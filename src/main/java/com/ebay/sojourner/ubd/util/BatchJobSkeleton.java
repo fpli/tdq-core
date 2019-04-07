@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.ebay.sojourner.ubd;
+package com.ebay.sojourner.ubd.util;
 
 import org.apache.flink.api.java.ExecutionEnvironment;
 
@@ -30,7 +30,7 @@ import org.apache.flink.api.java.ExecutionEnvironment;
  * change the main class in the POM.xml file to this class (simply search for 'mainClass')
  * and run 'mvn clean package' on the command line.
  */
-public class BatchJob {
+public class BatchJobSkeleton {
 
 	public static void main(String[] args) throws Exception {
 		// set up the batch execution environment
