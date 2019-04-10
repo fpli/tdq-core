@@ -1,8 +1,8 @@
 package com.ebay.sojourner.ubd.connectors;
 
 import com.ebay.sojourner.ubd.model.SojEvent;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer010;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -18,11 +18,11 @@ public class KafkaConnectorFactory {
             "rheos-kafka-proxy-3.phx02.dev.ebayc3.com:9092")
             .stream().collect(Collectors.joining(","));
 
-    public FlinkKafkaConsumer010<SojEvent> createKafkaConsumer() {
+    public FlinkKafkaConsumer<SojEvent> createKafkaConsumer() {
         return null;
     }
 
-    public FlinkKafkaProducer010<SojEvent> createKafkaProducer() {
+    public FlinkKafkaProducer<SojEvent> createKafkaProducer() {
         return null;
     }
 }
