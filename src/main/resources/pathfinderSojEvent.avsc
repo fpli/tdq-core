@@ -1,0 +1,295 @@
+{
+  "type": "record",
+  "name": "SojEvent",
+  "namespace": "behavior.pathfinder.sojevent",
+  "fields": [
+    {
+      "name": "rheosHeader",
+      "type": {
+        "type": "record",
+        "name": "RheosHeader",
+        "fields": [
+          {
+            "name": "eventCreateTimestamp",
+            "type": "long"
+          },
+          {
+            "name": "eventSentTimestamp",
+            "type": "long"
+          },
+          {
+            "name": "schemaId",
+            "type": "int"
+          },
+          {
+            "name": "eventId",
+            "type": [
+              "null",
+              {
+                "type": "string",
+                "avro.java.string": "String"
+              }
+            ]
+          },
+          {
+            "name": "producerId",
+            "type": {
+              "type": "string",
+              "avro.java.string": "String"
+            }
+          }
+        ]
+      },
+      "doc": "Rheos header"
+    },
+    {
+      "name": "sojA",
+      "type": {
+        "type": "map",
+        "values": "string"
+      },
+      "doc": "SOJ 'a' payload of key-value pairs as a map<string,string>"
+    },
+    {
+      "name": "sojK",
+      "type": {
+        "type": "map",
+        "values": "string"
+      },
+      "doc": "SOJ 'k' payload of key-value pairs as a map<string,string>"
+    },
+    {
+      "name": "sojC",
+      "type": [
+        "null",
+        {
+          "type": "map",
+          "values": "string"
+        }
+      ],
+      "doc": "SOJ 'c' payload of key-value pairs as a map<string,string>",
+      "default": null
+    },
+    {
+      "name": "clientData",
+      "type": {
+        "type": "record",
+        "name": "ClientData",
+        "fields": [
+          {
+            "name": "ForwardFor",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "Read from X-FORWARDED-FOR header",
+            "avro.java.string": "String"
+          },
+          {
+            "name": "Script",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "Servlet path for the request",
+            "avro.java.string": "String"
+          },
+          {
+            "name": "Server",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "Domain name, part of the applicationURL value of X-EBAY-C-ENDUSERCTX",
+            "avro.java.string": "String"
+          },
+          {
+            "name": "TMachine",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "Host IP of the machine which is producing this event",
+            "avro.java.string": "String"
+          },
+          {
+            "name": "TStamp",
+            "type": [
+              "null",
+              "long"
+            ],
+            "doc": "Timestamp of the event"
+          },
+          {
+            "name": "TName",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "CAL transaction name",
+            "avro.java.string": "String"
+          },
+          {
+            "name": "TPayload",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "Deprecated. Only here for backward/forward compatibility",
+            "avro.java.string": "String"
+          },
+          {
+            "name": "colo",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "colo name for the event producer machine",
+            "default": null,
+            "avro.java.string": "String"
+          },
+          {
+            "name": "pool",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "Pool name",
+            "default": null,
+            "avro.java.string": "String"
+          },
+          {
+            "name": "agent",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "User agent read from X-EBAY-C-ENDUSERCTX",
+            "default": null,
+            "avro.java.string": "String"
+          },
+          {
+            "name": "remoteIP",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "client machine IP read from X-EBAY-C-ENDUSERCTX",
+            "default": null,
+            "avro.java.string": "String"
+          },
+          {
+            "name": "TType",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "CAL transaction type",
+            "default": null,
+            "avro.java.string": "String"
+          },
+          {
+            "name": "TStatus",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "CAL transaction status",
+            "default": null,
+            "avro.java.string": "String"
+          },
+          {
+            "name": "corrId",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "Request correlation Id",
+            "default": null,
+            "avro.java.string": "String"
+          },
+          {
+            "name": "contentLength",
+            "type": [
+              "null",
+              "int"
+            ],
+            "doc": "httprequest content length",
+            "default": null,
+            "avro.java.string": "String"
+          },
+          {
+            "name": "nodeId",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "raptor node id",
+            "default": null,
+            "avro.java.string": "String"
+          },
+          {
+            "name": "requestGuid",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "Ginger request GUID",
+            "default": null,
+            "avro.java.string": "String"
+          },
+          {
+            "name": "urlQueryString",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "url query string read from applicationURL of X-EBAY-C-ENDUSERCTX",
+            "default": null,
+            "avro.java.string": "String"
+          },
+          {
+            "name": "referrer",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "referrer read from X-EBAY-C-ENDUSERCTX",
+            "default": null,
+            "avro.java.string": "String"
+          },
+          {
+            "name": "rlogid",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "CAL request log id",
+            "default": null,
+            "avro.java.string": "String"
+          },
+          {
+            "name": "acceptEncoding",
+            "type": [
+              "null",
+              "string"
+            ],
+            "doc": "Http request accept encoding",
+            "default": null,
+            "avro.java.string": "String"
+          },
+          {
+            "name": "TDuration",
+            "type": [
+              "null",
+              "long"
+            ],
+            "doc": "Approximate URL time in milli secs",
+            "default": null
+          }
+        ]
+      },
+      "doc": "Includes ForwardFor, Script, Server, TMachine, TStamp, TName, TPayload, colo, pool, agent, remoteIP, TType, TStatus, corrId, contentLength, nodeId, requestGuid, urlQueryString, referrer, rlogid, acceptEncoding, TDuration"
+    }
+  ]
+}
