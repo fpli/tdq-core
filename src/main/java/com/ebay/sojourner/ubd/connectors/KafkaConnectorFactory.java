@@ -1,7 +1,8 @@
 package com.ebay.sojourner.ubd.connectors;
 
+import com.ebay.sojourner.ubd.model.RawEvent;
 import com.ebay.sojourner.ubd.model.SojEvent;
-import com.ebay.sojourner.ubd.serialization.RheosEventDeserializationSchema;
+import com.ebay.sojourner.ubd.serialization.RawEventDeserializationSchema;
 import io.ebay.rheos.schema.avro.RheosEventDeserializer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
@@ -14,8 +15,6 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class KafkaConnectorFactory {
-
-    public static String RHEOS_SERVICES_URL = "https://rheos-services.qa.ebay.com";
 
     public static String CLIENT_ID = "43665ed9-5673-4d92-8ea7-21decd34c903";
 
@@ -30,7 +29,7 @@ public class KafkaConnectorFactory {
             "rheos-kafka-proxy-3.phx02.dev.ebayc3.com:9092")
             .stream().collect(Collectors.joining(","));
 
-    public FlinkKafkaConsumer<SojEvent> createKafkaConsumer() {
+    public static FlinkKafkaConsumer<RawEvent> createKafkaConsumer() {
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "sojourner-ubd");
@@ -43,10 +42,10 @@ public class KafkaConnectorFactory {
         props.put(ConsumerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
 
         return new FlinkKafkaConsumer<>(TOPIC_PATHFINDER_EVENTS,
-                new RheosEventDeserializationSchema(), props);
+                new RawEventDeserializationSchema(), props);
     }
 
-    public FlinkKafkaProducer<SojEvent> createKafkaProducer() {
+    public static FlinkKafkaProducer<SojEvent> createKafkaProducer() {
         return null;
     }
 }

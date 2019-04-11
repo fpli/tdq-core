@@ -1,21 +1,28 @@
 package com.ebay.sojourner.ubd.model;
 
+import org.apache.commons.lang3.builder.RecursiveToStringStyle;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 import java.util.Map;
 
 public class RawEvent {
 
-    private Map<String, String> rheosHeader;
+    private RheosHeader rheosHeader;
     private Map<String, String> sojA;
     private Map<String, String> sojK;
     private Map<String, String> sojC;
-    private Map<String, String> clientData;
+    private ClientData clientData;
+
+    public RawEvent() {
+
+    }
 
     public RawEvent(
-            Map<String, String> rheosHeader,
+            RheosHeader rheosHeader,
             Map<String, String> sojA,
             Map<String, String> sojK,
             Map<String, String> sojC,
-            Map<String, String> clientData) {
+            ClientData clientData) {
         this.rheosHeader = rheosHeader;
         this.sojA = sojA;
         this.sojK = sojK;
@@ -23,11 +30,11 @@ public class RawEvent {
         this.clientData = clientData;
     }
 
-    public Map<String, String> getRheosHeader() {
+    public RheosHeader getRheosHeader() {
         return rheosHeader;
     }
 
-    public void setRheosHeader(Map<String, String> rheosHeader) {
+    public void setRheosHeader(RheosHeader rheosHeader) {
         this.rheosHeader = rheosHeader;
     }
 
@@ -55,11 +62,16 @@ public class RawEvent {
         this.sojC = sojC;
     }
 
-    public Map<String, String> getClientData() {
+    public ClientData getClientData() {
         return clientData;
     }
 
-    public void setClientData(Map<String, String> clientData) {
+    public void setClientData(ClientData clientData) {
         this.clientData = clientData;
+    }
+
+    // For debug only
+    public String toString() {
+        return new ReflectionToStringBuilder(this, new RecursiveToStringStyle()).toString();
     }
 }
