@@ -1,15 +1,21 @@
 package com.ebay.sojourner.ubd.pipeline;
 
 import com.ebay.sojourner.ubd.connectors.kafka.KafkaConnectorFactory;
+import com.ebay.sojourner.ubd.model.UbiSession;
 import com.ebay.sojourner.ubd.operators.parser.EventParserMapFunction;
 import com.ebay.sojourner.ubd.model.RawEvent;
 import com.ebay.sojourner.ubd.model.UbiEvent;
+import com.ebay.sojourner.ubd.operators.sessionizer.UbiSessionReducer;
+import com.ebay.sojourner.ubd.operators.sessionizer.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.util.Property;
 import com.ebay.sojourner.ubd.util.UBIConfig;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
+import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
+import org.apache.flink.streaming.api.windowing.time.Time;
 
 import java.io.File;
 
@@ -60,9 +66,27 @@ public class UBDStreamingJob {
         executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
         executionEnvironment.enableCheckpointing(5000);
 
+        // Consume RawEvent from Rheos
         DataStream<RawEvent> rawEventDataStream = executionEnvironment.addSource(
-                KafkaConnectorFactory.createKafkaConsumer());
+                KafkaConnectorFactory.createKafkaConsumer()).assignTimestampsAndWatermarks(
+                        new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
+            @Override
+            public long extractTimestamp(RawEvent element) {
+                return element.getRheosHeader().getEventCreateTimestamp();
+            }
+        });
+
+        // Parse and transform RawEvent to UbiEvent
         DataStream<UbiEvent> ubiEventDataStream =  rawEventDataStream.map(new EventParserMapFunction());
+
+        // Sessionization
+        /*
+        ubiEventDataStream
+                .keyBy("guid")
+                .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
+                .allowedLateness(Time.hours(1))
+                .reduce(new UbiSessionReducer(), new UbiSessionWindowProcessFunction());
+        */
         ubiEventDataStream.print();
 
         executionEnvironment.execute("unified bot detection");
