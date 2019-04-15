@@ -1,62 +1,70 @@
 package com.ebay.sojourner.ubd.pipeline;
 
-import com.ebay.sojourner.ubd.connectors.KafkaConnectorFactory;
-import com.ebay.sojourner.ubd.functions.EventParserMapFunction;
+import com.ebay.sojourner.ubd.connectors.kafka.KafkaConnectorFactory;
+import com.ebay.sojourner.ubd.operators.parser.EventParserMapFunction;
 import com.ebay.sojourner.ubd.model.RawEvent;
 import com.ebay.sojourner.ubd.model.UbiEvent;
+import com.ebay.sojourner.ubd.util.Property;
+import com.ebay.sojourner.ubd.util.UBIConfig;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
+import java.io.File;
+
 public class UBDStreamingJob {
 
-    public static void main(String[] args) throws Exception {
-        final StreamExecutionEnvironment executionEnvironment =
-                StreamExecutionEnvironment.getExecutionEnvironment();
-        executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
-        final ParameterTool params = ParameterTool.fromArgs(args);
-
+    private static void uploadFiles(
+            StreamExecutionEnvironment executionEnvironment,
+            ParameterTool params) {
         String configFile = params.get("config","./src/main/resources/ubi.properties");
         executionEnvironment.registerCachedFile(configFile,"configFile");
 
-        String iframePageIds = params.get("iframePageIds","./src/main/resources/iframePageIds");
-        executionEnvironment.registerCachedFile(iframePageIds,"iframePageIds");
+        String iframePageIds = params.get("lookup/iframePageIds","./src/main/resources/lookup/iframePageIds");
+        executionEnvironment.registerCachedFile(iframePageIds, UBIConfig.getUBIProperty(Property.IFRAME_PAGE_IDS));
 
-        String findingFlag = params.get("findingFlag","./src/main/resources/findingFlag");
-        executionEnvironment.registerCachedFile(findingFlag,"findingFlag");
+        String findingFlag = params.get("lookup/findingFlag","./src/main/resources/lookup/findingFlag");
+        executionEnvironment.registerCachedFile(findingFlag, UBIConfig.getUBIProperty(Property.FINDING_FLAGS));
 
-        String vtNewIdSource = params.get("vtNewIdSource","./src/main/resources/vtNewIdSource");
-        executionEnvironment.registerCachedFile(vtNewIdSource,"vtNewIdSource");
+        String vtNewIdSource = params.get("lookup/vtNewIdSource","./src/main/resources/lookup/vtNewIdSource");
+        executionEnvironment.registerCachedFile(vtNewIdSource, UBIConfig.getUBIProperty(Property.VTNEW_IDS));
 
-        String iabAgentRex = params.get("iabAgentRex","./src/main/resources/iabAgentRex");
-        executionEnvironment.registerCachedFile(iabAgentRex,"iabAgentRex");
+        String iabAgentRex = params.get("lookup/iabAgentRex","./src/main/resources/lookup/iabAgentRex");
+        executionEnvironment.registerCachedFile(iabAgentRex, UBIConfig.getUBIProperty(Property.IAB_AGENT));
 
-        String appid = params.get("appid","./src/main/resources/appid");
-        executionEnvironment.registerCachedFile(appid,"appid");
+        String appid = params.get("lookup/appid","./src/main/resources/lookup/appid");
+        executionEnvironment.registerCachedFile(appid, UBIConfig.getUBIProperty(Property.APP_ID));
 
 
-        String testUserIds = params.get("testUserIds","./src/main/resources/testUserIds");
-        executionEnvironment.registerCachedFile(testUserIds,"testUserIds");
+        String testUserIds = params.get("lookup/testUserIds","./src/main/resources/lookup/testUserIds");
+        executionEnvironment.registerCachedFile(testUserIds, UBIConfig.getUBIProperty(Property.TEST_USER_IDS));
 
-        String largeSessionGuid = params.get("largeSessionGuid","./src/main/resources/largeSessionGuid");
-        executionEnvironment.registerCachedFile(largeSessionGuid,"largeSessionGuid");
+        String largeSessionGuid = params.get("lookup/largeSessionGuid","./src/main/resources/lookup/largeSessionGuid");
+        executionEnvironment.registerCachedFile(largeSessionGuid, UBIConfig.getUBIProperty(Property.LARGE_SESSION_GUID));
 
-        String pageFmly = params.get("pageFmly","./src/main/resources/pageFmly");
-        executionEnvironment.registerCachedFile(pageFmly,"pageFmly");
+        String pageFmly = params.get("lookup/pageFmly","./src/main/resources/lookup/pageFmly");
+        executionEnvironment.registerCachedFile(pageFmly, UBIConfig.getUBIProperty(Property.PAGE_FMLY));
 
-        String mpx = params.get("mpx","./src/main/resources/mpx");
-        executionEnvironment.registerCachedFile(mpx,"mpx");
+        String mpx = params.get("lookup/mpx","./src/main/resources/lookup/mpx");
+        executionEnvironment.registerCachedFile(mpx, UBIConfig.getUBIProperty(Property.MPX_ROTATION));
+    }
 
+    public static void main(String[] args) throws Exception {
+        UBIConfig.initAppConfiguration(new File("./src/main/resources/ubi.properties"));
+        final StreamExecutionEnvironment executionEnvironment =
+                StreamExecutionEnvironment.getExecutionEnvironment();
+        final ParameterTool params = ParameterTool.fromArgs(args);
+        uploadFiles(executionEnvironment, params);
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
         executionEnvironment.enableCheckpointing(5000);
+
         DataStream<RawEvent> rawEventDataStream = executionEnvironment.addSource(
                 KafkaConnectorFactory.createKafkaConsumer());
         DataStream<UbiEvent> ubiEventDataStream =  rawEventDataStream.map(new EventParserMapFunction());
         ubiEventDataStream.print();
 
         executionEnvironment.execute("unified bot detection");
-
     }
 }
