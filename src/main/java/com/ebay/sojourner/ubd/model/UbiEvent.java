@@ -5,12 +5,19 @@
  */
 package com.ebay.sojourner.ubd.model;
 
+import com.ebay.sojourner.ubd.util.Constants;
 import lombok.Data;
+import lombok.Getter;
+import org.apache.flink.configuration.Configuration;
+
+import java.io.Serializable;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Data
-public class UbiEvent  {
+public class UbiEvent implements Serializable {
   private String guid;
-  private Long sessionSkey;
+  private String sessionId;
   private Integer seqNum;
   private Long sessionStartDt;
   private Long sojDataDt;
@@ -48,6 +55,61 @@ public class UbiEvent  {
   private Long oldSessionSkey;
   private Integer hashCode;
   private Integer partialValidPage;
+  private long sessionStartTime;
+  private long sessionEndTime;
+  @Getter private long eventCnt;
+  private UbiSession ubiSession;
+  private Map<String, Object> counters;
+  private Configuration configuration;
+  public void updateSessionId() {
+    int charPos = Constants.HEX_DIGITS.length;
+    int mask = (1 << 4) - 1;
+    long decimal = sessionStartTime;
+    char[] out = new char[Constants.HEX_DIGITS.length];
 
+    for (int i = 0; i < out.length; i++) {
+      out[i] = '0';
+    }
 
+    do {
+      out[--charPos] = Constants.HEX_DIGITS[(int) (decimal & mask)];
+      decimal = decimal >>> 4;
+    } while (decimal != 0);
+
+    this.sessionId = guid + new String(out, 0, out.length);
+  }
+  public void eventCountIncrementByOne() {
+    eventCnt++;
+  }
+  public boolean isNewSession() {
+    return Constants.NO_SESSION_ID.equals(sessionId);
+  }
+
+  public boolean hasSessionEndTime() {
+    return Constants.NO_TIMESTAMP != sessionEndTime;
+  }
+
+  public Object get(String key) {
+    if (counters == null) {
+      synchronized (this) {
+        if (counters == null) {
+          counters = new ConcurrentHashMap<String, Object>();
+        }
+      }
+    }
+
+    return counters.get(key);
+  }
+
+  public void put(String key, Object value) {
+    if (counters == null) {
+      synchronized (this) {
+        if (counters == null) {
+          counters = new ConcurrentHashMap<String, Object>();
+        }
+      }
+    }
+
+    counters.put(key, value);
+  }
 }

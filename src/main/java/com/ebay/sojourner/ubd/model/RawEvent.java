@@ -3,9 +3,10 @@ package com.ebay.sojourner.ubd.model;
 import org.apache.commons.lang3.builder.RecursiveToStringStyle;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class RawEvent {
+public class RawEvent implements Serializable {
 
     private RheosHeader rheosHeader;
     private Map<String, String> sojA;

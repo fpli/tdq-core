@@ -1,6 +1,8 @@
 package com.ebay.sojourner.ubd.model;
 
-public class RheosHeader {
+import java.io.Serializable;
+
+public class RheosHeader implements Serializable {
     private long eventCreateTimestamp;
     private long eventSentTimestamp;
     private String producerId;

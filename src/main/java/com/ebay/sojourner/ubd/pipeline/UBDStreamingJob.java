@@ -1,10 +1,10 @@
 package com.ebay.sojourner.ubd.pipeline;
 
 import com.ebay.sojourner.ubd.connectors.kafka.KafkaConnectorFactory;
-import com.ebay.sojourner.ubd.model.UbiSession;
-import com.ebay.sojourner.ubd.operators.parser.EventParserMapFunction;
 import com.ebay.sojourner.ubd.model.RawEvent;
 import com.ebay.sojourner.ubd.model.UbiEvent;
+import com.ebay.sojourner.ubd.model.UbiSession;
+import com.ebay.sojourner.ubd.operators.parser.EventParserMapFunction;
 import com.ebay.sojourner.ubd.operators.sessionizer.UbiSessionReducer;
 import com.ebay.sojourner.ubd.operators.sessionizer.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.util.Property;
@@ -12,10 +12,13 @@ import com.ebay.sojourner.ubd.util.UBIConfig;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.api.windowing.triggers.CountTrigger;
+import org.apache.flink.util.OutputTag;
 
 import java.io.File;
 
@@ -80,15 +83,16 @@ public class UBDStreamingJob {
         DataStream<UbiEvent> ubiEventDataStream =  rawEventDataStream.map(new EventParserMapFunction());
 
         // Sessionization
-        /*
-        ubiEventDataStream
+         OutputTag outputTag = new OutputTag("session-output");
+        SingleOutputStreamOperator<UbiEvent> ubiEventSingleOutputStreamOperator =   ubiEventDataStream
                 .keyBy("guid")
                 .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
+                .trigger(CountTrigger.of(1))
                 .allowedLateness(Time.hours(1))
-                .reduce(new UbiSessionReducer(), new UbiSessionWindowProcessFunction());
-        */
-        ubiEventDataStream.print();
-
+                .reduce(new UbiSessionReducer(), new UbiSessionWindowProcessFunction(outputTag));
+        DataStream<UbiSession> sideOutputStream = ubiEventSingleOutputStreamOperator.getSideOutput(outputTag);
+        ubiEventSingleOutputStreamOperator.print();
+        sideOutputStream.print();
         executionEnvironment.execute("unified bot detection");
     }
 }

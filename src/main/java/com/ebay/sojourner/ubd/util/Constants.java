@@ -22,7 +22,9 @@ public class Constants {
     public static final String DATE_PARTITION = new StringBuilder().append("yyyy").append(Path.SEPARATOR)
                                                                      .append("MM").append(Path.SEPARATOR)
                                                                      .append("dd").append(Path.SEPARATOR).toString();
-
+    public static final char[] HEX_DIGITS = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+    public static final String NO_SESSION_ID = "NO_SESSION_ID";
+    public static final long NO_TIMESTAMP = Long.MIN_VALUE;
     public static final String DEFAULT_SESSION_FILE_NAME = "session";
     
     public static final long DEFAULT_TRACK_PERIOD = 10 * 1000L; // Default is 10 seconds
