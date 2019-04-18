@@ -9,6 +9,7 @@ import com.ebay.sojourner.ubd.operators.sessionizer.UbiSessionReducer;
 import com.ebay.sojourner.ubd.operators.sessionizer.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.util.Property;
 import com.ebay.sojourner.ubd.util.UBIConfig;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -83,7 +84,7 @@ public class UBDStreamingJob {
         DataStream<UbiEvent> ubiEventDataStream =  rawEventDataStream.map(new EventParserMapFunction());
 
         // Sessionization
-         OutputTag<UbiSession> outputTag = new OutputTag<UbiSession>("session-output");
+         OutputTag<UbiSession> outputTag = new OutputTag<UbiSession>("session-output", TypeInformation.of(UbiSession.class));
         SingleOutputStreamOperator<UbiEvent> ubiEventSingleOutputStreamOperator =   ubiEventDataStream
                 .keyBy("guid")
                 .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
