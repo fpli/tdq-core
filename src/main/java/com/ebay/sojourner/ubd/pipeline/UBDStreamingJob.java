@@ -87,12 +87,12 @@ public class UBDStreamingJob {
          OutputTag<UbiSession> outputTag = new OutputTag<UbiSession>("session-output", TypeInformation.of(UbiSession.class));
         SingleOutputStreamOperator<UbiEvent> ubiEventSingleOutputStreamOperator =   ubiEventDataStream
                 .keyBy("guid")
-                .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
+                .window(EventTimeSessionWindows.withGap(Time.minutes(1)))
                 .trigger(CountTrigger.of(1))
                 .allowedLateness(Time.hours(1))
                 .reduce(new UbiSessionReducer(), new UbiSessionWindowProcessFunction(outputTag));
         DataStream<UbiSession> sideOutputStream = ubiEventSingleOutputStreamOperator.getSideOutput(outputTag);
-        ubiEventSingleOutputStreamOperator.print();
+        //ubiEventSingleOutputStreamOperator.print();
         sideOutputStream.print();
         executionEnvironment.execute("unified bot detection");
     }
