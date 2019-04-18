@@ -83,7 +83,7 @@ public class UBDStreamingJob {
         DataStream<UbiEvent> ubiEventDataStream =  rawEventDataStream.map(new EventParserMapFunction());
 
         // Sessionization
-         OutputTag outputTag = new OutputTag("session-output");
+         OutputTag<UbiSession> outputTag = new OutputTag<UbiSession>("session-output");
         SingleOutputStreamOperator<UbiEvent> ubiEventSingleOutputStreamOperator =   ubiEventDataStream
                 .keyBy("guid")
                 .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
