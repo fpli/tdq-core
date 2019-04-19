@@ -25,7 +25,9 @@ public class SingleClickFlagMetrics implements FieldMetrics<UbiEvent, UbiEvent> 
         if (event.getIframe() == 0) {
             Integer clickId = event.getClickId();
             if (event.getRdt() == 0) {
-                event.getUbiSession().getDistinctClickIdSet().add(clickId);
+                if(clickId!=null) {
+                    event.getUbiSession().getDistinctClickIdSet().add(clickId);
+                }
             } else {
                 if(clickId!=null&&event.getUbiSession().getDistinctClickIdSet().contains(clickId)) {
                     event.getUbiSession().getDistinctClickIdSet().remove(clickId);
