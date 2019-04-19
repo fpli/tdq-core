@@ -9,12 +9,17 @@ import com.ebay.sojourner.ubd.operators.sessionizer.UbiSessionReducer;
 import com.ebay.sojourner.ubd.operators.sessionizer.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.util.Property;
 import com.ebay.sojourner.ubd.util.UBIConfig;
+import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.core.fs.Path;
+import org.apache.flink.runtime.state.StateBackend;
+import org.apache.flink.runtime.state.filesystem.FsStateBackend;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -22,6 +27,7 @@ import org.apache.flink.streaming.api.windowing.triggers.CountTrigger;
 import org.apache.flink.util.OutputTag;
 
 import java.io.File;
+import java.io.FileOutputStream;
 
 public class UBDStreamingJob {
 
@@ -68,7 +74,10 @@ public class UBDStreamingJob {
         uploadFiles(executionEnvironment, params);
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
-        executionEnvironment.enableCheckpointing(5000);
+        executionEnvironment.enableCheckpointing(60 * 1000);
+        executionEnvironment.setStateBackend(
+                (StateBackend) new FsStateBackend("file:///tmp/sojourner-ubd/checkpoint"));
+        executionEnvironment.setParallelism(1);
 
         // Consume RawEvent from Rheos
         DataStream<RawEvent> rawEventDataStream = executionEnvironment.addSource(
@@ -93,7 +102,14 @@ public class UBDStreamingJob {
                 .reduce(new UbiSessionReducer(), new UbiSessionWindowProcessFunction(outputTag));
         DataStream<UbiSession> sideOutputStream = ubiEventSingleOutputStreamOperator.getSideOutput(outputTag);
         //ubiEventSingleOutputStreamOperator.print();
-        sideOutputStream.print();
+
+        final String sessionOutputPath = "/tmp/sojourner-ubd/data/session-output.txt";
+        final StreamingFileSink<UbiSession> sessionSink = StreamingFileSink
+                .forRowFormat(new Path(sessionOutputPath), new SimpleStringEncoder<UbiSession>("UTF-8"))
+                .build();
+        sideOutputStream.addSink(sessionSink);
+
+        // Submit dataflow
         executionEnvironment.execute("unified bot detection");
     }
 }
