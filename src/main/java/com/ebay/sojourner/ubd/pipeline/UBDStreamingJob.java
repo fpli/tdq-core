@@ -5,7 +5,7 @@ import com.ebay.sojourner.ubd.model.RawEvent;
 import com.ebay.sojourner.ubd.model.UbiEvent;
 import com.ebay.sojourner.ubd.model.UbiSession;
 import com.ebay.sojourner.ubd.operators.parser.EventParserMapFunction;
-import com.ebay.sojourner.ubd.operators.sessionizer.UbiSessionReducer;
+import com.ebay.sojourner.ubd.operators.sessionizer.UbiSessionAggregation;
 import com.ebay.sojourner.ubd.operators.sessionizer.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.util.Property;
 import com.ebay.sojourner.ubd.util.UBIConfig;
@@ -90,7 +90,8 @@ public class UBDStreamingJob {
                 .window(EventTimeSessionWindows.withGap(Time.minutes(1)))
                 .trigger(CountTrigger.of(1))
                 .allowedLateness(Time.hours(1))
-                .reduce(new UbiSessionReducer(), new UbiSessionWindowProcessFunction(outputTag));
+                .aggregate(new UbiSessionAggregation(), new UbiSessionWindowProcessFunction(outputTag));
+//                .reduce(new UbiSessionReducer(), new UbiSessionWindowProcessFunction(outputTag));
         DataStream<UbiSession> sideOutputStream = ubiEventSingleOutputStreamOperator.getSideOutput(outputTag);
         //ubiEventSingleOutputStreamOperator.print();
         sideOutputStream.print();
