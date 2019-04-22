@@ -6,6 +6,7 @@ import com.ebay.sojourner.ubd.util.Property;
 import com.ebay.sojourner.ubd.model.RawEvent;
 import com.ebay.sojourner.ubd.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sojlib.SOJNVL;
+import com.ebay.sojourner.ubd.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.configuration.Configuration;
@@ -30,22 +31,24 @@ public class CobrandParser implements FieldParser<RawEvent, UbiEvent, Configurat
   private String shoppingPartner;
   private String artisanPartner;
   private MobileEventsIdentifier mobileIdentifier;
-
+  private static UBIConfig ubiConfig ;
+  private static LkpFetcher lkpFetcher;
   @Override
   public void init(Configuration conf, RuntimeContext runtimeContext) throws Exception {
-    setHalfPageIndicator(new PageIndicator(conf.getString(Property.HALF_PAGES,null)));
-    setClssfctnPageIndicator(new PageIndicator(conf.getString(Property.CLASSIFIED_PAGES,null)));
-    setCoreSitePageIndicator(new PageIndicator(conf.getString(Property.CORESITE_PAGES,null)));
-    setMobileAppIdCategory(new AppIdCategory(conf.getString(Property.MOBILE_APP,null)));
-    setDesktopAppIdCategory(new AppIdCategory(conf.getString(Property.DESKTOP_APP,null)));
-    setEimAppIdCategory(new AppIdCategory(conf.getString(Property.EIM_APP,null)));
+    ubiConfig = UBIConfig.getInstance();
+    setHalfPageIndicator(new PageIndicator(ubiConfig.getString(Property.HALF_PAGES)));
+    setClssfctnPageIndicator(new PageIndicator(ubiConfig.getString(Property.CLASSIFIED_PAGES)));
+    setCoreSitePageIndicator(new PageIndicator(ubiConfig.getString(Property.CORESITE_PAGES)));
+    setMobileAppIdCategory(new AppIdCategory(ubiConfig.getString(Property.MOBILE_APP)));
+    setDesktopAppIdCategory(new AppIdCategory(ubiConfig.getString(Property.DESKTOP_APP)));
+    setEimAppIdCategory(new AppIdCategory(ubiConfig.getString(Property.EIM_APP)));
     setMobileEventIdentifier(new MobileEventsIdentifier(conf));
-    halfSite = conf.getString(Property.HALF_SITE,null);
-    expressSite = conf.getString(Property.EXPRESS_SITE,null);
-    expressPartner = conf.getString(Property.EXPRESS_PARTNER,null);
-    halfPartner = conf.getString(Property.HALF_PARTNER,null);
-    shoppingPartner = conf.getString(Property.SHOPPING_PARTNER,null);
-    artisanPartner = conf.getString(Property.ARTISAN_PARTNER,null);
+    halfSite = ubiConfig.getString(Property.HALF_SITE);
+    expressSite = ubiConfig.getString(Property.EXPRESS_SITE);
+    expressPartner = ubiConfig.getString(Property.EXPRESS_PARTNER);
+    halfPartner = ubiConfig.getString(Property.HALF_PARTNER);
+    shoppingPartner = ubiConfig.getString(Property.SHOPPING_PARTNER);
+    artisanPartner = ubiConfig.getString(Property.ARTISAN_PARTNER);
         if (!conf.getBoolean(Property.IS_TEST_ENABLE, false)) {
             if (halfSite == null || expressSite == null || expressPartner == null || halfPartner == null || shoppingPartner == null
                     || artisanPartner == null) {
@@ -58,7 +61,7 @@ public class CobrandParser implements FieldParser<RawEvent, UbiEvent, Configurat
 
   @Override
   public void parse(RawEvent rawEvent, UbiEvent ubiEvent) throws Exception {
-    Map<Integer, String[]> pageFmlyNameMap = LkpFetcher.getPageFmlyMaps();
+    Map<Integer, String[]> pageFmlyNameMap = lkpFetcher.getPageFmlyMaps();
     Integer pageId = ubiEvent.getPageId();
     ubiEvent.setCobrand(Constants.DEFAULT_CORE_SITE_COBRAND);
 
@@ -138,7 +141,8 @@ public class CobrandParser implements FieldParser<RawEvent, UbiEvent, Configurat
     }
   }
   public void initLkpTable(Configuration conf,RuntimeContext runtimeContext) throws Exception {
-    LkpFetcher.loadPageFmlys(conf,runtimeContext);
+    lkpFetcher=LkpFetcher.getInstance();
+    lkpFetcher.loadPageFmlys(conf,runtimeContext);
   }
 
   void setHalfPageIndicator(PageIndicator indicator) {

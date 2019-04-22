@@ -9,14 +9,14 @@ import org.apache.flink.streaming.api.windowing.windows.Window;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OnElementEarlyFiringTrigger<W extends Window> extends Trigger<Object, W> {
+public class SojTrigger<W extends Window> extends Trigger<Object, W> {
     private static final long serialVersionUID = 1L;
 
     private Trigger countTrigger = CountTrigger.of(1);
     private Trigger eventTimeTrigger = EventTimeTrigger.create();
     private List<Trigger> triggers = new ArrayList<>();
 
-    private OnElementEarlyFiringTrigger() {
+    private SojTrigger() {
         triggers.add(countTrigger);
         triggers.add(eventTimeTrigger);
     }
@@ -84,7 +84,7 @@ public class OnElementEarlyFiringTrigger<W extends Window> extends Trigger<Objec
         return "SojTrigger()";
     }
 
-    public static <W extends Window> OnElementEarlyFiringTrigger<W> create() {
-        return new OnElementEarlyFiringTrigger<>();
+    public static <W extends Window> SojTrigger<W> create() {
+        return new SojTrigger<>();
     }
 }

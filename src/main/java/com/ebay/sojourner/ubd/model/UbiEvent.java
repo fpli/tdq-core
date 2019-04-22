@@ -8,7 +8,6 @@ package com.ebay.sojourner.ubd.model;
 import com.ebay.sojourner.ubd.util.Constants;
 import lombok.Data;
 import lombok.Getter;
-import org.apache.flink.configuration.Configuration;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -58,9 +57,7 @@ public class UbiEvent implements Serializable {
   private long sessionStartTime;
   private long sessionEndTime;
   @Getter private long eventCnt;
-  private UbiSession ubiSession;
   private Map<String, Object> counters;
-  private Configuration configuration;
   public void updateSessionId() {
     int charPos = Constants.HEX_DIGITS.length;
     int mask = (1 << 4) - 1;

@@ -3,13 +3,14 @@ package com.ebay.sojourner.ubd.model;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
 public class UbiSession implements Serializable{
     private Long sojDataDt;
     private String guid;
-    private Long sessionSkey;
+    private String sessionId;
     private Long sessionStartDt;
     private String ip;
     private String userAgent;
@@ -57,4 +58,16 @@ public class UbiSession implements Serializable{
     private String exInternalIp;
     private Integer familyViCnt;
     private Set<Integer> distinctClickIdSet;
+    private Set<String> agentSets;
+    private String agentInfo;
+    private String clientIp;
+    private boolean findFirst ;
+    private String internalIp;
+    private String externalIp;
+    private String externalIp2;
+    public UbiSession()
+    {
+        this.distinctClickIdSet = new HashSet<Integer>();
+        this.agentSets= new HashSet<String>();
+    }
 }

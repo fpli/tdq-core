@@ -31,7 +31,7 @@ public class KafkaConnectorFactory {
     public static FlinkKafkaConsumer<RawEvent> createKafkaConsumer() {
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "sojourner-ubd");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "flinkpoc");
         props.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG,
                 RoundRobinAssignor.class.getName());
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,

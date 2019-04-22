@@ -14,6 +14,7 @@ import java.util.Set;
 public class IFrameParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
 
     private static final String P_TAG = "p";
+    private static LkpFetcher lkpFetcher ;
     @Override
     public void parse(RawEvent rawEvent, UbiEvent ubiEvent) throws Exception {
 
@@ -26,7 +27,7 @@ public class IFrameParser implements FieldParser<RawEvent, UbiEvent, Configurati
             pageId=map.get(P_TAG);
         }
 
-        Set<String> pageIdSet = LkpFetcher.getIframePageIdSet();
+        Set<String> pageIdSet = lkpFetcher.getIframePageIdSet();
 
         if (pageIdSet.contains(pageId)) {
             ubiEvent.setIframe(1);
@@ -38,7 +39,8 @@ public class IFrameParser implements FieldParser<RawEvent, UbiEvent, Configurati
 
     @Override
     public void init(Configuration conf,RuntimeContext runtimeContext) throws Exception {
-        LkpFetcher.loadIframePageIds(conf,runtimeContext);
+        lkpFetcher = LkpFetcher.getInstance();
+        lkpFetcher.loadIframePageIds(conf,runtimeContext);
        // LkpFetcher.loadIframePageIds4Bot12(conf);
     }
 }

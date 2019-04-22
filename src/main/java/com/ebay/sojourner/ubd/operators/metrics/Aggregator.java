@@ -1,4 +1,4 @@
-package com.ebay.sojourner.ubd.operators.mertrics;
+package com.ebay.sojourner.ubd.operators.metrics;
 
 
 /**
@@ -9,13 +9,15 @@ package com.ebay.sojourner.ubd.operators.mertrics;
  * @param <Target>
  */
 public interface Aggregator<Source, Target> {
-
+    /**
+     * init the aggregator
+     */
+    public void init() throws Exception;
     /**
      * Start is the start point to aggregate the source for the target.
-     * @param source
      * @param target
      */
-    public void start(Source source, Target target) throws Exception;
+    public void start(Target target) throws Exception;
 
     /**
      * Feed the source to be aggregated for the target. 

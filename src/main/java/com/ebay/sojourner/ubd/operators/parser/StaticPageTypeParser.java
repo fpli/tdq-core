@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class StaticPageTypeParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
     private static final Logger log = Logger.getLogger(StaticPageTypeParser.class);
-    
+    private static  LkpFetcher lkpFetcher;
     @Override
     public void parse(RawEvent rawEvent, UbiEvent ubiEvent) throws Exception {
         int result = 0;
@@ -22,7 +22,7 @@ public class StaticPageTypeParser implements FieldParser<RawEvent, UbiEvent, Con
             Integer rdt = ubiEvent.getRdt();
             Integer pageId = ubiEvent.getPageId();
             Integer[] pageInfo = new Integer[2];
-            Map<Integer, Integer[]> vtNewIdsMap = LkpFetcher.getVtNewIdsMap();
+            Map<Integer, Integer[]> vtNewIdsMap = lkpFetcher.getVtNewIdsMap();
             if (pageId != null && rdt != null) {
                 if (vtNewIdsMap.containsKey(pageId)) {
                     pageInfo = vtNewIdsMap.get(pageId);
@@ -45,6 +45,7 @@ public class StaticPageTypeParser implements FieldParser<RawEvent, UbiEvent, Con
 
     @Override
     public void init(Configuration conf,RuntimeContext runtimeContext) throws Exception {
-        LkpFetcher.loadVtNewIds(conf,runtimeContext);
+        lkpFetcher=LkpFetcher.getInstance();
+        lkpFetcher.loadVtNewIds(conf,runtimeContext);
     }
 }

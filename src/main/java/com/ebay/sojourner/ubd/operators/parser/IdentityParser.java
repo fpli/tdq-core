@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class IdentityParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
     private static final String G_TAG = "g";
-    private Configuration configuration;
+//    private Configuration configuration;
     @Override
     public void parse(RawEvent rawEvent, UbiEvent ubiEvent) throws Exception {
         Map<String, String> map = new HashMap<>();
@@ -41,12 +41,12 @@ public class IdentityParser implements FieldParser<RawEvent, UbiEvent, Configura
         ubiEvent.setUrlQueryString(rawEvent.getClientData().getUrlQueryString());
         ubiEvent.setApplicationPayload(applicationPayload);
         ubiEvent.setPageName(rawEvent.getClientData().getTName());
-        ubiEvent.setConfiguration(configuration);
+//        ubiEvent.setConfiguration(configuration);
     }
 
     @Override
     public void init(Configuration context,RuntimeContext runtimeContext) throws Exception {
-        configuration=context;
+//        configuration=context;
 
     }
 }

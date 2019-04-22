@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.operators.parser;
 
 import com.ebay.sojourner.ubd.util.Property;
 import com.ebay.sojourner.ubd.model.UbiEvent;
+import com.ebay.sojourner.ubd.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.configuration.Configuration;
 
@@ -15,11 +16,12 @@ public class MobileEventsIdentifier {
     private String[] indexPatternList;
     public String[] matchPatternList;
     public String[][] multiMatchPatternArray;
-
+   private static UBIConfig ubiConfig;
     public MobileEventsIdentifier(Configuration conf) {
-        mobileStartPattern = conf.getString(Property.MOBILE_AGENT_START,null);
-        mobileIndexPattern = conf.getString(Property.MOBILE_AGENT_INDEX,null);
-        mobileMatchPattern = conf.getString(Property.MOBILE_AGENT_OTHER,null);
+        ubiConfig = UBIConfig.getInstance();
+        mobileStartPattern = ubiConfig.getString(Property.MOBILE_AGENT_START);
+        mobileIndexPattern = ubiConfig.getString(Property.MOBILE_AGENT_INDEX);
+        mobileMatchPattern = ubiConfig.getString(Property.MOBILE_AGENT_OTHER);
         if (!conf.getBoolean(Property.IS_TEST_ENABLE, false)) {
             if (mobileIndexPattern == null || mobileMatchPattern == null || mobileStartPattern == null) {
                 throw new RuntimeException();

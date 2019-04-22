@@ -1,4 +1,4 @@
-package com.ebay.sojourner.ubd.operators.mertrics;
+package com.ebay.sojourner.ubd.operators.metrics;
 
 
 import java.util.LinkedHashSet;
@@ -11,12 +11,16 @@ public abstract class RecordMetrics<Source, Target> implements Aggregator<Source
      * Initialize the field metrics for being used in aggregator operations.
      */
     public abstract void initFieldMetrics();
-    
 
-    
-    public void start(Source source, Target target) throws Exception {
+    public void init() throws Exception {
         for (FieldMetrics<Source, Target> metrics : fieldMetrics) {
-            metrics.start(source, target);
+            metrics.init();
+        }
+    }
+    
+    public void start(Target target) throws Exception {
+        for (FieldMetrics<Source, Target> metrics : fieldMetrics) {
+            metrics.start(target);
         }
     }
 
