@@ -8,12 +8,15 @@ import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RawEventDeserializationSchema implements DeserializationSchema<RawEvent> {
+
+    private static final Logger logger = Logger.getLogger(RawEventDeserializationSchema.class);
 
     @Override
     public RawEvent deserialize(byte[] message) throws IOException {
@@ -54,6 +57,13 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
         }
 
         // Generate ClientData
+        // If clientData is not of type GenericRecord, just skip this message.
+        if (!(genericRecord.get("clientData") instanceof GenericRecord)) {
+            logger.info("clientData is not of type GenericRecord. "
+                    + genericRecord.get("clientData"));
+            return null;
+        }
+
         GenericRecord genericClientData = (GenericRecord) genericRecord.get("clientData");
         ClientData clientData = new ClientData();
         clientData.setForwardFor(getString(genericClientData.get("ForwardFor")));

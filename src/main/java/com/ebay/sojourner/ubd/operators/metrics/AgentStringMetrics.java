@@ -37,7 +37,7 @@ public class AgentStringMetrics implements FieldMetrics<UbiEvent, SessionAccumul
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
         // Same logic implemented in IntermediaEventMetrics.java -> Line289
         String agentInfo = event.getAgentInfo();
-        logger.info("agentExcludeSet.size():"+agentExcludeSet.size());
+        // logger.info("agentExcludeSet.size():"+agentExcludeSet.size());
         if (event.getRdt() == 0 && event.getIframe() == 0 && !agentExcludeSet.contains(event.getPageId()) && agentInfo != null
                 && !agentInfo.equals(SHOCKWAVE_FLASH_AGENT) && !IsValidIPv4.isValidIP(agentInfo)) {
             if (agentInfo.length() > AGENT_MAX_LENGTH) {
