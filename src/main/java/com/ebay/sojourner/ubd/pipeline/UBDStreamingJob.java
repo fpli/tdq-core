@@ -9,6 +9,7 @@ import com.ebay.sojourner.ubd.operators.parser.EventParserMapFunction;
 import com.ebay.sojourner.ubd.operators.sessionizer.UbiSessionAgg;
 import com.ebay.sojourner.ubd.operators.sessionizer.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.util.Property;
+import com.ebay.sojourner.ubd.util.SojJobParameters;
 import com.ebay.sojourner.ubd.util.UBIConfig;
 import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -73,6 +74,7 @@ public class UBDStreamingJob {
         final StreamExecutionEnvironment executionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment();
         final ParameterTool params = ParameterTool.fromArgs(args);
+        executionEnvironment.getConfig().setGlobalJobParameters(new SojJobParameters());
         uploadFiles(executionEnvironment, params,ubiConfig);
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         executionEnvironment.getConfig().setLatencyTrackingInterval(2000);

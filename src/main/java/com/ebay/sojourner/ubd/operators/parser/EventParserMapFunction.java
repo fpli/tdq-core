@@ -16,6 +16,7 @@ public class EventParserMapFunction extends RichMapFunction<RawEvent,UbiEvent> {
     @Override
     public void open(Configuration conf) throws Exception {
         super.open(conf);
+        getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
         File configFile = getRuntimeContext().getDistributedCache().getFile("configFile");
         UBIConfig ubiConfig = UBIConfig.getInstance();
         if(!ubiConfig.isInitialized()) {
