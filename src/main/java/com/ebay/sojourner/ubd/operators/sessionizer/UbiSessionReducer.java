@@ -1,7 +1,7 @@
 package com.ebay.sojourner.ubd.operators.sessionizer;
 
 import com.ebay.sojourner.ubd.model.UbiEvent;
-import com.ebay.sojourner.ubd.operators.metrics.SessionMetrics;
+import com.ebay.sojourner.ubd.sojlib.metrics.SessionMetrics;
 import org.apache.flink.api.common.functions.ReduceFunction;
 
 public class UbiSessionReducer implements ReduceFunction<UbiEvent> {

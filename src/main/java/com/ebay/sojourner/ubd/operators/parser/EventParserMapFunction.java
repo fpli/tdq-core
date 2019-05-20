@@ -1,6 +1,8 @@
 package com.ebay.sojourner.ubd.operators.parser;
 
-import com.ebay.sojourner.ubd.common.sojlib.SOJTS2Date;
+import com.ebay.sojourner.ubd.sojlib.parser.EventParser;
+import com.ebay.sojourner.ubd.sojlib.parser.LkpFetcher;
+import com.ebay.sojourner.ubd.sojlib.util.SOJTS2Date;
 import com.ebay.sojourner.ubd.model.RawEvent;
 import com.ebay.sojourner.ubd.model.UbiEvent;
 import com.ebay.sojourner.ubd.util.Property;

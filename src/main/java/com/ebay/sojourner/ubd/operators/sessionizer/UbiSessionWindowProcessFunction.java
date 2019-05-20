@@ -1,11 +1,11 @@
 package com.ebay.sojourner.ubd.operators.sessionizer;
 
-import com.ebay.sojourner.ubd.common.sojlib.SOJTS2Date;
+import com.ebay.sojourner.ubd.sojlib.util.SOJTS2Date;
 import com.ebay.sojourner.ubd.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.model.UbiEvent;
 import com.ebay.sojourner.ubd.model.UbiSession;
-import com.ebay.sojourner.ubd.operators.metrics.SessionMetrics;
-import com.ebay.sojourner.ubd.operators.parser.LkpFetcher;
+import com.ebay.sojourner.ubd.sojlib.metrics.SessionMetrics;
+import com.ebay.sojourner.ubd.sojlib.parser.LkpFetcher;
 import com.ebay.sojourner.ubd.util.Property;
 import com.ebay.sojourner.ubd.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
