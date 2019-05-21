@@ -45,20 +45,20 @@ public class UBDStreamingJob {
         executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
         executionEnvironment.enableCheckpointing(60 * 1000);
         executionEnvironment.setStateBackend(
-                (StateBackend) new FsStateBackend("file:///tmp/sojourner-ubd/checkpoint"));
+                (StateBackend) new FsStateBackend("file:///var/sojourner-ubd/checkpoint"));
         executionEnvironment.setParallelism(1);
 
         // Consume RawEvent from Rheos PathFinder Topic, assign timestamps and emit watermarks.
-        DataStream<RawEvent> rawEventDataStream = executionEnvironment
-                .addSource(KafkaConnectorFactory.createKafkaConsumer())
-                .name("Rheos PathFinder Raw Event Consumer")
-                .assignTimestampsAndWatermarks(
+        DataStream<RawEvent> rawEventDataStream = executionEnvironment.addSource(
+                KafkaConnectorFactory.createKafkaConsumer().assignTimestampsAndWatermarks(
                         new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
-            @Override
-            public long extractTimestamp(RawEvent element) {
-                return element.getRheosHeader().getEventCreateTimestamp();
-            }
-        });
+                            @Override
+                            public long extractTimestamp(RawEvent element) {
+                                return element.getRheosHeader().getEventCreateTimestamp();
+                            }
+                        }
+                ))
+                .name("Rheos PathFinder Raw Event Consumer");
 
         // Parse and transform RawEvent to UbiEvent
         DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
@@ -80,21 +80,21 @@ public class UBDStreamingJob {
 
         // Load data to file system for batch processing
         // events with session id
-        final String eventSinkPath = "/tmp/sojourner-ubd/data/events-with-session-id";
+        final String eventSinkPath = "/var/sojourner-ubd/data/events-with-session-id";
         final StreamingFileSink<UbiEvent> eventSink = StreamingFileSink
                 .forRowFormat(new Path(eventSinkPath), new SimpleStringEncoder<UbiEvent>("UTF-8"))
                 .build();
         ubiEventStreamWithSessionId.addSink(eventSink).name("Events with Session Id").disableChaining();
         // sessions ended
         DataStream<UbiSession> sessionStream = ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag);
-        final String sessionSinkPath = "/tmp/sojourner-ubd/data/sessions-ended";
+        final String sessionSinkPath = "/var/sojourner-ubd/data/sessions-ended";
         final StreamingFileSink<UbiSession> sessionSink = StreamingFileSink
                 .forRowFormat(new Path(sessionSinkPath), new SimpleStringEncoder<UbiSession>("UTF-8"))
                 .build();
         sessionStream.addSink(sessionSink).name("Sessions Ended").disableChaining();
         // events late
         DataStream<UbiEvent> lateEventStream = ubiEventStreamWithSessionId.getSideOutput(lateEventOutputTag);
-        final String lateEventSinkPath = "/tmp/sojourner-ubd/data/events-late";
+        final String lateEventSinkPath = "/var/sojourner-ubd/data/events-late";
         final StreamingFileSink<UbiEvent> lateEventSink = StreamingFileSink
                 .forRowFormat(new Path(lateEventSinkPath), new SimpleStringEncoder<UbiEvent>("UTF-8"))
                 .build();
