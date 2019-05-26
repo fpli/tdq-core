@@ -13,6 +13,7 @@ public class SessionAccumulator implements Serializable{
     {
         this.ubiEvent=new UbiEvent();
         this.ubiSession = new UbiSession();
+
     }
 
 }

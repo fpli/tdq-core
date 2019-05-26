@@ -1,5 +1,7 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
+import com.ebay.sojourner.ubd.common.model.IpSignature;
+import com.ebay.sojourner.ubd.rt.operators.sessionizer.IPWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.operators.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
@@ -11,8 +13,13 @@ import com.ebay.sojourner.ubd.rt.operators.sessionizer.UbiSessionWindowProcessFu
 import com.ebay.sojourner.ubd.rt.util.LookupUtils;
 import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
+import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.serialization.SimpleStringEncoder;
+import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.tuple.Tuple1;
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.state.StateBackend;
@@ -69,13 +76,14 @@ public class SojournerUBDRTJob {
         // Do sessionization and calculate session metrics
         OutputTag<UbiSession> sessionOutputTag = new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
         OutputTag<UbiEvent> lateEventOutputTag = new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
+        JobID jobId=executionEnvironment.getStreamGraph().getJobGraph().getJobID();
         SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
                 .keyBy("guid")
                 .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .allowedLateness(Time.hours(1))
                 .sideOutputLateData(lateEventOutputTag)
-                .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction(sessionOutputTag))
+                .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction(sessionOutputTag,jobId))
                 .name("Sessionizer & Session Metrics Calculator");
 
         // Load data to file system for batch processing
@@ -101,12 +109,19 @@ public class SojournerUBDRTJob {
         lateEventStream.addSink(lateEventSink).name("Events Late").disableChaining();
 
         // Attribute level bot indicators
+        // for ip level bot detection
         sessionStream
-                .keyBy("agentInfo","clientIp")
-                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)));
+                .keyBy("clientIp")
+                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
+                .process(new IPWindowProcessFunction())
+                .keyBy("clientIp")
+                .asQueryableState("bot7",new ValueStateDescriptor<IpSignature>("", TypeInformation.of(new TypeHint<IpSignature>() {})))
+        ;
+
 
         // Submit dataflow
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");
+
     }
 
 }

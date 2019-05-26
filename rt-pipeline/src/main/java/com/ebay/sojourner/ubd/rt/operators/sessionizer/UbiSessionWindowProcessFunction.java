@@ -1,5 +1,6 @@
 package com.ebay.sojourner.ubd.rt.operators.sessionizer;
 
+import com.ebay.sojourner.ubd.common.model.IpSignature;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
@@ -9,8 +10,16 @@ import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.flink.api.common.JobID;
+import org.apache.flink.api.common.state.ValueState;
+import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.typeinfo.TypeHint;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple;
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.queryablestate.client.QueryableStateClient;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
@@ -18,6 +27,8 @@ import org.apache.flink.util.OutputTag;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.net.UnknownHostException;
+import java.util.concurrent.CompletableFuture;
 
 
 public class UbiSessionWindowProcessFunction
@@ -25,9 +36,14 @@ public class UbiSessionWindowProcessFunction
     private static final Logger logger = Logger.getLogger(UbiSessionWindowProcessFunction.class);
     private static SessionMetrics sessionMetrics;
     private OutputTag outputTag =null;
-    public UbiSessionWindowProcessFunction(OutputTag outputTag)
-    {
+    private JobID jobID=null;
+    private String proxyHost = "127.0.0.1";
+    private int proxyPort = 9069;
+    private QueryableStateClient client = null;
+    public UbiSessionWindowProcessFunction(OutputTag outputTag,JobID jobID) throws UnknownHostException {
         this.outputTag=outputTag;
+        this.jobID=jobID;
+        client =new QueryableStateClient(proxyHost, proxyPort);
     }
     @Override
     public void process(Tuple tuple, Context context, Iterable<SessionAccumulator> elements,
@@ -51,6 +67,12 @@ public class UbiSessionWindowProcessFunction
                 ubiSession.setExInternalIp(sessionAccumulator.getUbiSession().getExInternalIp());
                 ubiSession.setAgentCnt(sessionAccumulator.getUbiSession().getAgentCnt());
                 ubiSession.setSingleClickSessionFlag(sessionAccumulator.getUbiSession().getSingleClickSessionFlag());
+                CompletableFuture<ValueState<IpSignature>> completableFuture = queryState(ubiSession.getClientIp(),jobID,client);
+                if(completableFuture!=null)
+                {
+                    IpSignature ipSignature = completableFuture.get().value();
+                    ubiSession.setBotFlag(ipSignature.getBotFlag());
+                }
                 context.output(outputTag, ubiSession);
             }
         }
@@ -58,6 +80,15 @@ public class UbiSessionWindowProcessFunction
         {
             logger.error("ubiEvent is null pls check");
         }
+    }
+    private CompletableFuture<ValueState<IpSignature>> queryState(String key,JobID jobId, QueryableStateClient client)
+    {
+        return client.getKvState(
+                jobId,
+                "bot7",
+                key,
+                Types.STRING,
+                new ValueStateDescriptor<IpSignature>("", TypeInformation.of(new TypeHint<IpSignature>() {})));
     }
     private void endSessionEvent(SessionAccumulator sessionAccumulator) throws Exception {
         if(sessionAccumulator.getUbiEvent().getEventTimestamp()!=null) {
