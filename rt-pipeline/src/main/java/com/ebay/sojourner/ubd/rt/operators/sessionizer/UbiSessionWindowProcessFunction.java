@@ -43,7 +43,6 @@ public class UbiSessionWindowProcessFunction
     public UbiSessionWindowProcessFunction(OutputTag outputTag,JobID jobID) throws UnknownHostException {
         this.outputTag=outputTag;
         this.jobID=jobID;
-        client =new QueryableStateClient(proxyHost, proxyPort);
     }
     @Override
     public void process(Tuple tuple, Context context, Iterable<SessionAccumulator> elements,
@@ -67,11 +66,12 @@ public class UbiSessionWindowProcessFunction
                 ubiSession.setExInternalIp(sessionAccumulator.getUbiSession().getExInternalIp());
                 ubiSession.setAgentCnt(sessionAccumulator.getUbiSession().getAgentCnt());
                 ubiSession.setSingleClickSessionFlag(sessionAccumulator.getUbiSession().getSingleClickSessionFlag());
-                CompletableFuture<ValueState<IpSignature>> completableFuture = queryState(ubiSession.getClientIp(),jobID,client);
-                if(completableFuture!=null)
-                {
-                    IpSignature ipSignature = completableFuture.get().value();
-                    ubiSession.setBotFlag(ipSignature.getBotFlag());
+                if (ubiSession.getClientIp() != null) {
+                    CompletableFuture<ValueState<IpSignature>> completableFuture = queryState(ubiSession.getClientIp(), jobID, client);
+                    if (completableFuture != null) {
+                        IpSignature ipSignature = completableFuture.get().value();
+                        ubiSession.setBotFlag(ipSignature.getBotFlag());
+                    }
                 }
                 context.output(outputTag, ubiSession);
             }
@@ -114,6 +114,8 @@ public class UbiSessionWindowProcessFunction
             initConfiguration(conf, false, ubiConfig);
             setConfiguration(conf, ubiConfig);
         }
+
+        client =new QueryableStateClient(proxyHost, proxyPort);
 
     }
     public static void initConfiguration(Configuration conf, boolean enableTest,UBIConfig ubiConfig) throws Exception {
