@@ -35,7 +35,7 @@ public class IPWindowProcessFunction
                 if (clientIp == null) {
                     clientIp = ubiSession.getClientIp();
                 }
-                if (ubiSession.getSingleClickSessionFlag()) {
+                if (Boolean.TRUE.equals(ubiSession.getSingleClickSessionFlag())) {
                     singleClickSessionCount++;
                 }
             }
