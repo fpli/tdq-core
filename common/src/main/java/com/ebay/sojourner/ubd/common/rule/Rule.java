@@ -1,10 +1,15 @@
 package com.ebay.sojourner.ubd.common.rule;
 
-public abstract  class Rule {
-    public abstract void init();
-    public  abstract void collect();
-    public abstract int getBotFlag();
-    public abstract void clear();
+import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
+import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.model.UbiSession;
+
+public interface Rule {
+    public  void init();
+    public   void feed(UbiEvent ubiEvent, SessionAccumulator sessionAccumulator);
+    public  int getBotFlag();
+    public  int getBotFlag(UbiSession ubiSession);
+    public  void reset();
 
 
 }

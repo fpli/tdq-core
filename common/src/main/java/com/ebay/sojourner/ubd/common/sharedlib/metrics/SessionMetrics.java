@@ -38,5 +38,7 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
         addFieldMetrics(new SingleClickFlagMetrics());
         addFieldMetrics(new AgentIPMetrics());
         addFieldMetrics(new AgentStringMetrics());
+        addFieldMetrics(new SessionStartDtMetrics());
+        addFieldMetrics(new BotFlagMetrics());
     }
 }

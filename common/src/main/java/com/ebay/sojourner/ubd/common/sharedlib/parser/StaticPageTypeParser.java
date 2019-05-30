@@ -46,6 +46,6 @@ public class StaticPageTypeParser implements FieldParser<RawEvent, UbiEvent, Con
     @Override
     public void init(Configuration conf,RuntimeContext runtimeContext) throws Exception {
         lkpFetcher=LkpFetcher.getInstance();
-        lkpFetcher.loadVtNewIds(conf,runtimeContext);
+        lkpFetcher.loadVtNewIds();
     }
 }

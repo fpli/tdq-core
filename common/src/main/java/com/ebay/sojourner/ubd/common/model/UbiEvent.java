@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Data
 public class UbiEvent implements Serializable {
   private String guid;
-  private String sessionId;
+  private String sessionId=Constants.NO_SESSION_ID;
   private Integer seqNum;
   private Long sessionStartDt;
   private Long sojDataDt;

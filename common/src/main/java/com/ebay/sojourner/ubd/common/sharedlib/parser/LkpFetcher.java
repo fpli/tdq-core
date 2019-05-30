@@ -10,6 +10,7 @@ import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.configuration.Configuration;
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.util.*;
 
 public class LkpFetcher {
@@ -50,11 +51,11 @@ public class LkpFetcher {
         }
         return lkpFetcher;
     }
-    public void loadIframePageIds(Configuration conf, RuntimeContext runtimeContext) {
+    public void loadIframePageIds() {
         if (pageIdSet.isEmpty()) {
-            boolean isTestEnabled = conf.getBoolean(Property.IS_TEST_ENABLE, false);
+            boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String iframePageIds = ubiConfig.getString(Property.IFRAME_PAGE_IDS);
-            String pageIds = isTestEnabled ? iframePageIds :  FileLoader.loadContent(runtimeContext.getDistributedCache().getFile(iframePageIds));
+            String pageIds = isTestEnabled ? iframePageIds :  FileLoader.loadContent(new File(iframePageIds));
             if (StringUtils.isNotBlank(pageIds)) {
                 for (String pageId : pageIds.split(LKP_RECORD_DELIMITER)) {
                     pageIdSet.add(pageId);
@@ -118,11 +119,11 @@ public class LkpFetcher {
         }
     }
 
-    public  void loadLargeSessionGuid(Configuration conf, RuntimeContext runtimeContext) {
+    public  void loadLargeSessionGuid() {
         if (largeSessionGuidSet.isEmpty()) {
-            boolean isTestEnabled = conf.getBoolean(Property.IS_TEST_ENABLE, false);
+            boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String largeSessionGuidValue = ubiConfig.getString(Property.LARGE_SESSION_GUID);
-            String largeSessionGuids = isTestEnabled ? largeSessionGuidValue :  FileLoader.loadContent(runtimeContext.getDistributedCache().getFile(largeSessionGuidValue));
+            String largeSessionGuids = isTestEnabled ? largeSessionGuidValue :  FileLoader.loadContent(new File(largeSessionGuidValue));
             if (StringUtils.isNotBlank(largeSessionGuids)) {
                 for (String guid : largeSessionGuids.split(LKP_FILED_DELIMITER)) {
                     if (StringUtils.isNotBlank(guid)) {
@@ -135,11 +136,11 @@ public class LkpFetcher {
         }
     }
 
-    public  void loadIabAgent(Configuration conf , RuntimeContext runtimeContext) {
+    public  void loadIabAgent() {
         if (iabAgentRegs.isEmpty()) {
-            boolean isTestEnabled = conf.getBoolean(Property.IS_TEST_ENABLE, false);
+            boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String iabAgentReg = ubiConfig.getString(Property.IAB_AGENT);
-            String iabAgentRegValue = isTestEnabled ? iabAgentReg : FileLoader.loadContent(runtimeContext.getDistributedCache().getFile(iabAgentReg));
+            String iabAgentRegValue = isTestEnabled ? iabAgentReg : FileLoader.loadContent(new File(iabAgentReg));
             if (StringUtils.isNotBlank(iabAgentRegValue)) {
                 for (String iabAgent : iabAgentRegValue.split(LKP_RECORD_DELIMITER)) {
                     iabAgentRegs.add(iabAgent.toLowerCase());
@@ -150,11 +151,11 @@ public class LkpFetcher {
         }
     }
 
-    public  void loadFindingFlag(Configuration conf, RuntimeContext runtimeContext) {
+    public  void loadFindingFlag() {
         if (findingFlagMap.isEmpty()) {
-            boolean isTestEnabled = conf.getBoolean(Property.IS_TEST_ENABLE, false);
+            boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String findingFlag = ubiConfig.getString(Property.FINDING_FLAGS);
-            String findingFlags = isTestEnabled ? findingFlag : FileLoader.loadContent(runtimeContext.getDistributedCache().getFile(findingFlag));
+            String findingFlags = isTestEnabled ? findingFlag : FileLoader.loadContent(new File(findingFlag));
             if (StringUtils.isNotBlank(findingFlags)) {
                 for (String pageFlag : findingFlags.split(LKP_RECORD_DELIMITER)) {
                     String[] values = pageFlag.split(LKP_FILED_DELIMITER);
@@ -173,11 +174,11 @@ public class LkpFetcher {
         }
     }
 
-    public  void loadTestUserIds(Configuration conf, RuntimeContext runtimeContext) {
+    public  void loadTestUserIds() {
         if (testUserIds.isEmpty()) {
-            boolean isTestEnabled = conf.getBoolean(Property.IS_TEST_ENABLE, false);
+            boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String testUserIdsValue = ubiConfig.getString(Property.TEST_USER_IDS);
-            String userIdsToFilter = isTestEnabled ? testUserIdsValue : FileLoader.loadContent(runtimeContext.getDistributedCache().getFile(testUserIdsValue));
+            String userIdsToFilter = isTestEnabled ? testUserIdsValue : FileLoader.loadContent(new File(testUserIdsValue));
             if (StringUtils.isNotBlank(userIdsToFilter)) {
                 for (String userId : userIdsToFilter.split(LKP_RECORD_DELIMITER)) {
                     if (StringUtils.isNotBlank(userId)) {
@@ -190,11 +191,11 @@ public class LkpFetcher {
         }
     }
 
-    public  void loadVtNewIds(Configuration conf, RuntimeContext runtimeContext) {
+    public  void loadVtNewIds() {
         if (vtNewIdsMap.isEmpty()) {
-            boolean isTestEnabled = conf.getBoolean(Property.IS_TEST_ENABLE, false);
+            boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String vtNewIds = ubiConfig.getString(Property.VTNEW_IDS);
-            String vtNewIdsValue = isTestEnabled ? vtNewIds :  FileLoader.loadContent(runtimeContext.getDistributedCache().getFile(vtNewIds));
+            String vtNewIdsValue = isTestEnabled ? vtNewIds :  FileLoader.loadContent(new File(vtNewIds));
             if (StringUtils.isNotBlank(vtNewIdsValue)) {
                 for (String vtNewId : vtNewIdsValue.split(LKP_RECORD_DELIMITER)) {
                     Integer[] pageInfo = new Integer[2];
@@ -210,11 +211,11 @@ public class LkpFetcher {
         }
     }
 
-    public  void loadAppIds(Configuration conf, RuntimeContext runtimeContext) {
+    public  void loadAppIds() {
         if (appIdWithBotFlags.isEmpty()) {
-            boolean isTestEnabled = conf.getBoolean(Property.IS_TEST_ENABLE, false);
+            boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String appIds = ubiConfig.getString(Property.APP_ID);
-            String appIdAndFlags = isTestEnabled ? appIds :  FileLoader.loadContent(runtimeContext.getDistributedCache().getFile(appIds));
+            String appIdAndFlags = isTestEnabled ? appIds :  FileLoader.loadContent(new File(appIds));
             if (StringUtils.isNotBlank(appIdAndFlags)) {
                 String[] appIdFlagPair = appIdAndFlags.split(LKP_RECORD_DELIMITER);
                 for (String appIdFlag : appIdFlagPair) {
@@ -228,11 +229,11 @@ public class LkpFetcher {
         }
     }
 
-    public  void loadPageFmlys(Configuration conf, RuntimeContext runtimeContext) {
+    public  void loadPageFmlys() {
         if (pageFmlyMap.isEmpty()) {
-            boolean isTestEnabled = conf.getBoolean(Property.IS_TEST_ENABLE, false);
+            boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String pageFmlys = ubiConfig.getString(Property.PAGE_FMLY);
-            String pageFmlysValue = isTestEnabled ? pageFmlys : FileLoader.loadContent(runtimeContext.getDistributedCache().getFile(pageFmlys));
+            String pageFmlysValue = isTestEnabled ? pageFmlys : FileLoader.loadContent(new File(pageFmlys));
             if (StringUtils.isNotBlank(pageFmlysValue)) {
                 for (String pageFmlyPair : pageFmlysValue.split(LKP_RECORD_DELIMITER)) {
                     String[] pageFmlyNames = new String[2];
@@ -268,7 +269,7 @@ public class LkpFetcher {
         if (mpxMap.isEmpty()) {
             boolean isTestEnabled = conf.getBoolean(Property.IS_TEST_ENABLE, false);
             String mpxRotation = ubiConfig.getString(Property.MPX_ROTATION);
-            String mpxRotations = isTestEnabled ? mpxRotation : FileLoader.loadContent(runtimeContext.getDistributedCache().getFile(mpxRotation));
+            String mpxRotations = isTestEnabled ? mpxRotation : FileLoader.loadContent(new File(mpxRotation));
 
             if (StringUtils.isNotBlank(mpxRotations)) {
                 for (String mpx : mpxRotations.split(LKP_RECORD_DELIMITER)) {

@@ -115,6 +115,14 @@ public class UBIConfig {
         }
     }
 
+    public Boolean getBoolean(String key,Boolean bool) {
+        Object o = getRawValue(key);
+        if (o == null) {
+            return bool;
+        } else {
+            return Boolean.valueOf(o.toString());
+        }
+    }
     private Object getRawValue(String key) {
         if (key == null) {
             throw new NullPointerException("Key must not be null.");

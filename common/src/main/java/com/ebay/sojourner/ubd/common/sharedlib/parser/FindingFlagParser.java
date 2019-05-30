@@ -22,6 +22,6 @@ public class FindingFlagParser implements FieldParser<RawEvent, UbiEvent, Config
     @Override
     public void init(Configuration conf,RuntimeContext runtimeContext) throws Exception {
         lkpFetcher = LkpFetcher.getInstance();
-        lkpFetcher.loadFindingFlag(conf,runtimeContext);
+        lkpFetcher.loadFindingFlag();
     }
 }

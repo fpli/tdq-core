@@ -40,7 +40,7 @@ public class IFrameParser implements FieldParser<RawEvent, UbiEvent, Configurati
     @Override
     public void init(Configuration conf,RuntimeContext runtimeContext) throws Exception {
         lkpFetcher = LkpFetcher.getInstance();
-        lkpFetcher.loadIframePageIds(conf,runtimeContext);
+        lkpFetcher.loadIframePageIds();
        // LkpFetcher.loadIframePageIds4Bot12(conf);
     }
 }

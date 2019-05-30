@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Data
@@ -65,6 +66,8 @@ public class UbiSession implements Serializable{
     private String internalIp;
     private String externalIp;
     private String externalIp2;
+    private Map<String,Integer> botsingunature;
+    private Map<String,Integer> botCondition;
     public UbiSession()
     {
         this.distinctClickIdSet = new HashSet<Integer>();

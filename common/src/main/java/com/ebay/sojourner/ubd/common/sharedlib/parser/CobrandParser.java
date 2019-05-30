@@ -142,7 +142,7 @@ public class CobrandParser implements FieldParser<RawEvent, UbiEvent, Configurat
   }
   public void initLkpTable(Configuration conf,RuntimeContext runtimeContext) throws Exception {
     lkpFetcher=LkpFetcher.getInstance();
-    lkpFetcher.loadPageFmlys(conf,runtimeContext);
+    lkpFetcher.loadPageFmlys();
   }
 
   void setHalfPageIndicator(PageIndicator indicator) {

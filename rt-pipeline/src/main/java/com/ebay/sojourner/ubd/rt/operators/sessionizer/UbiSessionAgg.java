@@ -25,7 +25,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
 
     @Override
     public SessionAccumulator add(UbiEvent value, SessionAccumulator accumulator) {
-        if(value.isNewSession()) {
+        if(value.isNewSession()&&accumulator.getUbiSession().getSessionId()==null) {
             try {
                 value.updateSessionId();
                 sessionMetrics.feed(value,accumulator);
