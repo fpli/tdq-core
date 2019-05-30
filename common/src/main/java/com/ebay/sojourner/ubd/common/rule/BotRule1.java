@@ -5,7 +5,6 @@ import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.BotRules;
-import com.sun.xml.internal.bind.v2.model.runtime.RuntimeElement;
 
 import java.util.Map;
 import java.util.regex.Pattern;
