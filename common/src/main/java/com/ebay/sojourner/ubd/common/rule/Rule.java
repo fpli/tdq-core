@@ -4,16 +4,8 @@ import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 
-public interface Rule {
+public interface Rule<T> {
+
     void init();
-
-    void feed(UbiEvent ubiEvent, SessionAccumulator sessionAccumulator);
-
-    int getBotFlag();
-
-    int getBotFlag(UbiSession ubiSession);
-
-    void reset();
-
-
+    int getBotFlag(T t);
 }

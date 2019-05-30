@@ -2,18 +2,26 @@ package com.ebay.sojourner.ubd.rt.operators.sessionizer;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.sharedlib.detector.EventBotDetector;
+import com.ebay.sojourner.ubd.common.sharedlib.detector.SessionBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.log4j.Logger;
 
+import java.util.List;
+
 public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumulator,SessionAccumulator> {
     private static SessionMetrics sessionMetrics ;
+    private static EventBotDetector eventBotDetector;
+    private static SessionBotDetector sessionBotDetector;
     private static final Logger logger = Logger.getLogger(UbiSessionAgg.class);
 
     @Override
     public SessionAccumulator createAccumulator() {
         SessionAccumulator sessionAccumulator = new SessionAccumulator();
         sessionMetrics = SessionMetrics.getInstance();
+        eventBotDetector=EventBotDetector.getInstance();
+        sessionBotDetector=SessionBotDetector.getInstance();
         try {
             sessionMetrics.start(sessionAccumulator);
         } catch (Exception e) {
@@ -25,6 +33,8 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
 
     @Override
     public SessionAccumulator add(UbiEvent value, SessionAccumulator accumulator) {
+        List<Integer> botFlagList=eventBotDetector.getBotFlagList(value);
+        value.setBotFlags(botFlagList);
         if(value.isNewSession()&&accumulator.getUbiSession().getSessionId()==null) {
             try {
                 value.updateSessionId();
@@ -47,6 +57,8 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
                 logger.error("feed-session metrics collection log:"+e.getMessage());
             }
         }
+        List<Integer> sessionBotFlagList=sessionBotDetector.getBotFlagList(accumulator.getUbiSession());
+        accumulator.getUbiSession().setBotFlagList(sessionBotFlagList);
       return accumulator;
     }
 

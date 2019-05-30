@@ -1,0 +1,51 @@
+package com.ebay.sojourner.ubd.common.sharedlib.detector;
+
+import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.ubd.common.rule.BotRule1;
+import com.ebay.sojourner.ubd.common.rule.BotRule12;
+import com.ebay.sojourner.ubd.common.rule.Rule;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+
+public class SessionBotDetector implements BotDetector<UbiSession> {
+
+    private static SessionBotDetector sessionBotDetector;
+    private LinkedHashSet<Rule> botRules = null;
+    private SessionBotDetector() {
+        initBotRules();
+        for (Rule rule:botRules)
+        {
+            rule.init();
+        }
+    }
+    public static SessionBotDetector getInstance() {
+        if (sessionBotDetector == null) {
+            synchronized (SessionBotDetector.class) {
+                if (sessionBotDetector == null) {
+                    sessionBotDetector = new SessionBotDetector();
+                }
+            }
+        }
+        return sessionBotDetector;
+    }
+
+    @Override
+    public List<Integer> getBotFlagList(UbiSession ubiSession) {
+        List<Integer> botRuleList = new ArrayList<Integer>(botRules.size());
+        for (Rule rule:botRules)
+        {
+            Integer botRule =rule.getBotFlag(ubiSession);
+            botRuleList.add(botRule);
+        }
+        return botRuleList;
+    }
+
+    @Override
+    public void initBotRules() {
+        botRules.add(new BotRule12());
+
+    }
+}

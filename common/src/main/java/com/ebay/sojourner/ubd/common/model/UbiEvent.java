@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -56,6 +57,7 @@ public class UbiEvent implements Serializable {
   private Integer partialValidPage;
   private long sessionStartTime;
   private long sessionEndTime;
+  private List<Integer> botFlags;
   @Getter private long eventCnt;
   private Map<String, Object> counters;
   public void updateSessionId() {
