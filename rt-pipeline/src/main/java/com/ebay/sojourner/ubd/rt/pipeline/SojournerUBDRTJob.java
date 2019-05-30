@@ -40,7 +40,7 @@ public class SojournerUBDRTJob {
 
     public static void main(String[] args) throws Exception {
         UBIConfig ubiConfig = UBIConfig.getInstance();
-        ubiConfig.initAppConfiguration(new File("common/src/main/resources/ubi.properties"));
+        ubiConfig.initAppConfiguration(new File("/opt/sojourner-ubd/conf/ubi.properties"));
 
         final StreamExecutionEnvironment executionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment();

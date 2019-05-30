@@ -16,8 +16,8 @@ public class LookupUtils {
             StreamExecutionEnvironment executionEnvironment,
             ParameterTool params,
             UBIConfig ubiConfig) {
-        String lookupBase = "common/src/main/resources/lookup";
-        String configFile = params.get("config","common/src/main/resources/ubi.properties");
+        String lookupBase = "/opt/sojourner-ubd/conf/lookup";
+        String configFile = params.get("config","/opt/sojourner-ubd/conf/ubi.properties");
         executionEnvironment.registerCachedFile(configFile,"configFile");
 
         String iframePageIds = params.get("lookup/iframePageIds",lookupBase +  "/iframePageIds");
