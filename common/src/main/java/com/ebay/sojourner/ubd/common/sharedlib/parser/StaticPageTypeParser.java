@@ -1,11 +1,8 @@
 package com.ebay.sojourner.ubd.common.sharedlib.parser;
 
-
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJGetPageType;
-import org.apache.flink.api.common.functions.RuntimeContext;
-import org.apache.flink.configuration.Configuration;
 import org.apache.log4j.Logger;
 
 import java.util.Map;

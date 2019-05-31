@@ -5,7 +5,6 @@ import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.flink.configuration.Configuration;
 
 import java.io.File;
 

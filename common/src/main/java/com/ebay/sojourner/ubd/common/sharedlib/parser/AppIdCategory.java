@@ -1,6 +1,5 @@
 package com.ebay.sojourner.ubd.common.sharedlib.parser;
 
-
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
