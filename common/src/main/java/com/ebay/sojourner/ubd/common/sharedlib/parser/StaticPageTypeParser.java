@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 import java.util.Map;
 
-public class StaticPageTypeParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class StaticPageTypeParser implements FieldParser<RawEvent, UbiEvent> {
     private static final Logger log = Logger.getLogger(StaticPageTypeParser.class);
     private static  LkpFetcher lkpFetcher;
     @Override
@@ -22,7 +22,7 @@ public class StaticPageTypeParser implements FieldParser<RawEvent, UbiEvent, Con
             Integer rdt = ubiEvent.getRdt();
             Integer pageId = ubiEvent.getPageId();
             Integer[] pageInfo = new Integer[2];
-            Map<Integer, Integer[]> vtNewIdsMap = lkpFetcher.getVtNewIdsMap();
+            Map<Integer, Integer[]> vtNewIdsMap = LkpFetcher.getInstance().getVtNewIdsMap();
             if (pageId != null && rdt != null) {
                 if (vtNewIdsMap.containsKey(pageId)) {
                     pageInfo = vtNewIdsMap.get(pageId);
@@ -44,8 +44,7 @@ public class StaticPageTypeParser implements FieldParser<RawEvent, UbiEvent, Con
     }
 
     @Override
-    public void init(Configuration conf,RuntimeContext runtimeContext) throws Exception {
-        lkpFetcher=LkpFetcher.getInstance();
-        lkpFetcher.loadVtNewIds();
+    public void init() throws Exception {
+
     }
 }

@@ -23,7 +23,7 @@ import java.util.TimeZone;
  * Author: yunjzhang
  * Source code: /dw/etl/home/prod/sql/sg_ubi_freq.soj_event_wt1.ins.sql 
  * */
-public class TimestampParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
     private static final Logger log = Logger.getLogger(TimestampParser.class);
 	private static final long UPPERLIMITMICRO = 1 * 60 * 1000000L; // 2 minutes
 	private static final long LOWERLIMITMICRO = -30 * 60 * 1000000L; // 31 minutes
@@ -133,6 +133,6 @@ public class TimestampParser implements FieldParser<RawEvent, UbiEvent, Configur
 	}
 
     @Override
-    public void init(Configuration context,RuntimeContext runtimeContext) throws Exception {
+    public void init() throws Exception {
     }
 }

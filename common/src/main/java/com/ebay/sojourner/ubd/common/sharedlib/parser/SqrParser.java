@@ -15,7 +15,7 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SqrParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class SqrParser implements FieldParser<RawEvent, UbiEvent> {
     private static final Logger log = Logger.getLogger(SqrParser.class);
     private static final String S_QR_TAG = "sQr";
     public void parse(RawEvent rawEvent, UbiEvent ubiEvent) {
@@ -56,7 +56,7 @@ public class SqrParser implements FieldParser<RawEvent, UbiEvent, Configuration,
     }
 
     @Override
-    public void init(Configuration conf,RuntimeContext runtimeContext) throws Exception {
+    public void init() throws Exception {
         // nothing to do
     }
 }

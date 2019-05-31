@@ -9,6 +9,7 @@ import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.util.Set;
 
 public class AgentStringMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
@@ -19,7 +20,7 @@ public class AgentStringMetrics implements FieldMetrics<UbiEvent, SessionAccumul
     private static UBIConfig ubiConfig ;
     @Override
     public void init() throws Exception {
-        ubiConfig = UBIConfig.getInstance();
+        ubiConfig = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));
         agentExcludeSet = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.AGENT_EXCLUDE_PAGES), Property.PROPERTY_DELIMITER);
         logger.info("UBIConfig.getString(Property.AGENT_EXCLUDE_PAGES):"+ubiConfig.getString(Property.AGENT_EXCLUDE_PAGES));
 

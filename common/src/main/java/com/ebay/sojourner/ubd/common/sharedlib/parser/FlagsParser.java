@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FlagsParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class FlagsParser implements FieldParser<RawEvent, UbiEvent> {
     
     private static final Logger log = Logger.getLogger(FlagsParser.class);
     private static final String FLGS_TAG = "flgs";
@@ -31,7 +31,7 @@ public class FlagsParser implements FieldParser<RawEvent, UbiEvent, Configuratio
     }
 
     @Override
-    public void init(Configuration conf,RuntimeContext runtimeContext) throws Exception {
+    public void init() throws Exception {
         // nothing to do
     }
 }

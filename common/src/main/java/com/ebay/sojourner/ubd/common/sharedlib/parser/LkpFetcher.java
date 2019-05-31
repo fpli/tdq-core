@@ -35,11 +35,11 @@ public class LkpFetcher {
     private static Map<String, Boolean> selectedIps = new HashMap<String, Boolean>();
     private static Set<String> selectedAgents = new HashSet<String>();
     private static  UBIConfig ubiConfig;
-    private Map<String, String> result;
+    private Map<String, String> result = new HashMap<String, String>();
     private static  LkpFetcher lkpFetcher;
     public LkpFetcher() {
-        ubiConfig = UBIConfig.getInstance();
-        result = new HashMap<String, String>();
+        ubiConfig = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));
+        loadResources();
     }
     public static LkpFetcher getInstance() {
         if (lkpFetcher == null) {
@@ -50,6 +50,22 @@ public class LkpFetcher {
             }
         }
         return lkpFetcher;
+    }
+
+    private  void loadResources()
+    {
+        loadIframePageIds();
+        loadSelectedIps();
+        loadSelectedAgents();
+        loadLargeSessionGuid();
+        loadIabAgent();
+        loadFindingFlag();
+        loadTestUserIds();
+        loadVtNewIds();
+        loadAppIds();
+        loadPageFmlys();
+        loadMpxRotetion();
+
     }
     public void loadIframePageIds() {
         if (pageIdSet.isEmpty()) {
@@ -66,17 +82,17 @@ public class LkpFetcher {
         }
     }
 
-    public void loadSelectedIps(Configuration conf) {
-        parseTextFile(Property.SELECTED_IPS, selectedIps, conf);
+    public void loadSelectedIps() {
+        parseTextFile(Property.SELECTED_IPS, selectedIps);
     }
 
-    public void loadSelectedAgents(Configuration conf) {
-        parseTextFile(Property.SELECTED_AGENTS, selectedAgents, conf);
+    public void loadSelectedAgents() {
+        parseTextFile(Property.SELECTED_AGENTS, selectedAgents);
     }
 
-    private void parseTextFile(String filePathProperty, Set<String> sets, Configuration conf) {
+    private void parseTextFile(String filePathProperty, Set<String> sets) {
         if (sets.isEmpty()) {
-            boolean isTestEnabled = conf.getBoolean(Property.IS_TEST_ENABLE, false);
+            boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String file = ubiConfig.getString(filePathProperty);
             String fileContent = isTestEnabled ? file : FileLoader.loadContent(file, null);
             if (StringUtils.isNotBlank(fileContent)) {
@@ -95,9 +111,9 @@ public class LkpFetcher {
         }
     }
     
-    private  void parseTextFile(String filePathProperty, Map<String, Boolean> maps, Configuration conf) {
+    private  void parseTextFile(String filePathProperty, Map<String, Boolean> maps) {
         if (maps.isEmpty()) {
-            boolean isTestEnabled = conf.getBoolean(Property.IS_TEST_ENABLE, false);
+            boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String file = ubiConfig.getString(filePathProperty);
             String fileContent = isTestEnabled ? file : FileLoader.loadContent(file, null);
             if (StringUtils.isNotBlank(fileContent)) {
@@ -265,9 +281,9 @@ public class LkpFetcher {
         result.put(Property.SELECTED_AGENTS, FileLoader.loadContent(null, Resources.SELECTED_AGENTS));
     }
 
-    public  void loadMpxRotetion(Configuration conf, RuntimeContext runtimeContext) {
+    public  void loadMpxRotetion() {
         if (mpxMap.isEmpty()) {
-            boolean isTestEnabled = conf.getBoolean(Property.IS_TEST_ENABLE, false);
+            boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String mpxRotation = ubiConfig.getString(Property.MPX_ROTATION);
             String mpxRotations = isTestEnabled ? mpxRotation : FileLoader.loadContent(new File(mpxRotation));
 

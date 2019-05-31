@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ReferrerHashParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class ReferrerHashParser implements FieldParser<RawEvent, UbiEvent> {
     private static final Logger log = Logger.getLogger(ReferrerHashParser.class);
     private static final String R_TAG = "r";
     public void parse(RawEvent rawEvent, UbiEvent ubiEvent) {
@@ -38,7 +38,7 @@ public class ReferrerHashParser implements FieldParser<RawEvent, UbiEvent, Confi
     }
 
     @Override
-    public void init(Configuration conf,RuntimeContext runtimeContext) throws Exception {
+    public void init() throws Exception {
         // nothing to do
     }
 }

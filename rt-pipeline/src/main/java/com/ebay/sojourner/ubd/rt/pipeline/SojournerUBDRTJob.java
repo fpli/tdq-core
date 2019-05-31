@@ -39,14 +39,13 @@ import java.io.File;
 public class SojournerUBDRTJob {
 
     public static void main(String[] args) throws Exception {
-        UBIConfig ubiConfig = UBIConfig.getInstance();
-        ubiConfig.initAppConfiguration(new File("/opt/sojourner-ubd/conf/ubi.properties"));
+        UBIConfig ubiConfig = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));
 
         final StreamExecutionEnvironment executionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment();
         final ParameterTool params = ParameterTool.fromArgs(args);
         executionEnvironment.getConfig().setGlobalJobParameters(new SojJobParameters());
-        LookupUtils.uploadFiles(executionEnvironment, params,ubiConfig);
+        LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
         executionEnvironment.enableCheckpointing(60 * 1000);
@@ -75,14 +74,14 @@ public class SojournerUBDRTJob {
         // Do sessionization and calculate session metrics
         OutputTag<UbiSession> sessionOutputTag = new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
         OutputTag<UbiEvent> lateEventOutputTag = new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
-        JobID jobId=executionEnvironment.getStreamGraph().getJobGraph().getJobID();
+        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
         SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
                 .keyBy("guid")
                 .window(EventTimeSessionWindows.withGap(Time.minutes(2)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .allowedLateness(Time.minutes(1))
                 .sideOutputLateData(lateEventOutputTag)
-                .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction(sessionOutputTag,jobId))
+                .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction(sessionOutputTag, jobId))
                 .name("Sessionizer & Session Metrics Calculator");
 
         // Load data to file system for batch processing
@@ -118,7 +117,8 @@ public class SojournerUBDRTJob {
         // Save IP Signature for query
         ipSignatureDataStream
                 .keyBy("clientIp")
-                .asQueryableState("bot7",new ValueStateDescriptor<>("", TypeInformation.of(new TypeHint<IpSignature>() {})));
+                .asQueryableState("bot7", new ValueStateDescriptor<>("", TypeInformation.of(new TypeHint<IpSignature>() {
+                })));
 
         // Submit dataflow
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");

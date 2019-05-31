@@ -9,6 +9,7 @@ import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -23,7 +24,7 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
     private static UBIConfig ubiConfig ;
     @Override
     public void init() throws Exception {
-        ubiConfig = UBIConfig.getInstance();
+        ubiConfig = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));
         badIPPages = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.IP_EXCLUDE_PAGES), Property.PROPERTY_DELIMITER);
         logger.info("UBIConfig.getString(Property.IP_EXCLUDE_PAGES):"+ubiConfig.getString(Property.IP_EXCLUDE_PAGES));
         invalidIPPattern = ubiConfig.getString(Property.EXCLUDE_IP_PATTERN);

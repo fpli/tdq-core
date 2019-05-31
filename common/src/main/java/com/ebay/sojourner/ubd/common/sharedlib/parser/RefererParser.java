@@ -8,7 +8,7 @@ import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.configuration.Configuration;
 
 
-public class RefererParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class RefererParser implements FieldParser<RawEvent, UbiEvent> {
     
     public static final String REFERER = "Referer";
 
@@ -21,7 +21,7 @@ public class RefererParser implements FieldParser<RawEvent, UbiEvent, Configurat
     }
 
     @Override
-    public void init(Configuration conf,RuntimeContext runtimeContext) throws Exception {
+    public void init() throws Exception {
         // nothing to do
     }
 }

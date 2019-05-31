@@ -7,6 +7,8 @@ import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.configuration.Configuration;
 
+import java.io.File;
+
 public class MobileEventsIdentifier {
 
     private String mobileStartPattern;
@@ -16,13 +18,13 @@ public class MobileEventsIdentifier {
     private String[] indexPatternList;
     public String[] matchPatternList;
     public String[][] multiMatchPatternArray;
-   private static UBIConfig ubiConfig;
-    public MobileEventsIdentifier(Configuration conf) {
-        ubiConfig = UBIConfig.getInstance();
-        mobileStartPattern = ubiConfig.getString(Property.MOBILE_AGENT_START);
-        mobileIndexPattern = ubiConfig.getString(Property.MOBILE_AGENT_INDEX);
-        mobileMatchPattern = ubiConfig.getString(Property.MOBILE_AGENT_OTHER);
-        if (!conf.getBoolean(Property.IS_TEST_ENABLE, false)) {
+    private static UBIConfig ubiConfig;
+
+    public MobileEventsIdentifier() {
+        mobileStartPattern = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.MOBILE_AGENT_START);
+        mobileIndexPattern = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.MOBILE_AGENT_INDEX);
+        mobileMatchPattern = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.MOBILE_AGENT_OTHER);
+        if (!UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getBoolean(Property.IS_TEST_ENABLE, false)) {
             if (mobileIndexPattern == null || mobileMatchPattern == null || mobileStartPattern == null) {
                 throw new RuntimeException();
             }

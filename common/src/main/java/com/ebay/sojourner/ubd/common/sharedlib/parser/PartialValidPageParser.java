@@ -11,7 +11,7 @@ import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.configuration.Configuration;
 
 
-public class PartialValidPageParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class PartialValidPageParser implements FieldParser<RawEvent, UbiEvent> {
 
 	//	private long startTimestamp = 1282147200000000L + 2208963600000000L;  2010-08-19 sojTimestamp
 	private Integer[] CLFGPageIds = { 2588, 3030, 3907, 4939, 5108 };
@@ -242,7 +242,7 @@ public class PartialValidPageParser implements FieldParser<RawEvent, UbiEvent, C
 	}
 
 	@Override
-	public void init(Configuration conf,RuntimeContext runtimeContext) throws Exception {
+	public void init() throws Exception {
 		// nothing to do
 	}
 }

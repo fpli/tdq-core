@@ -5,14 +5,12 @@ import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.util.IntegerField;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.flink.api.common.functions.RuntimeContext;
-import org.apache.flink.configuration.Configuration;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ItemIdParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class ItemIdParser implements FieldParser<RawEvent, UbiEvent> {
 
     private static final Logger log = Logger.getLogger(ItemIdParser.class);
     private static final String _ITM_TAG = "_itm";
@@ -53,7 +51,7 @@ public class ItemIdParser implements FieldParser<RawEvent, UbiEvent, Configurati
     }
 
     @Override
-    public void init(Configuration conf,RuntimeContext runtimeContext) throws Exception {
+    public void init() throws Exception {
         // nothing to do
     }
 }

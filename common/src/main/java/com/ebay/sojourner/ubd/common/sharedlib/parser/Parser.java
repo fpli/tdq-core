@@ -7,9 +7,9 @@ package com.ebay.sojourner.ubd.common.sharedlib.parser;
  *
  * @param <Source>
  */
-public interface Parser<Source, Target,Configuration, Context> {
+public interface Parser<Source, Target> {
 
 
-    public void init(Configuration configuration,Context context) throws Exception ;
+    public void init() throws Exception ;
     public void parse(Source source, Target target) throws Exception;
 }

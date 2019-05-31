@@ -7,26 +7,26 @@ import java.util.LinkedHashSet;
  *
  * @param <Source>
  */
-public abstract class RecordParser<Source, Target,Configuration, Context> implements Parser<Source, Target,Configuration, Context> {
+public abstract class RecordParser<Source, Target> implements Parser<Source, Target> {
     
-    protected LinkedHashSet<FieldParser<Source, Target,Configuration,  Context>> fieldParsers = new LinkedHashSet<FieldParser<Source, Target,Configuration,  Context>>();
+    protected LinkedHashSet<FieldParser<Source, Target>> fieldParsers = new LinkedHashSet<FieldParser<Source, Target>>();
 
     public abstract void initFieldParsers();
     
-    public void init(Configuration configuration, Context context) throws Exception {
-        for (FieldParser<Source, Target, Configuration, Context> parser : fieldParsers) {
-            parser.init(configuration,context);
+    public void init() throws Exception {
+        for (FieldParser<Source, Target> parser : fieldParsers) {
+            parser.init();
         }
     }
     
     
     public void parse(Source source, Target target) throws Exception {
-        for (FieldParser<Source, Target,Configuration,  Context> parser : fieldParsers) {
+        for (FieldParser<Source, Target> parser : fieldParsers) {
             parser.parse(source, target);
         }
     }
 
-    public void addFieldParser(FieldParser<Source, Target,Configuration,  Context> parser) {
+    public void addFieldParser(FieldParser<Source, Target> parser) {
         if (!fieldParsers.contains(parser)) {
             fieldParsers.add(parser);
         } else {

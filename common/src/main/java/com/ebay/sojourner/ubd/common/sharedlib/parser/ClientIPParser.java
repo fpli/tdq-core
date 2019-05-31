@@ -14,14 +14,14 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.log4j.Logger;
 
 
-public class ClientIPParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class ClientIPParser implements FieldParser<RawEvent, UbiEvent> {
     private static final Logger log = Logger.getLogger(ClientIPParser.class);
     public static final String REMOTE_IP = "RemoteIP";
     public static final String FORWARDED_FOR = "ForwardedFor";
     public static final String AGENT = "Agent";
 
 	@Override
-	public void init(Configuration configuration,RuntimeContext context) throws Exception {
+	public void init() throws Exception {
 
 	}
 

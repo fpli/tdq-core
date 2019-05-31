@@ -7,9 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.configuration.Configuration;
 
-public class AgentInfoParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class AgentInfoParser implements FieldParser<RawEvent, UbiEvent> {
     @Override
-    public void init(Configuration configuration,RuntimeContext context) throws Exception {
+    public void init() throws Exception {
 
     }
 

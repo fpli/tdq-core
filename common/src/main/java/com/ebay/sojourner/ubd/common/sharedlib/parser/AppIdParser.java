@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class AppIdParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class AppIdParser implements FieldParser<RawEvent, UbiEvent> {
     private static final Logger log = Logger.getLogger(AppIdParser.class);
     public static final String APPID = "app";
     public static final String REFERER = "Referer";
@@ -180,7 +180,7 @@ public class AppIdParser implements FieldParser<RawEvent, UbiEvent, Configuratio
     }
 
     @Override
-    public void init(Configuration configuration,RuntimeContext context) throws Exception {
+    public void init() throws Exception {
 
     }
 }

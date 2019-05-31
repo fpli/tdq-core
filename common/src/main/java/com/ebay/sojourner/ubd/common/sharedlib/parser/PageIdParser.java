@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PageIdParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class PageIdParser implements FieldParser<RawEvent, UbiEvent> {
 
     private static final Logger log = Logger.getLogger(PageIdParser.class);
 
@@ -38,7 +38,7 @@ public class PageIdParser implements FieldParser<RawEvent, UbiEvent, Configurati
     }
 
     @Override
-    public void init(Configuration conf,RuntimeContext runtimeContext) throws Exception {
+    public void init() throws Exception {
         // nothing to do
     }
 }

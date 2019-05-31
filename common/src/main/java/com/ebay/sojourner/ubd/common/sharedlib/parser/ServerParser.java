@@ -9,7 +9,7 @@ import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.configuration.Configuration;
 
 
-public class ServerParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class ServerParser implements FieldParser<RawEvent, UbiEvent> {
 
     @Override
     public void parse(RawEvent rawEvent, UbiEvent ubiEvent) throws Exception {
@@ -23,7 +23,7 @@ public class ServerParser implements FieldParser<RawEvent, UbiEvent, Configurati
     }
 
     @Override
-    public void init(Configuration conf,RuntimeContext runtimeContext) throws Exception {
+    public void init() throws Exception {
         // nothing to do
     }
 }

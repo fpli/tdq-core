@@ -12,7 +12,7 @@ import org.apache.flink.configuration.Configuration;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CookiesParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class CookiesParser implements FieldParser<RawEvent, UbiEvent> {
 	private static final String CK_TAG = "ck";
 	private static final String COOKIE2_TAG = "C";
 	public void parse(RawEvent rawEvent, UbiEvent ubiEvent) {
@@ -60,6 +60,6 @@ public class CookiesParser implements FieldParser<RawEvent, UbiEvent, Configurat
 	}
 
     @Override
-    public void init(Configuration conf,RuntimeContext runtimeContext) throws Exception {
+    public void init() throws Exception {
     }
 }

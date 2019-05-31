@@ -9,7 +9,7 @@ import org.apache.flink.configuration.Configuration;
 import java.util.HashMap;
 import java.util.Map;
 
-public class IdentityParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class IdentityParser implements FieldParser<RawEvent, UbiEvent> {
     private static final String G_TAG = "g";
 //    private Configuration configuration;
     @Override
@@ -45,7 +45,7 @@ public class IdentityParser implements FieldParser<RawEvent, UbiEvent, Configura
     }
 
     @Override
-    public void init(Configuration context,RuntimeContext runtimeContext) throws Exception {
+    public void init() throws Exception {
 //        configuration=context;
 
     }

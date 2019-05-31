@@ -6,11 +6,11 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.configuration.Configuration;
 
-public class EventParser extends RecordParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class EventParser extends RecordParser<RawEvent, UbiEvent> {
     
-    public EventParser(Configuration conf,RuntimeContext runtimeContext) throws Exception {
+    public EventParser() throws Exception {
         initFieldParsers();
-        init(conf,runtimeContext);
+        init();
     }
 
     @Override

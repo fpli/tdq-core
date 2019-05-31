@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SiidParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class SiidParser implements FieldParser<RawEvent, UbiEvent> {
     private static final Logger log = Logger.getLogger(SiidParser.class);
     private static final String SIID_TAG = "siid";
     public void parse(RawEvent rawEvent, UbiEvent ubiEvent) {
@@ -38,7 +38,7 @@ public class SiidParser implements FieldParser<RawEvent, UbiEvent, Configuration
     }
 
     @Override
-    public void init(Configuration conf,RuntimeContext runtimeContext) throws Exception {
+    public void init() throws Exception {
         // nothing to do
     }
 }

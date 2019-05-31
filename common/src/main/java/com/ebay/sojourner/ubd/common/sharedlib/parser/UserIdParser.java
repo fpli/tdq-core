@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserIdParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class UserIdParser implements FieldParser<RawEvent, UbiEvent> {
     private static final Logger log = Logger.getLogger(UserIdParser.class);
     private static final String U_TAG = "u";
     public void parse(RawEvent rawEvent, UbiEvent ubiEvent) {
@@ -46,6 +46,6 @@ public class UserIdParser implements FieldParser<RawEvent, UbiEvent, Configurati
     }
 
     @Override
-    public void init(Configuration context,RuntimeContext runtimeContext) throws Exception {
+    public void init() throws Exception {
     }
 }

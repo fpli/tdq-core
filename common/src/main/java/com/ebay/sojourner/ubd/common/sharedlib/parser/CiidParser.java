@@ -13,9 +13,9 @@ import org.apache.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CiidParser implements FieldParser<RawEvent, UbiEvent, Configuration,RuntimeContext> {
+public class CiidParser implements FieldParser<RawEvent, UbiEvent> {
     @Override
-    public void init(Configuration configuration,RuntimeContext context) throws Exception {
+    public void init() throws Exception {
 
     }
 
