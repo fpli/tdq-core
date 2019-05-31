@@ -14,6 +14,7 @@ import com.ebay.sojourner.ubd.rt.operators.sessionizer.UbiSessionWindowProcessFu
 import com.ebay.sojourner.ubd.rt.util.LookupUtils;
 import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
+import com.ebay.sojourner.ubd.rt.util.StateBackendFactory;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
@@ -21,8 +22,6 @@ import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.runtime.state.StateBackend;
-import org.apache.flink.runtime.state.filesystem.FsStateBackend;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -49,8 +48,7 @@ public class SojournerUBDRTJob {
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
         executionEnvironment.enableCheckpointing(60 * 1000);
-        executionEnvironment.setStateBackend(
-                (StateBackend) new FsStateBackend("file:///opt/sojourner-ubd/checkpoint"));
+        executionEnvironment.setStateBackend(StateBackendFactory.getStateBackend(StateBackendFactory.FS));
         executionEnvironment.setParallelism(1);
 
         // Consume RawEvent from Rheos PathFinder Topic, assign timestamps and emit watermarks.

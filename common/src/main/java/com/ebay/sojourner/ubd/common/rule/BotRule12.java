@@ -1,13 +1,9 @@
 package com.ebay.sojourner.ubd.common.rule;
 
-
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.util.BotRules;
+import static com.ebay.sojourner.ubd.common.util.BotRules.*;
 
-import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 public class BotRule12 implements Rule<UbiSession> {
 
@@ -15,7 +11,6 @@ public class BotRule12 implements Rule<UbiSession> {
 
     @Override
     public void init() {
-
 
     }
 
@@ -26,28 +21,20 @@ public class BotRule12 implements Rule<UbiSession> {
         Long end = minMaxEventTtimestamp[1];
         Integer eventCount = ubiSession.getEventCnt();
         Set<Integer> sessionBotFlagList = ubiSession.getBotFlagList();
-        if (sessionBotFlagList==null||sessionBotFlagList.size()==0||!sessionBotFlagList.contains(12)) {
-            if (start != 0L && end != 0L && eventCount > 1) {
+
+        int botFlag = NON_BOT_FLAG;
+        if (!sessionBotFlagList.contains(MANY_FAST_EVENTS_BOT_FLAG)) {
+            if ((start != 0L) && (end != 0L) && (eventCount > 1)) {
                 Long duration = Math.abs(end - start);
                 if (duration <= (long) TOTAL_INTERVAL_MICRO_SEC * (eventCount - 1)) {
-                    return BotRules.MANY_FAST_EVENTS_BOT_FLAG;
-                }
-                else
-                {
-                    return BotRules.NON_BOT_FLAG;
+                    botFlag = MANY_FAST_EVENTS_BOT_FLAG;
                 }
             }
-            else
-            {
-                return BotRules.NON_BOT_FLAG;
-            }
-        } else if (sessionBotFlagList.contains(12)) {
-            return BotRules.MANY_FAST_EVENTS_BOT_FLAG;
+        } else {
+            botFlag = MANY_FAST_EVENTS_BOT_FLAG;
         }
 
-
-        return BotRules.NON_BOT_FLAG;
-
+        return botFlag;
     }
 
 }

@@ -25,7 +25,7 @@ public class UbiSession implements Serializable{
     private Integer endPageId;
     private Long startTimestamp;
     private Integer durationSec;
-    private Integer eventCnt;
+    private Integer eventCnt = 0;
     private Integer viCoreCnt;
     private Integer bidCoreCnt;
     private Integer binCoreCnt;
