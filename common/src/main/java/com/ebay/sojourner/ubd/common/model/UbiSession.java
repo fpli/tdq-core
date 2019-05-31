@@ -3,10 +3,7 @@ package com.ebay.sojourner.ubd.common.model;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Data
 public class UbiSession implements Serializable{
@@ -68,7 +65,7 @@ public class UbiSession implements Serializable{
     private String externalIp;
     private String externalIp2;
     private Long[] minMaxEventTimestamp;
-    private List<Integer> botFlagList;
+    private Set<Integer> botFlagList = new LinkedHashSet<Integer>();
     public UbiSession()
     {
         this.distinctClickIdSet = new HashSet<Integer>();

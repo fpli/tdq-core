@@ -6,6 +6,7 @@ import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.BotRules;
 
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class BotRule12 implements Rule<UbiSession> {
@@ -24,8 +25,8 @@ public class BotRule12 implements Rule<UbiSession> {
         Long start = minMaxEventTtimestamp[0];
         Long end = minMaxEventTtimestamp[1];
         Integer eventCount = ubiSession.getEventCnt();
-        List<Integer> sessionBotFlagList = ubiSession.getBotFlagList();
-        if (sessionBotFlagList.get(0) == 0) {
+        Set<Integer> sessionBotFlagList = ubiSession.getBotFlagList();
+        if (sessionBotFlagList==null||sessionBotFlagList.size()==0||!sessionBotFlagList.contains(12)) {
             if (start != 0L && end != 0L && eventCount > 1) {
                 Long duration = Math.abs(end - start);
                 if (duration <= (long) TOTAL_INTERVAL_MICRO_SEC * (eventCount - 1)) {
@@ -40,7 +41,7 @@ public class BotRule12 implements Rule<UbiSession> {
             {
                 return BotRules.NON_BOT_FLAG;
             }
-        } else if (sessionBotFlagList.get(0) == 12) {
+        } else if (sessionBotFlagList.contains(12)) {
             return BotRules.MANY_FAST_EVENTS_BOT_FLAG;
         }
 

@@ -7,18 +7,20 @@ import com.ebay.sojourner.ubd.common.rule.Rule;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class EventBotDetector implements BotDetector<UbiEvent> {
 
     private static EventBotDetector eventBotDetector;
-    private LinkedHashSet<Rule> botRules = null;
+    private Set<Rule> botRules = new LinkedHashSet<Rule>();
+
     private EventBotDetector() {
-       initBotRules();
-        for (Rule rule:botRules)
-        {
+        initBotRules();
+        for (Rule rule : botRules) {
             rule.init();
         }
     }
+
     public static EventBotDetector getInstance() {
         if (eventBotDetector == null) {
             synchronized (EventBotDetector.class) {
@@ -31,12 +33,13 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
     }
 
     @Override
-    public List<Integer> getBotFlagList(UbiEvent ubiEvent) {
-        List<Integer> botRuleList = new ArrayList<Integer>(botRules.size());
-        for (Rule rule:botRules)
-        {
-            Integer botRule =rule.getBotFlag(ubiEvent);
-            botRuleList.add(botRule);
+    public Set<Integer> getBotFlagList(UbiEvent ubiEvent) {
+        Set<Integer> botRuleList = new LinkedHashSet<Integer>(botRules.size());
+        for (Rule rule : botRules) {
+            Integer botRule = rule.getBotFlag(ubiEvent);
+            if(botRule!=0) {
+                botRuleList.add(botRule);
+            }
         }
         return botRuleList;
     }

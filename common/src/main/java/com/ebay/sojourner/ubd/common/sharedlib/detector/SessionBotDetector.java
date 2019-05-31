@@ -9,11 +9,12 @@ import com.ebay.sojourner.ubd.common.rule.Rule;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SessionBotDetector implements BotDetector<UbiSession> {
 
     private static SessionBotDetector sessionBotDetector;
-    private LinkedHashSet<Rule> botRules = null;
+    private Set<Rule> botRules = new LinkedHashSet<Rule>();
     private SessionBotDetector() {
         initBotRules();
         for (Rule rule:botRules)
@@ -33,12 +34,14 @@ public class SessionBotDetector implements BotDetector<UbiSession> {
     }
 
     @Override
-    public List<Integer> getBotFlagList(UbiSession ubiSession) {
-        List<Integer> botRuleList = new ArrayList<Integer>(botRules.size());
+    public Set<Integer> getBotFlagList(UbiSession ubiSession) {
+        Set<Integer> botRuleList = new LinkedHashSet<Integer>(botRules.size());
         for (Rule rule:botRules)
         {
             Integer botRule =rule.getBotFlag(ubiSession);
-            botRuleList.add(botRule);
+            if(botRule!=0) {
+                botRuleList.add(botRule);
+            }
         }
         return botRuleList;
     }

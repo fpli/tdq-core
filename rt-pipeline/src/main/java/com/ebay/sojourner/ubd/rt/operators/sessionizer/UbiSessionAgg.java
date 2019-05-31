@@ -9,6 +9,7 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.log4j.Logger;
 
 import java.util.List;
+import java.util.Set;
 
 public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumulator,SessionAccumulator> {
     private static SessionMetrics sessionMetrics ;
@@ -33,7 +34,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
 
     @Override
     public SessionAccumulator add(UbiEvent value, SessionAccumulator accumulator) {
-        List<Integer> botFlagList=eventBotDetector.getBotFlagList(value);
+        Set<Integer> botFlagList=eventBotDetector.getBotFlagList(value);
         value.setBotFlags(botFlagList);
         if(value.isNewSession()&&accumulator.getUbiSession().getSessionId()==null) {
             try {
@@ -57,7 +58,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
                 logger.error("feed-session metrics collection log:"+e.getMessage());
             }
         }
-        List<Integer> sessionBotFlagList=sessionBotDetector.getBotFlagList(accumulator.getUbiSession());
+        Set<Integer> sessionBotFlagList=sessionBotDetector.getBotFlagList(accumulator.getUbiSession());
         accumulator.getUbiSession().setBotFlagList(sessionBotFlagList);
       return accumulator;
     }

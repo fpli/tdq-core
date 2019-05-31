@@ -1,8 +1,9 @@
 package com.ebay.sojourner.ubd.common.sharedlib.detector;
 
 import java.util.List;
+import java.util.Set;
 
 public interface BotDetector<T> {
-    List<Integer> getBotFlagList(T t);
+    Set<Integer> getBotFlagList(T t);
     void initBotRules();
 }

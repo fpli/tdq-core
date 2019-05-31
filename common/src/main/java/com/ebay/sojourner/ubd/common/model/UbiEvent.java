@@ -10,8 +10,10 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Data
@@ -57,7 +59,7 @@ public class UbiEvent implements Serializable {
   private Integer partialValidPage;
   private long sessionStartTime;
   private long sessionEndTime;
-  private List<Integer> botFlags;
+  private Set<Integer> botFlags= new LinkedHashSet<Integer>();
   @Getter private long eventCnt;
   private Map<String, Object> counters;
   public void updateSessionId() {
