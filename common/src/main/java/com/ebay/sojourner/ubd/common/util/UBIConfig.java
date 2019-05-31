@@ -5,7 +5,6 @@ import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.flink.configuration.Configuration;
 import org.apache.log4j.Logger;
 
 import java.io.File;

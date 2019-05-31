@@ -1,6 +1,5 @@
 package com.ebay.sojourner.ubd.common.sharedlib.parser;
 
-
 import com.ebay.sojourner.ubd.common.model.ClientData;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
@@ -9,10 +8,7 @@ import com.ebay.sojourner.ubd.common.sharedlib.util.IsValidPrivateIPv4;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJListGetValueByIndex;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJListLastElement;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.flink.api.common.functions.RuntimeContext;
-import org.apache.flink.configuration.Configuration;
 import org.apache.log4j.Logger;
-
 
 public class ClientIPParser implements FieldParser<RawEvent, UbiEvent> {
     private static final Logger log = Logger.getLogger(ClientIPParser.class);

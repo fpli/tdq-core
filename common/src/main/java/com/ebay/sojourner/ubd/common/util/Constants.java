@@ -1,7 +1,6 @@
 package com.ebay.sojourner.ubd.common.util;
 
-
-import org.apache.flink.core.fs.Path;
+import java.io.File;
 
 public class Constants {
     // Version Control for POJO
@@ -19,9 +18,9 @@ public class Constants {
     public static final long EOD_BOT_POOL_THRESHOLD = 1000000; //1,000,000
     public static final long EOD_BOT_ROLLOUT_THRESHOLD = 10000000; //10,000,000
     // Date Format for Data Partition
-    public static final String DATE_PARTITION = new StringBuilder().append("yyyy").append(Path.SEPARATOR)
-                                                                     .append("MM").append(Path.SEPARATOR)
-                                                                     .append("dd").append(Path.SEPARATOR).toString();
+    public static final String DATE_PARTITION = new StringBuilder().append("yyyy").append(File.pathSeparator)
+                                                                     .append("MM").append(File.pathSeparator)
+                                                                     .append("dd").append(File.pathSeparator).toString();
     public static final char[] HEX_DIGITS = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
     public static final String NO_SESSION_ID = "NO_SESSION_ID";
     public static final long NO_TIMESTAMP = Long.MIN_VALUE;
