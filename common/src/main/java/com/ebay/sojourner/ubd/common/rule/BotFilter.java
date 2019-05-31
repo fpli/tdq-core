@@ -40,7 +40,7 @@ public class BotFilter implements ValueFilter<UbiSession, Integer> {
             }
         }
         
-        if (session.getNonIframeRdtEventCnt() != null && session.getNonIframeRdtEventCnt() == 0 && invalidSessionBotFilter.contains(botFlag)){
+        if ( session.getNonIframeRdtEventCnt() == 0 && invalidSessionBotFilter.contains(botFlag)){
             return true;
         }
 
