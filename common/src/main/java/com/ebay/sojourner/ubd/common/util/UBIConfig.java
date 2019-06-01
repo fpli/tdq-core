@@ -1,7 +1,6 @@
 package com.ebay.sojourner.ubd.common.util;
 
 
-import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
 import org.apache.commons.lang3.StringUtils;

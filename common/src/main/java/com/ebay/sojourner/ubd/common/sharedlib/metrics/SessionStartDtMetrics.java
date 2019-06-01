@@ -3,15 +3,8 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.util.SOJListGetValueByIndex;
-import com.ebay.sojourner.ubd.common.util.Property;
-import com.ebay.sojourner.ubd.common.util.PropertyUtils;
-import com.ebay.sojourner.ubd.common.util.UBIConfig;
-import org.apache.log4j.Logger;
 
-import java.text.SimpleDateFormat;
-import java.util.Set;
-import java.util.regex.Pattern;
+import org.apache.log4j.Logger;
 
 public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 

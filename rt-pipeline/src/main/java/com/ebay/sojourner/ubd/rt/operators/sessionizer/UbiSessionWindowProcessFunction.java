@@ -1,17 +1,13 @@
 package com.ebay.sojourner.ubd.rt.operators.sessionizer;
 
-import com.ebay.sojourner.ubd.common.model.IpSignature;
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.ubd.common.sharedlib.detector.SignatureBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
+
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.api.common.state.ValueState;
-import org.apache.flink.api.common.state.ValueStateDescriptor;
-import org.apache.flink.api.common.typeinfo.TypeHint;
-import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.queryablestate.client.QueryableStateClient;
@@ -23,7 +19,7 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.net.UnknownHostException;
-import java.util.concurrent.CompletableFuture;
+import java.util.Set;
 
 
 public class UbiSessionWindowProcessFunction
@@ -35,6 +31,7 @@ public class UbiSessionWindowProcessFunction
     private String proxyHost = "127.0.0.1";
     private int proxyPort = 9069;
     private QueryableStateClient client = null;
+    private static SignatureBotDetector singnatureBotDetector;
 
     public UbiSessionWindowProcessFunction(OutputTag outputTag, JobID jobID) throws UnknownHostException {
         this.outputTag = outputTag;
@@ -50,8 +47,16 @@ public class UbiSessionWindowProcessFunction
         SessionAccumulator sessionAccumulator = elements.iterator().next();
 
         if (sessionAccumulator.getUbiEvent() != null) {
-            out.collect(sessionAccumulator.getUbiEvent());
+            Set<Integer> eventBotFlagSet = sessionAccumulator.getUbiEvent().getBotFlags();
+            UbiSession ubiSessionTmp = sessionAccumulator.getUbiSession();
 
+            Set<Integer> botFlagSet = singnatureBotDetector.getBotFlagList(ubiSessionTmp);
+            eventBotFlagSet.addAll(botFlagSet);
+            sessionAccumulator.getUbiEvent().setBotFlags(eventBotFlagSet);
+            out.collect(sessionAccumulator.getUbiEvent());
+            Set<Integer> sessionBotFlagSet = sessionAccumulator.getUbiSession().getBotFlagList();
+            sessionBotFlagSet.addAll(botFlagSet);
+            sessionAccumulator.getUbiSession().setBotFlagList(sessionBotFlagSet);
             if (context.currentWatermark() > context.window().maxTimestamp()) {
                 endSessionEvent(sessionAccumulator);
                 UbiSession ubiSession = new UbiSession();
@@ -62,13 +67,7 @@ public class UbiSessionWindowProcessFunction
                 ubiSession.setExInternalIp(sessionAccumulator.getUbiSession().getExInternalIp());
                 ubiSession.setAgentCnt(sessionAccumulator.getUbiSession().getAgentCnt());
                 ubiSession.setSingleClickSessionFlag(sessionAccumulator.getUbiSession().getSingleClickSessionFlag());
-                if (ubiSession.getClientIp() != null) {
-                    CompletableFuture<ValueState<IpSignature>> completableFuture = queryState(ubiSession.getClientIp(), jobID, client);
-                    if (completableFuture != null) {
-                        IpSignature ipSignature = completableFuture.get().value();
-                        ubiSession.setBotFlag(ipSignature.getBotFlag());
-                    }
-                }
+
                 context.output(outputTag, ubiSession);
             }
         } else {
@@ -76,15 +75,6 @@ public class UbiSessionWindowProcessFunction
         }
     }
 
-    private CompletableFuture<ValueState<IpSignature>> queryState(String key, JobID jobId, QueryableStateClient client) {
-        return client.getKvState(
-                jobId,
-                "bot7",
-                key,
-                Types.STRING,
-                new ValueStateDescriptor<IpSignature>("", TypeInformation.of(new TypeHint<IpSignature>() {
-                })));
-    }
 
     private void endSessionEvent(SessionAccumulator sessionAccumulator) throws Exception {
         if (sessionAccumulator.getUbiEvent().getEventTimestamp() != null) {
@@ -102,8 +92,21 @@ public class UbiSessionWindowProcessFunction
         File configFile = getRuntimeContext().getDistributedCache().getFile("configFile");
         UBIConfig ubiConfig = UBIConfig.getInstance(configFile);
 
-        client = new QueryableStateClient(proxyHost, proxyPort);
+        this.client = new QueryableStateClient(proxyHost, proxyPort);
+//        this.client.setExecutionConfig(getRuntimeContext().getExecutionConfig());
+        singnatureBotDetector = SignatureBotDetector.getInstance(this.client,this.jobID);
 
     }
+
+//    private CompletableFuture<ValueState<IpSignature>> queryState(String key, JobID jobId, QueryableStateClient client) {
+//        return client.getKvState(
+//                jobId,
+//                "bot7",
+//                key,
+//                Types.STRING,
+//                new ValueStateDescriptor<IpSignature>("bot7", TypeInformation.of(new TypeHint<IpSignature>() {
+//                })));
+//    }
+
 
 }

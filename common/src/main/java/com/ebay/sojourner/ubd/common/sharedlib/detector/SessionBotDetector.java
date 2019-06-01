@@ -1,14 +1,10 @@
 package com.ebay.sojourner.ubd.common.sharedlib.detector;
 
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.rule.BotRule1;
 import com.ebay.sojourner.ubd.common.rule.BotRule12;
 import com.ebay.sojourner.ubd.common.rule.Rule;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 public class SessionBotDetector implements BotDetector<UbiSession> {

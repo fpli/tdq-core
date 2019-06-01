@@ -5,9 +5,6 @@ import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SessionDwellMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
     private static final Logger logger = Logger.getLogger(SingleClickFlagMetrics.class);

@@ -7,9 +7,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-public class IpSignature implements Serializable{
+public class IpSignature implements Signature,Serializable{
 
-    private Integer botFlag;
+    private Set<Integer> botFlag = new HashSet<Integer>();
 
     private String clientIp;
 

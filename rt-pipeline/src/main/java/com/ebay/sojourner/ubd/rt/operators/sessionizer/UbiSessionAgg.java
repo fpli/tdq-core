@@ -34,8 +34,9 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
 
     @Override
     public SessionAccumulator add(UbiEvent value, SessionAccumulator accumulator) {
+        Set<Integer> eventBotFlagSet = value.getBotFlags();
         Set<Integer> botFlagList=eventBotDetector.getBotFlagList(value);
-        value.setBotFlags(botFlagList);
+
         if(value.isNewSession()&&accumulator.getUbiSession().getSessionId()==null) {
             try {
                 value.updateSessionId();
@@ -59,7 +60,12 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
             }
         }
         Set<Integer> sessionBotFlagList=sessionBotDetector.getBotFlagList(accumulator.getUbiSession());
-        accumulator.getUbiSession().setBotFlagList(sessionBotFlagList);
+        Set<Integer> sessionBotFlagSet=accumulator.getUbiSession().getBotFlagList();
+        sessionBotFlagSet.addAll(sessionBotFlagList);
+        accumulator.getUbiSession().setBotFlagList(sessionBotFlagSet);
+        eventBotFlagSet.addAll(botFlagList);
+        eventBotFlagSet.addAll(sessionBotFlagList);
+        value.setBotFlags(botFlagList);
       return accumulator;
     }
 
