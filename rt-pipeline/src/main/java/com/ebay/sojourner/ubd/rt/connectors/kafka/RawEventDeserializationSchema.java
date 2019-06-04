@@ -28,9 +28,10 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
         // Generate RheosHeader
         RheosHeader rheosHeader = new RheosHeader(rheosEvent.getEventCreateTimestamp(),
                 rheosEvent.getEventSentTimestamp(),
-                rheosEvent.getProducerId(),
                 rheosEvent.getSchemaId(),
-                rheosEvent.getEventId());
+                rheosEvent.getEventId(),
+                rheosEvent.getProducerId()
+                );
 
         // Generate sojA, sojK, sojC
         Map<Utf8, Utf8> sojA = (Map<Utf8, Utf8>) genericRecord.get("sojA");

@@ -73,11 +73,12 @@ public class SojournerUBDRTJob {
         OutputTag<UbiSession> sessionOutputTag = new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
         OutputTag<UbiEvent> lateEventOutputTag = new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
         JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
+
         SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
                 .keyBy("guid")
-                .window(EventTimeSessionWindows.withGap(Time.minutes(2)))
+                .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
                 .trigger(OnElementEarlyFiringTrigger.create())
-                .allowedLateness(Time.minutes(1))
+                .allowedLateness(Time.hours(1))
                 .sideOutputLateData(lateEventOutputTag)
                 .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction(sessionOutputTag, jobId))
                 .name("Sessionizer & Session Metrics Calculator");
@@ -120,6 +121,7 @@ public class SojournerUBDRTJob {
 
         // Submit dataflow
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");
+
 
     }
 

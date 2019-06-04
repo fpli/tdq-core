@@ -44,6 +44,7 @@ public class UbiSessionWindowProcessFunction
         if (sessionMetrics == null) {
             sessionMetrics = new SessionMetrics();
         }
+
         SessionAccumulator sessionAccumulator = elements.iterator().next();
 
         if (sessionAccumulator.getUbiEvent() != null) {
@@ -62,9 +63,11 @@ public class UbiSessionWindowProcessFunction
                 UbiSession ubiSession = new UbiSession();
                 ubiSession.setGuid(sessionAccumulator.getUbiEvent().getGuid());
                 ubiSession.setAgentString(sessionAccumulator.getUbiSession().getAgentString());
+                ubiSession.setSessionId(sessionAccumulator.getUbiSession().getSessionId());
                 ubiSession.setIp(sessionAccumulator.getUbiSession().getIp());
                 ubiSession.setUserAgent(sessionAccumulator.getUbiSession().getUserAgent());
                 ubiSession.setExInternalIp(sessionAccumulator.getUbiSession().getExInternalIp());
+                ubiSession.setSojDataDt(sessionAccumulator.getUbiSession().getSojDataDt());
                 ubiSession.setAgentCnt(sessionAccumulator.getUbiSession().getAgentCnt());
                 ubiSession.setSingleClickSessionFlag(sessionAccumulator.getUbiSession().getSingleClickSessionFlag());
 
@@ -93,7 +96,8 @@ public class UbiSessionWindowProcessFunction
         UBIConfig ubiConfig = UBIConfig.getInstance(configFile);
 
         this.client = new QueryableStateClient(proxyHost, proxyPort);
-//        this.client.setExecutionConfig(getRuntimeContext().getExecutionConfig());
+        this.client.setExecutionConfig(getRuntimeContext().getExecutionConfig());
+
         singnatureBotDetector = SignatureBotDetector.getInstance(this.client,this.jobID);
 
     }

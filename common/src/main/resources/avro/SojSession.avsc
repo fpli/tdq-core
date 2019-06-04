@@ -1,0 +1,242 @@
+{
+  "type" : "record",
+  "name" : "SojSession",
+  "namespace" : "com.ebay.sojourner.ubd.common.model",
+  "fields" : [ {
+    "name" : "rheosHeader",
+    "type" : {
+      "type" : "record",
+      "name" : "RheosHeader",
+      "fields" : [ {
+        "name" : "eventCreateTimestamp",
+        "type" : "long"
+      }, {
+        "name" : "eventSentTimestamp",
+        "type" : "long"
+      }, {
+        "name" : "schemaId",
+        "type" : "int"
+      }, {
+        "name" : "eventId",
+        "type" : [ "null", {
+          "type" : "string",
+          "avro.java.string" : "String"
+        } ]
+      }, {
+        "name" : "producerId",
+        "type" : {
+          "type" : "string",
+          "avro.java.string" : "String"
+        }
+      } ]
+    },
+    "doc" : "Rheos header"
+  }, {
+    "name" : "sessionId",
+    "type" : "string",
+    "doc" : "session key, map from snid"
+  }, {
+    "name" : "streamId",
+    "type" : [ "null", "string" ],
+    "doc" : "map from si"
+  }, {
+    "name" : "absStartTimestamp",
+    "type" : [ "null", "long" ],
+    "doc" : "map from timestamp"
+  }, {
+    "name" : "absDuration",
+    "type" : [ "null", "long" ],
+    "doc" : "map from sndn"
+  }, {
+    "name" : "sessionStartDt",
+    "type" : [ "null", "long" ],
+    "doc" : "map from snst"
+  }, {
+    "name" : "sessionEndDt",
+    "type" : [ "null", "long" ],
+    "doc" : "map from snet"
+  }, {
+    "name" : "ipv4",
+    "type" : [ "null", "string" ],
+    "doc" : "map from ipv4"
+  }, {
+    "name" : "userAgent",
+    "type" : [ "null", "string" ],
+    "doc" : "map from ua"
+  }, {
+    "name" : "referer",
+    "type" : [ "null", "string" ],
+    "doc" : "map from rf"
+  }, {
+    "name" : "botFlag",
+    "type" : [ "null", "int" ],
+    "doc" : "map from bott"
+  }, {
+    "name" : "startResourceId",
+    "type" : [ "null", "int" ],
+    "doc" : "map from entryPage"
+  }, {
+    "name" : "endResourceId",
+    "type" : [ "null", "int" ],
+    "doc" : "map from exitPage"
+  }, {
+    "name" : "pageId",
+    "type" : [ "null", "int" ],
+    "doc" : "map from p"
+  }, {
+    "name" : "viCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "page count fields, map from vict"
+  }, {
+    "name" : "bidCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "page count fields, map from bidct"
+  }, {
+    "name" : "binCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "page count fields, map from binct"
+  }, {
+    "name" : "watchCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "page count fields, map from watchct"
+  }, {
+    "name" : "homepageCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "page count fields, map from hpct"
+  }, {
+    "name" : "boCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "page count fields, map from boct"
+  }, {
+    "name" : "srpCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "page count fields, map from srpct"
+  }, {
+    "name" : "asqCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "page count fields, map from asqct"
+  }, {
+    "name" : "atcCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "page count fields, map from addtocartct"
+  }, {
+    "name" : "atlCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "page count fields, map from addtolistct"
+  }, {
+    "name" : "absEventCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "map from snec, count with iframe and rdt"
+  }, {
+    "name" : "eventCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "map from pagect, non iframe/rdt count"
+  }, {
+    "name" : "pulsarEventCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "map from plsec"
+  }, {
+    "name" : "sojEventCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "map from sojec"
+  }, {
+    "name" : "servEventCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "map from servct"
+  }, {
+    "name" : "viewEventCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "map from viewct"
+  }, {
+    "name" : "searchViewPageCnt",
+    "type" : [ "null", "int" ],
+    "doc" : "map from sojecnt"
+  }, {
+    "name" : "trafficSrcId",
+    "type" : [ "null", "int" ],
+    "doc" : "map from trffc_src"
+  }, {
+    "name" : "lineSpeed",
+    "type" : [ "null", "string" ],
+    "doc" : "map from ls"
+  }, {
+    "name" : "isReturningVisitor",
+    "type" : [ "null", "boolean" ],
+    "doc" : "map from rv"
+  }, {
+    "name" : "appId",
+    "type" : [ "null", "int" ],
+    "doc" : "map from app"
+  }, {
+    "name" : "browserVersion",
+    "type" : [ "null", "string" ],
+    "doc" : "map from dd_bv"
+  }, {
+    "name" : "browserFamily",
+    "type" : [ "null", "string" ],
+    "doc" : "map from dd_bf"
+  }, {
+    "name" : "osVersion",
+    "type" : [ "null", "string" ],
+    "doc" : "map from dd_osv"
+  }, {
+    "name" : "osFamily",
+    "type" : [ "null", "string" ],
+    "doc" : "map from dd_os"
+  }, {
+    "name" : "deviceClass",
+    "type" : [ "null", "string" ],
+    "doc" : "map from dd_dc"
+  }, {
+    "name" : "deviceFamily",
+    "type" : [ "null", "string" ],
+    "doc" : "map from dd_d"
+  }, {
+    "name" : "city",
+    "type" : [ "null", "string" ],
+    "doc" : "map from cty"
+  }, {
+    "name" : "region",
+    "type" : [ "null", "string" ],
+    "doc" : "map from rgn"
+  }, {
+    "name" : "country",
+    "type" : [ "null", "string" ],
+    "doc" : "map from cn"
+  }, {
+    "name" : "continent",
+    "type" : [ "null", "string" ],
+    "doc" : "map from con"
+  }, {
+    "name" : "singleClickSessionFlag",
+    "type" : [ "null", "boolean" ],
+    "doc" : "map from bd_scs"
+  }, {
+    "name" : "cobrand",
+    "type" : [ "null", "int" ],
+    "doc" : "map from tag cobrand"
+  }, {
+    "name" : "guid",
+    "type" : [ "null", "string" ],
+    "doc" : "map from tag g"
+  }, {
+    "name" : "siteId",
+    "type" : [ "null", "string" ],
+    "doc" : "map from tag t"
+  }, {
+    "name" : "cguid",
+    "type" : [ "null", "string" ],
+    "doc" : "map from tag n",
+    "default" : null
+  }, {
+    "name" : "userId",
+    "type" : [ "null", "string" ],
+    "doc" : "map from tag u",
+    "default" : null
+  }, {
+    "name" : "buserId",
+    "type" : [ "null", "string" ],
+    "doc" : "map from tag bu",
+    "default" : null
+  } ]
+}
