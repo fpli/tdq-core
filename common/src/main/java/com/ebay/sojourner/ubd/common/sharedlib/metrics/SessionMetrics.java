@@ -41,7 +41,7 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
         addFieldMetrics(new AgentStringMetrics());
         addFieldMetrics(new SessionStartDtMetrics());
         addFieldMetrics(new SessionDwellMetrics());
-
+        addFieldMetrics(new TimestampMetrics());
 
     }
 }

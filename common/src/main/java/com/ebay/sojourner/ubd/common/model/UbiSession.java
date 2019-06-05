@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 
 @Data
-public class UbiSession implements Serializable{
+public class UbiSession implements Serializable,Cloneable{
     private Long sojDataDt;
     private String guid;
     private String sessionId;
@@ -32,6 +32,7 @@ public class UbiSession implements Serializable{
     private int watchCoreCnt;
     private Integer trafficSrcId;
     private Long absStartTimestamp;
+    private Long absEndTimestamp;
     private Integer absDuration;
     private Integer cobrand;
     private Integer firstSiteId;
