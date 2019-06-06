@@ -1,6 +1,7 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.IpSignature;
+import com.ebay.sojourner.ubd.rt.connectors.filesystem.StreamingFileSinkFactory;
 import com.ebay.sojourner.ubd.rt.operators.attrubite.IpWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.operators.attrubite.IpAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.windows.OnElementEarlyFiringTrigger;
@@ -16,17 +17,14 @@ import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import com.ebay.sojourner.ubd.rt.util.StateBackendFactory;
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
-import org.apache.flink.core.fs.Path;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
@@ -81,29 +79,22 @@ public class SojournerUBDRTJob {
                 .allowedLateness(Time.hours(1))
                 .sideOutputLateData(lateEventOutputTag)
                 .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction(sessionOutputTag, jobId))
-                .name("Sessionizer & Session Metrics Calculator");
+                .name("Session Operator");
 
         // Load data to file system for batch processing
-        // events with session id
-        final String eventSinkPath = "/opt/sojourner-ubd/data/events-with-session-id";
-        final StreamingFileSink<UbiEvent> eventSink = StreamingFileSink
-                .forRowFormat(new Path(eventSinkPath), new SimpleStringEncoder<UbiEvent>("UTF-8"))
-                .build();
-        ubiEventStreamWithSessionId.addSink(eventSink).name("Events with Session Id").disableChaining();
+        // events with session ID
+        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
+                .name("Events with Session Id").disableChaining();
         // sessions ended
-        DataStream<UbiSession> sessionStream = ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag);
-        final String sessionSinkPath = "/opt/sojourner-ubd/data/sessions-ended";
-        final StreamingFileSink<UbiSession> sessionSink = StreamingFileSink
-                .forRowFormat(new Path(sessionSinkPath), new SimpleStringEncoder<UbiSession>("UTF-8"))
-                .build();
-        sessionStream.addSink(sessionSink).name("Sessions Ended").disableChaining();
+        DataStream<UbiSession> sessionStream =
+                ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag);
+        sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
+                .name("Sessions Ended").disableChaining();
         // events late
-        DataStream<UbiEvent> lateEventStream = ubiEventStreamWithSessionId.getSideOutput(lateEventOutputTag);
-        final String lateEventSinkPath = "/opt/sojourner-ubd/data/events-late";
-        final StreamingFileSink<UbiEvent> lateEventSink = StreamingFileSink
-                .forRowFormat(new Path(lateEventSinkPath), new SimpleStringEncoder<UbiEvent>("UTF-8"))
-                .build();
-        lateEventStream.addSink(lateEventSink).name("Events Late").disableChaining();
+        DataStream<UbiEvent> lateEventStream =
+                ubiEventStreamWithSessionId.getSideOutput(lateEventOutputTag);
+        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
+                .name("Events Late").disableChaining();
 
         // Attribute level bot indicators
         // for ip level bot detection
@@ -111,20 +102,22 @@ public class SojournerUBDRTJob {
                 .keyBy("clientIp")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
                 .trigger(OnElementEarlyFiringTrigger.create())
-                .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction());
+                .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
+                .name("IP Attribute Operator");
 
-        // Save IP Signature for query
+        // Save IP Signature for load
         ipSignatureDataStream
                 .keyBy("clientIp")
-                .asQueryableState("bot7", new ValueStateDescriptor<>("", TypeInformation.of(new TypeHint<IpSignature>() {
-                })));
+                .asQueryableState("bot7",
+                        new ValueStateDescriptor<>("", TypeInformation.of(
+                                new TypeHint<IpSignature>() {
+                                }
+                        ))
+                );
 
         // Load IP Signature to file system
-        final String ipSignatureSinkPath = "/opt/sojourner-ubd/data/ip-signature";
-        final StreamingFileSink<IpSignature> ipSignatureSink = StreamingFileSink
-                .forRowFormat(new Path(ipSignatureSinkPath), new SimpleStringEncoder<IpSignature>("UTF-8"))
-                .build();
-        ipSignatureDataStream.addSink(ipSignatureSink).name("IP Signature").disableChaining();
+        ipSignatureDataStream.addSink(StreamingFileSinkFactory.ipSignatureSink())
+                .name("IP Signature").disableChaining();
 
         // Submit dataflow
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");
