@@ -119,6 +119,13 @@ public class SojournerUBDRTJob {
                 .asQueryableState("bot7", new ValueStateDescriptor<>("", TypeInformation.of(new TypeHint<IpSignature>() {
                 })));
 
+        // Load IP Signature to file system
+        final String ipSignatureSinkPath = "/opt/sojourner-ubd/data/ip-signature";
+        final StreamingFileSink<IpSignature> ipSignatureSink = StreamingFileSink
+                .forRowFormat(new Path(ipSignatureSinkPath), new SimpleStringEncoder<IpSignature>("UTF-8"))
+                .build();
+        ipSignatureDataStream.addSink(ipSignatureSink).name("IP Signature").disableChaining();
+
         // Submit dataflow
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");
 
