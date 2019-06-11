@@ -43,10 +43,10 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
 
-        if(!sessionAccumulator.getUbiSession().isFindFirst())
+        if(!sessionAccumulator.getUbiSession().isFindFirst()&&event.getClientIP()!=null)
         {
             sessionAccumulator.getUbiSession().setAgentInfo(event.getAgentInfo());
-            sessionAccumulator.getUbiSession().setClientIp( event.getClientIP());
+            sessionAccumulator.getUbiSession().setClientIp(event.getClientIP());
         }
         if (event.getIframe() == 0 && event.getRdt() == 0) {
             if (!sessionAccumulator.getUbiSession().isFindFirst()) {

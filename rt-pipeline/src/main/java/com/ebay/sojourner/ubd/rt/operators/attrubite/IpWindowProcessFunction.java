@@ -22,7 +22,7 @@ import java.util.Set;
 public class IpWindowProcessFunction
         extends ProcessWindowFunction<IpAttributeAccumulator, IpSignature, Tuple, TimeWindow> {
     private static final Logger logger = Logger.getLogger(IpWindowProcessFunction.class);
-    private IpSignature ipSignature;
+//    private IpSignature ipSignature;
     private IpSignatureBotDetector ipSignatureBotDetector;
     private CouchBaseConnector couchBaseConnector;
     private static final String BUCKET_NAME="botsignature";
@@ -33,18 +33,29 @@ public class IpWindowProcessFunction
                         Collector<IpSignature> out) throws Exception {
 
         IpAttributeAccumulator ipAttr = elements.iterator().next();
+
         Set<Integer> ipBotFlags = new HashSet<Integer>();
-        ipSignature = new IpSignature();
-        Set<Integer> botFlagList =ipSignatureBotDetector.getBotFlagList(ipAttr.getAttribute());
-        if(botFlagList!=null&&botFlagList.size()>0)
-        {
-            ipSignature.setClientIp(ipAttr.getAttribute().getClientIp());
-            ipSignature.setBotFlag(botFlagList);
-            JsonObject ipSignature = JsonObject.create()
-                    .put("ip", ipAttr.getAttribute().getClientIp())
-                    .put("botFlag", JsonArray.from(botFlagList));
-            couchBaseConnector.insUpsert(BUCKET_NAME,ipSignature,ipAttr.getAttribute().getClientIp());
+        Set<Integer> ipBotFlagSet = new HashSet<Integer>();
+        ipBotFlagSet.add(1);
+        ipBotFlagSet.add(2);
+        ipBotFlagSet.add(5);
+        JsonObject ipSignatureTest = JsonObject.create()
+                .put("ip", ipAttr.getAttribute().getClientIp())
+                .put("botFlag", JsonArray.from(ipBotFlagSet.toArray()));
+//        ipSignature = new IpSignature();
+        couchBaseConnector.insUpsert(ipSignatureTest, "10.1.1.11");
+        if(ipAttr.getAttribute().getClientIp()!=null) {
+            Set<Integer> botFlagList = ipSignatureBotDetector.getBotFlagList(ipAttr.getAttribute());
+
+            if (botFlagList != null && botFlagList.size() > 0) {
+//                ipSignature.setClientIp(ipAttr.getAttribute().getClientIp());
+//                ipSignature.setBotFlag(botFlagList);
+                JsonObject ipSignature = JsonObject.create()
+                        .put("ip", ipAttr.getAttribute().getClientIp())
+                        .put("botFlag", JsonArray.from(botFlagList.toArray()));
+                couchBaseConnector.insUpsert(ipSignature, ipAttr.getAttribute().getClientIp());
 //            out.collect(ipSignature);
+            }
         }
 
     }
@@ -54,5 +65,10 @@ public class IpWindowProcessFunction
         super.open(conf);
         ipSignatureBotDetector=IpSignatureBotDetector.getInstance();
         couchBaseConnector=CouchBaseConnector.getInstance();
+    }
+    @Override
+    public void clear(Context context) throws Exception {
+        super.clear(context);
+        couchBaseConnector.close();
     }
 }

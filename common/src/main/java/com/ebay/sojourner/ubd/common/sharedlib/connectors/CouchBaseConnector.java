@@ -21,11 +21,14 @@ public class CouchBaseConnector {
     private static final String serverName = "127.0.0.1";
     private static final String USER_NAME = "Administrator";
     private static final String USER_PASS = "111111";
+    private static final String BUCKET_NAME = "botsignature";
+    private static Bucket bucket = null;
 
     private CouchBaseConnector() {
         couchBaseCluster = CouchbaseCluster.create(serverName);
         couchBaseCluster.authenticate(USER_NAME, USER_PASS);
-
+        bucket = couchBaseCluster.openBucket(BUCKET_NAME);
+        bucket.bucketManager().createN1qlPrimaryIndex(true, false);
     }
 
     public static CouchBaseConnector getInstance() {
@@ -40,35 +43,32 @@ public class CouchBaseConnector {
         return couchBaseConnector;
     }
 
-    public void insUpsert(String bucketName, JsonObject jsonObject, String id) {
+    public void insUpsert(JsonObject jsonObject, String id) {
 
-        Bucket bucket = couchBaseCluster.openBucket(bucketName);
-        bucket.bucketManager().createN1qlPrimaryIndex(true, false);
-
-        // Store the Document
         bucket.upsert(JsonDocument.create(id, jsonObject));
-
 
     }
 
-    public Set<Integer> scanSignature(String inColumnName, String inColumnValue, String outColumnName, String bucketName) {
-
-        Bucket bucket = couchBaseCluster.openBucket(bucketName);
+    public Set<Integer> scanSignature(String inColumnName, String inColumnValue, String outColumnName) {
         N1qlQueryResult result = bucket.query(
-                N1qlQuery.parameterized("SELECT "+outColumnName+" FROM "+bucketName+" WHERE "+inColumnName+" =\"$1\"",
+                N1qlQuery.parameterized("SELECT " + outColumnName + " FROM " + BUCKET_NAME + " WHERE " + inColumnName + " =\"$1\"",
                         JsonArray.from(inColumnValue)));
 
         for (N1qlQueryRow row : result) {
-            JsonArray jsonArray =(JsonArray) row.value().get(outColumnName);
-            List<Object> botFlagList=(List<Object>) jsonArray.toList();
+            JsonArray jsonArray = (JsonArray) row.value().get(outColumnName);
+            List<Object> botFlagList = (List<Object>) jsonArray.toList();
             Set<Integer> botFlagSet = new HashSet<Integer>(botFlagList.size());
-            for (Object o:botFlagList)
-            {
-                botFlagSet.add((Integer)o);
+            for (Object o : botFlagList) {
+                botFlagSet.add((Integer) o);
             }
             return botFlagSet;
         }
         return null;
+    }
+
+    public static void close() {
+        bucket.close();
+        couchBaseCluster.disconnect();
     }
 
 }

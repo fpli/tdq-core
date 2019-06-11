@@ -63,6 +63,8 @@ public class UbiSessionWindowProcessFunction
                 ubiSession.setEndTimestamp(sessionAccumulator.getUbiSession().getEndTimestamp());
                 ubiSession.setAbsStartTimestamp(sessionAccumulator.getUbiSession().getAbsStartTimestamp());
                 ubiSession.setAbsEndTimestamp(sessionAccumulator.getUbiSession().getAbsEndTimestamp());
+                ubiSession.setClientIp(sessionAccumulator.getUbiSession().getClientIp());
+                ubiSession.setInternalIp(sessionAccumulator.getUbiSession().getInternalIp());
                 ubiSession.setSingleClickSessionFlag(sessionAccumulator.getUbiSession().getSingleClickSessionFlag());
 
                 context.output(outputTag, ubiSession);
