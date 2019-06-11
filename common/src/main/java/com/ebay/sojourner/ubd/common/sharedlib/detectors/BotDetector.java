@@ -1,4 +1,4 @@
-package com.ebay.sojourner.ubd.common.sharedlib.detector;
+package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import java.util.Set;
 

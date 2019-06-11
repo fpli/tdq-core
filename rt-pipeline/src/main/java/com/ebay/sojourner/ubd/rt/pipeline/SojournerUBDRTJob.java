@@ -78,7 +78,7 @@ public class SojournerUBDRTJob {
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .allowedLateness(Time.hours(1))
                 .sideOutputLateData(lateEventOutputTag)
-                .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction(sessionOutputTag, jobId))
+                .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction(sessionOutputTag))
                 .name("Session Operator");
 
         // Load data to file system for batch processing

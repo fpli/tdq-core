@@ -1,20 +1,10 @@
-package com.ebay.sojourner.ubd.common.sharedlib.detector;
+package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 
-import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.rule.BotFilter;
-import com.ebay.sojourner.ubd.common.rule.Rule;
-import com.ebay.sojourner.ubd.common.sharedlib.metrics.FieldMetrics;
-import com.ebay.sojourner.ubd.common.util.BotRules;
-import com.ebay.sojourner.ubd.common.util.Property;
-import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.log4j.Logger;
 
-import java.lang.reflect.Constructor;
-import java.util.Collection;
 import java.util.LinkedHashSet;
 
 public class BotFlagMetrics  {

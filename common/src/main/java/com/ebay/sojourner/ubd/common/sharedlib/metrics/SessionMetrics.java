@@ -3,7 +3,6 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.detector.BotFlagMetrics;
 import org.apache.log4j.Logger;
 
 public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> {

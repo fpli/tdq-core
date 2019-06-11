@@ -1,4 +1,4 @@
-package com.ebay.sojourner.ubd.common.sharedlib.detector;
+package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.rule.BotRule12;

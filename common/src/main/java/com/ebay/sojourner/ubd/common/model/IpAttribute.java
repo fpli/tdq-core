@@ -8,4 +8,8 @@ import java.io.Serializable;
 public class IpAttribute implements Attribute,Serializable {
     private String clientIp;
     private int singleClickSessionCount;
+    public void increase()
+    {
+        singleClickSessionCount++;
+    }
 }
