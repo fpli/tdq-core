@@ -36,8 +36,11 @@ import java.io.File;
 public class SojournerUBDRTJob {
 
     public static void main(String[] args) throws Exception {
-        UBIConfig ubiConfig = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));
-
+        // 0. Prepare execution environment
+        // 0.1 UBI configuration
+        // 0.2 Flink configuration
+        UBIConfig ubiConfig =
+                UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));
         final StreamExecutionEnvironment executionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment();
         final ParameterTool params = ParameterTool.fromArgs(args);
@@ -46,10 +49,13 @@ public class SojournerUBDRTJob {
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
         executionEnvironment.enableCheckpointing(60 * 1000);
-        executionEnvironment.setStateBackend(StateBackendFactory.getStateBackend(StateBackendFactory.FS));
+        executionEnvironment.setStateBackend(
+                StateBackendFactory.getStateBackend(StateBackendFactory.FS));
         executionEnvironment.setParallelism(1);
 
-        // Consume RawEvent from Rheos PathFinder Topic, assign timestamps and emit watermarks.
+        // 1. Rheos Consumer
+        // 1.1 Consume RawEvent from Rheos PathFinder topic
+        // 1.2 Assign timestamps and emit watermarks.
         DataStream<RawEvent> rawEventDataStream = executionEnvironment.addSource(
                 KafkaConnectorFactory.createKafkaConsumer().assignTimestampsAndWatermarks(
                         new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
@@ -59,67 +65,67 @@ public class SojournerUBDRTJob {
                             }
                         }
                 ))
-                .name("Rheos PathFinder Raw Event Consumer");
+                .name("Rheos Consumer");
 
-        // Parse and transform RawEvent to UbiEvent
+        // 2. Event Operator
+        // 2.1 Parse and transform RawEvent to UbiEvent
+        // 2.2 Event level bot detection via bot rule
         DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
                 .map(new EventParserMapFunction())
-                .name("UBI Event Parser")
+                .name("Event Operator")
                 .startNewChain();
 
-        // Do sessionization and calculate session metrics
-        OutputTag<UbiSession> sessionOutputTag = new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
-        OutputTag<UbiEvent> lateEventOutputTag = new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
+        // 3. Session Operator
+        // 3.1 Session window
+        // 3.2 Session indicator accumulation
+        // 3.3 Session Level bot detection (via bot rule & signature)
+        // 3.4 Event level bot detection (via session flag)
+        OutputTag<UbiSession> sessionOutputTag =
+                new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
+        OutputTag<UbiEvent> lateEventOutputTag =
+                new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
         JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
-
         SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
                 .keyBy("guid")
                 .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .allowedLateness(Time.hours(1))
                 .sideOutputLateData(lateEventOutputTag)
-                .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction(sessionOutputTag))
+                .aggregate(new UbiSessionAgg(),
+                        new UbiSessionWindowProcessFunction(sessionOutputTag))
                 .name("Session Operator");
-
-        // Load data to file system for batch processing
-        // events with session ID
-        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
-                .name("Events with Session Id").disableChaining();
-        // sessions ended
         DataStream<UbiSession> sessionStream =
-                ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag);
-        sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
-                .name("Sessions Ended").disableChaining();
-        // events late
-        DataStream<UbiEvent> lateEventStream =
-                ubiEventStreamWithSessionId.getSideOutput(lateEventOutputTag);
-        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
-                .name("Events Late").disableChaining();
+                ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag); // sessions ended
 
-        // Attribute level bot indicators
-        // for ip level bot detection
+        // 4. Attribute Operator
+        // 4.1 Sliding window
+        // 4.2 Attribute indicator accumulation
+        // 4.3 Attribute level bot detection (via bot rule)
+        // 4.4 Store bot signature
         DataStream<IpSignature> ipSignatureDataStream = sessionStream
                 .keyBy("clientIp")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
-                .name("IP Attribute Operator");
+                .name("Attribute Operator (IP)");
 
-        // Save IP Signature for load
-        ipSignatureDataStream
-                .keyBy("clientIp")
-                .asQueryableState("bot7",
-                        new ValueStateDescriptor<>("", TypeInformation.of(
-                                new TypeHint<IpSignature>() {
-                                }
-                        ))
-                );
-
-        // Load IP Signature to file system
+        // 5. Load data to file system for batch processing
+        // 5.1 Events with session ID
+        // 5.2 Sessions ended
+        // 5.3 Events late
+        // 5.4 IP Signature
+        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
+                .name("Events with Session Id").disableChaining();
+        sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
+                .name("Sessions Ended").disableChaining();
+        DataStream<UbiEvent> lateEventStream =
+                ubiEventStreamWithSessionId.getSideOutput(lateEventOutputTag);
+        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
+                .name("Events Late").disableChaining();
         ipSignatureDataStream.addSink(StreamingFileSinkFactory.ipSignatureSink())
                 .name("IP Signature").disableChaining();
 
-        // Submit dataflow
+        // Submit this job
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");
 
 
