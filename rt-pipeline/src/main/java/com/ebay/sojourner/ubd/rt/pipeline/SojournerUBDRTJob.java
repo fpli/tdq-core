@@ -108,20 +108,21 @@ public class SojournerUBDRTJob {
                 .name("Attribute Operator (IP)");
 
         // 5. Load data to file system for batch processing
-        // 5.1 Events with session ID
-        // 5.2 Sessions ended
-        // 5.3 Events late
-        // 5.4 IP Signature
-        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
-                .name("Events with Session Id").disableChaining();
+        // 5.1 IP Signature
+        // 5.2 Sessions (ended)
+        // 5.3 Events (with session ID & bot flags)
+        // 5.4 Events late
+        ipSignatureDataStream.addSink(StreamingFileSinkFactory.ipSignatureSink())
+                .name("IP Signature").disableChaining();
         sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
-                .name("Sessions Ended").disableChaining();
+                .name("Sessions").disableChaining();
+        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
+                .name("Events").disableChaining();
         DataStream<UbiEvent> lateEventStream =
                 ubiEventStreamWithSessionId.getSideOutput(lateEventOutputTag);
         lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
-                .name("Events Late").disableChaining();
-        ipSignatureDataStream.addSink(StreamingFileSinkFactory.ipSignatureSink())
-                .name("IP Signature").disableChaining();
+                .name("Events (Late)").disableChaining();
+
 
         // Submit this job
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");

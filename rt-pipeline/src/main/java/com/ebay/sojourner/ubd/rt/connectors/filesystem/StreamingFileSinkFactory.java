@@ -11,8 +11,8 @@ public class StreamingFileSinkFactory {
 
     public static String BASE_DIR = "/opt/sojourner-ubd/data";
 
-    public static String eventSinkPath = BASE_DIR + "/events-with-session-id";
-    public static String sessionSinkPath = BASE_DIR + "/sessions-ended";
+    public static String eventSinkPath = BASE_DIR + "/events";
+    public static String sessionSinkPath = BASE_DIR + "/sessions";
     public static String lateEventSinkPath = BASE_DIR + "/events-late";
     public static String ipSignatureSinkPath = BASE_DIR + "/ip-signature";
 
