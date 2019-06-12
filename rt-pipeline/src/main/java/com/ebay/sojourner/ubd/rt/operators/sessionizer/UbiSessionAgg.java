@@ -55,7 +55,6 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
         {
             try {
                 sessionMetrics.feed(value,accumulator);
-
             } catch (Exception e) {
                 e.printStackTrace();
                 logger.error("feed-session metrics collection issue:"+value);
@@ -64,7 +63,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
         }
         Set<Integer> sessionBotFlagSetDetect=sessionBotDetector.getBotFlagList(accumulator.getUbiSession());
         Set<Integer> sessionBotFlagSet=accumulator.getUbiSession().getBotFlagList();
-        Set<Integer> attrBotFlagSet = couchBaseConnector.scanSignature("ip",accumulator.getUbiSession().getClientIp(),"botFlag",BUCKET_NAME);
+        Set<Integer> attrBotFlagSet = couchBaseConnector.scanSignature("ip",accumulator.getUbiSession().getClientIp(),"botFlag");
 
         if(sessionBotFlagSetDetect!=null&&sessionBotFlagSetDetect.size()>0) {
             sessionBotFlagSet.addAll(sessionBotFlagSetDetect);
