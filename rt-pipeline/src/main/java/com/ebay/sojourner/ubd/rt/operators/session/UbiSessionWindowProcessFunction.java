@@ -1,15 +1,12 @@
-package com.ebay.sojourner.ubd.rt.operators.sessionizer;
+package com.ebay.sojourner.ubd.rt.operators.session;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.sharedlib.detectors.IpSignatureBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
-import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.queryablestate.client.QueryableStateClient;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
@@ -17,7 +14,6 @@ import org.apache.flink.util.OutputTag;
 import org.apache.log4j.Logger;
 
 import java.io.File;
-import java.net.UnknownHostException;
 import java.util.Set;
 
 

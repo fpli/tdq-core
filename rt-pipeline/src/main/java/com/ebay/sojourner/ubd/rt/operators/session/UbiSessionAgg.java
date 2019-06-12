@@ -1,9 +1,8 @@
-package com.ebay.sojourner.ubd.rt.operators.sessionizer;
+package com.ebay.sojourner.ubd.rt.operators.session;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.connectors.CouchBaseConnector;
-import com.ebay.sojourner.ubd.common.sharedlib.detectors.EventBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.SessionBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
 import org.apache.flink.api.common.functions.AggregateFunction;
@@ -13,7 +12,6 @@ import java.util.Set;
 
 public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumulator,SessionAccumulator> {
     private  SessionMetrics sessionMetrics ;
-    private  EventBotDetector eventBotDetector;
     private  SessionBotDetector sessionBotDetector;
     private static final Logger logger = Logger.getLogger(UbiSessionAgg.class);
     private CouchBaseConnector couchBaseConnector;
@@ -23,7 +21,6 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
     public SessionAccumulator createAccumulator() {
         SessionAccumulator sessionAccumulator = new SessionAccumulator();
         sessionMetrics = SessionMetrics.getInstance();
-        eventBotDetector=EventBotDetector.getInstance();
         sessionBotDetector=SessionBotDetector.getInstance();
         couchBaseConnector=CouchBaseConnector.getInstance();
         try {
@@ -38,7 +35,6 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
     @Override
     public SessionAccumulator add(UbiEvent value, SessionAccumulator accumulator) {
         Set<Integer> eventBotFlagSet = value.getBotFlags();
-        Set<Integer> eventBotFlagSetDetect=eventBotDetector.getBotFlagList(value);
 
         if(value.isNewSession()&&accumulator.getUbiSession().getSessionId()==null) {
             try {
@@ -72,10 +68,6 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
         if(attrBotFlagSet!=null&&attrBotFlagSet.size()>0) {
             sessionBotFlagSet.addAll(attrBotFlagSet);
             eventBotFlagSet.addAll(attrBotFlagSet);
-        }
-
-        if(eventBotFlagSetDetect!=null&&eventBotFlagSetDetect.size()>0) {
-            eventBotFlagSet.addAll(eventBotFlagSetDetect);
         }
 
         accumulator.getUbiSession().setBotFlagList(sessionBotFlagSet);

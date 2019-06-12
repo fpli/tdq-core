@@ -1,4 +1,4 @@
-package com.ebay.sojourner.ubd.rt.operators.windows;
+package com.ebay.sojourner.ubd.rt.common.windows;
 
 import org.apache.flink.streaming.api.windowing.triggers.CountTrigger;
 import org.apache.flink.streaming.api.windowing.triggers.EventTimeTrigger;
@@ -9,14 +9,14 @@ import org.apache.flink.streaming.api.windowing.windows.Window;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SojTrigger<W extends Window> extends Trigger<Object, W> {
+public class OnElementEarlyFiringTrigger<W extends Window> extends Trigger<Object, W> {
     private static final long serialVersionUID = 1L;
 
     private Trigger countTrigger = CountTrigger.of(1);
     private Trigger eventTimeTrigger = EventTimeTrigger.create();
     private List<Trigger> triggers = new ArrayList<>();
 
-    private SojTrigger() {
+    private OnElementEarlyFiringTrigger() {
         triggers.add(countTrigger);
         triggers.add(eventTimeTrigger);
     }
@@ -84,7 +84,7 @@ public class SojTrigger<W extends Window> extends Trigger<Object, W> {
         return "SojTrigger()";
     }
 
-    public static <W extends Window> SojTrigger<W> create() {
-        return new SojTrigger<>();
+    public static <W extends Window> OnElementEarlyFiringTrigger<W> create() {
+        return new OnElementEarlyFiringTrigger<>();
     }
 }

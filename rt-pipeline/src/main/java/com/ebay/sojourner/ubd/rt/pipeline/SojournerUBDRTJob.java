@@ -4,21 +4,19 @@ import com.ebay.sojourner.ubd.common.model.IpSignature;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.StreamingFileSinkFactory;
 import com.ebay.sojourner.ubd.rt.operators.attrubite.IpWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.operators.attrubite.IpAttributeAgg;
-import com.ebay.sojourner.ubd.rt.operators.windows.OnElementEarlyFiringTrigger;
+import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.rt.operators.parser.EventParserMapFunction;
-import com.ebay.sojourner.ubd.rt.operators.sessionizer.UbiSessionAgg;
-import com.ebay.sojourner.ubd.rt.operators.sessionizer.UbiSessionWindowProcessFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.LookupUtils;
 import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import com.ebay.sojourner.ubd.rt.util.StateBackendFactory;
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.api.common.state.ValueStateDescriptor;
-import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.TimeCharacteristic;
@@ -71,7 +69,7 @@ public class SojournerUBDRTJob {
         // 2.1 Parse and transform RawEvent to UbiEvent
         // 2.2 Event level bot detection via bot rule
         DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
-                .map(new EventParserMapFunction())
+                .map(new EventMapFunction())
                 .name("Event Operator")
                 .startNewChain();
 

@@ -1,4 +1,4 @@
-package com.ebay.sojourner.ubd.rt.operators.sessionizer;
+package com.ebay.sojourner.ubd.rt.operators.session;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
