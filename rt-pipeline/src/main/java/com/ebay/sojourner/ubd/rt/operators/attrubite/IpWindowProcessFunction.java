@@ -1,13 +1,11 @@
 package com.ebay.sojourner.ubd.rt.operators.attrubite;
 
-import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.document.json.JsonArray;
 import com.couchbase.client.java.document.json.JsonObject;
-import com.ebay.sojourner.ubd.common.model.IpAttribute;
 import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.IpSignature;
 
-import com.ebay.sojourner.ubd.common.sharedlib.connectors.CouchBaseConnector;
+import com.ebay.sojourner.ubd.common.sharedlib.connectors.CouchBaseManager;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.IpSignatureBotDetector;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
@@ -16,35 +14,24 @@ import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 import org.apache.log4j.Logger;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class IpWindowProcessFunction
         extends ProcessWindowFunction<IpAttributeAccumulator, IpSignature, Tuple, TimeWindow> {
     private static final Logger logger = Logger.getLogger(IpWindowProcessFunction.class);
-//    private IpSignature ipSignature;
+    //    private IpSignature ipSignature;
     private IpSignatureBotDetector ipSignatureBotDetector;
-    private CouchBaseConnector couchBaseConnector;
-    private static final String BUCKET_NAME="botsignature";
-    private static final String USER_NAME="Administrator";
-    private static final String USER_PASS="111111";
+    private CouchBaseManager couchBaseManager;
+    private static final String BUCKET_NAME = "botsignature";
+    private static final String USER_NAME = "Administrator";
+    private static final String USER_PASS = "111111";
+
     @Override
     public void process(Tuple tuple, Context context, Iterable<IpAttributeAccumulator> elements,
                         Collector<IpSignature> out) throws Exception {
 
         IpAttributeAccumulator ipAttr = elements.iterator().next();
-
-        Set<Integer> ipBotFlags = new HashSet<Integer>();
-        Set<Integer> ipBotFlagSet = new HashSet<Integer>();
-        ipBotFlagSet.add(1);
-        ipBotFlagSet.add(2);
-        ipBotFlagSet.add(5);
-        JsonObject ipSignatureTest = JsonObject.create()
-                .put("ip", ipAttr.getAttribute().getClientIp())
-                .put("botFlag", JsonArray.from(ipBotFlagSet.toArray()));
-//        ipSignature = new IpSignature();
-        couchBaseConnector.insUpsert(ipSignatureTest, "10.1.1.11");
-        if(ipAttr.getAttribute().getClientIp()!=null) {
+        if (ipAttr.getAttribute().getClientIp() != null) {
             Set<Integer> botFlagList = ipSignatureBotDetector.getBotFlagList(ipAttr.getAttribute());
 
             if (botFlagList != null && botFlagList.size() > 0) {
@@ -53,7 +40,7 @@ public class IpWindowProcessFunction
                 JsonObject ipSignature = JsonObject.create()
                         .put("ip", ipAttr.getAttribute().getClientIp())
                         .put("botFlag", JsonArray.from(botFlagList.toArray()));
-                couchBaseConnector.insUpsert(ipSignature, ipAttr.getAttribute().getClientIp());
+                couchBaseManager.upsert(ipSignature, ipAttr.getAttribute().getClientIp());
 //            out.collect(ipSignature);
             }
         }
@@ -63,12 +50,13 @@ public class IpWindowProcessFunction
     @Override
     public void open(Configuration conf) throws Exception {
         super.open(conf);
-        ipSignatureBotDetector=IpSignatureBotDetector.getInstance();
-        couchBaseConnector=CouchBaseConnector.getInstance();
+        ipSignatureBotDetector = IpSignatureBotDetector.getInstance();
+        couchBaseManager = CouchBaseManager.getInstance();
     }
+
     @Override
     public void clear(Context context) throws Exception {
         super.clear(context);
-        couchBaseConnector.close();
+        couchBaseManager.close();
     }
 }

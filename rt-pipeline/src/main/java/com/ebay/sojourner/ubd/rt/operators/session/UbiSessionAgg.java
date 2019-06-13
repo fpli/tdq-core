@@ -2,7 +2,7 @@ package com.ebay.sojourner.ubd.rt.operators.session;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.connectors.CouchBaseConnector;
+import com.ebay.sojourner.ubd.common.sharedlib.connectors.CouchBaseManager;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.SessionBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
 import org.apache.flink.api.common.functions.AggregateFunction;
@@ -14,7 +14,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
     private  SessionMetrics sessionMetrics ;
     private  SessionBotDetector sessionBotDetector;
     private static final Logger logger = Logger.getLogger(UbiSessionAgg.class);
-    private CouchBaseConnector couchBaseConnector;
+    private CouchBaseManager couchBaseManager;
     private static final String BUCKET_NAME="botsignature";
 
     @Override
@@ -22,7 +22,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
         SessionAccumulator sessionAccumulator = new SessionAccumulator();
         sessionMetrics = SessionMetrics.getInstance();
         sessionBotDetector=SessionBotDetector.getInstance();
-        couchBaseConnector=CouchBaseConnector.getInstance();
+        couchBaseManager = CouchBaseManager.getInstance();
         try {
             sessionMetrics.start(sessionAccumulator);
         } catch (Exception e) {
@@ -59,7 +59,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
         }
         Set<Integer> sessionBotFlagSetDetect=sessionBotDetector.getBotFlagList(accumulator.getUbiSession());
         Set<Integer> sessionBotFlagSet=accumulator.getUbiSession().getBotFlagList();
-        Set<Integer> attrBotFlagSet = couchBaseConnector.scanSignature("ip",accumulator.getUbiSession().getClientIp(),"botFlag");
+        Set<Integer> attrBotFlagSet = couchBaseManager.getSignatureWithDocId(accumulator.getUbiSession().getClientIp());
 
         if(sessionBotFlagSetDetect!=null&&sessionBotFlagSetDetect.size()>0) {
             sessionBotFlagSet.addAll(sessionBotFlagSetDetect);

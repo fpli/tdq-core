@@ -1,13 +1,9 @@
 package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import com.ebay.sojourner.ubd.common.model.IpAttribute;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.rule.BotRule7;
-import com.ebay.sojourner.ubd.common.rule.IpBotRule;
 import com.ebay.sojourner.ubd.common.rule.Rule;
-import com.ebay.sojourner.ubd.common.sharedlib.connectors.CouchBaseConnector;
-import org.apache.flink.api.common.JobID;
-import org.apache.flink.queryablestate.client.QueryableStateClient;
+import com.ebay.sojourner.ubd.common.sharedlib.connectors.CouchBaseManager;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -64,7 +60,7 @@ public class IpSignatureBotDetector implements BotDetector<IpAttribute> {
     }
 
     private  Set<Integer>  scanSignature(String inColumnName,String inColumnValue,String outColumnName, String bucketName) {
-        return CouchBaseConnector.getInstance().scanSignature(inColumnName,inColumnValue,outColumnName);
+        return CouchBaseManager.getInstance().getSignatureWithColumn(inColumnName,inColumnValue,outColumnName);
     }
 
 
