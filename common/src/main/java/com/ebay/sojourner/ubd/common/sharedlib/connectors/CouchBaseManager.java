@@ -86,6 +86,7 @@ public class CouchBaseManager {
                 for (Object o : botFlagList) {
                     botFlagSet.add((Integer) o);
                 }
+
                 return botFlagSet;
             } else {
                 return Collections.emptySet();
