@@ -89,6 +89,7 @@ public class CouchBaseManager {
 
                 return botFlagSet;
             } else {
+                
                 return Collections.emptySet();
             }
         } else{
