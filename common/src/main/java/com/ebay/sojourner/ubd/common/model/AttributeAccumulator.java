@@ -1,0 +1,19 @@
+package com.ebay.sojourner.ubd.common.model;
+
+import lombok.Data;
+
+import java.io.Serializable;
+
+@Data
+public class AttributeAccumulator<T> implements Serializable{
+    private T attribute;
+    private UbiSession ubiSession;
+
+    public AttributeAccumulator()
+    {
+
+        this.ubiSession = new UbiSession();
+
+    }
+
+}
