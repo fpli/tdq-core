@@ -33,7 +33,11 @@
         <flink.version>1.7.2</flink.version>
         <spark.version>2.3.1</spark.version>
         <rheos.client.version>2.0.0</rheos.client.version>
+
         <junit.version>4.12</junit.version>
+        <scalatest.version>3.0.5</scalatest.version>
+
+        <CodeCacheSize>512m</CodeCacheSize>
     </properties>
 
     <repositories>
@@ -88,6 +92,17 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_${scala.binary.version}</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -204,11 +219,18 @@
                 <version>${rheos.client.version}</version>
             </dependency>
 
-            <!-- Testing -->
+            <!-- test dependencies -->
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.scalatest</groupId>
+                <artifactId>scalatest_${scala.binary.version}</artifactId>
+                <version>${scalatest.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -264,6 +286,69 @@
                     </executions>
                 </plugin>
 
+                <!-- Surefire runs all Java tests -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.0.0-M2</version>
+                    <!-- Note config is repeated in scalatest config -->
+                    <configuration>
+                        <includes>
+                            <include>**/Test*.java</include>
+                            <include>**/*Test.java</include>
+                            <include>**/*TestCase.java</include>
+                            <include>**/*Suite.java</include>
+                        </includes>
+                        <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+                        <argLine>-ea -Xmx4g -Xss4m -XX:ReservedCodeCacheSize=${CodeCacheSize}</argLine>
+                        <environmentVariables>
+                        </environmentVariables>
+                        <systemProperties>
+                            <log4j.configuration>file:src/test/resources/log4j.properties</log4j.configuration>
+                            <java.awt.headless>true</java.awt.headless>
+                            <java.io.tmpdir>${project.build.directory}/tmp</java.io.tmpdir>
+                        </systemProperties>
+                        <failIfNoTests>false</failIfNoTests>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>test</id>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- Scalatest runs all Scala tests -->
+                <plugin>
+                    <groupId>org.scalatest</groupId>
+                    <artifactId>scalatest-maven-plugin</artifactId>
+                    <version>2.0.0</version>
+                    <!-- Note config is repeated in surefire config -->
+                    <configuration>
+                        <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+                        <junitxml>.</junitxml>
+                        <filereports>SojournerUBDTestSuite.txt</filereports>
+                        <argLine>-ea -Xmx4g -Xss4m -XX:ReservedCodeCacheSize=${CodeCacheSize}</argLine>
+                        <stderr/>
+                        <environmentVariables>
+                        </environmentVariables>
+                        <systemProperties>
+                            <log4j.configuration>file:src/test/resources/log4j.properties</log4j.configuration>
+                            <java.awt.headless>true</java.awt.headless>
+                            <java.io.tmpdir>${project.build.directory}/tmp</java.io.tmpdir>
+                        </systemProperties>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>test</id>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
@@ -279,6 +364,15 @@
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
+            </plugin>
+            <!-- Enable surefire and scalatest in all children, in one place: -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.scalatest</groupId>
+                <artifactId>scalatest-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
