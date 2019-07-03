@@ -23,12 +23,14 @@ public class KafkaConnectorFactory {
     public static String TOPIC_PATHFINDER_EVENTS = "behavior.pathfinder.events.total";
 
     public static String BOOTSTRAP_SERVERS = Arrays.asList(
+            "rheos-v10-proxy-kfk-1.slc07.dev.ebayc3.com:9092",
+            "rheos-v10-proxy-kfk-2.slc07.dev.ebayc3.com:9092",
+            "rheos-v10-proxy-kfk-3.slc07.dev.ebayc3.com:9092",
+            "rheos-v10-proxy-kfk-4.slc07.dev.ebayc3.com:9092",
+            "rheos-v10-proxy-kfk-5.slc07.dev.ebayc3.com:9092",
             "rheos-kafka-proxy-1.lvs02.dev.ebayc3.com:9092",
             "rheos-kafka-proxy-2.lvs02.dev.ebayc3.com:9092",
-            "rheos-kafka-proxy-3.lvs02.dev.ebayc3.com:9092",
-            "rheos-kafka-proxy-1.phx02.dev.ebayc3.com:9092",
-            "rheos-kafka-proxy-2.phx02.dev.ebayc3.com:9092",
-            "rheos-kafka-proxy-3.phx02.dev.ebayc3.com:9092")
+            "rheos-kafka-proxy-3.lvs02.dev.ebayc3.com:9092")
             .stream().collect(Collectors.joining(","));
 
     public static FlinkKafkaConsumer<RawEvent> createKafkaConsumer() {
