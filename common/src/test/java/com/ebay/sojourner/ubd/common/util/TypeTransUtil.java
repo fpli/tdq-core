@@ -33,8 +33,4 @@ public class TypeTransUtil {
     public static String IntegerToString(Integer integer){
         return String.valueOf(integer);
     }
-
-    public static Integer StringToInteger(String string){
-        return Integer.parseInt(string);
-    }
 }
