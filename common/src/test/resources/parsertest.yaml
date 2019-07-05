@@ -1,0 +1,923 @@
+agentInfoParser:
+  case1:
+    clientData:
+      agent: agent
+    expectResult: agent
+
+ciidParser:
+  case1:
+    sojA:
+      flgs: ""
+    sojK:
+      ciid: "ebay"
+    sojC:
+      c: ""
+    expectResult: 11712121
+
+  case2:
+    sojA:
+      flgs: ""
+    sojK:
+      ciid: "ebay%"
+    sojC:
+      c: ""
+    expectResult:
+
+  case3:
+    sojA:
+      flgs: ""
+    sojK:
+      ciid: "%bay"
+    sojC:
+      c: ""
+    expectResult:
+
+  case4:
+    sojA:
+      flgs: ""
+    sojK:
+      ciid: "e%ay"
+    sojC:
+      c: ""
+    expectResult: 44153
+
+clickIdParser:
+  case1:
+    sojA:
+      flgs: ""
+    sojK:
+      ciid: ""
+    sojC:
+      c: abc
+    expectResult: 0
+
+  case2:
+    sojA:
+      flgs: ""
+    sojK:
+      ciid: ""
+    sojC:
+      c: "123"
+    expectResult: 123
+
+  case3:
+    sojA:
+      flgs: ""
+    sojK:
+      q: ""
+    sojC:
+      c: abc_&*
+    expectResult: 0
+
+  case4:
+    sojA:
+      flgs: ""
+    sojK:
+      q: ""
+    sojC:
+      c: abc_&*8
+    expectResult: 8
+
+  case5:
+    sojA:
+      flgs: ""
+    sojK:
+      q: ""
+    sojC:
+      c: -abc_&89
+    expectResult: -89
+
+flagsParser:
+  case1:
+    sojA:
+      flgs: ebay
+    sojK:
+      ciid: ""
+    sojC:
+      c: ""
+    expectResult: ebay
+
+identityParser:
+  case1:
+    clientData:
+      urlQueryString: www.ebay.com
+      Tname: ebay
+    sojA:
+      flgs: ebay
+    sojK:
+      ciid: "nice"
+    sojC:
+      g: "economy"
+    expectResult: flgs=ebay&ciid=nice
+
+itemIdParser:
+  case1:
+    sojA:
+      _itm: "123456"
+    sojK:
+      itm: "789"
+    sojC:
+      c: ""
+    expectResult: 123456
+
+  case2:
+    sojA:
+      _itm: ""
+    sojK:
+      itm: "789"
+    sojC:
+      c: ""
+    expectResult: 789
+
+pageIdParser:
+  case1:
+    sojA:
+      flgs: ""
+    sojK:
+      ciid: ""
+    sojC:
+      p: abc
+    expectResult: 0
+
+  case2:
+    sojA:
+      flgs: ""
+    sojK:
+      ciid: ""
+    sojC:
+      p: "123"
+    expectResult: 123
+
+  case3:
+    sojA:
+      flgs: ""
+    sojK:
+      q: ""
+    sojC:
+      p: abc_&*
+    expectResult: 0
+
+  case4:
+    sojA:
+      flgs: ""
+    sojK:
+      q: ""
+    sojC:
+      p: abc_&*8
+    expectResult: 8
+
+  case5:
+    sojA:
+      flgs: ""
+    sojK:
+      q: ""
+    sojC:
+      p: -abc_&89
+    expectResult: -89
+
+cookiesParser:
+  case1:
+    sojA:
+      ck: "ebay"
+    sojK:
+      C: "nice"
+    sojC:
+      g: "xihe"
+    expectResult: ebay
+  case2:
+    sojA:
+      g: "ebay"
+    sojK:
+      a: "nice"
+    sojC:
+      ck: "haxi"
+    expectResult: haxi
+  case3:
+    sojA:
+      g: "ebay"
+    sojK:
+      a: "nice"
+    sojC:
+      C: "hayun"
+    expectResult: hayun
+
+  case4:
+    sojA:
+      g: "ebay"
+    sojK:
+      a: "nice"
+    sojC:
+      b: ""
+    expectResult:
+
+rdtParser:
+  case1:
+    sojA:
+      g: "ebay"
+    sojK:
+      a: "nice"
+    sojC:
+      rdt: "good"
+    expectResult: "0"
+
+  case2:
+    sojA:
+      rdt: "ebay"
+    sojK:
+      a: "nice"
+    sojC:
+      g: "good"
+    expectResult: "1"
+
+  case3:
+    sojA:
+      rdt: "0"
+    sojK:
+      a: "nice"
+    sojC:
+      g: "good"
+    expectResult: "0"
+
+refererParser:
+  case1:
+    clientData:
+      referer: "ebay_referer"
+    expectResult: "ebay_referer"
+
+referrerHashParser:
+  case1:
+    sojA:
+      g: "ebay"
+    sojK:
+      a: "nice"
+    sojC:
+      r: "123456"
+    expectResult: 123456
+
+reguParser:
+  case1:
+    sojA:
+      g: "ebay"
+    sojK:
+      a: "nice"
+    sojC:
+      regU: "123456"
+    expectResult: 1
+
+  case2:
+    sojA:
+      g: "ebay"
+    sojK:
+      a: "nice"
+    sojC:
+      regU:
+    expectResult: 0
+
+serverParser:
+  case1:
+    clientData:
+      Server: "shanghai_server"
+    expectResult: "shanghai_server"
+
+siidParser:
+  case1:
+    sojA:
+      flgs: ""
+    sojK:
+      siid: "ebay"
+    sojC:
+      c: ""
+    expectResult: 11712121
+
+  case2:
+    sojA:
+      flgs: ""
+    sojK:
+      siid: "ebay%"
+    sojC:
+      c: ""
+    expectResult:
+
+  case3:
+    sojA:
+      flgs: ""
+    sojK:
+      siid: "%bay"
+    sojC:
+      c: ""
+    expectResult:
+
+  case4:
+    sojA:
+      flgs: ""
+    sojK:
+      siid: "e%ay"
+    sojC:
+      c: ""
+    expectResult: 44153
+
+siteIdParser:
+  case1:
+    sojA:
+      flgs: ""
+    sojK:
+      ciid: ""
+    sojC:
+      t: abc
+    expectResult: 0
+
+  case2:
+    sojA:
+      flgs: ""
+    sojK:
+      ciid: ""
+    sojC:
+      t: "123"
+    expectResult: 123
+
+  case3:
+    sojA:
+      flgs: ""
+    sojK:
+      q: ""
+    sojC:
+      t: abc_&*
+    expectResult: 0
+
+  case4:
+    sojA:
+      flgs: ""
+    sojK:
+      q: ""
+    sojC:
+      t: abc_&*8
+    expectResult: 8
+
+  case5:
+    sojA:
+      flgs: ""
+    sojK:
+      q: ""
+    sojC:
+      t: -abc_&89
+    expectResult: -89
+
+appidParser:
+  case1:
+    clientData:
+      urlQueryString: ebay?trackingSrcAppId=11
+      referer: shanghai
+      agent: agent
+    sojA:
+      flgs: "huasheng"
+    sojK:
+      q: "hayun"
+    sojC:
+      t: haxi
+    expectResult: 11
+
+  case2:
+    clientData:
+      urlQueryString: ebay?trackingSrcAppId=ebay
+      referer:
+      agent: ebayUserAgent/eBayIOS;.*;iPad.*
+    sojA:
+      flgs: "huasheng"
+    sojK:
+      q: "hayun"
+    sojC:
+      t: haxi
+    expectResult: 2878
+
+  case3:
+    clientData:
+      urlQueryString: ebay?trackingSrcAppId=ebay
+      referer: http://www.ebay.come?trackingSrcAppId=11
+      agent: agent
+    sojA:
+      flgs: "huasheng"
+    sojK:
+      q: "hayun"
+    sojC:
+      t: haxi
+    expectResult: 11
+
+  case4:
+    clientData:
+      urlQueryString: ebay?trackingSrcAppId=ebay
+      referer:
+      agent: ebayUserAgent/eBayIOS;.*
+    sojA:
+      flgs: "huasheng"
+    sojK:
+      q: "hayun"
+    sojC:
+      t: haxi
+    expectResult: 1462
+
+  case5:
+    clientData:
+      urlQueryString: ebay?trackingSrcAppId=ebay
+      referer:
+      agent: ebayUserAgent/eBayAndroid;.*
+    sojA:
+      flgs: "huasheng"
+    sojK:
+      q: "hayun"
+    sojC:
+      t: haxi
+    expectResult: 2571
+
+  case6:
+    clientData:
+      urlQueryString: ebay?trackingSrcAppId=ebay
+      referer:
+      agent: eBayiPad/.*
+    sojA:
+      flgs: "huasheng"
+    sojK:
+      q: "hayun"
+    sojC:
+      t: haxi
+    expectResult: 2878
+
+  case7:
+    clientData:
+      urlQueryString: ebay?trackingSrcAppId=ebay
+      referer:
+      agent: eBayiPhone/.*
+    sojA:
+      flgs: "huasheng"
+    sojK:
+      q: "hayun"
+    sojC:
+      t: haxi
+    expectResult: 1462
+
+  case8:
+    clientData:
+      urlQueryString: ebay?trackingSrcAppId=ebay
+      referer:
+      agent: eBayAndroid/.
+    sojA:
+      flgs: "huasheng"
+    sojK:
+      q: "hayun"
+    sojC:
+      t: haxi
+    expectResult: 2571
+
+  case9:
+    clientData:
+      urlQueryString: ebay?trackingSrcAppId=ebay
+      referer:
+      agent: iphone/5.*
+    sojA:
+      flgs: "huasheng"
+    sojK:
+      q: "hayun"
+    sojC:
+      t: haxi
+    expectResult: 1462
+
+  case10:
+    clientData:
+      urlQueryString: ebay?trackingSrcAppId=ebay
+      referer:
+      agent: Android/5.*
+    sojA:
+      flgs: "huasheng"
+    sojK:
+      q: "hayun"
+    sojC:
+      t: haxi
+    expectResult: 2571
+
+  case11:
+    clientData:
+      urlQueryString:
+      referer: shanghai
+      agent: agent
+    sojA:
+      srcAppId: "11"
+    sojK:
+      q: "srcAppId"
+    sojC:
+      t: srcAppId
+    expectResult: 11
+
+  case12:
+    clientData:
+      urlQueryString: ebay?srcAppId=11
+      referer: shanghai
+      agent: agent
+    sojA:
+      flgs: "huasheng"
+    sojK:
+      q: "hayun"
+    sojC:
+      t: haxi
+    expectResult:
+
+  case13:
+    clientData:
+      urlQueryString: ebay?trackingSrcAppId=ebay
+      referer: http://www.ebay.come?srcAppId=11
+      agent: agent
+    sojA:
+      flgs: "huasheng"
+    sojK:
+      q: "hayun"
+    sojC:
+      t: haxi
+    expectResult: 11
+
+  case14:
+    clientData:
+      urlQueryString: .*srcAppId.*eBayInc80-8977-4f05-a933-3daa1311213.*
+      referer: http://www.ebay.come?srcAppd=11
+      agent: agent
+    sojA:
+      flgs: "huasheng"
+    sojK:
+      q: "hayun"
+    sojC:
+      t: haxi
+    expectResult:
+
+  case15:
+    clientData:
+      urlQueryString: ebayUserAgent/eBayIOS;.*;iPad.*
+      referer: http://www.ebay.come?srcAppd=11
+      agent: agent
+    sojA:
+      app: "12"
+    sojK:
+      q: "hayun"
+    sojC:
+      t: haxi
+    expectResult:
+
+  case16:
+    clientData:
+      urlQueryString: .*&UUID=.*|.*?UUID=.*
+      referer: http://www.ebay.come?srcAppd=string
+      agent: .*iPad.*
+    sojA:
+      flags: "12"
+    sojK:
+      q: "hayun"
+    sojC:
+      t: haxi
+    expectResult:
+
+findingFlagParser:
+  case1:
+    expectResult: 4
+
+  case2:
+    expectResult:
+
+iframeParser:
+  case1:
+    sojA:
+      flgs: ""
+    sojK:
+      ciid: ""
+    sojC:
+      p: abc
+    expectResult: 0
+
+  case2:
+    sojA:
+      flgs: ""
+    sojK:
+      ciid: ""
+    sojC:
+      p: "2340944"
+    expectResult: 1
+
+sqrParser:
+  case1:
+    sojA:
+      flgs: ""
+    sojK:
+      ciid: ""
+    sojC:
+      sQr: abc
+    expectResult: abc
+
+clientIPParser:
+  case1:
+    clientData:
+      remoteIP: 127.0.0.1
+      ForwardFor: 192.168.137.111
+    expectResult: 127.0.0.1
+
+  case2:
+    clientData:
+      remoteIP: 127.0
+      ForwardFor: 192.168.137.111
+    expectResult:
+
+  case3:
+    clientData:
+      remoteIP: 127.0.0.0.1
+      ForwardFor: 192.168.137.111
+    expectResult:
+
+  case4:
+    clientData:
+      remoteIP: 127.0.0.0.1
+      ForwardFor: 256.168.137.111
+    expectResult:
+
+  case5:
+    clientData:
+      remoteIP: 256.0.0.1
+      ForwardFor: 256.168.137.111
+    expectResult:
+
+userIdParser:
+  case1:
+    sojA:
+      flgs: ""
+    sojK:
+      ciid: ""
+    sojC:
+      u: "080314093"
+    expectResult: "80314093"
+
+  case2:
+    sojA:
+      flgs: ""
+    sojK:
+      ciid: ""
+    sojC:
+      u:
+    expectResult:
+
+  case3:
+    sojA:
+      flgs: ""
+    sojK:
+      ciid: ""
+    sojC:
+      u: "123456789123456789123456789123456"
+    expectResult:
+
+staticPageTypeParser:
+  case1:
+    expectResult: 0
+
+  case2:
+    expectResult: 2
+
+  case3:
+    expectResult: -1
+
+  case4:
+    expectResult: 0
+
+  case5:
+    expectResult: 3
+
+  case6:
+    expectResult: 4
+
+  case7:
+    expectResult: 6
+
+  case8:
+    expectResult: 0
+
+  case9:
+    expectResult: 0
+
+  case10:
+    expectResult: 2
+
+  case11:
+    expectResult: 0
+
+  case12:
+    expectResult: 0
+
+  case13:
+    expectResult: 5
+
+  case14:
+    expectResult: 0
+
+partialValidPageParser:
+  case1:
+    expectResult: 0
+
+  case2:
+    expectResult: 0
+
+  case3:
+    expectResult: 0
+
+  case4:
+    expectResult: 0
+
+  case5:
+    expectResult: 0
+
+  case6:
+    expectResult: 0
+
+  case7:
+    expectResult: 0
+
+  case8:
+    expectResult: 0
+
+  case9:
+    expectResult: 0
+
+  case10:
+    expectResult: 0
+
+  case11:
+    expectResult: 0
+
+  case12:
+    expectResult: 0
+
+  case13:
+    expectResult: 0
+
+  case14:
+    expectResult: 0
+
+  case15:
+    expectResult: 0
+
+  case16:
+    expectResult: 0
+
+  case17:
+    expectResult: 0
+
+  case18:
+    expectResult: 0
+
+  case19:
+    expectResult: 0
+
+  case20:
+    expectResult: 0
+
+  case21:
+    expectResult: 0
+
+  case22:
+    expectResult: 0
+
+  case23:
+    expectResult: 0
+
+  case24:
+    expectResult: 0
+
+  case25:
+    expectResult: 0
+
+  case26:
+    expectResult: 0
+
+  case27:
+    expectResult: 0
+
+  case28:
+    expectResult: 0
+
+  case29:
+    expectResult: 0
+
+  case30:
+    expectResult: 0
+
+  case31:
+    expectResult: 0
+
+  case32:
+    expectResult: 0
+
+  case33:
+    expectResult: 0
+
+  case34:
+    expectResult: 0
+
+  case35:
+    expectResult: 0
+
+  case36:
+    expectResult: 0
+
+  case37:
+    expectResult: 1
+
+cobrandParser:
+  case1:
+    expectResult: 0
+
+  case2:
+    expectResult: 6
+
+  case3:
+    expectResult: 11
+
+  case4:
+    expectResult: 10
+
+  case5:
+    expectResult: 5
+
+  case6:
+    expectResult: 9
+
+  case7:
+    expectResult: 9
+
+  case8:
+    expectResult: 5
+
+  case9:
+    expectResult: 5
+
+  case10:
+    expectResult: 8
+
+  case11:
+    expectResult: 1
+
+  case12:
+    expectResult: 0
+
+  case13:
+    expectResult: 7
+
+  case14:
+    expectResult: 2
+
+  case15:
+    expectResult: 8
+
+  case16:
+    expectResult: 1
+
+  case17:
+    expectResult: 2
+
+  case18:
+    expectResult: 3
+
+  case19:
+    expectResult: 8
+
+  case20:
+    expectResult: 1
+
+  case21:
+    expectResult: 4
+
+  case22:
+    expectResult: 7
+
+timestampParser:
+  case1:
+    rheosHeader:
+      eventCreateTimestamp: 1561444233
+    sojA:
+      flgs: " "
+    sojK:
+      p: " "
+    sojC:
+      a: abc
+    expectResult: "2210525044233000"
+
+  case2:
+    rheosHeader:
+      eventCreateTimestamp: 1561444233
+    sojA:
+      flgs: " "
+    sojK:
+      p: "5670"
+    sojC:
+      a: abc
+    expectResult: "2210525044233000"
+
+  case3:
+    rheosHeader:
+      eventCreateTimestamp: 1561444233
+    sojA:
+      flgs: "mtsts=e%ay"
+    sojK:
+      p: "5670"
+    sojC:
+      a: abc
+    expectResult: "2210525044233000"

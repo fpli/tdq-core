@@ -39,6 +39,9 @@
         <junit.version>4.12</junit.version>
         <scalatest.version>3.0.5</scalatest.version>
 
+        <yaml.version>1.17</yaml.version>
+        <jacoco.version>0.8.3</jacoco.version>
+
         <CodeCacheSize>512m</CodeCacheSize>
     </properties>
 
@@ -233,6 +236,13 @@
                 <artifactId>scalatest_${scala.binary.version}</artifactId>
                 <version>${scalatest.version}</version>
                 <scope>test</scope>
+            </dependency>
+
+            <!-- yaml dependencies -->
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${yaml.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
