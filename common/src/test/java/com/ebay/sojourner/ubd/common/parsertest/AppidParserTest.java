@@ -3,7 +3,6 @@ package com.ebay.sojourner.ubd.common.parsertest;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.AppIdParser;
-import com.ebay.sojourner.ubd.common.sharelib.Constants;
 import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
 import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.TypeTransUtil;
@@ -41,7 +40,7 @@ public class AppidParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             appIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getAppId()));
+            System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
         }
 
     }
@@ -56,7 +55,7 @@ public class AppidParserTest {
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             appIdParser.parse(entry.getKey(), ubiEvent);
 //            System.out.println(VaildateResult.vaildateString(entry. getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getAppId()));
+            System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
         }
     }
 
@@ -70,7 +69,7 @@ public class AppidParserTest {
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             appIdParser.parse(entry.getKey(), ubiEvent);
 //            System.out.println(VaildateResult.vaildateString(entry. getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getAppId()));
+            System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
         }
     }
 
@@ -84,7 +83,7 @@ public class AppidParserTest {
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             appIdParser.parse(entry.getKey(), ubiEvent);
 //            System.out.println(VaildateResult.vaildateString(entry. getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getAppId()));
+            System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
         }
     }
 
@@ -98,7 +97,7 @@ public class AppidParserTest {
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             appIdParser.parse(entry.getKey(), ubiEvent);
 //            System.out.println(VaildateResult.vaildateString(entry. getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getAppId()));
+            System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
         }
     }
 
@@ -113,7 +112,7 @@ public class AppidParserTest {
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             appIdParser.parse(entry.getKey(), ubiEvent);
 //            System.out.println(VaildateResult.vaildateString(entry. getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getAppId()));
+            System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
         }
     }
 
@@ -127,7 +126,7 @@ public class AppidParserTest {
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             appIdParser.parse(entry.getKey(), ubiEvent);
 //            System.out.println(VaildateResult.vaildateString(entry. getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getAppId()));
+            System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
         }
     }
 
@@ -141,7 +140,7 @@ public class AppidParserTest {
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             appIdParser.parse(entry.getKey(), ubiEvent);
 //            System.out.println(VaildateResult.vaildateString(entry. getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getAppId()));
+            System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
         }
     }
 
@@ -155,7 +154,7 @@ public class AppidParserTest {
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             appIdParser.parse(entry.getKey(), ubiEvent);
 //            System.out.println(VaildateResult.vaildateString(entry. getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getAppId()));
+            System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
         }
     }
 
@@ -211,7 +210,7 @@ public class AppidParserTest {
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             appIdParser.parse(entry.getKey(), ubiEvent);
 //            System.out.println(VaildateResult.vaildateString(entry. getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getAppId()));
+            System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.IntegerToString(ubiEvent.getAppId())));
         }
     }
 
