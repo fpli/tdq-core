@@ -36,7 +36,7 @@ public class ItemIdParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             itemIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getItemId())));
+            System.out.println(VaildateResult.validateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getItemId())));
         }
     }
 
@@ -48,7 +48,7 @@ public class ItemIdParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             itemIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateString(entry.getValue(),TypeTransUtil.LongToString(ubiEvent.getItemId())));
+            System.out.println(VaildateResult.validateString(entry.getValue(),TypeTransUtil.LongToString(ubiEvent.getItemId())));
         }
     }
 }

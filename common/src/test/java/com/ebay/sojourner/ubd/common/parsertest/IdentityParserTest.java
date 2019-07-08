@@ -39,11 +39,10 @@ public class IdentityParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 identityParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateString(entry.getValue(), ubiEvent.getApplicationPayload()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), ubiEvent.getApplicationPayload()));
                 System.out.println(ubiEvent.getGuid());
             }
         }catch (Exception e){
-            System.out.println(e.getMessage());
             logger.error("identity test fail!!!");
         }
     }

@@ -39,7 +39,7 @@ public class ServerParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 serverParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateString(entry.getValue(), ubiEvent.getWebServer()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), ubiEvent.getWebServer()));
             }
         } catch (Exception e) {
             logger.error("server test fail!!!");

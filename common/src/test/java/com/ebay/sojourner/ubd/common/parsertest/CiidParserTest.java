@@ -8,7 +8,6 @@ import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
 import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.TypeTransUtil;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
-import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -16,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CiidParserTest {
-    private static final Logger logger = Logger.getLogger(CiidParserTest.class);
 
     private static UbiEvent ubiEvent = null;
     private static String parser = null;
@@ -39,7 +37,7 @@ public class CiidParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             ciidParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getCurrentImprId())));
+            System.out.println(VaildateResult.validateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getCurrentImprId())));
         }
     }
 
@@ -52,7 +50,7 @@ public class CiidParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             ciidParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getCurrentImprId())));
+            System.out.println(VaildateResult.validateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getCurrentImprId())));
         }
     }
 
@@ -66,7 +64,7 @@ public class CiidParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             ciidParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getCurrentImprId())));
+            System.out.println(VaildateResult.validateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getCurrentImprId())));
         }
     }
 
@@ -79,7 +77,7 @@ public class CiidParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             ciidParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getCurrentImprId())));
+            System.out.println(VaildateResult.validateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getCurrentImprId())));
         }
     }
 }

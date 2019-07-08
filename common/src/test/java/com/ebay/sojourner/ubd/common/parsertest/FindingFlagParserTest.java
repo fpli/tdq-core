@@ -33,7 +33,7 @@ public class FindingFlagParserTest {
     @Test
     public void testFindingFlagParser1() {
         findingFlagParser = new FindingFlagParser();
-        ubiEvent = new UbiEvent(); // special value
+        ubiEvent = new UbiEvent();
         ubiEvent.setPageId(3141);
         caseItem = Constants.CASE1;
 
@@ -41,7 +41,7 @@ public class FindingFlagParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 findingFlagParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getBitVal()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getBitVal()));
             }
         } catch (Exception e) {
             logger.error("findingflag test fail!!!");
@@ -59,10 +59,9 @@ public class FindingFlagParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 findingFlagParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.IntegerToString(ubiEvent.getBitVal())));
+                System.out.println(VaildateResult.validateString(entry.getValue(), TypeTransUtil.IntegerToString(ubiEvent.getBitVal())));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("findingflag test fail!!!");
         }
     }

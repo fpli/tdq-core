@@ -40,7 +40,7 @@ public class AgentInfoParserTest {
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 agentInfoParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateString(entry.getValue(), ubiEvent.getAgentInfo()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), ubiEvent.getAgentInfo()));
             }
         }catch (Exception e){
             logger.error("agent test fail!!!");

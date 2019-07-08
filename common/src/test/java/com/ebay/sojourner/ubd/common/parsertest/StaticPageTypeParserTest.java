@@ -44,10 +44,9 @@ public class StaticPageTypeParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 staticPageTypeParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("staticpage test fail!!!");
         }
     }
@@ -67,10 +66,9 @@ public class StaticPageTypeParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 staticPageTypeParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("staticpage test fail!!!");
         }
     }
@@ -90,10 +88,9 @@ public class StaticPageTypeParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 staticPageTypeParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("staticpage test fail!!!");
         }
     }
@@ -113,10 +110,9 @@ public class StaticPageTypeParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 staticPageTypeParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("staticpage test fail!!!");
         }
     }
@@ -136,10 +132,9 @@ public class StaticPageTypeParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 staticPageTypeParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("staticpage test fail!!!");
         }
     }
@@ -159,10 +154,9 @@ public class StaticPageTypeParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 staticPageTypeParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("staticpage test fail!!!");
         }
     }
@@ -182,10 +176,9 @@ public class StaticPageTypeParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 staticPageTypeParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("staticpage test fail!!!");
         }
     }
@@ -205,10 +198,9 @@ public class StaticPageTypeParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 staticPageTypeParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("staticpage test fail!!!");
         }
     }
@@ -228,10 +220,9 @@ public class StaticPageTypeParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 staticPageTypeParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("staticpage test fail!!!");
         }
     }
@@ -251,10 +242,9 @@ public class StaticPageTypeParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 staticPageTypeParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("staticpage test fail!!!");
         }
     }
@@ -274,10 +264,9 @@ public class StaticPageTypeParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 staticPageTypeParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("staticpage test fail!!!");
         }
     }
@@ -297,10 +286,9 @@ public class StaticPageTypeParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 staticPageTypeParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("staticpage test fail!!!");
         }
     }
@@ -320,10 +308,9 @@ public class StaticPageTypeParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 staticPageTypeParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("staticpage test fail!!!");
         }
     }
@@ -343,10 +330,9 @@ public class StaticPageTypeParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 staticPageTypeParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getStaticPageType()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("staticpage test fail!!!");
         }
     }

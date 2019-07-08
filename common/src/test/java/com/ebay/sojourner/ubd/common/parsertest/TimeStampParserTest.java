@@ -40,10 +40,9 @@ public class TimeStampParserTest {
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 timestampParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getEventTimestamp())));
+                System.out.println(VaildateResult.validateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getEventTimestamp())));
             }
         }catch (Exception e){
-            System.out.println(e.getMessage());
             logger.error("timestamp test fail!!!");
         }
     }
@@ -58,10 +57,9 @@ public class TimeStampParserTest {
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 timestampParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getEventTimestamp())));
+                System.out.println(VaildateResult.validateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getEventTimestamp())));
             }
         }catch (Exception e){
-            System.out.println(e.getMessage());
             logger.error("timestamp test fail!!!");
         }
     }
@@ -76,10 +74,9 @@ public class TimeStampParserTest {
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 timestampParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getEventTimestamp())));
+                System.out.println(VaildateResult.validateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getEventTimestamp())));
             }
         }catch (Exception e){
-            System.out.println(e.getMessage());
             logger.error("timestamp test fail!!!");
         }
     }

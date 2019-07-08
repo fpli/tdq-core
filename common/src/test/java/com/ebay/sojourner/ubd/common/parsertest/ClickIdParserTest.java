@@ -35,7 +35,7 @@ public class ClickIdParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             clickIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getClickId()));
+            System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getClickId()));
         }
     }
 
@@ -47,7 +47,7 @@ public class ClickIdParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             clickIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getClickId()));
+            System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getClickId()));
         }
     }
 
@@ -59,7 +59,7 @@ public class ClickIdParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             clickIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getClickId()));
+            System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getClickId()));
         }
     }
 
@@ -71,7 +71,7 @@ public class ClickIdParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             clickIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getClickId()));
+            System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getClickId()));
         }
     }
 
@@ -83,7 +83,8 @@ public class ClickIdParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             clickIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getClickId()));
+            System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getClickId()));
+
         }
     }
 }

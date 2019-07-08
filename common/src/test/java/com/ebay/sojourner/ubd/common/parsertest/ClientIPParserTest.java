@@ -40,10 +40,9 @@ public class ClientIPParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 clientIPParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateString(entry.getValue(),ubiEvent.getClientIP()));
+                System.out.println(VaildateResult.validateString(entry.getValue(),ubiEvent.getClientIP()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("clientIP test fail!!!");
         }
     }
@@ -63,7 +62,6 @@ public class ClientIPParserTest {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("clientIP test fail!!!");
         }
     }
@@ -83,7 +81,6 @@ public class ClientIPParserTest {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("clientIP test fail!!!");
         }
     }
@@ -103,7 +100,6 @@ public class ClientIPParserTest {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("clientIP test fail!!!");
         }
     }
@@ -123,7 +119,6 @@ public class ClientIPParserTest {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("clientIP test fail!!!");
         }
     }

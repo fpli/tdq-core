@@ -41,7 +41,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -60,7 +60,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -79,7 +79,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -98,7 +98,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -118,7 +118,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -138,7 +138,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -158,7 +158,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -178,7 +178,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -198,7 +198,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -218,7 +218,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -238,7 +238,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -258,7 +258,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -278,7 +278,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -297,7 +297,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -317,7 +317,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -337,7 +337,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -357,7 +357,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -377,7 +377,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -398,7 +398,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -419,7 +419,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -439,7 +439,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");
@@ -460,7 +460,7 @@ public class CobrandParserTest {
             for(Map.Entry<RawEvent,Object> entry:rawEventAndExpectResult.entrySet()){
                 cobrandParser.init();
                 cobrandParser.parse(entry.getKey(),ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getCobrand()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
             logger.error("cobrand test fail!!!");

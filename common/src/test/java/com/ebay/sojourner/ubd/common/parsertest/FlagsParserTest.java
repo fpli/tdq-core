@@ -35,7 +35,7 @@ public class FlagsParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             flagsParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateString(entry.getValue(), ubiEvent.getFlags()));
+            System.out.println(VaildateResult.validateString(entry.getValue(), ubiEvent.getFlags()));
         }
     }
 }

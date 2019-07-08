@@ -7,7 +7,6 @@ import com.ebay.sojourner.ubd.common.sharelib.Constants;
 import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
 import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
-import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -15,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PageIdParserTest {
-    private static final Logger logger = Logger.getLogger(PageIdParserTest.class);
 
     private static UbiEvent ubiEvent = null;
     private static String parser = null;
@@ -38,7 +36,7 @@ public class PageIdParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             pageIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(),ubiEvent.getPageId()));
+            System.out.println(VaildateResult.validateInteger(entry.getValue(),ubiEvent.getPageId()));
         }
     }
 
@@ -51,7 +49,7 @@ public class PageIdParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             pageIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(),ubiEvent.getPageId()));
+            System.out.println(VaildateResult.validateInteger(entry.getValue(),ubiEvent.getPageId()));
         }
     }
 
@@ -64,7 +62,7 @@ public class PageIdParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             pageIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(),ubiEvent.getPageId()));
+            System.out.println(VaildateResult.validateInteger(entry.getValue(),ubiEvent.getPageId()));
         }
     }
 
@@ -77,7 +75,7 @@ public class PageIdParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             pageIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(),ubiEvent.getPageId()));
+            System.out.println(VaildateResult.validateInteger(entry.getValue(),ubiEvent.getPageId()));
         }
     }
 
@@ -90,7 +88,7 @@ public class PageIdParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             pageIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateInteger(entry.getValue(),ubiEvent.getPageId()));
+            System.out.println(VaildateResult.validateInteger(entry.getValue(),ubiEvent.getPageId()));
         }
     }
 }

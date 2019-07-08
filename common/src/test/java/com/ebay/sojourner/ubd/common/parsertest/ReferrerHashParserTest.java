@@ -8,7 +8,6 @@ import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
 import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.TypeTransUtil;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
-import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -16,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ReferrerHashParserTest {
-    private static final Logger logger = Logger.getLogger(ReferrerHashParserTest.class);
 
     private static UbiEvent ubiEvent = null;
     private static String parser = null;
@@ -39,7 +37,7 @@ public class ReferrerHashParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             referrerHashParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.vaildateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getRefererHash())));
+            System.out.println(VaildateResult.validateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getRefererHash())));
         }
     }
 }

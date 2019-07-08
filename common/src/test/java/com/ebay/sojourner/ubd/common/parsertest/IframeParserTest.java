@@ -39,10 +39,9 @@ public class IframeParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 iFrameParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(),ubiEvent.getIframe()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(),ubiEvent.getIframe()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("iframe test fail!!!");
         }
     }
@@ -57,10 +56,9 @@ public class IframeParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 iFrameParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.vaildateInteger(entry.getValue(), ubiEvent.getIframe()));
+                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getIframe()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error("iframe test fail!!!");
         }
     }
