@@ -10,10 +10,8 @@ object fSojournerUBDBatchPipeline {
       .master("local")
       .appName("Sojourner Unified Bot Detection Batch Pipeline").getOrCreate()
 
-    System.out.println(this.getClass.getResource("/").getPath)
     val df = spark.read.format("com.databricks.spark.avro").load(this.getClass.getResource("/").getPath + "event-r-03111.avro")
-    System.out.println(df.printSchema())
-    System.out.println(df.count())
+
     df.select("key.guid", "key.sessionSkey", "key.seqNum").createOrReplaceTempView("table1");
     val df2 = spark.read.format("com.databricks.spark.avro").load(this.getClass.getResource("/").getPath + "event-r-03111.avro")
     df2.select("value.guid", "value.sessionSkey", "value.sessionStartDt").createOrReplaceTempView("table2");
