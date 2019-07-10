@@ -1,16 +1,8 @@
 package com.ebay.sojourner.ubd.batch.pipeline
 
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
 
-import com.ebay.sojourner.ubd.common.model.{EventKey, SojEvent, UbiEvent}
-import org.apache.spark.{SparkConf, SparkContext}
-import com.alibaba.fastjson.JSON
-import org.apache.avro.generic.GenericRecord
-import org.apache.spark.sql.{SQLContext, SparkSession}
-import org.apache.avro.mapred.{AvroInputFormat, AvroWrapper}
-import org.apache.hadoop.io.NullWritable
+import org.apache.spark.sql.SparkSession
 
 object fSojournerUBDBatchPipeline {
   def main(args: Array[String]): Unit = {
