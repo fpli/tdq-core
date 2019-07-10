@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.common.rule;
 import com.ebay.sojourner.ubd.common.model.IpSignature;
 import org.apache.flink.queryablestate.client.QueryableStateClient;
 
+import java.util.List;
 import java.util.Set;
 
 public class IpBotRule implements Rule<IpSignature> {

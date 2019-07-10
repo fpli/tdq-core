@@ -112,7 +112,7 @@ public class SojournerUBDRTJob {
         // 5.2 Sessions (ended)
         // 5.3 Events (with session ID & bot flags)
         // 5.4 Events late
-        ipSignatureDataStream.addSink(StreamingFileSinkFactory.ipSignatureSink())
+        ipSignatureDataStream.addSink(StreamingFileSinkFactory.ipSignatureSinkWithAP())
                 .name("IP Signature").disableChaining();
         sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
                 .name("Sessions").disableChaining();
