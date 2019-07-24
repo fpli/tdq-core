@@ -18,6 +18,12 @@ public class KafkaConnectorFactory {
     public static String CLIENT_ID = "82034abc-572d-4b71-82df-c9820ef1627c";
     public static String GROUP_ID = "sojournerpoc";
 
+//    public static String CLIENT_ID = "43665ed9-5673-4d92-8ea7-21decd34c903";
+
+    public static String CLIENT_ID = "82034abc-572d-4b71-82df-c9820ef1627c";
+
+
+
     public static String TOPIC_PATHFINDER_EVENTS = "behavior.pathfinder.events.total";
 
     public static String BOOTSTRAP_SERVERS = Arrays.asList(
@@ -35,6 +41,7 @@ public class KafkaConnectorFactory {
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
+
         props.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG,
                 RoundRobinAssignor.class.getName());
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,

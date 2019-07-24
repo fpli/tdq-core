@@ -22,6 +22,7 @@
 			<groupId>com.ebay.sojourner</groupId>
 			<artifactId>sojourner-ubd-common</artifactId>
 			<version>${project.version}</version>
+
 		</dependency>
 
 		<!-- Apache Flink dependencies -->
@@ -70,7 +71,7 @@
 		<!-- eBay dependencies -->
 		<dependency>
 			<groupId>io.ebay.rheos</groupId>
-			<artifactId>rheos-client</artifactId>
+			<artifactId>rheos-client</artifactId>]
 		</dependency>
 	</dependencies>
 

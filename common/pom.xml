@@ -1,7 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
 		<groupId>com.ebay.sojourner</groupId>
 		<artifactId>sojourner-ubd-parent</artifactId>
@@ -11,6 +10,7 @@
 
 	<artifactId>sojourner-ubd-common</artifactId>
 	<packaging>jar</packaging>
+
 	<name>Sojourner UBD - Common</name>
 
 	<properties>
@@ -34,6 +34,7 @@
 			<artifactId>jacoco-maven-plugin</artifactId>
 		</dependency>
     </dependencies>
+
 
 	<build>
 		<plugins>
@@ -68,6 +69,16 @@
                             <goal>report</goal>
                         </goals>
                     </execution>
+				<groupId>org.apache.avro</groupId>
+				<artifactId>avro-maven-plugin</artifactId>
+				<version>1.7.7</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>schema</goal>
+						</goals>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>

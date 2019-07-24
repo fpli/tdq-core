@@ -10,27 +10,61 @@
 	</parent>
 
 	<artifactId>sojourner-ubd-batch-pipeline</artifactId>
+<<<<<<< HEAD
 	<packaging>jar</packaging>
+=======
+	<version>0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+>>>>>>> sojourner-ubd-poc
 	<name>Sojourner UBD - Batch Pipeline</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.ebay.sojourner</groupId>
 			<artifactId>sojourner-ubd-common</artifactId>
+<<<<<<< HEAD
 			<version>${project.version}</version>
+=======
+			<version>0.1-SNAPSHOT</version>
+>>>>>>> sojourner-ubd-poc
 		</dependency>
 		<dependency>
 			<groupId>org.apache.spark</groupId>
 			<artifactId>spark-core_${scala.binary.version}</artifactId>
+<<<<<<< HEAD
+=======
+			<version>${spark.version}</version>
+			<scope>provided</scope>
+>>>>>>> sojourner-ubd-poc
 		</dependency>
 		<dependency>
 			<groupId>org.apache.spark</groupId>
 			<artifactId>spark-sql_${scala.binary.version}</artifactId>
+<<<<<<< HEAD
+=======
+			<version>${spark.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.58</version>
+		</dependency>
+		<dependency>
+			<groupId>com.databricks</groupId>
+			<artifactId>spark-avro_2.11</artifactId>
+			<version>4.0.0</version>
+>>>>>>> sojourner-ubd-poc
 		</dependency>
 	</dependencies>
 
 	<!-- This profile helps to make things run out of the box in IntelliJ -->
+<<<<<<< HEAD
 	<!-- Its adds Spark's core classes to the runtime class path. -->
+=======
+	<!-- Its adds Flink's core classes to the runtime class path. -->
+>>>>>>> sojourner-ubd-poc
 	<!-- Otherwise they are missing in IntelliJ, because the dependency is 'provided' -->
 	<profiles>
 		<profile>
@@ -58,6 +92,7 @@
 			</dependencies>
 		</profile>
 	</profiles>
+<<<<<<< HEAD
 
 	<build>
 		<plugins>
@@ -70,4 +105,6 @@
 			</plugin>
 		</plugins>
 	</build>
+=======
+>>>>>>> sojourner-ubd-poc
 </project>
