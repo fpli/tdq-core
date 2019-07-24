@@ -57,6 +57,9 @@ public class UbiSession implements Serializable,Cloneable{
     private Integer lndgPageId;
     private String exInternalIp;
     private int familyViCnt;
+    private int pageCnt;
+    private int searchCnt;
+    private int viewCnt;
     private Set<Integer> distinctClickIdSet;
     private Set<String> agentSets;
     private String agentInfo;
@@ -65,7 +68,17 @@ public class UbiSession implements Serializable,Cloneable{
     private String internalIp;
     private String externalIp;
     private String externalIp2;
+    private Integer appId;
+    private int siidCnt;
+    private int viCnt;//for bot215
+    private int maxScsSeqNum;
+    private boolean isRefererNull;//for bot207
+    private int siidCnt2; // for bot207
+    private Integer firstCorbrand;
+    private Integer minSCSeqNum;
     private Long[] minMaxEventTimestamp;
+    private Set<Long> oldSessionSkeySet;
+    private byte[] siteFlagsSet;
     private Set<Integer> botFlagList = new LinkedHashSet<Integer>();
     public UbiSession()
     {

@@ -59,8 +59,8 @@ public class IpSignatureBotDetector implements BotDetector<IpAttribute> {
         botRules.add(new BotRule7());
     }
 
-    private  Set<Integer>  scanSignature(String inColumnName,String inColumnValue,String outColumnName, String bucketName) {
-        return CouchBaseManager.getInstance().getSignatureWithColumn(inColumnName,inColumnValue,outColumnName);
+    private Set<Integer> scanSignature(String inColumnName, String inColumnValue, String outColumnName, String bucketName) {
+        return CouchBaseManager.getInstance().getSignatureWithColumn(inColumnName, inColumnValue, outColumnName);
     }
 
 
