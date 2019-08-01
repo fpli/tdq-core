@@ -34,15 +34,15 @@ public class IpWindowProcessFunction
         if (ipAttr.getAttribute().getClientIp() != null) {
             Set<Integer> botFlagList = ipSignatureBotDetector.getBotFlagList(ipAttr.getAttribute());
 
-            if (botFlagList != null && botFlagList.size() > 0) {
-//                ipSignature.setClientIp(ipAttr.getAttribute().getClientIp());
-//                ipSignature.setBotFlag(botFlagList);
-                JsonObject ipSignature = JsonObject.create()
-                        .put("ip", ipAttr.getAttribute().getClientIp())
-                        .put("botFlag", JsonArray.from(botFlagList.toArray()));
-                couchBaseManager.upsert(ipSignature, ipAttr.getAttribute().getClientIp());
-//            out.collect(ipSignature);
-            }
+//            if (botFlagList != null && botFlagList.size() > 0) {
+////                ipSignature.setClientIp(ipAttr.getAttribute().getClientIp());
+////                ipSignature.setBotFlag(botFlagList);
+//                JsonObject ipSignature = JsonObject.create()
+//                        .put("ip", ipAttr.getAttribute().getClientIp())
+//                        .put("botFlag", JsonArray.from(botFlagList.toArray()));
+//                couchBaseManager.upsert(ipSignature, ipAttr.getAttribute().getClientIp());
+////            out.collect(ipSignature);
+//            }
         }
 
     }

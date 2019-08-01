@@ -59,16 +59,16 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
         }
         Set<Integer> sessionBotFlagSetDetect=sessionBotDetector.getBotFlagList(accumulator.getUbiSession());
         Set<Integer> sessionBotFlagSet=accumulator.getUbiSession().getBotFlagList();
-        Set<Integer> attrBotFlagSet = couchBaseManager.getSignatureWithDocId(accumulator.getUbiSession().getClientIp());
+//        Set<Integer> attrBotFlagSet = couchBaseManager.getSignatureWithDocId(accumulator.getUbiSession().getClientIp());
 
         if(sessionBotFlagSetDetect!=null&&sessionBotFlagSetDetect.size()>0) {
             sessionBotFlagSet.addAll(sessionBotFlagSetDetect);
             eventBotFlagSet.addAll(sessionBotFlagSetDetect);
         }
-        if(attrBotFlagSet!=null&&attrBotFlagSet.size()>0) {
-            sessionBotFlagSet.addAll(attrBotFlagSet);
-            eventBotFlagSet.addAll(attrBotFlagSet);
-        }
+//        if(attrBotFlagSet!=null&&attrBotFlagSet.size()>0) {
+//            sessionBotFlagSet.addAll(attrBotFlagSet);
+//            eventBotFlagSet.addAll(attrBotFlagSet);
+//        }
 
         accumulator.getUbiSession().setBotFlagList(sessionBotFlagSet);
         value.setBotFlags(eventBotFlagSet);

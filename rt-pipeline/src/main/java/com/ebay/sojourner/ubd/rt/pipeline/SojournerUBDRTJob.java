@@ -65,6 +65,7 @@ public class SojournerUBDRTJob {
                 ))
                 .name("Rheos Consumer");
 
+
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent
         // 2.2 Event level bot detection via bot rule

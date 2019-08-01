@@ -10,6 +10,8 @@ import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.configuration.Configuration;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EventMapFunction extends RichMapFunction<RawEvent,UbiEvent> {
     private EventParser parser;
@@ -31,13 +33,18 @@ public class EventMapFunction extends RichMapFunction<RawEvent,UbiEvent> {
 
     @Override
     public UbiEvent map(RawEvent rawEvent) throws Exception {
+        Map<String, String> map = new HashMap<>();
+        map.putAll(rawEvent.getSojA());
+        map.putAll(rawEvent.getSojK());
+        map.putAll(rawEvent.getSojC());
         UbiEvent event = new UbiEvent();
         long startTime = System.nanoTime();
-        parser.parse(rawEvent, event);
-        avgDuration.add(System.nanoTime() - startTime);
-        event.getBotFlags().addAll(eventBotDetector.getBotFlagList(event));
-       return event;
+
+        if(Long.parseLong(map.get("g"))% 100 == 1){
+            parser.parse(rawEvent, event);
+            avgDuration.add(System.nanoTime() - startTime);
+            event.getBotFlags().addAll(eventBotDetector.getBotFlagList(event));
+        }
+        return event;
     }
-
-
 }
