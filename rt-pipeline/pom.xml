@@ -119,6 +119,12 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!--job-uploader-maven-plugin-->
+			<plugin>
+				<groupId>io.ebay.rheos.streaming</groupId>
+				<artifactId>job-uploader-maven-plugin</artifactId>
+			</plugin>
 		</plugins>
 	</build>
 
