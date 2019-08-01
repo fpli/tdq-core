@@ -22,7 +22,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
         SessionAccumulator sessionAccumulator = new SessionAccumulator();
         sessionMetrics = SessionMetrics.getInstance();
         sessionBotDetector=SessionBotDetector.getInstance();
-        couchBaseManager = CouchBaseManager.getInstance();
+//        couchBaseManager = CouchBaseManager.getInstance();
         try {
             sessionMetrics.start(sessionAccumulator);
         } catch (Exception e) {

@@ -21,7 +21,7 @@ public class IpWindowProcessFunction
     private static final Logger logger = Logger.getLogger(IpWindowProcessFunction.class);
     //    private IpSignature ipSignature;
     private IpSignatureBotDetector ipSignatureBotDetector;
-    private CouchBaseManager couchBaseManager;
+//    private CouchBaseManager couchBaseManager;
     private static final String BUCKET_NAME = "botsignature";
     private static final String USER_NAME = "Administrator";
     private static final String USER_PASS = "111111";
@@ -51,12 +51,12 @@ public class IpWindowProcessFunction
     public void open(Configuration conf) throws Exception {
         super.open(conf);
         ipSignatureBotDetector = IpSignatureBotDetector.getInstance();
-        couchBaseManager = CouchBaseManager.getInstance();
+//        couchBaseManager = CouchBaseManager.getInstance();
     }
 
     @Override
     public void clear(Context context) throws Exception {
         super.clear(context);
-        couchBaseManager.close();
+//        couchBaseManager.close();
     }
 }
