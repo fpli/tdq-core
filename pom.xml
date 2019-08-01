@@ -43,6 +43,7 @@
         <jacoco.version>0.8.3</jacoco.version>
 
         <CodeCacheSize>512m</CodeCacheSize>
+
     </properties>
 
     <repositories>
@@ -437,8 +438,15 @@
                         <tarLongFileMode>posix</tarLongFileMode>
                     </configuration>
                 </plugin>
+                <!--job-uploader-maven-plugin-->
+                <plugin>
+                    <groupId>io.ebay.rheos.streaming</groupId>
+                    <artifactId>job-uploader-maven-plugin</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                </plugin>
             </plugins>
         </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -464,7 +472,11 @@
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest-maven-plugin</artifactId>
             </plugin>
+            <!--job-uploader-maven-plugin-->
+            <plugin>
+                <groupId>io.ebay.rheos.streaming</groupId>
+                <artifactId>job-uploader-maven-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
-
 </project>
