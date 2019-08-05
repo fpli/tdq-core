@@ -8,7 +8,7 @@ import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.*;
 
 public class LkpFetcher {
@@ -36,7 +36,9 @@ public class LkpFetcher {
     private Map<String, String> result = new HashMap<String, String>();
     private static  LkpFetcher lkpFetcher;
     public LkpFetcher() {
-        ubiConfig = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));
+        InputStream fileStream = LkpFetcher.class.getResourceAsStream("/ubi.properties");
+//        ubiConfig = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));
+        ubiConfig = UBIConfig.getInstance(fileStream);
         loadResources();
     }
     public static LkpFetcher getInstance() {
@@ -69,7 +71,8 @@ public class LkpFetcher {
         if (pageIdSet.isEmpty()) {
             boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String iframePageIds = ubiConfig.getString(Property.IFRAME_PAGE_IDS);
-            String pageIds = isTestEnabled ? iframePageIds :  FileLoader.loadContent(new File(iframePageIds));
+            InputStream resourceAsStream = lkpFetcher.getClass().getResourceAsStream(iframePageIds);
+            String pageIds = isTestEnabled ? iframePageIds :  FileLoader.loadContent(resourceAsStream);
             if (StringUtils.isNotBlank(pageIds)) {
                 for (String pageId : pageIds.split(LKP_RECORD_DELIMITER)) {
                     pageIdSet.add(pageId);
@@ -137,7 +140,8 @@ public class LkpFetcher {
         if (largeSessionGuidSet.isEmpty()) {
             boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String largeSessionGuidValue = ubiConfig.getString(Property.LARGE_SESSION_GUID);
-            String largeSessionGuids = isTestEnabled ? largeSessionGuidValue :  FileLoader.loadContent(new File(largeSessionGuidValue));
+            InputStream resourceAsStream = LkpFetcher.class.getResourceAsStream(largeSessionGuidValue);
+            String largeSessionGuids = isTestEnabled ? largeSessionGuidValue :  FileLoader.loadContent(resourceAsStream);
             if (StringUtils.isNotBlank(largeSessionGuids)) {
                 for (String guid : largeSessionGuids.split(LKP_FILED_DELIMITER)) {
                     if (StringUtils.isNotBlank(guid)) {
@@ -154,7 +158,8 @@ public class LkpFetcher {
         if (iabAgentRegs.isEmpty()) {
             boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String iabAgentReg = ubiConfig.getString(Property.IAB_AGENT);
-            String iabAgentRegValue = isTestEnabled ? iabAgentReg : FileLoader.loadContent(new File(iabAgentReg));
+            InputStream resourceAsStream = LkpFetcher.class.getResourceAsStream(iabAgentReg);
+            String iabAgentRegValue = isTestEnabled ? iabAgentReg : FileLoader.loadContent(resourceAsStream);
             if (StringUtils.isNotBlank(iabAgentRegValue)) {
                 for (String iabAgent : iabAgentRegValue.split(LKP_RECORD_DELIMITER)) {
                     iabAgentRegs.add(iabAgent.toLowerCase());
@@ -169,7 +174,8 @@ public class LkpFetcher {
         if (findingFlagMap.isEmpty()) {
             boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String findingFlag = ubiConfig.getString(Property.FINDING_FLAGS);
-            String findingFlags = isTestEnabled ? findingFlag : FileLoader.loadContent(new File(findingFlag));
+            InputStream resourceAsStream = LkpFetcher.class.getResourceAsStream(findingFlag);
+            String findingFlags = isTestEnabled ? findingFlag : FileLoader.loadContent(resourceAsStream);
             if (StringUtils.isNotBlank(findingFlags)) {
                 for (String pageFlag : findingFlags.split(LKP_RECORD_DELIMITER)) {
                     String[] values = pageFlag.split(LKP_FILED_DELIMITER);
@@ -192,7 +198,8 @@ public class LkpFetcher {
         if (testUserIds.isEmpty()) {
             boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String testUserIdsValue = ubiConfig.getString(Property.TEST_USER_IDS);
-            String userIdsToFilter = isTestEnabled ? testUserIdsValue : FileLoader.loadContent(new File(testUserIdsValue));
+            InputStream resourceAsStream = LkpFetcher.class.getResourceAsStream(testUserIdsValue);
+            String userIdsToFilter = isTestEnabled ? testUserIdsValue : FileLoader.loadContent(resourceAsStream);
             if (StringUtils.isNotBlank(userIdsToFilter)) {
                 for (String userId : userIdsToFilter.split(LKP_RECORD_DELIMITER)) {
                     if (StringUtils.isNotBlank(userId)) {
@@ -209,7 +216,8 @@ public class LkpFetcher {
         if (vtNewIdsMap.isEmpty()) {
             boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String vtNewIds = ubiConfig.getString(Property.VTNEW_IDS);
-            String vtNewIdsValue = isTestEnabled ? vtNewIds :  FileLoader.loadContent(new File(vtNewIds));
+            InputStream resourceAsStream = LkpFetcher.class.getResourceAsStream(vtNewIds);
+            String vtNewIdsValue = isTestEnabled ? vtNewIds :  FileLoader.loadContent(resourceAsStream);
             if (StringUtils.isNotBlank(vtNewIdsValue)) {
                 for (String vtNewId : vtNewIdsValue.split(LKP_RECORD_DELIMITER)) {
                     Integer[] pageInfo = new Integer[2];
@@ -229,7 +237,8 @@ public class LkpFetcher {
         if (appIdWithBotFlags.isEmpty()) {
             boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String appIds = ubiConfig.getString(Property.APP_ID);
-            String appIdAndFlags = isTestEnabled ? appIds :  FileLoader.loadContent(new File(appIds));
+            InputStream resourceAsStream = LkpFetcher.class.getResourceAsStream(appIds);
+            String appIdAndFlags = isTestEnabled ? appIds :  FileLoader.loadContent(resourceAsStream);
             if (StringUtils.isNotBlank(appIdAndFlags)) {
                 String[] appIdFlagPair = appIdAndFlags.split(LKP_RECORD_DELIMITER);
                 for (String appIdFlag : appIdFlagPair) {
@@ -247,7 +256,8 @@ public class LkpFetcher {
         if (pageFmlyMap.isEmpty()) {
             boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String pageFmlys = ubiConfig.getString(Property.PAGE_FMLY);
-            String pageFmlysValue = isTestEnabled ? pageFmlys : FileLoader.loadContent(new File(pageFmlys));
+            InputStream resourceAsStream = LkpFetcher.class.getResourceAsStream(pageFmlys);
+            String pageFmlysValue = isTestEnabled ? pageFmlys : FileLoader.loadContent(resourceAsStream);
             if (StringUtils.isNotBlank(pageFmlysValue)) {
                 for (String pageFmlyPair : pageFmlysValue.split(LKP_RECORD_DELIMITER)) {
                     String[] pageFmlyNames = new String[2];
@@ -283,7 +293,8 @@ public class LkpFetcher {
         if (mpxMap.isEmpty()) {
             boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String mpxRotation = ubiConfig.getString(Property.MPX_ROTATION);
-            String mpxRotations = isTestEnabled ? mpxRotation : FileLoader.loadContent(new File(mpxRotation));
+            InputStream resourceAsStream = LkpFetcher.class.getResourceAsStream(mpxRotation);
+            String mpxRotations = isTestEnabled ? mpxRotation : FileLoader.loadContent(resourceAsStream);
 
             if (StringUtils.isNotBlank(mpxRotations)) {
                 for (String mpx : mpxRotations.split(LKP_RECORD_DELIMITER)) {

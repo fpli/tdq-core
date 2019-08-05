@@ -3,7 +3,6 @@ package com.ebay.sojourner.ubd.common.util;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,15 +30,15 @@ public class PropertyUtils {
     return properties;
   }
 
-  public static Properties loadInProperties(File absoluteFilePath)
+  public static Properties loadInProperties(InputStream configFileStream)
           throws FileNotFoundException {
     Properties properties = new Properties();
     InputStream instream = null;
     try {
-      instream = FileLoader.loadInStream(absoluteFilePath);
+      instream = FileLoader.loadInStream(configFileStream);
       properties.load(instream);
     } catch (Exception e) {
-      throw new FileNotFoundException(absoluteFilePath.getName());
+      throw new FileNotFoundException("load file failed!!!");
     } finally {
       if (instream != null) {
         try {

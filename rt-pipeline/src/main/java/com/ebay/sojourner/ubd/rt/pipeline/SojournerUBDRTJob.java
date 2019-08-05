@@ -29,21 +29,26 @@ import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindow
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.util.OutputTag;
 
-import java.io.File;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class SojournerUBDRTJob {
 
     public static void main(String[] args) throws Exception {
         // 0. Prepare execution environment
         // 0.1 UBI configuration
-        // 0.2 Flink configuration
-        UBIConfig ubiConfig =
-                UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));
+//         0.2 Flink configuration
+        InputStream resourceAsStream = SojournerUBDRTJob.class.getResourceAsStream("/ubi.properties");
+        UBIConfig ubiConfig = UBIConfig.getInstance(resourceAsStream);
+
+//        UBIConfig ubiConfig = UBIConfig.getInstance(new File("src/main/resources/ubi.properties"));
         final StreamExecutionEnvironment executionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment();
         final ParameterTool params = ParameterTool.fromArgs(args);
         executionEnvironment.getConfig().setGlobalJobParameters(new SojJobParameters());
-        LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
+        // LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
         executionEnvironment.enableCheckpointing(60 * 1000);
@@ -65,11 +70,20 @@ public class SojournerUBDRTJob {
                 ))
                 .name("Rheos Consumer");
 
+        //due to guid filter 1% data test
+        SingleOutputStreamOperator<RawEvent> rawEventFilterStream = rawEventDataStream.filter(rawEvent -> {
+            Map<String, String> map = new HashMap<>();
+            map.putAll(rawEvent.getSojA());
+            map.putAll(rawEvent.getSojK());
+            map.putAll(rawEvent.getSojC());
+
+            return Long.parseLong(map.get("g")) % 100 == 1;
+        });
 
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent
         // 2.2 Event level bot detection via bot rule
-        DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
+        DataStream<UbiEvent> ubiEventDataStream = rawEventFilterStream
                 .map(new EventMapFunction())
                 .name("Event Operator")
                 .startNewChain();
@@ -113,21 +127,25 @@ public class SojournerUBDRTJob {
         // 5.2 Sessions (ended)
         // 5.3 Events (with session ID & bot flags)
         // 5.4 Events late
-        ipSignatureDataStream.addSink(StreamingFileSinkFactory.ipSignatureSink())
-                .name("IP Signature").disableChaining();
-        sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
-                .name("Sessions").disableChaining();
-        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
-                .name("Events").disableChaining();
+//        ipSignatureDataStream.addSink(StreamingFileSinkFactory.ipSignatureSink())
+//                .name("IP Signature").disableChaining();
+//        sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
+//                .name("Sessions").disableChaining();
+//        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
+//                .name("Events").disableChaining();
         DataStream<UbiEvent> lateEventStream =
                 ubiEventStreamWithSessionId.getSideOutput(lateEventOutputTag);
-        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
-                .name("Events (Late)").disableChaining();
+//        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
+//                .name("Events (Late)").disableChaining();
+
+        ipSignatureDataStream.print();
+        sessionStream.print();
+        ubiEventStreamWithSessionId.print();
+        lateEventStream.print();
 
 
         // Submit this job
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");
-
 
     }
 

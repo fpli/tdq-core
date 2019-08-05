@@ -67,7 +67,7 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
     @Override
     public void init() throws Exception {
-        setPageIndicator(new PageIndicator(UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.SEARCH_VIEW_PAGES)));
+        setPageIndicator(new PageIndicator(UBIConfig.getInstance(TimestampMetrics.class.getResourceAsStream("/ubi.properties")).getString(Property.SEARCH_VIEW_PAGES)));
     }
     
     void setPageIndicator(PageIndicator indicator) {

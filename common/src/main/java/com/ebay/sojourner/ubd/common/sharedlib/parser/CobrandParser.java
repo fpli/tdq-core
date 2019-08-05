@@ -33,20 +33,20 @@ public class CobrandParser implements FieldParser<RawEvent, UbiEvent> {
     @Override
     public void init() throws Exception {
 
-        setHalfPageIndicator(new PageIndicator(UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.HALF_PAGES)));
-        setClssfctnPageIndicator(new PageIndicator(UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.CLASSIFIED_PAGES)));
-        setCoreSitePageIndicator(new PageIndicator(UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.CORESITE_PAGES)));
-        setMobileAppIdCategory(new AppIdCategory(UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.MOBILE_APP)));
-        setDesktopAppIdCategory(new AppIdCategory(UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.DESKTOP_APP)));
-        setEimAppIdCategory(new AppIdCategory(UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.EIM_APP)));
+        setHalfPageIndicator(new PageIndicator(UBIConfig.getInstance(CobrandParser.class.getResourceAsStream("/ubi.properties")).getString(Property.HALF_PAGES)));
+        setClssfctnPageIndicator(new PageIndicator(UBIConfig.getInstance(CobrandParser.class.getResourceAsStream("/ubi.properties")).getString(Property.CLASSIFIED_PAGES)));
+        setCoreSitePageIndicator(new PageIndicator(UBIConfig.getInstance(CobrandParser.class.getResourceAsStream("/ubi.properties")).getString(Property.CORESITE_PAGES)));
+        setMobileAppIdCategory(new AppIdCategory(UBIConfig.getInstance(CobrandParser.class.getResourceAsStream("/ubi.properties")).getString(Property.MOBILE_APP)));
+        setDesktopAppIdCategory(new AppIdCategory(UBIConfig.getInstance(CobrandParser.class.getResourceAsStream("/ubi.properties")).getString(Property.DESKTOP_APP)));
+        setEimAppIdCategory(new AppIdCategory(UBIConfig.getInstance(CobrandParser.class.getResourceAsStream("/ubi.properties")).getString(Property.EIM_APP)));
         setMobileEventIdentifier(new MobileEventsIdentifier());
-        halfSite = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.HALF_SITE);
-        expressSite = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.EXPRESS_SITE);
-        expressPartner = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.EXPRESS_PARTNER);
-        halfPartner = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.HALF_PARTNER);
-        shoppingPartner = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.SHOPPING_PARTNER);
-        artisanPartner = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.ARTISAN_PARTNER);
-        if (!UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getBoolean(Property.IS_TEST_ENABLE, false)) {
+        halfSite = UBIConfig.getInstance(CobrandParser.class.getResourceAsStream("/ubi.properties")).getString(Property.HALF_SITE);
+        expressSite = UBIConfig.getInstance(CobrandParser.class.getResourceAsStream("/ubi.properties")).getString(Property.EXPRESS_SITE);
+        expressPartner = UBIConfig.getInstance(CobrandParser.class.getResourceAsStream("/ubi.properties")).getString(Property.EXPRESS_PARTNER);
+        halfPartner = UBIConfig.getInstance(CobrandParser.class.getResourceAsStream("/ubi.properties")).getString(Property.HALF_PARTNER);
+        shoppingPartner = UBIConfig.getInstance(CobrandParser.class.getResourceAsStream("/ubi.properties")).getString(Property.SHOPPING_PARTNER);
+        artisanPartner = UBIConfig.getInstance(CobrandParser.class.getResourceAsStream("/ubi.properties")).getString(Property.ARTISAN_PARTNER);
+        if (!UBIConfig.getInstance(CobrandParser.class.getResourceAsStream("/ubi.properties")).getBoolean(Property.IS_TEST_ENABLE, false)) {
             if (halfSite == null || expressSite == null || expressPartner == null || halfPartner == null || shoppingPartner == null
                     || artisanPartner == null) {
                 log.info("Error! Cobrand Properties Parse Error in config file!");

@@ -20,7 +20,7 @@ public class AgentStringMetrics implements FieldMetrics<UbiEvent, SessionAccumul
     private static UBIConfig ubiConfig ;
     @Override
     public void init() throws Exception {
-        ubiConfig = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));
+        ubiConfig = UBIConfig.getInstance(AgentStringMetrics.class.getResourceAsStream("/ubi.properties"));
         agentExcludeSet = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.AGENT_EXCLUDE_PAGES), Property.PROPERTY_DELIMITER);
         logger.info("UBIConfig.getString(Property.AGENT_EXCLUDE_PAGES):"+ubiConfig.getString(Property.AGENT_EXCLUDE_PAGES));
 

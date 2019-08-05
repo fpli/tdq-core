@@ -14,6 +14,7 @@ import org.apache.flink.util.OutputTag;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Set;
 
 
@@ -84,8 +85,8 @@ public class UbiSessionWindowProcessFunction
     @Override
     public void open(Configuration conf) throws Exception {
         super.open(conf);
-        File configFile = getRuntimeContext().getDistributedCache().getFile("configFile");
-        UBIConfig ubiConfig = UBIConfig.getInstance(configFile);
+//        InputStream configFile = getRuntimeContext().getDistributedCache().getClass().getResourceAsStream("configFile");
+//        UBIConfig ubiConfig = UBIConfig.getInstance(configFile);
 
     }
 

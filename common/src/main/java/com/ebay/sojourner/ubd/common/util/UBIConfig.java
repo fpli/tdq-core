@@ -6,8 +6,8 @@ import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -30,7 +30,7 @@ public class UBIConfig {
 
     private boolean isInitialized = false;
 
-    private UBIConfig(File configFile) {
+    private UBIConfig(InputStream configFile) {
         initAppConfiguration(configFile);
         try {
             initConfiguration(false);
@@ -41,7 +41,7 @@ public class UBIConfig {
 
     }
 
-    public static UBIConfig getInstance(File configFile) {
+    public static UBIConfig getInstance(InputStream configFile) {
         if (ubiConfig == null) {
             synchronized (UBIConfig.class) {
                 if (ubiConfig == null) {
@@ -52,7 +52,7 @@ public class UBIConfig {
         return ubiConfig;
     }
 
-    public void initAppConfiguration(File ubiConfig) {
+    public void initAppConfiguration(InputStream ubiConfig) {
 
         this.ubiProperties = initProperties(ubiConfig);
     }
@@ -60,18 +60,19 @@ public class UBIConfig {
     protected static Properties initProperties(String filePath, String resource) {
         try {
             return PropertyUtils.loadInProperties(filePath, resource);
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             log.error("Either unable to load resource either from " + filePath);
             log.error("Or unable to load from source from " + resource);
             throw new RuntimeException(e);
         }
     }
 
-    protected static Properties initProperties(File filePath) {
+    protected static Properties initProperties(InputStream filePath) {
         try {
             return PropertyUtils.loadInProperties(filePath);
-        } catch (FileNotFoundException e) {
-            log.error("Either unable to load resource either from " + filePath.getName());
+        } catch (Exception e) {
+//            log.error("Either unable to load resource either from " + filePath.getName());
+            log.error("Either unable to load resource either from ");
             throw new RuntimeException(e);
         }
     }

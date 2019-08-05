@@ -41,11 +41,12 @@ public class FileLoader {
         return content;
     }
 
-    public static String loadContent(File fileName) {
+    public static String loadContent(InputStream fileName) {
         String content = null;
         InputStream in = null;
         try {
             in = loadInStream(fileName);
+//            in = FileLoader.class.getResourceAsStream(fileName.toString());
             StringBuilder resultBuilder = new StringBuilder();
             byte[] bytes = new byte[4096];
             int readBytes = 0;
@@ -76,7 +77,8 @@ public class FileLoader {
         InputStream instream = null;
         try {
             if (StringUtils.isNotBlank(path)) {
-                instream = new FileInputStream(path);
+//                instream = new FileInputStream(path);
+                instream = FileLoader.class.getResourceAsStream(path);
             } else {
                 log.info("Load resource directly as provided path is empty, resource: " + resource);
                 instream = loadResource(resource);
@@ -91,16 +93,17 @@ public class FileLoader {
     }
 
     @SuppressWarnings("resource")
-    public static InputStream loadInStream(File file) throws FileNotFoundException {
+    public static InputStream loadInStream(InputStream fileStream) throws FileNotFoundException {
         InputStream instream = null;
         try {
-            if (file!=null) {
-                instream = new FileInputStream(file);
+            if (fileStream!=null) {
+//                instream = new FileInputStream(file);
+                instream = fileStream;
             } else {
                 log.info("file is null");
 
             }
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             log.info("Load file failed " );
 

@@ -9,9 +9,7 @@ import org.apache.flink.api.common.accumulators.AverageAccumulator;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.configuration.Configuration;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.InputStream;
 
 public class EventMapFunction extends RichMapFunction<RawEvent,UbiEvent> {
     private EventParser parser;
@@ -22,8 +20,8 @@ public class EventMapFunction extends RichMapFunction<RawEvent,UbiEvent> {
     public void open(Configuration conf) throws Exception {
         super.open(conf);
         getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
-        File configFile = getRuntimeContext().getDistributedCache().getFile("configFile");
-        UBIConfig ubiConfig = UBIConfig.getInstance(configFile);
+//        InputStream configFile = getRuntimeContext().getDistributedCache().getClass().getResourceAsStream("configFile");
+//        UBIConfig ubiConfig = UBIConfig.getInstance(configFile);
 
         parser = new EventParser();
         eventBotDetector = EventBotDetector.getInstance();
@@ -33,18 +31,11 @@ public class EventMapFunction extends RichMapFunction<RawEvent,UbiEvent> {
 
     @Override
     public UbiEvent map(RawEvent rawEvent) throws Exception {
-        Map<String, String> map = new HashMap<>();
-        map.putAll(rawEvent.getSojA());
-        map.putAll(rawEvent.getSojK());
-        map.putAll(rawEvent.getSojC());
         UbiEvent event = new UbiEvent();
         long startTime = System.nanoTime();
-
-        if(Long.parseLong(map.get("g"))% 100 == 1){
-            parser.parse(rawEvent, event);
-            avgDuration.add(System.nanoTime() - startTime);
-            event.getBotFlags().addAll(eventBotDetector.getBotFlagList(event));
-        }
+        parser.parse(rawEvent, event);
+        avgDuration.add(System.nanoTime() - startTime);
+        event.getBotFlags().addAll(eventBotDetector.getBotFlagList(event));
         return event;
     }
 }

@@ -6,7 +6,7 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
+import java.io.InputStream;
 
 public class MobileEventsIdentifier {
 
@@ -20,10 +20,14 @@ public class MobileEventsIdentifier {
     private static UBIConfig ubiConfig;
 
     public MobileEventsIdentifier() {
-        mobileStartPattern = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.MOBILE_AGENT_START);
-        mobileIndexPattern = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.MOBILE_AGENT_INDEX);
-        mobileMatchPattern = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getString(Property.MOBILE_AGENT_OTHER);
-        if (!UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")).getBoolean(Property.IS_TEST_ENABLE, false)) {
+        InputStream fileStream = LkpFetcher.class.getResourceAsStream("/ubi.properties");
+        mobileStartPattern = UBIConfig.getInstance(fileStream).getString(Property.MOBILE_AGENT_START);
+        mobileIndexPattern = UBIConfig.getInstance(fileStream).getString(Property.MOBILE_AGENT_INDEX);
+        mobileMatchPattern = UBIConfig.getInstance(fileStream).getString(Property.MOBILE_AGENT_OTHER);
+//        mobileStartPattern = UBIConfig.getInstance(new File(MobileEventsIdentifier.class.getResource("/ubi.properties").toString())).getString(Property.MOBILE_AGENT_START);
+//        mobileIndexPattern = UBIConfig.getInstance(new File(MobileEventsIdentifier.class.getResource("/ubi.properties").toString())).getString(Property.MOBILE_AGENT_INDEX);
+//        mobileMatchPattern = UBIConfig.getInstance(new File(MobileEventsIdentifier.class.getResource("/ubi.properties").toString())).getString(Property.MOBILE_AGENT_OTHER);
+        if (!UBIConfig.getInstance(fileStream).getBoolean(Property.IS_TEST_ENABLE, false)) {
             if (mobileIndexPattern == null || mobileMatchPattern == null || mobileStartPattern == null) {
                 throw new RuntimeException();
             }
