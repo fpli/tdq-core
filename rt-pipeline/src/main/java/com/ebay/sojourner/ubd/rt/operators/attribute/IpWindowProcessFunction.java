@@ -1,9 +1,11 @@
-package com.ebay.sojourner.ubd.rt.operators.attrubite;
+package com.ebay.sojourner.ubd.rt.operators.attribute;
 
 import com.couchbase.client.java.document.json.JsonArray;
 import com.couchbase.client.java.document.json.JsonObject;
+import com.ebay.sojourner.ubd.common.model.IpAttribute;
 import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.IpSignature;
+
 import com.ebay.sojourner.ubd.common.sharedlib.connectors.CouchBaseManager;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.IpSignatureBotDetector;
 import org.apache.flink.api.java.tuple.Tuple;
@@ -15,9 +17,9 @@ import org.apache.log4j.Logger;
 
 import java.util.Set;
 
-public class AgentStringExInternalIpWindowProcessFunction
+public class IpWindowProcessFunction
         extends ProcessWindowFunction<IpAttributeAccumulator, IpSignature, Tuple, TimeWindow> {
-    private static final Logger logger = Logger.getLogger(AgentStringExInternalIpWindowProcessFunction.class);
+    private static final Logger logger = Logger.getLogger(IpWindowProcessFunction.class);
     //    private IpSignature ipSignature;
     private IpSignatureBotDetector ipSignatureBotDetector;
     private CouchBaseManager couchBaseManager;
@@ -34,15 +36,14 @@ public class AgentStringExInternalIpWindowProcessFunction
             Set<Integer> botFlagList = ipSignatureBotDetector.getBotFlagList(ipAttr.getAttribute());
 
             if (botFlagList != null && botFlagList.size() > 0) {
-//                ipSignature.setClientIp(ipAttr.getAttribute().getClientIp());
-//                ipSignature.setBotFlag(botFlagList);
                 JsonObject ipSignature = JsonObject.create()
                         .put("ip", ipAttr.getAttribute().getClientIp())
                         .put("botFlag", JsonArray.from(botFlagList.toArray()));
                 couchBaseManager.upsert(ipSignature, ipAttr.getAttribute().getClientIp());
-//            out.collect(ipSignature);
+
             }
         }
+
 
     }
 

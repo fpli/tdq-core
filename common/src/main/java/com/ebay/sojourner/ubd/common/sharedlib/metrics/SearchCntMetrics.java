@@ -2,8 +2,6 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.PageIndicator;
-import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
 public class SearchCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 

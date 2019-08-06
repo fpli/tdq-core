@@ -1,11 +1,11 @@
-package com.ebay.sojourner.ubd.rt.operators.attrubite;
+package com.ebay.sojourner.ubd.rt.operators.attribute;
 
 import com.couchbase.client.java.document.json.JsonArray;
 import com.couchbase.client.java.document.json.JsonObject;
-import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.IpSignature;
+import com.ebay.sojourner.ubd.common.model.GuidAttribute;
+import com.ebay.sojourner.ubd.common.model.GuidAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.sharedlib.connectors.CouchBaseManager;
-import com.ebay.sojourner.ubd.common.sharedlib.detectors.IpSignatureBotDetector;
+import com.ebay.sojourner.ubd.common.sharedlib.detectors.GuidSignatureBotDetector;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
@@ -16,40 +16,37 @@ import org.apache.log4j.Logger;
 import java.util.Set;
 
 public class GuidWindowProcessFunction
-        extends ProcessWindowFunction<IpAttributeAccumulator, IpSignature, Tuple, TimeWindow> {
+        extends ProcessWindowFunction<GuidAttributeAccumulator, GuidAttribute, Tuple, TimeWindow> {
     private static final Logger logger = Logger.getLogger(GuidWindowProcessFunction.class);
     //    private IpSignature ipSignature;
-    private IpSignatureBotDetector ipSignatureBotDetector;
+    private GuidSignatureBotDetector guidSignatureBotDetector;
     private CouchBaseManager couchBaseManager;
     private static final String BUCKET_NAME = "botsignature";
     private static final String USER_NAME = "Administrator";
     private static final String USER_PASS = "111111";
 
     @Override
-    public void process(Tuple tuple, Context context, Iterable<IpAttributeAccumulator> elements,
-                        Collector<IpSignature> out) throws Exception {
+    public void process(Tuple tuple, Context context, Iterable<GuidAttributeAccumulator> elements,
+                        Collector<GuidAttribute> out) throws Exception {
 
-        IpAttributeAccumulator ipAttr = elements.iterator().next();
-        if (ipAttr.getAttribute().getClientIp() != null) {
-            Set<Integer> botFlagList = ipSignatureBotDetector.getBotFlagList(ipAttr.getAttribute());
+        GuidAttributeAccumulator guidAttributeAccumulator = elements.iterator().next();
+
+            Set<Integer> botFlagList = guidSignatureBotDetector.getBotFlagList(guidAttributeAccumulator.getAttribute());
 
             if (botFlagList != null && botFlagList.size() > 0) {
-//                ipSignature.setClientIp(ipAttr.getAttribute().getClientIp());
-//                ipSignature.setBotFlag(botFlagList);
-                JsonObject ipSignature = JsonObject.create()
-                        .put("ip", ipAttr.getAttribute().getClientIp())
+                JsonObject guidSignature = JsonObject.create()
+                        .put("guid", guidAttributeAccumulator.getAttribute().getGuid())
                         .put("botFlag", JsonArray.from(botFlagList.toArray()));
-                couchBaseManager.upsert(ipSignature, ipAttr.getAttribute().getClientIp());
-//            out.collect(ipSignature);
+                couchBaseManager.upsert(guidSignature, guidAttributeAccumulator.getAttribute().getGuid());
             }
-        }
+
 
     }
 
     @Override
     public void open(Configuration conf) throws Exception {
         super.open(conf);
-        ipSignatureBotDetector = IpSignatureBotDetector.getInstance();
+        guidSignatureBotDetector = GuidSignatureBotDetector.getInstance();
         couchBaseManager = CouchBaseManager.getInstance();
     }
 

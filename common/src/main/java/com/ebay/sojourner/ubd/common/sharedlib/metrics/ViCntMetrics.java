@@ -3,12 +3,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.PageIndicator;
-import com.ebay.sojourner.ubd.common.util.FlagUtils;
-import com.ebay.sojourner.ubd.common.util.Property;
-import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
-import java.io.File;
 import java.util.Map;
 
 public class ViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {

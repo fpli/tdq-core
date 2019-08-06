@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.rule.*;
 
+import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -29,7 +30,7 @@ public class SessionBotDetector implements BotDetector<UbiSession> {
     }
 
     @Override
-    public Set<Integer> getBotFlagList(UbiSession ubiSession) {
+    public Set<Integer> getBotFlagList(UbiSession ubiSession) throws IOException, InterruptedException {
         Set<Integer> botRuleList = new LinkedHashSet<Integer>(botRules.size());
         for (Rule rule:botRules)
         {
@@ -55,5 +56,6 @@ public class SessionBotDetector implements BotDetector<UbiSession> {
         botRules.add(new BotRule208());
         botRules.add(new BotRule212());
         botRules.add(new BotRule215());
+        botRules.add(new BotRule11());
     }
 }

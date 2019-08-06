@@ -18,7 +18,7 @@ public class BotRule7 implements Rule<IpAttribute> {
 
 
         int botFlag = NON_BOT_FLAG;
-        if (ipAttribute.getSingleClickSessionCount() >= 1) {
+        if (ipAttribute.getScsCount() >= 1) {
            botFlag=SCS_ON_IP;
         }
 

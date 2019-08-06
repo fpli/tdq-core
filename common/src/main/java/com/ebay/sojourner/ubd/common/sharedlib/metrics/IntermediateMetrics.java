@@ -11,9 +11,10 @@ import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.*;
 
-public class IntermediateMetrics {
+public class IntermediateMetrics implements Serializable {
     private static Set<Integer> agentExcludePageSet = null;
     private static final String CHANNEL = "chnl";
     private static final String EUID = "euid";

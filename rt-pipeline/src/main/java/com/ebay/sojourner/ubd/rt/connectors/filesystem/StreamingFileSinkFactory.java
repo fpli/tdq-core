@@ -5,7 +5,6 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.formats.parquet.ParquetBuilder;
 import org.apache.flink.formats.parquet.avro.ParquetAvroWriters;
 import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 

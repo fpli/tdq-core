@@ -1,23 +1,23 @@
-package com.ebay.sojourner.ubd.rt.operators.attrubite;
+package com.ebay.sojourner.ubd.rt.operators.attribute;
 
+import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.sharedlib.indicators.IpIndicator;
+import com.ebay.sojourner.ubd.common.sharedlib.indicators.IpIndicators;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.log4j.Logger;
 
-public class AgentStringAttributeAgg implements AggregateFunction<UbiSession, IpAttributeAccumulator, IpAttributeAccumulator> {
-    private static final Logger logger = Logger.getLogger(AgentStringAttributeAgg.class);
-    private IpIndicator ipIndicator;
+public class IpAttributeAgg implements AggregateFunction<AgentIpAttribute, IpAttributeAccumulator, IpAttributeAccumulator> {
+    private static final Logger logger = Logger.getLogger(IpAttributeAgg.class);
+    private IpIndicators ipIndicators;
 
     @Override
     public IpAttributeAccumulator createAccumulator() {
 
         IpAttributeAccumulator ipAttributeAccumulator = new IpAttributeAccumulator();
-        ipIndicator = IpIndicator.getInstance();
+        ipIndicators = IpIndicators.getInstance();
 
         try {
-            ipIndicator.start(ipAttributeAccumulator);
+            ipIndicators.start(ipAttributeAccumulator);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage());
@@ -26,12 +26,12 @@ public class AgentStringAttributeAgg implements AggregateFunction<UbiSession, Ip
     }
 
     @Override
-    public IpAttributeAccumulator add(UbiSession session, IpAttributeAccumulator ipAttr) {
+    public IpAttributeAccumulator add(AgentIpAttribute agentIpAttribute, IpAttributeAccumulator ipAttr) {
         if (ipAttr.getAttribute().getClientIp() == null) {
-            ipAttr.getAttribute().setClientIp(session.getClientIp());
+            ipAttr.getAttribute().setClientIp(agentIpAttribute.getClientIp());
         }
         try {
-            ipIndicator.feed(session,ipAttr);
+            ipIndicators.feed(agentIpAttribute, ipAttr);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,20 +1,14 @@
 package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
-import com.ebay.sojourner.common.datum.UbiEvent;
-import com.ebay.sojourner.common.datum.UbiSession;
-import com.ebay.sojourner.common.sojlib.SOJGetUrlPath;
-import com.ebay.sojourner.constant.Property;
-import com.ebay.sojourner.intraday.datum.IntermediateMetrics;
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJGetUrlPath;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
-import com.ebay.sojourner.utils.PropertyUtils;
+import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.hadoop.conf.Configuration;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,10 +16,10 @@ import java.util.Set;
  * @author yunjzhang
  * init version by Daniel:   logic from BI sql
  * 2014/4/9 by Daniel:   new traffic source id (30,31)
- *                       new landing page id (2056089,2057337,2059705)
- *                       *.yandex.ru to *.yandex.*
- *                       roverentry_src_string.mppid > 0 THEN 14
- *                       session_details.mppid > 0 THEN 14 
+ * new landing page id (2056089,2057337,2059705)
+ * *.yandex.ru to *.yandex.*
+ * roverentry_src_string.mppid > 0 THEN 14
+ * session_details.mppid > 0 THEN 14
  */
 public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
     public static final Long INITIALSESSIONDATE = 3542227200000000L; // 2012-04-01
@@ -35,6 +29,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
     private static final Long SECOND10 = 10 * SESCOND1;
     private static final Long SECOND30 = 30 * SESCOND1;
     private static final Long SECOND180 = 180 * SESCOND1;
+    private static UBIConfig ubiConfig;
     // since the init value need to add before a valid event appears,
     // minus 1 year for safe purpose
     public static final Long SOJMAXLONG = Long.MAX_VALUE - SESCOND1 * 365 * 24 * 3600;
@@ -134,53 +129,53 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
         TrafficSourceIdMetrics.swdSet = swdSet;
     }
 
-    private Long startTSOnCurrentCobrandSite = null;
+//    private Long startTSOnCurrentCobrandSite = null;
+//
+//    private IntermediateMetrics intermediateMetrics = null;
+//
+//    private Integer firstCobrand = null;
 
-    private IntermediateMetrics intermediateMetrics = null;
-
-    private Integer firstCobrand = null;
-
-    static private StringBuilder stingBuilder = new StringBuilder();
+    private static StringBuilder stingBuilder = new StringBuilder();
 
     static {
         stingBuilder.append("(.*(").append("popular|compare|achat-vente|affari|")
-        .append("einkaufstipps|top-themen|trucos|usato").append(")|")
-        .append("preisvergleich)\\.ebay\\..*");
+                .append("einkaufstipps|top-themen|trucos|usato").append(")|")
+                .append("preisvergleich)\\.ebay\\..*");
         regString4Id21 = stingBuilder.toString();
 
         stingBuilder.setLength(0);
         stingBuilder.append("t\\.co|").append("vk\\.com|").append(".*so\\.cl|").append(".*(facebook|")
-        .append("twitter|").append("\\.myspace|").append("\\.linkedin|").append("\\.tencent|")
-        .append("buzz\\.google|").append("vkontakte|").append("\\.orkut|").append("\\.bebo|")
-        .append("plus\\..*google|").append("pinterest)\\..*");
+                .append("twitter|").append("\\.myspace|").append("\\.linkedin|").append("\\.tencent|")
+                .append("buzz\\.google|").append("vkontakte|").append("\\.orkut|").append("\\.bebo|")
+                .append("plus\\..*google|").append("pinterest)\\..*");
         regString4Id22 = stingBuilder.toString();
 
         stingBuilder.setLength(0);
         stingBuilder.append("(search\\.(bt|icq)\\..*)|")
-        .append("(.*(\\.tiscali\\.co\\.uk|\\.mywebsearch\\.com))|")
-        .append("suche\\.web\\.de|").append("(.*(\\.google\\.|\\.yahoo\\.|search.*\\.live\\.|")
-        .append("search.*\\.msn\\.|\\.bing\\.|\\.ask\\.|\\.baidu\\.|")
-        .append("search\\.juno\\.|search\\.comcast\\.|suche\\.t-online\\.|")
-        .append("search\\.virginmedia|search\\.orange\\.|search\\.aol\\.|")
-        .append("search.*\\.sky\\.|suche\\.aol|search\\..*voila\\.|")
-        .append("search\\.conduit\\.|\\.excite\\.|\\.ciao\\.|duckduckgo\\.|yandex\\.).*)");
+                .append("(.*(\\.tiscali\\.co\\.uk|\\.mywebsearch\\.com))|")
+                .append("suche\\.web\\.de|").append("(.*(\\.google\\.|\\.yahoo\\.|search.*\\.live\\.|")
+                .append("search.*\\.msn\\.|\\.bing\\.|\\.ask\\.|\\.baidu\\.|")
+                .append("search\\.juno\\.|search\\.comcast\\.|suche\\.t-online\\.|")
+                .append("search\\.virginmedia|search\\.orange\\.|search\\.aol\\.|")
+                .append("search.*\\.sky\\.|suche\\.aol|search\\..*voila\\.|")
+                .append("search\\.conduit\\.|\\.excite\\.|\\.ciao\\.|duckduckgo\\.|yandex\\.).*)");
         regString4Id21_1 = stingBuilder.toString();
 
         stingBuilder.setLength(0);
         stingBuilder.append("(.*\\.(youtube|blogspot|blogger|stumbleupon|tumblr|")
-        .append("livejournal|wordpress|typepad)|").append("reddit)\\..*");
+                .append("livejournal|wordpress|typepad)|").append("reddit)\\..*");
         regString4Id23 = stingBuilder.toString();
     }
 
     @Override
     public void end(SessionAccumulator sessionAccumulator) throws Exception {
-        intermediateMetrics.end(sessionAccumulator);
-        sessionAccumulator.getUbiSession().setTrafficSrcId(getTrafficSourceId());
+        sessionAccumulator.getUbiSession().getIntermediateMetrics().end(sessionAccumulator);
+        sessionAccumulator.getUbiSession().setTrafficSrcId(getTrafficSourceId(sessionAccumulator));
     }
 
     @Override
     public void feed(UbiEvent ubiEvent, SessionAccumulator sessionAccumulator) throws Exception {
-        intermediateMetrics.feed(ubiEvent);
+        sessionAccumulator.getUbiSession().getIntermediateMetrics().feed(ubiEvent);
     }
 
     public String getCobrandSiteId(UbiEvent event) {
@@ -192,25 +187,15 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
         return stringBuilder.toString();
     }
 
-    public Integer getFirstCobrand() {
-        return firstCobrand;
-    }
-
-    public IntermediateMetrics getIntermediaEventMetrics() {
-        return intermediateMetrics;
-    }
-
-    public Long getStartTSOnCurrentCobrandSite() {
-        return startTSOnCurrentCobrandSite;
-    }
-
-    private Integer getTrafficSourceId() {
-        startTSOnCurrentCobrandSite =
+    private Integer getTrafficSourceId(SessionAccumulator sessionAccumulator) {
+        IntermediateMetrics intermediateMetrics=sessionAccumulator.getUbiSession().getIntermediateMetrics();
+        Integer firstCobrand =sessionAccumulator.getUbiSession().getFirstCorbrand();
+        Long startTSOnCurrentCobrandSite =
                 intermediateMetrics.getEventTS() == null ? SOJMAXLONG : intermediateMetrics
                         .getEventTS();
 
         // calculate the traffic source id base on intermedia parameters
-        if (("11030".equals(intermediateMetrics.getScEventE()) 
+        if (("11030".equals(intermediateMetrics.getScEventE())
                 || "11030".equals(intermediateMetrics.getRoverClickE()))
                 && INITIALSESSIONDATE.compareTo(startTSOnCurrentCobrandSite) <= 0) {
             return 23;
@@ -265,9 +250,9 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
                 && intermediateMetrics.getRoverEntryTs() != null
                 && intermediateMetrics.getRoverEntryTs() <= startTSOnCurrentCobrandSite + SESCOND1
                 && ("2".equals(intermediateMetrics.getMpxChannelId()) || "14"
-                        .equals(intermediateMetrics.getMpxChannelId()))
-                        && intermediateMetrics.getActualKeyword().matches(ebayStr)
-                        && rotSet.contains(intermediateMetrics.getRotId())) {
+                .equals(intermediateMetrics.getMpxChannelId()))
+                && intermediateMetrics.getActualKeyword().matches(ebayStr)
+                && rotSet.contains(intermediateMetrics.getRotId())) {
             return 29;
         } else if ((!FIVE.equals(firstCobrand) && !NINE.equals(firstCobrand)
                 && !ONE.equals(firstCobrand) && !EIGHT.equals(firstCobrand))
@@ -295,8 +280,8 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
                 && intermediateMetrics.getRoverEntryTs() != null
                 && intermediateMetrics.getRoverEntryTs() <= startTSOnCurrentCobrandSite + SESCOND1
                 && ("2".equals(intermediateMetrics.getMpxChannelId()) || "14"
-                        .equals(intermediateMetrics.getMpxChannelId()))
-                        && rotSet.contains(intermediateMetrics.getRotId())) {
+                .equals(intermediateMetrics.getMpxChannelId()))
+                && rotSet.contains(intermediateMetrics.getRotId())) {
             return 28;
         } else if (intermediateMetrics.getRoverEntryTs() != null
                 && intermediateMetrics.getRoverEntryTs() <= startTSOnCurrentCobrandSite + SESCOND1
@@ -438,7 +423,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
                 .matches(".*\\.(google|googleusercontent)\\..*")
                 && intermediateMetrics.getRefKeyword().equals("")
                 && !SOJGetUrlPath.getUrlPath(intermediateMetrics.getReferrer()).matches(
-                        "/url|/imgres|/search|/")) {
+                "/url|/imgres|/search|/")) {
             return 24;
         } else if ((ONE.equals(firstCobrand) || EIGHT.equals(firstCobrand))
                 && intermediateMetrics.getRefDomain().contains(".google.")
@@ -517,16 +502,14 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
                 && intermediateMetrics.getFirstNotifyTs() <= startTSOnCurrentCobrandSite + SECOND3
                 && intermediateMetrics.getFirstNotifyTs() >= startTSOnCurrentCobrandSite - SECOND180) {
             return 27;
-        } /*check mppid from roverentry*/
-        else if (intermediateMetrics.getRoverEntryTs() != null
+        } /*check mppid from roverentry*/ else if (intermediateMetrics.getRoverEntryTs() != null
                 && intermediateMetrics.getRoverEntryTs() <= startTSOnCurrentCobrandSite + SECOND10
                 && intermediateMetrics.getRoverEntryTs() >= startTSOnCurrentCobrandSite - SECOND30
                 && intermediateMetrics.getFirstMppId() != null
                 && intermediateMetrics.getFirstMppId() > 0) {
             return 14;
-        } /*check mppid from mobile pages*/
-        else if (intermediateMetrics.getFinalMppId() != null
-                && intermediateMetrics.getFinalMppId() > 0){
+        } /*check mppid from mobile pages*/ else if (intermediateMetrics.getFinalMppId() != null
+                && intermediateMetrics.getFinalMppId() > 0) {
             return 14;
         } else if (StringUtils.isBlank(intermediateMetrics.getRefDomain())) {
             return 1;
@@ -565,41 +548,35 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
     @Override
     public void init() throws Exception {
         // init constants from property
+        ubiConfig = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));
         landPageSet1 =
-                PropertyUtils.getIntegerSet(conf.get(Property.LAND_PAGES1),
-                    Property.PROPERTY_DELIMITER);
+                PropertyUtils.getIntegerSet(ubiConfig.getString(Property.LAND_PAGES1),
+                        Property.PROPERTY_DELIMITER);
         landPageSet2 =
-                PropertyUtils.getIntegerSet(conf.get(Property.LAND_PAGES2),
-                    Property.PROPERTY_DELIMITER);
+                PropertyUtils.getIntegerSet(ubiConfig.getString(Property.LAND_PAGES2),
+                        Property.PROPERTY_DELIMITER);
         swdSet =
                 PropertyUtils
-                .getIntegerSet(conf.get(Property.SWD_VALUES), Property.PROPERTY_DELIMITER);
+                        .getIntegerSet(ubiConfig.getString(Property.SWD_VALUES), Property.PROPERTY_DELIMITER);
         rotSet =
-                PropertyUtils.getLongSet(conf.get(Property.ROT_VALUES), Property.PROPERTY_DELIMITER);
-        socialAgentId22 = 
-                PropertyUtils.getIntegerSet(conf.get(Property.SOCIAL_AGENT_ID22),
-                    Property.PROPERTY_DELIMITER);
-        socialAgentId23 = 
-                PropertyUtils.getIntegerSet(conf.get(Property.SOCIAL_AGENT_ID23),
-                    Property.PROPERTY_DELIMITER);
+                PropertyUtils.getLongSet(ubiConfig.getString(Property.ROT_VALUES), Property.PROPERTY_DELIMITER);
+        socialAgentId22 =
+                PropertyUtils.getIntegerSet(ubiConfig.getString(Property.SOCIAL_AGENT_ID22),
+                        Property.PROPERTY_DELIMITER);
+        socialAgentId23 =
+                PropertyUtils.getIntegerSet(ubiConfig.getString(Property.SOCIAL_AGENT_ID23),
+                        Property.PROPERTY_DELIMITER);
 
-        intermediateMetrics = new IntermediateMetrics(conf);
-    }
 
-    public void setFirstCobrand(Integer firstCobrand) {
-        this.firstCobrand = firstCobrand;
-    }
-
-    void setIntermediaEventMetrics(IntermediateMetrics intermediaPara) {
-        this.intermediateMetrics = intermediaPara;
     }
 
     @Override
     public void start(SessionAccumulator sessionAccumulator) throws Exception {
-        firstCobrand = source.getCobrand();
+        IntermediateMetrics intermediateMetrics = new IntermediateMetrics();
         intermediateMetrics.initMetrics();
-        intermediateMetrics.start(source);
-        feed(source, target);
+        sessionAccumulator.getUbiSession().setIntermediateMetrics(intermediateMetrics);
+//        intermediateMetrics.start(source);
+//        feed(source, target);
     }
 
     public static Set<Integer> getSocialAgentId22() {

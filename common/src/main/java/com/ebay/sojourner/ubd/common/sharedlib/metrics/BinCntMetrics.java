@@ -12,6 +12,7 @@ import java.io.File;
 public class BinCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
     private PageIndicator indicator;
     private static UBIConfig ubiConfig;
+
     @Override
     public void start(SessionAccumulator sessionAccumulator) {
         sessionAccumulator.getUbiSession().setBinCoreCnt(0);

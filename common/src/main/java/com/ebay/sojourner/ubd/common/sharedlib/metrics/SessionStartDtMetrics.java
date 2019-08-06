@@ -8,33 +8,30 @@ import org.apache.log4j.Logger;
 
 public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
-    private static final Logger logger = Logger.getLogger(SingleClickFlagMetrics.class);
+    private static final Logger logger = Logger.getLogger(SessionStartDtMetrics.class);
     private long sessionStartDt;
     private Integer seqNum;
     @Override
     public void init() throws Exception {
-        // nothing to do
-        sessionStartDt=0;
-        seqNum=0;
+
     }
     @Override
     public void start(SessionAccumulator sessionAccumulator) {
-        sessionStartDt=0;
-        seqNum=0;
+        sessionAccumulator.getUbiSession().setSessionStartDt(0L);
+        sessionAccumulator.getUbiSession().setSeqNum(0);
+
 //        feed(event, sessionAccumulator);
     }
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-         seqNum++;
+        sessionAccumulator.getUbiSession().setSeqNum(sessionAccumulator.getUbiSession().getSeqNum()+1);
         if (event.getIframe() == 0) {
 
             if (event.getRdt() == 0) {
-               if(sessionStartDt==0)
+               if(sessionAccumulator.getUbiSession().getSessionStartDt()==0)
                {
-                   sessionStartDt=event.getSojDataDt();
-
-                   sessionAccumulator.getUbiSession().setSessionStartDt(sessionStartDt);
+                   sessionAccumulator.getUbiSession().setSessionStartDt(event.getSojDataDt());
                }
 
             }
@@ -47,8 +44,8 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
         {
             event.setSessionId(sessionAccumulator.getUbiSession().getSessionId());
         }
-        event.setSessionStartDt(sessionStartDt);
-        event.setSeqNum(seqNum);
+        event.setSessionStartDt(sessionAccumulator.getUbiSession().getSessionStartDt());
+        event.setSeqNum(sessionAccumulator.getUbiSession().getSeqNum());
     }
 
     @Override

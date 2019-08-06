@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.rule.*;
 
+import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
     }
 
     @Override
-    public Set<Integer> getBotFlagList(UbiEvent ubiEvent) {
+    public Set<Integer> getBotFlagList(UbiEvent ubiEvent) throws IOException, InterruptedException {
         Set<Integer> botRuleList = new LinkedHashSet<Integer>(botRules.size());
         for (Rule rule : botRules) {
             Integer botRule = rule.getBotFlag(ubiEvent);

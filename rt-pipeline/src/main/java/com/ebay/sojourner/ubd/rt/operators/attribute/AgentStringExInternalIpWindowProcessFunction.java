@@ -1,4 +1,4 @@
-package com.ebay.sojourner.ubd.rt.operators.attrubite;
+package com.ebay.sojourner.ubd.rt.operators.attribute;
 
 import com.couchbase.client.java.document.json.JsonArray;
 import com.couchbase.client.java.document.json.JsonObject;
@@ -15,9 +15,9 @@ import org.apache.log4j.Logger;
 
 import java.util.Set;
 
-public class AgentStringWindowProcessFunction
+public class AgentStringExInternalIpWindowProcessFunction
         extends ProcessWindowFunction<IpAttributeAccumulator, IpSignature, Tuple, TimeWindow> {
-    private static final Logger logger = Logger.getLogger(AgentStringWindowProcessFunction.class);
+    private static final Logger logger = Logger.getLogger(AgentStringExInternalIpWindowProcessFunction.class);
     //    private IpSignature ipSignature;
     private IpSignatureBotDetector ipSignatureBotDetector;
     private CouchBaseManager couchBaseManager;

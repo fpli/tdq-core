@@ -10,7 +10,6 @@
 
 	<artifactId>sojourner-ubd-common</artifactId>
 	<packaging>jar</packaging>
-
 	<name>Sojourner UBD - Common</name>
 
 	<properties>
@@ -32,6 +31,10 @@
 		<dependency>
 			<groupId>org.jacoco</groupId>
 			<artifactId>jacoco-maven-plugin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
 		</dependency>
     </dependencies>
 
@@ -69,6 +72,9 @@
                             <goal>report</goal>
                         </goals>
                     </execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.avro</groupId>
 				<artifactId>avro-maven-plugin</artifactId>
 				<version>1.7.7</version>

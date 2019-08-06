@@ -6,7 +6,6 @@ import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
-import scala.concurrent.java8.FuturesConvertersImpl;
 
 import java.io.File;
 import java.util.Set;

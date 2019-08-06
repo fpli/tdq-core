@@ -1,10 +1,9 @@
-package com.ebay.sojourner.ubd.rt.operators.attrubite;
+package com.ebay.sojourner.ubd.rt.operators.attribute;
 
 import com.couchbase.client.java.document.json.JsonArray;
 import com.couchbase.client.java.document.json.JsonObject;
 import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.IpSignature;
-
 import com.ebay.sojourner.ubd.common.sharedlib.connectors.CouchBaseManager;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.IpSignatureBotDetector;
 import org.apache.flink.api.java.tuple.Tuple;
@@ -16,9 +15,9 @@ import org.apache.log4j.Logger;
 
 import java.util.Set;
 
-public class IpWindowProcessFunction
+public class AgentStringWindowProcessFunction
         extends ProcessWindowFunction<IpAttributeAccumulator, IpSignature, Tuple, TimeWindow> {
-    private static final Logger logger = Logger.getLogger(IpWindowProcessFunction.class);
+    private static final Logger logger = Logger.getLogger(AgentStringWindowProcessFunction.class);
     //    private IpSignature ipSignature;
     private IpSignatureBotDetector ipSignatureBotDetector;
     private CouchBaseManager couchBaseManager;
