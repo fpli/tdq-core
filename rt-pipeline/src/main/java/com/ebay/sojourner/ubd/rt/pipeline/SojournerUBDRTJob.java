@@ -127,21 +127,21 @@ public class SojournerUBDRTJob {
         // 5.2 Sessions (ended)
         // 5.3 Events (with session ID & bot flags)
         // 5.4 Events late
-//        ipSignatureDataStream.addSink(StreamingFileSinkFactory.ipSignatureSink())
-//                .name("IP Signature").disableChaining();
-//        sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
-//                .name("Sessions").disableChaining();
-//        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
-//                .name("Events").disableChaining();
+        ipSignatureDataStream.addSink(StreamingFileSinkFactory.ipSignatureSink())
+                .name("IP Signature").disableChaining();
+        sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
+                .name("Sessions").disableChaining();
+        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
+                .name("Events").disableChaining();
         DataStream<UbiEvent> lateEventStream =
                 ubiEventStreamWithSessionId.getSideOutput(lateEventOutputTag);
-//        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
-//                .name("Events (Late)").disableChaining();
+        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
+                .name("Events (Late)").disableChaining();
 
-        ipSignatureDataStream.print();
-        sessionStream.print();
-        ubiEventStreamWithSessionId.print();
-        lateEventStream.print();
+//        ipSignatureDataStream.print();
+//        sessionStream.print();
+//        ubiEventStreamWithSessionId.print();
+//        lateEventStream.print();
 
 
         // Submit this job

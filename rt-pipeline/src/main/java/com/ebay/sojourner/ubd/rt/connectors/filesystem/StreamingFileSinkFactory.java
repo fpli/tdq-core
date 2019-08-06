@@ -9,7 +9,7 @@ import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSin
 
 public class StreamingFileSinkFactory {
 
-    public static String BASE_DIR = "/opt/sojourner-ubd/data";
+    public static String BASE_DIR = "/data";
 
     public static String eventSinkPath = BASE_DIR + "/events";
     public static String sessionSinkPath = BASE_DIR + "/sessions";
