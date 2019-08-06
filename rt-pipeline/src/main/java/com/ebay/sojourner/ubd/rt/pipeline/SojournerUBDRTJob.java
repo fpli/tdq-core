@@ -70,20 +70,20 @@ public class SojournerUBDRTJob {
                 ))
                 .name("Rheos Consumer");
 
-        //due to guid filter 1% data test
-        SingleOutputStreamOperator<RawEvent> rawEventFilterStream = rawEventDataStream.filter(rawEvent -> {
-            Map<String, String> map = new HashMap<>();
-            map.putAll(rawEvent.getSojA());
-            map.putAll(rawEvent.getSojK());
-            map.putAll(rawEvent.getSojC());
-
-            return Long.parseLong(map.get("g")) % 100 == 1;
-        });
+        // According to guid filter 1% data test
+//        SingleOutputStreamOperator<RawEvent> rawEventFilterStream = rawEventDataStream.filter(rawEvent -> {
+//            Map<String, String> map = new HashMap<>();
+//            map.putAll(rawEvent.getSojA());
+//            map.putAll(rawEvent.getSojK());
+//            map.putAll(rawEvent.getSojC());
+//
+//            return Long.parseLong(map.get("g")) % 100 == 1;
+//        });
 
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent
         // 2.2 Event level bot detection via bot rule
-        DataStream<UbiEvent> ubiEventDataStream = rawEventFilterStream
+        DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
                 .map(new EventMapFunction())
                 .name("Event Operator")
                 .startNewChain();

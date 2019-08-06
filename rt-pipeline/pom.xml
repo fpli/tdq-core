@@ -72,6 +72,12 @@
 			<groupId>io.ebay.rheos</groupId>
 			<artifactId>rheos-client</artifactId>
 		</dependency>
+
+		<!-- rheos jdk dependencies-->
+		<dependency>
+			<groupId>io.ebay.rheos</groupId>
+			<artifactId>rheos-client_JDK-1.8</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

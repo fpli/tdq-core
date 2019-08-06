@@ -71,7 +71,7 @@ public class LkpFetcher {
         if (pageIdSet.isEmpty()) {
             boolean isTestEnabled = ubiConfig.getBoolean(Property.IS_TEST_ENABLE, false);
             String iframePageIds = ubiConfig.getString(Property.IFRAME_PAGE_IDS);
-            InputStream resourceAsStream = lkpFetcher.getClass().getResourceAsStream(iframePageIds);
+            InputStream resourceAsStream = LkpFetcher.class.getResourceAsStream(iframePageIds);
             String pageIds = isTestEnabled ? iframePageIds :  FileLoader.loadContent(resourceAsStream);
             if (StringUtils.isNotBlank(pageIds)) {
                 for (String pageId : pageIds.split(LKP_RECORD_DELIMITER)) {

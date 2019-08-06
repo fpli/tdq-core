@@ -44,7 +44,7 @@ public class KafkaTest {
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConnectorFactory.BOOTSTRAP_SERVERS);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, KafkaConnectorFactory.GROUP_ID);
-        props.put(ConsumerConfig.CLIENT_ID_CONFIG, KafkaConnectorFactory.CLIENT_ID);
+//        props.put(ConsumerConfig.CLIENT_ID_CONFIG, KafkaConnectorFactory.CLIENT_ID);
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
         props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
