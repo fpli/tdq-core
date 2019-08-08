@@ -27,6 +27,7 @@ import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrderness
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.util.OutputTag;
 
 import java.io.InputStream;
@@ -59,6 +60,10 @@ public class SojournerUBDRTJob {
         // 1. Rheos Consumer
         // 1.1 Consume RawEvent from Rheos PathFinder topic
         // 1.2 Assign timestamps and emit watermarks.
+
+//        FlinkKafkaConsumer<RawEvent> kafkaConsumer = KafkaConnectorFactory.createKafkaConsumer();
+//        kafkaConsumer.setStartFromEarliest();
+
         DataStream<RawEvent> rawEventDataStream = executionEnvironment.addSource(
                 KafkaConnectorFactory.createKafkaConsumer().assignTimestampsAndWatermarks(
                         new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
@@ -127,21 +132,21 @@ public class SojournerUBDRTJob {
         // 5.2 Sessions (ended)
         // 5.3 Events (with session ID & bot flags)
         // 5.4 Events late
-        ipSignatureDataStream.addSink(StreamingFileSinkFactory.ipSignatureSink())
-                .name("IP Signature").disableChaining();
-        sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
-                .name("Sessions").disableChaining();
-        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
-                .name("Events").disableChaining();
+//        ipSignatureDataStream.addSink(StreamingFileSinkFactory.ipSignatureSink())
+//                .name("IP Signature").disableChaining();
+//        sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
+//                .name("Sessions").disableChaining();
+//        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
+//                .name("Events").disableChaining();
         DataStream<UbiEvent> lateEventStream =
                 ubiEventStreamWithSessionId.getSideOutput(lateEventOutputTag);
-        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
-                .name("Events (Late)").disableChaining();
+//        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
+//                .name("Events (Late)").disableChaining();
 
-//        ipSignatureDataStream.print();
-//        sessionStream.print();
-//        ubiEventStreamWithSessionId.print();
-//        lateEventStream.print();
+        ipSignatureDataStream.print();
+        sessionStream.print();
+        ubiEventStreamWithSessionId.print();
+        lateEventStream.print();
 
 
         // Submit this job
