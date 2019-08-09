@@ -79,7 +79,6 @@ public class UbiSessionWindowProcessFunction
             logger.error(sessionAccumulator.getUbiEvent());
         }
         sessionMetrics.end(sessionAccumulator);
-
     }
 
     @Override

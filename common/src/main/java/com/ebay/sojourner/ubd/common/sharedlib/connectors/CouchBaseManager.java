@@ -22,6 +22,7 @@ public class CouchBaseManager {
     private static final String BUCKET_NAME = "botsignature";
     private static Bucket bucket = null;
     private static final Logger logger = Logger.getLogger(CouchBaseManager.class);
+
     private CouchBaseManager() {
         couchBaseCluster = CouchbaseCluster.create(serverName);
         couchBaseCluster.authenticate(USER_NAME, USER_PASS);
@@ -69,17 +70,20 @@ public class CouchBaseManager {
         couchBaseCluster.disconnect();
     }
 
-    public  Set<Integer> getSignatureWithDocId(String id) {
+    public Set<Integer> getSignatureWithDocId(String id) {
         JsonDocument response = null;
-        if(id!=null) {
+        if (id != null) {
             try {
-                response = bucket.get(id);
+                if (bucket.exists(id)) {
+                    response = bucket.get(id);
+                }
+
             } catch (NoSuchElementException e) {
                 logger.error("ERROR: No element with message: "
                         + e.getMessage());
                 return Collections.emptySet();
             }
-            if(response!=null) {
+            if (response != null) {
                 JsonArray jsonArray = (JsonArray) response.content().get("botFlag");
                 List<Object> botFlagList = jsonArray.toList();
                 Set<Integer> botFlagSet = new HashSet<Integer>(botFlagList.size());
@@ -89,12 +93,11 @@ public class CouchBaseManager {
 
                 return botFlagSet;
             } else {
-                
                 return Collections.emptySet();
             }
-        } else{
+        } else {
             logger.error("ERROR: document id is null! "
-                   );
+            );
             return Collections.emptySet();
         }
 

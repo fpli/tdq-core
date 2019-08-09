@@ -1,9 +1,9 @@
 package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.rule.BotRule12;
-import com.ebay.sojourner.ubd.common.rule.Rule;
+import com.ebay.sojourner.ubd.common.rule.*;
 
+import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -30,7 +30,7 @@ public class SessionBotDetector implements BotDetector<UbiSession> {
     }
 
     @Override
-    public Set<Integer> getBotFlagList(UbiSession ubiSession) {
+    public Set<Integer> getBotFlagList(UbiSession ubiSession) throws IOException, InterruptedException {
         Set<Integer> botRuleList = new LinkedHashSet<Integer>(botRules.size());
         for (Rule rule:botRules)
         {
@@ -44,7 +44,18 @@ public class SessionBotDetector implements BotDetector<UbiSession> {
 
     @Override
     public void initBotRules() {
+        botRules.add(new BotRule15());
+        botRules.add(new BotRule9());
+        botRules.add(new BotRule10());
         botRules.add(new BotRule12());
-
+        botRules.add(new BotRule203());
+        botRules.add(new BotRule204());
+        botRules.add(new BotRule205());
+        botRules.add(new BotRule206());
+        botRules.add(new BotRule207());
+        botRules.add(new BotRule208());
+        botRules.add(new BotRule212());
+        botRules.add(new BotRule215());
+        botRules.add(new BotRule11());
     }
 }

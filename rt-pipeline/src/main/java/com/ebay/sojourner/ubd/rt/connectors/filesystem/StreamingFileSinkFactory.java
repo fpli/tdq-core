@@ -5,6 +5,7 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.core.fs.Path;
+import org.apache.flink.formats.parquet.avro.ParquetAvroWriters;
 import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 
 public class StreamingFileSinkFactory {
@@ -20,6 +21,15 @@ public class StreamingFileSinkFactory {
         return StreamingFileSink
                 .forRowFormat(new Path(sinkPath), new SimpleStringEncoder<T>("UTF-8"))
                 .build();
+
+
+    }
+
+    public static StreamingFileSink<IpSignature> createWithAP(String sinkPath) {
+        return StreamingFileSink
+                .forBulkFormat(new Path(sinkPath), ParquetAvroWriters.forReflectRecord(IpSignature.class))
+                .build();
+
     }
 
     public static StreamingFileSink eventSink() {
@@ -37,4 +47,9 @@ public class StreamingFileSinkFactory {
     public static StreamingFileSink ipSignatureSink() {
         return StreamingFileSinkFactory.<IpSignature>create(ipSignatureSinkPath);
     }
+
+    public static StreamingFileSink<IpSignature> ipSignatureSinkWithAP() {
+        return StreamingFileSinkFactory.createWithAP(ipSignatureSinkPath);
+    }
+
 }

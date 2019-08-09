@@ -1,14 +1,10 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
-import com.ebay.sojourner.ubd.common.model.IpSignature;
+import com.ebay.sojourner.ubd.common.model.*;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.StreamingFileSinkFactory;
-import com.ebay.sojourner.ubd.rt.operators.attrubite.IpWindowProcessFunction;
-import com.ebay.sojourner.ubd.rt.operators.attrubite.IpAttributeAgg;
+import com.ebay.sojourner.ubd.rt.operators.attribute.*;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
-import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
@@ -121,7 +117,19 @@ public class SojournerUBDRTJob {
         // 4.2 Attribute indicator accumulation
         // 4.3 Attribute level bot detection (via bot rule)
         // 4.4 Store bot signature
-        DataStream<IpSignature> ipSignatureDataStream = sessionStream
+        DataStream<AgentIpAttribute> agentIpAttributeDataStream = sessionStream
+                .keyBy("userAgent","clientIp")
+                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
+                .trigger(OnElementEarlyFiringTrigger.create())
+                .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
+                .name("Attribute Operator (Agent+IP)");
+        DataStream<AgentAttribute> agentAttributeDataStream = agentIpAttributeDataStream
+                .keyBy("userAgent")
+                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
+                .trigger(OnElementEarlyFiringTrigger.create())
+                .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
+                .name("Attribute Operator (Agent)");
+        DataStream<IpSignature>  ipAttributeDataStream = agentIpAttributeDataStream
                 .keyBy("clientIp")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
                 .trigger(OnElementEarlyFiringTrigger.create())
@@ -133,21 +141,16 @@ public class SojournerUBDRTJob {
         // 5.2 Sessions (ended)
         // 5.3 Events (with session ID & bot flags)
         // 5.4 Events late
-//        ipSignatureDataStream.addSink(StreamingFileSinkFactory.ipSignatureSink())
-//                .name("IP Signature").disableChaining();
-//        sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
-//                .name("Sessions").disableChaining();
-//        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
-//                .name("Events").disableChaining();
+        ipAttributeDataStream.addSink(StreamingFileSinkFactory.ipSignatureSinkWithAP())
+                .name("IP Signature").disableChaining();
+        sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
+                .name("Sessions").disableChaining();
+        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
+                .name("Events").disableChaining();
         DataStream<UbiEvent> lateEventStream =
                 ubiEventStreamWithSessionId.getSideOutput(lateEventOutputTag);
-//        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
-//                .name("Events (Late)").disableChaining();
-
-        ipSignatureDataStream.print();
-        sessionStream.print();
-        ubiEventStreamWithSessionId.print();
-        lateEventStream.print();
+        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
+                .name("Events (Late)").disableChaining();
 
 
         // Submit this job

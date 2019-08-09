@@ -22,6 +22,7 @@
 			<groupId>com.ebay.sojourner</groupId>
 			<artifactId>sojourner-ubd-common</artifactId>
 			<version>${project.version}</version>
+
 		</dependency>
 
 		<!-- Apache Flink dependencies -->
@@ -77,6 +78,14 @@
 		<dependency>
 			<groupId>io.ebay.rheos</groupId>
 			<artifactId>rheos-client_JDK-1.8</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-parquet</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.parquet</groupId>
+			<artifactId>parquet-avro</artifactId>
 		</dependency>
 	</dependencies>
 

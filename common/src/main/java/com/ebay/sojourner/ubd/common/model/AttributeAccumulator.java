@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class AttributeAccumulator<T> implements Serializable{
+public class AttributeAccumulator<T extends Attribute> implements Serializable{
     private T attribute;
     private UbiSession ubiSession;
 

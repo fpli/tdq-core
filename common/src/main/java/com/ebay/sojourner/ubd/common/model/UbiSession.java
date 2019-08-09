@@ -1,9 +1,12 @@
 package com.ebay.sojourner.ubd.common.model;
 
+import com.ebay.sojourner.ubd.common.sharedlib.metrics.IntermediateMetrics;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Data
 public class UbiSession implements Serializable,Cloneable{
@@ -57,19 +60,38 @@ public class UbiSession implements Serializable,Cloneable{
     private Integer lndgPageId;
     private String exInternalIp;
     private int familyViCnt;
-    private Set<Integer> distinctClickIdSet;
-    private Set<String> agentSets;
+    private int pageCnt;
+    private int searchCnt;
+    private int viewCnt;
+    private Set<Integer> distinctClickIdSet= new HashSet<Integer>();
+    private Set<String> agentSets= new HashSet<String>();
     private String agentInfo;
     private String clientIp;
-    private boolean findFirst ;
+    private Boolean findFirst ;
     private String internalIp;
     private String externalIp;
     private String externalIp2;
+    private Integer appId;
+    private int siidCnt;
+    private int viCnt;//for bot215
+    private int maxScsSeqNum;
+    private Boolean isRefererNull;//for bot207
+    private int siidCnt2; // for bot207
+    private Integer firstCorbrand;
+    private Integer minSCSeqNum;
     private Long[] minMaxEventTimestamp;
+    private Set<Long> oldSessionSkeySet;
+    private byte[] siteFlagsSet;
     private Set<Integer> botFlagList = new LinkedHashSet<Integer>();
+    private Set<String> userIdSet;
+    private Attributes attributes;
+    private byte[] attributeFlags = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    private Integer seqNum;
+    private IntermediateMetrics intermediateMetrics;;
     public UbiSession()
     {
-        this.distinctClickIdSet = new HashSet<Integer>();
-        this.agentSets= new HashSet<String>();
+//        this.distinctClickIdSet = new HashSet<Integer>();
+//        this.agentSets= new HashSet<String>();
     }
 }
