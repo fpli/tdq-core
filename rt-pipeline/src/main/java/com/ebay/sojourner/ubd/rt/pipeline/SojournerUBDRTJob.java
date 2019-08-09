@@ -80,7 +80,8 @@ public class SojournerUBDRTJob {
 //            Map<String, String> map = new HashMap<>();
 //            map.putAll(rawEvent.getSojA());
 //            map.putAll(rawEvent.getSojK());
-//            map.putAll(rawEvent.getSojC());
+//            map.putAll(rawdfgsdfgasdfgdfg  m,./Event.getSojC());
+
 //
 //            return Long.parseLong(map.get("g")) % 100 == 1;
 //        });

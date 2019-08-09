@@ -68,10 +68,10 @@
 		</dependency>
 
 		<!-- eBay dependencies -->
-		<dependency>
-			<groupId>io.ebay.rheos</groupId>
-			<artifactId>rheos-client</artifactId>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>io.ebay.rheos</groupId>-->
+			<!--<artifactId>rheos-client</artifactId>-->
+		<!--</dependency>-->
 
 		<!-- rheos jdk dependencies-->
 		<dependency>

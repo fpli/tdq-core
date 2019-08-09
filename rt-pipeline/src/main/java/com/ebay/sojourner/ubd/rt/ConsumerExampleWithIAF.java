@@ -7,6 +7,7 @@ import io.ebay.rheos.kafka.client.StreamConnectorConfig;
 import io.ebay.rheos.schema.avro.GenericRecordDomainDataDecoder;
 import io.ebay.rheos.schema.event.RheosEvent;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -43,7 +44,7 @@ public class ConsumerExampleWithIAF {
         props.put("sasl.mechanism", "IAF");
         props.put("security.protocol", "SASL_PLAINTEXT");
         props.put(SaslConfigs.SASL_JAAS_CONFIG, "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" iafSecret=\"6218c197-200e-49d7-b404-2a4dbf7595ef\" iafEnv=\"staging\";");
-//        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"earliest");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"earliest");
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         props.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, RoundRobinAssignor.class.getName());
 
@@ -77,7 +78,16 @@ public class ConsumerExampleWithIAF {
                 ))
                 .name("Rheos Consumer");
 
-        rawEventDataStream.print();
+        SingleOutputStreamOperator<RawEvent> rawEventFilterStream = rawEventDataStream.filter(rawEvent -> {
+            Map<String, String> map = new HashMap<>();
+            map.putAll(rawEvent.getSojA());
+            map.putAll(rawEvent.getSojK());
+            map.putAll(rawEvent.getSojC());
+
+            return Long.parseLong(map.get("g")) % 100 == 1;
+        });
+
+        rawEventFilterStream.print();
 
         executionEnvironment.execute("test kafka consumer");
 

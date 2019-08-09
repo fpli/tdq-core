@@ -219,17 +219,21 @@
             </dependency>
 
             <!-- eBay artifacts -->
-            <dependency>
-                <groupId>io.ebay.rheos</groupId>
-                <artifactId>rheos-client</artifactId>
-                <version>${rheos.client.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.xerial.snappy</groupId>
-                        <artifactId>snappy-java</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>io.ebay.rheos</groupId>-->
+                <!--<artifactId>rheos-client</artifactId>-->
+                <!--<version>${rheos.client.version}</version>-->
+                <!--<exclusions>-->
+                    <!--<exclusion>-->
+                        <!--<groupId>org.xerial.snappy</groupId>-->
+                        <!--<artifactId>snappy-java</artifactId>-->
+                    <!--</exclusion>-->
+                    <!--<exclusion>-->
+                        <!--<groupId>io.ebay.rheos</groupId>-->
+                        <!--<artifactId>rheos-client_JDK-1.8</artifactId>-->
+                    <!--</exclusion>-->
+                <!--</exclusions>-->
+            <!--</dependency>-->
 
             <!-- test dependencies -->
             <dependency>
