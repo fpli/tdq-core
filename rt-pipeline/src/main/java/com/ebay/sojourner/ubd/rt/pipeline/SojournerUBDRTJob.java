@@ -134,7 +134,7 @@ public class SojournerUBDRTJob {
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
-                .name("Attribute Operator (IP)");
+                .name("  Operator (IP)");
 
         // 5. Load data to file system for batch processing
         // 5.1 IP Signature
