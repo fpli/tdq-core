@@ -39,7 +39,7 @@ public class IntermediateMetrics implements Serializable {
     private static StringBuilder stingBuilder = new StringBuilder();
 
     private static final String SWD = "swd";
-    private static UBIConfig ubiConfig = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));
+    private static UBIConfig ubiConfig = UBIConfig.getInstance(IntermediateMetrics.class.getResourceAsStream("/ubi.properties"));
     private static Collection<String> tags = null;
 
     static {

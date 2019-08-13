@@ -9,6 +9,7 @@ import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -548,7 +549,8 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
     @Override
     public void init() throws Exception {
         // init constants from property
-        ubiConfig = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));
+        InputStream resourceAsStream = TrafficSourceIdMetrics.class.getResourceAsStream("/ubi.properties");
+        ubiConfig = UBIConfig.getInstance(resourceAsStream);
         landPageSet1 =
                 PropertyUtils.getIntegerSet(ubiConfig.getString(Property.LAND_PAGES1),
                         Property.PROPERTY_DELIMITER);

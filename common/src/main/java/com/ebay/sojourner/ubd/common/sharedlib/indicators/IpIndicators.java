@@ -9,6 +9,7 @@ import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.io.InputStream;
 
 public class IpIndicators extends AttributeIndicators<AgentIpAttribute, IpAttributeAccumulator> {
 
@@ -29,7 +30,8 @@ public class IpIndicators extends AttributeIndicators<AgentIpAttribute, IpAttrib
     }
 
     public IpIndicators() {
-        botFilter = new UbiBotFilter(UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")));
+        InputStream resourceAsStream = IpIndicators.class.getResourceAsStream("/ubi.properties");
+        botFilter = new UbiBotFilter(UBIConfig.getInstance(resourceAsStream));
         initIndicators();
         try {
             init();

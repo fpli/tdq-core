@@ -10,6 +10,7 @@ import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -41,7 +42,8 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
 
     @Override
     public void init() throws Exception {
-        ubiConfig = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));
+        InputStream resourceAsStream = GrCntMetrics.class.getResourceAsStream("/ubi.properties");
+        ubiConfig = UBIConfig.getInstance(resourceAsStream);
         lkpFetcher = LkpFetcher.getInstance();
         lkpFetcher.loadPageFmlys();
         pageFmlyNameMap = lkpFetcher.getPageFmlyMaps();

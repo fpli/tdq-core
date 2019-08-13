@@ -7,6 +7,7 @@ import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Set;
 
 public class CobrandMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
@@ -40,7 +41,8 @@ public class CobrandMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
 
   @Override
   public void init() throws Exception {
-    ubiConfig = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));
+    InputStream resourceAsStream = CobrandMetrics.class.getResourceAsStream("/ubi.properties");
+    ubiConfig = UBIConfig.getInstance(resourceAsStream);
     invalidPageIds = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.INVALID_PAGE_IDS), Property.PROPERTY_DELIMITER);
   }
 }

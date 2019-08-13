@@ -5,13 +5,15 @@ import com.ebay.sojourner.ubd.common.util.*;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
 
 import java.io.File;
+import java.io.InputStream;
 
 public class BotRule11 implements Rule<UbiSession> {
 
     private static BotFilter botFilter ;
     @Override
     public void init() {
-        botFilter = new UbiBotFilter(UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")));
+        InputStream resourceAsStream = BotRule11.class.getResourceAsStream("/ubi.proprties");
+        botFilter = new UbiBotFilter(UBIConfig.getInstance(resourceAsStream));
     }
 
     @Override

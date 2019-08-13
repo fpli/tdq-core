@@ -10,6 +10,7 @@ import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -22,7 +23,8 @@ public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
     @Override
     public void init() throws Exception {
-        ubiConfig = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));
+        InputStream resourceAsStream = FmlyViCntMetrics.class.getResourceAsStream("/ubi.properties");
+        ubiConfig = UBIConfig.getInstance(resourceAsStream);
         lkpFetcher = LkpFetcher.getInstance();
         lkpFetcher.loadPageFmlys();
         viPGT = new ArrayList<String>(PropertyUtils.parseProperty(ubiConfig.getString(Property.VI_EVENT_VALUES), Property.PROPERTY_DELIMITER));

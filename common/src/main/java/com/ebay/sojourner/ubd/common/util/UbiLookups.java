@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.common.util;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Set;
 
@@ -23,7 +24,8 @@ public class UbiLookups {
         if (ubiLookups == null) {
             synchronized (UbiLookups.class) {
                 if (ubiLookups == null) {
-                    ubiLookups = new UbiLookups(UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties")));
+                    InputStream resourceAsStream = UbiLookups.class.getResourceAsStream("/ubi.properties");
+                    ubiLookups = new UbiLookups(UBIConfig.getInstance(resourceAsStream));
                 }
             }
         }
