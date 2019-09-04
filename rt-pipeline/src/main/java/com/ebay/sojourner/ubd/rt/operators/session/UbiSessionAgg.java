@@ -122,7 +122,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
             sessionBotFlagSet.addAll(attrBotFlagWithIp);
             eventBotFlagSet.addAll(attrBotFlagWithIp);
         }
-        if(attrBotFlagWithAgent!=null&&attrBotFlagWithAgent.size()>0) {
+        if(attrBotFlagWithAgent!=null&&attrBotFlagWithAgent.size()>0) {s
             sessionBotFlagSet.addAll(attrBotFlagWithAgent);
             eventBotFlagSet.addAll(attrBotFlagWithAgent);
         }
@@ -141,6 +141,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
     @Override
     public SessionAccumulator merge(SessionAccumulator a, SessionAccumulator b) {
         logger.error("SessionAccumulator merge:");
-    return null;
+         a.setUbiSession(a.getUbiSession().merge(b.getUbiSession()));
+       return a;
     }
 }
