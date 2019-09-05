@@ -15,7 +15,7 @@ public class IpIndicators extends AttributeIndicators<AgentIpAttribute, IpAttrib
 
     private static Logger logger = Logger.getLogger(SessionMetrics.class);
 
-    private static IpIndicators ipIndicators;
+    private static volatile IpIndicators ipIndicators;
     private static BotFilter botFilter ;
 
     public static IpIndicators getInstance() {

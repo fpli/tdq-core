@@ -9,7 +9,7 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
 
     private static Logger logger = Logger.getLogger(SessionMetrics.class);
 
-    private static SessionMetrics sessionMetrics;
+    private static volatile SessionMetrics sessionMetrics;
 
     public static SessionMetrics getInstance() {
         if (sessionMetrics == null) {

@@ -32,9 +32,9 @@ public class LkpFetcher {
     private static Map<Long, String> mpxMap = new HashMap<Long, String>();
     private static Map<String, Boolean> selectedIps = new HashMap<String, Boolean>();
     private static Set<String> selectedAgents = new HashSet<String>();
-    private static  UBIConfig ubiConfig;
+    private static UBIConfig ubiConfig;
     private Map<String, String> result = new HashMap<String, String>();
-    private static  LkpFetcher lkpFetcher;
+    private static volatile LkpFetcher lkpFetcher;
     public LkpFetcher() {
         InputStream fileStream = LkpFetcher.class.getResourceAsStream("/ubi.properties");
 //        ubiConfig = UBIConfig.getInstance(new File("/opt/sojourner-ubd/conf/ubi.properties"));

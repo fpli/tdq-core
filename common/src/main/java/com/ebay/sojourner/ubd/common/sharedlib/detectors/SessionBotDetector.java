@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class SessionBotDetector implements BotDetector<UbiSession> {
 
-    private static SessionBotDetector sessionBotDetector;
+    private static volatile SessionBotDetector sessionBotDetector;
     private Set<Rule> botRules = new LinkedHashSet<Rule>();
     private SessionBotDetector() {
         initBotRules();
