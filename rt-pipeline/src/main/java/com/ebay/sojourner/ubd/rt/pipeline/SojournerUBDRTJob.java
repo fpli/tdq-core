@@ -115,24 +115,29 @@ public class SojournerUBDRTJob {
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
-                .name("  Operator (IP)");
+                .name("Attribute Operator (IP)");
 
         // 5. Load data to file system for batch processing
         // 5.1 IP Signature
         // 5.2 Sessions (ended)
         // 5.3 Events (with session ID & bot flags)
         // 5.4 Events late
-        ipAttributeDataStream.addSink(StreamingFileSinkFactory.ipSignatureSinkWithAP())
-                .name("IP Signature").disableChaining();
-        sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
-                .name("Sessions").disableChaining();
-        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
-                .name("Events").disableChaining();
+//        ipAttributeDataStream.addSink(StreamingFileSinkFactory.ipSignatureSinkWithAP())
+//                .name("IP Signature").disableChaining();
+//        sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
+//                .name("Sessions").disableChaining();
+//        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
+//                .name("Events").disableChaining();
         DataStream<UbiEvent> lateEventStream =
                 ubiEventStreamWithSessionId.getSideOutput(lateEventOutputTag);
-        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
-                .name("Events (Late)").disableChaining();
+//        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
+//                .name("Events (Late)").disableChaining();
 
+        agentAttributeDataStream.print().name("Agent Signature").disableChaining();
+        ipAttributeDataStream.print().name("IP Signature").disableChaining();
+        sessionStream.print().name("Sessions").disableChaining();
+        ubiEventStreamWithSessionId.print().name("Events").disableChaining();
+        lateEventStream.print().name("Events (Late)").disableChaining();
 
         // Submit this job
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");
