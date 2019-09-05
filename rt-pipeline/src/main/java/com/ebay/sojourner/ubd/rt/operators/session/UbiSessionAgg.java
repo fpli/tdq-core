@@ -130,17 +130,17 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
         value.setBotFlags(eventBotFlagSet);
         accumulator.setUbiEvent(value);
 
-        return accumulator;
+      return accumulator;
     }
 
     @Override
     public SessionAccumulator getResult(SessionAccumulator sessionAccumulator) {
-        return sessionAccumulator;
+       return sessionAccumulator;
     }
 
     @Override
     public SessionAccumulator merge(SessionAccumulator a, SessionAccumulator b) {
         logger.error("SessionAccumulator merge:");
-        return null;
+    return null;
     }
 }

@@ -94,4 +94,38 @@ public class UbiSession implements Serializable,Cloneable{
 //        this.distinctClickIdSet = new HashSet<Integer>();
 //        this.agentSets= new HashSet<String>();
     }
+    public UbiSession merge(UbiSession ubiSession)
+    {
+        this.eventCnt+=ubiSession.getEventCnt();
+        this.viCnt+=ubiSession.getViCnt();
+        this.viCoreCnt+=ubiSession.getViCoreCnt();
+        this.bidCoreCnt+=ubiSession.getBidCoreCnt();
+        this.binCoreCnt+=ubiSession.getBinCoreCnt();
+        this.watchCoreCnt+=ubiSession.getWatchCoreCnt();
+        this.absEventCnt+=ubiSession.getAbsEventCnt();
+        this.homepageCnt+=ubiSession.getHomepageCnt();
+        this.gr1Cnt+=ubiSession.getGr1Cnt();
+        this.grCnt+=ubiSession.getGrCnt();
+        this.myebayCnt+=ubiSession.getMyebayCnt();
+        this.signinPageCnt+=ubiSession.getSigninPageCnt();
+        this.nonIframeRdtEventCnt+=ubiSession.getNonIframeRdtEventCnt();
+        this.validPageCnt+=ubiSession.getValidPageCnt();
+        this.agentCnt+=ubiSession.getAgentCnt();
+        this.familyViCnt+=ubiSession.getFamilyViCnt();
+        this.pageCnt+=ubiSession.getPageCnt();
+        this.searchCnt+=ubiSession.getSearchCnt();
+        this.viewCnt+=ubiSession.getViewCnt();
+        this.siidCnt+=ubiSession.getSiidCnt();
+        this.siidCnt2+=ubiSession.getSiidCnt2();
+        this.maxScsSeqNum=(this.maxScsSeqNum>ubiSession.getMaxScsSeqNum()?this.maxScsSeqNum:ubiSession.getMaxScsSeqNum());
+        this.oldSessionSkeySet.addAll(ubiSession.getOldSessionSkeySet());
+        this.botFlagList.addAll(ubiSession.getBotFlagList());
+        this.userIdSet.addAll(ubiSession.getUserIdSet());
+
+
+
+        return this;
+
+
+    }
 }
