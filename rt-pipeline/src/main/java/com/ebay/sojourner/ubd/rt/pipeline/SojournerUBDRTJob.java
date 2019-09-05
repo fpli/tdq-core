@@ -1,16 +1,15 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.*;
-import com.ebay.sojourner.ubd.rt.connectors.filesystem.StreamingFileSinkFactory;
-import com.ebay.sojourner.ubd.rt.operators.attribute.*;
+import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
+import com.ebay.sojourner.ubd.rt.connectors.filesystem.StreamingFileSinkFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
+import com.ebay.sojourner.ubd.rt.operators.attribute.*;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
-import com.ebay.sojourner.ubd.rt.util.LookupUtils;
 import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
-import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import com.ebay.sojourner.ubd.rt.util.StateBackendFactory;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -23,12 +22,9 @@ import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrderness
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.util.OutputTag;
 
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class SojournerUBDRTJob {
@@ -40,7 +36,6 @@ public class SojournerUBDRTJob {
         InputStream resourceAsStream = SojournerUBDRTJob.class.getResourceAsStream("/ubi.properties");
         UBIConfig ubiConfig = UBIConfig.getInstance(resourceAsStream);
 
-//        UBIConfig ubiConfig = UBIConfig.getInstance(new File("src/main/resources/ubi.properties"));
         final StreamExecutionEnvironment executionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment();
         final ParameterTool params = ParameterTool.fromArgs(args);
@@ -50,15 +45,12 @@ public class SojournerUBDRTJob {
         executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
         executionEnvironment.enableCheckpointing(60 * 1000);
         executionEnvironment.setStateBackend(
-                StateBackendFactory.getStateBackend(StateBackendFactory.FS));
-        executionEnvironment.setParallelism(1);
+                StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
+        executionEnvironment.setParallelism(2);
 
         // 1. Rheos Consumer
         // 1.1 Consume RawEvent from Rheos PathFinder topic
         // 1.2 Assign timestamps and emit watermarks.
-
-//        FlinkKafkaConsumer<RawEvent> kafkaConsumer = KafkaConnectorFactory.createKafkaConsumer();
-//        kafkaConsumer.setStartFromEarliest();
 
         DataStream<RawEvent> rawEventDataStream = executionEnvironment.addSource(
                 KafkaConnectorFactory.createKafkaConsumer().assignTimestampsAndWatermarks(
@@ -70,17 +62,6 @@ public class SojournerUBDRTJob {
                         }
                 ))
                 .name("Rheos Consumer");
-
-        // According to guid filter 1% data test
-//        SingleOutputStreamOperator<RawEvent> rawEventFilterStream = rawEventDataStream.filter(rawEvent -> {
-//            Map<String, String> map = new HashMap<>();
-//            map.putAll(rawEvent.getSojA());
-//            map.putAll(rawEvent.getSojK());
-//            map.putAll(rawdfgsdfgasdfgdfg  m,./Event.getSojC());
-
-//
-//            return Long.parseLong(map.get("g")) % 100 == 1;
-//        });
 
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent

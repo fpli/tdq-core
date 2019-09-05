@@ -33,12 +33,12 @@ public class GuidWindowProcessFunction
 
             Set<Integer> botFlagList = guidSignatureBotDetector.getBotFlagList(guidAttributeAccumulator.getAttribute());
 
-            if (botFlagList != null && botFlagList.size() > 0) {
-                JsonObject guidSignature = JsonObject.create()
-                        .put("guid", guidAttributeAccumulator.getAttribute().getGuid())
-                        .put("botFlag", JsonArray.from(botFlagList.toArray()));
-                couchBaseManager.upsert(guidSignature, guidAttributeAccumulator.getAttribute().getGuid());
-            }
+//            if (botFlagList != null && botFlagList.size() > 0) {
+//                JsonObject guidSignature = JsonObject.create()
+//                        .put("guid", guidAttributeAccumulator.getAttribute().getGuid())
+//                        .put("botFlag", JsonArray.from(botFlagList.toArray()));
+//                couchBaseManager.upsert(guidSignature, guidAttributeAccumulator.getAttribute().getGuid());
+//            }
 
 
     }
@@ -47,12 +47,12 @@ public class GuidWindowProcessFunction
     public void open(Configuration conf) throws Exception {
         super.open(conf);
         guidSignatureBotDetector = GuidSignatureBotDetector.getInstance();
-        couchBaseManager = CouchBaseManager.getInstance();
+//        couchBaseManager = CouchBaseManager.getInstance();
     }
 
     @Override
     public void clear(Context context) throws Exception {
         super.clear(context);
-        couchBaseManager.close();
+//        couchBaseManager.close();
     }
 }

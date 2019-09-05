@@ -35,13 +35,13 @@ public class IpWindowProcessFunction
         if (ipAttr.getAttribute().getClientIp() != null) {
             Set<Integer> botFlagList = ipSignatureBotDetector.getBotFlagList(ipAttr.getAttribute());
 
-            if (botFlagList != null && botFlagList.size() > 0) {
-                JsonObject ipSignature = JsonObject.create()
-                        .put("ip", ipAttr.getAttribute().getClientIp())
-                        .put("botFlag", JsonArray.from(botFlagList.toArray()));
-                couchBaseManager.upsert(ipSignature, ipAttr.getAttribute().getClientIp());
+//            if (botFlagList != null && botFlagList.size() > 0) {
+//                JsonObject ipSignature = JsonObject.create()
+//                        .put("ip", ipAttr.getAttribute().getClientIp())
+//                        .put("botFlag", JsonArray.from(botFlagList.toArray()));
+//                couchBaseManager.upsert(ipSignature, ipAttr.getAttribute().getClientIp());
 
-            }
+//            }
         }
 
 
@@ -51,12 +51,12 @@ public class IpWindowProcessFunction
     public void open(Configuration conf) throws Exception {
         super.open(conf);
         ipSignatureBotDetector = IpSignatureBotDetector.getInstance();
-        couchBaseManager = CouchBaseManager.getInstance();
+//        couchBaseManager = CouchBaseManager.getInstance();
     }
 
     @Override
     public void clear(Context context) throws Exception {
         super.clear(context);
-        couchBaseManager.close();
+//        couchBaseManager.close();
     }
 }

@@ -50,12 +50,12 @@ public class ExInternalIpWindowProcessFunction
     public void open(Configuration conf) throws Exception {
         super.open(conf);
         ipSignatureBotDetector = IpSignatureBotDetector.getInstance();
-        couchBaseManager = CouchBaseManager.getInstance();
+//        couchBaseManager = CouchBaseManager.getInstance();
     }
 
     @Override
     public void clear(Context context) throws Exception {
         super.clear(context);
-        couchBaseManager.close();
+//        couchBaseManager.close();
     }
 }

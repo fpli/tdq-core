@@ -61,7 +61,8 @@ public class AgentIpSignatureBotDetector implements BotDetector<AgentIpAttribute
     }
 
     private Set<Integer> scanSignature(String inColumnName, String inColumnValue, String outColumnName, String bucketName) {
-        return CouchBaseManager.getInstance().getSignatureWithColumn(inColumnName, inColumnValue, outColumnName);
+//        return CouchBaseManager.getInstance().getSignatureWithColumn(inColumnName, inColumnValue, outColumnName);
+        return null;
     }
 
 

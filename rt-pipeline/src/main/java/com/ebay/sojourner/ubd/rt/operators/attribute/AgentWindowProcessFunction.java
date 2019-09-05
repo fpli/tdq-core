@@ -20,7 +20,7 @@ public class AgentWindowProcessFunction
     private static final Logger logger = Logger.getLogger(AgentWindowProcessFunction.class);
     //    private IpSignature ipSignature;
     private AgentSignatureBotDetector agentSignatureBotDetector;
-    private CouchBaseManager couchBaseManager;
+//    private CouchBaseManager couchBaseManager;
     private static final String BUCKET_NAME = "botsignature";
     private static final String USER_NAME = "Administrator";
     private static final String USER_PASS = "111111";
@@ -37,7 +37,7 @@ public class AgentWindowProcessFunction
             JsonObject agentSignature = JsonObject.create()
                     .put("agent", agentAttributeAccumulator.getAttribute().getAgent())
                     .put("botFlag", JsonArray.from(botFlagList.toArray()));
-            couchBaseManager.upsert(agentSignature, agentAttributeAccumulator.getAttribute().getAgent());
+//            couchBaseManager.upsert(agentSignature, agentAttributeAccumulator.getAttribute().getAgent());
 //            out.collect(ipSignature);
         }
 
@@ -48,12 +48,12 @@ public class AgentWindowProcessFunction
     public void open(Configuration conf) throws Exception {
         super.open(conf);
         agentSignatureBotDetector = AgentSignatureBotDetector.getInstance();
-        couchBaseManager = CouchBaseManager.getInstance();
+//        couchBaseManager = CouchBaseManager.getInstance();
     }
 
     @Override
     public void clear(Context context) throws Exception {
         super.clear(context);
-        couchBaseManager.close();
+//        couchBaseManager.close();
     }
 }
