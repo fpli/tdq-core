@@ -104,12 +104,14 @@ public class SojournerUBDRTJob {
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
                 .name("Attribute Operator (Agent+IP)");
+
         DataStream<AgentAttribute> agentAttributeDataStream = agentIpAttributeDataStream
-                .keyBy("userAgent")
+                .keyBy("agent")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
                 .name("Attribute Operator (Agent)");
+
         DataStream<IpSignature>  ipAttributeDataStream = agentIpAttributeDataStream
                 .keyBy("clientIp")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
@@ -135,6 +137,7 @@ public class SojournerUBDRTJob {
 
         agentAttributeDataStream.print().name("Agent Signature").disableChaining();
         ipAttributeDataStream.print().name("IP Signature").disableChaining();
+        agentIpAttributeDataStream.print().name("AgentIp Signature").disableChaining();
         sessionStream.print().name("Sessions").disableChaining();
         ubiEventStreamWithSessionId.print().name("Events").disableChaining();
         lateEventStream.print().name("Events (Late)").disableChaining();
