@@ -141,6 +141,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
     @Override
     public SessionAccumulator merge(SessionAccumulator a, SessionAccumulator b) {
         logger.error("SessionAccumulator merge:");
-    return null;
+        a.setUbiSession(a.getUbiSession().merge(b.getUbiSession()));
+    return a;
     }
 }
