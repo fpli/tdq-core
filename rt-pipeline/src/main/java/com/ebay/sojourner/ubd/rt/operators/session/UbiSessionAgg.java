@@ -122,7 +122,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
             sessionBotFlagSet.addAll(attrBotFlagWithIp);
             eventBotFlagSet.addAll(attrBotFlagWithIp);
         }
-        if(attrBotFlagWithAgent!=null&&attrBotFlagWithAgent.size()>0) {s
+        if(attrBotFlagWithAgent!=null&&attrBotFlagWithAgent.size()>0) {
             sessionBotFlagSet.addAll(attrBotFlagWithAgent);
             eventBotFlagSet.addAll(attrBotFlagWithAgent);
         }
