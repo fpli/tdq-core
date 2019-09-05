@@ -1,6 +1,7 @@
 package com.ebay.sojourner.ubd.common.model;
 
 import lombok.Data;
+import org.apache.flink.api.java.typeutils.TypeExtractor;
 
 import java.io.Serializable;
 

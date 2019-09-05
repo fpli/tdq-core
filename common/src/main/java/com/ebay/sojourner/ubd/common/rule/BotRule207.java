@@ -23,11 +23,9 @@ public class BotRule207 implements Rule<UbiSession> {
 
   @Override
   public int getBotFlag(UbiSession session) {
-    if (session.getValidPageCnt() > 5 && session.getSiidCnt2() <= 1 && session.getIsRefererNull() && !cobrandSets.contains(session.getCobrand())) {
-      return BotRules.MANY_VALID_EVENTS_WHITHOUT_REFERER;
+      if (session.getValidPageCnt() > 5 && session.getSiidCnt2() <= 1 && session.getIsRefererNull() && !cobrandSets.contains(session.getCobrand())) {
+        return BotRules.MANY_VALID_EVENTS_WHITHOUT_REFERER;
+      }
+      return 0;
     }
-    return 0;
-  }
-
-
 }

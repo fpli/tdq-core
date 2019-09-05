@@ -75,7 +75,7 @@ public class UbiSession implements Serializable,Cloneable{
     private int siidCnt;
     private int viCnt;//for bot215
     private int maxScsSeqNum;
-    private Boolean isRefererNull;//for bot207
+    private Boolean isRefererNull = false;//for bot207
     private int siidCnt2; // for bot207
     private Integer firstCorbrand;
     private Integer minSCSeqNum;
@@ -83,8 +83,8 @@ public class UbiSession implements Serializable,Cloneable{
     private Set<Long> oldSessionSkeySet;
     private byte[] siteFlagsSet;
     private Set<Integer> botFlagList = new LinkedHashSet<Integer>();
-    private Set<String> userIdSet;
-    private Attributes attributes;
+    private Set<String> userIdSet = new HashSet<>();
+    private Attributes attributes = new Attributes();
     private byte[] attributeFlags = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     private Integer seqNum;
