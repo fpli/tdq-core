@@ -14,7 +14,7 @@ public class BotFlagMetrics  {
     private BotFilter filter = null;
     private  UBIConfig ubiConfig ;
 
-    private static BotFlagMetrics botFlagMetrics;
+    private static volatile BotFlagMetrics botFlagMetrics;
 
     private BotFlagMetrics() {
 //        initBotDetectors();

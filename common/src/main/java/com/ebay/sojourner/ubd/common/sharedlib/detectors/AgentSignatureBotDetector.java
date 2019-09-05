@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class AgentSignatureBotDetector implements BotDetector<AgentAttribute> {
 
-    private static AgentSignatureBotDetector agentIpSignatureBotDetector;
+    private static volatile AgentSignatureBotDetector agentIpSignatureBotDetector;
     private Set<Rule> botRules = new LinkedHashSet<Rule>();
 
 

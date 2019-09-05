@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class IpSignatureBotDetector implements BotDetector<IpAttribute> {
 
-    private static IpSignatureBotDetector singnatureBotDetector;
+    private static volatile IpSignatureBotDetector singnatureBotDetector;
     private Set<Rule> botRules = new LinkedHashSet<Rule>();
 
 

@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class GuidSignatureBotDetector implements BotDetector<GuidAttribute> {
 
-    private static GuidSignatureBotDetector singnatureBotDetector;
+    private static volatile GuidSignatureBotDetector singnatureBotDetector;
     private Set<Rule> botRules = new LinkedHashSet<Rule>();
 
 

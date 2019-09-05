@@ -9,7 +9,7 @@ public class GuidIndicators extends AttributeIndicators<UbiSession, GuidAttribut
 
     private static Logger logger = Logger.getLogger(SessionMetrics.class);
 
-    private static GuidIndicators guidIndicators;
+    private static volatile GuidIndicators guidIndicators;
 
     public static GuidIndicators getInstance() {
         if (guidIndicators == null) {
