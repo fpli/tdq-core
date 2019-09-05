@@ -46,6 +46,9 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
     private Boolean isAllAgentHoper = true;
     private int totalCntForSec1 = 0;
 
+    public AgentIpAttribute() {
+    }
+
     @Override
     public void feed(UbiSession ubiSession, int botFlag) {
         totalSessionCnt += 1;

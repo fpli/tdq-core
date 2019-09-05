@@ -13,5 +13,6 @@ public class IpSignature implements Signature,Serializable{
 
     private String clientIp;
 
-
+    public IpSignature() {
+    }
 }

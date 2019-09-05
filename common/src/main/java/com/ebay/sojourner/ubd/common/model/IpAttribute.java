@@ -20,6 +20,9 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
     private Boolean isAllAgentHoper = true;
     private int totalCntForSec1 = 0;
 
+    public IpAttribute() {
+    }
+
     @Override
     public void feed(AgentIpAttribute agentIpAttribute, int botFlag) {
 

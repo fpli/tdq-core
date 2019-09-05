@@ -16,7 +16,7 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
         /*
          * is_abvar Application_Payload.contain('&abvar=' ) &&
          * !Application_Payload.contain('&abvar=0&' ) && !Application_Payload.contain('&abvar=-1&')
-         * is_test Application_Payload.contain('&test=') is_tui_abtest
+         * is_test Application_Payload.contain('&test=') is_tui_abtesto
          * Application_Payload.contain('&tui_abtest=' ) is_epr Application_Payload.contain('&epr=')
          * is_pgV Application_Payload.contain('&pgV=') is_m2g
          * Application_Payload.contain('&Motors20Group='|'&m2g=' )
