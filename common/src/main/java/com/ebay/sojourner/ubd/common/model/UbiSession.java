@@ -2,7 +2,6 @@ package com.ebay.sojourner.ubd.common.model;
 
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.IntermediateMetrics;
 import lombok.Data;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -75,7 +74,7 @@ public class UbiSession implements Serializable,Cloneable{
     private int siidCnt;
     private int viCnt;//for bot215
     private int maxScsSeqNum;
-    private Boolean isRefererNull = false;//for bot207
+    private boolean isRefererNull;//for bot207
     private int siidCnt2; // for bot207
     private Integer firstCorbrand;
     private Integer minSCSeqNum;
@@ -94,6 +93,15 @@ public class UbiSession implements Serializable,Cloneable{
 //        this.distinctClickIdSet = new HashSet<Integer>();
 //        this.agentSets= new HashSet<String>();
     }
+
+    public boolean isRefererNull() {
+        return isRefererNull;
+    }
+
+    public void setIsRefererNull(boolean refererNull) {
+        isRefererNull = refererNull;
+    }
+
     public UbiSession merge(UbiSession ubiSession)
     {
         this.eventCnt+=ubiSession.getEventCnt();
@@ -128,4 +136,5 @@ public class UbiSession implements Serializable,Cloneable{
 
 
     }
+
 }

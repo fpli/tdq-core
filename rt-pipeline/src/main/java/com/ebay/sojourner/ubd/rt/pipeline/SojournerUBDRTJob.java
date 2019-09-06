@@ -46,6 +46,10 @@ public class SojournerUBDRTJob {
         executionEnvironment.setStateBackend(
                 StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
         executionEnvironment.setParallelism(2);
+//        final TypeInformation<AttributeAccumulator> resultType = TypeInformation.of(new TypeHint<AttributeAccumulator>() {
+//        });
+//        executionEnvironment.getConfig().enableForceAvro();
+//        executionEnvironment.getConfig().disableGenericTypes();
 
         // 1. Rheos Consumer
         // 1.1 Consume RawEvent from Rheos PathFinder topic
