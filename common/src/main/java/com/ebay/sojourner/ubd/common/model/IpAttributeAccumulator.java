@@ -1,6 +1,6 @@
 package com.ebay.sojourner.ubd.common.model;
 
-public class IpAttributeAccumulator extends AttributeAccumulator<IpAttribute> {
+public class IpAttributeAccumulator {
     private IpAttribute ipAttribute;
     private UbiSession ubiSession;
 

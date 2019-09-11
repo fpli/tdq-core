@@ -1,6 +1,6 @@
 package com.ebay.sojourner.ubd.common.model;
 
-public class GuidAttributeAccumulator extends AttributeAccumulator<GuidAttribute> {
+public class GuidAttributeAccumulator  {
     private GuidAttribute guidAttribute;
     private UbiSession ubiSession;
 
