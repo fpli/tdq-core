@@ -27,9 +27,9 @@ public class AgentIpAttributeAgg implements AggregateFunction<UbiSession, AgentI
 
     @Override
     public AgentIpAttributeAccumulator add(UbiSession session, AgentIpAttributeAccumulator agentIpAttributeAccumulator) {
-        if (agentIpAttributeAccumulator.getAttribute().getClientIp() == null&&agentIpAttributeAccumulator.getAttribute().getAgent()==null) {
-            agentIpAttributeAccumulator.getAttribute().setClientIp(session.getClientIp());
-            agentIpAttributeAccumulator.getAttribute().setAgent(session.getUserAgent());
+        if (agentIpAttributeAccumulator.getAgentIpAttribute().getClientIp() == null&&agentIpAttributeAccumulator.getAgentIpAttribute().getAgent()==null) {
+            agentIpAttributeAccumulator.getAgentIpAttribute().setClientIp(session.getClientIp());
+            agentIpAttributeAccumulator.getAgentIpAttribute().setAgent(session.getUserAgent());
         }
         try {
             agentIpIndicators.feed(session,agentIpAttributeAccumulator);
