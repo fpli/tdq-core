@@ -26,9 +26,9 @@ public class AgentAttributeAgg implements AggregateFunction<AgentIpAttribute, Ag
 
     @Override
     public AgentAttributeAccumulator add(AgentIpAttribute agentIpAttribute, AgentAttributeAccumulator agentAttributeAccumulator) {
-        if (agentAttributeAccumulator.getAttribute().getAgent() == null) {
+        if (agentAttributeAccumulator.getAgentAttribute().getAgent() == null) {
 
-            agentAttributeAccumulator.getAttribute().setAgent(agentIpAttribute.getAgent());
+            agentAttributeAccumulator.getAgentAttribute().setAgent(agentIpAttribute.getAgent());
         }
         try {
             agentIndicators.feed(agentIpAttribute, agentAttributeAccumulator);

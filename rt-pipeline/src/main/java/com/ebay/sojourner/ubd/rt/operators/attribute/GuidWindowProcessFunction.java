@@ -31,7 +31,7 @@ public class GuidWindowProcessFunction
 
         GuidAttributeAccumulator guidAttributeAccumulator = elements.iterator().next();
 
-            Set<Integer> botFlagList = guidSignatureBotDetector.getBotFlagList(guidAttributeAccumulator.getAttribute());
+            Set<Integer> botFlagList = guidSignatureBotDetector.getBotFlagList(guidAttributeAccumulator.getGuidAttribute());
 
 //            if (botFlagList != null && botFlagList.size() > 0) {
 //                JsonObject guidSignature = JsonObject.create()

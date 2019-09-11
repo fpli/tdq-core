@@ -40,8 +40,8 @@ public class SuspectIPIndicator<Source, Target> implements Indicator<Source, Tar
         else if(source instanceof AgentIpAttribute)
         {
             AgentIpAttribute agentIpAttribute = (AgentIpAttribute) source;
-            AgentAttributeAccumulator agentAttributeAccumulator = (AgentAttributeAccumulator) target;
-            agentAttributeAccumulator.getAgentAttribute().feed(agentIpAttribute, BotRules.SUSPECTED_IP_ON_AGENT);
+            IpAttributeAccumulator ipAttributeAccumulator = (IpAttributeAccumulator) target;
+            ipAttributeAccumulator.getIpAttribute().feed(agentIpAttribute, BotRules.SUSPECTED_IP_ON_AGENT);
 
         }
 

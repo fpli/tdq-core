@@ -31,11 +31,11 @@ public class AgentWindowProcessFunction
 
         AgentAttributeAccumulator agentAttributeAccumulator = elements.iterator().next();
 
-        Set<Integer> botFlagList = agentSignatureBotDetector.getBotFlagList(agentAttributeAccumulator.getAttribute());
+        Set<Integer> botFlagList = agentSignatureBotDetector.getBotFlagList(agentAttributeAccumulator.getAgentAttribute());
 
         if (botFlagList != null && botFlagList.size() > 0) {
             JsonObject agentSignature = JsonObject.create()
-                    .put("agent", agentAttributeAccumulator.getAttribute().getAgent())
+                    .put("agent", agentAttributeAccumulator.getAgentAttribute().getAgent())
                     .put("botFlag", JsonArray.from(botFlagList.toArray()));
 //            couchBaseManager.upsert(agentSignature, agentAttributeAccumulator.getAttribute().getAgent());
 //            out.collect(ipSignature);

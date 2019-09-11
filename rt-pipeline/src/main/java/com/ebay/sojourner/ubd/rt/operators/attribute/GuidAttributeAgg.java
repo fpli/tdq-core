@@ -27,8 +27,8 @@ public class GuidAttributeAgg implements AggregateFunction<UbiSession, GuidAttri
 
     @Override
     public GuidAttributeAccumulator add(UbiSession session, GuidAttributeAccumulator guidAttributeAccumulator) {
-        if (guidAttributeAccumulator.getAttribute().getGuid() == null) {
-            guidAttributeAccumulator.getAttribute().setGuid(session.getGuid());
+        if (guidAttributeAccumulator.getGuidAttribute().getGuid() == null) {
+            guidAttributeAccumulator.getGuidAttribute().setGuid(session.getGuid());
         }
         try {
             guidIndicators.feed(session,guidAttributeAccumulator);

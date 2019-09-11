@@ -32,8 +32,8 @@ public class IpWindowProcessFunction
                         Collector<IpSignature> out) throws Exception {
 
         IpAttributeAccumulator ipAttr = elements.iterator().next();
-        if (ipAttr.getAttribute().getClientIp() != null) {
-            Set<Integer> botFlagList = ipSignatureBotDetector.getBotFlagList(ipAttr.getAttribute());
+        if (ipAttr.getIpAttribute().getClientIp() != null) {
+            Set<Integer> botFlagList = ipSignatureBotDetector.getBotFlagList(ipAttr.getIpAttribute());
 
 //            if (botFlagList != null && botFlagList.size() > 0) {
 //                JsonObject ipSignature = JsonObject.create()

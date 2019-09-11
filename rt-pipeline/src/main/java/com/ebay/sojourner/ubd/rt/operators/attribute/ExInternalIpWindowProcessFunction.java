@@ -30,16 +30,16 @@ public class ExInternalIpWindowProcessFunction
                         Collector<IpSignature> out) throws Exception {
 
         IpAttributeAccumulator ipAttr = elements.iterator().next();
-        if (ipAttr.getAttribute().getClientIp() != null) {
-            Set<Integer> botFlagList = ipSignatureBotDetector.getBotFlagList(ipAttr.getAttribute());
+        if (ipAttr.getIpAttribute().getClientIp() != null) {
+            Set<Integer> botFlagList = ipSignatureBotDetector.getBotFlagList(ipAttr.getIpAttribute());
 
             if (botFlagList != null && botFlagList.size() > 0) {
 //                ipSignature.setClientIp(ipAttr.getAttribute().getClientIp());
 //                ipSignature.setBotFlag(botFlagList);
                 JsonObject ipSignature = JsonObject.create()
-                        .put("ip", ipAttr.getAttribute().getClientIp())
+                        .put("ip", ipAttr.getIpAttribute().getClientIp())
                         .put("botFlag", JsonArray.from(botFlagList.toArray()));
-                couchBaseManager.upsert(ipSignature, ipAttr.getAttribute().getClientIp());
+                couchBaseManager.upsert(ipSignature, ipAttr.getIpAttribute().getClientIp());
 //            out.collect(ipSignature);
             }
         }
