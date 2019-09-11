@@ -12,13 +12,13 @@ public class AbsEventCountIndicator implements Indicator<UbiSession, GuidAttribu
 
     @Override
     public void start(GuidAttributeAccumulator guidAttributeAccumulator) throws Exception {
-        guidAttributeAccumulator.getAttribute().clear();
+        guidAttributeAccumulator.getGuidAttribute().clear();
     }
 
     @Override
     public void feed(UbiSession ubiSession, GuidAttributeAccumulator guidAttributeAccumulator) throws Exception {
 
-        guidAttributeAccumulator.getAttribute().feed(ubiSession, BotRules.MANY_EVENTS_BOT_FLAG);
+        guidAttributeAccumulator.getGuidAttribute().feed(ubiSession, BotRules.MANY_EVENTS_BOT_FLAG);
 
     }
 

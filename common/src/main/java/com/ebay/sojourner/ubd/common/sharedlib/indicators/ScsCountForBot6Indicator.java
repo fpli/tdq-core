@@ -22,11 +22,11 @@ public class ScsCountForBot6Indicator<Source, Target> implements Indicator<Sourc
     public void start(Target target) throws Exception {
         if (target instanceof AgentIpAttributeAccumulator) {
             AgentIpAttributeAccumulator agentIpAttributeAccumulator = (AgentIpAttributeAccumulator) target;
-            agentIpAttributeAccumulator.getAttribute().clear(BotRules.SCS_ON_AGENT);
-            agentIpAttributeAccumulator.getAttribute().setIpCount(0);
+            agentIpAttributeAccumulator.getAgentIpAttribute().clear(BotRules.SCS_ON_AGENT);
+            agentIpAttributeAccumulator.getAgentIpAttribute().setIpCount(0);
         } else if (target instanceof IpAttributeAccumulator) {
-            IpAttributeAccumulator agentIpAttributeAccumulator = (IpAttributeAccumulator) target;
-            agentIpAttributeAccumulator.getAttribute().clear();
+            IpAttributeAccumulator ipAttributeAccumulator = (IpAttributeAccumulator) target;
+            ipAttributeAccumulator.getIpAttribute().clear();
         }
     }
 
@@ -36,25 +36,25 @@ public class ScsCountForBot6Indicator<Source, Target> implements Indicator<Sourc
         if (source instanceof UbiSession) {
             UbiSession ubiSession = (UbiSession) source;
             AgentIpAttributeAccumulator agentIpAttributeAccumulator = (AgentIpAttributeAccumulator) target;
-            if (agentIpAttributeAccumulator.getAttribute().getScsCountForBot6() < 0) {
+            if (agentIpAttributeAccumulator.getAgentIpAttribute().getScsCountForBot6() < 0) {
 
             } else {
                 if (isValid(ubiSession)) {
                     if (UbiSessionHelper.isSingleClickSession(ubiSession)) {
-                        agentIpAttributeAccumulator.getAttribute().feed(ubiSession, BotRules.SCS_ON_AGENT);
+                        agentIpAttributeAccumulator.getAgentIpAttribute().feed(ubiSession, BotRules.SCS_ON_AGENT);
                     } else {
-                        agentIpAttributeAccumulator.getAttribute().revert(ubiSession, BotRules.SCS_ON_AGENT);
+                        agentIpAttributeAccumulator.getAgentIpAttribute().revert(ubiSession, BotRules.SCS_ON_AGENT);
                     }
                 }
             }
 
-            if (UbiSessionHelper.isNonIframRdtCountZero(ubiSession) && !isIpBlank(ubiSession.getIp())&&agentIpAttributeAccumulator.getAttribute().getIpCount()<=0) {
-                agentIpAttributeAccumulator.getAttribute().setIpCount(1);
+            if (UbiSessionHelper.isNonIframRdtCountZero(ubiSession) && !isIpBlank(ubiSession.getIp())&&agentIpAttributeAccumulator.getAgentIpAttribute().getIpCount()<=0) {
+                agentIpAttributeAccumulator.getAgentIpAttribute().setIpCount(1);
             }
         } else {
             AgentIpAttribute agentIpAttribute = (AgentIpAttribute) source;
             AgentAttributeAccumulator agentAttributeAccumulator = (AgentAttributeAccumulator) target;
-            agentAttributeAccumulator.getAttribute().feed(agentIpAttribute,BotRules.SCS_ON_AGENT);
+            agentAttributeAccumulator.getAgentAttribute().feed(agentIpAttribute,BotRules.SCS_ON_AGENT);
         }
 
     }

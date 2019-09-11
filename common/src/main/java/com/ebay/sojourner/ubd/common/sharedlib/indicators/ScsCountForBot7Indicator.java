@@ -25,10 +25,10 @@ public class ScsCountForBot7Indicator<Source, Target> implements Indicator<Sourc
     public void start(Target target) throws Exception {
         if (target instanceof AgentIpAttributeAccumulator) {
             AgentIpAttributeAccumulator agentIpAttributeAccumulator = (AgentIpAttributeAccumulator) target;
-            agentIpAttributeAccumulator.getAttribute().clear(BotRules.SCS_ON_IP);
+            agentIpAttributeAccumulator.getAgentIpAttribute().clear(BotRules.SCS_ON_IP);
         } else if (target instanceof IpAttributeAccumulator) {
             IpAttributeAccumulator agentIpAttributeAccumulator = (IpAttributeAccumulator) target;
-            agentIpAttributeAccumulator.getAttribute().clear();
+            agentIpAttributeAccumulator.getIpAttribute().clear();
         }
     }
 
@@ -38,14 +38,14 @@ public class ScsCountForBot7Indicator<Source, Target> implements Indicator<Sourc
         if (source instanceof UbiSession) {
             UbiSession ubiSession = (UbiSession) source;
             AgentIpAttributeAccumulator agentIpAttributeAccumulator = (AgentIpAttributeAccumulator) target;
-            if (agentIpAttributeAccumulator.getAttribute().getScsCountForBot7() < 0) {
+            if (agentIpAttributeAccumulator.getAgentIpAttribute().getScsCountForBot7() < 0) {
 
             } else {
                 if (isValid(ubiSession)) {
                     if (UbiSessionHelper.isSingleClickSession(ubiSession)) {
-                        agentIpAttributeAccumulator.getAttribute().feed(ubiSession, BotRules.SCS_ON_IP);
+                        agentIpAttributeAccumulator.getAgentIpAttribute().feed(ubiSession, BotRules.SCS_ON_IP);
                     } else {
-                        agentIpAttributeAccumulator.getAttribute().revert(ubiSession, BotRules.SCS_ON_IP);
+                        agentIpAttributeAccumulator.getAgentIpAttribute().revert(ubiSession, BotRules.SCS_ON_IP);
                     }
                 }
             }
@@ -53,7 +53,7 @@ public class ScsCountForBot7Indicator<Source, Target> implements Indicator<Sourc
         } else {
             AgentIpAttribute agentIpAttribute = (AgentIpAttribute) source;
             IpAttributeAccumulator ipAttributeAccumulator = (IpAttributeAccumulator) target;
-            ipAttributeAccumulator.getAttribute().feed(agentIpAttribute,BotRules.SCS_ON_IP);
+            ipAttributeAccumulator.getIpAttribute().feed(agentIpAttribute,BotRules.SCS_ON_IP);
         }
 
     }
