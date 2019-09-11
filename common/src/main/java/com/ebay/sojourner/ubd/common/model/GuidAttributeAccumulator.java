@@ -1,8 +1,12 @@
 package com.ebay.sojourner.ubd.common.model;
 
 public class GuidAttributeAccumulator extends AttributeAccumulator<GuidAttribute> {
+    private GuidAttribute guidAttribute;
+    private UbiSession ubiSession;
+
+
     public GuidAttributeAccumulator() {
-        super();
-        this.setAttribute(new GuidAttribute());
+        this.ubiSession = new UbiSession();
+        this.guidAttribute= new GuidAttribute();
     }
 }
