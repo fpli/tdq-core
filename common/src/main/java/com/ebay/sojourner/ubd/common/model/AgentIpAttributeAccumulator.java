@@ -1,12 +1,15 @@
 package com.ebay.sojourner.ubd.common.model;
 
+import lombok.Data;
+
+@Data
 public class AgentIpAttributeAccumulator  {
-    private AgentIpAttribute agentIpAttribute;
+    private AgentIpAttribute attribute;
     private UbiSession ubiSession;
 
 
     public AgentIpAttributeAccumulator() {
         this.ubiSession = new UbiSession();
-        this.agentIpAttribute= new AgentIpAttribute();
+        this.attribute= new AgentIpAttribute();
     }
 }
