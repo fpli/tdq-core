@@ -1,8 +1,11 @@
 package com.ebay.sojourner.ubd.common.model;
 
-public class AgentIpAttributeAccumulator extends AttributeAccumulator<AgentIpAttribute> {
+public class AgentIpAttributeAccumulator {
+    private AgentIpAttribute agentIpAttribute;
+    private UbiSession ubiSession;
+
     public AgentIpAttributeAccumulator() {
-        super();
-        this.setAttribute(new AgentIpAttribute());
+        this.agentIpAttribute = new AgentIpAttribute();
+        this.ubiSession = new UbiSession();
     }
 }
