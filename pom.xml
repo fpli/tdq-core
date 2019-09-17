@@ -403,8 +403,8 @@
                     <!-- Note config is repeated in scalatest config -->
                     <configuration>
                         <includes>
-                            <include>**/Test*.java</include>
-                            <include>**/*Test.java</include>
+                            <include>**/com.ebay.sojourner.ubd.common.util.Test*.java</include>
+                            <include>**/*com.ebay.sojourner.ubd.common.util.Test.java</include>
                             <include>**/*TestCase.java</include>
                             <include>**/*Suite.java</include>
                         </includes>

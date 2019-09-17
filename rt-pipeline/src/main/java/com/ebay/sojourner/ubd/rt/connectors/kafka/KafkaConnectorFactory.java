@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class KafkaConnectorFactory {
 
 //    public static String CLIENT_ID = "82034abc-572d-4b71-82df-c9820ef1627c";
-    public static String GROUP_ID = "sojourner";
+    public static String GROUP_ID = "sojourner2";
 
 //    public static String CLIENT_ID = "43665ed9-5673-4d92-8ea7-21decd34c903";
 
@@ -47,7 +47,7 @@ public class KafkaConnectorFactory {
                 ByteArrayDeserializer.class.getName());
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                 RheosEventDeserializer.class.getName());
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"earliest");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"latest");
 //        props.put(ConsumerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
 
         return new FlinkKafkaConsumer<>(TOPIC_PATHFINDER_EVENTS,

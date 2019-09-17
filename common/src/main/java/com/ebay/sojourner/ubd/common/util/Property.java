@@ -162,6 +162,6 @@ public class Property {
     public static final String LARGE_SESSION_EVENT_NUMBER = "event.number.threshold";
     public static final String LARGE_SESSION_TIMES_OF_BOT15 = "times.of.bot15";
     
-    // ---------------------- Enable Test  -----------------------------------------
+    // ---------------------- Enable com.ebay.sojourner.ubd.common.util.Test  -----------------------------------------
     public static final String IS_TEST_ENABLE = "enable.test";
 }
