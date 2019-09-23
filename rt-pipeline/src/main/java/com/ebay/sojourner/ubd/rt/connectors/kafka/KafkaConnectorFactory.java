@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class KafkaConnectorFactory {
 
 //    public static String CLIENT_ID = "82034abc-572d-4b71-82df-c9820ef1627c";
-    public static String GROUP_ID = "sojourner1";
+    public static String GROUP_ID = "sojourner";
 
 //    public static String CLIENT_ID = "43665ed9-5673-4d92-8ea7-21decd34c903";
 

@@ -45,7 +45,7 @@ public class SojournerUBDRTJob {
         executionEnvironment.enableCheckpointing(120 * 1000);
         executionEnvironment.setStateBackend(
                 StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
-        executionEnvironment.setParallelism(2);
+        executionEnvironment.setParallelism(8);
 //        executionEnvironment.getCheckpointConfig().setMinPauseBetweenCheckpoints(60 * 1000);
 //        final TypeInformation<AttributeAccumulator> resultType = TypeInformation.of(new TypeHint<AttributeAccumulator>() {
 //        });
