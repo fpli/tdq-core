@@ -42,7 +42,8 @@ public class SojournerUBDRTJob {
         // LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
-        executionEnvironment.enableCheckpointing(120 * 1000);
+        executionEnvironment.enableCheckpointing(300 * 1000);
+        executionEnvironment.getCheckpointConfig().setCheckpointTimeout(15 * 60 * 1000);
         executionEnvironment.setStateBackend(
                 StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
         executionEnvironment.setParallelism(2);
