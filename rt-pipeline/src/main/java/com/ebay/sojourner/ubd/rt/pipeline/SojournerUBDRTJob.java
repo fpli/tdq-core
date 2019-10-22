@@ -1,5 +1,6 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
+import com.ebay.rdp.application.Application;
 import com.ebay.sojourner.ubd.common.model.*;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
