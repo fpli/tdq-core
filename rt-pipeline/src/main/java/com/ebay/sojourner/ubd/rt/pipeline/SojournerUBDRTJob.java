@@ -1,6 +1,5 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
-import com.ebay.rdp.application.Application;
 import com.ebay.sojourner.ubd.common.model.*;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
@@ -30,9 +29,9 @@ import java.io.InputStream;
 public class SojournerUBDRTJob {
 
     public static void main(String[] args) throws Exception {
-        // 0. Prepare execution environment
+        // 0.0 Prepare execution environment
         // 0.1 UBI configuration
-//         0.2 Flink configuration
+        // 0.2 Flink configuration
         InputStream resourceAsStream = SojournerUBDRTJob.class.getResourceAsStream("/ubi.properties");
         UBIConfig ubiConfig = UBIConfig.getInstance(resourceAsStream);
 
@@ -48,16 +47,10 @@ public class SojournerUBDRTJob {
         executionEnvironment.setStateBackend(
                 StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
         executionEnvironment.setParallelism(2);
-//        executionEnvironment.getCheckpointConfig().setMinPauseBetweenCheckpoints(60 * 1000);
-//        final TypeInformation<AttributeAccumulator> resultType = TypeInformation.of(new TypeHint<AttributeAccumulator>() {
-//        });
-//        executionEnvironment.getConfig().enableForceAvro();
-//        executionEnvironment.getConfig().disableGenericTypes();
 
         // 1. Rheos Consumer
         // 1.1 Consume RawEvent from Rheos PathFinder topic
         // 1.2 Assign timestamps and emit watermarks.
-
         DataStream<RawEvent> rawEventDataStream = executionEnvironment.addSource(
                 KafkaConnectorFactory.createKafkaConsumer().assignTimestampsAndWatermarks(
                         new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
@@ -105,7 +98,7 @@ public class SojournerUBDRTJob {
         // 4.3 Attribute level bot detection (via bot rule)
         // 4.4 Store bot signature
         DataStream<AgentIpAttribute> agentIpAttributeDataStream = sessionStream
-                .keyBy("userAgent","clientIp")
+                .keyBy("userAgent", "clientIp")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
@@ -118,7 +111,7 @@ public class SojournerUBDRTJob {
                 .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
                 .name("Attribute Operator (Agent)");
 
-        DataStream<IpSignature>  ipAttributeDataStream = agentIpAttributeDataStream
+        DataStream<IpSignature> ipAttributeDataStream = agentIpAttributeDataStream
                 .keyBy("clientIp")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
                 .trigger(OnElementEarlyFiringTrigger.create())
