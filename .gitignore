@@ -2,6 +2,6 @@
 *.iml
 .DS_Store
 target/
-dependency-reduced-pom.xmlß
+dependency-reduced-pom.xml
 spark-warehouse/
 
