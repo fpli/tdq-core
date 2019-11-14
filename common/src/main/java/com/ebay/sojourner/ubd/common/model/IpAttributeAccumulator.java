@@ -1,9 +1,14 @@
 package com.ebay.sojourner.ubd.common.model;
 
-public class IpAttributeAccumulator extends AttributeAccumulator<IpAttribute> {
-    public IpAttributeAccumulator(){
-        super();
-        this.setAttribute(new IpAttribute());
+import lombok.Data;
+
+@Data
+public class IpAttributeAccumulator {
+    private IpAttribute attribute;
+
+
+    public IpAttributeAccumulator() {
+        this.attribute= new IpAttribute();
     }
 
 }

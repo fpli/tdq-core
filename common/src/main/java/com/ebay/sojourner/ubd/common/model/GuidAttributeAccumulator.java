@@ -1,8 +1,13 @@
 package com.ebay.sojourner.ubd.common.model;
 
-public class GuidAttributeAccumulator extends AttributeAccumulator<GuidAttribute> {
+import lombok.Data;
+
+@Data
+public class GuidAttributeAccumulator  {
+    private GuidAttribute attribute;
+
+
     public GuidAttributeAccumulator() {
-        super();
-        this.setAttribute(new GuidAttribute());
+        this.attribute= new GuidAttribute();
     }
 }

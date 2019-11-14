@@ -118,7 +118,9 @@ public class SojournerUBDRTJob {
         // 4.3 Attribute level bot detection (via bot rule)
         // 4.4 Store bot signature
         DataStream<AgentIpAttribute> agentIpAttributeDataStream = sessionStream
-                .keyBy("userAgent","clientIp")
+                .keyBy("agent" +
+                        "" +
+                        "","clientIp")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())

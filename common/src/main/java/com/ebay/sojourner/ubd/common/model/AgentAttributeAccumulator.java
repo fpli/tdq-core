@@ -1,8 +1,12 @@
 package com.ebay.sojourner.ubd.common.model;
 
-public class AgentAttributeAccumulator extends AttributeAccumulator<AgentAttribute> {
+import lombok.Data;
+
+@Data
+public class AgentAttributeAccumulator  {
+    private AgentAttribute attribute;
+
     public AgentAttributeAccumulator() {
-        super();
-        this.setAttribute(new AgentAttribute());
+        this.attribute= new AgentAttribute();
     }
 }
