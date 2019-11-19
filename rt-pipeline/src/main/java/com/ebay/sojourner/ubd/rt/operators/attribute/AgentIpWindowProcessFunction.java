@@ -19,11 +19,11 @@ public class AgentIpWindowProcessFunction
         extends ProcessWindowFunction<AgentIpAttributeAccumulator, AgentIpAttribute, Tuple, TimeWindow> {
     private static final Logger logger = Logger.getLogger(AgentIpWindowProcessFunction.class);
     //    private IpSignature ipSignature;
-    private AgentIpSignatureBotDetector agentIpSignatureBotDetector;
+//    private AgentIpSignatureBotDetector agentIpSignatureBotDetector;
 //    private CouchBaseManager couchBaseManager;
-    private static final String BUCKET_NAME = "botsignature";
-    private static final String USER_NAME = "Administrator";
-    private static final String USER_PASS = "111111";
+//    private static final String BUCKET_NAME = "botsignature";
+//    private static final String USER_NAME = "Administrator";
+//    private static final String USER_PASS = "111111";
 
     @Override
     public void process(Tuple tuple, Context context, Iterable<AgentIpAttributeAccumulator> elements,
@@ -31,14 +31,14 @@ public class AgentIpWindowProcessFunction
 
         AgentIpAttributeAccumulator agentIpAttributeAccumulator = elements.iterator().next();
 
-        Set<Integer> botFlagList = agentIpSignatureBotDetector.getBotFlagList(agentIpAttributeAccumulator.getAgentIpAttribute());
-
-        if (botFlagList != null && botFlagList.size() > 0) {
-            JsonObject ipSignature = JsonObject.create()
-                    .put("agentIp", agentIpAttributeAccumulator.getAgentIpAttribute().getAgent()+agentIpAttributeAccumulator.getAgentIpAttribute().getClientIp())
-                    .put("botFlag", JsonArray.from(botFlagList.toArray()));
+//        Set<Integer> botFlagList = agentIpSignatureBotDetector.getBotFlagList(agentIpAttributeAccumulator.getAgentIpAttribute());
+//
+//        if (botFlagList != null && botFlagList.size() > 0) {
+//            JsonObject ipSignature = JsonObject.create()
+//                    .put("agentIp", agentIpAttributeAccumulator.getAgentIpAttribute().getAgent()+agentIpAttributeAccumulator.getAgentIpAttribute().getClientIp())
+//                    .put("botFlag", JsonArray.from(botFlagList.toArray()));
 //            couchBaseManager.upsert(ipSignature, agentIpAttributeAccumulator.getAttribute().getAgent()+agentIpAttributeAccumulator.getAttribute().getClientIp());
-        }
+//        }
 
         out.collect(agentIpAttributeAccumulator.getAgentIpAttribute());
 
@@ -48,7 +48,7 @@ public class AgentIpWindowProcessFunction
     @Override
     public void open(Configuration conf) throws Exception {
         super.open(conf);
-        agentIpSignatureBotDetector = AgentIpSignatureBotDetector.getInstance();
+//        agentIpSignatureBotDetector = AgentIpSignatureBotDetector.getInstance();
 //        couchBaseManager = CouchBaseManager.getInstance();
     }
 

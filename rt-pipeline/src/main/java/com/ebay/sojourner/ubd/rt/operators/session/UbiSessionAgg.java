@@ -17,7 +17,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
     private  SessionBotDetector sessionBotDetector;
     private static final Logger logger = Logger.getLogger(UbiSessionAgg.class);
 //    private CouchBaseManager couchBaseManager;
-    private static final String BUCKET_NAME="botsignature";
+//    private static final String BUCKET_NAME="botsignature";
 
     @Override
     public SessionAccumulator createAccumulator() {
@@ -69,9 +69,11 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
             e.printStackTrace();
         }
         Set<Integer> sessionBotFlagSet=accumulator.getUbiSession().getBotFlagList();
+
 //        Set<Integer> attrBotFlagWithIp = couchBaseManager.getSignatureWithDocId(accumulator.getUbiSession().getClientIp());
 //        Set<Integer> attrBotFlagWithAgentIp = couchBaseManager.getSignatureWithDocId(accumulator.getUbiSession().getUserAgent()+accumulator.getUbiSession().getClientIp());
 //        Set<Integer> attrBotFlagWithAgent = couchBaseManager.getSignatureWithDocId(accumulator.getUbiSession().getUserAgent());
+
         if(sessionBotFlagSetDetect!=null&&sessionBotFlagSetDetect.size()>0) {
             sessionBotFlagSet.addAll(sessionBotFlagSetDetect);
             eventBotFlagSet.addAll(sessionBotFlagSetDetect);
