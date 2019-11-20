@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 
 import java.util.Set;
 
-    public class AgentIpMapFunction extends RichMapFunction<AgentIpAttribute, AgentIpSignature> {
+public class AgentIpMapFunction extends RichMapFunction<AgentIpAttribute, AgentIpSignature> {
     private static final Logger logger = Logger.getLogger(AgentIpMapFunction.class);
     private AgentIpSignatureBotDetector agentIpSignatureBotDetector;
     private AgentIpSignature agentIpSignature;
@@ -24,9 +24,9 @@ import java.util.Set;
 
 
     @Override
-        public AgentIpSignature map(AgentIpAttribute value) throws Exception {
+    public AgentIpSignature map(AgentIpAttribute value) throws Exception {
         Set<Integer> botFlagList = agentIpSignatureBotDetector.getBotFlagList(value);
-        agentIpSignature.getAgentIpBotSignature().put(value.getAgent()+value.getClientIp(),botFlagList);
+        agentIpSignature.getAgentIpBotSignature().put(value.getAgent() + value.getClientIp(), botFlagList);
         return agentIpSignature;
     }
 }

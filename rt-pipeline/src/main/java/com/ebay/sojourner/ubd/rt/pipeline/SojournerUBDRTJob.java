@@ -2,6 +2,9 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.*;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
+import com.ebay.sojourner.ubd.rt.common.broadcast.AgentBroadcastProcessFunction;
+import com.ebay.sojourner.ubd.rt.common.broadcast.AgentIpBroadcastProcessFunction;
+import com.ebay.sojourner.ubd.rt.common.broadcast.IpBroadcastProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
@@ -145,63 +148,20 @@ public class SojournerUBDRTJob {
         // ip broadcast
         BroadcastStream<IpSignature> ipBroadcastStrem = ipAttributeDataStream.broadcast(MapStateDesc.ipSignatureDesc);
 
-        SingleOutputStreamOperator<UbiEvent> ipConnectDataStream = ubiEventStreamWithSessionId.connect(ipBroadcastStrem).process(new BroadcastProcessFunction<UbiEvent, IpSignature, UbiEvent>() {
-            @Override
-            public void processElement(UbiEvent value, ReadOnlyContext ctx, Collector<UbiEvent> out) throws Exception {
-                ReadOnlyBroadcastState<String, Set<Integer>> ipBroadcastState = ctx.getBroadcastState(MapStateDesc.ipSignatureDesc);
-                if(ipBroadcastState.contains(value.getClientIP())){
-                    value.getBotFlags().addAll(ipBroadcastState.get(value.getClientIP()));
-                }
-                out.collect(value);
-            }
+        SingleOutputStreamOperator<UbiEvent> ipConnectDataStream = ubiEventStreamWithSessionId
+                .connect(ipBroadcastStrem)
+                .process(new IpBroadcastProcessFunction())
+                .name("Signature BotDetection(IP)");
 
-            @Override
-            public void processBroadcastElement(IpSignature value, Context ctx, Collector<UbiEvent> out) throws Exception {
-                BroadcastState<String, Set<Integer>> ipBroadcastState = ctx.getBroadcastState(MapStateDesc.ipSignatureDesc);
-                for (Map.Entry<String, Set<Integer>> entry : value.getIpBotSignature().entrySet()) {
-                    ipBroadcastState.put(entry.getKey(), entry.getValue());
-                }
-            }
-        }).name("Signature BotDetection(IP)");
+        SingleOutputStreamOperator<UbiEvent> agentConnectDataStream = ipConnectDataStream
+                .connect(agentBroadcastStream)
+                .process(new AgentBroadcastProcessFunction())
+                .name("Signature BotDetection(Agent)");
 
-        SingleOutputStreamOperator<UbiEvent> agentConnectDataStream = ipConnectDataStream.connect(agentBroadcastStream).process(new BroadcastProcessFunction<UbiEvent, AgentSignature, UbiEvent>() {
-            @Override
-            public void processElement(UbiEvent value, ReadOnlyContext ctx, Collector<UbiEvent> out) throws Exception {
-                ReadOnlyBroadcastState<String, Set<Integer>> agentBroadcastState = ctx.getBroadcastState(MapStateDesc.agentSignatureDesc);
-                if (agentBroadcastState.contains(value.getAgentInfo())) {
-                    value.getBotFlags().addAll(agentBroadcastState.get(value.getAgentInfo()));
-                }
-                out.collect(value);
-            }
-
-            @Override
-            public void processBroadcastElement(AgentSignature value, Context ctx, Collector<UbiEvent> out) throws Exception {
-                BroadcastState<String, Set<Integer>> agentBroadcastState = ctx.getBroadcastState(MapStateDesc.agentSignatureDesc);
-                for (Map.Entry<String, Set<Integer>> entry : value.getAgentBotSignature().entrySet()) {
-                    agentBroadcastState.put(entry.getKey(), entry.getValue());
-                }
-            }
-        }).name("Signature BotDetection(Agent)");
-
-        SingleOutputStreamOperator<UbiEvent> agentIpConnectDataStream = agentConnectDataStream.connect(agentIpBroadcastStream).process(new BroadcastProcessFunction<UbiEvent, AgentIpSignature, UbiEvent>() {
-            @Override
-            public void processElement(UbiEvent value, ReadOnlyContext ctx, Collector<UbiEvent> out) throws Exception {
-                ReadOnlyBroadcastState<String, Set<Integer>> agentIpBroadcastState = ctx.getBroadcastState(MapStateDesc.agentIpSignatureDesc);
-                if(agentIpBroadcastState.contains(value.getAgentInfo()+value.getClientIP())){
-                    value.getBotFlags().addAll(agentIpBroadcastState.get(value.getAgentInfo()+value.getClientIP()));
-                }
-                out.collect(value);
-            }
-
-            @Override
-            public void processBroadcastElement(AgentIpSignature value, Context ctx, Collector<UbiEvent> out) throws Exception {
-                BroadcastState<String, Set<Integer>> agentIpBroadcastState = ctx.getBroadcastState(MapStateDesc.agentIpSignatureDesc);
-                for (Map.Entry<String, Set<Integer>> entry : value.getAgentIpBotSignature().entrySet()) {
-                    agentIpBroadcastState.put(entry.getKey(), entry.getValue());
-                }
-            }
-        }).name("Signature BotDetection(Agent+IP)");
-
+        SingleOutputStreamOperator<UbiEvent> agentIpConnectDataStream = agentConnectDataStream
+                .connect(agentIpBroadcastStream)
+                .process(new AgentIpBroadcastProcessFunction())
+                .name("Signature BotDetection(Agent+IP)");
 
         // 5. Load data to file system for batch processing
         // 5.1 IP Signature
