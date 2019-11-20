@@ -13,14 +13,32 @@ import java.util.Map;
 import java.util.Set;
 
 public class AgentBroadcastProcessFunction extends BroadcastProcessFunction<UbiEvent, AgentSignature,UbiEvent> {
+
     Logger logger = Logger.getLogger(AgentBroadcastProcessFunction.class);
+
+    boolean isSuspectedAgent=false;
+    boolean isDeclarativeAgent=false;
 
     @Override
     public void processElement(UbiEvent ubiEvent, ReadOnlyContext context, Collector<UbiEvent> out) throws Exception {
         ReadOnlyBroadcastState<String, Set<Integer>> agentBroadcastState = context.getBroadcastState(MapStateDesc.agentSignatureDesc);
         if (agentBroadcastState.contains(ubiEvent.getAgentInfo())) {
+
+            if(agentBroadcastState.get(ubiEvent.getAgentInfo())!=null&&agentBroadcastState.get(ubiEvent.getAgentInfo()).size()>0){
+                if(agentBroadcastState.get(ubiEvent.getAgentInfo()).contains(220))
+                {
+                    isSuspectedAgent=true;
+                    agentBroadcastState.get(ubiEvent.getAgentInfo()).remove(220);
+                }
+                if(agentBroadcastState.get(ubiEvent.getAgentInfo()).contains(221))
+                {
+                    isDeclarativeAgent=true;
+                    agentBroadcastState.get(ubiEvent.getAgentInfo()).remove(221);
+                }
+            }
             ubiEvent.getBotFlags().addAll(agentBroadcastState.get(ubiEvent.getAgentInfo()));
         }
+
         out.collect(ubiEvent);
     }
 

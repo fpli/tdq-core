@@ -1,7 +1,6 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.*;
-import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import com.ebay.sojourner.ubd.rt.common.broadcast.AgentBroadcastProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.broadcast.AgentIpBroadcastProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.broadcast.IpBroadcastProcessFunction;
@@ -15,26 +14,17 @@ import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
 import com.ebay.sojourner.ubd.rt.util.StateBackendFactory;
-import org.apache.flink.api.common.state.BroadcastState;
-import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
-
-import java.io.InputStream;
-import java.util.Map;
-import java.util.Set;
 
 
 public class SojournerUBDRTJob {
@@ -43,12 +33,12 @@ public class SojournerUBDRTJob {
         // 0.0 Prepare execution environment
         // 0.1 UBI configuration
         // 0.2 Flink configuration
-        InputStream resourceAsStream = SojournerUBDRTJob.class.getResourceAsStream("/ubi.properties");
-        UBIConfig ubiConfig = UBIConfig.getInstance(resourceAsStream);
+//        InputStream resourceAsStream = SojournerUBDRTJob.class.getResourceAsStream("/ubi.properties");
+//        UBIConfig ubiConfig = UBIConfig.getInstance(resourceAsStream);
 
         final StreamExecutionEnvironment executionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment();
-        final ParameterTool params = ParameterTool.fromArgs(args);
+//        final ParameterTool params = ParameterTool.fromArgs(args);
         executionEnvironment.getConfig().setGlobalJobParameters(new SojJobParameters());
         // LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
