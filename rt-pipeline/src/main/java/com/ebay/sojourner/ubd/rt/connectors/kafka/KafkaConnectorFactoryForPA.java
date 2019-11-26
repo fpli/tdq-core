@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.rt.connectors.kafka;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.SojEvent;
 import io.ebay.rheos.schema.avro.RheosEventDeserializer;
+import org.apache.avro.generic.GenericRecord;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -14,7 +15,7 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-public class KafkaConnectorFactory {
+public class KafkaConnectorFactoryForPA {
 
 //    public static String CLIENT_ID = "82034abc-572d-4b71-82df-c9820ef1627c";
     public static String GROUP_ID = "sojourner";
@@ -32,7 +33,7 @@ public class KafkaConnectorFactory {
             "rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092")
             .stream().collect(Collectors.joining(","));
 
-    public static FlinkKafkaConsumer<RawEvent> createKafkaConsumer() {
+    public static FlinkKafkaConsumer<GenericRecord> createKafkaConsumer() {
 
         Properties props = new Properties();
         props.put("sasl.mechanism", "IAF");
@@ -51,8 +52,8 @@ public class KafkaConnectorFactory {
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"earliest");
 //        props.put(ConsumerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
 
-        return new FlinkKafkaConsumer<>(TOPIC_PATHFINDER_EVENTS,
-                new RawEventDeserializationSchema(), props);
+        return new FlinkKafkaConsumer<GenericRecord>(TOPIC_PATHFINDER_EVENTS,
+                new RawEventDeserializationSchemaForPA(), props);
     }
 
 
