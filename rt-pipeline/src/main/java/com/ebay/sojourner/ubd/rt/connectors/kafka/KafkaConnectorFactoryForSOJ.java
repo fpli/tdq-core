@@ -38,7 +38,7 @@ public class KafkaConnectorFactoryForSOJ {
             "rhs-nbrvkiaa-kfk-lvs-10.rheos-streaming-qa.svc.32.tess.io:9092")
             .stream().collect(Collectors.joining(","));
 
-    public static FlinkKafkaConsumer<GenericRecord> createKafkaConsumer() {
+    public static FlinkKafkaConsumer<RawEvent> createKafkaConsumer() {
 
         Properties props = new Properties();
         props.put("sasl.mechanism", "IAF");
@@ -57,7 +57,7 @@ public class KafkaConnectorFactoryForSOJ {
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"latest");
 //        props.put(ConsumerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
 
-        return new FlinkKafkaConsumer<GenericRecord>(TOPIC_PATHFINDER_EVENTS,
+        return new FlinkKafkaConsumer<RawEvent>(TOPIC_PATHFINDER_EVENTS,
                 new SojEventDeserializationSchema(), props);
     }
 

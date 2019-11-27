@@ -6,17 +6,15 @@ import com.ebay.sojourner.ubd.common.model.RheosHeader;
 import io.ebay.rheos.schema.event.RheosEvent;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
+import org.apache.commons.lang.StringUtils;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 public class SojEventDeserializationSchema implements DeserializationSchema<RawEvent> {
 
@@ -81,8 +79,8 @@ public class SojEventDeserializationSchema implements DeserializationSchema<RawE
 
         // Generate ClientData
         // If clientData is not of type GenericRecord, just skip this message.
-        if (!(genericRecord.get("clientData") instanceof GenericRecord)) {
-            logger.info("clientData is not of type GenericRecord. "
+        if (!(genericRecord.get("clientData") instanceof Map)) {
+            logger.info("clientData is not of type Map. "
                     + genericRecord.get("clientData"));
             return null;
         }
@@ -123,7 +121,7 @@ public class SojEventDeserializationSchema implements DeserializationSchema<RawE
         clientData.setServer(getString(clientDataMap.get("Server")));
         clientData.setTMachine(getString(clientDataMap.get("TMachine")));
 
-        clientData.setTStamp(Long.valueOf(getString(clientDataMap.get("TStamp"))));
+        clientData.setTStamp(StringUtils.isEmpty(applicationPayload.get("timestamp"))?null:Long.valueOf(getString(applicationPayload.get("timestamp"))));
         clientData.setTName(getString(clientDataMap.get("TName")));
         clientData.setTPayload(getString(clientDataMap.get("TPayload")));
         clientData.setColo(getString(applicationPayload.get("colo")));
@@ -132,14 +130,14 @@ public class SojEventDeserializationSchema implements DeserializationSchema<RawE
         clientData.setTType(getString(applicationPayload.get("TType")));
         clientData.setTStatus(getString(clientDataMap.get("TStatus")));
         clientData.setCorrId(getString(applicationPayload.get("corrId")));
-        clientData.setContentLength( Integer.valueOf(getString(clientDataMap.get("contentLength"))));
+        clientData.setContentLength(StringUtils.isEmpty(clientDataMap.get("ContentLength"))?null:Integer.valueOf(getString(clientDataMap.get("ContentLength"))));
         clientData.setNodeId(getString(applicationPayload.get("nodeId")));
         clientData.setRequestGuid(getString(applicationPayload.get("requestGuid")));
 
         clientData.setReferrer(getString(applicationPayload.get("Referer")));
 
         clientData.setAcceptEncoding(getString(clientDataMap.get("Encoding")));
-        clientData.setTDuration(Long.valueOf(clientDataMap.get("TDuration")));
+        clientData.setTDuration(StringUtils.isEmpty(clientDataMap.get("TDuration"))?null:Long.valueOf(clientDataMap.get("TDuration")));
 
         clientData.setAgent(agentCLI);
         clientData.setRemoteIP(getString(genericRecord.get("remoteIP")));

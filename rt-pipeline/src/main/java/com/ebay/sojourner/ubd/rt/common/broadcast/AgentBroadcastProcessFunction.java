@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class AgentBroadcastProcessFunction extends BroadcastProcessFunction<UbiEvent, AgentSignature,UbiEvent> {
 
-    Logger logger = Logger.getLogger(AgentBroadcastProcessFunction.class);
+    private static volatile Logger logger = Logger.getLogger(AgentBroadcastProcessFunction.class);
 
     boolean isSuspectedAgent=false;
     boolean isDeclarativeAgent=false;

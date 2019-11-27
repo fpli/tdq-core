@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class AgentIpBroadcastProcessFunction extends BroadcastProcessFunction<UbiEvent, AgentIpSignature,UbiEvent> {
-    Logger logger = Logger.getLogger(AgentIpBroadcastProcessFunction.class);
+    private static volatile Logger logger = Logger.getLogger(AgentIpBroadcastProcessFunction.class);
 
     @Override
     public void processElement(UbiEvent ubiEvent, ReadOnlyContext context, Collector<UbiEvent> out) throws Exception {

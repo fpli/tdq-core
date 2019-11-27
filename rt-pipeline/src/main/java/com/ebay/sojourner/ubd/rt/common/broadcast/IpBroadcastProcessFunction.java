@@ -9,11 +9,12 @@ import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.util.Collector;
 import org.apache.log4j.Logger;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
-public class IpBroadcastProcessFunction extends BroadcastProcessFunction<UbiEvent, IpSignature,UbiEvent> {
-    Logger logger = Logger.getLogger(IpBroadcastProcessFunction.class);
+public class IpBroadcastProcessFunction extends BroadcastProcessFunction<UbiEvent, IpSignature,UbiEvent> implements Serializable {
+    private static volatile Logger logger = Logger.getLogger(IpBroadcastProcessFunction.class);
 
     @Override
     public void processElement(UbiEvent ubiEvent, ReadOnlyContext context, Collector<UbiEvent> out) throws Exception {
