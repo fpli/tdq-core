@@ -26,16 +26,11 @@ public class KafkaConnectorFactoryForSOJ {
     public static String TOPIC_PATHFINDER_EVENTS = "behavior.pulsar.misc.bot";
 
     public static String BOOTSTRAP_SERVERS = Arrays.asList(
-            "rhs-nbrvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092",
-            "rhs-nbrvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092",
-            "rhs-nbrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092",
-            "rhs-nbrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092",
-            "rhs-nbrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092",
-            "rhs-nbrvkiaa-kfk-lvs-6.rheos-streaming-qa.svc.32.tess.io:9092",
-            "rhs-nbrvkiaa-kfk-lvs-7.rheos-streaming-qa.svc.32.tess.io:9092",
-            "rhs-nbrvkiaa-kfk-lvs-8.rheos-streaming-qa.svc.32.tess.io:9092",
-            "rhs-nbrvkiaa-kfk-lvs-9.rheos-streaming-qa.svc.32.tess.io:9092",
-            "rhs-nbrvkiaa-kfk-lvs-10.rheos-streaming-qa.svc.32.tess.io:9092")
+            "rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092",
+            "rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092",
+            "rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092",
+            "rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092",
+            "rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092")
             .stream().collect(Collectors.joining(","));
 
     public static FlinkKafkaConsumer<RawEvent> createKafkaConsumer() {
@@ -43,7 +38,7 @@ public class KafkaConnectorFactoryForSOJ {
         Properties props = new Properties();
         props.put("sasl.mechanism", "IAF");
         props.put("security.protocol", "SASL_PLAINTEXT");
-        props.put(SaslConfigs.SASL_JAAS_CONFIG, "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" iafSecret=\"6218c197-200e-49d7-b404-2a4dbf7595ef\" iafEnv=\"staging\";");
+        props.put(SaslConfigs.SASL_JAAS_CONFIG, "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" iafSecret=\"c4bb6fca-7ac5-46dd-b218-a49cb6307dbc\" iafEnv=\"production\";");
 
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
