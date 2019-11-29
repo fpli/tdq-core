@@ -34,7 +34,8 @@
         <avro.version>1.7.7</avro.version>
         <flink.version>1.7.2</flink.version>
         <spark.version>2.3.1</spark.version>
-        <rheos.client.version>2.0.5-SNAPSHOT</rheos.client.version>
+        <rheos.client.version>2.0.5</rheos.client.version>
+        <!--<rheos.client.version>2.0.5-SNAPSHOT</rheos.client.version>-->
 
         <junit.version>4.12</junit.version>
         <lombok.version>1.16.20</lombok.version>
@@ -234,7 +235,8 @@
             </dependency>
             <dependency>
                 <groupId>io.ebay.rheos</groupId>
-                <artifactId>rheos-client_JDK-1.8</artifactId>
+                <!--<artifactId>rheos-client_JDK-1.8</artifactId>-->
+                <artifactId>rheos-client</artifactId>
                 <version>${rheos.client.version}</version>
                 <exclusions>
                     <exclusion>
