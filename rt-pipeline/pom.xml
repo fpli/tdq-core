@@ -87,10 +87,6 @@
 			<groupId>org.apache.parquet</groupId>
 			<artifactId>parquet-avro</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>io.ebay.rheos</groupId>
-			<artifactId>rdp-event-distributor</artifactId>
-		</dependency>
 	</dependencies>
 
 	<build>
