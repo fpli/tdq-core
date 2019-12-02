@@ -49,7 +49,7 @@ public class SojournerUBDRTJobForSOJ {
         executionEnvironment.getCheckpointConfig().setCheckpointTimeout(10 * 60 * 1000);
         executionEnvironment.setStateBackend(
                 StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
-        executionEnvironment.setParallelism(60);
+        executionEnvironment.setParallelism(36);
 
 
 
