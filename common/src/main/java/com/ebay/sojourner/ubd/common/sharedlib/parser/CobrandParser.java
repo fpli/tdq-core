@@ -59,7 +59,13 @@ public class CobrandParser implements FieldParser<RawEvent, UbiEvent> {
     public void parse(RawEvent rawEvent, UbiEvent ubiEvent) throws Exception {
         Map<Integer, String[]> pageFmlyNameMap = LkpFetcher.getInstance().getPageFmlyMaps();
         Integer pageId = ubiEvent.getPageId();
-        Integer cobrand = Integer.valueOf(rawEvent.getSojA().get("cobrand").toString());
+        //TODO(Haibo): check buiness logic later????
+        Integer cobrand;
+        if(rawEvent.getSojA() == null || rawEvent.getSojA().get("cobrand") == null){
+            cobrand = -1;
+        } else {
+            cobrand = Integer.valueOf(rawEvent.getSojA().get("cobrand"));
+        }
         ubiEvent.setCobrand(cobrand);
 //
 //        if (mobileAppIdCategory != null && mobileAppIdCategory.isCorrespondingAppId(ubiEvent)) {
