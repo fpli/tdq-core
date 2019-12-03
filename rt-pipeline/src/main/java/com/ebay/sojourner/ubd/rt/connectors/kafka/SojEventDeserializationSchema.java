@@ -34,6 +34,8 @@ public class SojEventDeserializationSchema implements DeserializationSchema<RawE
         fieldMap.put("userId","u");
         fieldMap.put("sqr","sQr");
         fieldMap.put("cookies","cookies");
+        fieldMap.put("cobrand","cobrand");
+
     }
 
     @Override
