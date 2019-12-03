@@ -74,8 +74,8 @@ public class SojournerUBDRTJobForSOJ {
         // 2.2 Event level bot detection via bot rule
         DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
                 .map(new EventMapFunction())
-                .name("Event Operator")
-                .startNewChain();
+                .setParallelism(125)
+                .name("Event Operator");
 
         // 3. Session Operator
         // 3.1 Session window
@@ -180,10 +180,10 @@ public class SojournerUBDRTJobForSOJ {
         ipAttributeDataStream.print().name("IP Signature");
 //        agentIpAttributeDataStream.print().name("AgentIp Signature").disableChaining();
 
-        sessionStream.print().name("Sessions").disableChaining();
-        agentIpConnectDataStream.print().name("Events").disableChaining();
+        sessionStream.print().name("Sessions");
+        agentIpConnectDataStream.print().name("Events");
 //        ubiEventStreamWithSessionId.print().name("Events").disableChaining();
-        lateEventStream.print().name("Events (Late)").disableChaining();
+        lateEventStream.print().name("Events (Late)");
 
         // Submit this job
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");
