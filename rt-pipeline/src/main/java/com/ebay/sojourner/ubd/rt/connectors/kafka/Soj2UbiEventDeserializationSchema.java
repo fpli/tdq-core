@@ -200,7 +200,7 @@ public class Soj2UbiEventDeserializationSchema implements DeserializationSchema<
     }
 
     private String getString( Object o ) {
-        return (o != null) ? o.toString() : null;
+        return (o != null&&!"null".equals(o.toString())) ? o.toString() : null;
     }
     private String getString2( Object o ) {
         return (o != null) ? o.toString() : "";
