@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class RheosEventSerdeFactory {
 //    public static String RHEOS_SERVICES_URL = "https://rheos-services.stratus.ebay.com";
-    public static String RHEOS_SERVICES_URL = "https://rheos-qa.vip.ebay.com";
+    public static String RHEOS_SERVICES_URL = "https://rheos-services.qa.ebay.com";
     private static RheosEventDeserializer rheosEventHeaderDeserializer;
     private static GenericRecordDomainDataDecoder rheosEventDeserializer;
 

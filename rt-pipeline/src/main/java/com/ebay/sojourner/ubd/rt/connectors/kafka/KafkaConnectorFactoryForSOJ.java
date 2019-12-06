@@ -2,6 +2,7 @@ package com.ebay.sojourner.ubd.rt.connectors.kafka;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.SojEvent;
+import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import io.ebay.rheos.schema.avro.RheosEventDeserializer;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
@@ -33,7 +34,7 @@ public class KafkaConnectorFactoryForSOJ {
             "rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092")
             .stream().collect(Collectors.joining(","));
 
-    public static FlinkKafkaConsumer<RawEvent> createKafkaConsumer() {
+    public static FlinkKafkaConsumer<UbiEvent> createKafkaConsumer() {
 
         Properties props = new Properties();
         props.put("sasl.mechanism", "IAF");
@@ -52,8 +53,8 @@ public class KafkaConnectorFactoryForSOJ {
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"latest");
 //        props.put(ConsumerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
 
-        return new FlinkKafkaConsumer<RawEvent>(TOPIC_PATHFINDER_EVENTS,
-                new SojEventDeserializationSchema(), props);
+        return new FlinkKafkaConsumer<UbiEvent>(TOPIC_PATHFINDER_EVENTS,
+                new Soj2UbiEventDeserializationSchema(), props);
     }
 
     
