@@ -26,6 +26,7 @@ public class EventDeserializeMapFunction extends RichMapFunction<byte[], UbiEven
     public UbiEvent map( byte[] rawEvent ) throws Exception {
         RheosEvent rheosEvent = RheosEventSerdeFactory.getRheosEventHeaderDeserializer()
                 .deserialize(null, rawEvent);
+        System.out.println(rheosEvent.getEventCreateTimestamp());
         GenericRecord genericRecord = RheosEventSerdeFactory.getRheosEventDeserializer()
                 .decode(rheosEvent);
 
