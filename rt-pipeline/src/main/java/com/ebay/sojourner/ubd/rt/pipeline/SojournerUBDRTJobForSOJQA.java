@@ -83,29 +83,29 @@ public class SojournerUBDRTJobForSOJQA {
                                 return element.getEventTimestamp();
                             }
                         });
-
-        // 3. Session Operator
-        // 3.1 Session window
-        // 3.2 Session indicator accumulation
-        // 3.3 Session Level bot detection (via bot rule & signature)
-        // 3.4 Event level bot detection (via session flag)
-        OutputTag<UbiSession> sessionOutputTag =
-                new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
-        OutputTag<UbiEvent> lateEventOutputTag =
-                new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
-//        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
-        SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
-                .keyBy("guid")
-                .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-                .trigger(OnElementEarlyFiringTrigger.create())
-                .allowedLateness(Time.hours(1))
-                .sideOutputLateData(lateEventOutputTag)
-                .aggregate(new UbiSessionAgg(),
-                        new UbiSessionWindowProcessFunction(sessionOutputTag))
-                .name("Session Operator")
-                ;
-        DataStream<UbiSession> sessionStream =
-                ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag); // sessions ended
+//
+//        // 3. Session Operator
+//        // 3.1 Session window
+//        // 3.2 Session indicator accumulation
+//        // 3.3 Session Level bot detection (via bot rule & signature)
+//        // 3.4 Event level bot detection (via session flag)
+//        OutputTag<UbiSession> sessionOutputTag =
+//                new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
+//        OutputTag<UbiEvent> lateEventOutputTag =
+//                new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
+////        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
+//        SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
+//                .keyBy("guid")
+//                .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
+//                .trigger(OnElementEarlyFiringTrigger.create())
+//                .allowedLateness(Time.hours(1))
+//                .sideOutputLateData(lateEventOutputTag)
+//                .aggregate(new UbiSessionAgg(),
+//                        new UbiSessionWindowProcessFunction(sessionOutputTag))
+//                .name("Session Operator")
+//                ;
+//        DataStream<UbiSession> sessionStream =
+//                ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag); // sessions ended
 
 //        // 4. Attribute Operator
 //        // 4.1 Sliding window
@@ -185,8 +185,10 @@ public class SojournerUBDRTJobForSOJQA {
 //        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
 //                .name("Events (Late)").disableChaining();
 
-//        ubiEventDataStream.print().name("ubiEvent");
-        sessionStream.print().name("ubiSession");
+
+        rawEventDataStream.print().name("byte");
+        ubiEventDataStream.print().name("ubiEvent");
+//        sessionStream.print().name("ubiSession");
 //        ipAttributeDataStream.print().name("IP Signature");
 ////        agentIpAttributeDataStream.print().name("AgentIp Signature").disableChaining();
 //
