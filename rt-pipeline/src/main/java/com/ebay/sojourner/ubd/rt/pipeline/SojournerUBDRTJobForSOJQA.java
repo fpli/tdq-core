@@ -10,6 +10,7 @@ import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJQA;
 import com.ebay.sojourner.ubd.rt.operators.attribute.*;
 import com.ebay.sojourner.ubd.rt.operators.event.AgentIpMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.EventDeserializeMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
@@ -66,23 +67,22 @@ public class SojournerUBDRTJobForSOJQA {
 //                )).setParallelism(30)
 //                .name("Rheos Consumer");
 
-        DataStream<UbiEvent> ubiEventDataStream= executionEnvironment.addSource(
-                KafkaConnectorFactoryForSOJQA.createKafkaConsumer().assignTimestampsAndWatermarks(
+        DataStream<byte[]> rawEventDataStream= executionEnvironment.addSource(
+                KafkaConnectorFactoryForSOJQA.createKafkaConsumer()).setParallelism(30)
+                .name("Rheos Consumer");
+        // 2. Event Operator
+        // 2.1 Parse and transform RawEvent to UbiEvent
+        // 2.2 Event level bot detection via bot rule
+        DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
+                .map(new EventDeserializeMapFunction())
+                .setParallelism(125)
+                .name("Event Operator").assignTimestampsAndWatermarks(
                         new BoundedOutOfOrdernessTimestampExtractor<UbiEvent>(Time.seconds(10)) {
                             @Override
                             public long extractTimestamp(UbiEvent element) {
                                 return element.getEventTimestamp();
                             }
-                        }
-                )).setParallelism(30)
-                .name("Rheos Consumer");
-        // 2. Event Operator
-        // 2.1 Parse and transform RawEvent to UbiEvent
-        // 2.2 Event level bot detection via bot rule
-//        DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
-//                .map(new EventMapFunction())
-//                .setParallelism(125)
-//                .name("Event Operator");
+                        });
 
         // 3. Session Operator
         // 3.1 Session window
@@ -102,7 +102,8 @@ public class SojournerUBDRTJobForSOJQA {
                 .sideOutputLateData(lateEventOutputTag)
                 .aggregate(new UbiSessionAgg(),
                         new UbiSessionWindowProcessFunction(sessionOutputTag))
-                .name("Session Operator");
+                .name("Session Operator")
+                ;
         DataStream<UbiSession> sessionStream =
                 ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag); // sessions ended
 

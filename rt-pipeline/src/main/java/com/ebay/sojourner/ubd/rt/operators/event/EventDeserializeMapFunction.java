@@ -1,52 +1,31 @@
-package com.ebay.sojourner.ubd.rt.connectors.kafka;
+package com.ebay.sojourner.ubd.rt.operators.event;
 
 import com.ebay.sojourner.ubd.common.model.ClientData;
-import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.RheosHeader;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
 import com.ebay.sojourner.ubd.common.sharedlib.util.IntegerField;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.RheosEventSerdeFactory;
 import io.ebay.rheos.schema.event.RheosEvent;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
 import org.apache.commons.lang.StringUtils;
-import org.apache.flink.api.common.serialization.DeserializationSchema;
-import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.log4j.Logger;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class Soj2UbiEventDeserializationSchema implements DeserializationSchema<UbiEvent> {
+public class EventDeserializeMapFunction extends RichMapFunction<byte[], UbiEvent> {
+    private static final Logger logger = Logger.getLogger(EventDeserializeMapFunction.class);
 
-    private static final Logger logger = Logger.getLogger(Soj2UbiEventDeserializationSchema.class);
-
-    private static  Map<String,String> fieldMap= new ConcurrentHashMap<String, String>() ;
-
-    static
-    {
-        fieldMap.put("appId","app");
-        fieldMap.put("itemId","itm");
-        fieldMap.put("refererHash","r");
-        fieldMap.put("regu","regU");
-        fieldMap.put("siid","siid");
-        fieldMap.put("siteId","t");
-        fieldMap.put("timestamp","mtsts");
-        fieldMap.put("userId","u");
-        fieldMap.put("sqr","sQr");
-        fieldMap.put("cookies","cookies");
-        fieldMap.put("cobrand","cobrand");
-
-    }
 
     @Override
-    public UbiEvent deserialize( byte[] message ) throws IOException {
+    public UbiEvent map( byte[] rawEvent ) throws Exception {
         RheosEvent rheosEvent = RheosEventSerdeFactory.getRheosEventHeaderDeserializer()
-                .deserialize(null, message);
+                .deserialize(null, rawEvent);
         GenericRecord genericRecord = RheosEventSerdeFactory.getRheosEventDeserializer()
                 .decode(rheosEvent);
 
@@ -109,7 +88,7 @@ public class Soj2UbiEventDeserializationSchema implements DeserializationSchema<
         clientData.setServer(getString(clientDataMap.get("Server")));
         clientData.setTMachine(getString(clientDataMap.get("TMachine")));
 
-        clientData.setTStamp(StringUtils.isEmpty(applicationPayload.get("timestamp"))?null:Long.valueOf(getString(applicationPayload.get("timestamp"))));
+        clientData.setTStamp(StringUtils.isEmpty(applicationPayload.get("timestamp")) ? null : Long.valueOf(getString(applicationPayload.get("timestamp"))));
         clientData.setTName(getString(clientDataMap.get("TName")));
         clientData.setTPayload(getString(clientDataMap.get("TPayload")));
         clientData.setColo(getString(applicationPayload.get("colo")));
@@ -118,14 +97,14 @@ public class Soj2UbiEventDeserializationSchema implements DeserializationSchema<
         clientData.setTType(getString(applicationPayload.get("TType")));
         clientData.setTStatus(getString(clientDataMap.get("TStatus")));
         clientData.setCorrId(getString(applicationPayload.get("corrId")));
-        clientData.setContentLength(StringUtils.isEmpty(clientDataMap.get("ContentLength"))?null:Integer.valueOf(getString(clientDataMap.get("ContentLength"))));
+        clientData.setContentLength(StringUtils.isEmpty(clientDataMap.get("ContentLength")) ? null : Integer.valueOf(getString(clientDataMap.get("ContentLength"))));
         clientData.setNodeId(getString(applicationPayload.get("nodeId")));
         clientData.setRequestGuid(getString(applicationPayload.get("requestGuid")));
 
         clientData.setReferrer(getString(applicationPayload.get("Referer")));
 
         clientData.setAcceptEncoding(getString(clientDataMap.get("Encoding")));
-        clientData.setTDuration(StringUtils.isEmpty(clientDataMap.get("TDuration"))?null:Long.valueOf(clientDataMap.get("TDuration")));
+        clientData.setTDuration(StringUtils.isEmpty(clientDataMap.get("TDuration")) ? null : Long.valueOf(clientDataMap.get("TDuration")));
 
         clientData.setAgent(agentCLI);
         clientData.setRemoteIP(getString(genericRecord.get("remoteIP")));
@@ -147,7 +126,7 @@ public class Soj2UbiEventDeserializationSchema implements DeserializationSchema<
         ubiEvent.setCobrand(getInteger(genericRecord.get("cobrand")));
         ubiEvent.setCookies(getString(genericRecord.get("cookies")));
         ubiEvent.setFlags(getString(genericRecord.get("flags")));
-        ubiEvent.setIframe(getBoolean(genericRecord.get("flags"))?1:0);
+        ubiEvent.setIframe(getBoolean(genericRecord.get("flags")) ? 1 : 0);
         ubiEvent.setItemId(IntegerField.getIntVal(getString(genericRecord.get("itemId"))));
         ubiEvent.setPageId(getInteger(genericRecord.get("pageId")));
         ubiEvent.setRdt(getInteger(genericRecord.get("rdt")));
@@ -172,46 +151,39 @@ public class Soj2UbiEventDeserializationSchema implements DeserializationSchema<
         ubiEvent.setStaticPageType(-1);
 
         return ubiEvent;
-//        return genericRecord;
+
     }
 
-    private Integer getInteger(Object o){
-        if(StringUtils.isEmpty(getString(o))){
+    private Integer getInteger( Object o ) {
+        if (StringUtils.isEmpty(getString(o))) {
             return null;
-        }else{
+        } else {
             return Integer.valueOf(getString(o));
         }
     }
-    private boolean getBoolean(Object o){
-        if(StringUtils.isEmpty(getString(o))){
+
+    private boolean getBoolean( Object o ) {
+        if (StringUtils.isEmpty(getString(o))) {
             return false;
-        }else{
+        } else {
             return Boolean.valueOf(getString(o));
         }
     }
 
 
-    private Long getLong(Object o){
-        if(StringUtils.isEmpty(getString(o))){
+    private Long getLong( Object o ) {
+        if (StringUtils.isEmpty(getString(o))) {
             return null;
-        }else{
+        } else {
             return Long.valueOf(getString(o));
         }
     }
 
     private String getString( Object o ) {
-        return (o != null&&!"null".equals(o.toString())) ? o.toString() : null;
-    }
-    private String getString2( Object o ) {
-        return (o != null) ? o.toString() : "";
-    }
-    @Override
-    public boolean isEndOfStream( UbiEvent nextElement ) {
-        return false;
+        return (o != null && !"null".equals(o.toString())) ? o.toString() : null;
     }
 
-    @Override
-    public TypeInformation<UbiEvent> getProducedType() {
-        return TypeInformation.of(UbiEvent.class);
+    private String getString2( Object o ) {
+        return (o != null) ? o.toString() : "";
     }
 }
