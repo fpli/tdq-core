@@ -188,7 +188,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
         return stringBuilder.toString();
     }
 
-    private Integer getTrafficSourceId(SessionAccumulator sessionAccumulator) {
+    private int getTrafficSourceId(SessionAccumulator sessionAccumulator) {
         IntermediateMetrics intermediateMetrics=sessionAccumulator.getUbiSession().getIntermediateMetrics();
         Integer firstCobrand =sessionAccumulator.getUbiSession().getFirstCorbrand();
         Long startTSOnCurrentCobrandSite =
@@ -543,7 +543,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
             // not init on futureAdme
             // return 4;
         }
-        return null;
+        return Integer.MIN_VALUE;
     }
 
     @Override

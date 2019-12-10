@@ -26,7 +26,7 @@ public class LndgPageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumula
     @Override
     public void start(SessionAccumulator sessionAccumulator) throws Exception {
         sessionAccumulator.getUbiSession().setMinSCSeqNum(Integer.MAX_VALUE);
-        sessionAccumulator.getUbiSession().setLndgPageId(null);
+        sessionAccumulator.getUbiSession().setLndgPageId(Integer.MIN_VALUE);
     }
 
     @Override

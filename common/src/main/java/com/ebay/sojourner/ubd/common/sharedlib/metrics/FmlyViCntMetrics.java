@@ -38,7 +38,7 @@ public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
-        if (event.getPartialValidPage() != null && event.getPartialValidPage() == 1 && event.getRdt() != null && event.getRdt() == 0 && (event.getIframe() == null || event.getIframe() == 0)) {
+        if (event.getPartialValidPage() != Integer.MIN_VALUE && event.getPartialValidPage() == 1 && event.getRdt() != Integer.MIN_VALUE && event.getRdt() == 0 && (event.getIframe() == Integer.MIN_VALUE || event.getIframe() == 0)) {
             Map<Integer, String[]> pageFmlyNameMap = lkpFetcher.getPageFmlyMaps();
             // im_pgt='VI': pageId=1521826 and pgt='future' or 'like'. pageId meaning?
             // or LkpPageFmlyName='VI'
@@ -58,7 +58,7 @@ public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     }
 
     private String getImPGT(UbiEvent event) {
-        if (event.getPageId() != null) {
+        if (event.getPageId() != Integer.MIN_VALUE) {
             if (event.getPageId() == 1521826 && StringUtils.isNotBlank(SOJNVL.getTagValue(event.getApplicationPayload(), "pgt")) && viPGT.contains(SOJNVL.getTagValue(event.getApplicationPayload(), "pgt"))) {
                 return "VI";
             }

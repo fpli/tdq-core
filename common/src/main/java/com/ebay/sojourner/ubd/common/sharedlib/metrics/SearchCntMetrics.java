@@ -13,13 +13,11 @@ public class SearchCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-        Integer staticPageType = event.getStaticPageType();
-        if (staticPageType != null) {
-            if (staticPageType == 2) {
-                sessionAccumulator.getUbiSession().setSearchCnt(sessionAccumulator.getUbiSession().getSearchCnt() + 1);
-            } else if (staticPageType == 3) {
-                sessionAccumulator.getUbiSession().setViewCnt(sessionAccumulator.getUbiSession().getViewCnt() + 1);
-            }
+        int staticPageType = event.getStaticPageType();
+        if (staticPageType == 2) {
+            sessionAccumulator.getUbiSession().setSearchCnt(sessionAccumulator.getUbiSession().getSearchCnt() + 1);
+        } else if (staticPageType == 3) {
+            sessionAccumulator.getUbiSession().setViewCnt(sessionAccumulator.getUbiSession().getViewCnt() + 1);
         }
     }
 

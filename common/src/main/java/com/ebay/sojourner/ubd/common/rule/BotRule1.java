@@ -31,7 +31,7 @@ public class BotRule1 implements Rule<UbiEvent> {
     }
 
     boolean isValidEvent(UbiEvent event) {
-        return (event.getIframe() != null && event.getRdt() != null && event.getIframe() == 0 && event.getRdt() == 0);
+        return (event.getIframe() != Integer.MIN_VALUE && event.getRdt() != Integer.MIN_VALUE && event.getIframe() == 0 && event.getRdt() == 0);
     }
 
 

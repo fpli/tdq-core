@@ -14,7 +14,7 @@ public class BotRule204 implements Rule<UbiSession> {
     public int getBotFlag(UbiSession session) {
         int validPageCount = session.getValidPageCnt();
         if (session.getGrCnt() == validPageCount && session.getSiidCnt() == 0) {
-            if ((validPageCount > 20 && (session.getFirstSiteId() == null || session.getFirstSiteId() != 100)) || (validPageCount > 100 && session.getFirstSiteId() != null && session.getFirstSiteId() == 100)) {
+            if ((validPageCount > 20 && (session.getFirstSiteId() == Integer.MIN_VALUE || session.getFirstSiteId() != 100)) || (validPageCount > 100 && session.getFirstSiteId() != Integer.MIN_VALUE && session.getFirstSiteId() == 100)) {
                 return BotRules.MANY_SRP_WITHOUT_SIID;
             }
         }

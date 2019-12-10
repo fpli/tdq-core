@@ -58,7 +58,7 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
             }
         }
         // to avoid the cut off issue on 2018-02-09
-        if (event.getPartialValidPage() == null || event.getPartialValidPage() != 0) {
+        if (event.getPartialValidPage() == Integer.MIN_VALUE || event.getPartialValidPage() != 0) {
             if (event.getIframe() == 0) {
                 if (event.getRdt() != 1) {
                     if (sessionAccumulator.getUbiSession().getExternalIp() == null) {

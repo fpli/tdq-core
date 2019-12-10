@@ -33,7 +33,7 @@ public class BotRule11 implements Rule<UbiSession> {
             return true;
         }
 
-        if (ubiSession.getBotFlag() != null && ubiSession.getBotFlag() > 0) {
+        if (ubiSession.getBotFlag() > 0) {
             return true;
         }
 

@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.ebay.sojourner.ubd.common.util;
 
 
@@ -24,8 +21,8 @@ public class UbiSessionHelper {
 
     public static final long MINUS_GUID_MIN_MS = 180000L; // 417mins - 7hours = -3mins = -180000ms; UNIX.
     public static final long PLUS_GUID_MAX_MS = 300000L; // 425mins - 7hours = 5mins = 300000ms;
-    private static Integer DIRECT_SESSION_SRC = 1;
-    private static Integer SINGLE_PAGE_SESSION = 1;
+    private static final int DIRECT_SESSION_SRC = 1;
+    private static final int SINGLE_PAGE_SESSION = 1;
     public static final float DEFAULT_LOAD_FACTOR = .75F;
     public static final int IAB_MAX_CAPACITY = 100 * 1024; // 250 * 1024 * 1024 = 250m - refer io.sort.mb (default spill size)
     public static final int IAB_INITIAL_CAPACITY = 10 * 1024; // 16 * 1024 * 1024 = 16m
@@ -101,32 +98,19 @@ public class UbiSessionHelper {
     }
 
     public static boolean isSps(UbiSession session) {
-        if (SINGLE_PAGE_SESSION.equals(session.getValidPageCnt())) {
-            return true;
-        }
-
-        return false;
+        return session.getValidPageCnt() == SINGLE_PAGE_SESSION;
     }
 
     public static boolean isDirect(UbiSession session) {
-        if (session.getTrafficSrcId() != null && session.getTrafficSrcId().equals(DIRECT_SESSION_SRC)) {
-            return true;
-        }
-        return false;
+        return session.getTrafficSrcId() == DIRECT_SESSION_SRC;
     }
 
     public static boolean isMktg(UbiSession session) {
-        if (UbiLookups.getInstance().getMktgTraficSrcIds().contains(session.getTrafficSrcId())) {
-            return true;
-        }
-        return false;
+        return UbiLookups.getInstance().getMktgTraficSrcIds().contains(session.getTrafficSrcId());
     }
 
     public static boolean isSite(UbiSession session) {
-        if (UbiLookups.getInstance().getNonbrowserCobrands().contains(session.getCobrand())) {
-            return true;
-        }
-        return false;
+        return UbiLookups.getInstance().getNonbrowserCobrands().contains(session.getCobrand());
     }
 
     public static boolean isAgentDeclarative(UbiSession session) throws IOException, InterruptedException {

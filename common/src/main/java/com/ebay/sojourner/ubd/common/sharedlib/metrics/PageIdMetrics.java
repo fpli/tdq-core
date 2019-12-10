@@ -10,21 +10,21 @@ import java.io.File;
 import java.io.InputStream;
 
 public class PageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
-	private static final Integer ZERO = new Integer(0);
+	private static final Integer ZERO = 0;
 	private PageIndicator indicator = null;
 	private static UBIConfig ubiConfig;
 
 	@Override
 	public void start(SessionAccumulator sessionAccumulator) {
-		sessionAccumulator.getUbiSession().setStartPageId(null);
-		sessionAccumulator.getUbiSession().setEndPageId(null);
+		sessionAccumulator.getUbiSession().setStartPageId(Integer.MIN_VALUE);
+		sessionAccumulator.getUbiSession().setEndPageId(Integer.MIN_VALUE);
 	}
 
 	@Override
 	public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
 		if (ZERO.equals(event.getIframe())) {
 			if (ZERO.equals(event.getRdt()) || indicator.isCorrespondingPageEvent(event)) {
-				if (sessionAccumulator.getUbiSession().getStartPageId() == null) {
+				if (sessionAccumulator.getUbiSession().getStartPageId() == Integer.MIN_VALUE) {
 					sessionAccumulator.getUbiSession().setStartPageId(event.getPageId());
 				}
 				sessionAccumulator.getUbiSession().setEndPageId(event.getPageId());
@@ -34,12 +34,12 @@ public class PageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
 
 	@Override
 	public void end(SessionAccumulator sessionAccumulator) {
-		if (sessionAccumulator.getUbiSession().getStartPageId()!= null) {
+		if (sessionAccumulator.getUbiSession().getStartPageId() != Integer.MIN_VALUE) {
 
 		} else {
 			sessionAccumulator.getUbiSession().setStartPageId(0);
 		}
-		if (sessionAccumulator.getUbiSession().getEndPageId() != null) {
+		if (sessionAccumulator.getUbiSession().getEndPageId() != Integer.MIN_VALUE) {
 
 		} else {
 			sessionAccumulator.getUbiSession().setEndPageId(0);

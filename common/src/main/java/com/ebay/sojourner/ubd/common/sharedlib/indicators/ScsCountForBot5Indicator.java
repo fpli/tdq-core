@@ -68,7 +68,7 @@ public class ScsCountForBot5Indicator<Source, Target> implements Indicator<Sourc
             if (botFilter.filter(ubiSession, targetFlag)) {
                 return true;
             }
-            if (ubiSession.getBotFlag() != null && ubiSession.getBotFlag() > 0 && ubiSession.getBotFlag() < 200) {
+            if (ubiSession.getBotFlag() > 0 && ubiSession.getBotFlag() < 200) {
                 return true;
             }
 
