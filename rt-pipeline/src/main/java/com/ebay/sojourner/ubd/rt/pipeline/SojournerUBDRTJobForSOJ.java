@@ -72,7 +72,7 @@ public class SojournerUBDRTJobForSOJ {
 //                .name("Rheos Consumer");
 
         DataStream<byte[]> rawEventDataStream= executionEnvironment.addSource(
-                KafkaConnectorFactoryForSOJ.createKafkaConsumer()).setParallelism(30)
+                KafkaConnectorFactoryForSOJ.createKafkaConsumer().setStartFromLatest()).setParallelism(30)
                 .name("Rheos Consumer");
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent
