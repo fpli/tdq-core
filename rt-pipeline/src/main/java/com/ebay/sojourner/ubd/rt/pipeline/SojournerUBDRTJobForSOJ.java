@@ -8,8 +8,10 @@ import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJQA;
 import com.ebay.sojourner.ubd.rt.operators.attribute.*;
 import com.ebay.sojourner.ubd.rt.operators.event.AgentIpMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.EventDeserializeMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
@@ -69,16 +71,22 @@ public class SojournerUBDRTJobForSOJ {
 //                )).setParallelism(30)
 //                .name("Rheos Consumer");
 
-        DataStream<UbiEvent> ubiEventDataStream= executionEnvironment.addSource(
-                KafkaConnectorFactoryForSOJ.createKafkaConsumer().setStartFromLatest().assignTimestampsAndWatermarks(
+        DataStream<byte[]> rawEventDataStream= executionEnvironment.addSource(
+                KafkaConnectorFactoryForSOJ.createKafkaConsumer()).setParallelism(30)
+                .name("Rheos Consumer");
+        // 2. Event Operator
+        // 2.1 Parse and transform RawEvent to UbiEvent
+        // 2.2 Event level bot detection via bot rule
+        DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
+                .map(new EventDeserializeMapFunction())
+                .setParallelism(175)
+                .name("Event Operator").assignTimestampsAndWatermarks(
                         new BoundedOutOfOrdernessTimestampExtractor<UbiEvent>(Time.seconds(10)) {
                             @Override
                             public long extractTimestamp(UbiEvent element) {
                                 return element.getEventTimestamp();
                             }
-                        }
-                )).setParallelism(30)
-                .name("Rheos Consumer");
+                        });
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent
         // 2.2 Event level bot detection via bot rule
