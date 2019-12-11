@@ -62,7 +62,7 @@ public class SojournerUBDRTJobForSOJ {
         // 1.1 Consume RawEvent from Rheos PathFinder topic
         // 1.2 Assign timestamps and emit watermarks.
         DataStream<RawEvent> rawEventDataStream = executionEnvironment.addSource(
-                KafkaConnectorFactoryForSOJ.createKafkaConsumer().assignTimestampsAndWatermarks(
+                KafkaConnectorFactoryForSOJ.createKafkaConsumer().setStartFromLatest().assignTimestampsAndWatermarks(
                         new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
                             @Override
                             public long extractTimestamp(RawEvent element) {
@@ -87,7 +87,7 @@ public class SojournerUBDRTJobForSOJ {
 //                            public long extractTimestamp(UbiEvent element) {
 //                                return element.getEventTimestamp();
 //                            }
-//                        });
+
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent
         // 2.2 Event level bot detection via bot rule
