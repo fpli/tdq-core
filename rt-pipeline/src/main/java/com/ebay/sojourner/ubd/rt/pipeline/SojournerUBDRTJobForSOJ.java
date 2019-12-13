@@ -6,19 +6,16 @@ import com.ebay.sojourner.ubd.rt.common.broadcast.AgentIpBroadcastProcessFunctio
 import com.ebay.sojourner.ubd.rt.common.broadcast.IpBroadcastProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJQA;
 import com.ebay.sojourner.ubd.rt.operators.attribute.*;
 import com.ebay.sojourner.ubd.rt.operators.event.AgentIpMapFunction;
-import com.ebay.sojourner.ubd.rt.operators.event.EventDeserializeMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventFilterFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
 import com.ebay.sojourner.ubd.rt.util.StateBackendFactory;
-import org.apache.avro.generic.GenericRecord;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
@@ -32,29 +29,22 @@ import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindow
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.util.OutputTag;
 
-
+@Slf4j
 public class SojournerUBDRTJobForSOJ {
 
     public static void main(String[] args) throws Exception {
         // 0.0 Prepare execution environment
         // 0.1 UBI configuration
         // 0.2 Flink configuration
-//        InputStream resourceAsStream = SojournerUBDRTJob.class.getResourceAsStream("/ubi.properties");
-//        UBIConfig ubiConfig = UBIConfig.getInstance(resourceAsStream);
-
         final StreamExecutionEnvironment executionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment();
-//        final ParameterTool params = ParameterTool.fromArgs(args);
         executionEnvironment.getConfig().setGlobalJobParameters(new SojJobParameters());
-        // LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
         executionEnvironment.enableCheckpointing(180 * 1000);
         executionEnvironment.getCheckpointConfig().setCheckpointTimeout(10 * 60 * 1000);
         executionEnvironment.setStateBackend(
                 StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
-//        executionEnvironment.setParallelism(100);
-
 
 
         // for soj nrt output
@@ -72,9 +62,6 @@ public class SojournerUBDRTJobForSOJ {
                 )).setParallelism(30)
                 .name("Rheos Consumer");
 
-//        DataStream<byte[]> rawEventDataStream= executionEnvironment.addSource(
-//                KafkaConnectorFactoryForSOJ.createKafkaConsumerWithBinary()).setParallelism(30)
-//                .name("Rheos Consumer");
 //        // 2. Event Operator
 //        // 2.1 Parse and transform RawEvent to UbiEvent
 //        // 2.2 Event level bot detection via bot rule
@@ -91,10 +78,16 @@ public class SojournerUBDRTJobForSOJ {
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent
         // 2.2 Event level bot detection via bot rule
-        DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
+        DataStream<RawEvent> rawEventFilterDataStream = rawEventDataStream
                 .filter(new EventFilterFunction())
+                .name("Filter RawEvents")
+                .setParallelism(30);
+
+        // 2. Event Operator
+        // 2.1 Parse and transform RawEvent to UbiEvent
+        // 2.2 Event level bot detection via bot rule
+        DataStream<UbiEvent> ubiEventDataStream = rawEventFilterDataStream
                 .map(new EventMapFunction())
-                .setParallelism(125)
                 .name("Event Operator");
 
         // 3. Session Operator
@@ -106,7 +99,6 @@ public class SojournerUBDRTJobForSOJ {
                 new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
         OutputTag<UbiEvent> lateEventOutputTag =
                 new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
-//        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
         SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
                 .keyBy("guid")
                 .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
@@ -124,88 +116,73 @@ public class SojournerUBDRTJobForSOJ {
         // 4.2 Attribute indicator accumulation
         // 4.3 Attribute level bot detection (via bot rule)
         // 4.4 Store bot signature
-//        DataStream<AgentIpAttribute> agentIpAttributeDataStream = sessionStream
-//                .keyBy("userAgent", "clientIp")
-//                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
-//                .trigger(OnElementEarlyFiringTrigger.create())
-//                .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
-//                .name("Attribute Operator (Agent+IP)");
+        DataStream<AgentIpAttribute> agentIpAttributeDataStream = sessionStream
+                .keyBy("userAgent", "clientIp")
+                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
+                .trigger(OnElementEarlyFiringTrigger.create())
+                .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
+                .name("Attribute Operator (Agent+IP)");
 
         // agent ip DataStream & agent ip bot dectector
-//        SingleOutputStreamOperator<AgentIpSignature> agentIpSignatureDataStream = agentIpAttributeDataStream
-//                .keyBy("agent", "clientIp")
-//                .map(new AgentIpMapFunction())
-//                .name("Signature Generate(Agent+IP)");
-//
-//        agentIpSignatureDataStream.print().name("Agent+IP Signature");
-//
-//        DataStream<AgentSignature> agentAttributeDataStream = agentIpAttributeDataStream
-//                .keyBy("agent")
-//                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
-//                .trigger(OnElementEarlyFiringTrigger.create())
-//                .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
-//                .name("Attribute Operator (Agent)");
+        SingleOutputStreamOperator<AgentIpSignature> agentIpSignatureDataStream = agentIpAttributeDataStream
+                .keyBy("agent", "clientIp")
+                .map(new AgentIpMapFunction())
+                .name("Signature Generate(Agent+IP)")
+                .setParallelism(25);
 
-//        agentAttributeDataStream.print().name("Agent Signature");
-//
-//        DataStream<IpSignature> ipAttributeDataStream = agentIpAttributeDataStream
-//                .keyBy("clientIp")
-//                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
-//                .trigger(OnElementEarlyFiringTrigger.create())
-//                .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
-//                .name("Attribute Operator (IP)");
+        agentIpSignatureDataStream.addSink(new DiscardingSink<>()).name("Agent+IP Signature").setParallelism(25);
+
+        DataStream<AgentSignature> agentAttributeDataStream = agentIpAttributeDataStream
+                .keyBy("agent")
+                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
+                .trigger(OnElementEarlyFiringTrigger.create())
+                .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
+                .name("Attribute Operator (Agent)")
+                .setParallelism(25);
+
+        agentAttributeDataStream.addSink(new DiscardingSink<>()).name("Agent Signature").setParallelism(25);
+
+        DataStream<IpSignature> ipAttributeDataStream = agentIpAttributeDataStream
+                .keyBy("clientIp")
+                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
+                .trigger(OnElementEarlyFiringTrigger.create())
+                .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
+                .name("Attribute Operator (IP)")
+                .setParallelism(25);
+
+        ipAttributeDataStream.addSink(new DiscardingSink<>()).name("Ip Signature").setParallelism(25);
 
         // agent ip broadcast
-//        BroadcastStream<AgentIpSignature> agentIpBroadcastStream = agentIpSignatureDataStream.broadcast(MapStateDesc.agentIpSignatureDesc);
-//
-//        // agent broadcast
-//        BroadcastStream<AgentSignature> agentBroadcastStream = agentAttributeDataStream.broadcast(MapStateDesc.agentSignatureDesc);
+        BroadcastStream<AgentIpSignature> agentIpBroadcastStream = agentIpSignatureDataStream.broadcast(MapStateDesc.agentIpSignatureDesc);
+
+        // agent broadcast
+        BroadcastStream<AgentSignature> agentBroadcastStream = agentAttributeDataStream.broadcast(MapStateDesc.agentSignatureDesc);
 
         // ip broadcast
-//        BroadcastStream<IpSignature> ipBroadcastStrem = ipAttributeDataStream.broadcast(MapStateDesc.ipSignatureDesc);
-//
-//        SingleOutputStreamOperator<UbiEvent> ipConnectDataStream = ubiEventStreamWithSessionId
-//                .connect(ipBroadcastStrem)
-//                .process(new IpBroadcastProcessFunction())
-//                .name("Signature BotDetection(IP)");
-//
-//        SingleOutputStreamOperator<UbiEvent> agentConnectDataStream = ipConnectDataStream
-//                .connect(agentBroadcastStream)
-//                .process(new AgentBroadcastProcessFunction())
-//                .name("Signature BotDetection(Agent)");
-//
-//        SingleOutputStreamOperator<UbiEvent> agentIpConnectDataStream = agentConnectDataStream
-//                .connect(agentIpBroadcastStream)
-//                .process(new AgentIpBroadcastProcessFunction())
-//                .name("Signature BotDetection(Agent+IP)");
+        BroadcastStream<IpSignature> ipBroadcastStrem = ipAttributeDataStream.broadcast(MapStateDesc.ipSignatureDesc);
+
+        SingleOutputStreamOperator<UbiEvent> ipConnectDataStream = ubiEventStreamWithSessionId
+                .connect(ipBroadcastStrem)
+                .process(new IpBroadcastProcessFunction())
+                .name("Signature BotDetection(IP)");
+
+        SingleOutputStreamOperator<UbiEvent> agentConnectDataStream = ipConnectDataStream
+                .connect(agentBroadcastStream)
+                .process(new AgentBroadcastProcessFunction())
+                .name("Signature BotDetection(Agent)");
+
+        SingleOutputStreamOperator<UbiEvent> agentIpConnectDataStream = agentConnectDataStream
+                .connect(agentIpBroadcastStream)
+                .process(new AgentIpBroadcastProcessFunction())
+                .name("Signature BotDetection(Agent+IP)");
 
         // 5. Load data to file system for batch processing
         // 5.1 IP Signature
         // 5.2 Sessions (ended)
         // 5.3 Events (with session ID & bot flags)
         // 5.4 Events late
-//        ipAttributeDataStream.addSink(StreamingFileSinkFactory.ipSignatureSinkWithAP())
-//                .name("IP Signature").disableChaining();
-//        sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
-//                .name("Sessions").disableChaining();
-//        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
-//                .name("Events").disableChaining();
-
-//        DataStream<UbiEvent> lateEventStream =
-//                ubiEventStreamWithSessionId.getSideOutput(lateEventOutputTag);
-
-//        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
-//                .name("Events (Late)").disableChaining();
-
-//        ipAttributeDataStream.print().name("IP Signature");
-//        agentIpAttributeDataStream.print().name("AgentIp Signature").disableChaining();
-
-//        sessionStream.print().name("Sessions");
-//        agentIpConnectDataStream.print().name("Events");
-//        ubiEventStreamWithSessionId.print().name("Events").disableChaining();
-//        lateEventStream.print().name("Events (Late)");
-        sessionStream.addSink(new DiscardingSink<>()).name("session discarding").disableChaining();
-        ubiEventStreamWithSessionId.addSink(new DiscardingSink<>()).name("ubiEvents discarding").disableChaining();
+        agentIpConnectDataStream.addSink(new DiscardingSink<>()).name("broadcast connect(ubiEventStreamWithSessionId)");
+        sessionStream.addSink(new DiscardingSink<>()).name("session discarding");
         // Submit this job
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");
 
