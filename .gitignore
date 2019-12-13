@@ -5,3 +5,9 @@ target/
 dependency-reduced-pom.xml
 spark-warehouse/
 
+# Eclipse IDE
+.settings/
+# Java annotation processor (APT)
+.factorypath
+.classpath
+.project
