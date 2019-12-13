@@ -12,6 +12,7 @@ import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJQA;
 import com.ebay.sojourner.ubd.rt.operators.attribute.*;
 import com.ebay.sojourner.ubd.rt.operators.event.AgentIpMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventDeserializeMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.EventFilterFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
@@ -60,40 +61,41 @@ public class SojournerUBDRTJobForSOJ {
         // 1. Rheos Consumer
         // 1.1 Consume RawEvent from Rheos PathFinder topic
         // 1.2 Assign timestamps and emit watermarks.
-//        DataStream<RawEvent> rawEventDataStream = executionEnvironment.addSource(
-//                KafkaConnectorFactoryForSOJ.createKafkaConsumer().assignTimestampsAndWatermarks(
-//                        new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
-//                            @Override
-//                            public long extractTimestamp(RawEvent element) {
-//                                return element.getRheosHeader().getEventCreateTimestamp();
-//                            }
-//                        }
-//                )).setParallelism(30)
-//                .name("Rheos Consumer");
-
-        DataStream<byte[]> rawEventDataStream= executionEnvironment.addSource(
-                KafkaConnectorFactoryForSOJ.createKafkaConsumer()).setParallelism(30)
+        DataStream<RawEvent> rawEventDataStream = executionEnvironment.addSource(
+                KafkaConnectorFactoryForSOJ.createKafkaConsumer().assignTimestampsAndWatermarks(
+                        new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
+                            @Override
+                            public long extractTimestamp(RawEvent element) {
+                                return element.getRheosHeader().getEventCreateTimestamp();
+                            }
+                        }
+                )).setParallelism(30)
                 .name("Rheos Consumer");
+
+//        DataStream<byte[]> rawEventDataStream= executionEnvironment.addSource(
+//                KafkaConnectorFactoryForSOJ.createKafkaConsumerWithBinary()).setParallelism(30)
+//                .name("Rheos Consumer");
+//        // 2. Event Operator
+//        // 2.1 Parse and transform RawEvent to UbiEvent
+//        // 2.2 Event level bot detection via bot rule
+//        DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
+//                .map(new EventDeserializeMapFunction())
+//                .setParallelism(175)
+//                .name("Event Operator").assignTimestampsAndWatermarks(
+//                        new BoundedOutOfOrdernessTimestampExtractor<UbiEvent>(Time.seconds(10)) {
+//                            @Override
+//                            public long extractTimestamp(UbiEvent element) {
+//                                return element.getEventTimestamp();
+//                            }
+//                        });
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent
         // 2.2 Event level bot detection via bot rule
         DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
-                .map(new EventDeserializeMapFunction())
-                .setParallelism(175)
-                .name("Event Operator").assignTimestampsAndWatermarks(
-                        new BoundedOutOfOrdernessTimestampExtractor<UbiEvent>(Time.seconds(10)) {
-                            @Override
-                            public long extractTimestamp(UbiEvent element) {
-                                return element.getEventTimestamp();
-                            }
-                        });
-        // 2. Event Operator
-        // 2.1 Parse and transform RawEvent to UbiEvent
-        // 2.2 Event level bot detection via bot rule
-//        DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
-//                .map(new EventMapFunction())
-//                .setParallelism(125)
-//                .name("Event Operator");
+                .filter(new EventFilterFunction())
+                .map(new EventMapFunction())
+                .setParallelism(125)
+                .name("Event Operator");
 
         // 3. Session Operator
         // 3.1 Session window
