@@ -2,34 +2,40 @@ package com.ebay.sojourner.ubd.rt.operators.session;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.connectors.CouchBaseManager;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.SessionBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
-import org.apache.flink.api.common.functions.AggregateFunction;
-import org.apache.log4j.Logger;
+import com.google.common.reflect.ClassPath;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.flink.api.common.accumulators.AverageAccumulator;
+import org.apache.flink.api.common.functions.RichAggregateFunction;
+import org.apache.flink.configuration.Configuration;
 
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
-public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumulator,SessionAccumulator> {
-    private  SessionMetrics sessionMetrics ;
-    private  SessionBotDetector sessionBotDetector;
-    private static final Logger logger = Logger.getLogger(UbiSessionAgg.class);
-//    private CouchBaseManager couchBaseManager;
+@Slf4j
+public class UbiSessionAgg extends RichAggregateFunction<UbiEvent, SessionAccumulator, SessionAccumulator> {
+    private SessionMetrics sessionMetrics;
+    private SessionBotDetector sessionBotDetector;
+    private Map<String, AverageAccumulator> sessionMetricsAvgMap = new HashMap<>();
+    //    private CouchBaseManager couchBaseManager;
 //    private static final String BUCKET_NAME="botsignature";
+    private AverageAccumulator OldSessionMetricsAvgDuration = new AverageAccumulator();
+    private AverageAccumulator newSessionMetricsAvgDuration = new AverageAccumulator();
+
 
     @Override
     public SessionAccumulator createAccumulator() {
         SessionAccumulator sessionAccumulator = new SessionAccumulator();
         sessionMetrics = SessionMetrics.getInstance();
-        sessionBotDetector=SessionBotDetector.getInstance();
+        sessionBotDetector = SessionBotDetector.getInstance();
 //        couchBaseManager = CouchBaseManager.getInstance();
         try {
             sessionMetrics.start(sessionAccumulator);
         } catch (Exception e) {
-            e.printStackTrace();
-//            logger.error(e.getMessage());
+            log.error("session metrics start fail", e);
         }
         return sessionAccumulator;
     }
@@ -38,43 +44,41 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
     public SessionAccumulator add(UbiEvent value, SessionAccumulator accumulator) {
         Set<Integer> eventBotFlagSet = value.getBotFlags();
 
-        if(value.isNewSession()&&accumulator.getUbiSession().getSessionId()==null) {
+        if (value.isNewSession() && accumulator.getUbiSession().getSessionId() == null) {
             try {
+                long startNewSession = System.nanoTime();
                 value.updateSessionId();
-                sessionMetrics.feed(value,accumulator);
+                sessionMetrics.feed(value, accumulator, sessionMetricsAvgMap);
+                newSessionMetricsAvgDuration.add(System.nanoTime() - startNewSession);
 
             } catch (Exception e) {
-                e.printStackTrace();
-                logger.error("start-session metrics collection issue:"+value);
-                logger.error("start-session metrics collection log:"+e.getMessage());
+                log.error("start-session metrics collection issue:" + value, e);
             }
-        }
-        else
-        {
+        } else {
             try {
-                sessionMetrics.feed(value,accumulator);
+                long startOldSession = System.nanoTime();
+                sessionMetrics.feed(value, accumulator);
+                OldSessionMetricsAvgDuration.add(System.nanoTime() - startOldSession);
             } catch (Exception e) {
-                e.printStackTrace();
-                logger.error("feed-session metrics collection issue:"+value);
-                logger.error("feed-session metrics collection log:"+e.getMessage());
+                log.error("feed-session metrics collection issue:" + value, e);
             }
         }
         Set<Integer> sessionBotFlagSetDetect = null;
         try {
             sessionBotFlagSetDetect = sessionBotDetector.getBotFlagList(accumulator.getUbiSession());
         } catch (IOException e) {
-            e.printStackTrace();
-            logger.error("==================="+e.getMessage());
+            log.error("sessionBotDetector getBotFlagList error", e);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error("sessionBotDetector getBotFlagList error", e);
         }
-        Set<Integer> sessionBotFlagSet=accumulator.getUbiSession().getBotFlagList();
+
+        Set<Integer> sessionBotFlagSet = accumulator.getUbiSession().getBotFlagList();
 
 //        Set<Integer> attrBotFlagWithIp = couchBaseManager.getSignatureWithDocId(accumulator.getUbiSession().getClientIp());
 //        Set<Integer> attrBotFlagWithAgentIp = couchBaseManager.getSignatureWithDocId(accumulator.getUbiSession().getUserAgent()+accumulator.getUbiSession().getClientIp());
 //        Set<Integer> attrBotFlagWithAgent = couchBaseManager.getSignatureWithDocId(accumulator.getUbiSession().getUserAgent());
 
-        if(sessionBotFlagSetDetect!=null&&sessionBotFlagSetDetect.size()>0) {
+        if (sessionBotFlagSetDetect != null && sessionBotFlagSetDetect.size() > 0) {
             sessionBotFlagSet.addAll(sessionBotFlagSetDetect);
             eventBotFlagSet.addAll(sessionBotFlagSetDetect);
         }
@@ -134,18 +138,32 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
         value.setBotFlags(eventBotFlagSet);
         accumulator.setUbiEvent(value);
 
-      return accumulator;
+        return accumulator;
     }
 
     @Override
     public SessionAccumulator getResult(SessionAccumulator sessionAccumulator) {
-       return sessionAccumulator;
+        return sessionAccumulator;
     }
 
     @Override
     public SessionAccumulator merge(SessionAccumulator a, SessionAccumulator b) {
-        logger.error("SessionAccumulator merge:");
+        log.info("SessionAccumulator merge:");
         a.setUbiSession(a.getUbiSession().merge(b.getUbiSession()));
-    return a;
+        return a;
+    }
+
+    @Override
+    public void open(Configuration parameters) throws Exception {
+        super.open(parameters);
+
+        getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
+        getRuntimeContext().addAccumulator("Average Duration of OldSession Metrics", OldSessionMetricsAvgDuration);
+        getRuntimeContext().addAccumulator("Average Duration of NewSession Metrics", newSessionMetricsAvgDuration);
+
+        for (ClassPath.ClassInfo className : ClassPath.from(UbiSessionAgg.class.getClassLoader()).getTopLevelClasses("com.ebay.sojourner.ubd.common.sharedlib.metrics")) {
+            sessionMetricsAvgMap.put(className.getSimpleName(), new AverageAccumulator());
+            getRuntimeContext().addAccumulator(String.format("Average Duration of %s", className.getSimpleName()), sessionMetricsAvgMap.get(className.getSimpleName()));
+        }
     }
 }
