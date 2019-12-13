@@ -22,7 +22,6 @@
 			<groupId>com.ebay.sojourner</groupId>
 			<artifactId>sojourner-ubd-common</artifactId>
 			<version>${project.version}</version>
-
 		</dependency>
 
 		<!-- Apache Flink dependencies -->
@@ -67,12 +66,6 @@
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-avro</artifactId>
 		</dependency>
-
-		<!-- eBay dependencies -->
-		<!--<dependency>-->
-			<!--<groupId>io.ebay.rheos</groupId>-->
-			<!--<artifactId>rheos-client</artifactId>-->
-		<!--</dependency>-->
 
 		<!-- rheos jdk dependencies-->
 		<dependency>
@@ -134,13 +127,54 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			<plugin>
+				<groupId>com.coderplus.maven.plugins</groupId>
+				<artifactId>copy-rename-maven-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<id>rename-file</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>rename</goal>
+						</goals>
+						<configuration>
+							<sourceFile>${project.build.outputDirectory}/application-${profiles.active}.yml</sourceFile>
+							<destinationFile>${project.build.outputDirectory}/application.yml</destinationFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<!--job-uploader-maven-plugin-->
 			<plugin>
 				<groupId>io.ebay.rheos.streaming</groupId>
 				<artifactId>job-uploader-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources/config</directory>
+				<excludes>
+					<exclude>**/*.*</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources/config</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>application-${profiles.active}.yml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>avro/*.*</include>
+					<include>*.*</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 
 	<!-- This profile helps to make things run out of the box in IntelliJ -->
@@ -149,7 +183,6 @@
 	<profiles>
 		<profile>
 			<id>add-dependencies-for-IDEA</id>
-
 			<activation>
 				<property>
 					<name>idea.version</name>

@@ -1,0 +1,19 @@
+kafka:
+  bootstrapServers:
+    - rhs-nbrvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-nbrvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-nbrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-nbrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-nbrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
+  groupId: sojourner-newsource
+  topic: behavior.pulsar.misc.bot
+
+rheos:
+  serviceUrl: https://rheos-services.qa.ebay.com
+  iaf:
+    secret: 6218c197-200e-49d7-b404-2a4dbf7595ef
+    env: staging
+
+flink:
+  app:
+    name: sojourner-ubd
