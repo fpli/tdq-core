@@ -56,7 +56,6 @@ public class SojournerUBDRTJobForSOJ {
 //        executionEnvironment.setParallelism(100);
 
 
-
         // for soj nrt output
         // 1. Rheos Consumer
         // 1.1 Consume RawEvent from Rheos PathFinder topic
@@ -87,7 +86,14 @@ public class SojournerUBDRTJobForSOJ {
 //                            public long extractTimestamp(UbiEvent element) {
 //                                return element.getEventTimestamp();
 //                            }
-//                        });
+//                        }
+//                )).setParallelism(30)
+//                .name("Rheos Consumer");
+
+//        DataStream<byte[]> rawEventDataStream = executionEnvironment.addSource(
+//                KafkaConnectorFactoryForSOJ.createKafkaConsumer().setStartFromLatest()).setParallelism(30)
+//                .name("Rheos Consumer");
+//
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent
         // 2.2 Event level bot detection via bot rule
@@ -96,28 +102,35 @@ public class SojournerUBDRTJobForSOJ {
                 .map(new EventMapFunction())
                 .setParallelism(125)
                 .name("Event Operator");
+        // 2. Event Operator
+        // 2.1 Parse and transform RawEvent to UbiEvent
+        // 2.2 Event level bot detection via bot rule
+//        DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
+//                .map(new EventMapFunction())
+//                .setParallelism(125)
+//                .name("Event Operator");
 
         // 3. Session Operator
         // 3.1 Session window
         // 3.2 Session indicator accumulation
         // 3.3 Session Level bot detection (via bot rule & signature)
         // 3.4 Event level bot detection (via session flag)
-        OutputTag<UbiSession> sessionOutputTag =
-                new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
-        OutputTag<UbiEvent> lateEventOutputTag =
-                new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
+//        OutputTag<UbiSession> sessionOutputTag =
+//                new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
+//        OutputTag<UbiEvent> lateEventOutputTag =
+//                new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
 //        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
-        SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
-                .keyBy("guid")
-                .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-                .trigger(OnElementEarlyFiringTrigger.create())
-                .allowedLateness(Time.hours(1))
-                .sideOutputLateData(lateEventOutputTag)
-                .aggregate(new UbiSessionAgg(),
-                        new UbiSessionWindowProcessFunction(sessionOutputTag))
-                .name("Session Operator");
-        DataStream<UbiSession> sessionStream =
-                ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag); // sessions ended
+//        SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
+//                .keyBy("guid")
+//                .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
+//                .trigger(OnElementEarlyFiringTrigger.create())
+//                .allowedLateness(Time.hours(1))
+//                .sideOutputLateData(lateEventOutputTag)
+//                .aggregate(new UbiSessionAgg(),
+//                        new UbiSessionWindowProcessFunction(sessionOutputTag))
+//                .name("Session Operator");
+//        DataStream<UbiSession> sessionStream =
+//                ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag); // sessions ended
 
         // 4. Attribute Operator
         // 4.1 Sliding window
@@ -204,8 +217,9 @@ public class SojournerUBDRTJobForSOJ {
 //        agentIpConnectDataStream.print().name("Events");
 //        ubiEventStreamWithSessionId.print().name("Events").disableChaining();
 //        lateEventStream.print().name("Events (Late)");
-        sessionStream.addSink(new DiscardingSink<>()).name("session discarding").disableChaining();
-        ubiEventStreamWithSessionId.addSink(new DiscardingSink<>()).name("ubiEvents discarding").disableChaining();
+//        sessionStream.addSink(new DiscardingSink<>()).name("session discarding").disableChaining();
+//        ubiEventStreamWithSessionId.addSink(new DiscardingSink<>()).name("ubiEvents discarding").disableChaining();
+        ubiEventDataStream.addSink(new DiscardingSink<>()).name("source events").disableChaining();
         // Submit this job
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");
 

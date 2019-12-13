@@ -12,7 +12,9 @@ import io.ebay.rheos.schema.event.RheosEvent;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
 import org.apache.commons.lang.StringUtils;
+import org.apache.flink.api.common.accumulators.AverageAccumulator;
 import org.apache.flink.api.common.functions.RichMapFunction;
+import org.apache.flink.configuration.Configuration;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
@@ -21,14 +23,20 @@ import java.util.Map;
 public class EventDeserializeMapFunction extends RichMapFunction<byte[], UbiEvent> {
     private static final Logger logger = Logger.getLogger(EventDeserializeMapFunction.class);
 
+    private AverageAccumulator avgRheosEventDeserializeDuration = new AverageAccumulator();
+    private AverageAccumulator avgGeneriRecordDeserializeDuration = new AverageAccumulator();
 
     @Override
     public UbiEvent map( byte[] rawEvent ) throws Exception {
+        long startTimeOfRheosEvent = System.nanoTime();
         RheosEvent rheosEvent = RheosEventSerdeFactory.getRheosEventHeaderDeserializer()
                 .deserialize(null, rawEvent);
+        avgRheosEventDeserializeDuration.add(System.nanoTime()-startTimeOfRheosEvent);
         System.out.println(rheosEvent.getEventCreateTimestamp());
+        long startTimeOfGenericRecoed = System.nanoTime();
         GenericRecord genericRecord = RheosEventSerdeFactory.getRheosEventDeserializer()
                 .decode(rheosEvent);
+        avgGeneriRecordDeserializeDuration.add(System.nanoTime()-startTimeOfGenericRecoed);
 
         // Generate RheosHeader
         RheosHeader rheosHeader = new RheosHeader(rheosEvent.getEventCreateTimestamp(),
@@ -186,5 +194,15 @@ public class EventDeserializeMapFunction extends RichMapFunction<byte[], UbiEven
 
     private String getString2( Object o ) {
         return (o != null) ? o.toString() : "";
+    }
+
+    @Override
+    public void open(Configuration conf) throws Exception {
+        super.open(conf);
+        getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
+
+        getRuntimeContext().addAccumulator("Average Duration of Rheos Event Deserialize",avgRheosEventDeserializeDuration);
+        getRuntimeContext().addAccumulator("Average Duration of GenericRecords Deserialize",avgGeneriRecordDeserializeDuration);
+
     }
 }
