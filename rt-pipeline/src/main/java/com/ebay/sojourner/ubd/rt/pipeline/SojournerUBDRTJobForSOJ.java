@@ -62,19 +62,6 @@ public class SojournerUBDRTJobForSOJ {
                 )).setParallelism(30)
                 .name("Rheos Consumer");
 
-//        // 2. Event Operator
-//        // 2.1 Parse and transform RawEvent to UbiEvent
-//        // 2.2 Event level bot detection via bot rule
-//        DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
-//                .map(new EventDeserializeMapFunction())
-//                .setParallelism(175)
-//                .name("Event Operator").assignTimestampsAndWatermarks(
-//                        new BoundedOutOfOrdernessTimestampExtractor<UbiEvent>(Time.seconds(10)) {
-//                            @Override
-//                            public long extractTimestamp(UbiEvent element) {
-//                                return element.getEventTimestamp();
-//                            }
-
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent
         // 2.2 Event level bot detection via bot rule
