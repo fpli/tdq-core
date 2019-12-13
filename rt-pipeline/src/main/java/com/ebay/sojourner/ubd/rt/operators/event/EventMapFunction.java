@@ -4,6 +4,7 @@ import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.EventBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.*;
+import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.flink.api.common.accumulators.AverageAccumulator;
 import org.apache.flink.api.common.functions.RichMapFunction;
@@ -115,7 +116,9 @@ public class EventMapFunction extends RichMapFunction<RawEvent,UbiEvent> {
 
     @Override
     public UbiEvent map(RawEvent rawEvent) throws Exception {
+
         UbiEvent event = new UbiEvent();
+
         long startTime = System.nanoTime();
         parser.parse(rawEvent, event,parserMap);
         avgDuration.add(System.nanoTime() - startTime);
