@@ -7,7 +7,7 @@ import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
 import com.google.common.reflect.ClassPath;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.accumulators.AverageAccumulator;
-import org.apache.flink.api.common.functions.RichAggregateFunction;
+import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.configuration.Configuration;
 
 import java.io.IOException;
@@ -16,15 +16,11 @@ import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-public class UbiSessionAgg extends RichAggregateFunction<UbiEvent, SessionAccumulator, SessionAccumulator> {
+public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumulator, SessionAccumulator> {
     private SessionMetrics sessionMetrics;
     private SessionBotDetector sessionBotDetector;
-    private Map<String, AverageAccumulator> sessionMetricsAvgMap = new HashMap<>();
     //    private CouchBaseManager couchBaseManager;
 //    private static final String BUCKET_NAME="botsignature";
-    private AverageAccumulator OldSessionMetricsAvgDuration = new AverageAccumulator();
-    private AverageAccumulator newSessionMetricsAvgDuration = new AverageAccumulator();
-
 
     @Override
     public SessionAccumulator createAccumulator() {
@@ -44,31 +40,19 @@ public class UbiSessionAgg extends RichAggregateFunction<UbiEvent, SessionAccumu
     public SessionAccumulator add(UbiEvent value, SessionAccumulator accumulator) {
         Set<Integer> eventBotFlagSet = value.getBotFlags();
 
-        if (value.isNewSession() && accumulator.getUbiSession().getSessionId() == null) {
-            try {
-                long startNewSession = System.nanoTime();
+        try {
+            if (value.isNewSession() && accumulator.getUbiSession().getSessionId() == null) {
                 value.updateSessionId();
-                sessionMetrics.feed(value, accumulator, sessionMetricsAvgMap);
-                newSessionMetricsAvgDuration.add(System.nanoTime() - startNewSession);
-
-            } catch (Exception e) {
-                log.error("start-session metrics collection issue:" + value, e);
             }
-        } else {
-            try {
-                long startOldSession = System.nanoTime();
-                sessionMetrics.feed(value, accumulator);
-                OldSessionMetricsAvgDuration.add(System.nanoTime() - startOldSession);
-            } catch (Exception e) {
-                log.error("feed-session metrics collection issue:" + value, e);
-            }
+            sessionMetrics.feed(value, accumulator);
+        } catch (Exception e) {
+            log.error("start-session metrics collection issue:" + value, e);
         }
+
         Set<Integer> sessionBotFlagSetDetect = null;
         try {
             sessionBotFlagSetDetect = sessionBotDetector.getBotFlagList(accumulator.getUbiSession());
-        } catch (IOException e) {
-            log.error("sessionBotDetector getBotFlagList error", e);
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             log.error("sessionBotDetector getBotFlagList error", e);
         }
 
@@ -151,19 +135,5 @@ public class UbiSessionAgg extends RichAggregateFunction<UbiEvent, SessionAccumu
         log.info("SessionAccumulator merge:");
         a.setUbiSession(a.getUbiSession().merge(b.getUbiSession()));
         return a;
-    }
-
-    @Override
-    public void open(Configuration parameters) throws Exception {
-        super.open(parameters);
-
-        getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
-        getRuntimeContext().addAccumulator("Average Duration of OldSession Metrics", OldSessionMetricsAvgDuration);
-        getRuntimeContext().addAccumulator("Average Duration of NewSession Metrics", newSessionMetricsAvgDuration);
-
-        for (ClassPath.ClassInfo className : ClassPath.from(UbiSessionAgg.class.getClassLoader()).getTopLevelClasses("com.ebay.sojourner.ubd.common.sharedlib.metrics")) {
-            sessionMetricsAvgMap.put(className.getSimpleName(), new AverageAccumulator());
-            getRuntimeContext().addAccumulator(String.format("Average Duration of %s", className.getSimpleName()), sessionMetricsAvgMap.get(className.getSimpleName()));
-        }
     }
 }

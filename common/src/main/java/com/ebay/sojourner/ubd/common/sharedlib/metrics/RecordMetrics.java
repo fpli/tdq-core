@@ -1,14 +1,11 @@
 package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 
-import org.apache.flink.api.common.accumulators.AverageAccumulator;
-
 import java.util.LinkedHashSet;
-import java.util.Map;
 
 public abstract class RecordMetrics<Source, Target> implements Aggregator<Source, Target> {
     
-    protected LinkedHashSet<FieldMetrics<Source, Target>> fieldMetrics = new LinkedHashSet<FieldMetrics<Source, Target>>();
+    protected LinkedHashSet<FieldMetrics<Source, Target>> fieldMetrics = new LinkedHashSet<>();
 
     /**
      * Initialize the field metrics for being used in aggregator operations.
@@ -26,16 +23,10 @@ public abstract class RecordMetrics<Source, Target> implements Aggregator<Source
             metrics.start(target);
         }
     }
-    public void feed(Source source, Target target) throws Exception{
 
-    }
-
-    public void feed(Source source, Target target, Map<String, AverageAccumulator> map) throws Exception {
+    public void feed(Source source, Target target) throws Exception {
         for (FieldMetrics<Source, Target> metrics : fieldMetrics) {
-            long start = System.nanoTime();
             metrics.feed(source, target);
-            long end = System.nanoTime();
-            map.get(metrics.getClass().getSimpleName()).add(end - start);
         }
     }
     
