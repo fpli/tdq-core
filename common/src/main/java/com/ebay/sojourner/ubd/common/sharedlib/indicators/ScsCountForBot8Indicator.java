@@ -25,10 +25,10 @@ public class ScsCountForBot8Indicator<Source, Target> implements Indicator<Sourc
     public void start(Target target) throws Exception {
         if (target instanceof AgentIpAttributeAccumulator) {
             AgentIpAttributeAccumulator agentIpAttributeAccumulator = (AgentIpAttributeAccumulator) target;
-            agentIpAttributeAccumulator.getAttribute().clear(BotRules.SCS_CONFIRM_ON_AGENTIP);
+            agentIpAttributeAccumulator.getAgentIpAttribute().clear(BotRules.SCS_CONFIRM_ON_AGENTIP);
         } else if (target instanceof IpAttributeAccumulator) {
-            IpAttributeAccumulator agentIpAttributeAccumulator = (IpAttributeAccumulator) target;
-            agentIpAttributeAccumulator.getAttribute().clear();
+            IpAttributeAccumulator ipAttributeAccumulator = (IpAttributeAccumulator) target;
+            ipAttributeAccumulator.getIpAttribute().clear();
         }
     }
 
@@ -38,20 +38,20 @@ public class ScsCountForBot8Indicator<Source, Target> implements Indicator<Sourc
         if (source instanceof UbiSession) {
             UbiSession ubiSession = (UbiSession) source;
             AgentIpAttributeAccumulator agentIpAttributeAccumulator = (AgentIpAttributeAccumulator) target;
-            if (agentIpAttributeAccumulator.getAttribute().getScsCountForBot8() < 0) {
+            if (agentIpAttributeAccumulator.getAgentIpAttribute().getScsCountForBot8() < 0) {
 
             } else {
                 if (isValid(ubiSession)) {
                     if (UbiSessionHelper.isSingleClickSession(ubiSession)) {
-                        agentIpAttributeAccumulator.getAttribute().feed(ubiSession, BotRules.SCS_ON_IP);
+                        agentIpAttributeAccumulator.getAgentIpAttribute().feed(ubiSession, BotRules.SCS_ON_IP);
                     } else {
-                        agentIpAttributeAccumulator.getAttribute().revert(ubiSession, BotRules.SCS_ON_IP);
+                        agentIpAttributeAccumulator.getAgentIpAttribute().revert(ubiSession, BotRules.SCS_ON_IP);
                     }
                 }
             }
             if (!UbiSessionHelper.isNonIframRdtCountZero(ubiSession)) {
                 if (UbiSessionHelper.isBidBinConfirm(ubiSession)) {
-                    agentIpAttributeAccumulator.getAttribute().setBbcCount(agentIpAttributeAccumulator.getAttribute().getBbcCount() + 1);
+                    agentIpAttributeAccumulator.getAgentIpAttribute().setBbcCount(agentIpAttributeAccumulator.getAgentIpAttribute().getBbcCount() + 1);
                 }
             }
         }
@@ -72,7 +72,7 @@ public class ScsCountForBot8Indicator<Source, Target> implements Indicator<Sourc
             if (botFilter.filter(ubiSession, targetFlag)) {
                 return true;
             }
-            if (ubiSession.getBotFlag() != null && ubiSession.getBotFlag() > 0 && ubiSession.getBotFlag() < 200) {
+            if (ubiSession.getBotFlag() > 0 && ubiSession.getBotFlag() < 200) {
                 return true;
             }
         }

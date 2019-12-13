@@ -30,8 +30,8 @@ public class AgentStringWindowProcessFunction
                         Collector<IpSignature> out) throws Exception {
 
         IpAttributeAccumulator ipAttr = elements.iterator().next();
-        if (ipAttr.getAttribute().getClientIp() != null) {
-            Set<Integer> botFlagList = ipSignatureBotDetector.getBotFlagList(ipAttr.getAttribute());
+        if (ipAttr.getIpAttribute().getClientIp() != null) {
+            Set<Integer> botFlagList = ipSignatureBotDetector.getBotFlagList(ipAttr.getIpAttribute());
 
 //            if (botFlagList != null && botFlagList.size() > 0) {
 ////                ipSignature.setClientIp(ipAttr.getAttribute().getClientIp());

@@ -27,25 +27,26 @@ public class SqrParser implements FieldParser<RawEvent, UbiEvent> {
         }
         try {
             if (StringUtils.isNotBlank(sqr)) {
-                try{
-                    String sqrUtf8 = URLDecoder.decode(sqr, "UTF-8");
-                    if(sqrUtf8.length() <= 4096){
-                        ubiEvent.setSqr(URLDecoder.decode(sqr,"UTF-8"));
-                    } else {
-                        ubiEvent.setSqr(URLDecoder.decode(sqr,"UTF-8").substring(0,4096));
-                    }
-
-                }catch (UnsupportedEncodingException e){
-                    String replacedChar = RegexReplace.replace(sqr.replace('+', ' '),".%[^0-9a-fA-F].?.", "", 1, 0, 'i');
-
-                    String replacedCharUtf8 = SOJURLDecodeEscape.decodeEscapes(replacedChar, '%');
-                    if(replacedCharUtf8.length() <= 4096){
-                        ubiEvent.setSqr(SOJURLDecodeEscape.decodeEscapes(replacedChar, '%'));
-                    }else {
-                        ubiEvent.setSqr(SOJURLDecodeEscape.decodeEscapes(replacedChar, '%').substring(0,4096));
-                    }
-
-                }
+                ubiEvent.setSqr(sqr);
+//                try{
+//                    String sqrUtf8 = URLDecoder.decode(sqr, "UTF-8");
+//                    if(sqrUtf8.length() <= 4096){
+//                        ubiEvent.setSqr(URLDecoder.decode(sqr,"UTF-8"));
+//                    } else {
+//                        ubiEvent.setSqr(URLDecoder.decode(sqr,"UTF-8").substring(0,4096));
+//                    }
+//
+//                }catch (UnsupportedEncodingException e){
+//                    String replacedChar = RegexReplace.replace(sqr.replace('+', ' '),".%[^0-9a-fA-F].?.", "", 1, 0, 'i');
+//
+//                    String replacedCharUtf8 = SOJURLDecodeEscape.decodeEscapes(replacedChar, '%');
+//                    if(replacedCharUtf8.length() <= 4096){
+//                        ubiEvent.setSqr(SOJURLDecodeEscape.decodeEscapes(replacedChar, '%'));
+//                    }else {
+//                        ubiEvent.setSqr(SOJURLDecodeEscape.decodeEscapes(replacedChar, '%').substring(0,4096));
+//                    }
+//
+//                }
             }
         } catch (Exception e) {
             log.debug("Parsing Sqr failed, format incorrect: " + sqr);

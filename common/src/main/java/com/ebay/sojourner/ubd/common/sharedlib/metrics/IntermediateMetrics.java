@@ -316,7 +316,7 @@ public class IntermediateMetrics implements Serializable {
         }
 
         // get the mppid from mobile event
-        if (mobilePageSet.contains(event.getPageId()) && event.getCobrand().equals(6)) {
+        if (mobilePageSet.contains(event.getPageId()) && event.getCobrand() == 6) {
             setMinMppIds(event);
         }
     }
@@ -587,7 +587,7 @@ public class IntermediateMetrics implements Serializable {
     }
 
     public boolean isRover3084Click(UbiEvent event) {
-        if (event.getPageId() == null) {
+        if (event.getPageId() == Integer.MIN_VALUE) {
             return false;
         }
 
@@ -595,7 +595,7 @@ public class IntermediateMetrics implements Serializable {
     }
 
     public boolean isRover3085Click(UbiEvent event) {
-        if (event.getPageId() == null) {
+        if (event.getPageId() == Integer.MIN_VALUE) {
             return false;
         }
 
@@ -603,7 +603,7 @@ public class IntermediateMetrics implements Serializable {
     }
 
     public boolean isRover3962Click(UbiEvent event) {
-        if (event.getPageId() == null) {
+        if (event.getPageId() == Integer.MIN_VALUE) {
             return false;
         }
 
@@ -619,7 +619,7 @@ public class IntermediateMetrics implements Serializable {
     }
 
     public boolean isScEvent(UbiEvent event) {
-        Integer pageId = event.getPageId() == null ? -99 : event.getPageId();
+        Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
         // String urlQueryString = event.getUrlQueryString() == null ? "" :
         // event.getUrlQueryString();
 
@@ -640,7 +640,7 @@ public class IntermediateMetrics implements Serializable {
     }
 
     public Integer parseChannelFromEvent(UbiEvent event) {
-        Integer pageId = event.getPageId() == null ? -99 : event.getPageId();
+        Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
         Integer channel = null;
 
         try {
@@ -883,7 +883,7 @@ public class IntermediateMetrics implements Serializable {
     }
 
     public void setFirstRoverClickE(UbiEvent event) {
-        Integer pageId = event.getPageId() == null ? -99 : event.getPageId();
+        Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
         String e = "";
 
         if (!pageId.equals(3962) && !(pageId.equals(3084) && SEVEN.equals(getChannelSequence()))) {
@@ -940,7 +940,7 @@ public class IntermediateMetrics implements Serializable {
 
     // page 3084 only
     public void setFirstRoverClickMpxChannelId(UbiEvent event) {
-        Integer pageId = event.getPageId() == null ? -99 : event.getPageId();
+        Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
         String mpxChannelId = null;
         String[] channelIds = null;
 
@@ -976,7 +976,7 @@ public class IntermediateMetrics implements Serializable {
     }
 
     public void setFirstRoverClickRotId(UbiEvent event) {
-        Integer pageId = event.getPageId() == null ? -99 : event.getPageId();
+        Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
         String rotId = null;
         String webServer = event.getWebServer();
 
@@ -1478,7 +1478,7 @@ public class IntermediateMetrics implements Serializable {
     }
 
     public void setRoverClickUrl2Parse(UbiEvent event) {
-        Integer pageId = event.getPageId() == null ? -99 : event.getPageId();
+        Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
         String url2Parse = "";
         String urlQueryString = event.getUrlQueryString();
 

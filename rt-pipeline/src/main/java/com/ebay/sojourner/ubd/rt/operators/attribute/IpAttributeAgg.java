@@ -27,8 +27,8 @@ public class IpAttributeAgg implements AggregateFunction<AgentIpAttribute, IpAtt
 
     @Override
     public IpAttributeAccumulator add(AgentIpAttribute agentIpAttribute, IpAttributeAccumulator ipAttr) {
-        if (ipAttr.getAttribute().getClientIp() == null) {
-            ipAttr.getAttribute().setClientIp(agentIpAttribute.getClientIp());
+        if (ipAttr.getIpAttribute().getClientIp() == null) {
+            ipAttr.getIpAttribute().setClientIp(agentIpAttribute.getClientIp());
         }
         try {
             ipIndicators.feed(agentIpAttribute, ipAttr);

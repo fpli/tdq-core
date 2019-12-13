@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class AgentSignatureBotDetector implements BotDetector<AgentAttribute> {
 
-    private static AgentSignatureBotDetector agentIpSignatureBotDetector;
+    private static volatile AgentSignatureBotDetector agentIpSignatureBotDetector;
     private Set<Rule> botRules = new LinkedHashSet<Rule>();
 
 
@@ -62,7 +62,8 @@ public class AgentSignatureBotDetector implements BotDetector<AgentAttribute> {
     }
 
     private Set<Integer> scanSignature(String inColumnName, String inColumnValue, String outColumnName, String bucketName) {
-        return CouchBaseManager.getInstance().getSignatureWithColumn(inColumnName, inColumnValue, outColumnName);
+//        return CouchBaseManager.getInstance().getSignatureWithColumn(inColumnName, inColumnValue, outColumnName);
+        return null;
     }
 
 

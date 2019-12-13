@@ -3,15 +3,16 @@ package com.ebay.sojourner.ubd.common.model;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Data
 public class IpSignature implements Signature,Serializable{
 
-    private Set<Integer> botFlag = new HashSet<Integer>();
+    private Map<String,Set<Integer>> ipBotSignature = new HashMap<>();
 
-    private String clientIp;
-
-
+    public IpSignature() {
+    }
 }

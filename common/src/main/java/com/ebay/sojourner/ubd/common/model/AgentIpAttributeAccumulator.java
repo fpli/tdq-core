@@ -3,11 +3,12 @@ package com.ebay.sojourner.ubd.common.model;
 import lombok.Data;
 
 @Data
-public class AgentIpAttributeAccumulator  {
-    private AgentIpAttribute attribute;
+public class AgentIpAttributeAccumulator {
+    private AgentIpAttribute agentIpAttribute;
 
 
     public AgentIpAttributeAccumulator() {
-        this.attribute= new AgentIpAttribute();
+        this.agentIpAttribute = new AgentIpAttribute();
+
     }
 }

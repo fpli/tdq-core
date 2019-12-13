@@ -78,8 +78,8 @@ public class StaticPageTypeParserTest {
     public void testStaticPageTypeParser3() {
         staticPageTypeParser = new StaticPageTypeParser();
         ubiEvent = new UbiEvent();
-        ubiEvent.setPageId(null);
-        ubiEvent.setRdt(null);
+        ubiEvent.setPageId(Integer.MIN_VALUE);
+        ubiEvent.setRdt(Integer.MIN_VALUE);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(null);
         caseItem = Constants.CASE3;

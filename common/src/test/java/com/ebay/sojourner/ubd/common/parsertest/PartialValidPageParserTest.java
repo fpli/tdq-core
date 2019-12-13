@@ -497,7 +497,7 @@ public class PartialValidPageParserTest {
         clientData.setAgent("eBayNioHttpClient");
 
         ubiEvent.setClientData(clientData);
-        ubiEvent.setPageId(null);
+        ubiEvent.setPageId(Integer.MIN_VALUE);
 
         caseItem = Constants.CASE23;
 

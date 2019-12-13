@@ -26,7 +26,7 @@ public class UbiBotFilter implements BotFilter {
 
     @Override
     public boolean filter(UbiSession ubiSession, Integer targetFlag) {
-        if (ubiSession.getAppId() != null) {
+        if (ubiSession.getAppId() != Integer.MIN_VALUE) {
             Set<Integer> botFlags = appIdWithBotFlags.get(ubiSession.getAppId());
             if (botFlags != null && botFlags.contains(targetFlag)) {
                 return true;

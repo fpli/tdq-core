@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -19,13 +20,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UbiEvent implements Serializable {
   private String guid;
   private String sessionId=Constants.NO_SESSION_ID;
-  private Integer seqNum;
+  private int seqNum;
   private Long sessionStartDt;
   private Long sojDataDt;
-  private Integer clickId;
-  private Integer siteId;
-  private Integer version;
-  private Integer pageId;
+  private int clickId;
+  private int siteId;
+  private int version;
+  private int pageId;
   private String pageName;
   private Long refererHash;
   private Long eventTimestamp;
@@ -38,38 +39,37 @@ public class UbiEvent implements Serializable {
   private String userId;
   private Long itemId;
   private String flags;
-  private Integer rdt;
-  private Integer regu;
+  private int rdt;
+  private int regu;
   private String sqr;
-  private Integer staticPageType;
-  private Integer reservedForFuture;
+  private int staticPageType;
+  private int reservedForFuture;
   private String eventAttr;
   private Long currentImprId;
   private Long sourceImprId;
-  private Integer cobrand;
-  private Integer iframe;
+  private int cobrand;
+  private int iframe;
   private String agentInfo;
   private String forwardedFor;
   private String clientIP;
-  private Integer bitVal;
-  private Integer appId;
+  private int bitVal;
+  private int appId;
   private Long oldSessionSkey;
-  private Integer hashCode;
-  private Integer partialValidPage;
+  private int hashCode;
+  private int partialValidPage;
   private long sessionStartTime;
   private long sessionEndTime;
-  private Set<Integer> botFlags= new LinkedHashSet<Integer>();
+  private Set<Integer> botFlags= new LinkedHashSet<>();
   @Getter private long eventCnt;
   private Map<String, Object> counters;
+
   public void updateSessionId() {
     int charPos = Constants.HEX_DIGITS.length;
     int mask = (1 << 4) - 1;
     long decimal = sessionStartTime;
     char[] out = new char[Constants.HEX_DIGITS.length];
 
-    for (int i = 0; i < out.length; i++) {
-      out[i] = '0';
-    }
+    Arrays.fill(out, '0');
 
     do {
       out[--charPos] = Constants.HEX_DIGITS[(int) (decimal & mask)];
@@ -78,9 +78,11 @@ public class UbiEvent implements Serializable {
 
     this.sessionId = guid + new String(out, 0, out.length);
   }
+
   public void eventCountIncrementByOne() {
     eventCnt++;
   }
+
   public boolean isNewSession() {
     return Constants.NO_SESSION_ID.equals(sessionId);
   }
@@ -93,7 +95,7 @@ public class UbiEvent implements Serializable {
     if (counters == null) {
       synchronized (this) {
         if (counters == null) {
-          counters = new ConcurrentHashMap<String, Object>();
+          counters = new ConcurrentHashMap<>();
         }
       }
     }
@@ -105,7 +107,7 @@ public class UbiEvent implements Serializable {
     if (counters == null) {
       synchronized (this) {
         if (counters == null) {
-          counters = new ConcurrentHashMap<String, Object>();
+          counters = new ConcurrentHashMap<>();
         }
       }
     }

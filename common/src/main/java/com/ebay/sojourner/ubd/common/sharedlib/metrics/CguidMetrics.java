@@ -17,7 +17,7 @@ public class CguidMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
         // AS per the sql, find first not null cguid from valid event
         //comparing the length of cguid to 32, based on the SQL.
 
-        if (sessionAccumulator.getUbiSession().getFirstCguid() == null && (source.getIframe().equals(0) && source.getRdt().equals(0))) {
+        if (sessionAccumulator.getUbiSession().getFirstCguid() == null && (source.getIframe() == 0 && source.getRdt() == 0)) {
             String cGuidTemp = SOJNVL.getTagValue(source.getApplicationPayload(), "n");
             //checking for NPE
             if (cGuidTemp != null && cGuidTemp.length() == 32) {

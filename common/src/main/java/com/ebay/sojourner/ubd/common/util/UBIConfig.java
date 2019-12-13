@@ -16,7 +16,7 @@ import java.util.Properties;
  */
 public class UBIConfig {
     private static final Logger log = Logger.getLogger(UBIConfig.class);
-    private static UBIConfig ubiConfig;
+    private static volatile UBIConfig ubiConfig;
     private Properties ubiProperties;
     private HashMap<String, Object> confData = new HashMap<String, Object>();
 

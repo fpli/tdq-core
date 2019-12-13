@@ -2,7 +2,6 @@ package com.ebay.sojourner.ubd.common.model;
 
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.IntermediateMetrics;
 import lombok.Data;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -17,31 +16,31 @@ public class UbiSession implements Serializable,Cloneable{
     private String ip;
     private String userAgent;
     private String sessionReferrer;
-    private Integer botFlag;
-    private Integer version;
+    private int botFlag;
+    private int version;
     private String firstUserId;
     private Long siteFlags;
-    private Integer attrFlags;
-    private Integer botFlags;
+    private int attrFlags;
+    private int botFlags;
     private Long findingFlags;
-    private Integer startPageId;
-    private Integer endPageId;
+    private int startPageId;
+    private int endPageId;
     private Long startTimestamp;
-    private Integer durationSec;
+    private int durationSec;
     private int eventCnt ;
     private int viCoreCnt;
     private int bidCoreCnt;
     private int binCoreCnt;
     private int watchCoreCnt;
-    private Integer trafficSrcId;
+    private int trafficSrcId;
     private Long absStartTimestamp;
     private Long absEndTimestamp;
-    private Integer absDuration;
-    private Integer cobrand;
-    private Integer firstSiteId;
+    private int absDuration;
+    private int cobrand;
+    private int firstSiteId;
     private String firstCguid;
     private Long firstMappedUserId;
-    private Integer firstAppId;
+    private int firstAppId;
     private Long endTimestamp;
     private int homepageCnt;
     private int grCnt;
@@ -57,43 +56,52 @@ public class UbiSession implements Serializable,Cloneable{
     private int validPageCnt;
     private int agentCnt;
     private String agentString;
-    private Integer lndgPageId;
+    private int lndgPageId;
     private String exInternalIp;
     private int familyViCnt;
     private int pageCnt;
     private int searchCnt;
     private int viewCnt;
-    private Set<Integer> distinctClickIdSet= new HashSet<Integer>();
-    private Set<String> agentSets= new HashSet<String>();
+    private Set<Integer> distinctClickIdSet= new HashSet<>();
+    private Set<String> agentSets= new HashSet<>();
     private String agentInfo;
     private String clientIp;
     private Boolean findFirst ;
     private String internalIp;
     private String externalIp;
     private String externalIp2;
-    private Integer appId;
+    private int appId;
     private int siidCnt;
     private int viCnt;//for bot215
     private int maxScsSeqNum;
-    private Boolean isRefererNull;//for bot207
+    private boolean isRefererNull;//for bot207
     private int siidCnt2; // for bot207
-    private Integer firstCorbrand;
-    private Integer minSCSeqNum;
+    private int firstCorbrand;
+    private int minSCSeqNum;
     private Long[] minMaxEventTimestamp;
     private Set<Long> oldSessionSkeySet;
     private byte[] siteFlagsSet;
-    private Set<Integer> botFlagList = new LinkedHashSet<Integer>();
-    private Set<String> userIdSet;
-    private Attributes attributes;
+    private Set<Integer> botFlagList = new LinkedHashSet<>();
+    private Set<String> userIdSet = new HashSet<>();
+    private Attributes attributes = new Attributes();
     private byte[] attributeFlags = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    private Integer seqNum;
+    private int seqNum;
     private IntermediateMetrics intermediateMetrics;;
     public UbiSession()
     {
 //        this.distinctClickIdSet = new HashSet<Integer>();
 //        this.agentSets= new HashSet<String>();
     }
+
+    public boolean isRefererNull() {
+        return isRefererNull;
+    }
+
+    public void setIsRefererNull(boolean refererNull) {
+        isRefererNull = refererNull;
+    }
+
     public UbiSession merge(UbiSession ubiSession)
     {
         this.eventCnt+=ubiSession.getEventCnt();
@@ -117,15 +125,12 @@ public class UbiSession implements Serializable,Cloneable{
         this.viewCnt+=ubiSession.getViewCnt();
         this.siidCnt+=ubiSession.getSiidCnt();
         this.siidCnt2+=ubiSession.getSiidCnt2();
-        this.maxScsSeqNum=(this.maxScsSeqNum>ubiSession.getMaxScsSeqNum()?this.maxScsSeqNum:ubiSession.getMaxScsSeqNum());
+        this.maxScsSeqNum=Math.max(this.maxScsSeqNum, ubiSession.getMaxScsSeqNum());
         this.oldSessionSkeySet.addAll(ubiSession.getOldSessionSkeySet());
         this.botFlagList.addAll(ubiSession.getBotFlagList());
         this.userIdSet.addAll(ubiSession.getUserIdSet());
 
-
-
         return this;
-
-
     }
+
 }

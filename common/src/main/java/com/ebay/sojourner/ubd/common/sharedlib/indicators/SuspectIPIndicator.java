@@ -22,10 +22,10 @@ public class SuspectIPIndicator<Source, Target> implements Indicator<Source, Tar
     public void start(Target target) throws Exception {
         if (target instanceof AgentIpAttributeAccumulator) {
             AgentIpAttributeAccumulator agentIpAttributeAccumulator = (AgentIpAttributeAccumulator) target;
-            agentIpAttributeAccumulator.getAttribute().clear(BotRules.SUSPECTED_IP_ON_AGENT);
+            agentIpAttributeAccumulator.getAgentIpAttribute().clear(BotRules.SUSPECTED_IP_ON_AGENT);
         } else if (target instanceof IpAttributeAccumulator) {
-            IpAttributeAccumulator agentIpAttributeAccumulator = (IpAttributeAccumulator) target;
-            agentIpAttributeAccumulator.getAttribute().clear();
+            IpAttributeAccumulator ipAttributeAccumulator = (IpAttributeAccumulator) target;
+            ipAttributeAccumulator.getIpAttribute().clear();
         }
     }
 
@@ -35,13 +35,13 @@ public class SuspectIPIndicator<Source, Target> implements Indicator<Source, Tar
         if (source instanceof UbiSession) {
             UbiSession ubiSession = (UbiSession) source;
             AgentIpAttributeAccumulator agentIpAttributeAccumulator = (AgentIpAttributeAccumulator) target;
-            agentIpAttributeAccumulator.getAttribute().feed(ubiSession, BotRules.SUSPECTED_IP_ON_AGENT);
+            agentIpAttributeAccumulator.getAgentIpAttribute().feed(ubiSession, BotRules.SUSPECTED_IP_ON_AGENT);
         }
         else if(source instanceof AgentIpAttribute)
         {
             AgentIpAttribute agentIpAttribute = (AgentIpAttribute) source;
-            AgentAttributeAccumulator agentAttributeAccumulator = (AgentAttributeAccumulator) target;
-            agentAttributeAccumulator.getAttribute().feed(agentIpAttribute, BotRules.SUSPECTED_IP_ON_AGENT);
+            IpAttributeAccumulator ipAttributeAccumulator = (IpAttributeAccumulator) target;
+            ipAttributeAccumulator.getIpAttribute().feed(agentIpAttribute, BotRules.SUSPECTED_IP_ON_AGENT);
 
         }
 

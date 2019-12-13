@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class GuidSignatureBotDetector implements BotDetector<GuidAttribute> {
 
-    private static GuidSignatureBotDetector singnatureBotDetector;
+    private static volatile GuidSignatureBotDetector singnatureBotDetector;
     private Set<Rule> botRules = new LinkedHashSet<Rule>();
 
 
@@ -63,7 +63,8 @@ public class GuidSignatureBotDetector implements BotDetector<GuidAttribute> {
     }
 
     private Set<Integer> scanSignature(String inColumnName, String inColumnValue, String outColumnName, String bucketName) {
-        return CouchBaseManager.getInstance().getSignatureWithColumn(inColumnName, inColumnValue, outColumnName);
+//        return CouchBaseManager.getInstance().getSignatureWithColumn(inColumnName, inColumnValue, outColumnName);
+        return null;
     }
 
 

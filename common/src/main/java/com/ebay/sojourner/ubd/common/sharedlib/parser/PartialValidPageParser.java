@@ -39,7 +39,7 @@ public class PartialValidPageParser implements FieldParser<RawEvent, UbiEvent> {
 		Integer appId = ubiEvent.getAppId();
         String cflags=ubiEvent.getApplicationPayload()==null?null:SOJNVL.getTagValue(ubiEvent.getApplicationPayload(), "cflgs");
 
-		if (ubiEvent.getRdt()!=null&&ubiEvent.getRdt() == 1) {
+		if (ubiEvent.getRdt()!=Integer.MIN_VALUE&&ubiEvent.getRdt() == 1) {
 			ubiEvent.setPartialValidPage(0);
 			return;
 		}

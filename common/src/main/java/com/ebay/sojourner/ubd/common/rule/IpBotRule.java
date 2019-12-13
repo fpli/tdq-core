@@ -3,6 +3,8 @@ package com.ebay.sojourner.ubd.common.rule;
 import com.ebay.sojourner.ubd.common.model.IpSignature;
 import org.apache.flink.queryablestate.client.QueryableStateClient;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 public class IpBotRule implements Rule<IpSignature> {
@@ -18,12 +20,12 @@ public class IpBotRule implements Rule<IpSignature> {
 
     @Override
     public  int getBotFlag(IpSignature ipSignature) {
-        Set<Integer> botFlagSet= ipSignature.getBotFlag();
-        if(botFlagSet!=null&&botFlagSet.contains(7)) {
-            return 7;
+        for (Map.Entry<String,Set<Integer>> entry:ipSignature.getIpBotSignature().entrySet()) {
+            Set<Integer> botFlagSet = entry.getValue();
+            if(botFlagSet!=null&&botFlagSet.contains(7)) {
+                return 7;
+            }
         }
         return 0;
     }
-
-
 }

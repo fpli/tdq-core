@@ -1,5 +1,6 @@
 package com.ebay.sojourner.ubd.rt.connectors.kafka;
 
+import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import io.ebay.rheos.kafka.client.StreamConnectorConfig;
 import io.ebay.rheos.schema.avro.GenericRecordDomainDataDecoder;
 import io.ebay.rheos.schema.avro.RheosEventDeserializer;
@@ -8,8 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RheosEventSerdeFactory {
-    public static String RHEOS_SERVICES_URL = "https://rheos-services.qa.ebay.com";
-
+    private static String RHEOS_SERVICES_URL = AppEnv.config().getRheos().getServiceUrl();
     private static RheosEventDeserializer rheosEventHeaderDeserializer;
     private static GenericRecordDomainDataDecoder rheosEventDeserializer;
 

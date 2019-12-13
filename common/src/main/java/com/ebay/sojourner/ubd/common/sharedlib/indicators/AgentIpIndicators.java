@@ -16,7 +16,7 @@ public class AgentIpIndicators extends AttributeIndicators<UbiSession, AgentIpAt
 
     private static Logger logger = Logger.getLogger(SessionMetrics.class);
 
-    private static AgentIpIndicators agentIpIndicators;
+    private static volatile AgentIpIndicators agentIpIndicators;
     private static BotFilter botFilter ;
 
     public static AgentIpIndicators getInstance() {

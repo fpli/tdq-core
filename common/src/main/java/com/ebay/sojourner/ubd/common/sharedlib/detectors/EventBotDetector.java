@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class EventBotDetector implements BotDetector<UbiEvent> {
 
-    private static EventBotDetector eventBotDetector;
+    private static volatile EventBotDetector eventBotDetector;
     private Set<Rule> botRules = new LinkedHashSet<Rule>();
 
     private EventBotDetector() {

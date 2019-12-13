@@ -17,6 +17,9 @@ public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable
     private int mktgSessionCnt = 0;
     private int ipCountForSuspect=0;
 
+    public AgentAttribute() {
+    }
+
     @Override
     public void feed(AgentIpAttribute agentIpAttribute, int botFlag) {
         ipCount += agentIpAttribute.getIpCount();
@@ -65,4 +68,10 @@ public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable
 
 
     }
+
+//    public static void main(String[] args) {
+//        AgentAttribute agentAttribute = new AgentAttribute();
+//        agentAttribute.getAgent();
+//        agentAttribute.setAgent("sss");
+//    }
 }

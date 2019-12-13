@@ -16,6 +16,9 @@ public class GuidAttribute implements Attribute<UbiSession>, Serializable {
         absEventCount+=ubiSession.getAbsEventCnt();
     }
 
+    public GuidAttribute() {
+    }
+
     @Override
     public void revert(UbiSession ubiSession, int botFlag) {
 

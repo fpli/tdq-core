@@ -12,8 +12,8 @@ public class FindingFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumul
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-        if (sessionAccumulator.getUbiSession().getFindingFlags() == null && event.getBitVal() != null) {
-            sessionAccumulator.getUbiSession().setFindingFlags(event.getBitVal().longValue());
+        if (sessionAccumulator.getUbiSession().getFindingFlags() == null && event.getBitVal() != Integer.MIN_VALUE) {
+            sessionAccumulator.getUbiSession().setFindingFlags((long)event.getBitVal());
         }
     }
 

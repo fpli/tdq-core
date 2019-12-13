@@ -9,7 +9,7 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
 
     private static Logger logger = Logger.getLogger(SessionMetrics.class);
 
-    private static SessionMetrics sessionMetrics;
+    private static volatile SessionMetrics sessionMetrics;
 
     public static SessionMetrics getInstance() {
         if (sessionMetrics == null) {
@@ -52,15 +52,15 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
         addFieldMetrics(new EventCntMetrics());
         addFieldMetrics(new OldSessionSkeyMetrics());
         addFieldMetrics(new PageIdMetrics());
-        addFieldMetrics(new SessionStartDtMetrics());
-        addFieldMetrics(new TimestampMetrics());
+//        addFieldMetrics(new SessionStartDtMetrics());
+//        addFieldMetrics(new TimestampMetrics());
         addFieldMetrics(new UserIdMetrics());
         addFieldMetrics(new ViCoreMetrics());
         addFieldMetrics(new WatchCntMetric());
-        addFieldMetrics(new AgentIPMetrics());
+//        addFieldMetrics(new AgentIPMetrics());
         //add for iphone data filter
         addFieldMetrics(new AppIdMetrics());
-        addFieldMetrics(new SingleClickFlagMetrics());
+//        addFieldMetrics(new SingleClickFlagMetrics());
         addFieldMetrics(new BidBinConfirmFlagMetrics());
         addFieldMetrics(new BotFlagsMetrics());
         // few more new metrics
@@ -78,7 +78,7 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
         // Add extra metrics for new bots
         addFieldMetrics(new LndgPageIdMetrics());
         addFieldMetrics(new ValidPageMetrics());
-        addFieldMetrics(new AgentStringMetrics());
+//        addFieldMetrics(new AgentStringMetrics());
         addFieldMetrics(new FmlyViCntMetrics());
         // Put bot flag
 //        addFieldMetrics(new BotFlagMetrics());

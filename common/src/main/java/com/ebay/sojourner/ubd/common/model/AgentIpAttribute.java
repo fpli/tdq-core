@@ -41,10 +41,13 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
     private int siteCnt = 0;
     private int newGuidCnt = 0;
 //    private int guidCnt = 0;
-    private final Set<String> cguidSet = new HashSet<String>();
-    private final Set<String> guidSet = new HashSet<String>();
+    private  Set<String> cguidSet = new HashSet<String>();
+    private  Set<String> guidSet = new HashSet<String>();
     private Boolean isAllAgentHoper = true;
     private int totalCntForSec1 = 0;
+
+    public AgentIpAttribute() {
+    }
 
     @Override
     public void feed(UbiSession ubiSession, int botFlag) {

@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class IpAttributeAccumulator {
-    private IpAttribute attribute;
+    private IpAttribute ipAttribute;
 
 
-    public IpAttributeAccumulator() {
-        this.attribute= new IpAttribute();
+    public IpAttributeAccumulator(){
+        this.ipAttribute = new IpAttribute();
+
     }
-
 }
