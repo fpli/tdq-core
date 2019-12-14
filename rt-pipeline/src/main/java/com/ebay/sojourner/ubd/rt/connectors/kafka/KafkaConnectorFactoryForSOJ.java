@@ -19,7 +19,7 @@ public class KafkaConnectorFactoryForSOJ {
     public static final String TOPIC_PATHFINDER_EVENTS = AppEnv.config().getKafka().getTopic();
     public static final String BOOTSTRAP_SERVERS = String.join(",", AppEnv.config().getKafka().getBootstrapServers());
 
-    public static FlinkKafkaConsumer<RawEvent> createKafkaConsumer() {
+    public static FlinkKafkaConsumer<byte[]> createKafkaConsumer() {
         Properties props = new Properties();
         props.put("sasl.mechanism", "IAF");
         props.put("security.protocol", "SASL_PLAINTEXT");
@@ -42,7 +42,7 @@ public class KafkaConnectorFactoryForSOJ {
 //        props.put(ConsumerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
 
         return new FlinkKafkaConsumer<>(TOPIC_PATHFINDER_EVENTS,
-                new SojEventDeserializationSchema(), props);
+                new Soj2BinaryDeserializationSchema(), props);
     }
 
     public static FlinkKafkaProducer<SojEvent> createKafkaProducer() {
