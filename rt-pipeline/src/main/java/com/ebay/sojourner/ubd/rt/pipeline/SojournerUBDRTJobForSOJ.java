@@ -15,7 +15,6 @@ import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
 import com.ebay.sojourner.ubd.rt.util.StateBackendFactory;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
@@ -29,23 +28,27 @@ import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindow
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.util.OutputTag;
 
-@Slf4j
+
 public class SojournerUBDRTJobForSOJ {
 
     public static void main(String[] args) throws Exception {
         // 0.0 Prepare execution environment
         // 0.1 UBI configuration
         // 0.2 Flink configuration
+//        InputStream resourceAsStream = SojournerUBDRTJob.class.getResourceAsStream("/ubi.properties");
+//        UBIConfig ubiConfig = UBIConfig.getInstance(resourceAsStream);
+
         final StreamExecutionEnvironment executionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment();
+//        final ParameterTool params = ParameterTool.fromArgs(args);
         executionEnvironment.getConfig().setGlobalJobParameters(new SojJobParameters());
+        // LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
         executionEnvironment.enableCheckpointing(180 * 1000);
         executionEnvironment.getCheckpointConfig().setCheckpointTimeout(10 * 60 * 1000);
         executionEnvironment.setStateBackend(
                 StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
-
 
         // for soj nrt output
         // 1. Rheos Consumer
@@ -65,15 +68,12 @@ public class SojournerUBDRTJobForSOJ {
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent
         // 2.2 Event level bot detection via bot rule
-        DataStream<RawEvent> rawEventFilterDataStream = rawEventDataStream
+        DataStream<RawEvent> filterRawEventDataStream = rawEventDataStream
                 .filter(new EventFilterFunction())
-                .name("Filter RawEvents")
-                .setParallelism(30);
+                .setParallelism(30)
+                .name("filter RawEvents");
 
-        // 2. Event Operator
-        // 2.1 Parse and transform RawEvent to UbiEvent
-        // 2.2 Event level bot detection via bot rule
-        DataStream<UbiEvent> ubiEventDataStream = rawEventFilterDataStream
+        DataStream<UbiEvent> ubiEventDataStream = filterRawEventDataStream
                 .map(new EventMapFunction())
                 .name("Event Operator");
 
@@ -86,6 +86,7 @@ public class SojournerUBDRTJobForSOJ {
                 new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
         OutputTag<UbiEvent> lateEventOutputTag =
                 new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
+//        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
         SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
                 .keyBy("guid")
                 .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
@@ -118,7 +119,7 @@ public class SojournerUBDRTJobForSOJ {
                 .name("Signature Generate(Agent+IP)")
                 .setParallelism(25);
 
-        agentIpSignatureDataStream.addSink(new DiscardingSink<>()).name("Agent+IP Signature").setParallelism(25);
+        agentIpSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Agent+IP Signature");
 
         DataStream<AgentSignature> agentAttributeDataStream = agentIpAttributeDataStream
                 .keyBy("agent")
@@ -128,7 +129,7 @@ public class SojournerUBDRTJobForSOJ {
                 .name("Attribute Operator (Agent)")
                 .setParallelism(25);
 
-        agentAttributeDataStream.addSink(new DiscardingSink<>()).name("Agent Signature").setParallelism(25);
+        agentAttributeDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Agent Signature");
 
         DataStream<IpSignature> ipAttributeDataStream = agentIpAttributeDataStream
                 .keyBy("clientIp")
@@ -138,7 +139,7 @@ public class SojournerUBDRTJobForSOJ {
                 .name("Attribute Operator (IP)")
                 .setParallelism(25);
 
-        ipAttributeDataStream.addSink(new DiscardingSink<>()).name("Ip Signature").setParallelism(25);
+        ipAttributeDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Ip Signature");
 
         // agent ip broadcast
         BroadcastStream<AgentIpSignature> agentIpBroadcastStream = agentIpSignatureDataStream.broadcast(MapStateDesc.agentIpSignatureDesc);
@@ -169,9 +170,8 @@ public class SojournerUBDRTJobForSOJ {
         // 5.2 Sessions (ended)
         // 5.3 Events (with session ID & bot flags)
         // 5.4 Events late
-        agentIpConnectDataStream.addSink(new DiscardingSink<>()).name("broadcast connect(ubiEventStreamWithSessionId)");
         sessionStream.addSink(new DiscardingSink<>()).name("session discarding");
-
+        agentIpConnectDataStream.addSink(new DiscardingSink<>()).name("ubiEvents with sessionId and bot");
         // Submit this job
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");
 
