@@ -77,6 +77,17 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>OttoGroup</id>
+            <name>OttoGroup</name>
+            <url>https://dl.bintray.com/ottogroup/maven/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -124,11 +135,6 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons.lang3.version}</version>
             </dependency>
-            <!--<dependency>-->
-                <!--<groupId>org.projectlombok</groupId>-->
-                <!--<artifactId>lombok</artifactId>-->
-                <!--<version>${lombok.version}</version>-->
-            <!--</dependency>-->
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
@@ -171,6 +177,46 @@
                 <version>${flink.version}</version>
                 <scope>provided</scope>
             </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-test-utils_2.11</artifactId>
+                <version>${flink.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-runtime_2.11</artifactId>
+                <version>${flink.version}</version>
+                <scope>test</scope>
+                <classifier>tests</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-streaming-java_2.11</artifactId>
+                <version>${flink.version}</version>
+                <scope>test</scope>
+                <classifier>tests</classifier>
+            </dependency>
+
+            <!--            <dependency>-->
+            <!--                <groupId>org.mockito</groupId>-->
+            <!--                <artifactId>mockito-all</artifactId>-->
+            <!--                <version>1.10.19</version>-->
+            <!--                <scope>test</scope>-->
+            <!--                <exclusions>-->
+            <!--                    <exclusion>-->
+            <!--                        <groupId>org.hamcrest</groupId>-->
+            <!--                        <artifactId>hamcrest-core</artifactId>-->
+            <!--                    </exclusion>-->
+            <!--                </exclusions>-->
+            <!--            </dependency>-->
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>1.9.5</version>
+                <scope>test</scope>
+            </dependency>
             <dependency>
                 <groupId>org.apache.flink</groupId>
                 <artifactId>flink-java</artifactId>
@@ -194,6 +240,25 @@
                 <artifactId>flink-runtime-web_${scala.binary.version}</artifactId>
                 <version>${flink.version}</version>
                 <scope>provided</scope>
+            </dependency>
+            <!--            <dependency>-->
+            <!--                <groupId>org.flinkspector</groupId>-->
+            <!--                <artifactId>flinkspector-datastream_2.11</artifactId>-->
+            <!--                <version>0.7.1</version>-->
+            <!--                <scope>test</scope>-->
+            <!--            </dependency>-->
+
+            <dependency>
+                <groupId>io.flinkspector</groupId>
+                <artifactId>flinkspector-datastream_2.11</artifactId>
+                <version>0.9.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-all</artifactId>
+                <version>1.3</version>
+                <type>jar</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.flink</groupId>
@@ -226,7 +291,7 @@
             <!-- Spark artifacts -->
             <dependency>
                 <groupId>org.apache.spark</groupId>
-                        <artifactId>spark-core_${scala.binary.version}</artifactId>
+                <artifactId>spark-core_${scala.binary.version}</artifactId>
                 <version>${spark.version}</version>
                 <scope>provided</scope>
             </dependency>
@@ -237,20 +302,20 @@
                 <scope>provided</scope>
             </dependency>
             <!--<dependency>-->
-                <!--<groupId>io.ebay.rheos</groupId>-->
-                <!--<artifactId>rheos-client_JDK-1.8</artifactId>-->
-                <!--<version>${rheos.client.version}</version>-->
-                <!--<exclusions>-->
-                    <!--<exclusion>-->
-                    <!--<groupId>org.xerial.snappy</groupId>-->
-                    <!--<artifactId>snappy-java</artifactId>-->
-                    <!--</exclusion>-->
-                <!--</exclusions>-->
+            <!--<groupId>io.ebay.rheos</groupId>-->
+            <!--<artifactId>rheos-client_JDK-1.8</artifactId>-->
+            <!--<version>${rheos.client.version}</version>-->
+            <!--<exclusions>-->
+            <!--<exclusion>-->
+            <!--<groupId>org.xerial.snappy</groupId>-->
+            <!--<artifactId>snappy-java</artifactId>-->
+            <!--</exclusion>-->
+            <!--</exclusions>-->
             <!--</dependency>-->
             <!--<dependency>-->
-                <!--<groupId>org.xerial.snappy</groupId>-->
-                <!--<artifactId>snappy-java</artifactId>-->
-                <!--<version>1.1.1.3</version>-->
+            <!--<groupId>org.xerial.snappy</groupId>-->
+            <!--<artifactId>snappy-java</artifactId>-->
+            <!--<version>1.1.1.3</version>-->
             <!--</dependency>-->
             <!-- test dependencies -->
             <dependency>
@@ -258,6 +323,13 @@
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
                 <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.hamcrest</groupId>
+                        <artifactId>hamcrest-core</artifactId>
+                    </exclusion>
+                </exclusions>
+
             </dependency>
             <dependency>
                 <groupId>org.scalatest</groupId>
@@ -434,7 +506,7 @@
                     </executions>
                 </plugin>
 
-                 <!--Scalatest runs all Scala tests-->
+                <!--Scalatest runs all Scala tests-->
                 <plugin>
                     <groupId>org.scalatest</groupId>
                     <artifactId>scalatest-maven-plugin</artifactId>
