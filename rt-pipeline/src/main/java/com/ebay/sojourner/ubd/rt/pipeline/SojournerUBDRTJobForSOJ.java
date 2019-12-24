@@ -41,10 +41,11 @@ public class SojournerUBDRTJobForSOJ {
         final StreamExecutionEnvironment executionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment();
 //        final ParameterTool params = ParameterTool.fromArgs(args);
-        executionEnvironment.getConfig().setGlobalJobParameters(new SojJobParameters());
+//        executionEnvironment.getConfig().setGlobalJobParameters(new SojJobParameters());
         // LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
-        executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
+//        executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
+        //TODO(Jason): move configs to .yml file
         executionEnvironment.enableCheckpointing(180 * 1000);
         executionEnvironment.getCheckpointConfig().setCheckpointTimeout(10 * 60 * 1000);
         executionEnvironment.setStateBackend(
@@ -54,16 +55,18 @@ public class SojournerUBDRTJobForSOJ {
         // 1. Rheos Consumer
         // 1.1 Consume RawEvent from Rheos PathFinder topic
         // 1.2 Assign timestamps and emit watermarks.
-        DataStream<RawEvent> rawEventDataStream = executionEnvironment.addSource(
-                KafkaConnectorFactoryForSOJ.createKafkaConsumer().setStartFromLatest().assignTimestampsAndWatermarks(
-                        new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
-                            @Override
-                            public long extractTimestamp(RawEvent element) {
-                                return element.getRheosHeader().getEventCreateTimestamp();
-                            }
-                        }
-                )).setParallelism(30)
-                .name("Rheos Consumer");
+        DataStream<RawEvent> rawEventDataStream = executionEnvironment
+                .addSource(KafkaConnectorFactoryForSOJ.createKafkaConsumer()
+                        .setStartFromLatest()
+                        .assignTimestampsAndWatermarks(
+                                new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
+                                    @Override
+                                    public long extractTimestamp(RawEvent element) {
+                                        return element.getRheosHeader().getEventCreateTimestamp();
+                                    }
+                                }))
+                .setParallelism(30)
+                .name("Rheos Kafka Consumer");
 
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent

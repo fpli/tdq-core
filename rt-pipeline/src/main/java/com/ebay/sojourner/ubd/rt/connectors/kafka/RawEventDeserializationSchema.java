@@ -4,19 +4,18 @@ import com.ebay.sojourner.ubd.common.model.ClientData;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.RheosHeader;
 import io.ebay.rheos.schema.event.RheosEvent;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class RawEventDeserializationSchema implements DeserializationSchema<RawEvent> {
-
-    private static final Logger logger = Logger.getLogger(RawEventDeserializationSchema.class);
 
     @Override
     public RawEvent deserialize(byte[] message) throws IOException {
@@ -31,7 +30,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
                 rheosEvent.getSchemaId(),
                 rheosEvent.getEventId(),
                 rheosEvent.getProducerId()
-                );
+        );
 
         // Generate sojA, sojK, sojC
         Map<Utf8, Utf8> sojA = (Map<Utf8, Utf8>) genericRecord.get("sojA");
@@ -60,7 +59,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
         // Generate ClientData
         // If clientData is not of type GenericRecord, just skip this message.
         if (!(genericRecord.get("clientData") instanceof GenericRecord)) {
-            logger.info("clientData is not of type GenericRecord. "
+            log.info("clientData is not of type GenericRecord. "
                     + genericRecord.get("clientData"));
             return null;
         }
