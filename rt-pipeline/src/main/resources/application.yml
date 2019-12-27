@@ -17,3 +17,9 @@ rheos:
 flink:
   app:
     name: sojourner-ubd
+  checkpoint:
+    data-dir: /opt/sojourner-ubd/checkpoint
+    interval: 300000
+    timeout: 900000
+    min-pause-between: 120000
+    max-concurrent: 1

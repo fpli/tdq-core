@@ -17,7 +17,7 @@ public class AgentIpMapFunction extends RichMapFunction<AgentIpAttribute, AgentI
     @Override
     public void open(Configuration conf) throws Exception {
         super.open(conf);
-        getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
+//        getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
         agentIpSignatureBotDetector = AgentIpSignatureBotDetector.getInstance();
         agentIpSignature = new AgentIpSignature();
     }

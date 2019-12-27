@@ -13,7 +13,7 @@ import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
-import com.ebay.sojourner.ubd.rt.util.StateBackendFactory;
+import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
@@ -39,7 +39,7 @@ public class SojournerUBDRTJob {
         final StreamExecutionEnvironment executionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment();
 //        final ParameterTool params = ParameterTool.fromArgs(args);
-        executionEnvironment.getConfig().setGlobalJobParameters(new SojJobParameters());
+//        executionEnvironment.getConfig().setGlobalJobParameters(new SojJobParameters());
         // LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         executionEnvironment.getConfig().setLatencyTrackingInterval(2000);

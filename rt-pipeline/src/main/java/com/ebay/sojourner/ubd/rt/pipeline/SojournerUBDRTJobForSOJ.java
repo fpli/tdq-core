@@ -13,9 +13,11 @@ import com.ebay.sojourner.ubd.rt.operators.event.EventFilterFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
+import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
-import com.ebay.sojourner.ubd.rt.util.StateBackendFactory;
+import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -42,12 +44,16 @@ public class SojournerUBDRTJobForSOJ {
                 StreamExecutionEnvironment.getExecutionEnvironment();
 //        final ParameterTool params = ParameterTool.fromArgs(args);
 //        executionEnvironment.getConfig().setGlobalJobParameters(new SojJobParameters());
-        // LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
+//         LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 //        executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
-        //TODO(Jason): move configs to .yml file
-        executionEnvironment.enableCheckpointing(180 * 1000);
-        executionEnvironment.getCheckpointConfig().setCheckpointTimeout(10 * 60 * 1000);
+
+        // checkpoint settings
+        executionEnvironment.enableCheckpointing(AppEnv.config().getFlink().getCheckpoint().getInterval(), CheckpointingMode.EXACTLY_ONCE);
+        executionEnvironment.getCheckpointConfig().setCheckpointTimeout(AppEnv.config().getFlink().getCheckpoint().getTimeout());
+        executionEnvironment.getCheckpointConfig().setMinPauseBetweenCheckpoints(AppEnv.config().getFlink().getCheckpoint().getMinPauseBetween());
+        executionEnvironment.getCheckpointConfig().setMaxConcurrentCheckpoints(AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent()==null?
+                1:AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
         executionEnvironment.setStateBackend(
                 StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
 
@@ -115,7 +121,7 @@ public class SojournerUBDRTJobForSOJ {
                 .name("Attribute Operator (Agent+IP)")
                 .setParallelism(25);
 
-        // agent ip DataStream & agent ip bot dectector
+        // agent ip DataStream & agent ip bot detector
         SingleOutputStreamOperator<AgentIpSignature> agentIpSignatureDataStream = agentIpAttributeDataStream
                 .keyBy("agent", "clientIp")
                 .map(new AgentIpMapFunction())

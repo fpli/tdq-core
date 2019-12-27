@@ -23,7 +23,7 @@ public class EventMapFunction extends RichMapFunction<RawEvent,UbiEvent> {
         parser = new EventParser();
         eventBotDetector = EventBotDetector.getInstance();
 
-        getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
+//        getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
         getRuntimeContext().addAccumulator("Average Duration of Event Parsing", avgDuration);
 
 //        for (ClassPath.ClassInfo className : ClassPath.from(EventMapFunction.class.getClassLoader()).getTopLevelClasses("com.ebay.sojourner.ubd.common.sharedlib.parser")) {

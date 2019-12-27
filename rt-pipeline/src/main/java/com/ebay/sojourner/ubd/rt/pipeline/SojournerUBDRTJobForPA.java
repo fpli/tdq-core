@@ -2,9 +2,8 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.RheosHeader;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForPA;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
 import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
-import com.ebay.sojourner.ubd.rt.util.StateBackendFactory;
+import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -25,7 +24,7 @@ public class SojournerUBDRTJobForPA {
         final StreamExecutionEnvironment executionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment();
 //        final ParameterTool params = ParameterTool.fromArgs(args);
-        executionEnvironment.getConfig().setGlobalJobParameters(new SojJobParameters());
+//        executionEnvironment.getConfig().setGlobalJobParameters(new SojJobParameters());
         // LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
