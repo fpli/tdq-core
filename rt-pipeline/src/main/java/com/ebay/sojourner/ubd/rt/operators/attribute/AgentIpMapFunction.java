@@ -1,4 +1,4 @@
-package com.ebay.sojourner.ubd.rt.operators.event;
+package com.ebay.sojourner.ubd.rt.operators.attribute;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.AgentIpSignature;

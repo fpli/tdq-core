@@ -8,7 +8,7 @@ import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.operators.attribute.*;
-import com.ebay.sojourner.ubd.rt.operators.event.AgentIpMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;

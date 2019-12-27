@@ -11,3 +11,4 @@ spark-warehouse/
 .factorypath
 .classpath
 .project
+.vscode

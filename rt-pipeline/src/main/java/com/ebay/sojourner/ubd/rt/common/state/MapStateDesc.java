@@ -22,15 +22,7 @@ public class MapStateDesc {
             "broadcast-agentIpSignature-state", BasicTypeInfo.STRING_TYPE_INFO,TypeInformation.of(new TypeHint<Set<Integer>>() {})
     );
 
-    static {
-        StateTtlConfig ttlConfig = StateTtlConfig
-                .newBuilder(org.apache.flink.api.common.time.Time.days(1))
-                .setUpdateType(StateTtlConfig.UpdateType.OnCreateAndWrite)
-                .setStateVisibility(StateTtlConfig.StateVisibility.ReturnExpiredIfNotCleanedUp)
-                .build();
-
-        ipSignatureDesc.enableTimeToLive(ttlConfig);
-        agentSignatureDesc.enableTimeToLive(ttlConfig);
-        agentIpSignatureDesc.enableTimeToLive(ttlConfig);
-    }
+    public static final MapStateDescriptor<String,Object> attributeSignatureDesc = new MapStateDescriptor<>(
+            "broadcast-agentIpSignature-state", BasicTypeInfo.STRING_TYPE_INFO,TypeInformation.of(Object.class)
+    );
 }

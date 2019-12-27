@@ -35,9 +35,9 @@ public class EventMapFunction extends RichMapFunction<RawEvent,UbiEvent> {
     @Override
     public UbiEvent map(RawEvent rawEvent) throws Exception {
         UbiEvent event = new UbiEvent();
-//        long startTime = System.nanoTime();
+        long startTime = System.nanoTime();
         parser.parse(rawEvent,event);
-//        avgDuration.add(System.nanoTime() - startTime);
+        avgDuration.add(System.nanoTime() - startTime);
         event.getBotFlags().addAll(eventBotDetector.getBotFlagList(event));
         return event;
     }

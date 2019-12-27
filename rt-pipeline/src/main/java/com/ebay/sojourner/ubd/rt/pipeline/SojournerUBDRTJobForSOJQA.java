@@ -1,8 +1,7 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJQA;
-import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJQA;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;

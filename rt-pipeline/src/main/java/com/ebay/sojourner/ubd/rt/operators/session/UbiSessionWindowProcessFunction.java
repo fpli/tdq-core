@@ -39,8 +39,8 @@ public class UbiSessionWindowProcessFunction
         SessionAccumulator sessionAccumulator = elements.iterator().next();
 
         if (sessionAccumulator.getUbiEvent() != null) {
-            Set<Integer> eventBotFlagSet = sessionAccumulator.getUbiEvent().getBotFlags();
-            UbiSession ubiSessionTmp = sessionAccumulator.getUbiSession();
+//            Set<Integer> eventBotFlagSet = sessionAccumulator.getUbiEvent().getBotFlags();
+//            UbiSession ubiSessionTmp = sessionAccumulator.getUbiSession();
 
             out.collect(sessionAccumulator.getUbiEvent());
 
@@ -63,6 +63,7 @@ public class UbiSessionWindowProcessFunction
                 ubiSession.setClientIp(sessionAccumulator.getUbiSession().getClientIp());
                 ubiSession.setInternalIp(sessionAccumulator.getUbiSession().getInternalIp());
                 ubiSession.setSingleClickSessionFlag(sessionAccumulator.getUbiSession().getSingleClickSessionFlag());
+//                ubiSession.setBotFlagList(sessionAccumulator.getUbiSession().getBotFlagList());
 
                 context.output(outputTag, ubiSession);
             }
