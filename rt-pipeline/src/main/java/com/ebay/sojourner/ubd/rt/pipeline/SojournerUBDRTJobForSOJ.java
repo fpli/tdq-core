@@ -1,7 +1,10 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.*;
+import com.ebay.sojourner.ubd.rt.common.broadcast.AgentBroadcastProcessFunction;
+import com.ebay.sojourner.ubd.rt.common.broadcast.AgentIpBroadcastProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.broadcast.AttributeBroadcastProcessFunction;
+import com.ebay.sojourner.ubd.rt.common.broadcast.IpBroadcastProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
@@ -145,23 +148,29 @@ public class SojournerUBDRTJobForSOJ {
 
         ipAttributeDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Ip Signature");
 
-        DataStream<Map<String, Object>> agentConnectIpSignatureDataStream = agentAttributeDataStream
-                .connect(ipAttributeDataStream)
-                .map(new AgentIpSignatureCoMapFunction())
-                .name("agent ip Signature connect Operator");
+        // agent ip broadcast
+        BroadcastStream<AgentIpSignature> agentIpBroadcastStream = agentIpSignatureDataStream.broadcast(MapStateDesc.agentIpSignatureDesc);
 
-        DataStream<Map<String, Object>> attributeSignatureDataStream = agentIpSignatureDataStream
-                .connect(agentConnectIpSignatureDataStream)
-                .map(new AttributeSignatureCoMapFunction())
-                .name("Attribute Signature connect Operator");
+        // agent broadcast
+        BroadcastStream<AgentSignature> agentBroadcastStream = agentAttributeDataStream.broadcast(MapStateDesc.agentSignatureDesc);
 
-        // agent&ip broadcast
-        BroadcastStream<Map<String, Object>> attributeSignatureBroadcastStream = attributeSignatureDataStream.broadcast(MapStateDesc.attributeSignatureDesc);
+        // ip broadcast
+        BroadcastStream<IpSignature> ipBroadcastStrem = ipAttributeDataStream.broadcast(MapStateDesc.ipSignatureDesc);
 
-        DataStream<UbiEvent> attributeConnectDataStream = ubiEventStreamWithSessionId
-                .connect(attributeSignatureBroadcastStream)
-                .process(new AttributeBroadcastProcessFunction())
-                .name("Signature BotDetection(Attribute)");
+        SingleOutputStreamOperator<UbiEvent> ipConnectDataStream = ubiEventStreamWithSessionId
+                .connect(ipBroadcastStrem)
+                .process(new IpBroadcastProcessFunction())
+                .name("Signature BotDetection(IP)");
+
+        SingleOutputStreamOperator<UbiEvent> agentConnectDataStream = ipConnectDataStream
+                .connect(agentBroadcastStream)
+                .process(new AgentBroadcastProcessFunction())
+                .name("Signature BotDetection(Agent)");
+
+        SingleOutputStreamOperator<UbiEvent> agentIpConnectDataStream = agentConnectDataStream
+                .connect(agentIpBroadcastStream)
+                .process(new AgentIpBroadcastProcessFunction())
+                .name("Signature BotDetection(Agent+IP)");
 
         // 5. Load data to file system for batch processing
         // 5.1 IP Signature
@@ -169,9 +178,7 @@ public class SojournerUBDRTJobForSOJ {
         // 5.3 Events (with session ID & bot flags)
         // 5.4 Events late
         sessionStream.addSink(new DiscardingSink<>()).name("session discarding").disableChaining();
-        ubiEventStreamWithSessionId.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId").disableChaining();
-        attributeConnectDataStream.addSink(new DiscardingSink<>()).name("ubiEvents with sessionId and bot").disableChaining();
-
+        agentIpConnectDataStream.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId and bot").disableChaining();
         // Submit this job
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");
 
