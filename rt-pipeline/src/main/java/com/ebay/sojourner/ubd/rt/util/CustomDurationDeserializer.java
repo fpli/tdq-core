@@ -6,11 +6,9 @@ import com.fasterxml.jackson.core.JsonTokenId;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.DecimalUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.time.DateTimeException;
 import java.time.Duration;
 import java.time.Instant;
@@ -33,10 +31,6 @@ public class CustomDurationDeserializer extends StdDeserializer<Duration> {
     @Override
     public Duration deserialize(JsonParser parser, DeserializationContext context) throws IOException, JsonProcessingException {
         switch (parser.getCurrentTokenId()) {
-            case JsonTokenId.ID_NUMBER_FLOAT:
-                BigDecimal value = parser.getDecimalValue();
-                return DecimalUtils.extractSecondsAndNanos(value, Duration::ofSeconds);
-
             case JsonTokenId.ID_NUMBER_INT:
                 if (context.isEnabled(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS)) {
                     return Duration.ofSeconds(parser.getLongValue());

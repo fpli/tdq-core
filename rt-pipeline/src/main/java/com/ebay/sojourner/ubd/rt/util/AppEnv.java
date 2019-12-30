@@ -31,7 +31,6 @@ public class AppEnv {
                 if (appEnv == null) {
                     ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory())
                             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                    objectMapper.findAndRegisterModules();
                     try {
                         String path = Objects.requireNonNull(AppEnv.class.getClassLoader().getResource(CONFIG_FILE_NAME)).getPath();
                         appEnv = objectMapper.readValue(new File(path), AppEnv.class);
