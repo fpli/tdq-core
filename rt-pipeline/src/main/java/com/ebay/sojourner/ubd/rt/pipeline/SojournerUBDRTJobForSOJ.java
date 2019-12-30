@@ -30,6 +30,7 @@ import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindow
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.util.OutputTag;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 public class SojournerUBDRTJobForSOJ {
@@ -47,9 +48,9 @@ public class SojournerUBDRTJobForSOJ {
 //        executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
 
         // checkpoint settings
-        executionEnvironment.enableCheckpointing(AppEnv.config().getFlink().getCheckpoint().getInterval(), CheckpointingMode.EXACTLY_ONCE);
-        executionEnvironment.getCheckpointConfig().setCheckpointTimeout(AppEnv.config().getFlink().getCheckpoint().getTimeout());
-        executionEnvironment.getCheckpointConfig().setMinPauseBetweenCheckpoints(AppEnv.config().getFlink().getCheckpoint().getMinPauseBetween());
+        executionEnvironment.enableCheckpointing(AppEnv.config().getFlink().getCheckpoint().getInterval().getSeconds() * 1000, CheckpointingMode.EXACTLY_ONCE);
+        executionEnvironment.getCheckpointConfig().setCheckpointTimeout(AppEnv.config().getFlink().getCheckpoint().getTimeout().getSeconds() * 1000);
+        executionEnvironment.getCheckpointConfig().setMinPauseBetweenCheckpoints(AppEnv.config().getFlink().getCheckpoint().getMinPauseBetween().getSeconds() * 1000);
         executionEnvironment.getCheckpointConfig().setMaxConcurrentCheckpoints(AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent()==null?
                 1:AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
         executionEnvironment.setStateBackend(

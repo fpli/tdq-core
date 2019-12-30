@@ -19,7 +19,7 @@ flink:
     name: sojourner-ubd
   checkpoint:
     data-dir: /opt/sojourner-ubd/checkpoint
-    interval: 300000
-    timeout: 900000
-    min-pause-between: 120000
+    interval: 5m
+    timeout: 15m
+    min-pause-between: 2m
     max-concurrent: 1

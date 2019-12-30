@@ -1,17 +1,15 @@
 package com.ebay.sojourner.ubd.rt.util;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.introspector.Property;
-import org.yaml.snakeyaml.introspector.PropertyUtils;
-import org.yaml.snakeyaml.representer.Representer;
+import lombok.extern.slf4j.Slf4j;
 
-import java.beans.IntrospectionException;
-import java.io.InputStream;
+import java.io.File;
+import java.util.Objects;
 
+@Slf4j
 @Data
 public class AppEnv {
 
@@ -31,25 +29,19 @@ public class AppEnv {
         if (appEnv == null) {
             synchronized (AppEnv.class) {
                 if (appEnv == null) {
-                    Representer representer = new Representer();
-                    representer.setPropertyUtils(new MyPropUtils());
-                    representer.getPropertyUtils().setSkipMissingProperties(true);
-                    InputStream in = AppEnv.class.getClassLoader().getResourceAsStream(CONFIG_FILE_NAME);
-                    Yaml yaml = new Yaml(new Constructor(AppEnv.class), representer);
-                    appEnv = yaml.loadAs(in, AppEnv.class);
+                    ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory())
+                            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                    objectMapper.findAndRegisterModules();
+                    try {
+                        String path = Objects.requireNonNull(AppEnv.class.getClassLoader().getResource(CONFIG_FILE_NAME)).getPath();
+                        appEnv = objectMapper.readValue(new File(path), AppEnv.class);
+                    } catch (Exception e) {
+                        log.error("Cannot load {} file", CONFIG_FILE_NAME, e);
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }
         return appEnv;
-    }
-
-    static class MyPropUtils extends PropertyUtils {
-        @Override
-        public Property getProperty(Class<?> type, String name) throws IntrospectionException {
-            if (name.indexOf('-') > -1) {
-                name = StringUtils.uncapitalize(StringUtils.remove(WordUtils.capitalize(name, '-'), '-'));
-            }
-            return super.getProperty(type, name);
-        }
     }
 }
