@@ -6,8 +6,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.util.Objects;
+import java.io.InputStream;
 
 @Slf4j
 @Data
@@ -32,8 +31,8 @@ public class AppEnv {
                     ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory())
                             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
                     try {
-                        String path = Objects.requireNonNull(AppEnv.class.getClassLoader().getResource(CONFIG_FILE_NAME)).getPath();
-                        appEnv = objectMapper.readValue(new File(path), AppEnv.class);
+                        InputStream inputStream = AppEnv.class.getClassLoader().getResourceAsStream(CONFIG_FILE_NAME);
+                        appEnv = objectMapper.readValue(inputStream, AppEnv.class);
                     } catch (Exception e) {
                         log.error("Cannot load {} file", CONFIG_FILE_NAME, e);
                         throw new RuntimeException(e);
