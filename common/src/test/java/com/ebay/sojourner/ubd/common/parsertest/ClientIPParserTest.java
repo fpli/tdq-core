@@ -7,16 +7,16 @@ import com.ebay.sojourner.ubd.common.sharelib.Constants;
 import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
 import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class ClientIPParserTest {
-    private static final Logger logger = Logger.getLogger(ClientIPParserTest.class);
 
     private static UbiEvent ubiEvent = null;
     private static String parser = null;
@@ -24,7 +24,7 @@ public class ClientIPParserTest {
     private static ClientIPParser clientIPParser = null;
     private static HashMap<String, Object> map = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void initParser(){
         parser = Constants.CLIENTIP;
         map = YamlUtil.getInstance().loadFileMap(Constants.FILEPATH);
@@ -43,7 +43,7 @@ public class ClientIPParserTest {
                 System.out.println(VaildateResult.validateString(entry.getValue(),ubiEvent.getClientIP()));
             }
         } catch (Exception e) {
-            logger.error("clientIP test fail!!!");
+            log.error("clientIP test fail!!!");
         }
     }
 
@@ -62,7 +62,7 @@ public class ClientIPParserTest {
                 }
             }
         } catch (Exception e) {
-            logger.error("clientIP test fail!!!");
+            log.error("clientIP test fail!!!");
         }
     }
 
@@ -81,7 +81,7 @@ public class ClientIPParserTest {
                 }
             }
         } catch (Exception e) {
-            logger.error("clientIP test fail!!!");
+            log.error("clientIP test fail!!!");
         }
     }
 
@@ -100,7 +100,7 @@ public class ClientIPParserTest {
                 }
             }
         } catch (Exception e) {
-            logger.error("clientIP test fail!!!");
+            log.error("clientIP test fail!!!");
         }
     }
 
@@ -119,7 +119,7 @@ public class ClientIPParserTest {
                 }
             }
         } catch (Exception e) {
-            logger.error("clientIP test fail!!!");
+            log.error("clientIP test fail!!!");
         }
     }
 }

@@ -7,8 +7,9 @@ import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
 import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.TypeTransUtil;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class AppidParserTest {
     private static AppIdParser appIdParser = null;
     private static HashMap<String, Object> map = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void initParser() {
         parser = APPID;
         map = YamlUtil.getInstance().loadFileMap(FILEPATH);

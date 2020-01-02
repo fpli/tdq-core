@@ -7,16 +7,16 @@ import com.ebay.sojourner.ubd.common.sharelib.Constants;
 import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
 import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
-import org.apache.log4j.Logger;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
+@Slf4j
 public class AgentInfoParserTest {
-    private static final Logger logger = Logger.getLogger(AgentInfoParserTest.class);
 
     private static UbiEvent ubiEvent = null;
     private static String parser = null;
@@ -24,7 +24,7 @@ public class AgentInfoParserTest {
     private static AgentInfoParser agentInfoParser = null;
     private static HashMap<String, Object> map = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void initParser() {
         parser = Constants.AGENTINFO;
         map = YamlUtil.getInstance().loadFileMap(Constants.FILEPATH);
@@ -43,7 +43,7 @@ public class AgentInfoParserTest {
                 System.out.println(VaildateResult.validateString(entry.getValue(), ubiEvent.getAgentInfo()));
             }
         }catch (Exception e){
-            logger.error("agent test fail!!!");
+            log.error("agent test fail!!!");
         }
     }
 }
