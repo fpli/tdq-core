@@ -1,42 +1,43 @@
-package com.ebay.sojourner.ubd.common.parsertest;
+package com.ebay.sojourner.ubd.common.parser;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.FlagsParser;
+import com.ebay.sojourner.ubd.common.sharedlib.parser.ReferrerHashParser;
 import com.ebay.sojourner.ubd.common.sharelib.Constants;
 import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
 import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
+import com.ebay.sojourner.ubd.common.util.TypeTransUtil;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
-public class FlagsParserTest {
+public class ReferrerHashParserTest {
 
     private static UbiEvent ubiEvent = null;
     private static String parser = null;
     private static String caseItem = null;
-    private static FlagsParser flagsParser = null;
+    private static ReferrerHashParser referrerHashParser = null;
     private static HashMap<String, Object> map = null;
 
     @BeforeAll
     public static void initParser() {
-        parser = Constants.FLAGS;
+        parser = Constants.REFERRERHASH;
         map = YamlUtil.getInstance().loadFileMap(Constants.FILEPATH);
     }
 
     @Test
-    public void testFlagsParser() {
-        flagsParser = new FlagsParser();
+    public void testReferrerHash() {
+        referrerHashParser = new ReferrerHashParser();
         ubiEvent = new UbiEvent();
         caseItem = Constants.CASE1;
+
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-            flagsParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.validateString(entry.getValue(), ubiEvent.getFlags()));
+            referrerHashParser.parse(entry.getKey(), ubiEvent);
+            System.out.println(VaildateResult.validateString(entry.getValue(), TypeTransUtil.LongToString(ubiEvent.getRefererHash())));
         }
     }
 }

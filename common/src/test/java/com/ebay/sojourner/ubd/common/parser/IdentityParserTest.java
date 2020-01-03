@@ -1,8 +1,8 @@
-package com.ebay.sojourner.ubd.common.parsertest;
+package com.ebay.sojourner.ubd.common.parser;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.ServerParser;
+import com.ebay.sojourner.ubd.common.sharedlib.parser.IdentityParser;
 import com.ebay.sojourner.ubd.common.sharelib.Constants;
 import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
 import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
@@ -14,35 +14,36 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ServerParserTest {
-    private static final Logger logger = Logger.getLogger(ServerParserTest.class);
+public class IdentityParserTest {
+    private static final Logger logger = Logger.getLogger(IdentityParserTest.class);
 
     private static UbiEvent ubiEvent = null;
     private static String parser = null;
     private static String caseItem = null;
-    private static ServerParser serverParser = null;
+    private static IdentityParser identityParser = null;
     private static HashMap<String, Object> map = null;
 
     @BeforeAll
     public static void initParser() {
-        parser = Constants.SERVERPARSER;
+        parser = Constants.IDENTITY;
         map = YamlUtil.getInstance().loadFileMap(Constants.FILEPATH);
     }
 
     @Test
-    public void testServerParser() {
-        serverParser = new ServerParser();
+    public void testIdentityParser() {
+        identityParser = new IdentityParser();
         ubiEvent = new UbiEvent();
         caseItem = Constants.CASE1;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-                serverParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateString(entry.getValue(), ubiEvent.getWebServer()));
+                identityParser.parse(entry.getKey(), ubiEvent);
+                System.out.println(VaildateResult.validateString(entry.getValue(), ubiEvent.getApplicationPayload()));
+                System.out.println(ubiEvent.getGuid());
             }
-        } catch (Exception e) {
-            logger.error("server test fail!!!");
+        }catch (Exception e){
+            logger.error("identity test fail!!!");
         }
     }
 }

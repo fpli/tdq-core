@@ -1,4 +1,4 @@
-package com.ebay.sojourner.ubd.common.parsertest;
+package com.ebay.sojourner.ubd.common.parser;
 
 import com.ebay.sojourner.ubd.common.model.ClientData;
 import com.ebay.sojourner.ubd.common.model.RawEvent;

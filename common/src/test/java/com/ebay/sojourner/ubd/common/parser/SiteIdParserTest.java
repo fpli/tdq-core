@@ -1,8 +1,8 @@
-package com.ebay.sojourner.ubd.common.parsertest;
+package com.ebay.sojourner.ubd.common.parser;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.PageIdParser;
+import com.ebay.sojourner.ubd.common.sharedlib.parser.SiteIdParser;
 import com.ebay.sojourner.ubd.common.sharelib.Constants;
 import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
 import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
@@ -13,82 +13,82 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PageIdParserTest {
+public class SiteIdParserTest {
 
     private static UbiEvent ubiEvent = null;
     private static String parser = null;
     private static String caseItem = null;
-    private static PageIdParser pageIdParser = null;
+    private static SiteIdParser siteIdParser = null;
     private static HashMap<String, Object> map = null;
 
     @BeforeAll
     public static void initParser() {
-        parser = Constants.PAGEID;
+        parser = Constants.SITE;
         map = YamlUtil.getInstance().loadFileMap(Constants.FILEPATH);
     }
 
     @Test
-    public void testPageIdParser1() {
-        pageIdParser = new PageIdParser();
+    public void testSiteIdParser1() {
+        siteIdParser = new SiteIdParser();
         ubiEvent = new UbiEvent();
         caseItem = Constants.CASE1;
 
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-            pageIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.validateInteger(entry.getValue(),ubiEvent.getPageId()));
+            siteIdParser.parse(entry.getKey(), ubiEvent);
+            System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getSiteId()));
         }
     }
 
     @Test
-    public void testPageIdParser2() {
-        pageIdParser = new PageIdParser();
+    public void testSiteIdParser2() {
+        siteIdParser = new SiteIdParser();
         ubiEvent = new UbiEvent();
         caseItem = Constants.CASE2;
 
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-            pageIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.validateInteger(entry.getValue(),ubiEvent.getPageId()));
+            siteIdParser.parse(entry.getKey(), ubiEvent);
+            System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getSiteId()));
         }
     }
 
     @Test
-    public void testPageIdParser3() {
-        pageIdParser = new PageIdParser();
+    public void testSiteIdParser3() {
+        siteIdParser = new SiteIdParser();
         ubiEvent = new UbiEvent();
         caseItem = Constants.CASE3;
 
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-            pageIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.validateInteger(entry.getValue(),ubiEvent.getPageId()));
+            siteIdParser.parse(entry.getKey(), ubiEvent);
+            System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getSiteId()));
         }
     }
 
     @Test
-    public void testPageIdParser4() {
-        pageIdParser = new PageIdParser();
+    public void testSiteIdParser4() {
+        siteIdParser = new SiteIdParser();
         ubiEvent = new UbiEvent();
         caseItem = Constants.CASE4;
 
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-            pageIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.validateInteger(entry.getValue(),ubiEvent.getPageId()));
+            siteIdParser.parse(entry.getKey(), ubiEvent);
+            System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getSiteId()));
         }
     }
 
     @Test
-    public void testPageIdParser5() {
-        pageIdParser = new PageIdParser();
+    public void testSiteIdParser5() {
+        siteIdParser = new SiteIdParser();
         ubiEvent = new UbiEvent();
         caseItem = Constants.CASE5;
 
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-            pageIdParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.validateInteger(entry.getValue(),ubiEvent.getPageId()));
+            siteIdParser.parse(entry.getKey(), ubiEvent);
+            System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getSiteId()));
         }
     }
 }
