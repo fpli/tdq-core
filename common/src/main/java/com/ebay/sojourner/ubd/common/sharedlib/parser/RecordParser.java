@@ -1,6 +1,9 @@
 package com.ebay.sojourner.ubd.common.sharedlib.parser;
 
+import org.apache.flink.api.common.accumulators.AverageAccumulator;
+
 import java.util.LinkedHashSet;
+import java.util.Map;
 
 /**
  * @author kofeng
@@ -9,7 +12,7 @@ import java.util.LinkedHashSet;
  */
 public abstract class RecordParser<Source, Target> implements Parser<Source, Target> {
     
-    protected LinkedHashSet<FieldParser<Source, Target>> fieldParsers = new LinkedHashSet<FieldParser<Source, Target>>();
+    protected LinkedHashSet<FieldParser<Source, Target>> fieldParsers = new LinkedHashSet<>();
 
     public abstract void initFieldParsers();
     
@@ -19,16 +22,15 @@ public abstract class RecordParser<Source, Target> implements Parser<Source, Tar
         }
     }
 
-//    public void parse(Source source, Target target) throws Exception {
-//
-//    }
-
     public void parse(Source source, Target target) throws Exception {
+    }
+
+    public void parse(Source source, Target target, Map<String, AverageAccumulator> map) throws Exception {
         for (FieldParser<Source, Target> parser : fieldParsers) {
-//            long start = System.nanoTime();
+            long start = System.nanoTime();
             parser.parse(source, target);
-//            long end = System.nanoTime();
-//            map.get(parser.getClass().getSimpleName()).add(end - start);
+            long end = System.nanoTime();
+            map.get(parser.getClass().getSimpleName()).add(end - start);
         }
     }
 
