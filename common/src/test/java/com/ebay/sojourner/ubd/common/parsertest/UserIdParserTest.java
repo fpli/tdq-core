@@ -8,8 +8,8 @@ import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
 import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +22,7 @@ public class UserIdParserTest {
     private static UserIdParser userIdParser = null;
     private static HashMap<String, Object> map = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void initParser() {
         parser = Constants.USERID;
         map = YamlUtil.getInstance().loadFileMap(Constants.FILEPATH);

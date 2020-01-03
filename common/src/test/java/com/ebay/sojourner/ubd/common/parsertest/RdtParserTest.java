@@ -7,8 +7,8 @@ import com.ebay.sojourner.ubd.common.sharelib.Constants;
 import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
 import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class RdtParserTest {
     private static RdtParser rdtParser = null;
     private static HashMap<String, Object> map = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void initParser() {
         parser = Constants.RDT;
         map = YamlUtil.getInstance().loadFileMap(Constants.FILEPATH);

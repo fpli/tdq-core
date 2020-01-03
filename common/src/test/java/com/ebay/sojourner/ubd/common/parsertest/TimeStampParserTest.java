@@ -9,8 +9,8 @@ import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.TypeTransUtil;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
 import org.apache.log4j.Logger;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ public class TimeStampParserTest {
     private static TimestampParser timestampParser = null;
     private static HashMap<String, Object> map = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void initParser() {
         parser = Constants.TIMESTAMP;
         map = YamlUtil.getInstance().loadFileMap(Constants.FILEPATH);
