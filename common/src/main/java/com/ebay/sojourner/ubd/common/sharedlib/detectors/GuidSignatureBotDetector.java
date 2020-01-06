@@ -2,6 +2,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import com.ebay.sojourner.ubd.common.model.GuidAttribute;
 import com.ebay.sojourner.ubd.common.model.IpAttribute;
+import com.ebay.sojourner.ubd.common.rule.BotRule15_1;
 import com.ebay.sojourner.ubd.common.rule.BotRule7;
 import com.ebay.sojourner.ubd.common.rule.Rule;
 import com.ebay.sojourner.ubd.common.sharedlib.connectors.CouchBaseManager;
@@ -59,7 +60,7 @@ public class GuidSignatureBotDetector implements BotDetector<GuidAttribute> {
     @Override
     public void initBotRules() {
 
-        botRules.add(new BotRule7());
+        botRules.add(new BotRule15_1());
     }
 
     private Set<Integer> scanSignature(String inColumnName, String inColumnValue, String outColumnName, String bucketName) {

@@ -50,8 +50,10 @@ public class EventMapFunction extends RichMapFunction<RawEvent,UbiEvent> {
 
     @Override
     public void open(Configuration conf) throws Exception {
+
+        System.out.println("eventMap thread id:"+Thread.currentThread().getId());
         super.open(conf);
-        getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
+//        getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
 //        InputStream configFile = getRuntimeContext().getDistributedCache().getClass().getResourceAsStream("configFile");
 //        UBIConfig ubiConfig = UBIConfig.getInstance(configFile);
 

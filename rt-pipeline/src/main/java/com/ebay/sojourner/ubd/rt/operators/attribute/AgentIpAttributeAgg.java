@@ -32,7 +32,9 @@ public class AgentIpAttributeAgg implements AggregateFunction<UbiSession, AgentI
             agentIpAttributeAccumulator.getAgentIpAttribute().setAgent(session.getUserAgent());
         }
         try {
-            agentIpIndicators.feed(session,agentIpAttributeAccumulator);
+
+            agentIpIndicators.feed(session,agentIpAttributeAccumulator,true);
+//            System.out.println("agg:==========="+agentIpAttributeAccumulator.getAgentIpAttribute());
         } catch (Exception e) {
             e.printStackTrace();
         }

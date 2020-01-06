@@ -59,6 +59,10 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
                 logger.error("feed-session metrics collection log:"+e.getMessage());
             }
         }
+        if(accumulator.getUbiSession().getGuid()==null)
+        {
+            accumulator.getUbiSession().setGuid(value.getGuid());
+        }
         Set<Integer> sessionBotFlagSetDetect = null;
         try {
             sessionBotFlagSetDetect = sessionBotDetector.getBotFlagList(accumulator.getUbiSession());
@@ -74,6 +78,10 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent,SessionAccumula
 //        Set<Integer> attrBotFlagWithAgentIp = couchBaseManager.getSignatureWithDocId(accumulator.getUbiSession().getUserAgent()+accumulator.getUbiSession().getClientIp());
 //        Set<Integer> attrBotFlagWithAgent = couchBaseManager.getSignatureWithDocId(accumulator.getUbiSession().getUserAgent());
 
+        if(eventBotFlagSet!=null&&eventBotFlagSet.size()>0&&!sessionBotFlagSet.containsAll(eventBotFlagSet))
+        {
+            sessionBotFlagSet.addAll(eventBotFlagSet);
+        }
         if(sessionBotFlagSetDetect!=null&&sessionBotFlagSetDetect.size()>0) {
             sessionBotFlagSet.addAll(sessionBotFlagSetDetect);
             eventBotFlagSet.addAll(sessionBotFlagSetDetect);

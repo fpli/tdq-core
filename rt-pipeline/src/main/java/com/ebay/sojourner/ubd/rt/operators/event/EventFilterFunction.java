@@ -19,7 +19,7 @@ public class EventFilterFunction extends RichFilterFunction<RawEvent> {
     @Override
     public void open(Configuration conf) throws Exception {
         super.open(conf);
-        getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
+//        getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
 //
     }
 

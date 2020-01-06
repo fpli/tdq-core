@@ -2,12 +2,15 @@ package com.ebay.sojourner.ubd.common.model;
 
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.IntermediateMetrics;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
+@EqualsAndHashCode(exclude={"id", "intermediateMetrics"})
 public class UbiSession implements Serializable,Cloneable{
     private Long sojDataDt;
     private String guid;

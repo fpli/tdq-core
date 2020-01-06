@@ -6,12 +6,14 @@ import com.ebay.sojourner.ubd.rt.common.broadcast.AgentIpBroadcastProcessFunctio
 import com.ebay.sojourner.ubd.rt.common.broadcast.IpBroadcastProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
+import com.ebay.sojourner.ubd.rt.connectors.filesystem.SojHdfsSink;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJQA;
 import com.ebay.sojourner.ubd.rt.operators.attribute.*;
 import com.ebay.sojourner.ubd.rt.operators.event.AgentIpMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventDeserializeMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.RawEvent2JSONMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
@@ -67,6 +69,7 @@ public class SojournerUBDRTJobForSOJQA {
                         }
                 )).setParallelism(30)
                 .name("Rheos Consumer");
+//        DataStream<String> jsonString = rawEventDataStream.map(new RawEvent2JSONMapFunction());
 //
 //        DataStream<byte[]> rawEventDataStream= executionEnvironment.addSource(
 //                KafkaConnectorFactoryForSOJQA.createKafkaConsumer()).setParallelism(30)
@@ -87,33 +90,33 @@ public class SojournerUBDRTJobForSOJQA {
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent
         // 2.2 Event level bot detection via bot rule
-//        DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
-//                .map(new EventMapFunction())
-//                .setParallelism(125)
-//                .name("Event Operator");
-////
-////        // 3. Session Operator
-////        // 3.1 Session window
-////        // 3.2 Session indicator accumulation
-////        // 3.3 Session Level bot detection (via bot rule & signature)
-////        // 3.4 Event level bot detection (via session flag)
-//        OutputTag<UbiSession> sessionOutputTag =
-//                new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
-//        OutputTag<UbiEvent> lateEventOutputTag =
-//                new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
-////        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
-//        SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
-//                .keyBy("guid")
-//                .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-//                .trigger(OnElementEarlyFiringTrigger.create())
-//                .allowedLateness(Time.hours(1))
-//                .sideOutputLateData(lateEventOutputTag)
-//                .aggregate(new UbiSessionAgg(),
-//                        new UbiSessionWindowProcessFunction(sessionOutputTag))
-//                .name("Session Operator")
-//                ;
-//        DataStream<UbiSession> sessionStream =
-//                ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag); // sessions ended
+        DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
+                .map(new EventMapFunction())
+                .setParallelism(125)
+                .name("Event Operator");
+//
+//        // 3. Session Operator
+//        // 3.1 Session window
+//        // 3.2 Session indicator accumulation
+//        // 3.3 Session Level bot detection (via bot rule & signature)
+//        // 3.4 Event level bot detection (via session flag)
+        OutputTag<UbiSession> sessionOutputTag =
+                new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
+        OutputTag<UbiEvent> lateEventOutputTag =
+                new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
+//        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
+        SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
+                .keyBy("guid")
+                .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
+                .trigger(OnElementEarlyFiringTrigger.create())
+                .allowedLateness(Time.hours(1))
+                .sideOutputLateData(lateEventOutputTag)
+                .aggregate(new UbiSessionAgg(),
+                        new UbiSessionWindowProcessFunction(sessionOutputTag))
+                .name("Session Operator")
+                ;
+        DataStream<UbiSession> sessionStream =
+                ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag); // sessions ended
 
 //        // 4. Attribute Operator
 //        // 4.1 Sliding window
@@ -192,9 +195,10 @@ public class SojournerUBDRTJobForSOJQA {
 
 //        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
 //                .name("Events (Late)").disableChaining();
+        sessionStream.addSink(new SojHdfsSink<UbiSession>(UbiSession.class));
 
-
-        rawEventDataStream.print().name("byte");
+//        rawEventDataStream.print().name("byte");
+//        jsonString.print().name("json");
 //        ubiEventDataStream.print().name("ubiEvent");
 //        sessionStream.print().name("ubiSession");
 //        ipAttributeDataStream.print().name("IP Signature");

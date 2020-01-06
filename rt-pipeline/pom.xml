@@ -24,7 +24,15 @@
             <version>${project.version}</version>
 
         </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
 
+        </dependency>
+        <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-hdfs</artifactId>
+        </dependency>
         <!-- Apache Flink dependencies -->
         <!-- These dependencies are provided, because they should not be packaged into the JAR file. -->
         <dependency>
@@ -120,6 +128,11 @@
             <groupId>org.apache.parquet</groupId>
             <artifactId>parquet-avro</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-streaming-java_2.12</artifactId>
+            <version>1.7.1</version>
+        </dependency>
 
     </dependencies>
 
@@ -212,6 +225,13 @@
                     <artifactId>flink-runtime-web_${scala.binary.version}</artifactId>
                     <scope>compile</scope>
                 </dependency>
+                <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+                <dependency>
+                    <groupId>com.alibaba</groupId>
+                    <artifactId>fastjson</artifactId>
+                    <version>1.2.62</version>
+                </dependency>
+
             </dependencies>
         </profile>
     </profiles>

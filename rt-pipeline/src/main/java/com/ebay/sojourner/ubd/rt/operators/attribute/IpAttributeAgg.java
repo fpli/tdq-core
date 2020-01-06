@@ -31,7 +31,7 @@ public class IpAttributeAgg implements AggregateFunction<AgentIpAttribute, IpAtt
             ipAttr.getIpAttribute().setClientIp(agentIpAttribute.getClientIp());
         }
         try {
-            ipIndicators.feed(agentIpAttribute, ipAttr);
+            ipIndicators.feed(agentIpAttribute, ipAttr,true);
         } catch (Exception e) {
             e.printStackTrace();
         }
