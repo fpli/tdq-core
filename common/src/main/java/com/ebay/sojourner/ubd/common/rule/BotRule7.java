@@ -14,14 +14,12 @@ public class BotRule7 implements Rule<IpAttribute> {
     }
 
     @Override
-    public int getBotFlag(IpAttribute ipAttribute) {
-
-
+    public int getBotFlag( IpAttribute ipAttribute ) {
         int botFlag = NON_BOT_FLAG;
-        if (ipAttribute.getScsCount() >= 1) {
-           botFlag=SCS_ON_IP;
+        if (ipAttribute.getScsCount() >= 1&&ipAttribute.getTotalCnt()>=20) {
+//            System.out.println("ipAttribute.getTotalCnt():"+ipAttribute);
+            botFlag = SCS_ON_IP;
         }
-
         return botFlag;
     }
 

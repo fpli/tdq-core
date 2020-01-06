@@ -179,7 +179,7 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
         directSessionCnt = 0;
         mktgSessionCnt = 0;
         ipCountForSuspect = 0;
-
+        totalCnt = 0;
         validPageCnt = -1;
         maxValidPageCnt = -1;
         consistent = true;
