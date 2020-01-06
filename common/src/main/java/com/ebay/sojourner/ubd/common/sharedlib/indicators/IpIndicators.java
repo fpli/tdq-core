@@ -44,7 +44,8 @@ public class IpIndicators extends AttributeIndicators<AgentIpAttribute, IpAttrib
     @Override
     public void initIndicators() {
 
-        addIndicators(new <AgentIpAttribute,IpAttributeAccumulator>ScsCountForBot8Indicator(botFilter));
+//        addIndicators(new <AgentIpAttribute,IpAttributeAccumulator>ScsCountForBot8Indicator(botFilter));
+        addIndicators(new <AgentIpAttribute,IpAttributeAccumulator>ScsCountForBot7Indicator(botFilter));
         addIndicators(new <AgentIpAttribute,IpAttributeAccumulator>SuspectIPIndicator(botFilter));
 
     }

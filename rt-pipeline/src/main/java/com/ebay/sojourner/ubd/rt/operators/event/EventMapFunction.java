@@ -4,7 +4,12 @@ import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.EventBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.*;
+<<<<<<< HEAD
 import lombok.extern.slf4j.Slf4j;
+=======
+import com.ebay.sojourner.ubd.common.util.PropertyUtils;
+import com.ebay.sojourner.ubd.common.util.UBIConfig;
+>>>>>>> sojourner-split
 import org.apache.flink.api.common.accumulators.AverageAccumulator;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.configuration.Configuration;
@@ -23,6 +28,8 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
     @Override
     public void open(Configuration conf) throws Exception {
+
+        System.out.println("eventMap thread id:"+Thread.currentThread().getId());
         super.open(conf);
 
         parser = new EventParser();
@@ -70,7 +77,9 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
     @Override
     public UbiEvent map(RawEvent rawEvent) throws Exception {
+
         UbiEvent event = new UbiEvent();
+
         long startTime = System.nanoTime();
         parser.parse(rawEvent, event, eventParseMap);
         avgDuration.add(System.nanoTime() - startTime);

@@ -40,9 +40,9 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
     private int mktgCnt = 0;
     private int siteCnt = 0;
     private int newGuidCnt = 0;
-//    private int guidCnt = 0;
-    private  Set<String> cguidSet = new HashSet<String>();
-    private  Set<String> guidSet = new HashSet<String>();
+    //    private int guidCnt = 0;
+    private Set<String> cguidSet = new HashSet<String>();
+    private Set<String> guidSet = new HashSet<String>();
     private Boolean isAllAgentHoper = true;
     private int totalCntForSec1 = 0;
 
@@ -50,74 +50,80 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
     }
 
     @Override
-    public void feed(UbiSession ubiSession, int botFlag) {
-        totalSessionCnt += 1;
-        if (ubiSession.getFirstCguid() == null) {
-            nocguidSessionCnt += 1;
-        }
+    public void feed( UbiSession ubiSession, int botFlag, boolean isNeeded ) {
+        if (isNeeded) {
+            totalSessionCnt += 1;
+            if (ubiSession.getFirstCguid() == null) {
+                nocguidSessionCnt += 1;
+            }
 
-        if (UbiSessionHelper.isSps(ubiSession)) {
-            spsSessionCnt += 1;
-        }
+            if (UbiSessionHelper.isSps(ubiSession)) {
+                spsSessionCnt += 1;
+            }
 
-        if (UbiSessionHelper.isNoUid(ubiSession)) {
-            nouidSessionCnt += 1;
-        }
+            if (UbiSessionHelper.isNoUid(ubiSession)) {
+                nouidSessionCnt += 1;
+            }
 
-        if (UbiSessionHelper.isDirect(ubiSession)) {
-            directSessionCnt += 1;
-        }
-        if (UbiSessionHelper.isMktg(ubiSession)) {
-            mktgSessionCnt += 1;
-        }
+            if (UbiSessionHelper.isDirect(ubiSession)) {
+                directSessionCnt += 1;
+            }
+            if (UbiSessionHelper.isMktg(ubiSession)) {
+                mktgSessionCnt += 1;
+            }
 
-        if (UbiSessionHelper.getExInternalIp(ubiSession) != null) {
-            ipCountForSuspect = 1;
-        }
-        totalCnt += 1;
-        consistent = consistent
-                && (validPageCnt == ubiSession.getValidPageCnt()
-                || validPageCnt < 0 || ubiSession.getValidPageCnt() < 0);
+            if (UbiSessionHelper.getExInternalIp(ubiSession) != null) {
+                ipCountForSuspect = 1;
+            }
 
-        if(ubiSession.getValidPageCnt() >= 0) {
-            validPageCnt = ubiSession.getValidPageCnt();
-        }
-        maxValidPageCnt = Math.max(maxValidPageCnt,
-                ubiSession.getValidPageCnt());
+            if (UbiSessionHelper.getExInternalIp(ubiSession) != null) {
+                ipCount = 1;
+            }
+            totalCnt += 1;
+            consistent = consistent
+                    && (validPageCnt == ubiSession.getValidPageCnt()
+                    || validPageCnt < 0 || ubiSession.getValidPageCnt() < 0);
 
-        if (UbiSessionHelper.isHomePage(ubiSession)) {
-            homePageCnt += 1;
-        }
-        if (UbiSessionHelper.isFamilyVi(ubiSession)) {
-            familyViCnt += 1;
-        }
-        if (UbiSessionHelper.isSignIn(ubiSession)) {
-            signinCnt += 1;
-        }
-        if (UbiSessionHelper.isNoUid(ubiSession)) {
-            noUidCnt += 1;
-        }
-        if (UbiSessionHelper.isDirect(ubiSession)) {
-            directCnt += 1;
-        }
-        if (UbiSessionHelper.isMktg(ubiSession)) {
-            mktgCnt += 1;
-        }
-        if (UbiSessionHelper.isSite(ubiSession)) {
-            siteCnt += 1;
-        }
-        if (UbiSessionHelper.isNewGuid(ubiSession)) {
-            newGuidCnt += 1;
-        }
-        if(ubiSession.getGuid()!=null)
-        {
-            guidSet.add(ubiSession.getGuid());
-        }
+            if (ubiSession.getValidPageCnt() >= 0) {
+                validPageCnt = ubiSession.getValidPageCnt();
+            }
+            maxValidPageCnt = Math.max(maxValidPageCnt,
+                    ubiSession.getValidPageCnt());
 
-        if (ubiSession.getFirstCguid() != null) {
-            cguidSet.add(ubiSession.getFirstCguid());
+            if (UbiSessionHelper.isHomePage(ubiSession)) {
+                homePageCnt += 1;
+            }
+            if (UbiSessionHelper.isFamilyVi(ubiSession)) {
+                familyViCnt += 1;
+            }
+            if (UbiSessionHelper.isSignIn(ubiSession)) {
+                signinCnt += 1;
+            }
+            if (UbiSessionHelper.isNoUid(ubiSession)) {
+                noUidCnt += 1;
+            }
+            if (UbiSessionHelper.isDirect(ubiSession)) {
+                directCnt += 1;
+            }
+            if (UbiSessionHelper.isMktg(ubiSession)) {
+                mktgCnt += 1;
+            }
+            if (UbiSessionHelper.isSite(ubiSession)) {
+                siteCnt += 1;
+            }
+            if (UbiSessionHelper.isNewGuid(ubiSession)) {
+                newGuidCnt += 1;
+            }
+            if (ubiSession.getGuid() != null) {
+                guidSet.add(ubiSession.getGuid());
+            }
+
+            if (ubiSession.getFirstCguid() != null) {
+                cguidSet.add(ubiSession.getFirstCguid());
+            }
+            isAllAgentHoper = isAllAgentHoper && UbiSessionHelper.isAgentHoper(ubiSession);
+
         }
-        isAllAgentHoper = isAllAgentHoper && UbiSessionHelper.isAgentHoper(ubiSession);
         switch (botFlag) {
             case 5:
                 scsCountForBot5 += 1;
@@ -137,7 +143,7 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
     }
 
     @Override
-    public void revert(UbiSession ubiSession, int botFlag) {
+    public void revert( UbiSession ubiSession, int botFlag ) {
         switch (botFlag) {
             case 5:
                 scsCountForBot5 = -1;
@@ -172,7 +178,7 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
         directSessionCnt = 0;
         mktgSessionCnt = 0;
         ipCountForSuspect = 0;
-
+        totalCnt = 0;
         validPageCnt = -1;
         maxValidPageCnt = -1;
         consistent = true;
@@ -192,7 +198,7 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
     }
 
     @Override
-    public void clear(int botFlag) {
+    public void clear( int botFlag ) {
         switch (botFlag) {
             case 5:
                 scsCountForBot5 = 0;

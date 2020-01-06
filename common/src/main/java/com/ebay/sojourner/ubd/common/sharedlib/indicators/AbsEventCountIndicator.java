@@ -11,24 +11,29 @@ public class AbsEventCountIndicator implements Indicator<UbiSession, GuidAttribu
     }
 
     @Override
-    public void start(GuidAttributeAccumulator guidAttributeAccumulator) throws Exception {
+    public void start( GuidAttributeAccumulator guidAttributeAccumulator ) throws Exception {
         guidAttributeAccumulator.getGuidAttribute().clear();
     }
 
     @Override
-    public void feed(UbiSession ubiSession, GuidAttributeAccumulator guidAttributeAccumulator) throws Exception {
+    public void feed( UbiSession ubiSession, GuidAttributeAccumulator guidAttributeAccumulator, boolean isNeeded ) throws Exception {
 
-        guidAttributeAccumulator.getGuidAttribute().feed(ubiSession, BotRules.MANY_EVENTS_BOT_FLAG);
-
-    }
-
-    @Override
-    public void end(GuidAttributeAccumulator guidAttributeAccumulator) throws Exception {
+        guidAttributeAccumulator.getGuidAttribute().feed(ubiSession, BotRules.MANY_EVENTS_BOT_FLAG, isNeeded);
 
     }
 
     @Override
-    public boolean filter(UbiSession ubiSession, GuidAttributeAccumulator guidAttributeAccumulator) throws Exception {
+    public void feed( UbiSession source, GuidAttributeAccumulator target ) throws Exception {
+
+    }
+
+    @Override
+    public void end( GuidAttributeAccumulator guidAttributeAccumulator ) throws Exception {
+
+    }
+
+    @Override
+    public boolean filter( UbiSession ubiSession, GuidAttributeAccumulator guidAttributeAccumulator ) throws Exception {
 
         return false;
     }

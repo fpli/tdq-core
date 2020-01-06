@@ -3,9 +3,9 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 import com.ebay.sojourner.ubd.common.model.*;
 import com.ebay.sojourner.ubd.rt.common.broadcast.AgentBroadcastProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.broadcast.AgentIpBroadcastProcessFunction;
-import com.ebay.sojourner.ubd.rt.common.broadcast.AttributeBroadcastProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.broadcast.IpBroadcastProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
+import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
 import com.ebay.sojourner.ubd.rt.operators.attribute.*;
@@ -14,8 +14,7 @@ import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
-import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
-import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
+
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
@@ -29,9 +28,6 @@ import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindow
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.util.OutputTag;
-
-import java.time.temporal.ChronoUnit;
-import java.util.Map;
 
 public class SojournerUBDRTJobForSOJ {
 
@@ -55,6 +51,7 @@ public class SojournerUBDRTJobForSOJ {
                 1:AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
         executionEnvironment.setStateBackend(
                 StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
+
 
         // for soj nrt output
         // 1. Rheos Consumer
@@ -94,7 +91,7 @@ public class SojournerUBDRTJobForSOJ {
                 new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
         OutputTag<UbiEvent> lateEventOutputTag =
                 new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
-//        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
+
         SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
                 .keyBy("guid")
                 .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
@@ -117,6 +114,7 @@ public class SojournerUBDRTJobForSOJ {
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
+
                 .name("Attribute Operator (Agent+IP)")
                 .setParallelism(25);
 
@@ -129,15 +127,18 @@ public class SojournerUBDRTJobForSOJ {
 
         agentIpSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Agent+IP Signature");
 
+
         DataStream<AgentSignature> agentAttributeDataStream = agentIpAttributeDataStream
                 .keyBy("agent")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
+
                 .name("Attribute Operator (Agent)")
                 .setParallelism(25);
 
         agentAttributeDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Agent Signature");
+
 
         DataStream<IpSignature> ipAttributeDataStream = agentIpAttributeDataStream
                 .keyBy("clientIp")
@@ -178,8 +179,10 @@ public class SojournerUBDRTJobForSOJ {
         // 5.2 Sessions (ended)
         // 5.3 Events (with session ID & bot flags)
         // 5.4 Events late
+
         sessionStream.addSink(new DiscardingSink<>()).name("session discarding").disableChaining();
         agentIpConnectDataStream.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId and bot").disableChaining();
+
         // Submit this job
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");
 

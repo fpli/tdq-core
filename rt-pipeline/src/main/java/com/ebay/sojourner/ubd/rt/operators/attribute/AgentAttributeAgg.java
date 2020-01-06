@@ -31,7 +31,7 @@ public class AgentAttributeAgg implements AggregateFunction<AgentIpAttribute, Ag
             agentAttributeAccumulator.getAgentAttribute().setAgent(agentIpAttribute.getAgent());
         }
         try {
-            agentIndicators.feed(agentIpAttribute, agentAttributeAccumulator);
+            agentIndicators.feed(agentIpAttribute, agentAttributeAccumulator,true);
         } catch (Exception e) {
             e.printStackTrace();
         }

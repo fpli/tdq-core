@@ -1,0 +1,233 @@
+package com.ebay.sojourner.ubd.rt.pipleline;
+
+import com.ebay.sojourner.ubd.common.model.*;
+import com.ebay.sojourner.ubd.rt.common.broadcast.AgentBroadcastProcessFunction;
+import com.ebay.sojourner.ubd.rt.common.broadcast.AgentIpBroadcastProcessFunction;
+import com.ebay.sojourner.ubd.rt.common.broadcast.IpBroadcastProcessFunction;
+import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
+import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
+import com.ebay.sojourner.ubd.rt.operators.attribute.*;
+import com.ebay.sojourner.ubd.rt.operators.event.AgentIpMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
+import com.ebay.sojourner.ubd.rt.util.RawEventGenerator;
+import com.ebay.sojourner.ubd.rt.util.ResultGenerator;
+import org.apache.flink.api.common.JobExecutionResult;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
+import org.apache.flink.streaming.api.TimeCharacteristic;
+import org.apache.flink.streaming.api.datastream.BroadcastStream;
+import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.sink.SinkFunction;
+import org.apache.flink.streaming.api.functions.source.SourceFunction;
+import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
+import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
+import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
+import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.test.util.MiniClusterWithClientResource;
+import org.apache.flink.util.OutputTag;
+import org.junit.ClassRule;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.assertTrue;
+
+public class IntegrationTest {
+
+
+    public class DynamicConfigSource implements SourceFunction<RawEvent> {
+
+        private volatile boolean isRunning = true;
+
+        @Override
+        public void run( SourceFunction.SourceContext<RawEvent> ctx ) throws Exception {
+            long idx = 1;
+
+            while (isRunning) {
+                System.out.println("source thread id:"+Thread.currentThread().getId());
+                List<RawEvent> rawEvents = RawEventGenerator.getRawEventList("/SourceData"+idx);
+                for (RawEvent rawEvent : rawEvents) {
+                    ctx.collect(rawEvent);
+                }
+                idx++;
+                if (idx > 2)
+                    isRunning = false;
+//                TimeUnit.SECONDS.sleep(1);
+                TimeUnit.SECONDS.sleep(60);
+            }
+        }
+
+        @Override
+        public void cancel() {
+            isRunning = false;
+        }
+    }
+
+    @ClassRule
+    public static MiniClusterWithClientResource flinkCluster =
+            new MiniClusterWithClientResource(
+                    new MiniClusterResourceConfiguration.Builder()
+                            .setNumberSlotsPerTaskManager(2)
+                            .setNumberTaskManagers(1)
+                            .build());
+
+
+    @Test
+    public void testIncrementPipeline() throws Exception {
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        System.out.println("main thread id:"+Thread.currentThread().getId());
+        // configure your test environment
+        env.setParallelism(1);
+        env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+        // values are collected in a static variable
+        CollectSink.values.clear();
+
+        // create a stream of custom elements and apply transformations
+//        DataStream<RawEvent> rawEventDataStream = env.fromCollection(RawEventGenerator.getRawEventList("/SourceData")).assignTimestampsAndWatermarks
+//                (
+//                        new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
+//                            @Override
+//                            public long extractTimestamp( RawEvent element ) {
+//                                return element.getRheosHeader().getEventCreateTimestamp();
+//                            }
+//                        }
+//                ).name("Source Operator");
+
+        // create a stream of custom elements and apply transformations
+        DataStream<RawEvent> rawEventDataStream = env.addSource(new DynamicConfigSource()).assignTimestampsAndWatermarks
+                (
+                        new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
+                            @Override
+                            public long extractTimestamp( RawEvent element ) {
+                                return element.getRheosHeader().getEventCreateTimestamp();
+                            }
+                        }
+                ).name("Source Operator");
+        DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
+                .map(new EventMapFunction())
+                .setParallelism(2)
+                .name("Event Operator");//.slotSharingGroup("event");
+//        ubiEventDataStream.addSink(new CollectSink2());
+//        ubiEventDataStream.print();
+        OutputTag<UbiSession> sessionOutputTag =
+                new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
+        OutputTag<UbiEvent> lateEventOutputTag =
+                new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
+//        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();∂
+        SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
+                .keyBy("guid")
+                .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
+                .trigger(OnElementEarlyFiringTrigger.create())
+                .allowedLateness(Time.hours(1))
+                .sideOutputLateData(lateEventOutputTag)
+                .aggregate(new UbiSessionAgg(),
+                        new UbiSessionWindowProcessFunction(sessionOutputTag))
+                .name("Session Operator");
+        DataStream<UbiSession> sessionStream =
+                ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag); // sessions ended
+//        ubiEventStreamWithSessionId.print();
+        // 4. Attribute Operator
+        // 4.1 Sliding window
+        // 4.2 Attribute indicator accumulation
+        // 4.3 Attribute level bot detection (via bot rule)
+        // 4.4 Store bot signature
+        DataStream<AgentIpAttribute> agentIpAttributeDataStream = sessionStream
+                .keyBy("userAgent", "clientIp")
+                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
+//                .trigger(OnElementEarlyFiringTrigger.create())
+                .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
+                .name("Attribute Operator (Agent+IP)");
+//        agentIpAttributeDataStream.print();
+
+        // agent ip DataStream & agent ip bot dectector
+        SingleOutputStreamOperator<AgentIpSignature> agentIpSignatureDataStream = agentIpAttributeDataStream
+                .keyBy("agent", "clientIp")
+                .map(new AgentIpMapFunction())
+                .name("Signature Generate(Agent+IP)");
+
+//        agentIpSignatureDataStream.print().name("Agent+IP Signature");
+
+        DataStream<AgentSignature> agentAttributeDataStream = agentIpAttributeDataStream
+                .keyBy("agent")
+                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
+//                .trigger(OnElementEarlyFiringTrigger.create())
+                .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
+                .name("Attribute Operator (Agent)");
+
+//        agentAttributeDataStream.print().name("Agent Signature");
+
+        DataStream<IpSignature> ipAttributeDataStream = agentIpAttributeDataStream
+                .keyBy("clientIp")
+                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
+//                .trigger(OnElementEarlyFiringTrigger.create())
+                .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
+                .name("Attribute Operator (IP)");
+
+//        ipAttributeDataStream.print().name("ipSigunature");
+        // agent ip broadcast
+        BroadcastStream<AgentIpSignature> agentIpBroadcastStream = agentIpSignatureDataStream.broadcast(MapStateDesc.agentIpSignatureDesc);
+
+        // agent broadcast
+        BroadcastStream<AgentSignature> agentBroadcastStream = agentAttributeDataStream.broadcast(MapStateDesc.agentSignatureDesc);
+
+        // ip broadcast
+        BroadcastStream<IpSignature> ipBroadcastStrem = ipAttributeDataStream.broadcast(MapStateDesc.ipSignatureDesc);
+
+        SingleOutputStreamOperator<UbiEvent> ipConnectDataStream = ubiEventStreamWithSessionId
+                .connect(ipBroadcastStrem)
+                .process(new IpBroadcastProcessFunction())
+                .name("Signature BotDetection(IP)");
+
+        SingleOutputStreamOperator<UbiEvent> agentConnectDataStream = ipConnectDataStream
+                .connect(agentBroadcastStream)
+                .process(new AgentBroadcastProcessFunction())
+                .name("Signature BotDetection(Agent)");
+
+        SingleOutputStreamOperator<UbiEvent> agentIpConnectDataStream = agentConnectDataStream
+                .connect(agentIpBroadcastStream)
+                .process(new AgentIpBroadcastProcessFunction())
+                .name("Signature BotDetection(Agent+IP)").slotSharingGroup("session");
+//        SingleOutputStreamOperator<UbiSession> ipConnectDataStreamForSession = sessionStream
+//                .connect(ipBroadcastStrem)
+//                .process(new IpBroadcastProcessFunctionForSession())
+//                .name("Signature BotDetection(IP) for UbiSession");
+
+        sessionStream.addSink(new CollectSink());
+
+//        ubiEventDataStream.print().name("event");
+//        sessionStream.print().name("test");
+//        ipConnectDataStream.print().name("test");
+//        ipConnectDataStreamForSession.print();
+        // execute
+        JobExecutionResult jobExecutionResult = env.execute();
+        jobExecutionResult.isJobExecutionResult();
+
+
+        List<UbiSession> ubiSessions = ResultGenerator.getUbiSessionList("/ExpectedData");
+
+        for (UbiSession ubisession : CollectSink.values) {
+//            System.out.println(JSON.toJSONString(ubisession));
+        }
+        // verify your results
+        assertTrue(CollectSink.values.containsAll(ubiSessions));
+    }
+
+    // create a testing sink
+    private static class CollectSink implements SinkFunction<UbiSession> {
+
+        // must be static
+        public static final List<UbiSession> values = new ArrayList<>();
+
+        @Override
+        public synchronized void invoke( UbiSession value ) throws Exception {
+            values.add(value);
+        }
+    }
+
+}

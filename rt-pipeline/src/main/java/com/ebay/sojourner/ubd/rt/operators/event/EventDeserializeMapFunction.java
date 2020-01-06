@@ -21,7 +21,6 @@ import java.util.Map;
 public class EventDeserializeMapFunction extends RichMapFunction<byte[], UbiEvent> {
     private static final Logger logger = Logger.getLogger(EventDeserializeMapFunction.class);
 
-
     @Override
     public UbiEvent map( byte[] rawEvent ) throws Exception {
         RheosEvent rheosEvent = RheosEventSerdeFactory.getRheosEventHeaderDeserializer()

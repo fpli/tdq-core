@@ -32,7 +32,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumul
     }
 
     @Override
-    public SessionAccumulator add(UbiEvent value, SessionAccumulator accumulator) {
+    public SessionAccumulator add( UbiEvent value, SessionAccumulator accumulator ) {
         Set<Integer> eventBotFlagSet = value.getBotFlags();
 
         try {
@@ -43,7 +43,9 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumul
         } catch (Exception e) {
             log.error("start-session metrics collection issue:" + value, e);
         }
-
+        if (accumulator.getUbiSession().getGuid() == null) {
+            accumulator.getUbiSession().setGuid(value.getGuid());
+        }
         Set<Integer> sessionBotFlagSetDetect = null;
         try {
             sessionBotFlagSetDetect = sessionBotDetector.getBotFlagList(accumulator.getUbiSession());
@@ -57,7 +59,12 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumul
 //        Set<Integer> attrBotFlagWithAgentIp = couchBaseManager.getSignatureWithDocId(accumulator.getUbiSession().getUserAgent()+accumulator.getUbiSession().getClientIp());
 //        Set<Integer> attrBotFlagWithAgent = couchBaseManager.getSignatureWithDocId(accumulator.getUbiSession().getUserAgent());
 
+
+        if (eventBotFlagSet != null && eventBotFlagSet.size() > 0 && !sessionBotFlagSet.containsAll(eventBotFlagSet)) {
+            sessionBotFlagSet.addAll(eventBotFlagSet);
+        }
         if (sessionBotFlagSetDetect != null && sessionBotFlagSetDetect.size() > 0) {
+
             sessionBotFlagSet.addAll(sessionBotFlagSetDetect);
             eventBotFlagSet.addAll(sessionBotFlagSetDetect);
         }
@@ -121,12 +128,12 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumul
     }
 
     @Override
-    public SessionAccumulator getResult(SessionAccumulator sessionAccumulator) {
+    public SessionAccumulator getResult( SessionAccumulator sessionAccumulator ) {
         return sessionAccumulator;
     }
 
     @Override
-    public SessionAccumulator merge(SessionAccumulator a, SessionAccumulator b) {
+    public SessionAccumulator merge( SessionAccumulator a, SessionAccumulator b ) {
         log.info("SessionAccumulator merge:");
         a.setUbiSession(a.getUbiSession().merge(b.getUbiSession()));
         return a;
