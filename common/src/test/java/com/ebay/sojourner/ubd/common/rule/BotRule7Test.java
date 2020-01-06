@@ -19,6 +19,7 @@ public class BotRule7Test {
     @Test
     public void test_getBotFlag_hit(){
         ipAttribute.setScsCount(2);
+        ipAttribute.setTotalCnt(21);
         int actual = rule7.getBotFlag(ipAttribute);
         assertThat(actual).isEqualTo(7);
     }
