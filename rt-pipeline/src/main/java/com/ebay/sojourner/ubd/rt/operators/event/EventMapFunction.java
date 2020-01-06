@@ -4,12 +4,7 @@ import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.EventBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.*;
-<<<<<<< HEAD
 import lombok.extern.slf4j.Slf4j;
-=======
-import com.ebay.sojourner.ubd.common.util.PropertyUtils;
-import com.ebay.sojourner.ubd.common.util.UBIConfig;
->>>>>>> sojourner-split
 import org.apache.flink.api.common.accumulators.AverageAccumulator;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.configuration.Configuration;
