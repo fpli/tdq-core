@@ -21,25 +21,36 @@ public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable
     }
 
     @Override
-    public void feed(AgentIpAttribute agentIpAttribute, int botFlag) {
-        ipCount += agentIpAttribute.getIpCount();
-        if (scsCount < 0) {
-            return;
-        }
+    public void feed(AgentIpAttribute agentIpAttribute, int botFlag, boolean isNeeded) {
+        switch (botFlag)
+        {
+            case 6: {
+                ipCount += agentIpAttribute.getIpCount();
+                if (scsCount < 0) {
+                    return;
+                }
 
-        if (agentIpAttribute.getScsCountForBot6() < 0) {
-            scsCount = -1;
-        } else {
-            scsCount += agentIpAttribute.getScsCountForBot6();
+                if (agentIpAttribute.getScsCountForBot6() < 0) {
+                    scsCount = -1;
+                } else {
+                    scsCount += agentIpAttribute.getScsCountForBot6();
+                }
+                break;
+            }
+            case 202: {
+                totalSessionCnt += agentIpAttribute.getTotalSessionCnt()
+                ;
+                nocguidSessionCnt += agentIpAttribute.getNocguidSessionCnt();
+                spsSessionCnt += agentIpAttribute.getSpsSessionCnt();
+                nouidSessionCnt += agentIpAttribute.getNouidSessionCnt();
+                directSessionCnt += agentIpAttribute.getDirectSessionCnt();
+                mktgSessionCnt += agentIpAttribute.getMktgSessionCnt();
+                ipCountForSuspect += agentIpAttribute.getIpCountForSuspect();
+                break;
+            }
         }
-        totalSessionCnt += agentIpAttribute.getTotalSessionCnt();
-        nocguidSessionCnt += agentIpAttribute.getNocguidSessionCnt();
-        spsSessionCnt += agentIpAttribute.getSpsSessionCnt();
-        nouidSessionCnt += agentIpAttribute.getNouidSessionCnt();
-        directSessionCnt += agentIpAttribute.getDirectSessionCnt();
-        mktgSessionCnt += agentIpAttribute.getMktgSessionCnt();
-        ipCountForSuspect += agentIpAttribute.getIpCountForSuspect();
     }
+
 
     @Override
     public void revert(AgentIpAttribute agentIpAttribute, int botFlag) {

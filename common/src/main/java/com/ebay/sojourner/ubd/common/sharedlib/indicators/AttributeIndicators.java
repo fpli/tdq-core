@@ -28,10 +28,20 @@ public abstract class AttributeIndicators<Source, Target> implements Aggregator<
         }
     }
 
-    public void feed(Source source, Target target) throws Exception {
+    @Override
+    public void feed( Source ubiSession, Target agentIpAttributeAccumulator ) throws Exception {
+
+    }
+
+    public void feed( Source source, Target target ,boolean isNeeded) throws Exception {
         for (Indicator<Source, Target> indicator : indicators) {
-            if(!indicator.filter(source,target)) {
-                indicator.feed(source, target);
+            if (!indicator.filter(source, target)) {
+                if (isNeeded) {
+                    indicator.feed(source, target, isNeeded);
+                    isNeeded=false;
+                } else {
+                    indicator.feed(source, target, isNeeded);
+                }
             }
         }
     }

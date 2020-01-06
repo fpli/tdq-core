@@ -1,9 +1,11 @@
 package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
-import com.ebay.sojourner.ubd.common.model.*;
+import com.ebay.sojourner.ubd.common.model.AgentAttributeAccumulator;
+import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
+import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
+import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
 import com.ebay.sojourner.ubd.common.util.BotRules;
-import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
 
 
 public class SuspectAgentIndicator<Source, Target> implements Indicator<Source, Target> {
@@ -30,18 +32,23 @@ public class SuspectAgentIndicator<Source, Target> implements Indicator<Source, 
     }
 
     @Override
-    public void feed(Source source, Target target) throws Exception {
+    public void feed( Source source, Target target ) throws Exception {
+
+    }
+
+    @Override
+    public void feed(Source source, Target target, boolean isNeeded) throws Exception {
 
         if (source instanceof UbiSession) {
             UbiSession ubiSession = (UbiSession) source;
             AgentIpAttributeAccumulator agentIpAttributeAccumulator = (AgentIpAttributeAccumulator) target;
-            agentIpAttributeAccumulator.getAgentIpAttribute().feed(ubiSession, BotRules.DECLARED_AGENT);
+            agentIpAttributeAccumulator.getAgentIpAttribute().feed(ubiSession, BotRules.DECLARED_AGENT,isNeeded);
         }
         else if(source instanceof AgentIpAttribute)
         {
             AgentIpAttribute agentIpAttribute = (AgentIpAttribute) source;
             AgentAttributeAccumulator agentAttributeAccumulator = (AgentAttributeAccumulator) target;
-            agentAttributeAccumulator.getAgentAttribute().feed(agentIpAttribute, BotRules.DECLARED_AGENT);
+            agentAttributeAccumulator.getAgentAttribute().feed(agentIpAttribute, BotRules.DECLARED_AGENT,isNeeded);
 
         }
 

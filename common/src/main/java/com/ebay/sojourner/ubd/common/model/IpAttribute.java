@@ -24,13 +24,32 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
     }
 
     @Override
-    public void feed(AgentIpAttribute agentIpAttribute, int botFlag) {
-
-        if (selectRatio(agentIpAttribute)) {
-            totalCntForSec1 += agentIpAttribute.getTotalCntForSec1();
+    public void feed(AgentIpAttribute agentIpAttribute, int botFlag, boolean isNeeded) {
+        if(isNeeded) {
+            totalCnt += agentIpAttribute.getTotalCnt();
         }
-        totalCnt += agentIpAttribute.getTotalCnt();
-        isAllAgentHoper = isAllAgentHoper && agentIpAttribute.getIsAllAgentHoper();
+        switch(botFlag) {
+            case 7: {
+
+                if (scsCount < 0) {
+                    return;
+                }
+
+                if (agentIpAttribute.getScsCountForBot7() < 0) {
+                    scsCount = -1;
+                } else {
+                    scsCount += agentIpAttribute.getScsCountForBot7();
+                }
+                break;
+            }
+            case 210: {
+                if (selectRatio(agentIpAttribute)) {
+                    totalCntForSec1 += agentIpAttribute.getTotalCntForSec1();
+                }
+                isAllAgentHoper = isAllAgentHoper && agentIpAttribute.getIsAllAgentHoper();
+                break;
+            }
+        }
 
     }
 

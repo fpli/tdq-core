@@ -30,18 +30,23 @@ public class SuspectIPIndicator<Source, Target> implements Indicator<Source, Tar
     }
 
     @Override
-    public void feed(Source source, Target target) throws Exception {
+    public void feed( Source source, Target target ) throws Exception {
+
+    }
+
+    @Override
+    public void feed(Source source, Target target, boolean isNeeded) throws Exception {
 
         if (source instanceof UbiSession) {
             UbiSession ubiSession = (UbiSession) source;
             AgentIpAttributeAccumulator agentIpAttributeAccumulator = (AgentIpAttributeAccumulator) target;
-            agentIpAttributeAccumulator.getAgentIpAttribute().feed(ubiSession, BotRules.SUSPECTED_IP_ON_AGENT);
+            agentIpAttributeAccumulator.getAgentIpAttribute().feed(ubiSession, BotRules.SUSPECTED_IP_ON_AGENT,isNeeded);
         }
         else if(source instanceof AgentIpAttribute)
         {
             AgentIpAttribute agentIpAttribute = (AgentIpAttribute) source;
             IpAttributeAccumulator ipAttributeAccumulator = (IpAttributeAccumulator) target;
-            ipAttributeAccumulator.getIpAttribute().feed(agentIpAttribute, BotRules.SUSPECTED_IP_ON_AGENT);
+            ipAttributeAccumulator.getIpAttribute().feed(agentIpAttribute, BotRules.SUSPECTED_IP_ON_AGENT,isNeeded);
 
         }
 

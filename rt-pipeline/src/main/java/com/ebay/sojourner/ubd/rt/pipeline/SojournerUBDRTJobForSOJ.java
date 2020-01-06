@@ -76,12 +76,12 @@ public class SojournerUBDRTJobForSOJ {
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent
         // 2.2 Event level bot detection via bot rule
-        DataStream<RawEvent> filterRawEventDataStream = rawEventDataStream
-                .filter(new EventFilterFunction())
-                .setParallelism(30)
-                .name("filter RawEvents");
+//        DataStream<RawEvent> filterRawEventDataStream = rawEventDataStream
+//                .filter(new EventFilterFunction())
+//                .setParallelism(30)
+//                .name("filter RawEvents");
 
-        DataStream<UbiEvent> ubiEventDataStream = filterRawEventDataStream
+        DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
                 .map(new EventMapFunction())
                 .name("Event Operator");
 
@@ -103,10 +103,11 @@ public class SojournerUBDRTJobForSOJ {
                 .sideOutputLateData(lateEventOutputTag)
                 .aggregate(new UbiSessionAgg(),
                         new UbiSessionWindowProcessFunction(sessionOutputTag))
+                .setParallelism(72)
                 .name("Session Operator");
         DataStream<UbiSession> sessionStream =
                 ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag); // sessions ended
-
+/*
         // 4. Attribute Operator
         // 4.1 Sliding window
         // 4.2 Attribute indicator accumulation
@@ -172,14 +173,15 @@ public class SojournerUBDRTJobForSOJ {
                 .connect(agentIpBroadcastStream)
                 .process(new AgentIpBroadcastProcessFunction())
                 .name("Signature BotDetection(Agent+IP)");
-
+*/
         // 5. Load data to file system for batch processing
         // 5.1 IP Signature
         // 5.2 Sessions (ended)
         // 5.3 Events (with session ID & bot flags)
         // 5.4 Events late
-        sessionStream.addSink(new DiscardingSink<>()).name("session discarding").disableChaining();
-        agentIpConnectDataStream.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId and bot").disableChaining();
+        sessionStream.print().name("session discarding").disableChaining();
+        ubiEventStreamWithSessionId.print().name("ubiEvent with sessionId").disableChaining();
+//        agentIpConnectDataStream.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId and bot").disableChaining();
         // Submit this job
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");
 

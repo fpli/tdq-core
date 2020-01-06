@@ -16,9 +16,14 @@ public class AbsEventCountIndicator implements Indicator<UbiSession, GuidAttribu
     }
 
     @Override
-    public void feed(UbiSession ubiSession, GuidAttributeAccumulator guidAttributeAccumulator) throws Exception {
+    public void feed(UbiSession ubiSession, GuidAttributeAccumulator guidAttributeAccumulator,boolean isNeeded) throws Exception {
 
-        guidAttributeAccumulator.getGuidAttribute().feed(ubiSession, BotRules.MANY_EVENTS_BOT_FLAG);
+        guidAttributeAccumulator.getGuidAttribute().feed(ubiSession, BotRules.MANY_EVENTS_BOT_FLAG,isNeeded);
+
+    }
+
+    @Override
+    public void feed( UbiSession source, GuidAttributeAccumulator target ) throws Exception {
 
     }
 

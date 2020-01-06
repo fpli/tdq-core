@@ -33,7 +33,12 @@ public class ScsCountForBot8Indicator<Source, Target> implements Indicator<Sourc
     }
 
     @Override
-    public void feed(Source source, Target target) throws Exception {
+    public void feed( Source source, Target target ) throws Exception {
+
+    }
+
+    @Override
+    public void feed(Source source, Target target,boolean isNeeded) throws Exception {
 
         if (source instanceof UbiSession) {
             UbiSession ubiSession = (UbiSession) source;
@@ -43,9 +48,9 @@ public class ScsCountForBot8Indicator<Source, Target> implements Indicator<Sourc
             } else {
                 if (isValid(ubiSession)) {
                     if (UbiSessionHelper.isSingleClickSession(ubiSession)) {
-                        agentIpAttributeAccumulator.getAgentIpAttribute().feed(ubiSession, BotRules.SCS_ON_IP);
+                        agentIpAttributeAccumulator.getAgentIpAttribute().feed(ubiSession, BotRules.SCS_CONFIRM_ON_AGENTIP,isNeeded);
                     } else {
-                        agentIpAttributeAccumulator.getAgentIpAttribute().revert(ubiSession, BotRules.SCS_ON_IP);
+                        agentIpAttributeAccumulator.getAgentIpAttribute().revert(ubiSession, BotRules.SCS_CONFIRM_ON_AGENTIP);
                     }
                 }
             }
