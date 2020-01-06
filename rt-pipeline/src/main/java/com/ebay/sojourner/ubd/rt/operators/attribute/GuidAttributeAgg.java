@@ -31,7 +31,7 @@ public class GuidAttributeAgg implements AggregateFunction<UbiSession, GuidAttri
             guidAttributeAccumulator.getGuidAttribute().setGuid(session.getGuid());
         }
         try {
-            guidIndicators.feed(session,guidAttributeAccumulator);
+            guidIndicators.feed(session,guidAttributeAccumulator,true);
         } catch (Exception e) {
             e.printStackTrace();
         }

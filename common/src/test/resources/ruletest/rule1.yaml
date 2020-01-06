@@ -1,0 +1,22 @@
+- name: bla bla bla
+  input:
+    Type: UbiEvent
+    a: 123
+    b: 456
+    SessionAccumulator:
+      ubiSession<UbiSession>:
+        guid: 123
+  expect:
+    UbiSession:
+      abc: 123
+- name: bla bla bla
+  input:
+    UbiEvent:
+      a: 123
+      b: 456
+    SessionAccumulator:
+      ubiSession<UbiSession>:
+        guid: 123
+  expect:
+    UbiSession:
+      abc: 123
