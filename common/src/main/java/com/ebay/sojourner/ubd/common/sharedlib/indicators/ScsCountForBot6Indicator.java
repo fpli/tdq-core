@@ -25,9 +25,9 @@ public class ScsCountForBot6Indicator<Source, Target> implements Indicator<Sourc
             agentIpAttributeAccumulator.getAgentIpAttribute().clear();
             agentIpAttributeAccumulator.getAgentIpAttribute().clear(BotRules.SCS_ON_AGENT);
             agentIpAttributeAccumulator.getAgentIpAttribute().setIpCount(0);
-        } else if (target instanceof IpAttributeAccumulator) {
-            IpAttributeAccumulator ipAttributeAccumulator = (IpAttributeAccumulator) target;
-            ipAttributeAccumulator.getIpAttribute().clear();
+        } else if (target instanceof AgentAttributeAccumulator) {
+            AgentAttributeAccumulator agentAttributeAccumulator = (AgentAttributeAccumulator) target;
+            agentAttributeAccumulator.getAgentAttribute().clear();
         }
     }
     @Override
