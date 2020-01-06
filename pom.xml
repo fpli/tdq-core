@@ -430,13 +430,13 @@
                     <!-- Note config is repeated in scalatest config -->
                     <configuration>
                         <includes>
-                            <include>**/com.ebay.sojourner.ubd.common.util.Test*.java</include>
-                            <include>**/*com.ebay.sojourner.ubd.common.util.Test.java</include>
+                            <include>**/Test*.java</include>
+                            <include>**/*Test.java</include>
+                            <include>**/*Tests.java</include>
                             <include>**/*TestCase.java</include>
                             <include>**/*Suite.java</include>
                         </includes>
                         <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
-                        <!--<argLine>-ea -Xmx4g -Xss4m -XX:ReservedCodeCacheSize=${CodeCacheSize}</argLine>-->
                         <environmentVariables>
                         </environmentVariables>
                         <systemProperties>
@@ -446,15 +446,10 @@
                         </systemProperties>
                         <failIfNoTests>false</failIfNoTests>
                         <forkMode>always</forkMode>
+<!--                        <forkCount>2C</forkCount>-->
+<!--                        <reuseForks>false</reuseForks>-->
+<!--                        <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>-->
                     </configuration>
-                    <executions>
-                        <execution>
-                            <id>test</id>
-                            <goals>
-                                <goal>test</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
 
                  <!--Scalatest runs all Scala tests-->
