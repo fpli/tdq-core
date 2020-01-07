@@ -1,4 +1,4 @@
-package com.ebay.sojourner.ubd.common;
+package com.ebay.sojourner.ubd.common.util;
 
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.fasterxml.jackson.annotation.JsonProperty;

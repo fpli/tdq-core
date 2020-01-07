@@ -1,4 +1,4 @@
-package com.ebay.sojourner.ubd.common;
+package com.ebay.sojourner.ubd.common.util;
 
 import lombok.Data;
 

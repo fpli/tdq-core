@@ -1,6 +1,6 @@
 package com.ebay.sojourner.ubd.common.metrics;
 
-import com.ebay.sojourner.ubd.common.MetricsTestCase;
+import com.ebay.sojourner.ubd.common.util.MetricsTestCase;
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionDwellMetrics;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.tuple.Pair;
