@@ -17,7 +17,7 @@ public class EventCntMetricsTest extends BaseMetricsTest{
     @BeforeEach
     public void setup() throws Exception {
         eventCntMetrics = new EventCntMetrics();
-        pair = loadTestCases("EventCntMetricsTest.yaml");
+        pair = loadTestCases("EventCntMetricTest.yaml");
     }
 
     @TestFactory
