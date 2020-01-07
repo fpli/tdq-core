@@ -1,6 +1,5 @@
 package com.ebay.sojourner.ubd.common.metrics;
 
-import com.ebay.sojourner.ubd.common.MetricsTestCase;
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
@@ -46,6 +45,7 @@ public abstract class BaseMetricsTest {
                 MetricsTestCase testCase = testCases.get(caseNum);
                 UbiEvent ubiEvent = testCase.getInputs().getUbiEvent();
                 SessionAccumulator sessionAccumulator = testCase.getInputs().getSessionAccumulator();
+                fieldMetrics.init();
                 fieldMetrics.feed(ubiEvent, sessionAccumulator);
                 UbiSession actual = sessionAccumulator.getUbiSession();
                 Iterator<String> fieldNames = yaml.get(caseNum).get("expect").get("UbiSession").fieldNames();
@@ -59,7 +59,7 @@ public abstract class BaseMetricsTest {
                                 Assertions.assertEquals(node.get(j).asText(), String.valueOf(array[j]));
                             }
                         } else {
-                            Assertions.assertEquals(node.asText(), actualValue);
+                            Assertions.assertEquals(node.asText(), actualValue.toString());
                         }
                     } catch (Exception e) {
                         throw new RuntimeException(e);

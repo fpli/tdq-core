@@ -1,0 +1,26 @@
+-
+  name: case1
+  type: IpAttribute
+  input:
+    IpAttribute:
+      scsCount: 0
+      totalCnt: 21
+  expectResult: 0
+
+-
+  name: case2
+  type: IpAttribute
+  input:
+    IpAttribute:
+      scsCount: 2
+      totalCnt: 0
+  expectResult: 0
+
+-
+  name: case3
+  type: IpAttribute
+  input:
+    IpAttribute:
+      scsCount: 2
+      totalCnt: 21
+  expectResult: 7

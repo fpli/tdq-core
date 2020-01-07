@@ -2,32 +2,24 @@ package com.ebay.sojourner.ubd.common.rule;
 
 import com.ebay.sojourner.ubd.common.model.IpAttribute;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.Collection;
+import java.util.List;
 
-public class BotRule7Test {
-    private BotRule7 rule7;
-    private IpAttribute ipAttribute;
+public class BotRule7Test extends BaseRulesTest<IpAttribute> {
+    private BotRule7 botRule7;
+    private List<RulesTestCase> rulesTestCaseList;
 
     @BeforeEach
-    public void setup(){
-        rule7 = new BotRule7();
-        ipAttribute = new IpAttribute();
+    public void setup() throws Exception {
+        botRule7 = new BotRule7();
+        rulesTestCaseList = loadTestCases("rule7.yaml");
     }
 
-    @Test
-    public void test_getBotFlag_hit(){
-        ipAttribute.setScsCount(2);
-        ipAttribute.setTotalCnt(21);
-        int actual = rule7.getBotFlag(ipAttribute);
-        assertThat(actual).isEqualTo(7);
-    }
-
-    @Test
-    public void test_getBotFlag_notHit(){
-        ipAttribute.setScsCount(0);
-        int actual = rule7.getBotFlag(ipAttribute);
-        assertThat(actual).isEqualTo(0);
+    @TestFactory
+    public Collection<DynamicTest> dynamicTests() {
+        return generateDynamicTests(rulesTestCaseList, botRule7);
     }
 }
