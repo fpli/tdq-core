@@ -6,6 +6,7 @@ import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.runtime.state.internal.InternalAppendingState;
 import org.apache.flink.runtime.state.internal.InternalMergingState;
+import org.apache.flink.streaming.api.operators.InternalTimerService;
 import org.apache.flink.streaming.api.windowing.assigners.MergingWindowAssigner;
 import org.apache.flink.streaming.api.windowing.assigners.WindowAssigner;
 import org.apache.flink.streaming.api.windowing.triggers.Trigger;
@@ -69,15 +70,15 @@ public class MapWithStateWindowOperator <K, IN, ACC, OUT, W extends Window, MAPP
         OutputTag<IN> mappedRecordsOutputTag
     ) {
         return new MapWithStateWindowOperator(
-            windowOperator.windowAssigner,
-            windowOperator.windowSerializer,
+            windowOperator.getWindowAssigner(),
+            (TypeSerializer) WindowOperatorHelper.getField(windowOperator, "windowSerializer"),
             windowOperator.getKeySelector(),
-            windowOperator.keySerializer,
+            (TypeSerializer) WindowOperatorHelper.getField(windowOperator, "keySerializer"),
             windowOperator.getStateDescriptor(),
             (InternalWindowFunction) windowOperator.getUserFunction(),
             windowOperator.getTrigger(),
-            windowOperator.allowedLateness,
-            windowOperator.lateDataOutputTag,
+            (long) WindowOperatorHelper.getField(windowOperator, "allowedLateness"),
+            (OutputTag) WindowOperatorHelper.getField(windowOperator, "lateDataOutputTag"),
             mapWithStateFunction,
             mappedRecordsOutputTag
             );
@@ -126,27 +127,27 @@ public class MapWithStateWindowOperator <K, IN, ACC, OUT, W extends Window, MAPP
                                       Collection<W> mergedWindows, W stateWindowResult,
                                       Collection<W> mergedStateWindows) throws Exception {
 
-                        if ((windowAssigner.isEventTime() && mergeResult.maxTimestamp() + allowedLateness <= internalTimerService.currentWatermark())) {
+                        if ((_windowAssigner().isEventTime() && mergeResult.maxTimestamp() + _allowedLateness() <= _internalTimerService().currentWatermark())) {
                             throw new UnsupportedOperationException("The end timestamp of an " +
                                 "event-time window cannot become earlier than the current watermark " +
-                                "by merging. Current watermark: " + internalTimerService.currentWatermark() +
+                                "by merging. Current watermark: " + _internalTimerService().currentWatermark() +
                                 " window: " + mergeResult);
-                        } else if (!windowAssigner.isEventTime() && mergeResult.maxTimestamp() <= internalTimerService.currentProcessingTime()) {
+                        } else if (!_windowAssigner().isEventTime() && mergeResult.maxTimestamp() <= _internalTimerService().currentProcessingTime()) {
                             throw new UnsupportedOperationException("The end timestamp of a " +
                                 "processing-time window cannot become earlier than the current processing time " +
-                                "by merging. Current processing time: " + internalTimerService.currentProcessingTime() +
+                                "by merging. Current processing time: " + _internalTimerService().currentProcessingTime() +
                                 " window: " + mergeResult);
                         }
 
-                        triggerContext.key = key;
-                        triggerContext.window = mergeResult;
+                        WindowOperatorHelper.setField(_triggerContext(), "key", key);
+                        WindowOperatorHelper.setField(_triggerContext(), "window", mergeResult);
 
-                        triggerContext.onMerge(mergedWindows);
+                        _triggerContext().onMerge(mergedWindows);
 
                         for (W m: mergedWindows) {
-                            triggerContext.window = m;
-                            triggerContext.clear();
-                            deleteCleanupTimer(m);
+                            WindowOperatorHelper.setField(_triggerContext(), "window", m);
+                            _triggerContext().clear();
+                            _deleteCleanupTimer(m);
                         }
 
                         // merge the merged state windows into the newly resulting state window
@@ -169,8 +170,8 @@ public class MapWithStateWindowOperator <K, IN, ACC, OUT, W extends Window, MAPP
                 windowState.setCurrentNamespace(stateWindow);
                 windowState.add(element.getValue());
 
-                triggerContext.key = key;
-                triggerContext.window = actualWindow;
+                WindowOperatorHelper.setField(triggerContext, "key", key);
+                WindowOperatorHelper.setField(triggerContext, "window", actualWindow);
 
                 TriggerResult triggerResult = triggerContext.onElement(element);
 
@@ -202,8 +203,8 @@ public class MapWithStateWindowOperator <K, IN, ACC, OUT, W extends Window, MAPP
                 windowState.setCurrentNamespace(window);
                 windowState.add(element.getValue());
 
-                triggerContext.key = key;
-                triggerContext.window = window;
+                WindowOperatorHelper.setField(triggerContext, "key", key);
+                WindowOperatorHelper.setField(triggerContext, "window", window);
 
                 TriggerResult triggerResult = triggerContext.onElement(element);
 
@@ -245,7 +246,27 @@ public class MapWithStateWindowOperator <K, IN, ACC, OUT, W extends Window, MAPP
     @SuppressWarnings("unchecked")
     private void emitWindowContents(W window, ACC contents) throws Exception {
         timestampedCollector.setAbsoluteTimestamp(window.maxTimestamp());
-        processContext.window = window;
-        userFunction.process(triggerContext.key, window, processContext, contents, timestampedCollector);
+        WindowOperatorHelper.setField(processContext, "window", window);
+        userFunction.process((K) WindowOperatorHelper.getField(triggerContext, "key"), window, processContext, contents, timestampedCollector);
+    }
+
+    WindowAssigner _windowAssigner() {
+        return this.windowAssigner;
+    }
+
+    long _allowedLateness() {
+        return this.allowedLateness;
+    }
+
+    InternalTimerService _internalTimerService() {
+        return this.internalTimerService;
+    }
+
+    Context _triggerContext() {
+        return this.triggerContext;
+    }
+
+    void _deleteCleanupTimer(W m) {
+        this.deleteCleanupTimer(m);
     }
 }
