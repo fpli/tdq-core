@@ -21,12 +21,17 @@ import java.util.Set;
 
 public class UbiSessionWindowProcessFunction
         extends ProcessWindowFunction<SessionAccumulator, UbiSession, Tuple, TimeWindow> {
-    private static final Logger logger = Logger.getLogger(UbiSessionWindowProcessFunction.class);
+    private static final Logger logger = Logger.getLogger(UbiSessionWindowProcessFunctionWithEvent.class);
     private static SessionMetrics sessionMetrics;
-//    private OutputTag outputTag = null;
+    private OutputTag outputTag = null;
 
     public UbiSessionWindowProcessFunction() {
 //        this.outputTag = outputTag;
+
+    }
+
+    public UbiSessionWindowProcessFunction( OutputTag outputTag ) {
+        this.outputTag = outputTag;
 
     }
 

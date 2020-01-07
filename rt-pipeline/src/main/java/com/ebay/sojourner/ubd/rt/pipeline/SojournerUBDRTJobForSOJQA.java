@@ -9,6 +9,7 @@ import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.StreamingFileSinkFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJQA;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -17,8 +18,10 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
+import org.apache.flink.streaming.api.transformations.OneInputTransformation;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
 
 
@@ -99,18 +102,28 @@ public class SojournerUBDRTJobForSOJQA {
         OutputTag<UbiEvent> lateEventOutputTag =
                 new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
 //        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
-        SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
+
+        OutputTag<UbiEvent> mappedEventOutputTag =
+                new OutputTag<>("mapped-event-output-tag", TypeInformation.of(UbiEvent.class));
+        SingleOutputStreamOperator<UbiSession> ubiSessinDataStream = ubiEventDataStream
                 .keyBy("guid")
                 .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-                .trigger(OnElementEarlyFiringTrigger.create())
+//                .trigger(OnElementEarlyFiringTrigger.create())   //no need to customize the triiger, use the default eventtimeTrigger
                 .allowedLateness(Time.hours(1))
                 .sideOutputLateData(lateEventOutputTag)
                 .aggregate(new UbiSessionAgg(),
-                        new UbiSessionWindowProcessFunction(sessionOutputTag))
-                .name("Session Operator")
-                ;
-        DataStream<UbiSession> sessionStream =
-                ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag); // sessions ended
+                        new UbiSessionWindowProcessFunction());
+
+        WindowOperatorHelper.enrichWindowOperator(
+                (OneInputTransformation) ubiSessinDataStream.getTransformation(),
+                new UbiEventMapWithStateFunction(),
+                mappedEventOutputTag
+        );
+
+        ubiSessinDataStream.name("Session Operator");
+
+        DataStream<UbiEvent> mappedEventStream = ubiSessinDataStream.getSideOutput(mappedEventOutputTag);
+
 
 //        // 4. Attribute Operator
 //        // 4.1 Sliding window
@@ -190,7 +203,7 @@ public class SojournerUBDRTJobForSOJQA {
 //        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
 //                .name("Events (Late)").disableChaining();
 //        sessionStream.addSink(new SojHdfsSink<UbiSession>(UbiSession.class));
-        sessionStream.addSink(StreamingFileSinkFactory.sessionSinkWithSojHdfs());
+        ubiSessinDataStream.addSink(StreamingFileSinkFactory.sessionSinkWithSojHdfs());
         rawEventDataStream.print().name("byte");
 
 //        ubiEventDataStream.print().name("ubiEvent");
