@@ -254,7 +254,7 @@ public class IntermediateMetrics implements Serializable {
         if (isRoverClick(event)) {
             setMaxMppIds(event);
             if (!findRover3084 || !findRover3085 || !findRover3962) {
-                setChannelSequence(event);
+                setChannelSequence(parseChannelFromEvent(event));
                 setRoverClickUrl2Parse(event);
             }
         }
@@ -280,7 +280,7 @@ public class IntermediateMetrics implements Serializable {
         if (!findRover3084 && isRover3084Click(event)) {
             setFindRover3084(true);
             setFirstRover3084Metrics(event);
-            setFirstMppId(event);
+            setFirstMppIdFromEvent(event);
         }
 
         // check first 3085 click only
@@ -703,10 +703,6 @@ public class IntermediateMetrics implements Serializable {
         this.channelSequence = channelSequence;
     }
 
-    public void setChannelSequence(UbiEvent event) {
-        setChannelSequence(parseChannelFromEvent(event));
-    }
-
     public void setCurAdme(String curAdme) {
         if (curAdme == null) {
             curAdme = "";
@@ -758,7 +754,7 @@ public class IntermediateMetrics implements Serializable {
         this.firstMppId = firstMppId;
     }
 
-    private void setFirstMppId(UbiEvent event) {
+    private void setFirstMppIdFromEvent(UbiEvent event) {
         try {
             this.firstMppId = Integer.valueOf(kvMap.get(MPPID));
         } catch (NumberFormatException e) {

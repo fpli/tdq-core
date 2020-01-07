@@ -87,7 +87,7 @@ public class UbiSession implements Serializable,Cloneable{
     private byte[] attributeFlags = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     private int seqNum;
-    private IntermediateMetrics intermediateMetrics;;
+    private IntermediateMetrics intermediateMetrics;
     public UbiSession()
     {
 //        this.distinctClickIdSet = new HashSet<Integer>();
