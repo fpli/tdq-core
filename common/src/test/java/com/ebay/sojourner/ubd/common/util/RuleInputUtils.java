@@ -1,6 +1,7 @@
 package com.ebay.sojourner.ubd.common.util;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.model.UbiSession;
 
 import java.util.HashMap;
 
@@ -21,6 +22,8 @@ public class RuleInputUtils {
 
         } else if (inputRuleType != null && inputRuleType.equals(RuleConstants.sessionRuleType)) {
             hashMap = new HashMap<>();
+            UbiSession ubiSession = InitSessionRuleInput.init(map, rule);
+            hashMap.put(ubiSession,expectResult);
         } else if (inputRuleType != null && inputRuleType.equals(RuleConstants.ipAttributeRuleType)) {
 
         } else if (inputRuleType != null && inputRuleType.equals(RuleConstants.agentAttributeRuleType)) {

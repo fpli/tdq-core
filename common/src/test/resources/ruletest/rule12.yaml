@@ -1,14 +1,16 @@
 case1:
-  type: session
+  Type: UbiSession
   description:
-  minMaxEventTtimestamp:
-  eventCount:
-  sessionBotFlagList:
+  UbiSession:
+    minMaxEventTtimestamp:
+    eventCount:
+    sessionBotFlagList:
   expectResult: 0
 case2:
-  type: session
+  Type: UbiSession
   description:
-  minMaxEventTtimestamp:
-  eventCount:
-  sessionBotFlagList:
+  UbiSession:
+    minMaxEventTtimestamp:
+    eventCount:
+    sessionBotFlagList:
   expectResult: 1
