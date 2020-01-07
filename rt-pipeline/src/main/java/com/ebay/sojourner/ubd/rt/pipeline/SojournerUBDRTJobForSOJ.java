@@ -31,6 +31,7 @@ import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindow
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
+import sun.applet.AppletEvent;
 
 public class SojournerUBDRTJobForSOJ {
 
@@ -70,18 +71,19 @@ public class SojournerUBDRTJobForSOJ {
                                         return element.getRheosHeader().getEventCreateTimestamp();
                                     }
                                 }))
-                .setParallelism(30)
+                .setParallelism(AppEnv.config().getFlink().getApp().getSourceParallelism()==null?
+                        30:AppEnv.config().getFlink().getApp().getSourceParallelism())
                 .name("Rheos Kafka Consumer");
 
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent
         // 2.2 Event level bot detection via bot rule
-        DataStream<RawEvent> filterRawEventDataStream = rawEventDataStream
-                .filter(new EventFilterFunction())
-                .setParallelism(30)
-                .name("filter RawEvents");
+//        DataStream<RawEvent> filterRawEventDataStream = rawEventDataStream
+//                .filter(new EventFilterFunction())
+//                .setParallelism(30)
+//                .name("filter RawEvents");
 
-        DataStream<UbiEvent> ubiEventDataStream = filterRawEventDataStream
+        DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
                 .map(new EventMapFunction())
                 .name("Event Operator");
 
@@ -198,7 +200,7 @@ public class SojournerUBDRTJobForSOJ {
         agentIpConnectDataStream.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId and bot").disableChaining();
 
         // Submit this job
-        executionEnvironment.execute("Unified Bot Detection RT Pipeline");
+        executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
 
     }
 

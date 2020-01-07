@@ -1,10 +1,10 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
-import com.ebay.sojourner.ubd.common.model.*;
+import com.ebay.sojourner.ubd.common.model.RawEvent;
+import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
-import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
-import com.ebay.sojourner.ubd.rt.operators.event.EventFilterFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
@@ -21,7 +21,6 @@ import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrderness
 import org.apache.flink.streaming.api.transformations.OneInputTransformation;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.streaming.runtime.operators.windowing.MapWithStateFunction;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
 
@@ -38,7 +37,7 @@ public class SojournerUBDRTJobUntilSession {
 //         LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 //        executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
-        executionEnvironment.setParallelism(1);
+//        executionEnvironment.setParallelism(1);
 
         // checkpoint settings
         executionEnvironment.enableCheckpointing(AppEnv.config().getFlink().getCheckpoint().getInterval().getSeconds() * 1000, CheckpointingMode.EXACTLY_ONCE);
@@ -63,18 +62,14 @@ public class SojournerUBDRTJobUntilSession {
                                         return element.getRheosHeader().getEventCreateTimestamp();
                                     }
                                 }))
-                .setParallelism(1)
+                .setParallelism(AppEnv.config().getFlink().getApp().getSourceParallelism()==null?
+                        30:AppEnv.config().getFlink().getApp().getSourceParallelism())
                 .name("Rheos Kafka Consumer");
 
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent
         // 2.2 Event level bot detection via bot rule
-        DataStream<RawEvent> filterRawEventDataStream = rawEventDataStream
-                .filter(new EventFilterFunction())
-                .setParallelism(1)
-                .name("filter RawEvents");
-
-        DataStream<UbiEvent> ubiEventDataStream = filterRawEventDataStream
+        DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
                 .map(new EventMapFunction())
                 .name("Event Operator").disableChaining();
 
@@ -119,7 +114,7 @@ public class SojournerUBDRTJobUntilSession {
 //        ubiEventStreamWithSessionId.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId").disableChaining();
 
         // Submit this job
-        executionEnvironment.execute("Unified Bot Detection RT Pipeline");
+        executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
 
     }
 
