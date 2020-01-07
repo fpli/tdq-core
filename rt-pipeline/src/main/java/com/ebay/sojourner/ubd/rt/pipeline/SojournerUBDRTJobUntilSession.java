@@ -6,6 +6,7 @@ import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
 import com.ebay.sojourner.ubd.rt.operators.event.EventFilterFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
@@ -20,6 +21,7 @@ import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrderness
 import org.apache.flink.streaming.api.transformations.OneInputTransformation;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.runtime.operators.windowing.MapWithStateFunction;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
 
@@ -81,38 +83,40 @@ public class SojournerUBDRTJobUntilSession {
         // 3.2 Session indicator accumulation
         // 3.3 Session Level bot detection (via bot rule & signature)
         // 3.4 Event level bot detection (via session flag)
-        OutputTag<UbiSession> sessionOutputTag =
-                new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
+//        OutputTag<UbiSession> sessionOutputTag =
+//                new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
         OutputTag<UbiEvent> lateEventOutputTag =
                 new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
         OutputTag<UbiEvent> mappedEventOutputTag =
             new OutputTag<>("mapped-event-output-tag", TypeInformation.of(UbiEvent.class));
 //        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
-        SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
+        SingleOutputStreamOperator<UbiSession> ubiSessinDataStream = ubiEventDataStream
                 .keyBy("guid")
                 .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-                .trigger(OnElementEarlyFiringTrigger.create())
+//                .trigger(OnElementEarlyFiringTrigger.create())   //no need to customize the triiger, use the default eventtimeTrigger
                 .allowedLateness(Time.hours(1))
                 .sideOutputLateData(lateEventOutputTag)
                 .aggregate(new UbiSessionAgg(),
-                        new UbiSessionWindowProcessFunction(sessionOutputTag));
+                        new UbiSessionWindowProcessFunction());
         // Hack here to use MapWithStateWindowOperator instead while bypassing DataStream API which
         // cannot be enhanced easily since we do not want to modify Flink framework sourcecode.
+//        WindowOperatorHelper.enrichWindowOperator(
+//            (OneInputTransformation) ubiEventStreamWithSessionId.getTransformation(),
+//            mappedEventOutputTag
+//        );
         WindowOperatorHelper.enrichWindowOperator(
-            (OneInputTransformation) ubiEventStreamWithSessionId.getTransformation(),
-            mappedEventOutputTag
+                (OneInputTransformation) ubiSessinDataStream.getTransformation(),
+               new UbiEventMapWithStateFunction(),
+                mappedEventOutputTag
         );
 
-        ubiEventStreamWithSessionId.name("Session Operator");
+        ubiSessinDataStream.name("Session Operator");
 
-        DataStream<UbiSession> sessionStream =
-                ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag); // sessions ended
-
-        DataStream<UbiEvent> mappedEventStream = ubiEventStreamWithSessionId.getSideOutput(mappedEventOutputTag);
+        DataStream<UbiEvent> mappedEventStream = ubiSessinDataStream.getSideOutput(mappedEventOutputTag);
         mappedEventStream.addSink(new DiscardingSink<>()).name("Mapped UbiEvent").disableChaining();
 
-        sessionStream.addSink(new DiscardingSink<>()).name("session").disableChaining();
-        ubiEventStreamWithSessionId.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId").disableChaining();
+        ubiSessinDataStream.addSink(new DiscardingSink<>()).name("session").disableChaining();
+//        ubiEventStreamWithSessionId.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId").disableChaining();
 
         // Submit this job
         executionEnvironment.execute("Unified Bot Detection RT Pipeline");

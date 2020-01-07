@@ -9,7 +9,7 @@ import java.lang.reflect.Modifier;
 
 public class WindowOperatorHelper {
 
-    public static Object getField(Object obj, Class declaringClazz, String field) {
+    public static Object getField( Object obj, Class declaringClazz, String field ) {
         try {
             Field f = declaringClazz.getDeclaredField(field);
             f.setAccessible(true);
@@ -19,8 +19,8 @@ public class WindowOperatorHelper {
         }
     }
 
-    public static void replaceOperator(OneInputTransformation transformation,
-                                       OneInputStreamOperator operator) {
+    public static void replaceOperator( OneInputTransformation transformation,
+                                        OneInputStreamOperator operator ) {
         try {
             Field operatorField = OneInputTransformation.class.getDeclaredField("operator");
 
@@ -37,14 +37,27 @@ public class WindowOperatorHelper {
         }
     }
 
-    public static void enrichWindowOperator(OneInputTransformation transformation,
-                                            OutputTag mappedEventOutputTag) {
+    public static void enrichWindowOperator( OneInputTransformation transformation,
+                                             OutputTag mappedEventOutputTag ) {
         replaceOperator(
-            transformation,
-            MapWithStateWindowOperator.from(
-                (WindowOperator) transformation.getOperator(),
-                mappedEventOutputTag
-            )
+                transformation,
+                MapWithStateWindowOperator.from(
+                        (WindowOperator) transformation.getOperator(),
+                        mappedEventOutputTag
+                )
+        );
+    }
+
+    public static <IN, ACC, MAPPED> void enrichWindowOperator( OneInputTransformation transformation,
+                                                               MapWithStateFunction<IN, ACC, MAPPED> mapWithStateFunction,
+                                                               OutputTag mappedEventOutputTag ) {
+        replaceOperator(
+                transformation,
+                MapWithStateWindowOperator.from(
+                        (WindowOperator) transformation.getOperator(),
+                        mapWithStateFunction,
+                        mappedEventOutputTag
+                )
         );
     }
 }
