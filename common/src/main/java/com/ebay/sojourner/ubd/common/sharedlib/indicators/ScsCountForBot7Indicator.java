@@ -33,7 +33,6 @@ public class ScsCountForBot7Indicator<Source, Target> implements Indicator<Sourc
         }
     }
 
-
     @Override
     public void feed( Source source, Target target ) throws Exception {
 
@@ -50,7 +49,7 @@ public class ScsCountForBot7Indicator<Source, Target> implements Indicator<Sourc
             } else {
                 if (isValid(ubiSession)) {
                     if (UbiSessionHelper.isSingleClickSession(ubiSession)) {
-                        agentIpAttributeAccumulator.getAgentIpAttribute().feed(ubiSession, BotRules.SCS_ON_IP, isNeeded);
+                        agentIpAttributeAccumulator.getAgentIpAttribute().feed(ubiSession, BotRules.SCS_ON_IP,isNeeded);
                     } else {
                         agentIpAttributeAccumulator.getAgentIpAttribute().revert(ubiSession, BotRules.SCS_ON_IP);
                     }
@@ -60,8 +59,9 @@ public class ScsCountForBot7Indicator<Source, Target> implements Indicator<Sourc
         } else {
             AgentIpAttribute agentIpAttribute = (AgentIpAttribute) source;
             IpAttributeAccumulator ipAttributeAccumulator = (IpAttributeAccumulator) target;
-            ipAttributeAccumulator.getIpAttribute().feed(agentIpAttribute, BotRules.SCS_ON_IP, isNeeded);
+            ipAttributeAccumulator.getIpAttribute().feed(agentIpAttribute,BotRules.SCS_ON_IP,isNeeded);
         }
+
     }
 
     @Override

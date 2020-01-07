@@ -31,7 +31,7 @@ public class AgentWindowProcessFunction
                         Collector<AgentSignature> out) throws Exception {
 
         AgentAttributeAccumulator agentAttributeAccumulator = elements.iterator().next();
-
+//        System.out.println(agentAttributeAccumulator.getAgentAttribute());
         Set<Integer> botFlagList = agentSignatureBotDetector.getBotFlagList(agentAttributeAccumulator.getAgentAttribute());
 
         if (botFlagList != null && botFlagList.size() > 0) {

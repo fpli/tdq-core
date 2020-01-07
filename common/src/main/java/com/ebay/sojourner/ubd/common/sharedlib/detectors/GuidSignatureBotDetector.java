@@ -60,7 +60,6 @@ public class GuidSignatureBotDetector implements BotDetector<GuidAttribute> {
     @Override
     public void initBotRules() {
 
-//        botRules.add(new BotRule7());
         botRules.add(new BotRule15_1());
     }
 

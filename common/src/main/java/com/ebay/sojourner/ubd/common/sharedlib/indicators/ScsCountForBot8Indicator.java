@@ -25,13 +25,13 @@ public class ScsCountForBot8Indicator<Source, Target> implements Indicator<Sourc
     public void start(Target target) throws Exception {
         if (target instanceof AgentIpAttributeAccumulator) {
             AgentIpAttributeAccumulator agentIpAttributeAccumulator = (AgentIpAttributeAccumulator) target;
+            agentIpAttributeAccumulator.getAgentIpAttribute().clear();
             agentIpAttributeAccumulator.getAgentIpAttribute().clear(BotRules.SCS_CONFIRM_ON_AGENTIP);
         } else if (target instanceof IpAttributeAccumulator) {
             IpAttributeAccumulator ipAttributeAccumulator = (IpAttributeAccumulator) target;
             ipAttributeAccumulator.getIpAttribute().clear();
         }
     }
-
     @Override
     public void feed( Source source, Target target ) throws Exception {
 

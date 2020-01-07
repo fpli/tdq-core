@@ -23,6 +23,8 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
     @Override
     public void open(Configuration conf) throws Exception {
+
+        System.out.println("eventMap thread id:"+Thread.currentThread().getId());
         super.open(conf);
 
         parser = new EventParser();
@@ -70,7 +72,9 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
     @Override
     public UbiEvent map(RawEvent rawEvent) throws Exception {
+
         UbiEvent event = new UbiEvent();
+
         long startTime = System.nanoTime();
         parser.parse(rawEvent, event, eventParseMap);
         avgDuration.add(System.nanoTime() - startTime);

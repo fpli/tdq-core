@@ -1,5 +1,6 @@
 package com.ebay.sojourner.ubd.common.model;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.builder.RecursiveToStringStyle;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
@@ -73,6 +74,13 @@ public class RawEvent implements Serializable {
 
     // For debug only
     public String toString() {
-        return new ReflectionToStringBuilder(this, new RecursiveToStringStyle()).toString();
+        StringBuilder sb = new StringBuilder("{");
+        sb.append("rheosHeader:"+this.rheosHeader.toString()).append(",");
+        sb.append("sojA:"+JSON.toJSONString(this.sojA)).append(",");
+        sb.append("sojC:"+JSON.toJSONString(this.sojC)).append(",");
+        sb.append("sojK:"+JSON.toJSONString(this.sojK)).append(",");
+        sb.append("clientData:"+JSON.toJSONString(this.clientData)).append("}");
+//        return new ReflectionToStringBuilder(this, new RecursiveToStringStyle()).toString();
+        return sb.toString();
     }
 }

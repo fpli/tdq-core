@@ -28,9 +28,14 @@ public class AgentIpWindowProcessFunction
     @Override
     public void process(Tuple tuple, Context context, Iterable<AgentIpAttributeAccumulator> elements,
                         Collector<AgentIpAttribute> out) throws Exception {
+//        if (context.currentWatermark() > context.window().maxTimestamp()) {
+//
+//        }else{
+            AgentIpAttributeAccumulator agentIpAttributeAccumulator = elements.iterator().next();
+            out.collect(agentIpAttributeAccumulator.getAgentIpAttribute());
+//        }
 
-        AgentIpAttributeAccumulator agentIpAttributeAccumulator = elements.iterator().next();
-
+//        System.out.println(agentIpAttributeAccumulator.getAgentIpAttribute());
 //        Set<Integer> botFlagList = agentIpSignatureBotDetector.getBotFlagList(agentIpAttributeAccumulator.getAgentIpAttribute());
 //
 //        if (botFlagList != null && botFlagList.size() > 0) {
@@ -40,7 +45,7 @@ public class AgentIpWindowProcessFunction
 //            couchBaseManager.upsert(ipSignature, agentIpAttributeAccumulator.getAttribute().getAgent()+agentIpAttributeAccumulator.getAttribute().getClientIp());
 //        }
 
-        out.collect(agentIpAttributeAccumulator.getAgentIpAttribute());
+
 
 
     }
@@ -48,6 +53,7 @@ public class AgentIpWindowProcessFunction
     @Override
     public void open(Configuration conf) throws Exception {
         super.open(conf);
+        System.out.println("agentIpWindowProcess thread id:"+Thread.currentThread().getId());
 //        agentIpSignatureBotDetector = AgentIpSignatureBotDetector.getInstance();
 //        couchBaseManager = CouchBaseManager.getInstance();
     }

@@ -38,7 +38,7 @@ public class IpSignatureBotDetector implements BotDetector<IpAttribute> {
     }
 
     @Override
-    public Set<Integer> getBotFlagList(IpAttribute ipAttribute) throws IOException, InterruptedException {
+    public Set<Integer> getBotFlagList( IpAttribute ipAttribute ) throws IOException, InterruptedException {
         Set<Integer> signature = null;
         Set<Integer> botflagSet = new HashSet<Integer>();
 //        if (ubiSession.getClientIp() != null) {
@@ -65,7 +65,7 @@ public class IpSignatureBotDetector implements BotDetector<IpAttribute> {
 
     }
 
-    private Set<Integer> scanSignature(String inColumnName, String inColumnValue, String outColumnName, String bucketName) {
+    private Set<Integer> scanSignature( String inColumnName, String inColumnValue, String outColumnName, String bucketName ) {
 //        return CouchBaseManager.getInstance().getSignatureWithColumn(inColumnName, inColumnValue, outColumnName);
         return null;
     }

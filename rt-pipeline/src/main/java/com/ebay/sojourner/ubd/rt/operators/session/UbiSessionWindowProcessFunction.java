@@ -5,6 +5,7 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
@@ -19,72 +20,49 @@ import java.util.Set;
 
 
 public class UbiSessionWindowProcessFunction
-        extends ProcessWindowFunction<SessionAccumulator, UbiEvent, Tuple, TimeWindow> {
+        extends ProcessWindowFunction<SessionAccumulator, UbiSession, Tuple, TimeWindow> {
     private static final Logger logger = Logger.getLogger(UbiSessionWindowProcessFunction.class);
     private static SessionMetrics sessionMetrics;
     private OutputTag outputTag = null;
 
-    public UbiSessionWindowProcessFunction(OutputTag outputTag) {
+    public UbiSessionWindowProcessFunction() {
+//        this.outputTag = outputTag;
+
+    }
+
+    public UbiSessionWindowProcessFunction( OutputTag outputTag ) {
         this.outputTag = outputTag;
 
     }
 
     @Override
-    public void process(Tuple tuple, Context context, Iterable<SessionAccumulator> elements,
-                        Collector<UbiEvent> out) throws Exception {
+    public void process( Tuple tuple, Context context, Iterable<SessionAccumulator> elements,
+                         Collector<UbiSession> out ) throws Exception {
+
         if (sessionMetrics == null) {
             sessionMetrics = new SessionMetrics();
         }
 
         SessionAccumulator sessionAccumulator = elements.iterator().next();
+        System.out.println("context.currentWatermark():========" + context.currentWatermark());
+        endSessionEvent(sessionAccumulator);
+        UbiSession ubiSession = new UbiSession();
+        BeanUtils.copyProperties(ubiSession, sessionAccumulator.getUbiSession());
 
-        if (sessionAccumulator.getUbiEvent() != null) {
-//            Set<Integer> eventBotFlagSet = sessionAccumulator.getUbiEvent().getBotFlags();
-//            UbiSession ubiSessionTmp = sessionAccumulator.getUbiSession();
+//                 context.output(outputTag, ubiSession);
+        out.collect(ubiSession);
 
-            out.collect(sessionAccumulator.getUbiEvent());
-
-            if (context.currentWatermark() > context.window().maxTimestamp()) {
-                endSessionEvent(sessionAccumulator);
-                UbiSession ubiSession = new UbiSession();
-                ubiSession.setGuid(sessionAccumulator.getUbiEvent().getGuid());
-                ubiSession.setAgentString(sessionAccumulator.getUbiSession().getAgentString());
-                ubiSession.setSessionId(sessionAccumulator.getUbiSession().getSessionId());
-                ubiSession.setIp(sessionAccumulator.getUbiSession().getIp());
-                ubiSession.setUserAgent(sessionAccumulator.getUbiSession().getUserAgent());
-                ubiSession.setExInternalIp(sessionAccumulator.getUbiSession().getExInternalIp());
-                ubiSession.setSojDataDt(sessionAccumulator.getUbiSession().getSojDataDt());
-                ubiSession.setSessionStartDt(sessionAccumulator.getUbiSession().getSessionStartDt());
-                ubiSession.setAgentCnt(sessionAccumulator.getUbiSession().getAgentCnt());
-                ubiSession.setStartTimestamp(sessionAccumulator.getUbiSession().getStartTimestamp());
-                ubiSession.setEndTimestamp(sessionAccumulator.getUbiSession().getEndTimestamp());
-                ubiSession.setAbsStartTimestamp(sessionAccumulator.getUbiSession().getAbsStartTimestamp());
-                ubiSession.setAbsEndTimestamp(sessionAccumulator.getUbiSession().getAbsEndTimestamp());
-                ubiSession.setClientIp(sessionAccumulator.getUbiSession().getClientIp());
-                ubiSession.setInternalIp(sessionAccumulator.getUbiSession().getInternalIp());
-                ubiSession.setSingleClickSessionFlag(sessionAccumulator.getUbiSession().getSingleClickSessionFlag());
-//                ubiSession.setBotFlagList(sessionAccumulator.getUbiSession().getBotFlagList());
-
-                context.output(outputTag, ubiSession);
-            }
-        } else {
-            logger.error("ubiEvent is null pls check");
-        }
     }
 
 
-    private void endSessionEvent(SessionAccumulator sessionAccumulator) throws Exception {
-        if (sessionAccumulator.getUbiEvent().getEventTimestamp() != null) {
-            sessionAccumulator.getUbiSession().setEndTimestamp(sessionAccumulator.getUbiEvent().getEventTimestamp());
-        } else {
-            logger.error(sessionAccumulator.getUbiEvent());
-        }
+    private void endSessionEvent( SessionAccumulator sessionAccumulator ) throws Exception {
         sessionMetrics.end(sessionAccumulator);
     }
 
     @Override
-    public void open(Configuration conf) throws Exception {
+    public void open( Configuration conf ) throws Exception {
         super.open(conf);
+        System.out.println("ubiSessionwindowfunction thread id:" + Thread.currentThread().getId());
 //        InputStream configFile = getRuntimeContext().getDistributedCache().getClass().getResourceAsStream("configFile");
 //        UBIConfig ubiConfig = UBIConfig.getInstance(configFile);
 

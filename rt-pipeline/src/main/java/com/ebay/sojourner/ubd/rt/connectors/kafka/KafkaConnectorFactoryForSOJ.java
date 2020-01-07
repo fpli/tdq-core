@@ -19,6 +19,7 @@ public class KafkaConnectorFactoryForSOJ {
     public static final String TOPIC_PATHFINDER_EVENTS = AppEnv.config().getKafka().getTopic();
     public static final String BOOTSTRAP_SERVERS = String.join(",", AppEnv.config().getKafka().getBootstrapServers());
 
+
     public static FlinkKafkaConsumer<RawEvent> createKafkaConsumer() {
         Properties props = new Properties();
         props.put("sasl.mechanism", "IAF");
@@ -45,7 +46,7 @@ public class KafkaConnectorFactoryForSOJ {
                 ByteArrayDeserializer.class.getName());
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                 RheosEventDeserializer.class.getName());
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 //        props.put(ConsumerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
 
         return new FlinkKafkaConsumer<>(TOPIC_PATHFINDER_EVENTS,

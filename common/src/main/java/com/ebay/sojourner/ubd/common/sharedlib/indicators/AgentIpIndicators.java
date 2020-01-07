@@ -1,7 +1,6 @@
 package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
@@ -9,7 +8,6 @@ import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
 import org.apache.log4j.Logger;
 
-import java.io.File;
 import java.io.InputStream;
 
 public class AgentIpIndicators extends AttributeIndicators<UbiSession, AgentIpAttributeAccumulator> {

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RheosEventSerdeFactory {
+
     private static final String RHEOS_SERVICES_URL = AppEnv.config().getRheos().getServiceUrl();
     private static RheosEventDeserializer rheosEventHeaderDeserializer;
     private static GenericRecordDomainDataDecoder rheosEventDeserializer;

@@ -28,7 +28,6 @@ public class SuspectIPIndicator<Source, Target> implements Indicator<Source, Tar
             ipAttributeAccumulator.getIpAttribute().clear();
         }
     }
-
     @Override
     public void feed( Source source, Target target ) throws Exception {
 
