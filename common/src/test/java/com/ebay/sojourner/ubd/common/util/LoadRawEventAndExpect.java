@@ -1,7 +1,6 @@
-package com.ebay.sojourner.ubd.common.sharelib;
+package com.ebay.sojourner.ubd.common.util;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.util.TypeTransUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -31,7 +30,7 @@ public class LoadRawEventAndExpect {
         HashMap<String, Object> map2 = TypeTransUtil.ObjectToHashMap(map1.get(caseItem));
 
         rawEvent = InitRawEvent.initRawEvent(map2,parser);
-        expectResult = map2.get(Constants.EXPECTRESULT);
+        expectResult = map2.get(ParserConstants.EXPECTRESULT);
 
         hashMap.put(rawEvent,expectResult);
 

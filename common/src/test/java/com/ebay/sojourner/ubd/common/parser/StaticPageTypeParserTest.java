@@ -3,9 +3,9 @@ package com.ebay.sojourner.ubd.common.parser;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.StaticPageTypeParser;
-import com.ebay.sojourner.ubd.common.sharelib.Constants;
-import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
-import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
+import com.ebay.sojourner.ubd.common.util.ParserConstants;
+import com.ebay.sojourner.ubd.common.util.LoadRawEventAndExpect;
+import com.ebay.sojourner.ubd.common.util.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,8 +25,8 @@ public class StaticPageTypeParserTest {
 
     @BeforeAll
     public static void initParser() {
-        parser = Constants.STATICPAGE;
-        map = YamlUtil.getInstance().loadFileMap(Constants.FILEPATH);
+        parser = ParserConstants.STATICPAGE;
+        map = YamlUtil.getInstance().loadFileMap(ParserConstants.FILEPATH);
     }
 
     //rdt and pageId not null,itemId not null,vtNewIdsMap not contains pageId
@@ -38,7 +38,7 @@ public class StaticPageTypeParserTest {
         ubiEvent.setRdt(456);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(789L);
-        caseItem = Constants.CASE1;
+        caseItem = ParserConstants.CASE1;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -60,7 +60,7 @@ public class StaticPageTypeParserTest {
         ubiEvent.setRdt(456);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(null);
-        caseItem = Constants.CASE2;
+        caseItem = ParserConstants.CASE2;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -82,7 +82,7 @@ public class StaticPageTypeParserTest {
         ubiEvent.setRdt(Integer.MIN_VALUE);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(null);
-        caseItem = Constants.CASE3;
+        caseItem = ParserConstants.CASE3;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -104,7 +104,7 @@ public class StaticPageTypeParserTest {
         ubiEvent.setRdt(2019);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(null);
-        caseItem = Constants.CASE4;
+        caseItem = ParserConstants.CASE4;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -126,7 +126,7 @@ public class StaticPageTypeParserTest {
         ubiEvent.setRdt(2019);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(1L);
-        caseItem = Constants.CASE5;
+        caseItem = ParserConstants.CASE5;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -148,7 +148,7 @@ public class StaticPageTypeParserTest {
         ubiEvent.setRdt(2019);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(1L);
-        caseItem = Constants.CASE6;
+        caseItem = ParserConstants.CASE6;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -170,7 +170,7 @@ public class StaticPageTypeParserTest {
         ubiEvent.setRdt(2019);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(1L);
-        caseItem = Constants.CASE7;
+        caseItem = ParserConstants.CASE7;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -192,7 +192,7 @@ public class StaticPageTypeParserTest {
         ubiEvent.setRdt(2019);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(null);
-        caseItem = Constants.CASE8;
+        caseItem = ParserConstants.CASE8;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -214,7 +214,7 @@ public class StaticPageTypeParserTest {
         ubiEvent.setRdt(2019);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(2L);
-        caseItem = Constants.CASE9;
+        caseItem = ParserConstants.CASE9;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -236,7 +236,7 @@ public class StaticPageTypeParserTest {
         ubiEvent.setRdt(456);
         ubiEvent.setFlags("");
         ubiEvent.setItemId(null);
-        caseItem = Constants.CASE10;
+        caseItem = ParserConstants.CASE10;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -258,7 +258,7 @@ public class StaticPageTypeParserTest {
         ubiEvent.setRdt(456);
         ubiEvent.setFlags("1234567890123456789012345678901234567890abcdefg");
         ubiEvent.setItemId(null);
-        caseItem = Constants.CASE11;
+        caseItem = ParserConstants.CASE11;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -280,7 +280,7 @@ public class StaticPageTypeParserTest {
         ubiEvent.setRdt(456);
         ubiEvent.setFlags("1234567890123$56789012345678901234567890abcdzfg");
         ubiEvent.setItemId(null);
-        caseItem = Constants.CASE12;
+        caseItem = ParserConstants.CASE12;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -302,7 +302,7 @@ public class StaticPageTypeParserTest {
         ubiEvent.setRdt(2019);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(2L);
-        caseItem = Constants.CASE13;
+        caseItem = ParserConstants.CASE13;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -324,7 +324,7 @@ public class StaticPageTypeParserTest {
         ubiEvent.setRdt(1);
         ubiEvent.setFlags("haxiboeBay");
         ubiEvent.setItemId(1L);
-        caseItem = Constants.CASE14;
+        caseItem = ParserConstants.CASE14;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);

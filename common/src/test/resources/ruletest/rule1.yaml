@@ -1,22 +1,12 @@
-- name: bla bla bla
-  input:
-    Type: UbiEvent
-    a: 123
-    b: 456
-    SessionAccumulator:
-      ubiSession<UbiSession>:
-        guid: 123
-  expect:
-    UbiSession:
-      abc: 123
-- name: bla bla bla
-  input:
-    UbiEvent:
-      a: 123
-      b: 456
-    SessionAccumulator:
-      ubiSession<UbiSession>:
-        guid: 123
-  expect:
-    UbiSession:
-      abc: 123
+case1:
+  Type: UbiEvent
+  description: ubiEvent agentInfo like Chrome
+  UbiEvent:
+    agentInfo: Chrome
+  expectResult: 0
+case2:
+  Type: UbiEvent
+  description: ubiEvent agentinfo like bot
+  UbiEvent:
+    agentInfo: I am a bot
+  expectResult: 1

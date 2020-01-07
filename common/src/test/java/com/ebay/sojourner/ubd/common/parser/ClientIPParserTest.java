@@ -3,9 +3,9 @@ package com.ebay.sojourner.ubd.common.parser;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.ClientIPParser;
-import com.ebay.sojourner.ubd.common.sharelib.Constants;
-import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
-import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
+import com.ebay.sojourner.ubd.common.util.ParserConstants;
+import com.ebay.sojourner.ubd.common.util.LoadRawEventAndExpect;
+import com.ebay.sojourner.ubd.common.util.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -26,15 +26,15 @@ public class ClientIPParserTest {
 
     @BeforeAll
     public static void initParser(){
-        parser = Constants.CLIENTIP;
-        map = YamlUtil.getInstance().loadFileMap(Constants.FILEPATH);
+        parser = ParserConstants.CLIENTIP;
+        map = YamlUtil.getInstance().loadFileMap(ParserConstants.FILEPATH);
     }
 
     @Test
     public void testClientIPParser1(){
         clientIPParser = new ClientIPParser();
         ubiEvent = new UbiEvent();
-        caseItem = Constants.CASE1;
+        caseItem = ParserConstants.CASE1;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -51,7 +51,7 @@ public class ClientIPParserTest {
     public void testClientIPParser2() {
         clientIPParser = new ClientIPParser();
         ubiEvent = new UbiEvent();
-        caseItem = Constants.CASE2;
+        caseItem = ParserConstants.CASE2;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -70,7 +70,7 @@ public class ClientIPParserTest {
     public void testClientIPParser3() {
         clientIPParser = new ClientIPParser();
         ubiEvent = new UbiEvent();
-        caseItem = Constants.CASE3;
+        caseItem = ParserConstants.CASE3;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -89,7 +89,7 @@ public class ClientIPParserTest {
     public void testClientIPParser4() {
         clientIPParser = new ClientIPParser();
         ubiEvent = new UbiEvent();
-        caseItem = Constants.CASE4;
+        caseItem = ParserConstants.CASE4;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -108,7 +108,7 @@ public class ClientIPParserTest {
     public void testClientIPParser5() {
         clientIPParser = new ClientIPParser();
         ubiEvent = new UbiEvent();
-        caseItem = Constants.CASE5;
+        caseItem = ParserConstants.CASE5;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);

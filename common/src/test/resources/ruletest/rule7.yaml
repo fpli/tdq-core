@@ -1,0 +1,12 @@
+case1:
+  Type: ipAttribute
+  description:
+  scsCount:
+  totalCount:
+  expectResult:
+case2:
+  Type: ipAttribute
+  description:
+  scsCount:
+  totalCount:
+  expectResult:

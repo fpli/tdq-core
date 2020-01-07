@@ -4,9 +4,9 @@ import com.ebay.sojourner.ubd.common.model.ClientData;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.PartialValidPageParser;
-import com.ebay.sojourner.ubd.common.sharelib.Constants;
-import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
-import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
+import com.ebay.sojourner.ubd.common.util.ParserConstants;
+import com.ebay.sojourner.ubd.common.util.LoadRawEventAndExpect;
+import com.ebay.sojourner.ubd.common.util.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
@@ -27,8 +27,8 @@ public class PartialValidPageParserTest {
 
     @BeforeAll
     public static void initParser() {
-        parser = Constants.PARTIAL;
-        map = YamlUtil.getInstance().loadFileMap(Constants.FILEPATH);
+        parser = ParserConstants.PARTIAL;
+        map = YamlUtil.getInstance().loadFileMap(ParserConstants.FILEPATH);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class PartialValidPageParserTest {
 
         ubiEvent.setRdt(1);
 
-        caseItem = Constants.CASE1;
+        caseItem = ParserConstants.CASE1;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -59,7 +59,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(3686);
         ubiEvent.setUrlQueryString("Portlet");
 
-        caseItem = Constants.CASE2;
+        caseItem = ParserConstants.CASE2;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -80,7 +80,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(451);
         ubiEvent.setUrlQueryString("LogBuyerRegistrationJSEvent");
 
-        caseItem = Constants.CASE3;
+        caseItem = ParserConstants.CASE3;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -100,7 +100,7 @@ public class PartialValidPageParserTest {
 
         ubiEvent.setWebServer("sandbox.ebay.internet");
 
-        caseItem = Constants.CASE4;
+        caseItem = ParserConstants.CASE4;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -121,7 +121,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(2588);
         ubiEvent.setApplicationPayload("cflgs=ebay");
 
-        caseItem = Constants.CASE5;
+        caseItem = ParserConstants.CASE5;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -142,7 +142,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(123);
         ubiEvent.setApplicationPayload("cflgs=ebay");
 
-        caseItem = Constants.CASE6;
+        caseItem = ParserConstants.CASE6;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -162,7 +162,7 @@ public class PartialValidPageParserTest {
 
         ubiEvent.setApplicationPayload("cflgs=ebay");
 
-        caseItem = Constants.CASE7;
+        caseItem = ParserConstants.CASE7;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -182,7 +182,7 @@ public class PartialValidPageParserTest {
 
         ubiEvent.setSqr("null");
 
-        caseItem = Constants.CASE8;
+        caseItem = ParserConstants.CASE8;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -204,7 +204,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setSiteId(0);
         ubiEvent.setWebServer("rover.ebay.com");
 
-        caseItem = Constants.CASE9;
+        caseItem = ParserConstants.CASE9;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -225,7 +225,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(1702440);
         ubiEvent.setWebServer("rover.ebay.haxi");
 
-        caseItem = Constants.CASE10;
+        caseItem = ParserConstants.CASE10;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -245,7 +245,7 @@ public class PartialValidPageParserTest {
 
         ubiEvent.setApplicationPayload("an=ebay&av=ebay");
 
-        caseItem = Constants.CASE11;
+        caseItem = ParserConstants.CASE11;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -265,7 +265,7 @@ public class PartialValidPageParserTest {
 
         ubiEvent.setApplicationPayload("in=ebay");
 
-        caseItem = Constants.CASE12;
+        caseItem = ParserConstants.CASE12;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -286,7 +286,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(5360);
         ubiEvent.setUrlQueryString("ebay_xhr=2");
 
-        caseItem = Constants.CASE13;
+        caseItem = ParserConstants.CASE13;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -307,7 +307,7 @@ public class PartialValidPageParserTest {
 
         ubiEvent.setUrlQueryString("/_vti_bin");
 
-        caseItem = Constants.CASE14;
+        caseItem = ParserConstants.CASE14;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -328,7 +328,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setApplicationPayload("mr=ebay");
         ubiEvent.setUrlQueryString("?redirect=mobile");
 
-        caseItem = Constants.CASE15;
+        caseItem = ParserConstants.CASE15;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -349,7 +349,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(2043141);
         ubiEvent.setUrlQueryString("/intercept.jsf");
 
-        caseItem = Constants.CASE16;
+        caseItem = ParserConstants.CASE16;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -370,7 +370,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(2765);
         ubiEvent.setApplicationPayload("stateebay");
 
-        caseItem = Constants.CASE17;
+        caseItem = ParserConstants.CASE17;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -390,7 +390,7 @@ public class PartialValidPageParserTest {
 
         ubiEvent.setUrlQueryString("_showdiag=1");
 
-        caseItem = Constants.CASE18;
+        caseItem = ParserConstants.CASE18;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -414,7 +414,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setClientData(clientData);
         ubiEvent.setUrlQueryString("_showdiag=");
 
-        caseItem = Constants.CASE19;
+        caseItem = ParserConstants.CASE19;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -434,7 +434,7 @@ public class PartialValidPageParserTest {
 
         ubiEvent.setUrlQueryString("/&nbsb;");
 
-        caseItem = Constants.CASE20;
+        caseItem = ParserConstants.CASE20;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -455,7 +455,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setSqr("postalCodeTestQuery");
         ubiEvent.setPageId(1677950);
 
-        caseItem = Constants.CASE21;
+        caseItem = ParserConstants.CASE21;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -475,7 +475,7 @@ public class PartialValidPageParserTest {
 
         ubiEvent.setPageId(5713);
 
-        caseItem = Constants.CASE22;
+        caseItem = ParserConstants.CASE22;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -499,7 +499,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setClientData(clientData);
         ubiEvent.setPageId(Integer.MIN_VALUE);
 
-        caseItem = Constants.CASE23;
+        caseItem = ParserConstants.CASE23;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -520,7 +520,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(2050867);
         ubiEvent.setUrlQueryString("json");
 
-        caseItem = Constants.CASE24;
+        caseItem = ParserConstants.CASE24;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -541,7 +541,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(2052122);
         ubiEvent.setUrlQueryString("json");
 
-        caseItem = Constants.CASE25;
+        caseItem = ParserConstants.CASE25;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -561,7 +561,7 @@ public class PartialValidPageParserTest {
 
         ubiEvent.setUrlQueryString("null");
 
-        caseItem = Constants.CASE26;
+        caseItem = ParserConstants.CASE26;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -582,7 +582,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(2050601);
         ubiEvent.setPageName("ebayFeedHome");
 
-        caseItem = Constants.CASE27;
+        caseItem = ParserConstants.CASE27;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -603,7 +603,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(2054095);
         ubiEvent.setUrlQueryString("ebay/survey");
 
-        caseItem = Constants.CASE28;
+        caseItem = ParserConstants.CASE28;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -624,7 +624,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(2056116);
         ubiEvent.setUrlQueryString("/itm/watchInline");
 
-        caseItem = Constants.CASE29;
+        caseItem = ParserConstants.CASE29;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -645,7 +645,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(2059707);
         ubiEvent.setUrlQueryString("/itm/delivery");
 
-        caseItem = Constants.CASE30;
+        caseItem = ParserConstants.CASE30;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -666,7 +666,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(2052197);
         ubiEvent.setUrlQueryString("ImportHubItemDescription");
 
-        caseItem = Constants.CASE31;
+        caseItem = ParserConstants.CASE31;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -687,7 +687,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(2047935);
         ubiEvent.setWebServer("reco.ebay.haxi");
 
-        caseItem = Constants.CASE32;
+        caseItem = ParserConstants.CASE32;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -708,7 +708,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(2067339);
         ubiEvent.setUrlQueryString("/roverimp/0/0/9?");
 
-        caseItem = Constants.CASE33;
+        caseItem = ParserConstants.CASE33;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -728,7 +728,7 @@ public class PartialValidPageParserTest {
 
         ubiEvent.setPageId(2056812);
 
-        caseItem = Constants.CASE34;
+        caseItem = ParserConstants.CASE34;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -748,7 +748,7 @@ public class PartialValidPageParserTest {
 
         ubiEvent.setPageId(2056116);
 
-        caseItem = Constants.CASE35;
+        caseItem = ParserConstants.CASE35;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -773,7 +773,7 @@ public class PartialValidPageParserTest {
         ubiEvent.setPageId(2481888);
         ubiEvent.setAppId(3564);
 
-        caseItem = Constants.CASE36;
+        caseItem = ParserConstants.CASE36;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -791,7 +791,7 @@ public class PartialValidPageParserTest {
         partialValidPageParser = new PartialValidPageParser();
         ubiEvent = new UbiEvent();
 
-        caseItem = Constants.CASE37;
+        caseItem = ParserConstants.CASE37;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);

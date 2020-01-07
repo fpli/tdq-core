@@ -3,9 +3,9 @@ package com.ebay.sojourner.ubd.common.parser;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.ReferrerHashParser;
-import com.ebay.sojourner.ubd.common.sharelib.Constants;
-import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
-import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
+import com.ebay.sojourner.ubd.common.util.ParserConstants;
+import com.ebay.sojourner.ubd.common.util.LoadRawEventAndExpect;
+import com.ebay.sojourner.ubd.common.util.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.TypeTransUtil;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,15 +24,15 @@ public class ReferrerHashParserTest {
 
     @BeforeAll
     public static void initParser() {
-        parser = Constants.REFERRERHASH;
-        map = YamlUtil.getInstance().loadFileMap(Constants.FILEPATH);
+        parser = ParserConstants.REFERRERHASH;
+        map = YamlUtil.getInstance().loadFileMap(ParserConstants.FILEPATH);
     }
 
     @Test
     public void testReferrerHash() {
         referrerHashParser = new ReferrerHashParser();
         ubiEvent = new UbiEvent();
-        caseItem = Constants.CASE1;
+        caseItem = ParserConstants.CASE1;
 
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {

@@ -3,9 +3,9 @@ package com.ebay.sojourner.ubd.common.parser;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.IFrameParser;
-import com.ebay.sojourner.ubd.common.sharelib.Constants;
-import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
-import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
+import com.ebay.sojourner.ubd.common.util.ParserConstants;
+import com.ebay.sojourner.ubd.common.util.LoadRawEventAndExpect;
+import com.ebay.sojourner.ubd.common.util.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,15 +25,15 @@ public class IframeParserTest {
 
     @BeforeAll
     public static void initParser() {
-        parser = Constants.IFRAME;
-        map = YamlUtil.getInstance().loadFileMap(Constants.FILEPATH);
+        parser = ParserConstants.IFRAME;
+        map = YamlUtil.getInstance().loadFileMap(ParserConstants.FILEPATH);
     }
 
     @Test
     public void testIframeParser1() {
         iFrameParser = new IFrameParser();
         ubiEvent = new UbiEvent();
-        caseItem = Constants.CASE1;
+        caseItem = ParserConstants.CASE1;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -50,7 +50,7 @@ public class IframeParserTest {
     public void testIframeParser2() {
         iFrameParser = new IFrameParser();
         ubiEvent = new UbiEvent();
-        caseItem = Constants.CASE2;
+        caseItem = ParserConstants.CASE2;
 
         try {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);

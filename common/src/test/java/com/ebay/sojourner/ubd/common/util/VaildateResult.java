@@ -1,4 +1,4 @@
-package com.ebay.sojourner.ubd.common.sharelib;
+package com.ebay.sojourner.ubd.common.util;
 
 import com.ebay.sojourner.ubd.common.util.TypeTransUtil;
 

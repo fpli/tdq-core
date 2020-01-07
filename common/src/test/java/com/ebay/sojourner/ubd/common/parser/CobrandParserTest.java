@@ -3,9 +3,9 @@ package com.ebay.sojourner.ubd.common.parser;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.CobrandParser;
-import com.ebay.sojourner.ubd.common.sharelib.Constants;
-import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
-import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
+import com.ebay.sojourner.ubd.common.util.ParserConstants;
+import com.ebay.sojourner.ubd.common.util.LoadRawEventAndExpect;
+import com.ebay.sojourner.ubd.common.util.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,8 +25,8 @@ public class CobrandParserTest {
 
     @BeforeAll
     public static void initParser() {
-        parser = Constants.COBRAND;
-        map = YamlUtil.getInstance().loadFileMap(Constants.FILEPATH);
+        parser = ParserConstants.COBRAND;
+        map = YamlUtil.getInstance().loadFileMap(ParserConstants.FILEPATH);
     }
 
     @Test
@@ -34,7 +34,7 @@ public class CobrandParserTest {
         cobrandParser = new CobrandParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(123);
-        caseItem = Constants.CASE1;
+        caseItem = ParserConstants.CASE1;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -53,7 +53,7 @@ public class CobrandParserTest {
         cobrandParser = new CobrandParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setAppId(1281);
-        caseItem = Constants.CASE2;
+        caseItem = ParserConstants.CASE2;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -72,7 +72,7 @@ public class CobrandParserTest {
         cobrandParser = new CobrandParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setAppId(1232);
-        caseItem = Constants.CASE3;
+        caseItem = ParserConstants.CASE3;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -91,7 +91,7 @@ public class CobrandParserTest {
         cobrandParser = new CobrandParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setAppId(2736);
-        caseItem = Constants.CASE4;
+        caseItem = ParserConstants.CASE4;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -111,7 +111,7 @@ public class CobrandParserTest {
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(1605657);
         ubiEvent.setAgentInfo("");
-        caseItem = Constants.CASE5;
+        caseItem = ParserConstants.CASE5;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -131,7 +131,7 @@ public class CobrandParserTest {
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(1605657);
         ubiEvent.setAgentInfo("HTC");
-        caseItem = Constants.CASE6;
+        caseItem = ParserConstants.CASE6;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -151,7 +151,7 @@ public class CobrandParserTest {
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(1605657);
         ubiEvent.setAgentInfo("iPhone");
-        caseItem = Constants.CASE7;
+        caseItem = ParserConstants.CASE7;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -171,7 +171,7 @@ public class CobrandParserTest {
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(1605657);
         ubiEvent.setAgentInfo("Windows NT 6.2");
-        caseItem = Constants.CASE8;
+        caseItem = ParserConstants.CASE8;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -191,7 +191,7 @@ public class CobrandParserTest {
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(1605657);
         ubiEvent.setAgentInfo("Mozilla/5.0 ");
-        caseItem = Constants.CASE9;
+        caseItem = ParserConstants.CASE9;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -211,7 +211,7 @@ public class CobrandParserTest {
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(5938);
         ubiEvent.setAgentInfo("HTC");
-        caseItem = Constants.CASE10;
+        caseItem = ParserConstants.CASE10;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -231,7 +231,7 @@ public class CobrandParserTest {
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(5938);
         ubiEvent.setAgentInfo("Mozilla/5.0 ");
-        caseItem = Constants.CASE11;
+        caseItem = ParserConstants.CASE11;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -251,7 +251,7 @@ public class CobrandParserTest {
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(1468662);
         ubiEvent.setAgentInfo("Mozilla/5.0 ");
-        caseItem = Constants.CASE12;
+        caseItem = ParserConstants.CASE12;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -271,7 +271,7 @@ public class CobrandParserTest {
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(1468662);
         ubiEvent.setAgentInfo("HTC");
-        caseItem = Constants.CASE13;
+        caseItem = ParserConstants.CASE13;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -290,7 +290,7 @@ public class CobrandParserTest {
         cobrandParser = new CobrandParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(1499158);
-        caseItem = Constants.CASE14;
+        caseItem = ParserConstants.CASE14;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -310,7 +310,7 @@ public class CobrandParserTest {
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(1695768);
         ubiEvent.setAgentInfo("HTC");
-        caseItem = Constants.CASE15;
+        caseItem = ParserConstants.CASE15;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -330,7 +330,7 @@ public class CobrandParserTest {
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(1695768);
         ubiEvent.setAgentInfo("Mozilla/5.0 ");
-        caseItem = Constants.CASE16;
+        caseItem = ParserConstants.CASE16;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -350,7 +350,7 @@ public class CobrandParserTest {
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(123);
         ubiEvent.setApplicationPayload("pn=505");
-        caseItem = Constants.CASE17;
+        caseItem = ParserConstants.CASE17;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -370,7 +370,7 @@ public class CobrandParserTest {
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(123);
         ubiEvent.setApplicationPayload("pn=506");
-        caseItem = Constants.CASE18;
+        caseItem = ParserConstants.CASE18;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -391,7 +391,7 @@ public class CobrandParserTest {
         ubiEvent.setPageId(123);
         ubiEvent.setApplicationPayload("pn=502");
         ubiEvent.setAgentInfo("HTC");
-        caseItem = Constants.CASE19;
+        caseItem = ParserConstants.CASE19;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -412,7 +412,7 @@ public class CobrandParserTest {
         ubiEvent.setPageId(123);
         ubiEvent.setApplicationPayload("pn=502");
         ubiEvent.setAgentInfo("Mozilla/5.0 ");
-        caseItem = Constants.CASE20;
+        caseItem = ParserConstants.CASE20;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -432,7 +432,7 @@ public class CobrandParserTest {
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(123);
         ubiEvent.setApplicationPayload("pn=507");
-        caseItem = Constants.CASE21;
+        caseItem = ParserConstants.CASE21;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
@@ -453,7 +453,7 @@ public class CobrandParserTest {
         ubiEvent.setPageId(123);
         ubiEvent.setApplicationPayload("pn=ebay");
         ubiEvent.setAgentInfo("HTC");
-        caseItem = Constants.CASE22;
+        caseItem = ParserConstants.CASE22;
 
         try{
             HashMap<RawEvent,Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);

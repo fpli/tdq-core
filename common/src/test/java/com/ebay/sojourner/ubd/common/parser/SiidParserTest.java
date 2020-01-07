@@ -3,9 +3,9 @@ package com.ebay.sojourner.ubd.common.parser;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.SiidParser;
-import com.ebay.sojourner.ubd.common.sharelib.Constants;
-import com.ebay.sojourner.ubd.common.sharelib.LoadRawEventAndExpect;
-import com.ebay.sojourner.ubd.common.sharelib.VaildateResult;
+import com.ebay.sojourner.ubd.common.util.ParserConstants;
+import com.ebay.sojourner.ubd.common.util.LoadRawEventAndExpect;
+import com.ebay.sojourner.ubd.common.util.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.TypeTransUtil;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,15 +24,15 @@ public class SiidParserTest {
 
     @BeforeAll
     public static void initParser() {
-        parser = Constants.SIID;
-        map = YamlUtil.getInstance().loadFileMap(Constants.FILEPATH);
+        parser = ParserConstants.SIID;
+        map = YamlUtil.getInstance().loadFileMap(ParserConstants.FILEPATH);
     }
 
     @Test
     public void testSiidParser1() {
         siidParser = new SiidParser();
         ubiEvent = new UbiEvent();
-        caseItem = Constants.CASE1;
+        caseItem = ParserConstants.CASE1;
 
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
@@ -45,7 +45,7 @@ public class SiidParserTest {
     public void testSiidParser2() {
         siidParser = new SiidParser();
         ubiEvent = new UbiEvent();
-        caseItem = Constants.CASE2;
+        caseItem = ParserConstants.CASE2;
 
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
@@ -58,7 +58,7 @@ public class SiidParserTest {
     public void testSiidParser3() {
         siidParser = new SiidParser();
         ubiEvent = new UbiEvent();
-        caseItem = Constants.CASE3;
+        caseItem = ParserConstants.CASE3;
 
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
@@ -71,7 +71,7 @@ public class SiidParserTest {
     public void testSiidParser4() {
         siidParser = new SiidParser();
         ubiEvent = new UbiEvent();
-        caseItem = Constants.CASE4;
+        caseItem = ParserConstants.CASE4;
 
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {

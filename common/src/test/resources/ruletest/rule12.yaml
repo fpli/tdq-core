@@ -1,0 +1,14 @@
+case1:
+  type: session
+  description:
+  minMaxEventTtimestamp:
+  eventCount:
+  sessionBotFlagList:
+  expectResult: 0
+case2:
+  type: session
+  description:
+  minMaxEventTtimestamp:
+  eventCount:
+  sessionBotFlagList:
+  expectResult: 1
