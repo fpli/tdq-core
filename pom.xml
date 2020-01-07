@@ -241,26 +241,7 @@
                 <scope>provided</scope>
             </dependency>
 
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-test-utils_2.11</artifactId>
-                <version>${flink.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-runtime_2.11</artifactId>
-                <version>${flink.version}</version>
-                <scope>test</scope>
-                <classifier>tests</classifier>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-streaming-java_2.11</artifactId>
-                <version>${flink.version}</version>
-                <scope>test</scope>
-                <classifier>tests</classifier>
-            </dependency>
+
 
             <!--            <dependency>-->
             <!--                <groupId>org.mockito</groupId>-->
@@ -443,6 +424,26 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>28.1-jre</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-test-utils_${scala.binary.version}</artifactId>
+                <version>${flink.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-runtime_${scala.binary.version}</artifactId>
+                <version>${flink.version}</version>
+                <scope>test</scope>
+                <classifier>tests</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
+                <version>${flink.version}</version>
+                <scope>test</scope>
+                <classifier>tests</classifier>
             </dependency>
         </dependencies>
     </dependencyManagement>

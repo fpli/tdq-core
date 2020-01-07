@@ -8,6 +8,7 @@ import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.operators.attribute.*;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.RawEventGenerator;
@@ -23,9 +24,11 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
+import org.apache.flink.streaming.api.transformations.OneInputTransformation;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.test.util.MiniClusterWithClientResource;
 import org.apache.flink.util.OutputTag;
 import org.junit.ClassRule;
@@ -119,24 +122,33 @@ public class IntegrationTest {
         OutputTag<UbiEvent> lateEventOutputTag =
                 new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
 //        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();∂
-        SingleOutputStreamOperator<UbiEvent> ubiEventStreamWithSessionId = ubiEventDataStream
+        OutputTag<UbiEvent> mappedEventOutputTag =
+                new OutputTag<>("mapped-event-output-tag", TypeInformation.of(UbiEvent.class));
+        SingleOutputStreamOperator<UbiSession> ubiSessinDataStream = ubiEventDataStream
                 .keyBy("guid")
                 .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-                .trigger(OnElementEarlyFiringTrigger.create())
+//                .trigger(OnElementEarlyFiringTrigger.create())   //no need to customize the triiger, use the default eventtimeTrigger
                 .allowedLateness(Time.hours(1))
                 .sideOutputLateData(lateEventOutputTag)
                 .aggregate(new UbiSessionAgg(),
-                        new UbiSessionWindowProcessFunction(sessionOutputTag))
-                .name("Session Operator");
-        DataStream<UbiSession> sessionStream =
-                ubiEventStreamWithSessionId.getSideOutput(sessionOutputTag); // sessions ended
+                        new UbiSessionWindowProcessFunction());
+
+        WindowOperatorHelper.enrichWindowOperator(
+                (OneInputTransformation) ubiSessinDataStream.getTransformation(),
+                new UbiEventMapWithStateFunction(),
+                mappedEventOutputTag
+        );
+
+        ubiSessinDataStream.name("Session Operator");
+
+        DataStream<UbiEvent> mappedEventStream = ubiSessinDataStream.getSideOutput(mappedEventOutputTag);
 //        ubiEventStreamWithSessionId.print();
         // 4. Attribute Operator
         // 4.1 Sliding window
         // 4.2 Attribute indicator accumulation
         // 4.3 Attribute level bot detection (via bot rule)
         // 4.4 Store bot signature
-        DataStream<AgentIpAttribute> agentIpAttributeDataStream = sessionStream
+        DataStream<AgentIpAttribute> agentIpAttributeDataStream = ubiSessinDataStream
                 .keyBy("userAgent", "clientIp")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
 //                .trigger(OnElementEarlyFiringTrigger.create())
@@ -178,7 +190,7 @@ public class IntegrationTest {
         // ip broadcast
         BroadcastStream<IpSignature> ipBroadcastStrem = ipAttributeDataStream.broadcast(MapStateDesc.ipSignatureDesc);
 
-        SingleOutputStreamOperator<UbiEvent> ipConnectDataStream = ubiEventStreamWithSessionId
+        SingleOutputStreamOperator<UbiEvent> ipConnectDataStream = mappedEventStream
                 .connect(ipBroadcastStrem)
                 .process(new IpBroadcastProcessFunction())
                 .name("Signature BotDetection(IP)");
@@ -197,7 +209,7 @@ public class IntegrationTest {
 //                .process(new IpBroadcastProcessFunctionForSession())
 //                .name("Signature BotDetection(IP) for UbiSession");
 
-        sessionStream.addSink(new CollectSink());
+        ubiSessinDataStream.addSink(new CollectSink());
 
 //        ubiEventDataStream.print().name("event");
 //        sessionStream.print().name("test");

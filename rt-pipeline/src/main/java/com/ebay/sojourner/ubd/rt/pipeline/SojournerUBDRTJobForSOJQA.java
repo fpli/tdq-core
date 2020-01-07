@@ -1,6 +1,7 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 
+
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
