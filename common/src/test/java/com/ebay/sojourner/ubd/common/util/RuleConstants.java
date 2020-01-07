@@ -10,14 +10,9 @@ public class RuleConstants {
     public static final String agentAttributeRuleType = "agentAttribute";
     public static final String agentIpAttributeRuleType = "agentIpAttribute";
 
-    public static final String Rule1 = "BotRule1";
-    public static final String Rule7 = "BotRule7";
-    public static final String Rule12 = "BotRule12";
-
-    public static final String AGENTINFO = "agentInfo";
-
     public static final String EXPECT = "expectResult";
 
+    // case
     public static final String CASE1 = "case1";
     public static final String CASE2 = "case2";
     public static final String CASE3 = "case3";
@@ -29,5 +24,17 @@ public class RuleConstants {
     public static final String CASE9 = "case9";
     public static final String CASE10 = "case10";
 
+    // rule
+    public static final String Rule1 = "BotRule1";
+    public static final String Rule7 = "BotRule7";
+    public static final String Rule12 = "BotRule12";
+
+    // event
+    public static final String AGENTINFO = "agentInfo";
+
+    // session
+    public static final String EVENTCNT = "eventCount";
+    public static final String SESSIONFLAG = "sessionBotFlagList";
+    public static final String MINMAXTIMESTAMP = "minMaxEventTimestamp";
 
 }

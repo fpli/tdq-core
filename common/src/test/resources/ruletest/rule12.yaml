@@ -3,6 +3,8 @@ case1:
   description:
   UbiSession:
     minMaxEventTtimestamp:
+      - 1578366467
+      - 1578366461
     eventCount:
     sessionBotFlagList:
   expectResult: 0
@@ -11,6 +13,8 @@ case2:
   description:
   UbiSession:
     minMaxEventTtimestamp:
+      - 1578366467
+      - 1578366461
     eventCount:
     sessionBotFlagList:
   expectResult: 1
