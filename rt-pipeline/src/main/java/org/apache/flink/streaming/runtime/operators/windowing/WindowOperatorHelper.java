@@ -9,7 +9,7 @@ import java.lang.reflect.Modifier;
 
 public class WindowOperatorHelper {
 
-    public static Object getField( Object obj, Class declaringClazz, String field ) {
+    public static Object getField(Object obj, Class declaringClazz, String field) {
         try {
             Field f = declaringClazz.getDeclaredField(field);
             f.setAccessible(true);
@@ -19,8 +19,26 @@ public class WindowOperatorHelper {
         }
     }
 
-    public static void replaceOperator( OneInputTransformation transformation,
-                                        OneInputStreamOperator operator ) {
+    public static Object getField(Object obj, String field) {
+        return getField(obj, obj.getClass(), field);
+    }
+
+    public static void setField(Object obj, Class declaringClazz, String field, Object value) {
+        try {
+            Field f = declaringClazz.getDeclaredField(field);
+            f.setAccessible(true);
+            f.set(obj, value);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException("Couldn't set " + field + " from " + obj, e);
+        }
+    }
+
+    public static void setField(Object obj, String field, Object value) {
+        setField(obj, obj.getClass(), field, value);
+    }
+
+    public static void replaceOperator(OneInputTransformation transformation,
+                                       OneInputStreamOperator operator) {
         try {
             Field operatorField = OneInputTransformation.class.getDeclaredField("operator");
 
