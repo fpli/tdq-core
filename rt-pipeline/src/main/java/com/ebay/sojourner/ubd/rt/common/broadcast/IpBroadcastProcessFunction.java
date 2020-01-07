@@ -19,8 +19,15 @@ public class IpBroadcastProcessFunction extends BroadcastProcessFunction<UbiEven
     @Override
     public void processElement(UbiEvent ubiEvent, ReadOnlyContext context, Collector<UbiEvent> out) throws Exception {
         ReadOnlyBroadcastState<String, Set<Integer>> ipBroadcastState = context.getBroadcastState(MapStateDesc.ipSignatureDesc);
+//        System.out.println(ubiEvent);
         if(ipBroadcastState.contains(ubiEvent.getClientIP())){
             ubiEvent.getBotFlags().addAll(ipBroadcastState.get(ubiEvent.getClientIP()));
+//            System.out.println(ubiEvent);
+        }
+//         System.out.println("test========"+ipBroadcastState.contains("10.246.240.175"));
+        for (Map.Entry<String, Set<Integer>> entry : ipBroadcastState.immutableEntries()) {
+//            System.out.println("test========"+entry);
+//
         }
         out.collect(ubiEvent);
     }
@@ -30,6 +37,7 @@ public class IpBroadcastProcessFunction extends BroadcastProcessFunction<UbiEven
         BroadcastState<String, Set<Integer>> ipBroadcastState = context.getBroadcastState(MapStateDesc.ipSignatureDesc);
         for (Map.Entry<String, Set<Integer>> entry : ipSignature.getIpBotSignature().entrySet()) {
             ipBroadcastState.put(entry.getKey(), entry.getValue());
+//            System.out.println(entry);
         }
     }
 }

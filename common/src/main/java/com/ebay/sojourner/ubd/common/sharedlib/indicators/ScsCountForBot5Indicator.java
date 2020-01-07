@@ -31,7 +31,6 @@ public class ScsCountForBot5Indicator<Source, Target> implements Indicator<Sourc
             ipAttributeAccumulator.getIpAttribute().clear();
         }
     }
-
     @Override
     public void feed( Source source, Target target ) throws Exception {
 

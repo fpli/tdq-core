@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!DOCTYPE doc [
+<!ENTITY mapping SYSTEM "federation-mapping.xml">
+]>
+<!--
+       Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+    <property>
+        <name>fs.trash.interval</name>
+        <value>480</value>
+    </property>
+
+    <property>
+        <name>ha.failover-controller.active-standby-elector.zk.op.retries</name>
+        <value>3</value>
+    </property>
+
+    <property>
+        <name>ha.health-monitor.rpc-timeout.ms</name>
+        <value>360000</value>
+    </property>
+
+    <property>
+        <name>ha.zookeeper.session-timeout.ms</name>
+        <value>180000</value>
+    </property>
+
+    <property>
+        <name>hadoop.http.authentication.composite.default-non-browser-handler-type</name>
+        <value>kerberos</value>
+    </property>
+
+    <property>
+        <name>hadoop.http.authentication.composite.handlers</name>
+        <value>org.apache.hadoop.security.authentication.server.PingFederateAuthenticationHandler,anonymous</value>
+    </property>
+
+    <property>
+        <name>hadoop.http.authentication.composite.non-browser.user-agents</name>
+        <value>java,curl,wget,perl,python</value>
+    </property>
+
+    <property>
+        <name>hadoop.http.authentication.cookie.domain</name>
+        <value>ebay.com</value>
+    </property>
+
+    <property>
+        <name>hadoop.http.authentication.kerberos.keytab</name>
+        <value>/etc/security/keytabs/spnego.service.keytab</value>
+    </property>
+
+    <property>
+        <name>hadoop.http.authentication.kerberos.principal</name>
+        <value>HTTP/_HOST@PROD.EBAY.COM</value>
+    </property>
+
+    <property>
+        <name>hadoop.http.authentication.pingFederate.anonymous.allowed</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>hadoop.http.authentication.pingFederate.config.file</name>
+        <value>/etc/hadoop/pingfederate-agent-config.txt</value>
+    </property>
+
+    <property>
+        <name>hadoop.http.authentication.pingFederate.url</name>
+        <value>https://sso.corp.ebay.com/sp/startSSO.ping?PartnerIdpId=PINGHADOOP2FAT3R</value>
+    </property>
+
+    <property>
+        <name>hadoop.http.authentication.signature.secret.file</name>
+        <value>/etc/hadoop/http_auth_secret</value>
+    </property>
+
+    <property>
+        <name>hadoop.http.authentication.simple.anonymous.allowed</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>hadoop.http.authentication.token.validity</name>
+        <value>36000</value>
+    </property>
+
+    <property>
+        <name>hadoop.http.authentication.type</name>
+        <value>org.apache.hadoop.security.authentication.server.CompositeAuthenticationHandler</value>
+    </property>
+
+    <property>
+        <name>hadoop.http.filter.initializers</name>
+        <value>org.apache.hadoop.security.AuthenticationFilterInitializer</value>
+    </property>
+
+    <property>
+        <name>hadoop.security.auth_to_local</name>
+        <value>
+            RULE:[2:$1@$0]([rn]m@.*)s/.*/yarn/
+            RULE:[2:$1@$0](jhs@.*)s/.*/mapred/
+            RULE:[2:$1@$0]([nd]n@.*)s/.*/hdfs/
+            RULE:[2:$1@$0](hm@.*)s/.*/hbase/
+            RULE:[2:$1@$0](rs@.*)s/.*/hbase/
+            RULE:[1:$1]
+            RULE:[2:$1]
+            DEFAULT
+        </value>
+    </property>
+
+    <property>
+        <name>hadoop.security.authentication</name>
+        <value>kerberos</value>
+    </property>
+
+    <property>
+        <name>hadoop.security.authorization</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>hadoop.security.group.mapping</name>
+        <value>org.apache.hadoop.security.ShellBasedUnixGroupsMapping</value>
+    </property>
+
+    <property>
+        <name>hadoop.security.groups.cache.secs</name>
+        <value>3600</value>
+    </property>
+
+    <property>
+        <name>hadoop.ssl.hostname.verifier</name>
+        <value>ALLOW_ALL</value>
+    </property>
+
+    <property>
+        <name>io.compression.codec.lzo.class</name>
+        <value>com.hadoop.compression.lzo.LzoCodec</value>
+    </property>
+
+    <property>
+        <name>io.compression.codecs</name>
+        <value>org.apache.hadoop.io.compress.GzipCodec,org.apache.hadoop.io.compress.DefaultCodec,com.hadoop.compression.lzo.LzoCodec,com.hadoop.compression.lzo.LzopCodec,org.apache.hadoop.io.compress.BZip2Codec,org.apache.hadoop.io.compress.SnappyCodec</value>
+    </property>
+
+    <property>
+        <name>io.file.buffer.size</name>
+        <value>131072</value>
+    </property>
+
+    <property>
+        <name>io.serializations</name>
+        <value>org.apache.hadoop.io.serializer.WritableSerialization</value>
+    </property>
+
+    <property>
+        <name>ipc.client.connect.max.retries</name>
+        <value>50</value>
+    </property>
+
+    <property>
+        <name>ipc.client.connection.maxidletime</name>
+        <value>30000</value>
+    </property>
+
+    <property>
+        <name>ipc.client.idlethreshold</name>
+        <value>8000</value>
+    </property>
+
+    <property>
+        <name>ipc.server.listen.queue.size</name>
+        <value>4096</value>
+    </property>
+
+    <property>
+        <name>ipc.server.read.threadpool.size</name>
+        <value>3</value>
+    </property>
+
+    <property>
+        <name>net.topology.script.file.name</name>
+        <value>/apache/hadoop/etc/hadoop/topology.py</value>
+    </property>
+
+    <property>
+        <name>webinterface.private.actions</name>
+        <value>false</value>
+    </property>
+
+    <property>
+		<name>fs.defaultFS</name>
+		<value>viewfs://apollo-rno</value>
+		<final>true</final>    
+    </property>
+
+	<property>
+		<name>ha.zookeeper.quorum</name>
+		<value>apollo-rno-zk-1.vip.hadoop.ebay.com:2181,apollo-rno-zk-2.vip.hadoop.ebay.com:2181,apollo-rno-zk-3.vip.hadoop.ebay.com:2181,apollo-rno-zk-4.vip.hadoop.ebay.com:2181,apollo-rno-zk-5.vip.hadoop.ebay.com:2181</value>
+	</property>
+
+    <property>
+        <name>hadoop.proxyuser.hdfs.groups</name>
+        <value>*</value>
+    </property>
+
+    <property>
+        <name>hadoop.proxyuser.hdfs.hosts</name>
+        <value>*</value>
+    </property>
+
+    <property>
+        <name>hadoop.proxyuser.yarn.groups</name>
+        <value>*</value>
+    </property>
+
+    <property>
+        <name>hadoop.proxyuser.yarn.hosts</name>
+        <value>*</value>
+    </property>
+
+    <property>
+        <name>hadoop.proxyuser.hive.groups</name>
+        <value>*</value>
+    </property>
+
+    <property>
+        <name>hadoop.proxyuser.hive.hosts</name>
+        <value>*</value>
+    </property>
+
+    <property>
+        <name>hadoop.proxyuser.hmc_service.groups</name>
+        <value>*</value>
+    </property>
+
+    <property>
+        <name>hadoop.proxyuser.hmc_service.hosts</name>
+        <value>*</value>
+    </property>
+
+    <property>
+        <name>hadoop.proxyuser.sg_adm.groups</name>
+        <value>hdmi-etl</value>
+    </property>
+
+    <property>
+        <name>hadoop.proxyuser.sg_adm.hosts</name>
+        <value>*</value>
+    </property>
+
+    <property>
+        <name>hadoop.proxyuser.b_zeta_devsuite.groups</name>
+        <value>*</value>
+    </property>
+
+    <property>
+        <name>hadoop.proxyuser.b_zeta_devsuite.hosts</name>
+        <value>rnolivy-zds-712895.stratus.rno.ebay.com,zeta.corp.ebay.com ,zeta.staging.corp.ebay.com,zeta-tools.corp.ebay.com ,zeta-tools.staging.ebay.com ,zeta-tools-2320284.lvs02.eaz.ebayc3.com,zeta-tools-2-2507706.lvs02.eaz.ebayc3.com,zds-server-1-2695684.lvs02.eaz.ebayc3.com,zds-server-2-2692995.lvs02.eaz.ebayc3.com,zds-server-3-2695603.lvs02.eaz.ebayc3.com,zds-server-4-2695614.lvs02.eaz.ebayc3.com,zds-server-5-2695625.lvs02.eaz.ebayc3.com,zds-server-6-2971643.lvs02.eaz.ebayc3.com,zds-server-7-2971664.lvs02.eaz.ebayc3.com</value>
+    </property>
+
+    <property> 
+        <name>hadoop.proxyuser.b_davis.groups</name> 
+        <value>hdmi-employees</value> 
+    </property> 
+    <property> 
+        <name>hadoop.proxyuser.b_davis.hosts</name> 
+        <value>*</value> 
+    </property> 
+
+    <property> 
+        <name>hadoop.proxyuser.b_hrvst.groups</name> 
+        <value>havest_impersonation</value> 
+    </property> 
+    <property> 
+        <name>hadoop.proxyuser.b_hrvst.hosts</name> 
+        <value>*</value> 
+    </property>
+
+    <property> 
+        <name>hadoop.proxyuser.bridge_adm.groups</name> 
+        <value>hdmi-mm,hdmi-set,hdmi-research,hdmi-technology,hdmi-hadoopeng,hdmi-cs,hdmi-milo,hdmi-appdev,hdmi-siteanalytics,hdmi-prod,hdmi-others,hdmi-sdc,hdmi-finance,hdmi-est,hdmi-cci,hdmi-mptna,hdmi-xcom,hdmi-stu,hdmi-mobile,hdmi-olympus</value>
+    </property> 
+    <property>
+        <name>hadoop.proxyuser.bridge_adm.hosts</name> 
+        <value>10.103.47.11,10.103.47.12,10.103.47.13,10.103.47.14,10.103.47.15,10.103.47.16,10.103.47.17,10.103.47.18,10.103.47.19,10.103.47.20,10.103.47.21,10.103.47.22,10.103.48.11,10.103.48.12,10.103.48.13,10.103.48.14,10.103.48.15,10.103.48.16,10.103.48.17,10.103.48.18,10.103.48.19,10.103.48.20,10.103.48.21,10.103.48.22,10.103.88.11,10.103.88.12,10.103.88.13,10.103.88.14,10.103.88.15,10.103.88.16,10.103.88.17,10.103.88.18,10.103.88.19,10.103.88.20,10.103.88.21,10.103.88.22,10.103.88.23,10.103.88.24,10.103.88.25,10.103.88.26,10.103.88.27,10.103.88.28,10.103.88.29,10.103.88.30,10.103.88.31,10.103.88.32,10.103.88.33,10.103.88.34,10.103.89.11,10.103.89.12,10.103.89.13,10.103.89.14,10.103.89.15,10.103.89.16,10.103.89.17,10.103.89.18,10.103.89.19,10.103.89.20,10.103.89.21,10.103.89.22,10.103.89.23,10.103.89.24,10.103.89.25,10.103.89.26,10.103.89.27,10.103.89.28,10.103.89.29,10.103.89.30,10.103.89.31,10.103.89.32,10.103.89.33,10.103.89.34,10.115.37.50,10.115.37.51,10.115.37.52,10.115.37.53,10.115.38.50,10.115.38.51,10.115.38.52,10.115.38.53,10.115.208.11,10.115.208.12,10.115.208.13,10.115.208.14,10.115.208.15,10.115.208.16,10.115.208.17,10.115.208.18,10.115.208.19,10.115.208.20,10.115.208.21,10.115.208.22,10.115.208.23,10.115.208.24,10.115.208.25,10.115.208.26,10.103.158.101,10.103.158.102,10.103.158.103,10.103.158.104,10.103.158.105,10.103.158.106,10.103.158.107,10.103.158.108,10.103.158.109,10.103.158.110,10.103.158.111,10.103.158.112,10.103.158.113,10.103.158.114,10.103.158.115,10.103.158.116</value>
+    </property>
+
+    <property>
+        <name>hadoop.rpc.protection</name>
+        <value>privacy</value>
+    </property>
+
+    <property>
+        <name>hadoop.caller.context.enabled</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>fs.viewfs.rename.strategy</name>
+        <value>SAME_FILESYSTEM_ACROSS_MOUNTPOINT</value>
+    </property>
+    <!-- Adding the federation mappings   -->
+    &mapping;
+</configuration>
+

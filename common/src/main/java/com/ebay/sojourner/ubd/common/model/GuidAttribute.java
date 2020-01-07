@@ -14,7 +14,7 @@ public class GuidAttribute implements Attribute<UbiSession>, Serializable {
 
     public void feed(UbiSession ubiSession, int botFlag, boolean isNeeded) {
         if(isNeeded)
-            absEventCount+=ubiSession.getAbsEventCnt();
+        absEventCount+=ubiSession.getAbsEventCnt();
     }
 
     public GuidAttribute() {

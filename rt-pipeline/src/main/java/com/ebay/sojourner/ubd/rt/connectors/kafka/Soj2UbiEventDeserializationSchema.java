@@ -41,7 +41,7 @@ public class Soj2UbiEventDeserializationSchema implements DeserializationSchema<
     }
 
     @Override
-    public UbiEvent deserialize(byte[] message) throws IOException {
+    public UbiEvent deserialize( byte[] message ) throws IOException {
         RheosEvent rheosEvent = RheosEventSerdeFactory.getRheosEventHeaderDeserializer()
                 .deserialize(null, message);
         GenericRecord genericRecord = RheosEventSerdeFactory.getRheosEventDeserializer()
@@ -172,7 +172,7 @@ public class Soj2UbiEventDeserializationSchema implements DeserializationSchema<
 //        return genericRecord;
     }
 
-    private int getInteger(Object o) {
+    private int getInteger( Object o ) {
         if (StringUtils.isEmpty(getString(o))) {
             return Integer.MIN_VALUE;
         } else {
@@ -180,7 +180,7 @@ public class Soj2UbiEventDeserializationSchema implements DeserializationSchema<
         }
     }
 
-    private boolean getBoolean(Object o) {
+    private boolean getBoolean( Object o ) {
         if (StringUtils.isEmpty(getString(o))) {
             return false;
         } else {
@@ -189,7 +189,7 @@ public class Soj2UbiEventDeserializationSchema implements DeserializationSchema<
     }
 
 
-    private Long getLong(Object o) {
+    private Long getLong( Object o ) {
         if (StringUtils.isEmpty(getString(o))) {
             return null;
         } else {
@@ -197,16 +197,17 @@ public class Soj2UbiEventDeserializationSchema implements DeserializationSchema<
         }
     }
 
-    private String getString(Object o) {
+    private String getString( Object o ) {
         return (o != null && !"null".equals(o.toString())) ? o.toString() : null;
+
     }
 
-    private String getStringNonNull(Object o) {
+    private String getStringNonNull( Object o ) {
         return (o != null) ? o.toString() : "";
     }
 
     @Override
-    public boolean isEndOfStream(UbiEvent nextElement) {
+    public boolean isEndOfStream( UbiEvent nextElement ) {
         return false;
     }
 

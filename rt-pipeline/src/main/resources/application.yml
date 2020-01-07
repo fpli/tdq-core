@@ -16,7 +16,8 @@ rheos:
 
 flink:
   app:
-    name: sojourner-ubd
+    name: Unified Bot Detection RT Pipeline
+    source-parallelism: 1
   checkpoint:
     data-dir: /opt/sojourner-ubd/checkpoint
     interval: 5m

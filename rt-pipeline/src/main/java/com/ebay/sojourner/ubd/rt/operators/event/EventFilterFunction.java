@@ -2,6 +2,7 @@ package com.ebay.sojourner.ubd.rt.operators.event;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
+
 import org.apache.flink.api.common.functions.RichFilterFunction;
 import org.apache.flink.configuration.Configuration;
 
@@ -12,13 +13,13 @@ public class EventFilterFunction extends RichFilterFunction<RawEvent> {
 
 
     @Override
-    public void open(Configuration conf) throws Exception {
+    public void open( Configuration conf ) throws Exception {
         super.open(conf);
 //        getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
     }
 
     @Override
-    public boolean filter(RawEvent rawEvent) throws Exception {
+    public boolean filter( RawEvent rawEvent ) throws Exception {
         Map<String, String> map = new HashMap<>();
         map.putAll(rawEvent.getSojA());
         map.putAll(rawEvent.getSojK());

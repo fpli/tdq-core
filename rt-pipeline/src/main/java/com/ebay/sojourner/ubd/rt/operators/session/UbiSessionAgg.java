@@ -6,6 +6,7 @@ import com.ebay.sojourner.ubd.common.sharedlib.detectors.SessionBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.functions.AggregateFunction;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Set;
@@ -16,7 +17,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumul
     private SessionBotDetector sessionBotDetector;
     //    private CouchBaseManager couchBaseManager;
 //    private static final String BUCKET_NAME="botsignature";
-
+    private static final Logger logger = Logger.getLogger(UbiSessionAgg.class);
     @Override
     public SessionAccumulator createAccumulator() {
         SessionAccumulator sessionAccumulator = new SessionAccumulator();
@@ -32,18 +33,21 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumul
     }
 
     @Override
-    public SessionAccumulator add(UbiEvent value, SessionAccumulator accumulator) {
+    public SessionAccumulator add( UbiEvent value, SessionAccumulator accumulator ) {
         Set<Integer> eventBotFlagSet = value.getBotFlags();
 
         try {
-            if (value.isNewSession() && accumulator.getUbiSession().getSessionId() == null) {
-                value.updateSessionId();
-            }
+            //move this logic to MapWithStateFunction
+//            if (value.isNewSession() && accumulator.getUbiSession().getSessionId() == null) {
+//                value.updateSessionId();
+//            }
             sessionMetrics.feed(value, accumulator);
         } catch (Exception e) {
             log.error("start-session metrics collection issue:" + value, e);
         }
-
+        if (accumulator.getUbiSession().getGuid() == null) {
+            accumulator.getUbiSession().setGuid(value.getGuid());
+        }
         Set<Integer> sessionBotFlagSetDetect = null;
         try {
             sessionBotFlagSetDetect = sessionBotDetector.getBotFlagList(accumulator.getUbiSession());
@@ -57,9 +61,19 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumul
 //        Set<Integer> attrBotFlagWithAgentIp = couchBaseManager.getSignatureWithDocId(accumulator.getUbiSession().getUserAgent()+accumulator.getUbiSession().getClientIp());
 //        Set<Integer> attrBotFlagWithAgent = couchBaseManager.getSignatureWithDocId(accumulator.getUbiSession().getUserAgent());
 
+
+        if (eventBotFlagSet != null && eventBotFlagSet.size() > 0 && !sessionBotFlagSet.containsAll(eventBotFlagSet)) {
+            sessionBotFlagSet.addAll(eventBotFlagSet);
+        }
         if (sessionBotFlagSetDetect != null && sessionBotFlagSetDetect.size() > 0) {
+
             sessionBotFlagSet.addAll(sessionBotFlagSetDetect);
             eventBotFlagSet.addAll(sessionBotFlagSetDetect);
+        }
+        if (value.getEventTimestamp() != null&&(accumulator.getUbiSession().getEndTimestamp()==null||value.getEventTimestamp()>accumulator.getUbiSession().getEndTimestamp())) {
+            accumulator.getUbiSession().setEndTimestamp(value.getEventTimestamp());
+        } else {
+            logger.error(value);
         }
 //        if(attrBotFlagWithAgentIp!=null&&attrBotFlagWithAgentIp.size()>0) {
 //            sessionBotFlagSet.addAll(attrBotFlagWithAgentIp);
@@ -115,18 +129,18 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumul
 //        }
         accumulator.getUbiSession().setBotFlagList(sessionBotFlagSet);
         value.setBotFlags(eventBotFlagSet);
-        accumulator.setUbiEvent(value);
+//        accumulator.setUbiEvent(value);
 
         return accumulator;
     }
 
     @Override
-    public SessionAccumulator getResult(SessionAccumulator sessionAccumulator) {
+    public SessionAccumulator getResult( SessionAccumulator sessionAccumulator ) {
         return sessionAccumulator;
     }
 
     @Override
-    public SessionAccumulator merge(SessionAccumulator a, SessionAccumulator b) {
+    public SessionAccumulator merge( SessionAccumulator a, SessionAccumulator b ) {
         log.info("SessionAccumulator merge:");
         a.setUbiSession(a.getUbiSession().merge(b.getUbiSession()));
         return a;

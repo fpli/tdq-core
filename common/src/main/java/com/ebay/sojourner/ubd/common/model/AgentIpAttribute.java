@@ -40,9 +40,9 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
     private int mktgCnt = 0;
     private int siteCnt = 0;
     private int newGuidCnt = 0;
-//    private int guidCnt = 0;
-    private  Set<String> cguidSet = new HashSet<String>();
-    private  Set<String> guidSet = new HashSet<String>();
+    //    private int guidCnt = 0;
+    private Set<String> cguidSet = new HashSet<String>();
+    private Set<String> guidSet = new HashSet<String>();
     private Boolean isAllAgentHoper = true;
     private int totalCntForSec1 = 0;
 
@@ -144,7 +144,7 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
 
 
     @Override
-    public void revert(UbiSession ubiSession, int botFlag) {
+    public void revert( UbiSession ubiSession, int botFlag ) {
         switch (botFlag) {
             case 5:
                 scsCountForBot5 = -1;
@@ -199,7 +199,7 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
     }
 
     @Override
-    public void clear(int botFlag) {
+    public void clear( int botFlag ) {
         switch (botFlag) {
             case 5:
                 scsCountForBot5 = 0;
