@@ -1,0 +1,16 @@
+-
+  name: case1
+  type: AgentIpAttribute
+  input:
+    AgentIpAttribute:
+      totalCnt: 11
+      totalCntForSec1: 5
+      consistent: true
+      validPageCnt: 4
+      isAllAgentHoper: false
+    botFlag: 210
+    needed: true
+  expectResult:
+    totalCnt: 11
+    totalCntForSec1: 5
+    isAllAgentHoper: false
