@@ -71,7 +71,8 @@ public class SojournerUBDRTJobUntilSession {
         // 2.2 Event level bot detection via bot rule
         DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
                 .map(new EventMapFunction())
-                .name("Event Operator").disableChaining();
+                .setParallelism(30)
+                .name("Event Operator");
 
         // 3. Session Operator
         // 3.1 Session window
