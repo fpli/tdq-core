@@ -16,7 +16,7 @@ public class SessionDwellMetricsTest extends BaseMetricsTest {
     @BeforeEach
     public void setup() throws Exception {
         sessionDwellMetrics = new SessionDwellMetrics();
-        yaml = loadTestCasesYaml("SessionDwellMetrics1Test.yaml");
+        yaml = loadTestCasesYaml("SessionDwellMetricsTest.yaml");
     }
 
 

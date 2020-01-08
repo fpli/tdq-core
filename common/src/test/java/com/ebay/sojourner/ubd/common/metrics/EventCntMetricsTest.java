@@ -15,7 +15,7 @@ public class EventCntMetricsTest extends BaseMetricsTest {
     @BeforeEach
     public void setup() throws Exception {
         eventCntMetrics = new EventCntMetrics();
-        yaml = loadTestCasesYaml("EventCntMetricTest.yaml");
+        yaml = loadTestCasesYaml("EventCntMetricsTest.yaml");
     }
 
     @TestFactory

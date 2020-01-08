@@ -3,23 +3,23 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class SessionDwellMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
-    private static final Logger logger = Logger.getLogger(SingleClickFlagMetrics.class);
-    private Long[] minMaxEventTimestamp ;
+    private Long[] minMaxEventTimestamp;
     private Integer seqNum;
+
     @Override
     public void init() throws Exception {
 
     }
+
     @Override
     public void start(SessionAccumulator sessionAccumulator) {
-
-        minMaxEventTimestamp = new Long[]{Long.MAX_VALUE,Long.MIN_VALUE};
+        minMaxEventTimestamp = new Long[]{Long.MAX_VALUE, Long.MIN_VALUE};
         sessionAccumulator.getUbiSession().setMinMaxEventTimestamp(minMaxEventTimestamp);
-//        feed(event, sessionAccumulator);
     }
 
     @Override

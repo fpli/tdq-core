@@ -28,6 +28,9 @@ public abstract class BaseMetricsTest {
     protected JsonNode loadTestCasesYaml(String fileName) throws Exception {
         String fullPathName = "src/test/resources/test-cases/metrics/" + fileName;
         File resourcesFile = new File(fullPathName);
+        if (!resourcesFile.exists()) {
+            throw new RuntimeException("Cannot load resource file: " + fullPathName);
+        }
         return objectMapper.readTree(resourcesFile);
     }
 
