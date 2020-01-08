@@ -11,12 +11,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,18 +25,17 @@ public abstract class BaseMetricsTest {
     private ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory())
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);;
 
-    protected Pair<JsonNode, List<MetricsTestCase>> loadTestCases(String fileName) throws Exception {
+    protected JsonNode loadTestCasesYaml(String fileName) throws Exception {
         String fullPathName = "src/test/resources/test-cases/metrics/" + fileName;
         File resourcesFile = new File(fullPathName);
-        JsonNode jsonNode = objectMapper.readTree(resourcesFile);
-        List<MetricsTestCase> testCases = objectMapper.readValue(resourcesFile,
-                new TypeReference<List<MetricsTestCase>>() {});
-
-        return Pair.of(jsonNode, testCases);
+        return objectMapper.readTree(resourcesFile);
     }
 
-    protected List<DynamicTest> generateDynamicTests(List<MetricsTestCase> testCases, JsonNode yaml,
-                                                     FieldMetrics<UbiEvent, SessionAccumulator> fieldMetrics) {
+    protected List<DynamicTest> generateDynamicTests(JsonNode yaml,
+                                                     FieldMetrics<UbiEvent, SessionAccumulator> fieldMetrics) throws IOException {
+        List<MetricsTestCase> testCases = objectMapper.readValue(yaml.toString(),
+                new TypeReference<List<MetricsTestCase>>() {});
+
         List<DynamicTest> dynamicTestList = Lists.newArrayList();
 
         for (int i = 0; i < testCases.size(); i++) {
