@@ -92,11 +92,11 @@ public class BaseAttributesTest<T> {
                         throw new RuntimeException(e);
                     }
                 });
+                attribute.clear();
             });
 
             dynamicTestList.add(dynamicTest);
         }
-
         return dynamicTestList;
     }
 

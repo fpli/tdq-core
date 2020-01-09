@@ -14,3 +14,128 @@
     totalCnt: 11
     totalCntForSec1: 5
     isAllAgentHoper: false
+
+-
+  name: case2
+  type: AgentIpAttribute
+  input:
+    AgentIpAttribute:
+      totalCnt: 11
+      scsCountForBot7: 1
+      validPageCnt: 4
+    botFlag: 7
+    needed: true
+  expectResult:
+    scsCount: 1
+
+-
+  name: case3
+  type: AgentIpAttribute
+  input:
+    AgentIpAttribute:
+      totalCnt: 4
+      totalCntForSec1: 5
+      homePageCnt: 4
+    botFlag: 210
+    needed: true
+  expectResult:
+    totalCnt: 4
+    totalCntForSec1: 5
+    isAllAgentHoper: true
+
+-
+  name: case4
+  type: AgentIpAttribute
+  input:
+    AgentIpAttribute:
+      totalCnt: 6
+      totalCntForSec1: 5
+      familyViCnt: 6
+      signinCnt: 6
+    botFlag: 210
+    needed: true
+  expectResult:
+    totalCnt: 6
+    totalCntForSec1: 5
+    isAllAgentHoper: true
+
+-
+  name: case5
+  type: AgentIpAttribute
+  input:
+    AgentIpAttribute:
+      totalCnt: 12
+      totalCntForSec1: 5
+      newGuidCnt: 12
+    botFlag: 210
+    needed: true
+  expectResult:
+    totalCnt: 12
+    totalCntForSec1: 5
+    isAllAgentHoper: true
+
+-
+  name: case6
+  type: AgentIpAttribute
+  input:
+    AgentIpAttribute:
+      totalCnt: 21
+      totalCntForSec1: 5
+      mktgCnt: 21
+      guidSet:
+        - 1
+    botFlag: 210
+    needed: true
+  expectResult:
+    totalCnt: 21
+    totalCntForSec1: 5
+    isAllAgentHoper: true
+
+-
+  name: case7
+  type: AgentIpAttribute
+  input:
+    AgentIpAttribute:
+      totalCnt: 51
+      totalCntForSec1: 5
+      noUidCnt: 51
+    botFlag: 210
+    needed: true
+  expectResult:
+    totalCnt: 51
+    totalCntForSec1: 5
+    isAllAgentHoper: true
+
+-
+  name: case8
+  type: AgentIpAttribute
+  input:
+    AgentIpAttribute:
+      totalCnt: 101
+      totalCntForSec1: 5
+      familyViCnt: 100
+    botFlag: 210
+    needed: true
+  expectResult:
+    totalCnt: 101
+    totalCntForSec1: 5
+    isAllAgentHoper: true
+
+-
+  name: case9
+  type: AgentIpAttribute
+  input:
+    AgentIpAttribute:
+      totalCnt: 201
+      totalCntForSec1: 5
+      cguidSet:
+        - 1
+        - 2
+        - 3
+        - 4
+    botFlag: 210
+    needed: true
+  expectResult:
+    totalCnt: 201
+    totalCntForSec1: 5
+    isAllAgentHoper: true
