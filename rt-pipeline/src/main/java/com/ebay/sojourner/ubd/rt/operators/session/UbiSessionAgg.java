@@ -43,7 +43,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumul
 //            }
             sessionMetrics.feed(value, accumulator);
         } catch (Exception e) {
-            log.error("start-session metrics collection issue:" + value, e);
+            log.error("start-session metrics collection issue:" + value.getGuid()+"||"+(value.getSessionId()==null?"":value.getSessionId())+"||"+value.getSeqNum(), e);
         }
         if (accumulator.getUbiSession().getGuid() == null) {
             accumulator.getUbiSession().setGuid(value.getGuid());
@@ -73,7 +73,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumul
         if (value.getEventTimestamp() != null&&(accumulator.getUbiSession().getEndTimestamp()==null||value.getEventTimestamp()>accumulator.getUbiSession().getEndTimestamp())) {
             accumulator.getUbiSession().setEndTimestamp(value.getEventTimestamp());
         } else {
-            logger.error(value);
+//            log.error( value.getGuid()+"||"+(value.getSessionId()==null?"":value.getSessionId())+"||"+value.getSeqNum(), e);
         }
 //        if(attrBotFlagWithAgentIp!=null&&attrBotFlagWithAgentIp.size()>0) {
 //            sessionBotFlagSet.addAll(attrBotFlagWithAgentIp);

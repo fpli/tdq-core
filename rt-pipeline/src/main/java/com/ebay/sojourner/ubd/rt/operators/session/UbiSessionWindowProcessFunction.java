@@ -47,9 +47,38 @@ public class UbiSessionWindowProcessFunction
         System.out.println("context.currentWatermark():========" + context.currentWatermark());
         endSessionEvent(sessionAccumulator);
         UbiSession ubiSession = new UbiSession();
-        BeanUtils.copyProperties(ubiSession, sessionAccumulator.getUbiSession());
-
-//                 context.output(outputTag, ubiSession);
+//        BeanUtils.copyProperties(ubiSession, sessionAccumulator.getUbiSession());
+        ubiSession.setGuid(sessionAccumulator.getUbiSession().getGuid());
+        ubiSession.setAgentString(sessionAccumulator.getUbiSession().getAgentString());
+        ubiSession.setSessionId(sessionAccumulator.getUbiSession().getSessionId());
+        ubiSession.setIp(sessionAccumulator.getUbiSession().getIp());
+        ubiSession.setUserAgent(sessionAccumulator.getUbiSession().getUserAgent());
+        ubiSession.setExInternalIp(sessionAccumulator.getUbiSession().getExInternalIp());
+        ubiSession.setSojDataDt(sessionAccumulator.getUbiSession().getSojDataDt());
+        ubiSession.setSessionStartDt(sessionAccumulator.getUbiSession().getSessionStartDt());
+        ubiSession.setAgentCnt(sessionAccumulator.getUbiSession().getAgentCnt());
+        ubiSession.setStartTimestamp(sessionAccumulator.getUbiSession().getStartTimestamp());
+        ubiSession.setEndTimestamp(sessionAccumulator.getUbiSession().getEndTimestamp());
+        ubiSession.setAbsStartTimestamp(sessionAccumulator.getUbiSession().getAbsStartTimestamp());
+        ubiSession.setAbsEndTimestamp(sessionAccumulator.getUbiSession().getAbsEndTimestamp());
+        ubiSession.setClientIp(sessionAccumulator.getUbiSession().getClientIp());
+        ubiSession.setInternalIp(sessionAccumulator.getUbiSession().getInternalIp());
+        ubiSession.setSingleClickSessionFlag(sessionAccumulator.getUbiSession().getSingleClickSessionFlag());
+        ubiSession.setBotFlagList(sessionAccumulator.getUbiSession().getBotFlagList());
+        ubiSession.setNonIframeRdtEventCnt(sessionAccumulator.getUbiSession().getNonIframeRdtEventCnt());
+        ubiSession.setSingleClickSessionFlag(sessionAccumulator.getUbiSession().getSingleClickSessionFlag());
+        ubiSession.setSessionReferrer(sessionAccumulator.getUbiSession().getSessionReferrer());
+        ubiSession.setBotFlag(sessionAccumulator.getUbiSession().getBotFlag());
+        ubiSession.setVersion(sessionAccumulator.getUbiSession().getVersion());
+        ubiSession.setFirstUserId(sessionAccumulator.getUbiSession().getFirstUserId());
+        ubiSession.setSiteFlagsSet(sessionAccumulator.getUbiSession().getSiteFlagsSet());
+        ubiSession.setSiteFlags(sessionAccumulator.getUbiSession().getSiteFlags());
+        ubiSession.setAttrFlags(sessionAccumulator.getUbiSession().getAttrFlags());
+        ubiSession.setBotFlags(sessionAccumulator.getUbiSession().getBotFlags());
+        ubiSession.setFindingFlags(sessionAccumulator.getUbiSession().getFindingFlags());
+        ubiSession.setStartPageId(sessionAccumulator.getUbiSession().getStartPageId());
+        ubiSession.setEndPageId(sessionAccumulator.getUbiSession().getEndPageId());
+        ubiSession.setDurationSec(sessionAccumulator.getUbiSession().getDurationSec());
         out.collect(ubiSession);
 
     }
