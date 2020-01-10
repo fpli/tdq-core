@@ -22,8 +22,7 @@ public class AppIdParser implements FieldParser<RawEvent, UbiEvent> {
     private static final String PREFIX = "http://www.ebay.com";
     public static final String SRCAPPID = "srcAppId";
 
-    private static final String prefix0 = "ebayUserAgent/eBayIOS;";
-    private static final String matchStr0 = ";iPad";
+    private static final String matchStr1 = ";iPad";
     private static final String prefix1 = "ebayUserAgent/eBayIOS;";
     private static final String prefix2 = "ebayUserAgent/eBayAndroid;";
     private static final String prefix3 = "eBayiPad/";
@@ -81,7 +80,8 @@ public class AppIdParser implements FieldParser<RawEvent, UbiEvent> {
             appid = SOJNVL.getTagValue(SOJGetUrlParams.getUrlParams(PREFIX + urlQueryStrPrefix), TRACKING_SRC_APPID);
         } else if (isInteger(SOJNVL.getTagValue(SOJGetUrlParams.getUrlParams(referrer), TRACKING_SRC_APPID))) {
             appid = SOJNVL.getTagValue(SOJGetUrlParams.getUrlParams(referrer), TRACKING_SRC_APPID);
-        } else if (StringUtils.startsWithIgnoreCase(agentInfo, prefix0) && StringUtils.containsIgnoreCase(agentInfo, matchStr0)) {
+        } else if (StringUtils.startsWithIgnoreCase(agentInfo, prefix1)
+                && StringUtils.containsIgnoreCase(StringUtils.substring(agentInfo, prefix1.length()), matchStr1)) {
             appid = "2878";
         } else if (StringUtils.startsWithIgnoreCase(agentInfo, prefix1)) {
             appid = "1462";
