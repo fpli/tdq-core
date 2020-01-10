@@ -111,9 +111,10 @@ public class IpAttributeTest {
     }
 
     @Test
-    public void test_feed_botFlag210_sessionCntGt100_and_sameNoUidCnt() {
+    public void test_feed_botFlag210_sessionCntGt100_and_validFamilyViCnt() {
         agentIpAttribute.setTotalCnt(101);
         agentIpAttribute.setTotalCntForSec1(5);
+        agentIpAttribute.setNoUidCnt(51);
         agentIpAttribute.setFamilyViCnt(100);
 
         ipAttribute.feed(agentIpAttribute, 210, true);
@@ -127,6 +128,7 @@ public class IpAttributeTest {
     public void test_feed_botFlag210_sessionCntGt200() {
         agentIpAttribute.setTotalCnt(201);
         agentIpAttribute.setTotalCntForSec1(5);
+        agentIpAttribute.setNoUidCnt(51);
         agentIpAttribute.setCguidSet(Sets.newHashSet("1", "2", "3", "4"));
 
         ipAttribute.feed(agentIpAttribute, 210, true);

@@ -1,5 +1,5 @@
 -
-  name: case1
+  name: botFlag7
   type: AgentIpAttribute
   input:
     AgentIpAttribute:
@@ -16,7 +16,7 @@
     isAllAgentHoper: false
 
 -
-  name: case2
+  name: botFlag210_sessionGt10
   type: AgentIpAttribute
   input:
     AgentIpAttribute:
@@ -29,7 +29,7 @@
     scsCount: 1
 
 -
-  name: case3
+  name: botFlag210_sessionCntGt3_and_sameSessionCnt
   type: AgentIpAttribute
   input:
     AgentIpAttribute:
@@ -44,7 +44,7 @@
     isAllAgentHoper: true
 
 -
-  name: case4
+  name: botFlag210_sessionCntGt5
   type: AgentIpAttribute
   input:
     AgentIpAttribute:
@@ -60,7 +60,7 @@
     isAllAgentHoper: true
 
 -
-  name: case5
+  name: botFlag210_sessionCntGt10_and_sameGuidCnt
   type: AgentIpAttribute
   input:
     AgentIpAttribute:
@@ -75,7 +75,7 @@
     isAllAgentHoper: true
 
 -
-  name: case6
+  name: botFlag210_sessionCntGt20_and_sameMktCnt
   type: AgentIpAttribute
   input:
     AgentIpAttribute:
@@ -92,7 +92,7 @@
     isAllAgentHoper: true
 
 -
-  name: case7
+  name: botFlag210_sessionCntGt50_and_sameNoUidCnt
   type: AgentIpAttribute
   input:
     AgentIpAttribute:
@@ -107,13 +107,14 @@
     isAllAgentHoper: true
 
 -
-  name: case8
+  name: botFlag210_sessionCntGt100_and_validFamilyViCnt
   type: AgentIpAttribute
   input:
     AgentIpAttribute:
       totalCnt: 101
       totalCntForSec1: 5
       familyViCnt: 100
+      noUidCnt: 51
     botFlag: 210
     needed: true
   expectResult:
@@ -122,12 +123,13 @@
     isAllAgentHoper: true
 
 -
-  name: case9
+  name: botFlag210_sessionCntGt200
   type: AgentIpAttribute
   input:
     AgentIpAttribute:
       totalCnt: 201
       totalCntForSec1: 5
+      noUidCnt: 51
       cguidSet:
         - 1
         - 2
