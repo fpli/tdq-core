@@ -53,7 +53,7 @@ public class UbiEvent implements Serializable {
   private String forwardedFor;
   private String clientIP;
   private int bitVal;
-  private int appId;
+  private Integer appId;
   private Long oldSessionSkey;
   private int hashCode;
   private int partialValidPage;

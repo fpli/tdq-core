@@ -543,7 +543,7 @@ appidParser:
       q: "hayun"
     sojC:
       t: haxi
-    expectResult:
+    expectResult: 1462
 
   case15:
     clientData:
@@ -556,7 +556,7 @@ appidParser:
       q: "hayun"
     sojC:
       t: haxi
-    expectResult:
+    expectResult: 12
 
   case16:
     clientData:
@@ -569,7 +569,7 @@ appidParser:
       q: "hayun"
     sojC:
       t: haxi
-    expectResult:
+    expectResult: 2878
 
 findingFlagParser:
   case1:
