@@ -48,7 +48,8 @@ public class AgentStringMetrics implements FieldMetrics<UbiEvent, SessionAccumul
             if (sessionAccumulator.getUbiSession().getAgentString() == null) {
                 sessionAccumulator.getUbiSession().setAgentString(agentInfo);
             }
-            sessionAccumulator.getUbiSession().getAgentSets().add(agentInfo);
+            if(sessionAccumulator.getUbiSession().getAgentSets()!=null&&sessionAccumulator.getUbiSession().getAgentSets().size()<2)
+                sessionAccumulator.getUbiSession().getAgentSets().add(agentInfo);
         }
     }
 
