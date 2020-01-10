@@ -40,7 +40,7 @@ public class UbiSession implements Serializable,Cloneable{
     private int firstSiteId;
     private String firstCguid;
     private Long firstMappedUserId;
-    private int firstAppId;
+    private Integer firstAppId;
     private Long endTimestamp;
     private int homepageCnt;
     private int grCnt;
@@ -70,7 +70,7 @@ public class UbiSession implements Serializable,Cloneable{
     private String internalIp;
     private String externalIp;
     private String externalIp2;
-    private int appId;
+    private Integer appId;
     private int siidCnt;
     private int viCnt;//for bot215
     private int maxScsSeqNum;
