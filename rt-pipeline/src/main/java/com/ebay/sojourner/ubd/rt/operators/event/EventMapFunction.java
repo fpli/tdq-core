@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.accumulators.AverageAccumulator;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.metrics.Counter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +21,7 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
     private EventBotDetector eventBotDetector;
     private AverageAccumulator avgDuration = new AverageAccumulator();
     private Map<String, AverageAccumulator> eventParseMap = new ConcurrentHashMap<>();
+    private Counter counter;
 
     @Override
     public void open(Configuration conf) throws Exception {
@@ -32,6 +34,7 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
 //        getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
         getRuntimeContext().addAccumulator("Average Duration of Event Parsing", avgDuration);
+        counter = getRuntimeContext().getMetricGroup().addGroup("flink-metrics-test").counter("ubiEvent count");
 
         List<String> classNames = Arrays.asList(
                 AgentInfoParser.class.getSimpleName(),
@@ -72,7 +75,7 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
     @Override
     public UbiEvent map(RawEvent rawEvent) throws Exception {
-
+        counter.inc();
         UbiEvent event = new UbiEvent();
 
         long startTime = System.nanoTime();
