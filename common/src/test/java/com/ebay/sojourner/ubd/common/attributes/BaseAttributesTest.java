@@ -1,13 +1,6 @@
 package com.ebay.sojourner.ubd.common.attributes;
 
-import com.ebay.sojourner.ubd.common.metrics.MetricsTestCase;
 import com.ebay.sojourner.ubd.common.model.Attribute;
-import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.rule.RulesTestCase;
-import com.ebay.sojourner.ubd.common.rule.RulesTestInputObjects;
-import com.ebay.sojourner.ubd.common.sharedlib.metrics.FieldMetrics;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,8 +14,10 @@ import org.junit.jupiter.api.DynamicTest;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class BaseAttributesTest<T> {
     private AttributeTestInputObjects attributesInput;
@@ -85,6 +80,20 @@ public class BaseAttributesTest<T> {
                             for (int j = 0; j < array.length; j++) {
                                 Assertions.assertEquals(node.get(j).asText(), String.valueOf(array[j]));
                             }
+                        } else if (actualValue instanceof Set) {
+                            Set actualValue1 = (Set) actualValue;
+                            Set<String> actualSet = new HashSet<>();
+                            Iterator<String> iterator = actualValue1.iterator();
+                            while (iterator.hasNext()) {
+                                actualSet.add(iterator.next());
+                            }
+
+                            Iterator<JsonNode> iterator1 = node.iterator();
+                            while (iterator1.hasNext()) {
+                                Assertions.assertEquals(actualSet.contains(iterator1.next().asText()),true);
+                            }
+
+                            Assertions.assertEquals(node.size(),actualSet.size());
                         } else {
                             Assertions.assertEquals(node.asText(), actualValue.toString());
                         }

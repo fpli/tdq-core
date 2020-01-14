@@ -1,6 +1,5 @@
 package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
-import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
