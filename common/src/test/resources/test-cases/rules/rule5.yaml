@@ -1,0 +1,15 @@
+-
+  name: case1
+  type: AgentIpAttribute
+  input:
+    AgentIpAttribute:
+      scsCountForBot5: 49
+  expectResult: 0
+
+-
+  name: case2
+  type: AgentIpAttribute
+  input:
+    AgentIpAttribute:
+      scsCountForBot5: 50
+  expectResult: 5
