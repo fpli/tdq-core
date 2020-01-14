@@ -1,0 +1,26 @@
+-
+  name: case1
+  type: AgentAttribute
+  input:
+    AgentAttribute:
+      scsCount: 51
+      ipCount: 19
+  expectResult: 6
+
+-
+  name: case2
+  type: AgentAttribute
+  input:
+    AgentAttribute:
+      scsCount: 49
+      ipCount: 0
+  expectResult: 0
+
+-
+  name: case3
+  type: AgentAttribute
+  input:
+    AgentAttribute:
+      scsCount: 51
+      ipCount: 21
+  expectResult: 0

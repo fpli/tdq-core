@@ -8,7 +8,7 @@ public class BotRule8 implements Rule<AgentIpAttribute> {
 
     @Override
     public int getBotFlag(AgentIpAttribute agentIpAttribute) {
-        if (agentIpAttribute.getScsCountForBot5() >= 0&&agentIpAttribute.getBbcCount()>BID_BIN_COUNT) {
+        if (agentIpAttribute.getScsCountForBot8() >= 0&&agentIpAttribute.getBbcCount()>BID_BIN_COUNT) {
             return BotRules.SCS_CONFIRM_ON_AGENTIP;
         } else {
             return BotRules.NON_BOT_FLAG;
