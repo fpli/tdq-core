@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
 
 public class StreamingFileSinkFactory {
 
-    public static String BASE_DIR = "/data";
+    public static String BASE_DIR = "/user/o_ubi/";
 
     public static String eventSinkPath = BASE_DIR + "/events";
     public static String sessionSinkPath = BASE_DIR + "/sessions";
@@ -57,7 +57,7 @@ public class StreamingFileSinkFactory {
     }
 
     public static SojHdfsSinkWithKeytab sessionSinkWithSojHdfs() {
-        return StreamingFileSinkFactory.<UbiSession>createWithParquet(eventSinkPath,UbiSession.class);
+        return StreamingFileSinkFactory.<UbiSession>createWithParquet(sessionSinkPath,UbiSession.class);
     }
 
 

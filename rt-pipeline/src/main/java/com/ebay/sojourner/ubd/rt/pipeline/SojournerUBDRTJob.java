@@ -15,7 +15,9 @@ import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
+import org.apache.flink.api.common.typeinfo.SOjStringFactory;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -29,16 +31,21 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+
 
 public class SojournerUBDRTJob {
 
-    public static void main(String[] args) throws Exception {
+    public static void main( String[] args ) throws Exception {
         // 0.0 Prepare execution environment
         // 0.1 UBI configuration
         // 0.2 Flink configuration
 //        InputStream resourceAsStream = SojournerUBDRTJob.class.getResourceAsStream("/ubi.properties");
 //        UBIConfig ubiConfig = UBIConfig.getInstance(resourceAsStream);
-
+        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class, Class.class);
+        m.setAccessible(true);
+        m.invoke(null, String.class, SOjStringFactory.class);
         final StreamExecutionEnvironment executionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment();
 //        final ParameterTool params = ParameterTool.fromArgs(args);
@@ -59,7 +66,7 @@ public class SojournerUBDRTJob {
                 KafkaConnectorFactory.createKafkaConsumer().assignTimestampsAndWatermarks(
                         new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
                             @Override
-                            public long extractTimestamp(RawEvent element) {
+                            public long extractTimestamp( RawEvent element ) {
                                 return element.getRheosHeader().getEventCreateTimestamp();
                             }
                         }

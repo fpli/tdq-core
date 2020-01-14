@@ -4,13 +4,16 @@ import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
+import com.ebay.sojourner.ubd.rt.connectors.filesystem.StreamingFileSinkFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
+import org.apache.flink.api.common.typeinfo.SOjStringFactory;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -24,9 +27,18 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+
 public class SojournerUBDRTJobUntilSession {
 
     public static void main(String[] args) throws Exception {
+
+        // hack StringValue to use the version 1.10
+        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class, Class.class);
+        m.setAccessible(true);
+        m.invoke(null, String.class, SOjStringFactory.class);
+
         // 0.0 Prepare execution environment
         // 0.1 UBI configuration
         // 0.2 Flink configuration
@@ -109,11 +121,12 @@ public class SojournerUBDRTJobUntilSession {
         ubiSessinDataStream.name("Session Operator");
 
         DataStream<UbiEvent> mappedEventStream = ubiSessinDataStream.getSideOutput(mappedEventOutputTag);
-        mappedEventStream.addSink(new DiscardingSink<>()).name("Mapped UbiEvent").disableChaining();
+//        mappedEventStream.addSink(new DiscardingSink<>()).name("Mapped UbiEvent").disableChaining();
 
-        ubiSessinDataStream.addSink(new DiscardingSink<>()).name("session").disableChaining();
+//        ubiSessinDataStream.addSink(new DiscardingSink<>()).name("session").disableChaining();
 //        ubiEventStreamWithSessionId.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId").disableChaining();
-
+        ubiSessinDataStream.addSink(StreamingFileSinkFactory.sessionSinkWithSojHdfs())
+                .name("Sessions");
         // Submit this job
         executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
 
