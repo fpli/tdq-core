@@ -29,7 +29,7 @@ public class LkpFetcher {
     private static Set<String> testUserIds = new HashSet<String>();
     private static Set<String> largeSessionGuidSet = new HashSet<String>();
     private static Map<Integer, String[]> pageFmlyMap = new HashMap<Integer, String[]>();
-    private static Map<Long, String> mpxMap = new HashMap<Long, String>();
+    private static Map<String, String> mpxMap = new HashMap<String, String>();
     private static Map<String, Boolean> selectedIps = new HashMap<String, Boolean>();
     private static Set<String> selectedAgents = new HashSet<String>();
     private static UBIConfig ubiConfig;
@@ -302,7 +302,8 @@ public class LkpFetcher {
                     // Keep the null judgment also for session metrics first finding flag
                     if (values[0] != null && values[1] != null) {
                         try {
-                            mpxMap.put(Long.parseLong(values[0].trim()), String.valueOf(values[1].trim()));
+//                            mpxMap.put(Long.parseLong(values[0].trim()), String.valueOf(values[1].trim()));
+                            mpxMap.put(values[0].trim(), values[1].trim());
                         } catch (NumberFormatException e) {
                             log.error("Ignore the incorrect format for mpx: " + values[0] + " - " + values[1]);
                         }
@@ -381,7 +382,7 @@ public class LkpFetcher {
         return largeSessionGuidSet;
     }
 
-    public  Map<Long, String> getMpxMap() {
+    public  Map<String, String> getMpxMap() {
         return mpxMap;
     }
 

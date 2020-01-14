@@ -22,7 +22,8 @@ public class IntermediateMetrics implements Serializable {
     private static String imgMpxChnlSet6 = null;
     private static Set<Integer> mobilePageSet = null;
     private static final String MPPID = "mppid";
-    private static Map<Long, String> mpxMap; // mpx channel id map
+//    private static Map<Long, String> mpxMap; // mpx channel id map
+    private static Map<String, String> mpxMap;
     private static Set<Integer> notifyCLickPageSet = null;
     private static Set<Integer> notifyViewPageSet = null;
     private static final Integer ONE = 1;
@@ -72,7 +73,7 @@ public class IntermediateMetrics implements Serializable {
         return mobilePageSet;
     }
 
-    static Map<Long, String> getMpxMap() {
+    static Map<String, String> getMpxMap() {
         return mpxMap;
     }
 
@@ -112,7 +113,7 @@ public class IntermediateMetrics implements Serializable {
         IntermediateMetrics.mobilePageSet = mobilePageSet;
     }
 
-    static void setMpxMap(Map<Long, String> mpxMap) {
+    static void setMpxMap(Map<String, String> mpxMap) {
         IntermediateMetrics.mpxMap = mpxMap;
     }
 
