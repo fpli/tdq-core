@@ -19,7 +19,6 @@ import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.transformations.OneInputTransformation;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
@@ -35,9 +34,9 @@ public class SojournerUBDRTJobUntilSession {
     public static void main(String[] args) throws Exception {
 
         // hack StringValue to use the version 1.10
-        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class, Class.class);
-        m.setAccessible(true);
-        m.invoke(null, String.class, SOjStringFactory.class);
+//        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class, Class.class);
+//        m.setAccessible(true);
+//        m.invoke(null, String.class, SOjStringFactory.class);
 
         // 0.0 Prepare execution environment
         // 0.1 UBI configuration

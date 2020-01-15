@@ -59,6 +59,10 @@ public class StreamingFileSinkFactory {
     public static SojHdfsSinkWithKeytab sessionSinkWithSojHdfs() {
         return StreamingFileSinkFactory.<UbiSession>createWithParquet(sessionSinkPath,UbiSession.class);
     }
+    public static SojHdfsSinkWithKeytab sessionSinkWithStrinf() {
+        return StreamingFileSinkFactory.<UbiEvent>createSojHdfs(sessionSinkPath);
+    }
+
 
 
     public static StreamingFileSink sessionSink() {
