@@ -34,9 +34,9 @@ public class SojournerUBDRTJobUntilSession {
     public static void main(String[] args) throws Exception {
 
         // hack StringValue to use the version 1.10
-        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class, Class.class);
-        m.setAccessible(true);
-        m.invoke(null, String.class, SOjStringFactory.class);
+//        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class, Class.class);
+//        m.setAccessible(true);
+//        m.invoke(null, String.class, SOjStringFactory.class);
 
         // 0.0 Prepare execution environment
         // 0.1 UBI configuration

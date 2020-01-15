@@ -155,6 +155,7 @@ public class TypeExtractor {
         if (!TypeInfoFactory.class.isAssignableFrom(factory)) {
             throw new IllegalArgumentException("Class is not a TypeInfoFactory.");
         }
+        System.out.println("this is our new TypeExtractor");
         if (registeredTypeInfoFactories.containsKey(t) && t!=String.class){
             throw new InvalidTypesException("A TypeInfoFactory for type '" + t + "' is already registered.");
         }

@@ -173,9 +173,9 @@ public class IntermediateMetrics implements Serializable {
      * 2052310,2054060,2053277,2058946,2054180,2050494,2050495,
      * 2058483,2050605,2050606,1673581,1698105,2034596,2041594,1677709
      */
-    private Map<Integer, Integer> mppIdsFromMobileEvent;
+    private Map<String, Integer> mppIdsFromMobileEvent;
 
-    private Map<Integer, Integer> mppIdsFromRoverEvent;
+    private Map<String, Integer> mppIdsFromRoverEvent;
 
     private String mpxChannelId;
     // Notify click
@@ -398,11 +398,11 @@ public class IntermediateMetrics implements Serializable {
         return landPageID;
     }
 
-    public Map<Integer, Integer> getMppIdsFromMobileEvent() {
+    public Map<String, Integer> getMppIdsFromMobileEvent() {
         return mppIdsFromMobileEvent;
     }
 
-    public Map<Integer, Integer> getMppIdsFromRoverEvent() {
+    public Map<String, Integer> getMppIdsFromRoverEvent() {
         return mppIdsFromRoverEvent;
     }
 
@@ -543,13 +543,13 @@ public class IntermediateMetrics implements Serializable {
         this.channelSequence = null;
 
         if (this.mppIdsFromRoverEvent == null) {
-            this.mppIdsFromRoverEvent = new HashMap<Integer, Integer>();
+            this.mppIdsFromRoverEvent = new HashMap<String, Integer>();
         } else {
             this.mppIdsFromRoverEvent.clear();
         }
 
         if (this.mppIdsFromMobileEvent == null) {
-            this.mppIdsFromMobileEvent = new HashMap<Integer, Integer>();
+            this.mppIdsFromMobileEvent = new HashMap<String, Integer>();
         } else {
             this.mppIdsFromMobileEvent.clear();
         }
@@ -1384,10 +1384,10 @@ public class IntermediateMetrics implements Serializable {
                 return;
             }
         }
-        Integer oldmppId = mppIdsFromRoverEvent.get(event.getAppId());
+        Integer oldmppId = mppIdsFromRoverEvent.get(event.getAppId().toString());
         if (oldmppId == null ||
                 (mppId != null && mppId.compareTo(oldmppId) > 0)) {
-            mppIdsFromRoverEvent.put(event.getAppId(), mppId);
+            mppIdsFromRoverEvent.put(event.getAppId().toString(), mppId);
         }
     }
 
@@ -1398,18 +1398,18 @@ public class IntermediateMetrics implements Serializable {
         } catch (NumberFormatException e) {
             return;
         }
-        Integer oldmppId = mppIdsFromMobileEvent.get(event.getAppId());
+        Integer oldmppId = mppIdsFromMobileEvent.get(event.getAppId().toString());
         if (oldmppId == null ||
                 (mppId != null && mppId.compareTo(oldmppId) < 0)) {
-            mppIdsFromMobileEvent.put(event.getAppId(), mppId);
+            mppIdsFromMobileEvent.put(event.getAppId().toString(), mppId);
         }
     }
 
-    public void setMppIdsFromMobileEvent(Map<Integer, Integer> mppIdsFromMobileEvent) {
+    public void setMppIdsFromMobileEvent(Map<String, Integer> mppIdsFromMobileEvent) {
         this.mppIdsFromMobileEvent = mppIdsFromMobileEvent;
     }
 
-    public void setMppIdsFromRoverEvent(Map<Integer, Integer> mppIdsFromRoverEvent) {
+    public void setMppIdsFromRoverEvent(Map<String, Integer> mppIdsFromRoverEvent) {
         this.mppIdsFromRoverEvent = mppIdsFromRoverEvent;
     }
 
