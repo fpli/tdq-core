@@ -38,8 +38,7 @@ public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable
                 break;
             }
             case 202: {
-                totalSessionCnt += agentIpAttribute.getTotalSessionCnt()
-                ;
+                totalSessionCnt += agentIpAttribute.getTotalSessionCnt();
                 nocguidSessionCnt += agentIpAttribute.getNocguidSessionCnt();
                 spsSessionCnt += agentIpAttribute.getSpsSessionCnt();
                 nouidSessionCnt += agentIpAttribute.getNouidSessionCnt();

@@ -5,7 +5,7 @@ kafka:
     - rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
     - rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
     - rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
-  groupId: sojourner-newsource
+  groupId: sojourner
   topic: behavior.pulsar.misc.bot
 
 rheos:
@@ -18,6 +18,7 @@ flink:
   app:
     name: Unified Bot Detection RT Pipeline
     source-parallelism: 30
+    event-parallelism: 72
   checkpoint:
     data-dir: /opt/sojourner-ubd/checkpoint
     interval: 5m

@@ -1,0 +1,18 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      sourceImprId: 1
+      rdt: 0
+      iframe: 0
+      referrer: ebay
+    SessionAccumulator:
+      ubiSession:
+        siidCnt: 0
+        isRefererNull: true
+        siidCnt2: 0
+  expect:
+    UbiSession:
+      siidCnt: 1
+      siidCnt2: 1
+      isRefererNull: false

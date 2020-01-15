@@ -1,0 +1,19 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      agentInfo: ebay
+      rdt: 0
+      iframe: 0
+      pageId: 1
+    SessionAccumulator:
+      ubiSession:
+        agentString:
+        agentSets:
+          - ebay
+  expect:
+    UbiSession:
+      agentString: ebay
+      agentSets:
+        - ebay
+

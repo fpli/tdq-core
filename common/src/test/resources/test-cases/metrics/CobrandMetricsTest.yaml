@@ -1,0 +1,16 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      pageId: 1
+      rdt: 0
+      iframe: 0
+      cobrand: 1
+    SessionAccumulator:
+      ubiSession:
+        cobrand: -2147483648
+        firstCorbrand: -2147483648
+  expect:
+    UbiSession:
+      cobrand: 1
+      firstCorbrand: 1
