@@ -8,4 +8,8 @@ public class FlinkAppConfig {
     private String name;
     @JsonProperty("source-parallelism")
     private Integer sourceParallelism;
+
+    @JsonProperty("event-parallelism")
+    private Integer eventParallelism;
+
 }

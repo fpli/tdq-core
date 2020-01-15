@@ -55,8 +55,7 @@ public class SojournerUBDRTJobUntilSession {
         executionEnvironment.getCheckpointConfig().setMinPauseBetweenCheckpoints(AppEnv.config().getFlink().getCheckpoint().getMinPauseBetween().getSeconds() * 1000);
         executionEnvironment.getCheckpointConfig().setMaxConcurrentCheckpoints(AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent()==null?
                 1:AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
-        executionEnvironment.setStateBackend(
-                StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
+        executionEnvironment.setStateBackend(StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
 
         // for soj nrt output
         // 1. Rheos Consumer
@@ -81,7 +80,7 @@ public class SojournerUBDRTJobUntilSession {
         // 2.2 Event level bot detection via bot rule
         DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
                 .map(new EventMapFunction())
-//                .setParallelism(30)
+                .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
                 .name("Event Operator");
 
         // 3. Session Operator

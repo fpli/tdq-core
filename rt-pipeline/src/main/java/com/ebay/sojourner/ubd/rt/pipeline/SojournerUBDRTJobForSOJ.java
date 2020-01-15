@@ -16,6 +16,7 @@ import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFuncti
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import org.apache.flink.api.common.typeinfo.SOjStringFactory;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
@@ -38,6 +39,9 @@ import java.lang.reflect.Type;
 public class SojournerUBDRTJobForSOJ {
 
     public static void main(String[] args) throws Exception {
+        // Make sure this is being executed at start up.
+        ParameterTool parameterTool = ParameterTool.fromArgs(args);
+        AppEnv.config(parameterTool);
 
         // hack StringValue to use the version 1.10
         Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class, Class.class);
@@ -61,8 +65,7 @@ public class SojournerUBDRTJobForSOJ {
         executionEnvironment.getCheckpointConfig().setMinPauseBetweenCheckpoints(AppEnv.config().getFlink().getCheckpoint().getMinPauseBetween().getSeconds() * 1000);
         executionEnvironment.getCheckpointConfig().setMaxConcurrentCheckpoints(AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent()==null?
                 1:AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
-        executionEnvironment.setStateBackend(
-                StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
+        executionEnvironment.setStateBackend(StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
 
         // for soj nrt output
         // 1. Rheos Consumer
@@ -92,6 +95,7 @@ public class SojournerUBDRTJobForSOJ {
 
         DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
                 .map(new EventMapFunction())
+                .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
                 .name("Event Operator");
 
         //refine windowsoperator

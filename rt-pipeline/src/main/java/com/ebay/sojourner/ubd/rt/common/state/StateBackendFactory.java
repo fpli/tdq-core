@@ -25,6 +25,7 @@ public class StateBackendFactory {
                     return rocksDBStateBackend;
                 } catch (Exception e) {
                     log.error("Failed to create RocksDB state backend", e);
+                    throw new RuntimeException(e);
                 }
             default:
                 throw new RuntimeException("Unknown state backend type");

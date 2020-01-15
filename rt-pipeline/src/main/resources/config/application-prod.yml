@@ -18,6 +18,7 @@ flink:
   app:
     name: Unified Bot Detection RT Pipeline
     source-parallelism: 30
+    event-parallelism: 72
   checkpoint:
     data-dir: /opt/sojourner-ubd/checkpoint
     interval: 5m

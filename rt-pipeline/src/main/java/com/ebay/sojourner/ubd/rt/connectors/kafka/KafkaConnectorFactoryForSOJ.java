@@ -33,7 +33,7 @@ public class KafkaConnectorFactoryForSOJ {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
 
-        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 2500);
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 3000);
         props.put(ConsumerConfig.RECEIVE_BUFFER_CONFIG, 8 * 1024 * 1024);
         props.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 250 * 1024 * 1024);
         props.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 1000);
