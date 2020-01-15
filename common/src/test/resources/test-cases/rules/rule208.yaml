@@ -1,0 +1,19 @@
+-
+  name: case1
+  type: UbiSession
+  input:
+    UbiSession:
+      agentString:
+      siidCnt: 0
+      cobrand: 4
+  expectResult: 208
+
+-
+  name: case2
+  type: UbiSession
+  input:
+    UbiSession:
+      agentString: ebay
+      siidCnt: 0
+      cobrand: 1
+  expectResult: 0

@@ -2,13 +2,12 @@ package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.sharedlib.metrics.*;
+import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
 import org.apache.log4j.Logger;
 
-import java.io.File;
 import java.io.InputStream;
 
 public class IpIndicators extends AttributeIndicators<AgentIpAttribute, IpAttributeAccumulator> {

@@ -1,0 +1,16 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      agentInfo: 0
+      rdt: 0
+      iframe: 1
+      pageId:
+    SessionAccumulator:
+      ubiSession:
+        agentString: 0
+        agentSets: 0
+  expect:
+    UbiSession:
+      agentString: 1
+      agentSets: 0

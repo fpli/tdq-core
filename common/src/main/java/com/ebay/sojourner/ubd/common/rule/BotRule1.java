@@ -1,12 +1,9 @@
 package com.ebay.sojourner.ubd.common.rule;
 
 
-import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.BotRules;
 
-import java.util.Map;
 import java.util.regex.Pattern;
 
 public class BotRule1 implements Rule<UbiEvent> {
