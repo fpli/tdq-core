@@ -1,7 +1,10 @@
 package com.ebay.sojourner.ubd.rt.connectors.filesystem;
 
+import com.ebay.sojourner.ubd.common.model.AgentAttribute;
 import lombok.extern.java.Log;
+import org.apache.avro.reflect.ReflectData;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.streaming.api.functions.sink.filesystem.SojHdfsSinkWithKeytab;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.security.UserGroupInformation;
@@ -10,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.util.Objects;
 
 import static com.ebay.sojourner.ubd.rt.common.constants.PropertiesConstants.PROD_CONFIG;
@@ -88,8 +92,8 @@ public class KeytabHdfsFactory {
 
     public static UserGroupInformation getUGI() throws IOException, InterruptedException {
 
-        final String keytabFilename = "b_eip.keytab";
-        final String principal = "b_eip@PROD.EBAY.COM";
+        final String keytabFilename = "o_ubi.keytab";
+        final String principal = "o_ubi@PROD.EBAY.COM";
         final String krb5Filename = "krb5.conf";
         final String jaasFilename = "jaas.conf";
         final String APOLLO_RNO = "hdfs://apollo-rno";
@@ -147,6 +151,16 @@ public class KeytabHdfsFactory {
             throw new RuntimeException("failed write config file: " + filename, e);
         }
     }
+    public static void main(String[] args ){
+        System.out.println(ReflectData.get().getSchema(AgentAttribute.class));
+        System.out.println(SojHdfsSinkWithKeytab.class.getResource("").getPath());
+        System.out.println(SojHdfsSinkWithKeytab.class.getResource("/hdfs/o_ubi.keytab").getPath());
+        System.out.println(SojHdfsSinkWithKeytab.class.getResource("/").getPath());
+//        Files.copy()
+        System.out.println(SojHdfsSinkWithKeytab.class.getResource("/"));
 
+        ByteBuffer buffer = ByteBuffer.allocateDirect(10 * 1024 * 1024);
+
+    }
 
 }

@@ -11,9 +11,11 @@ import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
+import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
 import org.apache.flink.api.common.typeinfo.SOjStringFactory;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -37,14 +39,13 @@ public class SojournerUBDRTJobUntilSession {
 //        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class, Class.class);
 //        m.setAccessible(true);
 //        m.invoke(null, String.class, SOjStringFactory.class);
-
+        final ParameterTool parameterTool = ExecutionEnvUtil.createParameterTool(args);
         // 0.0 Prepare execution environment
         // 0.1 UBI configuration
         // 0.2 Flink configuration
         final StreamExecutionEnvironment executionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment();
-//        final ParameterTool params = ParameterTool.fromArgs(args);
-//        executionEnvironment.getConfig().setGlobalJobParameters(new SojJobParameters());
+        executionEnvironment.getConfig().setGlobalJobParameters(parameterTool);
 //         LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 //        executionEnvironment.getConfig().setLatencyTrackingInterval(2000);

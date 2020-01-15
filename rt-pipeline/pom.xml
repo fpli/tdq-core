@@ -203,6 +203,7 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>avro/*.*</include>
+                    <include>hdfs/*.*</include>
                     <include>*.*</include>
                 </includes>
             </resource>
