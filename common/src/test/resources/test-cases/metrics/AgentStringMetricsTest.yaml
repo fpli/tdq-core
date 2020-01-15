@@ -2,15 +2,18 @@
   name: test1
   inputs:
     UbiEvent:
-      agentInfo: 0
+      agentInfo: ebay
       rdt: 0
-      iframe: 1
-      pageId:
+      iframe: 0
+      pageId: 1
     SessionAccumulator:
       ubiSession:
-        agentString: 0
-        agentSets: 0
+        agentString:
+        agentSets:
+          - ebay
   expect:
     UbiSession:
-      agentString: 1
-      agentSets: 0
+      agentString: ebay
+      agentSets:
+        - ebay
+
