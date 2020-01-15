@@ -1,0 +1,13 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      iframe: 0
+      rdt: 0
+      siteId: 1
+    SessionAccumulator:
+      ubiSession:
+        firstSiteId: -2147483648
+  expect:
+    UbiSession:
+      firstSiteId: 1

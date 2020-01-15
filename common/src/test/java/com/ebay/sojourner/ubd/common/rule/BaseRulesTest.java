@@ -57,6 +57,7 @@ public class BaseRulesTest<T> {
                 Field inputObjectType = rulesInput.getClass().getDeclaredField(typeName.substring(0, 1).toLowerCase() + typeName.substring(1));
                 inputObjectType.setAccessible(true);
                 T t = (T) inputObjectType.get(rulesInput);
+                rule.init();
                 int actual = rule.getBotFlag(t);
                 assertThat(actual).isEqualTo(rulesTestCase.getExpectResult());
             });

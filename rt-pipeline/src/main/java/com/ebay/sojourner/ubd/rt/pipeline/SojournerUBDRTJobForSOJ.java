@@ -14,10 +14,8 @@ import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
-import org.apache.flink.api.common.typeinfo.SOjStringFactory;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
-import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
@@ -33,8 +31,7 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
+//import org.apache.flink.api.java.typeutils.TypeExtractor;
 
 public class SojournerUBDRTJobForSOJ {
 
@@ -44,9 +41,9 @@ public class SojournerUBDRTJobForSOJ {
         AppEnv.config(parameterTool);
 
         // hack StringValue to use the version 1.10
-        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class, Class.class);
-        m.setAccessible(true);
-        m.invoke(null, String.class, SOjStringFactory.class);
+//        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class, Class.class);
+//        m.setAccessible(true);
+//        m.invoke(null, String.class, SOjStringFactory.class);
 
         // 0.0 Prepare execution environment
         // 0.1 UBI configuration

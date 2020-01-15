@@ -8,18 +8,19 @@ import org.junit.jupiter.api.TestFactory;
 import java.util.Collection;
 import java.util.List;
 
-public class BotRule207Test extends BaseRulesTest<UbiSession>{
-    private BotRule207 botRule207;
+public class BotRule203Test extends BaseRulesTest<UbiSession>{
+    private BotRule203 botRule203;
     private List<RulesTestCase> rulesTestCaseList;
 
     @BeforeEach
     public void setup() throws Exception {
-        botRule207 = new BotRule207();
-        rulesTestCaseList = loadTestCases("rule207.yaml");
+        botRule203 = new BotRule203();
+        botRule203.init();
+        rulesTestCaseList = loadTestCases("rule203.yaml");
     }
 
     @TestFactory
     public Collection<DynamicTest> dynamicTests() {
-        return generateDynamicTests(rulesTestCaseList, botRule207);
+        return generateDynamicTests(rulesTestCaseList, botRule203);
     }
 }

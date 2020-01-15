@@ -1,0 +1,32 @@
+-
+  name: case1
+  type: UbiSession
+  input:
+    UbiSession:
+      validPageCnt: 21
+      familyViCnt: 21
+      siidCnt: 0
+      firstSiteId:
+  expectResult: 203
+
+-
+  name: case2
+  type: UbiSession
+  input:
+    UbiSession:
+      validPageCnt: 21
+      familyViCnt: 21
+      siidCnt: 1
+      firstSiteId:
+  expectResult: 0
+
+-
+  name: case3
+  type: UbiSession
+  input:
+    UbiSession:
+      validPageCnt: 101
+      familyViCnt: 101
+      siidCnt: 0
+      firstSiteId: 100
+  expectResult: 203
