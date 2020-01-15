@@ -8,12 +8,12 @@ import java.io.InputStream;
 
 public class BotRule11 implements Rule<UbiSession> {
 
-    private BotFilter botFilter ;
+    private static BotFilter botFilter ;
 
     @Override
     public void init() {
         InputStream resourceAsStream = BotRule11.class.getResourceAsStream("/ubi.proprties");
-        botFilter = new UbiBotFilter(UBIConfig.getInstance());
+        botFilter = new UbiBotFilter(UBIConfig.getInstance(resourceAsStream));
     }
 
     @Override
