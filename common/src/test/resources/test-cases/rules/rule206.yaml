@@ -1,0 +1,19 @@
+-
+  name: case1
+  type: UbiSession
+  input:
+    UbiSession:
+      agentString:
+      maxScsSeqNum: 3
+      lndgPageId: 554
+  expectResult: 206
+
+-
+  name: case2
+  type: UbiSession
+  input:
+    UbiSession:
+      agentString:
+      maxScsSeqNum: 3
+      lndgPageId: 1
+  expectResult: 0

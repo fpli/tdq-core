@@ -1,0 +1,14 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      iframe: false
+      rdt: false
+      pageId: 1
+      seqNum: 2
+    SessionAccumulator:
+      ubiSession:
+        maxScsSeqNum: 1
+  expect:
+    UbiSession:
+      maxScsSeqNum: 2

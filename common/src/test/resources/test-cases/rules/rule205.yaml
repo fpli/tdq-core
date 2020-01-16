@@ -1,0 +1,17 @@
+-
+  name: case1
+  type: UbiSession
+  input:
+    UbiSession:
+      sessionReferrer: http://cs.ebay.login
+      exInternalIp: 10.10.10.111
+  expectResult: 205
+
+-
+  name: case2
+  type: UbiSession
+  input:
+    UbiSession:
+      sessionReferrer:
+      exInternalIp: 10.10.10.111
+  expectResult: 0
