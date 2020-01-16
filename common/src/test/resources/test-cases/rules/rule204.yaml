@@ -1,0 +1,21 @@
+-
+  name: case1
+  type: UbiSession
+  input:
+    UbiSession:
+      validPageCnt: 21
+      grCnt: 21
+      siidCnt: 0
+      firstSiteId: 1
+  expectResult: 204
+
+-
+  name: case2
+  type: UbiSession
+  input:
+    UbiSession:
+      validPageCnt: 21
+      grCnt: 21
+      siidCnt: 1
+      firstSiteId: 1
+  expectResult: 0

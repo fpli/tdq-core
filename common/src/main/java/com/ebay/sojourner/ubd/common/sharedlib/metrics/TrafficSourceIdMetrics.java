@@ -190,7 +190,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
 
     private int getTrafficSourceId(SessionAccumulator sessionAccumulator) {
         IntermediateMetrics intermediateMetrics=sessionAccumulator.getUbiSession().getIntermediateMetrics();
-        Integer firstCobrand =sessionAccumulator.getUbiSession().getFirstCorbrand();
+        Integer firstCobrand =sessionAccumulator.getUbiSession().getFirstCobrand();
         Long startTSOnCurrentCobrandSite =
                 intermediateMetrics.getEventTS() == null ? SOJMAXLONG : intermediateMetrics
                         .getEventTS();

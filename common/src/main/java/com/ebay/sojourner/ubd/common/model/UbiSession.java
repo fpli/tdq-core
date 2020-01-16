@@ -76,7 +76,7 @@ public class UbiSession implements Serializable,Cloneable{
     private int maxScsSeqNum;
     private boolean isRefererNull;//for bot207
     private int siidCnt2; // for bot207
-    private int firstCorbrand;
+    private int firstCobrand;
     private int minSCSeqNum;
     private Long[] minMaxEventTimestamp;
     private Set<Long> oldSessionSkeySet;

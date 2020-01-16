@@ -60,8 +60,8 @@ public class SojournerUBDRTJobForSOJ {
         executionEnvironment.enableCheckpointing(AppEnv.config().getFlink().getCheckpoint().getInterval().getSeconds() * 1000, CheckpointingMode.EXACTLY_ONCE);
         executionEnvironment.getCheckpointConfig().setCheckpointTimeout(AppEnv.config().getFlink().getCheckpoint().getTimeout().getSeconds() * 1000);
         executionEnvironment.getCheckpointConfig().setMinPauseBetweenCheckpoints(AppEnv.config().getFlink().getCheckpoint().getMinPauseBetween().getSeconds() * 1000);
-        executionEnvironment.getCheckpointConfig().setMaxConcurrentCheckpoints(AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent()==null?
-                1:AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
+        executionEnvironment.getCheckpointConfig().setMaxConcurrentCheckpoints(AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent() == null ?
+                1 : AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
         executionEnvironment.setStateBackend(StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
 
         // for soj nrt output
@@ -78,8 +78,8 @@ public class SojournerUBDRTJobForSOJ {
                                         return element.getRheosHeader().getEventCreateTimestamp();
                                     }
                                 }))
-                .setParallelism(AppEnv.config().getFlink().getApp().getSourceParallelism()==null?
-                        30:AppEnv.config().getFlink().getApp().getSourceParallelism())
+                .setParallelism(AppEnv.config().getFlink().getApp().getSourceParallelism() == null ?
+                        30 : AppEnv.config().getFlink().getApp().getSourceParallelism())
                 .name("Rheos Kafka Consumer");
 
         // 2. Event Operator
@@ -115,16 +115,14 @@ public class SojournerUBDRTJobForSOJ {
 //                .trigger(OnElementEarlyFiringTrigger.create())   //no need to customize the triiger, use the default eventtimeTrigger
                 .allowedLateness(Time.hours(1))
                 .sideOutputLateData(lateEventOutputTag)
-                .aggregate(new UbiSessionAgg(),
-                        new UbiSessionWindowProcessFunction());
+                .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction())
+                .name("Session Operator");
 
         WindowOperatorHelper.enrichWindowOperator(
                 (OneInputTransformation) ubiSessinDataStream.getTransformation(),
                 new UbiEventMapWithStateFunction(),
                 mappedEventOutputTag
         );
-
-        ubiSessinDataStream.name("Session Operator");
 
         DataStream<UbiEvent> mappedEventStream = ubiSessinDataStream.getSideOutput(mappedEventOutputTag);
 
@@ -201,8 +199,8 @@ public class SojournerUBDRTJobForSOJ {
         // 5.3 Events (with session ID & bot flags)
         // 5.4 Events late
 
-        ubiSessinDataStream.addSink(new DiscardingSink<>()).name("session discarding").disableChaining();
-        agentIpConnectDataStream.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId and bot").disableChaining();
+        ubiSessinDataStream.addSink(new DiscardingSink<>()).name("session discarding");
+        agentIpConnectDataStream.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId and bot");
 
         // Submit this job
         executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());

@@ -17,7 +17,7 @@ public class CobrandMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
   @Override
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
     firstCobrand = null;
-    sessionAccumulator.getUbiSession().setFirstCorbrand(Integer.MIN_VALUE);
+    sessionAccumulator.getUbiSession().setFirstCobrand(Integer.MIN_VALUE);
     sessionAccumulator.getUbiSession().setCobrand(Integer.MIN_VALUE);
   }
 
@@ -27,15 +27,15 @@ public class CobrandMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
         && !invalidPageIds.contains(event.getPageId())) {
       sessionAccumulator.getUbiSession().setCobrand(event.getCobrand());
     }
-    if (sessionAccumulator.getUbiSession().getFirstCorbrand() == Integer.MIN_VALUE) {
-      sessionAccumulator.getUbiSession().setFirstCorbrand(event.getCobrand());
+    if (sessionAccumulator.getUbiSession().getFirstCobrand() == Integer.MIN_VALUE) {
+      sessionAccumulator.getUbiSession().setFirstCobrand(event.getCobrand());
     }
   }
 
   @Override
   public void end(SessionAccumulator sessionAccumulator) throws Exception {
     if (sessionAccumulator.getUbiSession().getCobrand() == Integer.MIN_VALUE) {
-      sessionAccumulator.getUbiSession().setCobrand(sessionAccumulator.getUbiSession().getFirstCorbrand());
+      sessionAccumulator.getUbiSession().setCobrand(sessionAccumulator.getUbiSession().getFirstCobrand());
     }
   }
 
