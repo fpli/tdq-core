@@ -12,7 +12,11 @@ import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
+
+import org.apache.flink.api.common.typeinfo.SOjStringFactory;
+import org.apache.flink.api.common.typeinfo.TypeInfoFactory;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
@@ -26,18 +30,28 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
+import java.util.Map;
+
 public class SojournerUBDRTJobUntilSession {
 
     public static void main(String[] args) throws Exception {
         // Make sure this is being executed at start up.
-        ParameterTool parameterTool1 = ParameterTool.fromArgs(args);
-        AppEnv.config(parameterTool1);
+        ParameterTool parameterTool = ExecutionEnvUtil.createParameterTool(args);
+        AppEnv.config(parameterTool);
+
 
         // hack StringValue to use the version 1.10
 //        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class, Class.class);
 //        m.setAccessible(true);
 //        m.invoke(null, String.class, SOjStringFactory.class);
-        final ParameterTool parameterTool = ExecutionEnvUtil.createParameterTool(args);
+//        final ParameterTool parameterTool = ExecutionEnvUtil.createParameterTool(args);
+        Field modifiersField = TypeExtractor.class.getDeclaredField("registeredTypeInfoFactories");
+        modifiersField.setAccessible(true);
+        Map<Type, Class<? extends TypeInfoFactory>> registeredTypeInfoFactories = (Map<Type, Class<? extends TypeInfoFactory>>) modifiersField.get(null);
+        registeredTypeInfoFactories.put(String.class, SOjStringFactory.class);
+        modifiersField.set(null,registeredTypeInfoFactories);
         // 0.0 Prepare execution environment
         // 0.1 UBI configuration
         // 0.2 Flink configuration

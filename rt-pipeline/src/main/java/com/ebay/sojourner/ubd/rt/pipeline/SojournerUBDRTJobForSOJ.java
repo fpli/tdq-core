@@ -31,8 +31,6 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
 
-//import org.apache.flink.api.java.typeutils.TypeExtractor;
-
 public class SojournerUBDRTJobForSOJ {
 
     public static void main(String[] args) throws Exception {
