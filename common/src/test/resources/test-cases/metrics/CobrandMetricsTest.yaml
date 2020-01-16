@@ -3,14 +3,14 @@
   inputs:
     UbiEvent:
       pageId: 1
-      rdt: 0
-      iframe: 0
+      rdt: false
+      iframe: false
       cobrand: 1
     SessionAccumulator:
       ubiSession:
         cobrand: -2147483648
-        firstCorbrand: -2147483648
+        firstCobrand: -2147483648
   expect:
     UbiSession:
       cobrand: 1
-      firstCorbrand: 1
+      firstCobrand: 1

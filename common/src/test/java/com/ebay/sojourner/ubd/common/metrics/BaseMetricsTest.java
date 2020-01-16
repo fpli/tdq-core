@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Assertions;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public abstract class BaseMetricsTest {
 
     private ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory())
@@ -80,6 +82,7 @@ public abstract class BaseMetricsTest {
                             Assertions.assertEquals(node.asText(), actualValue.toString());
                         }
                     } catch (Exception e) {
+                        log.error("Error: {}", e.getMessage(), e);
                         throw new RuntimeException(e);
                     }
                 });
