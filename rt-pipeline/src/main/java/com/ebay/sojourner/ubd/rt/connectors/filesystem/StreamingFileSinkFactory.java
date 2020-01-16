@@ -21,7 +21,7 @@ public class StreamingFileSinkFactory {
     public static String lateEventSinkPath = BASE_DIR + "/events-late";
     public static String ipSignatureSinkPath = BASE_DIR + "/ip-signature";
 
-    public static <T> StreamingFileSink create( String sinkPath) {
+    public static <T> StreamingFileSink create( String sinkPath ) {
         return StreamingFileSink
                 .forRowFormat(new Path(sinkPath), new SimpleStringEncoder<T>("UTF-8"))
                 .build();
@@ -29,23 +29,20 @@ public class StreamingFileSinkFactory {
 
     }
 
-    public static <T> SojHdfsSinkWithKeytab createSojHdfs( String sinkPath) {
-        return SojHdfsSinkWithKeytab
-                .forRowFormat(new Path(sinkPath), new SimpleStringEncoder<T>("UTF-8"))
-                .build();
+    public static <T> SojHdfsSinkWithKeytab createSojHdfs( String sinkPath ) {
+        return new SojHdfsSinkWithKeytab(new Path(sinkPath), new SimpleStringEncoder<T>("UTF-8"), 0, null, null)
+                ;
     }
 
-    public static StreamingFileSink<IpSignature> createWithAP(String sinkPath) {
+    public static StreamingFileSink<IpSignature> createWithAP( String sinkPath ) {
         return StreamingFileSink
                 .forBulkFormat(new Path(sinkPath), ParquetAvroWriters.forReflectRecord(IpSignature.class))
                 .build();
 
     }
 
-    public static <T> SojHdfsSinkWithKeytab createWithParquet( String sinkPath, Class<T> sinkClass) {
-        return SojHdfsSinkWithKeytab
-                .forBulkFormat(new Path(sinkPath), ParquetAvroWriters.forReflectRecord(sinkClass))
-                .build();
+    public static <T> SojHdfsSinkWithKeytab createWithParquet( String sinkPath, Class<T> sinkClass ) {
+        return new SojHdfsSinkWithKeytab(new Path(sinkPath), ParquetAvroWriters.forReflectRecord(sinkClass), 0, null, null);
     }
 
     public static StreamingFileSink eventSink() {
@@ -53,16 +50,16 @@ public class StreamingFileSinkFactory {
     }
 
     public static SojHdfsSinkWithKeytab eventSinkWithSojHdfs() {
-        return StreamingFileSinkFactory.<UbiEvent>createWithParquet(eventSinkPath,UbiEvent.class);
+        return StreamingFileSinkFactory.<UbiEvent>createWithParquet(eventSinkPath, UbiEvent.class);
     }
 
     public static SojHdfsSinkWithKeytab sessionSinkWithSojHdfs() {
-        return StreamingFileSinkFactory.<UbiSession>createWithParquet(sessionSinkPath,UbiSession.class);
+        return StreamingFileSinkFactory.<UbiSession>createWithParquet(sessionSinkPath, UbiSession.class);
     }
+
     public static SojHdfsSinkWithKeytab sessionSinkWithStrinf() {
         return StreamingFileSinkFactory.<UbiEvent>createSojHdfs(sessionSinkPath);
     }
-
 
 
     public static StreamingFileSink sessionSink() {

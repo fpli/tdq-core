@@ -28,7 +28,7 @@ import java.io.IOException;
  * A factory returning {@link Bucket buckets}.
  */
 @Internal
-class DefaultBucketFactoryImpl<IN, BucketID> implements BucketFactory<IN, BucketID> {
+class DefaultBucketFactoryImplSoj<IN, BucketID> implements BucketFactory<IN, BucketID> {
 
     private static final long serialVersionUID = 1L;
 

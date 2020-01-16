@@ -5,19 +5,15 @@ import com.ebay.sojourner.ubd.rt.common.broadcast.AgentBroadcastProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.broadcast.AgentIpBroadcastProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.broadcast.IpBroadcastProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
+import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.operators.attribute.*;
-import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
-import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
-import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
-import org.apache.flink.api.common.typeinfo.SOjStringFactory;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -31,9 +27,6 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-
 
 public class SojournerUBDRTJob {
 
@@ -43,9 +36,9 @@ public class SojournerUBDRTJob {
         // 0.2 Flink configuration
 //        InputStream resourceAsStream = SojournerUBDRTJob.class.getResourceAsStream("/ubi.properties");
 //        UBIConfig ubiConfig = UBIConfig.getInstance(resourceAsStream);
-        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class, Class.class);
-        m.setAccessible(true);
-        m.invoke(null, String.class, SOjStringFactory.class);
+//        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class, Class.class);
+//        m.setAccessible(true);
+//        m.invoke(null, String.class, SOjStringFactory.class);
         final StreamExecutionEnvironment executionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment();
 //        final ParameterTool params = ParameterTool.fromArgs(args);
