@@ -36,7 +36,7 @@ public class RdtParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             rdtParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.validateInteger(entry.getValue(),ubiEvent.getRdt()));
+            System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isRdt())));
         }
     }
 
@@ -49,7 +49,7 @@ public class RdtParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             rdtParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.validateInteger(entry.getValue(),ubiEvent.getRdt()));
+            System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isRdt())));
         }
     }
 
@@ -62,7 +62,7 @@ public class RdtParserTest {
         HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
         for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
             rdtParser.parse(entry.getKey(), ubiEvent);
-            System.out.println(VaildateResult.validateInteger(entry.getValue(),ubiEvent.getRdt()));
+            System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isRdt())));
         }
     }
 }

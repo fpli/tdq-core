@@ -17,7 +17,7 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-        if (event.getIframe() == 0 && (event.getRdt() == 0 || 
+        if (!event.isIframe() && (!event.isRdt() ||
                 indicator.isCorrespondingPageEvent(event))) {
             if (sessionAccumulator.getUbiSession().getStartTimestamp() == null) {
                 sessionAccumulator.getUbiSession().setStartTimestamp(event.getEventTimestamp());

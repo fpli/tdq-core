@@ -21,7 +21,7 @@ public class SOJGetPageType {
         return 0;
     }
 
-    public static int soj_get_page_type(String itemId, String flags, int rdt, int id, Integer lkup, Integer fbp) {
+    public static int soj_get_page_type(String itemId, String flags, boolean rdt, int id, Integer lkup, Integer fbp) {
         // -1 for integer is same as null
         if (lkup == null) {
             return fbp == null ? 0 : -1;
@@ -30,7 +30,7 @@ public class SOJGetPageType {
         switch (lkup) {
         case 4:
             if (commonCheck(itemId, flags) == 1 && SOJExtractFlag.extractFlag(flags, 47) != 1) {
-                if (id == 3897 && SOJExtractFlag.extractFlag(flags, 59) == 1 && rdt == 1) {
+                if (id == 3897 && SOJExtractFlag.extractFlag(flags, 59) == 1 && rdt) {
                     return 4;
                 }
 

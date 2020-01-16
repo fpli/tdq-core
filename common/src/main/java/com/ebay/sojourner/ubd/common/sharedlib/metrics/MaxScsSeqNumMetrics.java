@@ -20,7 +20,7 @@ public class MaxScsSeqNumMetrics implements FieldMetrics<UbiEvent, SessionAccumu
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-        if (event.getIframe() == 0 && event.getRdt() == 0 && !invalidPageIds.contains(event.getPageId())) {
+        if (!event.isIframe() && !event.isRdt() && !invalidPageIds.contains(event.getPageId())) {
             if (event.getSeqNum() > sessionAccumulator.getUbiSession().getMaxScsSeqNum()) {
                 sessionAccumulator.getUbiSession().setMaxScsSeqNum(event.getSeqNum());
             }

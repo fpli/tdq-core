@@ -23,7 +23,7 @@ public class FirstMappedUserIdMetrics implements FieldMetrics<UbiEvent, SessionA
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
     String bestGuessUserId = null;
-    if (sessionAccumulator.getUbiSession().getFirstMappedUserId()==null && !ONE.equals(event.getRdt()) && !ONE.equals(event.getIframe())) {
+    if (sessionAccumulator.getUbiSession().getFirstMappedUserId()==null && !event.isRdt() && !event.isIframe()) {
       bestGuessUserId = SOJNVL.getTagValue(event.getApplicationPayload(), "bu");
       try {
         bestGuessUserId = bestGuessUserId.trim();

@@ -18,8 +18,8 @@ public class PageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
 
 	@Override
 	public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-		if (ZERO.equals(event.getIframe())) {
-			if (ZERO.equals(event.getRdt()) || indicator.isCorrespondingPageEvent(event)) {
+		if (!event.isIframe()) {
+			if (!event.isRdt() || indicator.isCorrespondingPageEvent(event)) {
 				if (sessionAccumulator.getUbiSession().getStartPageId() == Integer.MIN_VALUE) {
 					sessionAccumulator.getUbiSession().setStartPageId(event.getPageId());
 				}

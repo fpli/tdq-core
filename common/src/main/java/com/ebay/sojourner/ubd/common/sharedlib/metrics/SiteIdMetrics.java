@@ -16,7 +16,7 @@ public class SiteIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
-        if (sessionAccumulator.getUbiSession().getFirstSiteId() == Integer.MIN_VALUE && event.getIframe() == 0 && event.getRdt() == 0) {
+        if (sessionAccumulator.getUbiSession().getFirstSiteId() == Integer.MIN_VALUE && !event.isIframe() && !event.isRdt()) {
             sessionAccumulator.getUbiSession().setFirstSiteId(event.getSiteId());
         }
     }

@@ -17,7 +17,7 @@ public class BidCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-        if (event.getIframe() == 0 && event.getRdt() == 0 &&
+        if (!event.isIframe() && !event.isRdt() &&
                 indicator.isCorrespondingPageEvent(event) &&
                 FlagUtils.matchFlag(event, 3, 1)) {
             sessionAccumulator.getUbiSession().setBidCoreCnt(sessionAccumulator.getUbiSession().getBidCoreCnt()+1);

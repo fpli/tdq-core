@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJListGetValueByIndex;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
@@ -41,41 +42,35 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
+        UbiSession ubiSession = sessionAccumulator.getUbiSession();
 
-        if (!sessionAccumulator.getUbiSession().getFindFirst() && event.getClientIP() != null) {
-            sessionAccumulator.getUbiSession().setAgentInfo(event.getAgentInfo());
-            sessionAccumulator.getUbiSession().setClientIp(event.getClientIP());
+        if (!ubiSession.isFindFirst() && event.getClientIP() != null) {
+            ubiSession.setAgentInfo(event.getAgentInfo());
+            ubiSession.setClientIp(event.getClientIP());
         }
-        if (event.getIframe() == 0 && event.getRdt() == 0) {
-            if (!sessionAccumulator.getUbiSession().getFindFirst()) {
-                sessionAccumulator.getUbiSession().setAgentInfo(event.getAgentInfo());
-                sessionAccumulator.getUbiSession().setClientIp(event.getClientIP());
-                sessionAccumulator.getUbiSession().setFindFirst(true);
-                ;
-            }
+
+        if (!event.isIframe() && !event.isRdt() && !ubiSession.isFindFirst()) {
+            ubiSession.setAgentInfo(event.getAgentInfo());
+            ubiSession.setClientIp(event.getClientIP());
+            ubiSession.setFindFirst(true);
         }
         // to avoid the cut off issue on 2018-02-09
-        if (event.getPartialValidPage() == Integer.MIN_VALUE || event.getPartialValidPage() != 0) {
-            if (event.getIframe() == 0) {
-                if (event.getRdt() != 1) {
-                    if (sessionAccumulator.getUbiSession().getExternalIp() == null) {
-                        String remoteIp = event.getClientData().getRemoteIP(); //SOJParseClientInfo.getClientInfo(event.getClientData(), "RemoteIP");
-                        String forwardFor = event.getClientData().getForwardFor();// SOJParseClientInfo.getClientInfo(event.getClientData(), "ForwardedFor");
-                        sessionAccumulator.getUbiSession().setExternalIp(getExternalIP(event, remoteIp, forwardFor));
-                        if (sessionAccumulator.getUbiSession().getExternalIp() == null && sessionAccumulator.getUbiSession().getInternalIp() == null) {
-                            sessionAccumulator.getUbiSession().setInternalIp(getInternalIP(remoteIp, forwardFor));
-                        }
-                    }
-
-                }
-
-            }
-        }
-        if (event.getIframe() == 0) {
-            if (sessionAccumulator.getUbiSession().getExternalIp2() == null) {
+        if (event.isPartialValidPage()) {
+            if (!event.isIframe() && !event.isRdt() && ubiSession.getExternalIp() == null) {
                 String remoteIp = event.getClientData().getRemoteIP(); //SOJParseClientInfo.getClientInfo(event.getClientData(), "RemoteIP");
                 String forwardFor = event.getClientData().getForwardFor();// SOJParseClientInfo.getClientInfo(event.getClientData(), "ForwardedFor");
-                sessionAccumulator.getUbiSession().setExternalIp2(getExternalIP(event, remoteIp, forwardFor));
+                ubiSession.setExternalIp(getExternalIP(event, remoteIp, forwardFor));
+                if (ubiSession.getExternalIp() == null && ubiSession.getInternalIp() == null) {
+                    ubiSession.setInternalIp(getInternalIP(remoteIp, forwardFor));
+                }
+            }
+        }
+
+        if (!event.isIframe()) {
+            if (ubiSession.getExternalIp2() == null) {
+                String remoteIp = event.getClientData().getRemoteIP(); //SOJParseClientInfo.getClientInfo(event.getClientData(), "RemoteIP");
+                String forwardFor = event.getClientData().getForwardFor();// SOJParseClientInfo.getClientInfo(event.getClientData(), "ForwardedFor");
+                ubiSession.setExternalIp2(getExternalIP(event, remoteIp, forwardFor));
             }
 
         }
@@ -83,7 +78,7 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
 
     @Override
     public void end(SessionAccumulator sessionAccumulator) {
-        //change the logic to allign with caleb's on 2018-02-06
+        //change the logic to align with caleb's on 2018-02-06
         //  exInternalIp = externalIp == null ? internalIp : externalIp;
 
         sessionAccumulator.getUbiSession().setUserAgent(sessionAccumulator.getUbiSession().getAgentInfo());

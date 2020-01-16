@@ -18,7 +18,7 @@ public class HomepgCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
     	Integer pageId = event.getPageId();
-        if (event.getRdt()!=Integer.MIN_VALUE&&event.getRdt() == 0 &&(event.getIframe()==Integer.MIN_VALUE|| event.getIframe()==0) &&event.getPartialValidPage()!=Integer.MIN_VALUE&& event.getPartialValidPage() == 1 &&
+        if (!event.isRdt() && !event.isIframe() && event.isPartialValidPage() &&
                 //no partial valid page condition checked here
                 pageFmlyNameMap.containsKey(pageId) &&
                 //using get(pageId)[1] for page_fmly_3

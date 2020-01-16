@@ -26,7 +26,7 @@ public class LndgPageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumula
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
-        if (event.getIframe() == 0 && event.getRdt() == 0 && !invalidPageIds.contains(event.getPageId())) {
+        if (!event.isIframe() && !event.isRdt() && !invalidPageIds.contains(event.getPageId())) {
             if (sessionAccumulator.getUbiSession().getMinSCSeqNum() > event.getSeqNum()) {
                 sessionAccumulator.getUbiSession().setMinSCSeqNum(event.getSeqNum());
                 sessionAccumulator.getUbiSession().setLndgPageId(event.getPageId());

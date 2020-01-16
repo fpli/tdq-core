@@ -34,7 +34,7 @@ public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
-        if (event.getPartialValidPage() != Integer.MIN_VALUE && event.getPartialValidPage() == 1 && event.getRdt() != Integer.MIN_VALUE && event.getRdt() == 0 && (event.getIframe() == Integer.MIN_VALUE || event.getIframe() == 0)) {
+        if (event.isPartialValidPage() && !event.isRdt() && !event.isIframe()) {
             Map<Integer, String[]> pageFmlyNameMap = lkpFetcher.getPageFmlyMaps();
             // im_pgt='VI': pageId=1521826 and pgt='future' or 'like'. pageId meaning?
             // or LkpPageFmlyName='VI'

@@ -35,7 +35,7 @@ public class StaticPageTypeParserTest {
         staticPageTypeParser = new StaticPageTypeParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(123);
-        ubiEvent.setRdt(456);
+        ubiEvent.setRdt(true);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(789L);
         caseItem = ParserConstants.CASE1;
@@ -57,7 +57,7 @@ public class StaticPageTypeParserTest {
         staticPageTypeParser = new StaticPageTypeParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(4737);
-        ubiEvent.setRdt(456);
+        ubiEvent.setRdt(true);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(null);
         caseItem = ParserConstants.CASE2;
@@ -79,7 +79,6 @@ public class StaticPageTypeParserTest {
         staticPageTypeParser = new StaticPageTypeParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(Integer.MIN_VALUE);
-        ubiEvent.setRdt(Integer.MIN_VALUE);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(null);
         caseItem = ParserConstants.CASE3;
@@ -101,7 +100,7 @@ public class StaticPageTypeParserTest {
         staticPageTypeParser = new StaticPageTypeParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(284);
-        ubiEvent.setRdt(2019);
+        ubiEvent.setRdt(true);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(null);
         caseItem = ParserConstants.CASE4;
@@ -123,7 +122,7 @@ public class StaticPageTypeParserTest {
         staticPageTypeParser = new StaticPageTypeParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(284);
-        ubiEvent.setRdt(2019);
+        ubiEvent.setRdt(true);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(1L);
         caseItem = ParserConstants.CASE5;
@@ -145,7 +144,7 @@ public class StaticPageTypeParserTest {
         staticPageTypeParser = new StaticPageTypeParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(5414);
-        ubiEvent.setRdt(2019);
+        ubiEvent.setRdt(true);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(1L);
         caseItem = ParserConstants.CASE6;
@@ -167,7 +166,7 @@ public class StaticPageTypeParserTest {
         staticPageTypeParser = new StaticPageTypeParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(4018);
-        ubiEvent.setRdt(2019);
+        ubiEvent.setRdt(true);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(1L);
         caseItem = ParserConstants.CASE7;
@@ -189,7 +188,7 @@ public class StaticPageTypeParserTest {
         staticPageTypeParser = new StaticPageTypeParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(4018);
-        ubiEvent.setRdt(2019);
+        ubiEvent.setRdt(true);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(null);
         caseItem = ParserConstants.CASE8;
@@ -211,7 +210,7 @@ public class StaticPageTypeParserTest {
         staticPageTypeParser = new StaticPageTypeParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(3994);
-        ubiEvent.setRdt(2019);
+        ubiEvent.setRdt(true);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(2L);
         caseItem = ParserConstants.CASE9;
@@ -233,7 +232,7 @@ public class StaticPageTypeParserTest {
         staticPageTypeParser = new StaticPageTypeParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(4737);
-        ubiEvent.setRdt(456);
+        ubiEvent.setRdt(true);
         ubiEvent.setFlags("");
         ubiEvent.setItemId(null);
         caseItem = ParserConstants.CASE10;
@@ -255,7 +254,7 @@ public class StaticPageTypeParserTest {
         staticPageTypeParser = new StaticPageTypeParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(4737);
-        ubiEvent.setRdt(456);
+        ubiEvent.setRdt(true);
         ubiEvent.setFlags("1234567890123456789012345678901234567890abcdefg");
         ubiEvent.setItemId(null);
         caseItem = ParserConstants.CASE11;
@@ -277,7 +276,7 @@ public class StaticPageTypeParserTest {
         staticPageTypeParser = new StaticPageTypeParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(1637);
-        ubiEvent.setRdt(456);
+        ubiEvent.setRdt(true);
         ubiEvent.setFlags("1234567890123$56789012345678901234567890abcdzfg");
         ubiEvent.setItemId(null);
         caseItem = ParserConstants.CASE12;
@@ -299,7 +298,7 @@ public class StaticPageTypeParserTest {
         staticPageTypeParser = new StaticPageTypeParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(2499);
-        ubiEvent.setRdt(2019);
+        ubiEvent.setRdt(true);
         ubiEvent.setFlags("ebay");
         ubiEvent.setItemId(2L);
         caseItem = ParserConstants.CASE13;
@@ -321,7 +320,7 @@ public class StaticPageTypeParserTest {
         staticPageTypeParser = new StaticPageTypeParser();
         ubiEvent = new UbiEvent();
         ubiEvent.setPageId(3897);
-        ubiEvent.setRdt(1);
+        ubiEvent.setRdt(true);
         ubiEvent.setFlags("haxiboeBay");
         ubiEvent.setItemId(1L);
         caseItem = ParserConstants.CASE14;

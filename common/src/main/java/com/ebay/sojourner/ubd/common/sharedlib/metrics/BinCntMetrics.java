@@ -17,7 +17,7 @@ public class BinCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-        if (event.getIframe() == 0 && event.getRdt() == 0 &&
+        if (!event.isIframe() && !event.isRdt() &&
                 indicator.isCorrespondingPageEvent(event) &&
                 (FlagUtils.matchFlag(event, 6, 1) || FlagUtils.matchFlag(event, 48, 1))) {
             sessionAccumulator.getUbiSession().setBinCoreCnt(sessionAccumulator.getUbiSession().getBinCoreCnt() + 1);

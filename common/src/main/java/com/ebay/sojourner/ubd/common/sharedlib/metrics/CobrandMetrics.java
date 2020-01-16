@@ -20,7 +20,7 @@ public class CobrandMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
-    if (sessionAccumulator.getUbiSession().getCobrand() == Integer.MIN_VALUE && event.getIframe() == 0 && event.getRdt() == 0
+    if (sessionAccumulator.getUbiSession().getCobrand() == Integer.MIN_VALUE && !event.isIframe() && !event.isRdt()
         && !invalidPageIds.contains(event.getPageId())) {
       sessionAccumulator.getUbiSession().setCobrand(event.getCobrand());
     }

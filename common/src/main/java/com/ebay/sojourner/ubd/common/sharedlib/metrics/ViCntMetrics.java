@@ -20,7 +20,7 @@ public class ViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-        if (event.getIframe() == 0 && event.getRdt() == 0) {
+        if (!event.isIframe() && !event.isRdt()) {
             Integer pageId = event.getPageId();
             String[] pageFmly = pageFmlyNameMap.get(pageId);
             if (pageFmly != null && pageFmly.length > 1 && VI_PAGE_FMLY.equals(pageFmly[1])) {

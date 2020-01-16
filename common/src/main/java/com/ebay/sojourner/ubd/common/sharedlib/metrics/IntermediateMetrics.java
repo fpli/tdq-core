@@ -307,7 +307,7 @@ public class IntermediateMetrics implements Serializable {
         }
 
         // check first not null agent_info from valid click
-        if (!findAgentString && !ONE.equals(event.getRdt()) && !ONE.equals(event.getIframe()) && !agentExcludePageSet.contains(event.getPageId())
+        if (!findAgentString && !event.isRdt() && !event.isIframe() && !agentExcludePageSet.contains(event.getPageId())
                 && event.getAgentInfo() != null && !event.getAgentInfo().equals("Shockwave Flash") && !IsValidIPv4.isValidIP(event.getAgentInfo())) {
             setFindAgentString(true);
             setFirstScSocialAgentTypeId(event);
@@ -630,7 +630,7 @@ public class IntermediateMetrics implements Serializable {
         // skip PartialValidPage check since it will not be introduced in this change, use rdt
         // instead
         if (// ZERO.equals(source.getPartialValidPage()) ||
-                ONE.equals(event.getRdt()) || ONE.equals(event.getIframe())
+                event.isRdt() || event.isIframe()
                         // || urlQueryString.matches("(/roverimp|.*SojPageView).*")
                         || scPageSet1.contains(pageId) || scPageSet2.contains(pageId)) {
             return false;

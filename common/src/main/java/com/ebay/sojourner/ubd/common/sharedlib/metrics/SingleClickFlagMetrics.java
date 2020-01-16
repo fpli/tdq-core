@@ -20,9 +20,9 @@ public class SingleClickFlagMetrics implements FieldMetrics<UbiEvent, SessionAcc
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-        if (event.getIframe() == 0) {
+        if (!event.isIframe()) {
             Integer clickId = event.getClickId();
-            if (event.getRdt() == 0) {
+            if (!event.isRdt()) {
                 if(clickId!=null) {
                     sessionAccumulator.getUbiSession().getDistinctClickIdSet().add(clickId);
                 }

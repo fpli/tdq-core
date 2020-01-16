@@ -19,7 +19,7 @@ public class WatchCntMetric implements FieldMetrics<UbiEvent, SessionAccumulator
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-        if (event.getIframe() == 0 && 
+        if (!event.isIframe() &&
                 searchViewPageSet.contains(event.getPageId()) &&
                 event.getItemId() != null) {
             sessionAccumulator.getUbiSession().setWatchCoreCnt(sessionAccumulator.getUbiSession().getWatchCoreCnt()+1);

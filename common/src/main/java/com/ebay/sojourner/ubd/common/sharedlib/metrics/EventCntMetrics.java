@@ -21,8 +21,8 @@ public class EventCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
         sessionAccumulator.getUbiSession().setAbsEventCnt(sessionAccumulator.getUbiSession().getAbsEventCnt()+1);
-        if (event.getIframe() == 0) {
-            if (event.getRdt() == 0) {
+        if (!event.isIframe()) {
+            if (!event.isRdt()) {
                 sessionAccumulator.getUbiSession().setEventCnt(sessionAccumulator.getUbiSession().getEventCnt()+1);
                 sessionAccumulator.getUbiSession().setNonIframeRdtEventCnt(sessionAccumulator.getUbiSession().getNonIframeRdtEventCnt()+1);
             } else if (indicator.isCorrespondingPageEvent(event)) {

@@ -19,7 +19,7 @@ public class MyebayCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
-        if (event.getRdt() != Integer.MIN_VALUE && event.getRdt() == 0 && (event.getIframe() == Integer.MIN_VALUE || event.getIframe() == 0) && event.getPartialValidPage() != Integer.MIN_VALUE && event.getPartialValidPage() == 1 && isMyebayPage(event)) {
+        if (!event.isRdt() && !event.isIframe() && event.isPartialValidPage() && isMyebayPage(event)) {
             sessionAccumulator.getUbiSession().setMyebayCnt(sessionAccumulator.getUbiSession().getMyebayCnt() + 1);
         }
     }

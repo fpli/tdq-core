@@ -33,7 +33,7 @@ public class AgentStringMetrics implements FieldMetrics<UbiEvent, SessionAccumul
         // Same logic implemented in IntermediaEventMetrics.java -> Line289
         String agentInfo = event.getAgentInfo();
         // logger.info("agentExcludeSet.size():"+agentExcludeSet.size());
-        if (event.getRdt() == 0 && event.getIframe() == 0 && !agentExcludeSet.contains(event.getPageId()) && agentInfo != null
+        if (!event.isRdt() && !event.isIframe() && !agentExcludeSet.contains(event.getPageId()) && agentInfo != null
                 && !agentInfo.equals(SHOCKWAVE_FLASH_AGENT) && !IsValidIPv4.isValidIP(agentInfo)) {
             if (agentInfo.length() > AGENT_MAX_LENGTH) {
                 agentInfo = agentInfo.substring(0, AGENT_MAX_LENGTH);

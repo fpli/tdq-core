@@ -36,7 +36,7 @@ public class PartialValidPageParserTest {
         partialValidPageParser = new PartialValidPageParser();
         ubiEvent = new UbiEvent();
 
-        ubiEvent.setRdt(1);
+        ubiEvent.setRdt(true);
 
         caseItem = ParserConstants.CASE1;
 
@@ -44,7 +44,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -65,7 +65,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -86,7 +86,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -106,7 +106,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -127,7 +127,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -148,7 +148,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -168,7 +168,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -188,7 +188,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -210,7 +210,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -231,7 +231,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -251,7 +251,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -271,7 +271,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -292,7 +292,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
 //            System.out.println(e.getMessage());
@@ -313,7 +313,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -334,7 +334,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -355,7 +355,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -376,7 +376,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -396,7 +396,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -420,7 +420,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -440,7 +440,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -461,7 +461,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -481,7 +481,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -505,7 +505,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -526,7 +526,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -547,7 +547,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -567,7 +567,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -588,7 +588,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -609,7 +609,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -630,7 +630,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -651,7 +651,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -672,7 +672,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -693,7 +693,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -714,7 +714,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -734,7 +734,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -754,7 +754,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -779,7 +779,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");
@@ -797,7 +797,7 @@ public class PartialValidPageParserTest {
             HashMap<RawEvent, Object> rawEventAndExpectResult = LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
             for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
                 partialValidPageParser.parse(entry.getKey(), ubiEvent);
-                System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPartialValidPage()));
+                System.out.println(VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isPartialValidPage())));
             }
         } catch (Exception e) {
             logger.error("partial test fail!!!");

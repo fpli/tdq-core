@@ -18,7 +18,7 @@ public class ViCoreMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-        if (event.getItemId() != null && event.getIframe() == 0 && event.getRdt() == 0 &&
+        if (event.getItemId() != null && !event.isIframe() && !event.isRdt() &&
                 indicator.isCorrespondingPageEvent(event) && 
                 FlagUtils.matchFlag(event, 28, 0)) {
             sessionAccumulator.getUbiSession().setViCoreCnt(sessionAccumulator.getUbiSession().getViCoreCnt()+1);

@@ -25,7 +25,7 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
         Integer pageId = event.getPageId();
-        if (event.getRdt() != Integer.MIN_VALUE && event.getRdt() == 0 && (event.getIframe() == Integer.MIN_VALUE || event.getIframe() == 0) && event.getPartialValidPage() != Integer.MIN_VALUE && event.getPartialValidPage() == 1 &&
+        if (!event.isRdt() && !event.isIframe() && event.isPartialValidPage() &&
                 pageId != null
                 && ((pageFmlyNameMap.containsKey(pageId) && "GR".equals(pageFmlyNameMap.get(pageId)[1])) || (getImPGT(event) != null && "GR".equals(getImPGT(event))))) {
             sessionAccumulator.getUbiSession().setGrCnt(sessionAccumulator.getUbiSession().getGrCnt() + 1);
