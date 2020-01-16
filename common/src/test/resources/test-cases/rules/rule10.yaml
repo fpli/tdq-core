@@ -1,0 +1,17 @@
+-
+  name: case1
+  type: UbiSession
+  input:
+    UbiSession:
+      viCoreCnt: 20
+      pageCnt: 20
+  expectResult: 10
+
+-
+  name: case2
+  type: UbiSession
+  input:
+    UbiSession:
+      viCoreCnt: 10
+      pageCnt: 500
+  expectResult: 0
