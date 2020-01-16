@@ -2,9 +2,9 @@ package com.ebay.sojourner.ubd.common.rule;
 
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
-import com.ebay.sojourner.ubd.common.util.*;
-
-import java.io.InputStream;
+import com.ebay.sojourner.ubd.common.util.BotRules;
+import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
+import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
 
 public class BotRule11 implements Rule<UbiSession> {
 
@@ -12,8 +12,7 @@ public class BotRule11 implements Rule<UbiSession> {
 
     @Override
     public void init() {
-        InputStream resourceAsStream = BotRule11.class.getResourceAsStream("/ubi.proprties");
-        botFilter = new UbiBotFilter(UBIConfig.getInstance(resourceAsStream));
+        botFilter = new UbiBotFilter();
     }
 
     @Override

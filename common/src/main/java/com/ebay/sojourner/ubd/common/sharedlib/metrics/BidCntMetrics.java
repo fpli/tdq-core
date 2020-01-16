@@ -7,12 +7,8 @@ import com.ebay.sojourner.ubd.common.util.FlagUtils;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
-import java.io.File;
-import java.io.InputStream;
-
 public class BidCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
     private static PageIndicator indicator;
-    private static UBIConfig ubiConfig;
 
     @Override
     public void start(SessionAccumulator sessionAccumulator) {
@@ -35,9 +31,7 @@ public class BidCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
 
     @Override
     public void init() throws Exception {
-        InputStream resourceAsStream = BidCntMetrics.class.getResourceAsStream("/ubi.properties");
-        ubiConfig = UBIConfig.getInstance(resourceAsStream);
-        setPageIndicator(new PageIndicator(ubiConfig.getString(Property.BID_PAGES)));
+        setPageIndicator(new PageIndicator(UBIConfig.getString(Property.BID_PAGES)));
     }
 
     void setPageIndicator(PageIndicator indicator) {

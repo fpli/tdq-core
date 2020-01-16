@@ -1,37 +1,31 @@
 package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 
-import com.ebay.sojourner.ubd.common.sharedlib.util.IsValidIPv4;
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.sharedlib.util.IsValidIPv4;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
 import java.util.Set;
 
+@Slf4j
 public class AgentStringMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
     public static final String SHOCKWAVE_FLASH_AGENT = "Shockwave Flash";
     public static final int AGENT_MAX_LENGTH = 2000;
     private static Set<Integer> agentExcludeSet;
-    private static final Logger logger = Logger.getLogger(AgentStringMetrics.class);
-    private static UBIConfig ubiConfig ;
     @Override
     public void init() throws Exception {
-        ubiConfig = UBIConfig.getInstance(AgentStringMetrics.class.getResourceAsStream("/ubi.properties"));
-        agentExcludeSet = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.AGENT_EXCLUDE_PAGES), Property.PROPERTY_DELIMITER);
-        logger.info("UBIConfig.getString(Property.AGENT_EXCLUDE_PAGES):"+ubiConfig.getString(Property.AGENT_EXCLUDE_PAGES));
-
+        agentExcludeSet = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.AGENT_EXCLUDE_PAGES), Property.PROPERTY_DELIMITER);
+        log.info("UBIConfig.getString(Property.AGENT_EXCLUDE_PAGES): {}", UBIConfig.getString(Property.AGENT_EXCLUDE_PAGES));
     }
 
     @Override
     public void start(SessionAccumulator sessionAccumulator) throws Exception {
         // do clear first as end method may not been invoked.
-
         sessionAccumulator.getUbiSession().setAgentString(null);
-      //  feed(event, sessionAccumulator);
     }
 
     @Override

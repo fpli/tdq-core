@@ -8,8 +8,6 @@ import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang.StringUtils;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +28,6 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
     private static final Long SECOND10 = 10 * SESCOND1;
     private static final Long SECOND30 = 30 * SESCOND1;
     private static final Long SECOND180 = 180 * SESCOND1;
-    private static UBIConfig ubiConfig;
     // since the init value need to add before a valid event appears,
     // minus 1 year for safe purpose
     public static final Long SOJMAXLONG = Long.MAX_VALUE - SESCOND1 * 365 * 24 * 3600;
@@ -549,24 +546,22 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
     @Override
     public void init() throws Exception {
         // init constants from property
-        InputStream resourceAsStream = TrafficSourceIdMetrics.class.getResourceAsStream("/ubi.properties");
-        ubiConfig = UBIConfig.getInstance(resourceAsStream);
         landPageSet1 =
-                PropertyUtils.getIntegerSet(ubiConfig.getString(Property.LAND_PAGES1),
+                PropertyUtils.getIntegerSet(UBIConfig.getString(Property.LAND_PAGES1),
                         Property.PROPERTY_DELIMITER);
         landPageSet2 =
-                PropertyUtils.getIntegerSet(ubiConfig.getString(Property.LAND_PAGES2),
+                PropertyUtils.getIntegerSet(UBIConfig.getString(Property.LAND_PAGES2),
                         Property.PROPERTY_DELIMITER);
         swdSet =
                 PropertyUtils
-                        .getIntegerSet(ubiConfig.getString(Property.SWD_VALUES), Property.PROPERTY_DELIMITER);
+                        .getIntegerSet(UBIConfig.getString(Property.SWD_VALUES), Property.PROPERTY_DELIMITER);
         rotSet =
-                PropertyUtils.getLongSet(ubiConfig.getString(Property.ROT_VALUES), Property.PROPERTY_DELIMITER);
+                PropertyUtils.getLongSet(UBIConfig.getString(Property.ROT_VALUES), Property.PROPERTY_DELIMITER);
         socialAgentId22 =
-                PropertyUtils.getIntegerSet(ubiConfig.getString(Property.SOCIAL_AGENT_ID22),
+                PropertyUtils.getIntegerSet(UBIConfig.getString(Property.SOCIAL_AGENT_ID22),
                         Property.PROPERTY_DELIMITER);
         socialAgentId23 =
-                PropertyUtils.getIntegerSet(ubiConfig.getString(Property.SOCIAL_AGENT_ID23),
+                PropertyUtils.getIntegerSet(UBIConfig.getString(Property.SOCIAL_AGENT_ID23),
                         Property.PROPERTY_DELIMITER);
 
 

@@ -1,12 +1,10 @@
 package com.ebay.sojourner.ubd.common.sharedlib.parser;
 
 
-import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
-
-import java.io.InputStream;
 
 public class MobileEventsIdentifier {
 
@@ -17,17 +15,12 @@ public class MobileEventsIdentifier {
     private String[] indexPatternList;
     public String[] matchPatternList;
     public String[][] multiMatchPatternArray;
-    private static UBIConfig ubiConfig;
 
     public MobileEventsIdentifier() {
-        InputStream fileStream = LkpFetcher.class.getResourceAsStream("/ubi.properties");
-        mobileStartPattern = UBIConfig.getInstance(fileStream).getString(Property.MOBILE_AGENT_START);
-        mobileIndexPattern = UBIConfig.getInstance(fileStream).getString(Property.MOBILE_AGENT_INDEX);
-        mobileMatchPattern = UBIConfig.getInstance(fileStream).getString(Property.MOBILE_AGENT_OTHER);
-//        mobileStartPattern = UBIConfig.getInstance(new File(MobileEventsIdentifier.class.getResource("/ubi.properties").toString())).getString(Property.MOBILE_AGENT_START);
-//        mobileIndexPattern = UBIConfig.getInstance(new File(MobileEventsIdentifier.class.getResource("/ubi.properties").toString())).getString(Property.MOBILE_AGENT_INDEX);
-//        mobileMatchPattern = UBIConfig.getInstance(new File(MobileEventsIdentifier.class.getResource("/ubi.properties").toString())).getString(Property.MOBILE_AGENT_OTHER);
-        if (!UBIConfig.getInstance(fileStream).getBoolean(Property.IS_TEST_ENABLE, false)) {
+        mobileStartPattern = UBIConfig.getString(Property.MOBILE_AGENT_START);
+        mobileIndexPattern = UBIConfig.getString(Property.MOBILE_AGENT_INDEX);
+        mobileMatchPattern = UBIConfig.getString(Property.MOBILE_AGENT_OTHER);
+        if (!UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false)) {
             if (mobileIndexPattern == null || mobileMatchPattern == null || mobileStartPattern == null) {
                 throw new RuntimeException();
             }

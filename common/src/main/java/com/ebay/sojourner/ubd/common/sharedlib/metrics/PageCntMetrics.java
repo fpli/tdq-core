@@ -6,19 +6,13 @@ import com.ebay.sojourner.ubd.common.sharedlib.parser.PageIndicator;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
-import java.io.File;
-import java.io.InputStream;
-
 public class PageCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
-    private PageIndicator indicator;
 
-    private static UBIConfig ubiConfig;
+    private PageIndicator indicator;
 
     @Override
     public void start(SessionAccumulator sessionAccumulator) {
         sessionAccumulator.getUbiSession().setPageCnt(0);
-
-
     }
 
     @Override
@@ -35,9 +29,7 @@ public class PageCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
 
     @Override
     public void init() throws Exception {
-        InputStream resourceAsStream = PageCntMetrics.class.getResourceAsStream("/ubi.properties");
-        ubiConfig = UBIConfig.getInstance(resourceAsStream);
-        setPageIndicator(new PageIndicator(ubiConfig.getString(Property.CAPTCHA_PAGES)));
+        setPageIndicator(new PageIndicator(UBIConfig.getString(Property.CAPTCHA_PAGES)));
     }
 
     void setPageIndicator(PageIndicator indicator) {

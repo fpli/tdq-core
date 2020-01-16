@@ -9,25 +9,21 @@ import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Map;
 
 public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
     public static final Integer ONE_VI_PAGEID = new Integer(1521826);
     private int familyViCnt;
     private ArrayList<String> viPGT;
     private static LkpFetcher lkpFetcher;
-    private static UBIConfig ubiConfig;
 
     @Override
     public void init() throws Exception {
-        InputStream resourceAsStream = FmlyViCntMetrics.class.getResourceAsStream("/ubi.properties");
-        ubiConfig = UBIConfig.getInstance(resourceAsStream);
         lkpFetcher = LkpFetcher.getInstance();
         lkpFetcher.loadPageFmlys();
-        viPGT = new ArrayList<String>(PropertyUtils.parseProperty(ubiConfig.getString(Property.VI_EVENT_VALUES), Property.PROPERTY_DELIMITER));
+        viPGT = new ArrayList<>(PropertyUtils.parseProperty(UBIConfig.getString(Property.VI_EVENT_VALUES), Property.PROPERTY_DELIMITER));
     }
 
     @Override

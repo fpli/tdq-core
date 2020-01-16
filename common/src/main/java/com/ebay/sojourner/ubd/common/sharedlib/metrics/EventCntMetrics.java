@@ -6,9 +6,6 @@ import com.ebay.sojourner.ubd.common.sharedlib.parser.PageIndicator;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
-import java.io.File;
-import java.io.InputStream;
-
 public class EventCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
     private PageIndicator indicator;
     private static UBIConfig ubiConfig;
@@ -41,9 +38,7 @@ public class EventCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
 
     @Override
     public void init() throws Exception {
-        InputStream resourceAsStream = EventCntMetrics.class.getResourceAsStream("/ubi.properties");
-        ubiConfig = UBIConfig.getInstance(resourceAsStream);
-        setPageIndicator(new PageIndicator(ubiConfig.getString(Property.SEARCH_VIEW_PAGES)));
+        setPageIndicator(new PageIndicator(UBIConfig.getString(Property.SEARCH_VIEW_PAGES)));
     }
     
     void setPageIndicator(PageIndicator indicator) {
