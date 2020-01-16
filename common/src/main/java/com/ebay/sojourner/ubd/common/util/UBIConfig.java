@@ -3,10 +3,9 @@ package com.ebay.sojourner.ubd.common.util;
 
 import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Properties;
@@ -14,21 +13,13 @@ import java.util.Properties;
 /**
  * @author kofeng
  */
+@Slf4j
 public class UBIConfig {
-    private static final Logger log = Logger.getLogger(UBIConfig.class);
+
     private static volatile UBIConfig ubiConfig;
     private Properties ubiProperties;
-    private HashMap<String, Object> confData = new HashMap<String, Object>();
-
-    public boolean isInitialized() {
-        return isInitialized;
-    }
-
-    public void setInitialized(boolean initialized) {
-        isInitialized = initialized;
-    }
-
-    private boolean isInitialized = false;
+    private HashMap<String, Object> confData = new HashMap<>();
+    private static final String DEFAULT_FILE = "/ubi.properties";
 
     private UBIConfig(InputStream configFile) {
         initAppConfiguration(configFile);
@@ -39,6 +30,15 @@ public class UBIConfig {
             e.printStackTrace();
         }
 
+    }
+
+    public static UBIConfig getInstance() {
+        return getInstance(DEFAULT_FILE);
+    }
+
+    public static UBIConfig getInstance(String fileName) {
+        InputStream resource = UBIConfig.class.getClassLoader().getResourceAsStream(fileName);
+        return getInstance(resource);
     }
 
     public static UBIConfig getInstance(InputStream configFile) {

@@ -1,0 +1,33 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      partialValidPage: 1
+      iframe: 0
+      rdt: 0
+      pageId: 1521826
+      applicationPayload: pgt=like
+      familyViCnt: 0
+    SessionAccumulator:
+      ubiSession:
+        familyViCnt:
+  expect:
+    UbiSession:
+      familyViCnt: 1
+
+-
+  name: test2
+  inputs:
+    UbiEvent:
+      partialValidPage: 1
+      iframe: 0
+      rdt: 0
+      pageId: 2357794
+      applicationPayload: pgt=like
+      familyViCnt: 0
+    SessionAccumulator:
+      ubiSession:
+        familyViCnt:
+  expect:
+    UbiSession:
+      familyViCnt: 1

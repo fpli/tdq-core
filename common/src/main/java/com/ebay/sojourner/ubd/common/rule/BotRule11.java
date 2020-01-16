@@ -1,15 +1,15 @@
 package com.ebay.sojourner.ubd.common.rule;
 
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.util.*;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
+import com.ebay.sojourner.ubd.common.util.*;
 
-import java.io.File;
 import java.io.InputStream;
 
 public class BotRule11 implements Rule<UbiSession> {
 
     private static BotFilter botFilter ;
+
     @Override
     public void init() {
         InputStream resourceAsStream = BotRule11.class.getResourceAsStream("/ubi.proprties");

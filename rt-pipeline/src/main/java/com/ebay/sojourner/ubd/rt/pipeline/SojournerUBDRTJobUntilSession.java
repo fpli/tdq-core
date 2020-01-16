@@ -13,7 +13,6 @@ import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFuncti
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
 
-
 import org.apache.flink.api.common.typeinfo.SOjStringFactory;
 import org.apache.flink.api.common.typeinfo.TypeInfoFactory;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -41,6 +40,7 @@ public class SojournerUBDRTJobUntilSession {
         // Make sure this is being executed at start up.
         ParameterTool parameterTool = ExecutionEnvUtil.createParameterTool(args);
         AppEnv.config(parameterTool);
+
 
         // hack StringValue to use the version 1.10
 //        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class, Class.class);

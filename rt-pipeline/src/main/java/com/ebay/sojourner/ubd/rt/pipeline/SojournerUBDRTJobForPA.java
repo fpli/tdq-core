@@ -1,9 +1,8 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.RheosHeader;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForPA;
-import com.ebay.sojourner.ubd.rt.util.SojJobParameters;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForPA;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;

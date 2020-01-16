@@ -37,6 +37,8 @@
         <spark.version>2.3.1</spark.version>
         <rheos.client.version>2.0.5-SNAPSHOT</rheos.client.version>
         <junit-jupiter.version>5.5.2</junit-jupiter.version>
+        <mockito.version>3.2.4</mockito.version>
+        <powermock.version>2.0.4</powermock.version>
         <assertj.version>3.9.1</assertj.version>
         <hadoop.version>2.7.3</hadoop.version>
         <scalatest.version>3.0.5</scalatest.version>
@@ -110,6 +112,26 @@
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito2</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -366,8 +388,26 @@
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
-                <artifactId>mockito-all</artifactId>
-                <version>1.9.5</version>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-junit-jupiter</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-module-junit4</artifactId>
+                <version>${powermock.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-api-mockito2</artifactId>
+                <version>${powermock.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
