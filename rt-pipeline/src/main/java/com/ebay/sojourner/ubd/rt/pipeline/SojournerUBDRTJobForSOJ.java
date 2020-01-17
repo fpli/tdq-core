@@ -132,7 +132,7 @@ public class SojournerUBDRTJobForSOJ {
         DataStream<AgentIpAttribute> agentIpAttributeDataStream = ubiSessinDataStream
                 .keyBy("userAgent", "clientIp")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
-                .trigger(OnElementEarlyFiringTrigger.create())
+//                .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
 
                 .name("Attribute Operator (Agent+IP)")
@@ -150,7 +150,7 @@ public class SojournerUBDRTJobForSOJ {
         DataStream<AgentSignature> agentAttributeDataStream = agentIpAttributeDataStream
                 .keyBy("agent")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
-                .trigger(OnElementEarlyFiringTrigger.create())
+//                .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
                 .name("Attribute Operator (Agent)")
                 .setParallelism(25);
@@ -160,7 +160,7 @@ public class SojournerUBDRTJobForSOJ {
         DataStream<IpSignature> ipAttributeDataStream = agentIpAttributeDataStream
                 .keyBy("clientIp")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
-                .trigger(OnElementEarlyFiringTrigger.create())
+//                .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
                 .name("Attribute Operator (IP)")
                 .setParallelism(25);
