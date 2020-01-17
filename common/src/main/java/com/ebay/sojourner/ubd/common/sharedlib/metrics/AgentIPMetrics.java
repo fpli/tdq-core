@@ -10,23 +10,21 @@ import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import lombok.extern.slf4j.Slf4j;
 
-import java.text.SimpleDateFormat;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 @Slf4j
 public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
-    private static Set<Integer> badIPPages;
-    private static String invalidIPPattern;
-    private static SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
-    private static final Pattern pattern = Pattern.compile(".*cdn.ampproject.org.*", Pattern.CASE_INSENSITIVE);
+    private Set<Integer> badIPPages;
+    private Pattern invalidIPPattern;
 
     @Override
     public void init() throws Exception {
         badIPPages = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.IP_EXCLUDE_PAGES), Property.PROPERTY_DELIMITER);
         log.info("UBIConfig.getString(Property.IP_EXCLUDE_PAGES): {}", UBIConfig.getString(Property.IP_EXCLUDE_PAGES));
-        invalidIPPattern = UBIConfig.getString(Property.EXCLUDE_IP_PATTERN);
+        String patternStr = UBIConfig.getString(Property.EXCLUDE_IP_PATTERN);
+        invalidIPPattern = Pattern.compile(patternStr);
     }
 
     @Override
@@ -35,9 +33,6 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
         sessionAccumulator.getUbiSession().setInternalIp(null);
         sessionAccumulator.getUbiSession().setExternalIp(null);
         sessionAccumulator.getUbiSession().setExternalIp2(null);
-
-
-//        feed(event, sessionAccumulator);
     }
 
     @Override
@@ -72,7 +67,6 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
                 String forwardFor = event.getClientData().getForwardFor();// SOJParseClientInfo.getClientInfo(event.getClientData(), "ForwardedFor");
                 ubiSession.setExternalIp2(getExternalIP(event, remoteIp, forwardFor));
             }
-
         }
     }
 
@@ -88,23 +82,22 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
     }
 
     public String getExternalIP(UbiEvent event, String remoteIp, String forwardFor) {
-        Integer pageId = event.getPageId();
+        int pageId = event.getPageId();
         String urlQueryString = event.getUrlQueryString();
         if (badIPPages.contains(pageId)) {
             return null;
         }
-        if (pageId != null && pageId == 3686 && urlQueryString != null && urlQueryString.contains("Portlet")) {
+        if (pageId == 3686 && urlQueryString != null && urlQueryString.contains("Portlet")) {
             return null;
         }
 
-        Pattern p = Pattern.compile(invalidIPPattern);
-        if (remoteIp != null && !(p.matcher(remoteIp).matches())) {
+        if (remoteIp != null && !(invalidIPPattern.matcher(remoteIp).matches())) {
             return remoteIp;
         }
 
         for (int i = 1; i < 4; i++) {
             String forwardValueByIndex = SOJListGetValueByIndex.getValueByIndex(forwardFor, ",", i);
-            if (forwardValueByIndex != null && !(p.matcher(forwardValueByIndex).matches())) {
+            if (forwardValueByIndex != null && !(invalidIPPattern.matcher(forwardValueByIndex).matches())) {
                 return forwardValueByIndex;
             }
         }
@@ -112,14 +105,10 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
     }
 
     public String getInternalIP(String remoteIp, String forwardFor) {
-        String forwardForValueIndex1 = SOJListGetValueByIndex.getValueByIndex(forwardFor, ",", 1);
         if (remoteIp != null) {
             return remoteIp;
         }
-        if (forwardForValueIndex1 != null) {
-            return forwardForValueIndex1;
-        }
-        return null;
+        return SOJListGetValueByIndex.getValueByIndex(forwardFor, ",", 1);
     }
 
 }

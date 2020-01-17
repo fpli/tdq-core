@@ -1,0 +1,54 @@
+-
+  name: test_findFirst_clientIPNotNull
+  inputs:
+    UbiEvent:
+      clientIP: "1.1.1.1"
+      agentInfo: "I am an agent"
+    SessionAccumulator:
+      ubiSession:
+        findFirst: false
+        externalIp: "bla"
+        externalIp2: "bla"
+  expect:
+    UbiSession:
+      clientIp: "1.1.1.1"
+      agentInfo: "I am an agent"
+
+-
+  name: test_rdt_iframe_findFirst
+  inputs:
+    UbiEvent:
+      rdt: false
+      iframe: false
+      clientIP: "1.1.1.1"
+      agentInfo: "I am an agent"
+    SessionAccumulator:
+      ubiSession:
+        findFirst: false
+        externalIp: "bla"
+        externalIp2: "bla"
+  expect:
+    UbiSession:
+      clientIp: "1.1.1.1"
+      agentInfo: "I am an agent"
+      findFirst: true
+
+-
+  name: test_partialValidPage
+  inputs:
+    UbiEvent:
+      rdt: false
+      iframe: false
+      clientData:
+        remoteIP: 1.2.3.4
+        ForwardFor: 1.2.3.4
+      clientIP: "1.1.1.1"
+      agentInfo: "I am an agent"
+    SessionAccumulator:
+      ubiSession:
+        findFirst: false
+        externalIp2: "bla"
+  expect:
+    UbiSession:
+      externalIp: 1.2.3.4
+      internalIp:

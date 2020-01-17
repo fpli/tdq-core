@@ -134,7 +134,6 @@ public class SojournerUBDRTJobForSOJ {
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
 //                .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
-
                 .name("Attribute Operator (Agent+IP)")
                 .setParallelism(25);
 

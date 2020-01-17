@@ -66,7 +66,7 @@ public class UbiSession implements Serializable,Cloneable{
     private Set<String> agentSets= new HashSet<>();
     private String agentInfo;
     private String clientIp;
-    private boolean findFirst ;
+    private boolean findFirst;
     private String internalIp;
     private String externalIp;
     private String externalIp2;

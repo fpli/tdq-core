@@ -79,7 +79,11 @@ public abstract class BaseMetricsTest {
                             });
                             Assertions.assertEquals(node.size(),actualSet.size());
                         } else {
-                            Assertions.assertEquals(node.asText(), actualValue.toString());
+                            if (node.isNull()) {
+                                Assertions.assertNull(actualValue);
+                            } else {
+                                Assertions.assertEquals(node.asText(), actualValue.toString());
+                            }
                         }
                     } catch (Exception e) {
                         log.error("Error: {}", e.getMessage(), e);
