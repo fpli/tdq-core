@@ -15,7 +15,6 @@ public class BotRule208Test extends BaseRulesTest<UbiSession>{
     @BeforeEach
     public void setup() throws Exception {
         botRule208 = new BotRule208();
-        botRule208.init();
         rulesTestCaseList = loadTestCases("rule208.yaml");
     }
 

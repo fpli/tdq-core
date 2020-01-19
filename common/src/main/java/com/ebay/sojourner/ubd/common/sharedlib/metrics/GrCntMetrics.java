@@ -9,8 +9,6 @@ import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -18,7 +16,6 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
     private static ArrayList<String> viPGT;
     private static Map<Integer, String[]> pageFmlyNameMap;
     private static LkpFetcher lkpFetcher;
-    private static UBIConfig ubiConfig;
 
     @Override
     public void start(SessionAccumulator sessionAccumulator) throws Exception {
@@ -28,7 +25,7 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
         Integer pageId = event.getPageId();
-        if (event.getRdt() != Integer.MIN_VALUE && event.getRdt() == 0 && (event.getIframe() == Integer.MIN_VALUE || event.getIframe() == 0) && event.getPartialValidPage() != Integer.MIN_VALUE && event.getPartialValidPage() == 1 &&
+        if (!event.isRdt() && !event.isIframe() && event.isPartialValidPage() &&
                 pageId != null
                 && ((pageFmlyNameMap.containsKey(pageId) && "GR".equals(pageFmlyNameMap.get(pageId)[1])) || (getImPGT(event) != null && "GR".equals(getImPGT(event))))) {
             sessionAccumulator.getUbiSession().setGrCnt(sessionAccumulator.getUbiSession().getGrCnt() + 1);
@@ -42,12 +39,10 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
 
     @Override
     public void init() throws Exception {
-        InputStream resourceAsStream = GrCntMetrics.class.getResourceAsStream("/ubi.properties");
-        ubiConfig = UBIConfig.getInstance(resourceAsStream);
         lkpFetcher = LkpFetcher.getInstance();
         lkpFetcher.loadPageFmlys();
         pageFmlyNameMap = lkpFetcher.getPageFmlyMaps();
-        viPGT = new ArrayList<String>(PropertyUtils.parseProperty(ubiConfig.getString(Property.VI_EVENT_VALUES), Property.PROPERTY_DELIMITER));
+        viPGT = new ArrayList<>(PropertyUtils.parseProperty(UBIConfig.getString(Property.VI_EVENT_VALUES), Property.PROPERTY_DELIMITER));
     }
 
     public boolean isVIPGT(UbiEvent event) {

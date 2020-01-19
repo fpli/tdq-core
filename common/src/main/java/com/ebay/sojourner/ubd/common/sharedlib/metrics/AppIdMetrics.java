@@ -19,7 +19,7 @@ public class AppIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
         if (sessionAccumulator.getUbiSession().getFirstAppId() == null && event.getAppId() != null) {
             sessionAccumulator.getUbiSession().setFirstAppId(event.getAppId());
         }
-        if (sessionAccumulator.getUbiSession().getAppId() == null && event.getIframe() == 0 && event.getRdt() == 0 && event.getAppId() != null) {
+        if (sessionAccumulator.getUbiSession().getAppId() == null && !event.isIframe() && !event.isRdt() && event.getAppId() != null) {
             sessionAccumulator.getUbiSession().setAppId(event.getAppId());
         }
     }

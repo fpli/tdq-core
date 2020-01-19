@@ -1,0 +1,15 @@
+-
+  name: case1
+  type: GuidAttribute
+  input:
+    GuidAttribute:
+      absEventCount: 20000
+  expectResult: 15
+
+-
+  name: case2
+  type: GuidAttribute
+  input:
+    GuidAttribute:
+      absEventCount: 100
+  expectResult: 0

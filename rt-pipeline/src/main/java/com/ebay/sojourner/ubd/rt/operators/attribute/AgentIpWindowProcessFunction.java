@@ -28,12 +28,9 @@ public class AgentIpWindowProcessFunction
     @Override
     public void process(Tuple tuple, Context context, Iterable<AgentIpAttributeAccumulator> elements,
                         Collector<AgentIpAttribute> out) throws Exception {
-//        if (context.currentWatermark() > context.window().maxTimestamp()) {
-//
-//        }else{
+
             AgentIpAttributeAccumulator agentIpAttributeAccumulator = elements.iterator().next();
             out.collect(agentIpAttributeAccumulator.getAgentIpAttribute());
-//        }
 
 //        System.out.println(agentIpAttributeAccumulator.getAgentIpAttribute());
 //        Set<Integer> botFlagList = agentIpSignatureBotDetector.getBotFlagList(agentIpAttributeAccumulator.getAgentIpAttribute());

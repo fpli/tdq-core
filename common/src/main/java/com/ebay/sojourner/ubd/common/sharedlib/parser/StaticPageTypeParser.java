@@ -16,11 +16,10 @@ public class StaticPageTypeParser implements FieldParser<RawEvent, UbiEvent> {
         try {
             Long itemId = ubiEvent.getItemId();
             String flags = ubiEvent.getFlags();
-            Integer rdt = ubiEvent.getRdt();
             Integer pageId = ubiEvent.getPageId();
             Integer[] pageInfo = new Integer[2];
             Map<Integer, Integer[]> vtNewIdsMap = LkpFetcher.getInstance().getVtNewIdsMap();
-            if (pageId != null && rdt != null) {
+            if (pageId != null) {
                 if (vtNewIdsMap.containsKey(pageId)) {
                     pageInfo = vtNewIdsMap.get(pageId);
                 }
@@ -30,7 +29,7 @@ public class StaticPageTypeParser implements FieldParser<RawEvent, UbiEvent> {
                 } else {
                     itemid = String.valueOf(itemId);
                 }
-                result = SOJGetPageType.soj_get_page_type(itemid, flags, rdt.intValue(), pageId.intValue(), pageInfo[0], pageInfo[1]);
+                result = SOJGetPageType.soj_get_page_type(itemid, flags, ubiEvent.isRdt(), pageId.intValue(), pageInfo[0], pageInfo[1]);
             } else {
                 result = -1;
             }

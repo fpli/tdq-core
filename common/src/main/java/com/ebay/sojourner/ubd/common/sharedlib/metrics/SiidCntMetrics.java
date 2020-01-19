@@ -22,10 +22,10 @@ public class SiidCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-        if (event.getIframe() == 0 && event.getRdt() == 0 && event.getSourceImprId() != null) {
+        if (!event.isIframe() && !event.isRdt() && event.getSourceImprId() != null) {
             sessionAccumulator.getUbiSession().setSiidCnt(sessionAccumulator.getUbiSession().getSiidCnt() + 1);
         }
-        if (event.getIframe() == 0 && event.getRdt() == 0 && sessionAccumulator.getUbiSession().isRefererNull()) {
+        if (!event.isIframe() && !event.isRdt() && sessionAccumulator.getUbiSession().isRefererNull()) {
             if (event.getSourceImprId() != null) {
                 sessionAccumulator.getUbiSession().setSiidCnt2(sessionAccumulator.getUbiSession().getSiidCnt2()+1);
             }

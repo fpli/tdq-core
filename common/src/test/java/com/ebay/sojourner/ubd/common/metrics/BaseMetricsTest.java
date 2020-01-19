@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Assertions;
@@ -21,7 +22,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+@Slf4j
 public abstract class BaseMetricsTest {
 
     private ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory())
@@ -63,23 +68,25 @@ public abstract class BaseMetricsTest {
                                 Assertions.assertEquals(node.get(j).asText(), String.valueOf(array[j]));
                             }
                         } else if (actualValue instanceof Set) {
-                            Set actualValue1 = (Set) actualValue;
-                            Set<String> actualSet = new HashSet<>();
-                            Iterator<String> iterator = actualValue1.iterator();
-                            while (iterator.hasNext()) {
-                                actualSet.add(iterator.next());
-                            }
-
-                            Iterator<JsonNode> iterator1 = node.iterator();
-                            while (iterator1.hasNext()) {
-                                Assertions.assertEquals(actualSet.contains(iterator1.next().asText()),true);
-                            }
-
+                            Set<String> actualSet = ((Set<Object>) actualValue).stream()
+                                    .map(String::valueOf)
+                                    .collect(Collectors.toSet());
+                            Iterator<JsonNode> nodeIterator = node.iterator();
+                            Set<String> expectSet = new HashSet<>();
+                            nodeIterator.forEachRemaining(s->{
+                                expectSet.add(s.asText());
+                                assertThat(expectSet).contains(s.asText());
+                            });
                             Assertions.assertEquals(node.size(),actualSet.size());
                         } else {
-                            Assertions.assertEquals(node.asText(), actualValue.toString());
+                            if (node.isNull()) {
+                                Assertions.assertNull(actualValue);
+                            } else {
+                                Assertions.assertEquals(node.asText(), actualValue.toString());
+                            }
                         }
                     } catch (Exception e) {
+                        log.error("Error: {}", e.getMessage(), e);
                         throw new RuntimeException(e);
                     }
                 });

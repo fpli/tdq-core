@@ -1,0 +1,19 @@
+-
+  name: case1
+  type: UbiSession
+  input:
+    UbiSession:
+      validPageCnt: 1000
+      grCnt: 20
+      viCnt: 2000
+  expectResult: 215
+
+-
+  name: case2
+  type: UbiSession
+  input:
+    UbiSession:
+      validPageCnt: 1000
+      grCnt: 20
+      viCnt: 300
+  expectResult: 0

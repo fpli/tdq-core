@@ -7,12 +7,8 @@ import com.ebay.sojourner.ubd.common.util.FlagUtils;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
-import java.io.File;
-import java.io.InputStream;
-
 public class BinCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
     private PageIndicator indicator;
-    private static UBIConfig ubiConfig;
 
     @Override
     public void start(SessionAccumulator sessionAccumulator) {
@@ -21,7 +17,7 @@ public class BinCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-        if (event.getIframe() == 0 && event.getRdt() == 0 &&
+        if (!event.isIframe() && !event.isRdt() &&
                 indicator.isCorrespondingPageEvent(event) &&
                 (FlagUtils.matchFlag(event, 6, 1) || FlagUtils.matchFlag(event, 48, 1))) {
             sessionAccumulator.getUbiSession().setBinCoreCnt(sessionAccumulator.getUbiSession().getBinCoreCnt() + 1);
@@ -35,9 +31,7 @@ public class BinCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
 
     @Override
     public void init() throws Exception {
-        InputStream resourceAsStream = BinCntMetrics.class.getResourceAsStream("/ubi.properties");
-        ubiConfig = UBIConfig.getInstance(resourceAsStream);
-        setPageIndicator(new PageIndicator(ubiConfig.getString(Property.BIN_PAGES)));
+        setPageIndicator(new PageIndicator(UBIConfig.getString(Property.BIN_PAGES)));
     }
 
     void setPageIndicator(PageIndicator indicator) {

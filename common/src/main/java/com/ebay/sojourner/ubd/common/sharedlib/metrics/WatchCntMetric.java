@@ -6,13 +6,11 @@ import com.ebay.sojourner.ubd.common.sharedlib.parser.PageIndicator;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.Set;
 
 public class WatchCntMetric implements FieldMetrics<UbiEvent, SessionAccumulator> {
     private Set<Integer> searchViewPageSet = null;
-    private static UBIConfig ubiConfig;
+
     @Override
     public void start(SessionAccumulator sessionAccumulator) {
 
@@ -21,7 +19,7 @@ public class WatchCntMetric implements FieldMetrics<UbiEvent, SessionAccumulator
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-        if (event.getIframe() == 0 && 
+        if (!event.isIframe() &&
                 searchViewPageSet.contains(event.getPageId()) &&
                 event.getItemId() != null) {
             sessionAccumulator.getUbiSession().setWatchCoreCnt(sessionAccumulator.getUbiSession().getWatchCoreCnt()+1);
@@ -35,8 +33,6 @@ public class WatchCntMetric implements FieldMetrics<UbiEvent, SessionAccumulator
 
     @Override
     public void init() throws Exception {
-        InputStream resourceAsStream = WatchCntMetric.class.getResourceAsStream("/ubi.properties");
-        ubiConfig = UBIConfig.getInstance(resourceAsStream);
-        searchViewPageSet = PageIndicator.parse(ubiConfig.getString(Property.SEARCH_VIEW_PAGES));
+        searchViewPageSet = PageIndicator.parse(UBIConfig.getString(Property.SEARCH_VIEW_PAGES));
     }
 }

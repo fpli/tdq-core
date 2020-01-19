@@ -1,18 +1,14 @@
 package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
-import com.ebay.sojourner.ubd.common.model.*;
-import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
+import com.ebay.sojourner.ubd.common.model.AgentAttributeAccumulator;
+import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
+import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
-import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.io.InputStream;
-
+@Slf4j
 public class AgentIndicators extends AttributeIndicators<AgentIpAttribute, AgentAttributeAccumulator> {
-
-    private static Logger logger = Logger.getLogger(SessionMetrics.class);
 
     private static volatile AgentIndicators agentIpIndicators;
     private static BotFilter botFilter ;
@@ -29,14 +25,12 @@ public class AgentIndicators extends AttributeIndicators<AgentIpAttribute, Agent
     }
 
     public AgentIndicators() {
-        InputStream resourceAsStream = AgentIndicator.class.getResourceAsStream("/ubi.properties");
-        botFilter = new UbiBotFilter(UBIConfig.getInstance(resourceAsStream));
+        botFilter = new UbiBotFilter();
         initIndicators();
         try {
             init();
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 

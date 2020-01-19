@@ -6,20 +6,15 @@ import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.Set;
 
 public class BotRule208 implements Rule<UbiSession> {
 
     private static Set<Integer> cobrandSet;
-    private static UBIConfig ubiConfig;
 
     @Override
     public void init() {
-        InputStream resourceAsStream = BotRule208.class.getResourceAsStream("/ubi.properties");
-        ubiConfig = UBIConfig.getInstance(resourceAsStream);
-        cobrandSet = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.EBAY_SITE_COBRAND), Property.PROPERTY_DELIMITER);
+        cobrandSet = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.EBAY_SITE_COBRAND), Property.PROPERTY_DELIMITER);
     }
 
     @Override

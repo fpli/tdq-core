@@ -28,9 +28,9 @@ public class IFrameParser implements FieldParser<RawEvent, UbiEvent> {
         Set<String> pageIdSet = LkpFetcher.getInstance().getIframePageIdSet();
 
         if (pageIdSet.contains(pageId)) {
-            ubiEvent.setIframe(1);
+            ubiEvent.setIframe(true);
         } else {
-            ubiEvent.setIframe(0);
+            ubiEvent.setIframe(false);
         }
 
     }

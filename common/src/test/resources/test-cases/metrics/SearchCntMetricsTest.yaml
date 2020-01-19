@@ -1,0 +1,27 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      staticPageType: 2
+    SessionAccumulator:
+      ubiSession:
+        searchCnt: 0
+        viewCnt: 0
+  expect:
+    UbiSession:
+      searchCnt: 1
+      viewCnt: 0
+
+-
+  name: test2
+  inputs:
+    UbiEvent:
+      staticPageType: 3
+    SessionAccumulator:
+      ubiSession:
+        searchCnt: 0
+        viewCnt: 0
+  expect:
+    UbiSession:
+      searchCnt: 0
+      viewCnt: 1

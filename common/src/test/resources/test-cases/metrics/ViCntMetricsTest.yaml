@@ -1,0 +1,13 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      pageId: 492
+      rdt: 0
+      iframe: 0
+    SessionAccumulator:
+      ubiSession:
+        viCnt: 0
+  expect:
+    UbiSession:
+      viCnt: 1

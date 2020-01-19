@@ -6,9 +6,6 @@ import com.ebay.sojourner.ubd.common.sharedlib.parser.PageIndicator;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
-import java.io.File;
-import java.io.InputStream;
-
 public class EventCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
     private PageIndicator indicator;
     private static UBIConfig ubiConfig;
@@ -24,8 +21,8 @@ public class EventCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
         sessionAccumulator.getUbiSession().setAbsEventCnt(sessionAccumulator.getUbiSession().getAbsEventCnt()+1);
-        if (event.getIframe() == 0) {
-            if (event.getRdt() == 0) {
+        if (!event.isIframe()) {
+            if (!event.isRdt()) {
                 sessionAccumulator.getUbiSession().setEventCnt(sessionAccumulator.getUbiSession().getEventCnt()+1);
                 sessionAccumulator.getUbiSession().setNonIframeRdtEventCnt(sessionAccumulator.getUbiSession().getNonIframeRdtEventCnt()+1);
             } else if (indicator.isCorrespondingPageEvent(event)) {
@@ -41,9 +38,7 @@ public class EventCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
 
     @Override
     public void init() throws Exception {
-        InputStream resourceAsStream = EventCntMetrics.class.getResourceAsStream("/ubi.properties");
-        ubiConfig = UBIConfig.getInstance(resourceAsStream);
-        setPageIndicator(new PageIndicator(ubiConfig.getString(Property.SEARCH_VIEW_PAGES)));
+        setPageIndicator(new PageIndicator(UBIConfig.getString(Property.SEARCH_VIEW_PAGES)));
     }
     
     void setPageIndicator(PageIndicator indicator) {

@@ -6,20 +6,15 @@ import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.Set;
 
 public class BotRule206 implements Rule<UbiSession> {
 
     private static Set<Integer> lndgPageIds;
-    private static UBIConfig ubiConfig;
 
     @Override
     public void init() {
-        InputStream resourceAsStream = BotRule206.class.getResourceAsStream("/ubi.properties");
-        ubiConfig = UBIConfig.getInstance(resourceAsStream);
-        lndgPageIds = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.LNDG_PAGE_IDS), Property.PROPERTY_DELIMITER);
+        lndgPageIds = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.LNDG_PAGE_IDS), Property.PROPERTY_DELIMITER);
     }
 
     @Override
@@ -28,7 +23,6 @@ public class BotRule206 implements Rule<UbiSession> {
             return BotRules.SHORT_SESSION_WITHOUT_AGENT;
         }
         return 0;
-
     }
 
 }

@@ -7,21 +7,18 @@ import com.ebay.sojourner.ubd.common.util.FlagUtils;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
-import java.io.File;
-import java.io.InputStream;
-
 public class ViCoreMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
     private PageIndicator indicator;
-    private static UBIConfig ubiConfig;
+
     @Override
     public void start(SessionAccumulator sessionAccumulator) {
-
         sessionAccumulator.getUbiSession().setViCoreCnt(0);
     }
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-        if (event.getItemId() != null && event.getIframe() == 0 && event.getRdt() == 0 &&
+        if (event.getItemId() != null && !event.isIframe() && !event.isRdt() &&
                 indicator.isCorrespondingPageEvent(event) && 
                 FlagUtils.matchFlag(event, 28, 0)) {
             sessionAccumulator.getUbiSession().setViCoreCnt(sessionAccumulator.getUbiSession().getViCoreCnt()+1);
@@ -35,9 +32,7 @@ public class ViCoreMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
 
     @Override
     public void init() throws Exception {
-        InputStream resourceAsStream = ViCoreMetrics.class.getResourceAsStream("/ubi.properties");
-        ubiConfig = UBIConfig.getInstance(resourceAsStream);
-        setPageIndicator(new PageIndicator(ubiConfig.getString(Property.VIEW_ITEM_PAGES)));
+        setPageIndicator(new PageIndicator(UBIConfig.getString(Property.VIEW_ITEM_PAGES)));
     }
     
     void setPageIndicator(PageIndicator indicator) {

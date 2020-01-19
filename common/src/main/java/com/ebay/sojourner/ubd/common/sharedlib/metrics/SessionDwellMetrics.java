@@ -25,7 +25,7 @@ public class SessionDwellMetrics implements FieldMetrics<UbiEvent, SessionAccumu
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
         long eventTimestamp = event.getEventTimestamp();
-        if (event.getIframe() != Integer.MIN_VALUE && event.getRdt() != Integer.MIN_VALUE && event.getIframe() == 0 && event.getRdt() == 0) {
+        if (!event.isIframe() && !event.isRdt()) {
             minMaxEventTimestamp = sessionAccumulator.getUbiSession().getMinMaxEventTimestamp();
             if (minMaxEventTimestamp[0] > eventTimestamp) {
                 minMaxEventTimestamp[0] = eventTimestamp;

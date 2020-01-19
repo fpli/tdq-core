@@ -26,7 +26,7 @@ public class UbiEvent implements Serializable {
   private int clickId;
   private int siteId;
   private int version;
-  private int pageId;
+  private int pageId = -1;
   private String pageName;
   private Long refererHash;
   private Long eventTimestamp;
@@ -39,7 +39,7 @@ public class UbiEvent implements Serializable {
   private String userId;
   private Long itemId;
   private String flags;
-  private int rdt;
+  private boolean rdt;
   private int regu;
   private String sqr;
   private int staticPageType;
@@ -48,7 +48,7 @@ public class UbiEvent implements Serializable {
   private Long currentImprId;
   private Long sourceImprId;
   private int cobrand;
-  private int iframe;
+  private boolean iframe;
   private String agentInfo;
   private String forwardedFor;
   private String clientIP;
@@ -56,7 +56,7 @@ public class UbiEvent implements Serializable {
   private Integer appId;
   private Long oldSessionSkey;
   private int hashCode;
-  private int partialValidPage;
+  private boolean partialValidPage = true;
   private long sessionStartTime;
   private long sessionEndTime;
   private Set<Integer> botFlags= new LinkedHashSet<>();

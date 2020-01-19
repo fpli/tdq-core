@@ -3,18 +3,17 @@ package com.ebay.sojourner.ubd.common.sharedlib.parser;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
+import com.ebay.sojourner.ubd.common.util.PropertyUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class RdtParser implements FieldParser<RawEvent, UbiEvent> {
-    
-    private static final Logger log = Logger.getLogger(RdtParser.class);
-    
+
     public static final String RDT = "rdt";
     
     public void parse(RawEvent rawEvent, UbiEvent ubiEvent) {
@@ -41,17 +40,17 @@ public class RdtParser implements FieldParser<RawEvent, UbiEvent> {
         try {
             if (StringUtils.isNotBlank(SOJNVL.getTagValue(payload, RDT))){
                 if("0".equals(SOJNVL.getTagValue(payload, RDT))) {
-                    ubiEvent.setRdt(0);
+                    ubiEvent.setRdt(false);
                 }
                 else {
-                    ubiEvent.setRdt(1);
+                    ubiEvent.setRdt(true);
                 }
             } else {
-                ubiEvent.setRdt(0);
+                ubiEvent.setRdt(false);
             }
         } catch (Exception e) {
-            log.error("Parsing rdt failed, format wrong...");
-            ubiEvent.setRdt(0);
+            log.error("Parsing rdt failed, format wrong...", e);
+            ubiEvent.setRdt(false);
         }
     }
 

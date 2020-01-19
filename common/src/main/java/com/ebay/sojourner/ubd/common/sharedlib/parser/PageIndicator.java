@@ -1,10 +1,10 @@
 package com.ebay.sojourner.ubd.common.sharedlib.parser;
 
 
-import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -15,10 +15,10 @@ import java.util.Set;
  * Indicate the page type for event
  * @author kofeng
  */
+@Slf4j
 public class PageIndicator {
-    public static final Logger log = Logger.getLogger(PageIndicator.class);
-    
-    private Set<Integer> pageIds = null;
+
+    private Set<Integer> pageIds;
     
     public PageIndicator(String pageIds) {
         this(parse(pageIds));
@@ -29,19 +29,18 @@ public class PageIndicator {
     }
     
     public boolean isCorrespondingPageEvent(UbiEvent event) {
-        Integer pageId = event.getPageId();
-        return pageId != null && pageIds.contains(pageId) ? true : false;
+        int pageId = event.getPageId();
+        return pageIds.contains(pageId);
     }
     
     public static Set<Integer> parse(String pageIds) {
-        Set<Integer> resultSet = new HashSet<Integer>();
+        Set<Integer> resultSet = new HashSet<>();
         Collection<String> ids = PropertyUtils.parseProperty(pageIds, Property.PROPERTY_DELIMITER);
         for (String id : ids) {
             try {
                 resultSet.add(Integer.valueOf(id.trim()));
             } catch (NumberFormatException e) {
-                e.printStackTrace(System.err);
-                log.error("Format page Id error: " + id);
+                log.error("Format page Id error: {}", id, e);
             }
         }
         

@@ -6,21 +6,16 @@ import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.Set;
 
 public class LndgPageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
     private Integer minSCSeqNum;
     private Integer lndgPageId;
     private Set<Integer> invalidPageIds;
-    private static UBIConfig ubiConfig;
 
     @Override
     public void init() throws Exception {
-        InputStream resourceAsStream = LndgPageIdMetrics.class.getResourceAsStream("/ubi.properties");
-        ubiConfig = UBIConfig.getInstance(resourceAsStream);
-        invalidPageIds = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.INVALID_PAGE_IDS), Property.PROPERTY_DELIMITER);
+        invalidPageIds = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.INVALID_PAGE_IDS), Property.PROPERTY_DELIMITER);
     }
 
     @Override
@@ -31,7 +26,7 @@ public class LndgPageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumula
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
-        if (event.getIframe() == 0 && event.getRdt() == 0 && !invalidPageIds.contains(event.getPageId())) {
+        if (!event.isIframe() && !event.isRdt() && !invalidPageIds.contains(event.getPageId())) {
             if (sessionAccumulator.getUbiSession().getMinSCSeqNum() > event.getSeqNum()) {
                 sessionAccumulator.getUbiSession().setMinSCSeqNum(event.getSeqNum());
                 sessionAccumulator.getUbiSession().setLndgPageId(event.getPageId());

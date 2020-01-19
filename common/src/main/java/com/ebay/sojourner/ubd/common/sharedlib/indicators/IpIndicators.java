@@ -2,17 +2,12 @@ package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
-import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.InputStream;
-
+@Slf4j
 public class IpIndicators extends AttributeIndicators<AgentIpAttribute, IpAttributeAccumulator> {
-
-    private static Logger logger = Logger.getLogger(SessionMetrics.class);
 
     private static volatile IpIndicators ipIndicators;
     private static BotFilter botFilter ;
@@ -29,24 +24,20 @@ public class IpIndicators extends AttributeIndicators<AgentIpAttribute, IpAttrib
     }
 
     public IpIndicators() {
-        InputStream resourceAsStream = IpIndicators.class.getResourceAsStream("/ubi.properties");
-        botFilter = new UbiBotFilter(UBIConfig.getInstance(resourceAsStream));
+        botFilter = new UbiBotFilter();
         initIndicators();
         try {
             init();
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
     @Override
     public void initIndicators() {
-
 //        addIndicators(new <AgentIpAttribute,IpAttributeAccumulator>ScsCountForBot8Indicator(botFilter));
         addIndicators(new <AgentIpAttribute,IpAttributeAccumulator>ScsCountForBot7Indicator(botFilter));
         addIndicators(new <AgentIpAttribute,IpAttributeAccumulator>SuspectIPIndicator(botFilter));
-
     }
 
 }

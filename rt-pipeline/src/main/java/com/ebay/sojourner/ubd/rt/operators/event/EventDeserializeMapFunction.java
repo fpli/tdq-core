@@ -126,10 +126,10 @@ public class EventDeserializeMapFunction extends RichMapFunction<byte[], UbiEven
         ubiEvent.setCobrand(getInteger(genericRecord.get("cobrand")));
         ubiEvent.setCookies(getString(genericRecord.get("cookies")));
         ubiEvent.setFlags(getString(genericRecord.get("flags")));
-        ubiEvent.setIframe(getBoolean(genericRecord.get("flags")) ? 1 : 0);
+        ubiEvent.setIframe(getBoolean(genericRecord.get("flags")));
         ubiEvent.setItemId(IntegerField.getIntVal(getString(genericRecord.get("itemId"))));
         ubiEvent.setPageId(getInteger(genericRecord.get("pageId")));
-        ubiEvent.setRdt(getInteger(genericRecord.get("rdt")));
+        ubiEvent.setRdt(getInteger(genericRecord.get("rdt")) != 0);
         ubiEvent.setRefererHash(getLong(genericRecord.get("refererHash")));
         ubiEvent.setReferrer(getString(applicationPayload.get("Referer")));
         ubiEvent.setRegu(getInteger(getString(applicationPayload.get("regu"))));
@@ -147,7 +147,7 @@ public class EventDeserializeMapFunction extends RichMapFunction<byte[], UbiEven
             ubiEvent.setBitVal(findingFlagMap.get(pageId));
         }
 
-        ubiEvent.setPartialValidPage(1);//set to default value;
+        ubiEvent.setPartialValidPage(true);//set to default value;
         ubiEvent.setStaticPageType(-1);
 
         return ubiEvent;

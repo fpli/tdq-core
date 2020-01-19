@@ -8,17 +8,22 @@ import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
 import com.ebay.sojourner.ubd.rt.operators.attribute.*;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
+import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.transformations.OneInputTransformation;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
@@ -30,52 +35,67 @@ import org.apache.flink.util.OutputTag;
 
 public class SojournerUBDRTJob {
 
-    public static void main( String[] args ) throws Exception {
-        // 0.0 Prepare execution environment
-        // 0.1 UBI configuration
-        // 0.2 Flink configuration
-//        InputStream resourceAsStream = SojournerUBDRTJob.class.getResourceAsStream("/ubi.properties");
-//        UBIConfig ubiConfig = UBIConfig.getInstance(resourceAsStream);
+    public static void main(String[] args) throws Exception {
+        // Make sure this is being executed at start up.
+        ParameterTool parameterTool = ParameterTool.fromArgs(args);
+        AppEnv.config(parameterTool);
+
+        // hack StringValue to use the version 1.10
 //        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class, Class.class);
 //        m.setAccessible(true);
 //        m.invoke(null, String.class, SOjStringFactory.class);
+
+        // 0.0 Prepare execution environment
+        // 0.1 UBI configuration
+        // 0.2 Flink configuration
         final StreamExecutionEnvironment executionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment();
 //        final ParameterTool params = ParameterTool.fromArgs(args);
 //        executionEnvironment.getConfig().setGlobalJobParameters(new SojJobParameters());
-        // LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
+//         LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
         executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
-        executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
-        executionEnvironment.enableCheckpointing(180 * 1000);
-        executionEnvironment.getCheckpointConfig().setCheckpointTimeout(10 * 60 * 1000);
-        executionEnvironment.setStateBackend(
-                StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
-        executionEnvironment.setParallelism(2);
+//        executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
 
+        // checkpoint settings
+        executionEnvironment.enableCheckpointing(AppEnv.config().getFlink().getCheckpoint().getInterval().getSeconds() * 1000, CheckpointingMode.EXACTLY_ONCE);
+        executionEnvironment.getCheckpointConfig().setCheckpointTimeout(AppEnv.config().getFlink().getCheckpoint().getTimeout().getSeconds() * 1000);
+        executionEnvironment.getCheckpointConfig().setMinPauseBetweenCheckpoints(AppEnv.config().getFlink().getCheckpoint().getMinPauseBetween().getSeconds() * 1000);
+        executionEnvironment.getCheckpointConfig().setMaxConcurrentCheckpoints(AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent() == null ?
+                1 : AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
+        executionEnvironment.setStateBackend(StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
+
+        // for soj nrt output
         // 1. Rheos Consumer
         // 1.1 Consume RawEvent from Rheos PathFinder topic
         // 1.2 Assign timestamps and emit watermarks.
-        DataStream<RawEvent> rawEventDataStream = executionEnvironment.addSource(
-                KafkaConnectorFactory.createKafkaConsumer().assignTimestampsAndWatermarks(
-                        new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
-                            @Override
-                            public long extractTimestamp( RawEvent element ) {
-                                return element.getRheosHeader().getEventCreateTimestamp();
-                            }
-                        }
-                ))
-                .name("Rheos Consumer");
+        DataStream<RawEvent> rawEventDataStream = executionEnvironment
+                .addSource(KafkaConnectorFactory.createKafkaConsumer()
+                        .setStartFromLatest()
+                        .assignTimestampsAndWatermarks(
+                                new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
+                                    @Override
+                                    public long extractTimestamp(RawEvent element) {
+                                        return element.getRheosHeader().getEventCreateTimestamp();
+                                    }
+                                }))
+                .setParallelism(AppEnv.config().getFlink().getApp().getSourceParallelism() == null ?
+                        30 : AppEnv.config().getFlink().getApp().getSourceParallelism())
+                .name("Rheos Kafka Consumer");
 
         // 2. Event Operator
         // 2.1 Parse and transform RawEvent to UbiEvent
         // 2.2 Event level bot detection via bot rule
+//        DataStream<RawEvent> filterRawEventDataStream = rawEventDataStream
+//                .filter(new EventFilterFunction())
+//                .setParallelism(30)
+//                .name("filter RawEvents");
+
         DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
                 .map(new EventMapFunction())
-                .name("Event Operator")
-                .startNewChain();
+                .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
+                .name("Event Operator");
 
-
-        //refine window operator
+        //refine windowsoperator
 
         // 3. Session Operator
         // 3.1 Session window
@@ -86,7 +106,6 @@ public class SojournerUBDRTJob {
                 new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
         OutputTag<UbiEvent> lateEventOutputTag =
                 new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
-//        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
 
         OutputTag<UbiEvent> mappedEventOutputTag =
                 new OutputTag<>("mapped-event-output-tag", TypeInformation.of(UbiEvent.class));
@@ -96,16 +115,14 @@ public class SojournerUBDRTJob {
 //                .trigger(OnElementEarlyFiringTrigger.create())   //no need to customize the triiger, use the default eventtimeTrigger
                 .allowedLateness(Time.hours(1))
                 .sideOutputLateData(lateEventOutputTag)
-                .aggregate(new UbiSessionAgg(),
-                        new UbiSessionWindowProcessFunction());
+                .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction())
+                .name("Session Operator");
 
         WindowOperatorHelper.enrichWindowOperator(
                 (OneInputTransformation) ubiSessinDataStream.getTransformation(),
                 new UbiEventMapWithStateFunction(),
                 mappedEventOutputTag
         );
-
-        ubiSessinDataStream.name("Session Operator");
 
         DataStream<UbiEvent> mappedEventStream = ubiSessinDataStream.getSideOutput(mappedEventOutputTag);
 
@@ -119,31 +136,38 @@ public class SojournerUBDRTJob {
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
-                .name("Attribute Operator (Agent+IP)");
 
-        // agent ip DataStream & agent ip bot dectector
+                .name("Attribute Operator (Agent+IP)")
+                .setParallelism(25);
+
+        // agent ip DataStream & agent ip bot detector
         SingleOutputStreamOperator<AgentIpSignature> agentIpSignatureDataStream = agentIpAttributeDataStream
                 .keyBy("agent", "clientIp")
                 .map(new AgentIpMapFunction())
-                .name("Signature Generate(Agent+IP)");
+                .name("Signature Generate(Agent+IP)")
+                .setParallelism(25);
 
-        agentIpSignatureDataStream.print().name("Agent+IP Signature");
+        agentIpSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Agent+IP Signature");
 
         DataStream<AgentSignature> agentAttributeDataStream = agentIpAttributeDataStream
                 .keyBy("agent")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
-                .name("Attribute Operator (Agent)");
+                .name("Attribute Operator (Agent)")
+                .setParallelism(25);
 
-        agentAttributeDataStream.print().name("Agent Signature");
+        agentAttributeDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Agent Signature");
 
         DataStream<IpSignature> ipAttributeDataStream = agentIpAttributeDataStream
                 .keyBy("clientIp")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
-                .name("Attribute Operator (IP)");
+                .name("Attribute Operator (IP)")
+                .setParallelism(25);
+
+        ipAttributeDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Ip Signature");
 
         // agent ip broadcast
         BroadcastStream<AgentIpSignature> agentIpBroadcastStream = agentIpSignatureDataStream.broadcast(MapStateDesc.agentIpSignatureDesc);
@@ -174,30 +198,12 @@ public class SojournerUBDRTJob {
         // 5.2 Sessions (ended)
         // 5.3 Events (with session ID & bot flags)
         // 5.4 Events late
-//        ipAttributeDataStream.addSink(StreamingFileSinkFactory.ipSignatureSinkWithAP())
-//                .name("IP Signature").disableChaining();
-//        sessionStream.addSink(StreamingFileSinkFactory.sessionSink())
-//                .name("Sessions").disableChaining();
-//        ubiEventStreamWithSessionId.addSink(StreamingFileSinkFactory.eventSink())
-//                .name("Events").disableChaining();
 
-        DataStream<UbiEvent> lateEventStream =
-                ubiSessinDataStream.getSideOutput(lateEventOutputTag);
-
-//        lateEventStream.addSink(StreamingFileSinkFactory.lateEventSink())
-//                .name("Events (Late)").disableChaining();
-
-        ipAttributeDataStream.print().name("IP Signature");
-//        agentIpAttributeDataStream.print().name("AgentIp Signature").disableChaining();
-
-        ubiSessinDataStream.print().name("Sessions").disableChaining();
-        agentIpConnectDataStream.print().name("Events").disableChaining();
-//        ubiEventStreamWithSessionId.print().name("Events").disableChaining();
-        lateEventStream.print().name("Events (Late)").disableChaining();
+        ubiSessinDataStream.addSink(new DiscardingSink<>()).name("session discarding");
+        agentIpConnectDataStream.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId and bot");
 
         // Submit this job
-        executionEnvironment.execute("Unified Bot Detection RT Pipeline");
+        executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
 
     }
-
 }

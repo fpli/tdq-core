@@ -10,7 +10,6 @@ import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.*;
 
@@ -40,7 +39,6 @@ public class IntermediateMetrics implements Serializable {
     private static StringBuilder stingBuilder = new StringBuilder();
 
     private static final String SWD = "swd";
-    private static UBIConfig ubiConfig = UBIConfig.getInstance(IntermediateMetrics.class.getResourceAsStream("/ubi.properties"));
     private static Collection<String> tags = null;
 
     static {
@@ -220,15 +218,15 @@ public class IntermediateMetrics implements Serializable {
     private String url2Parse;
 
     public IntermediateMetrics() {
-        roverPageSet = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.ROVER_PAGES), Property.PROPERTY_DELIMITER);
-        scPageSet1 = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.SCEVENT_EXCLUDE_PAGES1), Property.PROPERTY_DELIMITER);
-        scPageSet2 = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.SCEVENT_EXCLUDE_PAGES2), Property.PROPERTY_DELIMITER);
-        agentExcludePageSet = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.AGENT_EXCLUDE_PAGES), Property.PROPERTY_DELIMITER);
-        notifyCLickPageSet = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.NOTIFY_CLICK_PAGES), Property.PROPERTY_DELIMITER);
-        notifyViewPageSet = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.NOTIFY_VIEW_PAGES), Property.PROPERTY_DELIMITER);
-        mobilePageSet = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.MOBILE_PAGES), Property.PROPERTY_DELIMITER);
-        PropertyUtils.getIntegerSet(ubiConfig.getString(Property.NOTIFY_VIEW_PAGES), Property.PROPERTY_DELIMITER);
-        tags = PropertyUtils.parseProperty(ubiConfig.getString(Property.PRELOAD_PAYLOAD_TAGS), Property.PROPERTY_DELIMITER);
+        roverPageSet = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.ROVER_PAGES), Property.PROPERTY_DELIMITER);
+        scPageSet1 = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.SCEVENT_EXCLUDE_PAGES1), Property.PROPERTY_DELIMITER);
+        scPageSet2 = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.SCEVENT_EXCLUDE_PAGES2), Property.PROPERTY_DELIMITER);
+        agentExcludePageSet = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.AGENT_EXCLUDE_PAGES), Property.PROPERTY_DELIMITER);
+        notifyCLickPageSet = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.NOTIFY_CLICK_PAGES), Property.PROPERTY_DELIMITER);
+        notifyViewPageSet = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.NOTIFY_VIEW_PAGES), Property.PROPERTY_DELIMITER);
+        mobilePageSet = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.MOBILE_PAGES), Property.PROPERTY_DELIMITER);
+        PropertyUtils.getIntegerSet(UBIConfig.getString(Property.NOTIFY_VIEW_PAGES), Property.PROPERTY_DELIMITER);
+        tags = PropertyUtils.parseProperty(UBIConfig.getString(Property.PRELOAD_PAYLOAD_TAGS), Property.PROPERTY_DELIMITER);
         initLkp();
         initMetrics();
     }
@@ -309,7 +307,7 @@ public class IntermediateMetrics implements Serializable {
         }
 
         // check first not null agent_info from valid click
-        if (!findAgentString && !ONE.equals(event.getRdt()) && !ONE.equals(event.getIframe()) && !agentExcludePageSet.contains(event.getPageId())
+        if (!findAgentString && !event.isRdt() && !event.isIframe() && !agentExcludePageSet.contains(event.getPageId())
                 && event.getAgentInfo() != null && !event.getAgentInfo().equals("Shockwave Flash") && !IsValidIPv4.isValidIP(event.getAgentInfo())) {
             setFindAgentString(true);
             setFirstScSocialAgentTypeId(event);
@@ -632,7 +630,7 @@ public class IntermediateMetrics implements Serializable {
         // skip PartialValidPage check since it will not be introduced in this change, use rdt
         // instead
         if (// ZERO.equals(source.getPartialValidPage()) ||
-                ONE.equals(event.getRdt()) || ONE.equals(event.getIframe())
+                event.isRdt() || event.isIframe()
                         // || urlQueryString.matches("(/roverimp|.*SojPageView).*")
                         || scPageSet1.contains(pageId) || scPageSet2.contains(pageId)) {
             return false;

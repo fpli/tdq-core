@@ -7,8 +7,6 @@ import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.Set;
 
 /**
@@ -24,13 +22,10 @@ import java.util.Set;
  */
 public class ValidPageMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
     private Set<Integer> invalidPageIds;
-    private static UBIConfig ubiConfig;
 
     @Override
     public void init() throws Exception {
-        InputStream resourceAsStream = ValidPageMetrics.class.getResourceAsStream("/ubi.properties");
-        ubiConfig = UBIConfig.getInstance(resourceAsStream);
-        invalidPageIds = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.INVALID_PAGE_IDS), Property.PROPERTY_DELIMITER);
+        invalidPageIds = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.INVALID_PAGE_IDS), Property.PROPERTY_DELIMITER);
     }
 
     @Override
@@ -46,7 +41,7 @@ public class ValidPageMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
         if (StringUtils.isNotBlank(event.getUrlQueryString()) && (event.getUrlQueryString().startsWith("/roverimp") || event.getUrlQueryString().contains("SojPageView"))) {
             csTracking = 1;
         }
-        if (event.getPartialValidPage() != Integer.MIN_VALUE && event.getPartialValidPage() == 1 && (event.getIframe() == Integer.MIN_VALUE || event.getIframe() == 0) && ((event.getPageId() != Integer.MIN_VALUE && !invalidPageIds.contains(event.getPageId())) || csTracking == 0)) {
+        if (event.isPartialValidPage() && !event.isIframe() && ((event.getPageId() != Integer.MIN_VALUE && !invalidPageIds.contains(event.getPageId())) || csTracking == 0)) {
             sessionAccumulator.getUbiSession().setValidPageCnt(sessionAccumulator.getUbiSession().getValidPageCnt() + 1);
         }
     }

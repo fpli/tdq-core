@@ -7,13 +7,8 @@ import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
-import java.io.File;
-
 public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
     private PageIndicator indicator;
-
-    // All timestamps are based on SOJ timestamp in microseconds
-
 
     @Override
     public void start(SessionAccumulator sessionAccumulator) {
@@ -22,7 +17,7 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-        if (event.getIframe() == 0 && (event.getRdt() == 0 || 
+        if (!event.isIframe() && (!event.isRdt() ||
                 indicator.isCorrespondingPageEvent(event))) {
             if (sessionAccumulator.getUbiSession().getStartTimestamp() == null) {
                 sessionAccumulator.getUbiSession().setStartTimestamp(event.getEventTimestamp());
@@ -54,8 +49,6 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
     @Override
     public void end(SessionAccumulator sessionAccumulator) {
-
-
         sessionAccumulator.getUbiSession().setSojDataDt(SOJTS2Date.castSojTimestampToDate(sessionAccumulator.getUbiSession().getAbsEndTimestamp()));
         // Fix bug HDMIT-3732 to avoid integer result overflow
         int durationSec = (sessionAccumulator.getUbiSession().getStartTimestamp() == null || sessionAccumulator.getUbiSession().getEndTimestamp() == null) ? 0
@@ -67,7 +60,7 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
     @Override
     public void init() throws Exception {
-        setPageIndicator(new PageIndicator(UBIConfig.getInstance(TimestampMetrics.class.getResourceAsStream("/ubi.properties")).getString(Property.SEARCH_VIEW_PAGES)));
+        setPageIndicator(new PageIndicator(UBIConfig.getString(Property.SEARCH_VIEW_PAGES)));
     }
     
     void setPageIndicator(PageIndicator indicator) {

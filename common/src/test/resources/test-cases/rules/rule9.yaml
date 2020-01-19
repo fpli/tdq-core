@@ -1,0 +1,17 @@
+-
+  name: case1
+  type: UbiSession
+  input:
+    UbiSession:
+      searchCnt: 500
+      viewCnt: 500
+  expectResult: 9
+
+-
+  name: case2
+  type: UbiSession
+  input:
+    UbiSession:
+      searchCnt: 300
+      viewCnt: 300
+  expectResult: 0

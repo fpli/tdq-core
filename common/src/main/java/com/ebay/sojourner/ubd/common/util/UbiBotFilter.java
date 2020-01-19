@@ -16,12 +16,11 @@ public class UbiBotFilter implements BotFilter {
     public static final String COUNTER_FILTERED_INVALID = "filteredByInvalidSession";
 
     private final Set<Integer> invalidSessionBotFilter;
-
     private final Map<Integer, Set<Integer>> appIdWithBotFlags;
 
-    public UbiBotFilter(UBIConfig conf) {
+    public UbiBotFilter() {
         appIdWithBotFlags = getAppIdWithBotFlags(LkpFetcher.getInstance().getAppIds());
-        invalidSessionBotFilter = PropertyUtils.getIntegerSet(conf.getString(Property.INVALID_BOT_FILTER), Property.PROPERTY_DELIMITER);
+        invalidSessionBotFilter = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.INVALID_BOT_FILTER), Property.PROPERTY_DELIMITER);
     }
 
     @Override

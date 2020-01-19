@@ -1,18 +1,16 @@
 package com.ebay.sojourner.ubd.common.util;
 
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.Set;
 
 /**
  * @author weifang.
  */
+@Slf4j
 public class UbiLookups {
 
-    private static final Logger LOGGER = Logger.getLogger(UbiLookups.class);
     public static final String LKP_RECORD_DELIMITER = "\177";
     private final Set<Integer> mktgTrafficSrcIds;
     private final Set<Integer> nonbrowserCobrands;
@@ -24,29 +22,28 @@ public class UbiLookups {
         if (ubiLookups == null) {
             synchronized (UbiLookups.class) {
                 if (ubiLookups == null) {
-                    InputStream resourceAsStream = UbiLookups.class.getResourceAsStream("/ubi.properties");
-                    ubiLookups = new UbiLookups(UBIConfig.getInstance(resourceAsStream));
+                    ubiLookups = new UbiLookups();
                 }
             }
         }
         return ubiLookups;
     }
 
-    private UbiLookups(UBIConfig ubiConfig) {
-        setupConfiguration(ubiConfig);
-        mktgTrafficSrcIds = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.MKTG_TRAFFIC_SOURCE_IDS), Property.PROPERTY_DELIMITER);
-        nonbrowserCobrands = PropertyUtils.getIntegerSet(ubiConfig.getString(Property.EBAY_NONBROWSER_COBRAND), Property.PROPERTY_DELIMITER);
-        Collection<String> browerAgents = PropertyUtils.parseProperty(ubiConfig.getString(Property.BROWSER_AGENT_STRING), Property.PROPERTY_DELIMITER);
-        Collection<String> botAgents = PropertyUtils.parseProperty(ubiConfig.getString(Property.BOT_AGENT_STRING), Property.PROPERTY_DELIMITER);
+    private UbiLookups() {
+        setupConfiguration();
+        mktgTrafficSrcIds = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.MKTG_TRAFFIC_SOURCE_IDS), Property.PROPERTY_DELIMITER);
+        nonbrowserCobrands = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.EBAY_NONBROWSER_COBRAND), Property.PROPERTY_DELIMITER);
+        Collection<String> browerAgents = PropertyUtils.parseProperty(UBIConfig.getString(Property.BROWSER_AGENT_STRING), Property.PROPERTY_DELIMITER);
+        Collection<String> botAgents = PropertyUtils.parseProperty(UBIConfig.getString(Property.BOT_AGENT_STRING), Property.PROPERTY_DELIMITER);
         agentMatcher = new BotAgentMatcher(browerAgents, botAgents);
     }
 
-    private static void setupConfiguration(UBIConfig ubiConfig) {
-        ubiConfig.setString(Property.MKTG_TRAFFIC_SOURCE_IDS, ubiConfig.getUBIProperty(Property.MKTG_TRAFFIC_SOURCE_IDS));
-        ubiConfig.setString(Property.EBAY_NONBROWSER_COBRAND, ubiConfig.getUBIProperty(Property.EBAY_NONBROWSER_COBRAND));
-        ubiConfig.setString(Property.BROWSER_AGENT_STRING, ubiConfig.getUBIProperty(Property.BROWSER_AGENT_STRING));
-        ubiConfig.setString(Property.BOT_AGENT_STRING, ubiConfig.getUBIProperty(Property.BOT_AGENT_STRING));
-        ubiConfig.setString(Property.INVALID_BOT_FILTER, ubiConfig.getUBIProperty(Property.INVALID_BOT_FILTER));
+    private static void setupConfiguration() {
+        UBIConfig.setString(Property.MKTG_TRAFFIC_SOURCE_IDS, UBIConfig.getUBIProperty(Property.MKTG_TRAFFIC_SOURCE_IDS));
+        UBIConfig.setString(Property.EBAY_NONBROWSER_COBRAND, UBIConfig.getUBIProperty(Property.EBAY_NONBROWSER_COBRAND));
+        UBIConfig.setString(Property.BROWSER_AGENT_STRING, UBIConfig.getUBIProperty(Property.BROWSER_AGENT_STRING));
+        UBIConfig.setString(Property.BOT_AGENT_STRING, UBIConfig.getUBIProperty(Property.BOT_AGENT_STRING));
+        UBIConfig.setString(Property.INVALID_BOT_FILTER, UBIConfig.getUBIProperty(Property.INVALID_BOT_FILTER));
     }
 
     public Set<Integer> getMktgTraficSrcIds() {
@@ -60,17 +57,5 @@ public class UbiLookups {
     public BotAgentMatcher getAgentMatcher() {
         return agentMatcher;
     }
-
-//    public BotFilter getBotFilter() {
-//        return botFilter;
-//    }
-
-    //    public Collection<String> getBrowerAgents() {
-//        return browerAgents;
-//    }
-//
-//    public Collection<String> getBotAgents() {
-//        return botAgents;
-//    }
 
 }

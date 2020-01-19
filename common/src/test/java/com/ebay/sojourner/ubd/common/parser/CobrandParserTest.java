@@ -3,19 +3,19 @@ package com.ebay.sojourner.ubd.common.parser;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.CobrandParser;
-import com.ebay.sojourner.ubd.common.util.ParserConstants;
 import com.ebay.sojourner.ubd.common.util.LoadRawEventAndExpect;
+import com.ebay.sojourner.ubd.common.util.ParserConstants;
 import com.ebay.sojourner.ubd.common.util.VaildateResult;
 import com.ebay.sojourner.ubd.common.util.YamlUtil;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class CobrandParserTest {
-    private static final Logger logger = Logger.getLogger(CobrandParserTest.class);
 
     private static UbiEvent ubiEvent = null;
     private static String parser = null;
@@ -44,7 +44,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -63,7 +63,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -82,7 +82,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -101,7 +101,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -121,7 +121,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -141,7 +141,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -161,7 +161,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -181,7 +181,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -201,7 +201,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -221,7 +221,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -241,7 +241,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -261,7 +261,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -281,7 +281,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -300,7 +300,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -320,7 +320,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -340,7 +340,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -360,7 +360,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -380,7 +380,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -401,7 +401,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -422,7 +422,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -442,7 +442,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 
@@ -463,7 +463,7 @@ public class CobrandParserTest {
                 System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getCobrand()));
             }
         }catch (Exception e){
-            logger.error("cobrand test fail!!!");
+            log.error("cobrand test fail!!!");
         }
     }
 }

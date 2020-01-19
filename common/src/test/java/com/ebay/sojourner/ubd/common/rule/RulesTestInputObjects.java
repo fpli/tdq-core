@@ -20,4 +20,7 @@ public class RulesTestInputObjects {
 
     @JsonProperty("IpAttribute")
     private IpAttribute ipAttribute;
+
+    @JsonProperty("GuidAttribute")
+    private GuidAttribute guidAttribute;
 }
