@@ -201,12 +201,19 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
-                <includes>
-                    <include>avro/*.*</include>
-                    <include>hdfs/*.*</include>
-                    <include>*.*</include>
-                </includes>
+                <excludes>
+                    <exclude>**/*.keytab</exclude>
+                </excludes>
             </resource>
+
+            <resource>
+            <directory>src/main/resources</directory>
+            <filtering>false</filtering>
+            <includes>
+                <include>**/*.keytab</include>
+            </includes>
+           </resource>
+
         </resources>
     </build>
 

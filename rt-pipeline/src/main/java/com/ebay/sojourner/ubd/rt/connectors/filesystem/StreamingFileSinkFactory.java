@@ -30,7 +30,11 @@ public class StreamingFileSinkFactory {
     }
 
     public static <T> SojHdfsSinkWithKeytab createSojHdfs( String sinkPath ) {
-        return new SojHdfsSinkWithKeytab(new Path(sinkPath), new SimpleStringEncoder<T>("UTF-8"), 0, null, null)
+
+        StreamingFileSink streamingFileSink = StreamingFileSink
+                .forBulkFormat(new Path(sinkPath), ParquetAvroWriters.forReflectRecord(IpSignature.class))
+                .build();
+        return new SojHdfsSinkWithKeytab(streamingFileSink)
                 ;
     }
 
@@ -42,7 +46,10 @@ public class StreamingFileSinkFactory {
     }
 
     public static <T> SojHdfsSinkWithKeytab createWithParquet( String sinkPath, Class<T> sinkClass ) {
-        return new SojHdfsSinkWithKeytab(new Path(sinkPath), ParquetAvroWriters.forReflectRecord(sinkClass), 0, null, null);
+        StreamingFileSink streamingFileSink = StreamingFileSink
+                .forBulkFormat(new Path(sinkPath), ParquetAvroWriters.forReflectRecord(sinkClass))
+                .build();
+        return new SojHdfsSinkWithKeytab(streamingFileSink);
     }
 
     public static StreamingFileSink eventSink() {

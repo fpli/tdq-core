@@ -23,6 +23,7 @@ import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.transformations.OneInputTransformation;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
@@ -134,10 +135,10 @@ public class SojournerUBDRTJobUntilSession {
         DataStream<UbiEvent> mappedEventStream = ubiSessinDataStream.getSideOutput(mappedEventOutputTag);
 //        mappedEventStream.addSink(new DiscardingSink<>()).name("Mapped UbiEvent").disableChaining();
 
-//        ubiSessinDataStream.addSink(new DiscardingSink<>()).name("session").disableChaining();
+        ubiSessinDataStream.addSink(new DiscardingSink<>()).name("session").disableChaining();
 //        ubiEventStreamWithSessionId.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId").disableChaining();
-        ubiSessinDataStream.addSink(StreamingFileSinkFactory.sessionSinkWithSojHdfs())
-                .name("Sessions");
+//        ubiSessinDataStream.addSink(StreamingFileSinkFactory.sessionSinkWithSojHdfs())
+//                .name("Sessions");
         // Submit this job
         executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
 

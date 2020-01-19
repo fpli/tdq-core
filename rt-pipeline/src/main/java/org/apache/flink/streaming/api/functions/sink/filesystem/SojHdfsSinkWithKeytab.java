@@ -3,26 +3,22 @@ package org.apache.flink.streaming.api.functions.sink.filesystem;
 
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.KeytabHdfsFactory;
 import org.apache.flink.annotation.PublicEvolving;
-import org.apache.flink.api.common.serialization.BulkWriter;
-import org.apache.flink.api.common.serialization.Encoder;
+import org.apache.flink.api.common.functions.RuntimeContext;
+import org.apache.flink.api.common.functions.util.FunctionUtils;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.state.CheckpointListener;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
 import org.apache.flink.runtime.state.FunctionSnapshotContext;
 import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
-import org.apache.flink.streaming.api.functions.sink.filesystem.bucketassigners.DateTimeBucketAssigner;
 import org.apache.flink.streaming.runtime.tasks.ProcessingTimeCallback;
 import org.apache.hadoop.security.UserGroupInformation;
 
 import java.security.PrivilegedExceptionAction;
 
 import static com.ebay.sojourner.ubd.rt.common.constants.PropertiesConstants.PROD_CONFIG;
-import static org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink.BulkFormatBuilder;
-import static org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink.RowFormatBuilder;
 
 
 /**
@@ -38,70 +34,11 @@ public class SojHdfsSinkWithKeytab<IN>
     private org.apache.hadoop.conf.Configuration conf;
     private transient UserGroupInformation ugi;
     private StreamingFileSink streamingFileSink;
-    private RowFormatBuilder rowFormatBuilder;
-    private BulkFormatBuilder bulkFormatBuilder;
 
-    public SojHdfsSinkWithKeytab( Path basePath, Encoder<IN> encoder, final long interval, BucketAssigner assigner, RollingPolicy policy ) {
-        rowFormatBuilder = forRowFormat(basePath, encoder);
-        if (interval != 0) {
-            rowFormatBuilder = rowFormatBuilder.withBucketCheckInterval(interval);
-        }
-        if (assigner != null) {
-            rowFormatBuilder = rowFormatBuilder.withBucketAssigner(assigner);
-        }
-        if (policy != null) {
-            rowFormatBuilder = rowFormatBuilder.withRollingPolicy(policy);
-        }
-        streamingFileSink = rowFormatBuilder.build();
+    public SojHdfsSinkWithKeytab( StreamingFileSink streamingFileSink ) {
+        super();
 
-    }
-
-
-    public SojHdfsSinkWithKeytab( Path basePath, BulkWriter.Factory<IN> writerFactory, long interval, BucketAssigner assigner, BucketFactory factory ) {
-
-        bulkFormatBuilder = forBulkFormat(basePath, writerFactory);
-        if (interval != 0) {
-            bulkFormatBuilder = bulkFormatBuilder.withBucketCheckInterval(interval);
-        }
-        if (assigner != null) {
-            bulkFormatBuilder = bulkFormatBuilder.withBucketAssigner(assigner);
-        }
-        if (factory != null) {
-            bulkFormatBuilder = bulkFormatBuilder.withBucketFactory(factory);
-        }
-        streamingFileSink = bulkFormatBuilder.build();
-    }
-
-    // ------------------------------------------------------------------------
-
-    // --------------------------- Sink Builders  -----------------------------
-
-    /**
-     * Creates the builder for a {@code StreamingFileSink} with row-encoding format.
-     *
-     * @param basePath the base path where all the buckets are going to be created as sub-directories.
-     * @param encoder  the {@link Encoder} to be used when writing elements in the buckets.
-     * @param <IN>     the type of incoming elements
-     * @return The builder where the remaining of the configuration parameters for the sink can be configured.
-     * In order to instantiate the sink, call {@link RowFormatBuilder#build()} after specifying the desired parameters.
-     */
-    public static <IN> StreamingFileSink.RowFormatBuilder<IN, String> forRowFormat(
-            final Path basePath, final Encoder<IN> encoder ) {
-        return new RowFormatBuilder(basePath, encoder, new DateTimeBucketAssigner<>());
-    }
-
-    /**
-     * Creates the builder for a {@link StreamingFileSink} with row-encoding format.
-     *
-     * @param basePath      the base path where all the buckets are going to be created as sub-directories.
-     * @param writerFactory the {@link BulkWriter.Factory} to be used when writing elements in the buckets.
-     * @param <IN>          the type of incoming elements
-     * @return The builder where the remaining of the configuration parameters for the sink can be configured.
-     * In order to instantiate the sink, call {@link RowFormatBuilder#build()} after specifying the desired parameters.
-     */
-    public static <IN> BulkFormatBuilder<IN, String> forBulkFormat(
-            final org.apache.flink.core.fs.Path basePath, final BulkWriter.Factory<IN> writerFactory ) {
-        return new BulkFormatBuilder<>(basePath, writerFactory, new DateTimeBucketAssigner<>());
+        this.streamingFileSink = streamingFileSink;
     }
 
     // --------------------------- Sink Methods -----------------------------
@@ -121,6 +58,12 @@ public class SojHdfsSinkWithKeytab<IN>
 
         streamingFileSink.snapshotState(context);
 
+    }
+
+    @Override
+    public void setRuntimeContext( RuntimeContext t ) {
+        super.setRuntimeContext(t);
+        FunctionUtils.setFunctionRuntimeContext(streamingFileSink, t);
     }
 
     @Override

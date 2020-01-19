@@ -35,7 +35,7 @@
         <avro.version>1.7.7</avro.version>
         <flink.version>1.7.2</flink.version>
         <spark.version>2.3.1</spark.version>
-        <rheos.client.version>2.0.5-SNAPSHOT</rheos.client.version>
+        <rheos.client.version>2.0.6-SNAPSHOT</rheos.client.version>
         <junit-jupiter.version>5.5.2</junit-jupiter.version>
         <mockito.version>3.2.4</mockito.version>
         <powermock.version>2.0.4</powermock.version>
@@ -447,6 +447,12 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>xml-apis</groupId>
+                        <artifactId>xml-apis</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>
