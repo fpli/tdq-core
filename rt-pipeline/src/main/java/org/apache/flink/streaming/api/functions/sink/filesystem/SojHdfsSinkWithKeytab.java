@@ -45,6 +45,7 @@ public class SojHdfsSinkWithKeytab<IN>
 
     @Override
     public void initializeState( FunctionInitializationContext context ) throws Exception {
+
         streamingFileSink.initializeState(context);
     }
 

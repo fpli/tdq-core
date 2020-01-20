@@ -9,6 +9,7 @@ import org.apache.flink.streaming.api.functions.sink.filesystem.SojHdfsSinkWithK
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.security.UserGroupInformation;
+import sun.security.krb5.KrbException;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -32,7 +33,7 @@ import static org.apache.hadoop.fs.CommonConfigurationKeysPublic.HADOOP_SECURITY
 @Log
 public class KeytabHdfsFactory {
 
-    public static UserGroupInformation getUGI( ParameterTool parameterTool) throws IOException, InterruptedException {
+    public static UserGroupInformation getUGI( ParameterTool parameterTool ) throws IOException, InterruptedException, KrbException {
 
         final boolean isProd = parameterTool.getBoolean(PROD_CONFIG);
         final String keyTabFilename = parameterTool.getRequired("keyTab");
@@ -50,13 +51,13 @@ public class KeytabHdfsFactory {
 //        storeFile(keyTabFilename);
 //        storeFile(krb5Filename);
 //        storeFile(jaasFilename);
-//        System.setProperty("java.security.krb5.conf","/tmp/" + krb5Filename);
-//        System.setProperty("java.security.auth.login.config", "/tmp/" + jaasFilename);
+        System.setProperty("java.security.krb5.conf", "/tmp/" + krb5Filename);
+        System.setProperty("java.security.auth.login.config", "/tmp/" + jaasFilename);
 
 //        System.setProperty("java.security.krb5.conf",KeytabHdfsFactory.class.getResource("/11/" + krb5Filename).getPath() );
-        System.setProperty("java.security.auth.login.config", KeytabHdfsFactory.class.getResource("/" + jaasFilename).getPath());
-        System.setProperty("sun.security.krb5.debug","true");
-
+//        System.setProperty("java.security.auth.login.config", KeytabHdfsFactory.class.getResource("/" + jaasFilename).getPath());
+        System.setProperty("sun.security.krb5.debug", "true");
+        sun.security.krb5.Config.refresh();
         UserGroupInformation.setConfiguration(hadoopConfig);
 
         if (isProd) {
@@ -74,7 +75,7 @@ public class KeytabHdfsFactory {
     }
 
 
-    public static org.apache.hadoop.conf.Configuration getConf(boolean isProd) throws IOException, InterruptedException {
+    public static org.apache.hadoop.conf.Configuration getConf( boolean isProd ) throws IOException, InterruptedException {
 
         org.apache.hadoop.conf.Configuration hadoopConfig = new Configuration();
         hadoopConfig.set("parquet.enable.summary-metadata", "false");
@@ -148,7 +149,7 @@ public class KeytabHdfsFactory {
     }
 
 
-    public static void writeTmpFile(String filename) {
+    public static void writeTmpFile( String filename ) {
 
         byte[] buffer;
 
@@ -167,8 +168,8 @@ public class KeytabHdfsFactory {
         }
     }
 
-    public static void storeFile(String filePath) throws IllegalStateException, IOException {
-        File file = new File("/tmp/"+filePath);
+    public static void storeFile( String filePath ) throws IllegalStateException, IOException {
+        File file = new File("/tmp/" + filePath);
         //设置权限
         Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
         perms.add(PosixFilePermission.OWNER_READ);
@@ -189,7 +190,7 @@ public class KeytabHdfsFactory {
         }
     }
 
-    public static void main(String[] args ) throws Exception {
+    public static void main( String[] args ) throws Exception {
 //        System.out.println(ReflectData.get().getSchema(AgentAttribute.class));
 //        System.out.println(SojHdfsSinkWithKeytab.class.getResource("").getPath());
 //        System.out.println(SojHdfsSinkWithKeytab.class.getResource("/hdfs/o_ubi.keytab").getPath());
@@ -202,7 +203,7 @@ public class KeytabHdfsFactory {
         Configuration conf = new Configuration();
         //conf.addResource("/opt/jediael/hadoop-1.2.1/conf/core-site.xml");
         conf.addResource("/core-site.xml");
-        getUGI( ExecutionEnvUtil.createParameterTool(new String[]{"--a=b"}));
+        getUGI(ExecutionEnvUtil.createParameterTool(new String[]{"--a=b"}));
         System.out.println(conf.get("hadoop.http.authentication.composite.default-non-browser-handler-type"));
         System.out.println(conf.get("hadoop.tmp.dir"));
         System.out.println(conf.get("io.sort.mb"));

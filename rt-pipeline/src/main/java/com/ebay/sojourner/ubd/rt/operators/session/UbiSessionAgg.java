@@ -13,8 +13,8 @@ import java.util.Set;
 
 @Slf4j
 public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumulator, SessionAccumulator> {
-    private SessionMetrics sessionMetrics;
-    private SessionBotDetector sessionBotDetector;
+    private transient SessionMetrics sessionMetrics;
+    private transient SessionBotDetector sessionBotDetector;
     //    private CouchBaseManager couchBaseManager;
 //    private static final String BUCKET_NAME="botsignature";
     private static final Logger logger = Logger.getLogger(UbiSessionAgg.class);

@@ -103,6 +103,12 @@
             <artifactId>scalatest_${scala.binary.version}</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-shaded-hadoop2</artifactId>
+
+        </dependency>
+
     </dependencies>
 
     <build>

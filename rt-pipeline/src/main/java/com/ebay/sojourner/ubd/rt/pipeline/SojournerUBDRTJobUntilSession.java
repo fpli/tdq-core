@@ -135,7 +135,7 @@ public class SojournerUBDRTJobUntilSession {
         DataStream<UbiEvent> mappedEventStream = ubiSessinDataStream.getSideOutput(mappedEventOutputTag);
 //        mappedEventStream.addSink(new DiscardingSink<>()).name("Mapped UbiEvent").disableChaining();
 
-        ubiSessinDataStream.addSink(new DiscardingSink<>()).name("session").disableChaining();
+        ubiSessinDataStream.addSink(new DiscardingSink<>()).name("d").disableChaining();
 //        ubiEventStreamWithSessionId.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId").disableChaining();
 //        ubiSessinDataStream.addSink(StreamingFileSinkFactory.sessionSinkWithSojHdfs())
 //                .name("Sessions");
