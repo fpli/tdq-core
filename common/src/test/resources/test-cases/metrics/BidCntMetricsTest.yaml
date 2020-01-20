@@ -1,0 +1,14 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      pageId: 167
+      flags: ebay
+      rdt: false
+      iframe: false
+    SessionAccumulator:
+      ubiSession:
+        bidCoreCnt: 0
+  expect:
+    UbiSession:
+      bidCoreCnt: 1

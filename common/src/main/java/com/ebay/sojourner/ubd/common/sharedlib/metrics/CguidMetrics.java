@@ -13,12 +13,12 @@ public class CguidMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
     }
 
     @Override
-    public void feed(UbiEvent source, SessionAccumulator sessionAccumulator) throws Exception {
+    public void feed(UbiEvent ubiEvent, SessionAccumulator sessionAccumulator) throws Exception {
         // AS per the sql, find first not null cguid from valid event
         //comparing the length of cguid to 32, based on the SQL.
 
-        if (sessionAccumulator.getUbiSession().getFirstCguid() == null && (!source.isIframe() && !source.isRdt())) {
-            String cGuidTemp = SOJNVL.getTagValue(source.getApplicationPayload(), "n");
+        if (sessionAccumulator.getUbiSession().getFirstCguid() == null && (!ubiEvent.isIframe() && !ubiEvent.isRdt())) {
+            String cGuidTemp = SOJNVL.getTagValue(ubiEvent.getApplicationPayload(), "n");
             //checking for NPE
             if (cGuidTemp != null && cGuidTemp.length() == 32) {
                 sessionAccumulator.getUbiSession().setFirstCguid(cGuidTemp);
