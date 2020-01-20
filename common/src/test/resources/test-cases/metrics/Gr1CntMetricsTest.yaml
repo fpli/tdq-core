@@ -1,0 +1,14 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      pageId: 2034059
+      rdt: 0
+      iframe: 0
+      partialValidPage: true
+    SessionAccumulator:
+      ubiSession:
+        gr1Cnt: 0
+  expect:
+    UbiSession:
+      gr1Cnt: 1

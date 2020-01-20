@@ -1,0 +1,13 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      applicationPayload: n=ebayebayebayebayebayebayebayebay
+      rdt: false
+      iframe: false
+    SessionAccumulator:
+      ubiSession:
+        firstCguid:
+  expect:
+    UbiSession:
+      firstCguid: ebayebayebayebayebayebayebayebay

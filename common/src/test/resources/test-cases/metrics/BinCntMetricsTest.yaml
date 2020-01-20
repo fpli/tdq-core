@@ -1,0 +1,14 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      pageId: 760
+      flags: eybay
+      rdt: false
+      iframe: false
+    SessionAccumulator:
+      ubiSession:
+        binCoreCnt: 0
+  expect:
+    UbiSession:
+      binCoreCnt: 1

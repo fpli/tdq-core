@@ -1,0 +1,11 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      bitVal: 10
+    SessionAccumulator:
+      ubiSession:
+        findingFlags:
+  expect:
+    UbiSession:
+      findingFlags: 10
