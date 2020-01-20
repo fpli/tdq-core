@@ -114,20 +114,12 @@ public class UbiSessionHelper {
     }
 
     public static boolean isAgentDeclarative(UbiSession session) throws IOException, InterruptedException {
-        if (!StringUtils.isBlank(session.getAgentString())) {
-            if (UbiLookups.getInstance().getAgentMatcher().match(session.getAgentString())) {
-                return true;
-            }
-        }
-        return false;
+        return StringUtils.isNotBlank(session.getAgentString())
+                && UbiLookups.getInstance().getAgentMatcher().match(session.getAgentString());
     }
     public static boolean isAgentDeclarative(AgentAttribute agentAttribute) throws IOException, InterruptedException {
-        if (!StringUtils.isBlank(agentAttribute.getAgent())) {
-            if (UbiLookups.getInstance().getAgentMatcher().match(agentAttribute.getAgent())) {
-                return true;
-            }
-        }
-        return false;
+        return StringUtils.isNotBlank(agentAttribute.getAgent())
+                && UbiLookups.getInstance().getAgentMatcher().match(agentAttribute.getAgent());
     }
 
     public static boolean isNonIframRdtCountZero(UbiSession session) {
