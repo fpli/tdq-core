@@ -1,0 +1,14 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      pageId: 2051127
+      partialValidPage: true
+      rdt: false
+      iframe: false
+    SessionAccumulator:
+      ubiSession:
+        myebayCnt: 0
+  expect:
+    UbiSession:
+      myebayCnt: 1

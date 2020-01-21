@@ -14,12 +14,12 @@ import java.lang.reflect.Type;
 
 public class StreamingFileSinkFactory {
 
-    public static String BASE_DIR = "/user/o_ubi/";
+    public static String BASE_DIR = "viewfs:///user/o_ubi/";
 
-    public static String eventSinkPath = BASE_DIR + "/events";
-    public static String sessionSinkPath = BASE_DIR + "/sessions";
-    public static String lateEventSinkPath = BASE_DIR + "/events-late";
-    public static String ipSignatureSinkPath = BASE_DIR + "/ip-signature";
+    public static String eventSinkPath = BASE_DIR + "events";
+    public static String sessionSinkPath = BASE_DIR + "sessions";
+    public static String lateEventSinkPath = BASE_DIR + "events-late";
+    public static String ipSignatureSinkPath = BASE_DIR + "ip-signature";
 
     public static <T> StreamingFileSink create( String sinkPath ) {
         return StreamingFileSink

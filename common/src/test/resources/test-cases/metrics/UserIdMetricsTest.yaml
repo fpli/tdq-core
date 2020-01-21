@@ -1,0 +1,11 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      userId: ebay
+    SessionAccumulator:
+      ubiSession:
+        firstUserId:
+  expect:
+    UbiSession:
+      firstUserId: ebay

@@ -1,0 +1,13 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      iframe: false
+      pageId: 4018
+      itemId: 123456789
+    SessionAccumulator:
+      ubiSession:
+        watchCoreCnt: 0
+  expect:
+    UbiSession:
+      watchCoreCnt: 1

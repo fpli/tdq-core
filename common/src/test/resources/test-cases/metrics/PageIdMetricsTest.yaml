@@ -1,0 +1,15 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      iframe: false
+      rdt: false
+      pageId: 4018
+    SessionAccumulator:
+      ubiSession:
+        startPageId: -2147483648
+        endPageId:
+  expect:
+    UbiSession:
+      startPageId: 4018
+      endPageId: 4018

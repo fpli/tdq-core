@@ -1,0 +1,41 @@
+-
+  name: test1
+  inputs:
+    UbiEvent:
+      iframe: false
+      rdt: false
+      pageId: 4018
+      eventTimestamp: 1579505089
+    SessionAccumulator:
+      ubiSession:
+        startTimestamp:
+        endTimestamp:
+        absStartTimestamp:
+        absEndTimestamp:
+  expect:
+    UbiSession:
+      startTimestamp: 1579505089
+      endTimestamp: 1579505089
+      absStartTimestamp: 1579505089
+      absEndTimestamp: 1579505089
+
+-
+  name: test2
+  inputs:
+    UbiEvent:
+      iframe: false
+      rdt: false
+      pageId: 4018
+      eventTimestamp: 1579505089
+    SessionAccumulator:
+      ubiSession:
+        startTimestamp:
+        endTimestamp: 1579505080
+        absStartTimestamp: 1579505090
+        absEndTimestamp: 1579505080
+  expect:
+    UbiSession:
+      startTimestamp: 1579505089
+      endTimestamp: 1579505089
+      absStartTimestamp: 1579505089
+      absEndTimestamp: 1579505089

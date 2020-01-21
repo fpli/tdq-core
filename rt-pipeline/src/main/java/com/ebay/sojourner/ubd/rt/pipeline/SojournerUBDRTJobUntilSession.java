@@ -105,40 +105,41 @@ public class SojournerUBDRTJobUntilSession {
         // 3.4 Event level bot detection (via session flag)
 //        OutputTag<UbiSession> sessionOutputTag =
 //                new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
-        OutputTag<UbiEvent> lateEventOutputTag =
-                new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
-        OutputTag<UbiEvent> mappedEventOutputTag =
-            new OutputTag<>("mapped-event-output-tag", TypeInformation.of(UbiEvent.class));
-//        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
-        SingleOutputStreamOperator<UbiSession> ubiSessinDataStream = ubiEventDataStream
-                .keyBy("guid")
-                .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-//                .trigger(OnElementEarlyFiringTrigger.create())   //no need to customize the triiger, use the default eventtimeTrigger
-                .allowedLateness(Time.hours(1))
-                .sideOutputLateData(lateEventOutputTag)
-                .aggregate(new UbiSessionAgg(),
-                        new UbiSessionWindowProcessFunction());
+//        OutputTag<UbiEvent> lateEventOutputTag =
+//                new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
+//        OutputTag<UbiEvent> mappedEventOutputTag =
+//            new OutputTag<>("mapped-event-output-tag", TypeInformation.of(UbiEvent.class));
+////        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
+//        SingleOutputStreamOperator<UbiSession> ubiSessinDataStream = ubiEventDataStream
+//                .keyBy("guid")
+//                .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
+////                .trigger(OnElementEarlyFiringTrigger.create())   //no need to customize the triiger, use the default eventtimeTrigger
+//                .allowedLateness(Time.hours(1))
+//                .sideOutputLateData(lateEventOutputTag)
+//                .aggregate(new UbiSessionAgg(),
+//                        new UbiSessionWindowProcessFunction());
         // Hack here to use MapWithStateWindowOperator instead while bypassing DataStream API which
         // cannot be enhanced easily since we do not want to modify Flink framework sourcecode.
 //        WindowOperatorHelper.enrichWindowOperator(
 //            (OneInputTransformation) ubiEventStreamWithSessionId.getTransformation(),
 //            mappedEventOutputTag
 //        );
-        WindowOperatorHelper.enrichWindowOperator(
-                (OneInputTransformation) ubiSessinDataStream.getTransformation(),
-               new UbiEventMapWithStateFunction(),
-                mappedEventOutputTag
-        );
+//        WindowOperatorHelper.enrichWindowOperator(
+//                (OneInputTransformation) ubiSessinDataStream.getTransformation(),
+//               new UbiEventMapWithStateFunction(),
+//                mappedEventOutputTag
+//        );
 
-        ubiSessinDataStream.name("Session Operator");
+//        ubiSessinDataStream.name("Session Operator");
 
-        DataStream<UbiEvent> mappedEventStream = ubiSessinDataStream.getSideOutput(mappedEventOutputTag);
+//        DataStream<UbiEvent> mappedEventStream = ubiSessinDataStream.getSideOutput(mappedEventOutputTag);
 //        mappedEventStream.addSink(new DiscardingSink<>()).name("Mapped UbiEvent").disableChaining();
 
-        ubiSessinDataStream.addSink(new DiscardingSink<>()).name("d").disableChaining();
+//        ubiSessinDataStream.addSink(new DiscardingSink<>()).name("d").disableChaining();
 //        ubiEventStreamWithSessionId.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId").disableChaining();
 //        ubiSessinDataStream.addSink(StreamingFileSinkFactory.sessionSinkWithSojHdfs())
 //                .name("Sessions");
+        ubiEventDataStream.addSink(StreamingFileSinkFactory.eventSinkWithSojHdfs()).name("ubiEvent sink");
         // Submit this job
         executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
 
