@@ -27,6 +27,7 @@ import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrderness
 import org.apache.flink.streaming.api.transformations.OneInputTransformation;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
+import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
@@ -129,24 +130,32 @@ public class SojournerUBDRTJobForSOJ {
         // 4.2 Attribute indicator accumulation
         // 4.3 Attribute level bot detection (via bot rule)
         // 4.4 Store bot signature
-        DataStream<AgentIpAttribute> agentIpAttributeDataStream = ubiSessinDataStream
+        DataStream<AgentIpAttribute> agentIpAttributeDatastream = ubiSessinDataStream
                 .keyBy("userAgent", "clientIp")
-                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
+                .window(TumblingEventTimeWindows.of(Time.minutes(5)))
 //                .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
                 .name("Attribute Operator (Agent+IP)")
                 .setParallelism(25);
 
-        // agent ip DataStream & agent ip bot detector
-        SingleOutputStreamOperator<AgentIpSignature> agentIpSignatureDataStream = agentIpAttributeDataStream
+        DataStream<AgentIpSignature> agentIpSignatureDataStream = agentIpAttributeDatastream
                 .keyBy("agent", "clientIp")
-                .map(new AgentIpMapFunction())
-                .name("Signature Generate(Agent+IP)")
+                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
+//                .trigger(OnElementEarlyFiringTrigger.create())
+                .aggregate(new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
+                .name("Attribute Operator (Agent+IP)")
                 .setParallelism(25);
 
-        agentIpSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Agent+IP Signature");
+//        // agent ip DataStream & agent ip bot detector
+//        SingleOutputStreamOperator<AgentIpSignature> agentIpSignatureDataStream = agentIpAttributeDataStream
+//                .keyBy("agent", "clientIp")
+//                .map(new AgentIpMapFunction())
+//                .name("Signature Generate(Agent+IP)")
+//                .setParallelism(25);
 
-        DataStream<AgentSignature> agentAttributeDataStream = agentIpAttributeDataStream
+//        agentIpSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Agent+IP Signature");
+
+        DataStream<AgentSignature> agentAttributeDataStream = agentIpAttributeDatastream
                 .keyBy("agent")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
 //                .trigger(OnElementEarlyFiringTrigger.create())
@@ -156,7 +165,7 @@ public class SojournerUBDRTJobForSOJ {
 
         agentAttributeDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Agent Signature");
 
-        DataStream<IpSignature> ipAttributeDataStream = agentIpAttributeDataStream
+        DataStream<IpSignature> ipAttributeDataStream = agentIpAttributeDatastream
                 .keyBy("clientIp")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
 //                .trigger(OnElementEarlyFiringTrigger.create())

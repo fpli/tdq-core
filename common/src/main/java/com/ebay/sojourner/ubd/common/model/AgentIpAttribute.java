@@ -143,6 +143,20 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
     }
 
 
+    public void merge( AgentIpAttribute agentIpAttribute, int botFlag ) {
+
+        switch (botFlag) {
+            case 5:
+                scsCountForBot5 += agentIpAttribute.getScsCountForBot5();
+                break;
+            case 8:
+                scsCountForBot8 += agentIpAttribute.getScsCountForBot8();
+                break;
+            default:
+                break;
+        }
+    }
+
     @Override
     public void revert( UbiSession ubiSession, int botFlag ) {
         switch (botFlag) {
