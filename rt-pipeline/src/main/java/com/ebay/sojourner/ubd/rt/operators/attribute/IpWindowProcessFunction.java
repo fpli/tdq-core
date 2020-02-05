@@ -2,6 +2,7 @@ package com.ebay.sojourner.ubd.rt.operators.attribute;
 
 import com.couchbase.client.java.document.json.JsonArray;
 import com.couchbase.client.java.document.json.JsonObject;
+import com.ebay.sojourner.ubd.common.model.AttributeSignature;
 import com.ebay.sojourner.ubd.common.model.IpAttribute;
 import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.IpSignature;
@@ -18,9 +19,9 @@ import org.apache.log4j.Logger;
 import java.util.Set;
 
 public class IpWindowProcessFunction
-        extends ProcessWindowFunction<IpAttributeAccumulator, IpSignature, Tuple, TimeWindow> {
+        extends ProcessWindowFunction<IpAttributeAccumulator, AttributeSignature, Tuple, TimeWindow> {
     private static final Logger logger = Logger.getLogger(IpWindowProcessFunction.class);
-    private IpSignature ipSignature;
+    private AttributeSignature ipSignature;
     private IpSignatureBotDetector ipSignatureBotDetector;
 //    private CouchBaseManager couchBaseManager;
 //    private static final String BUCKET_NAME = "botsignature";
@@ -29,7 +30,7 @@ public class IpWindowProcessFunction
 
     @Override
     public void process(Tuple tuple, Context context, Iterable<IpAttributeAccumulator> elements,
-                        Collector<IpSignature> out) throws Exception {
+                        Collector<AttributeSignature> out) throws Exception {
 
         IpAttributeAccumulator ipAttributeAccumulator = elements.iterator().next();
         if (ipAttributeAccumulator.getIpAttribute().getClientIp() != null) {
@@ -40,7 +41,7 @@ public class IpWindowProcessFunction
 //                        .put("ip", ipAttr.getAttribute().getClientIp())
 //                        .put("botFlag", JsonArray.from(botFlagList.toArray()));
 //                couchBaseManager.upsert(ipSignature, ipAttr.getAttribute().getClientIp());
-                ipSignature.getIpBotSignature().put(ipAttributeAccumulator.getIpAttribute().getClientIp(),botFlagList);
+                ipSignature.getAttributeSignature().put("ip" + ipAttributeAccumulator.getIpAttribute().getClientIp(),botFlagList);
                 out.collect(ipSignature);
             }
         }
@@ -52,7 +53,7 @@ public class IpWindowProcessFunction
     public void open(Configuration conf) throws Exception {
         super.open(conf);
         ipSignatureBotDetector = IpSignatureBotDetector.getInstance();
-        ipSignature = new IpSignature();
+        ipSignature = new AttributeSignature();
 //        couchBaseManager = CouchBaseManager.getInstance();
     }
 

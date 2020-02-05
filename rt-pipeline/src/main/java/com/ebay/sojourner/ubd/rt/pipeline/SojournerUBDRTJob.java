@@ -148,50 +148,50 @@ public class SojournerUBDRTJob {
                 .setParallelism(25);
 
         agentIpSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Agent+IP Signature");
-
-        DataStream<AgentSignature> agentAttributeDataStream = agentIpAttributeDataStream
-                .keyBy("agent")
-                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
-                .trigger(OnElementEarlyFiringTrigger.create())
-                .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
-                .name("Attribute Operator (Agent)")
-                .setParallelism(25);
-
-        agentAttributeDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Agent Signature");
-
-        DataStream<IpSignature> ipAttributeDataStream = agentIpAttributeDataStream
-                .keyBy("clientIp")
-                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
-                .trigger(OnElementEarlyFiringTrigger.create())
-                .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
-                .name("Attribute Operator (IP)")
-                .setParallelism(25);
-
-        ipAttributeDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Ip Signature");
+//
+//        DataStream<AgentSignature> agentAttributeDataStream = agentIpAttributeDataStream
+//                .keyBy("agent")
+//                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
+//                .trigger(OnElementEarlyFiringTrigger.create())
+//                .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
+//                .name("Attribute Operator (Agent)")
+//                .setParallelism(25);
+//
+//        agentAttributeDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Agent Signature");
+//
+//        DataStream<IpSignature> ipAttributeDataStream = agentIpAttributeDataStream
+//                .keyBy("clientIp")
+//                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
+//                .trigger(OnElementEarlyFiringTrigger.create())
+//                .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
+//                .name("Attribute Operator (IP)")
+//                .setParallelism(25);
+//
+//        ipAttributeDataStream.addSink(new DiscardingSink<>()).setParallelism(25).name("Ip Signature");
 
         // agent ip broadcast
-        BroadcastStream<AgentIpSignature> agentIpBroadcastStream = agentIpSignatureDataStream.broadcast(MapStateDesc.agentIpSignatureDesc);
+//        BroadcastStream<AgentIpSignature> agentIpBroadcastStream = agentIpSignatureDataStream.broadcast(MapStateDesc.agentIpSignatureDesc);
 
         // agent broadcast
-        BroadcastStream<AgentSignature> agentBroadcastStream = agentAttributeDataStream.broadcast(MapStateDesc.agentSignatureDesc);
+//        BroadcastStream<AgentSignature> agentBroadcastStream = agentAttributeDataStream.broadcast(MapStateDesc.agentSignatureDesc);
+//
+//        // ip broadcast
+//        BroadcastStream<IpSignature> ipBroadcastStrem = ipAttributeDataStream.broadcast(MapStateDesc.ipSignatureDesc);
 
-        // ip broadcast
-        BroadcastStream<IpSignature> ipBroadcastStrem = ipAttributeDataStream.broadcast(MapStateDesc.ipSignatureDesc);
-
-        SingleOutputStreamOperator<UbiEvent> ipConnectDataStream = mappedEventStream
-                .connect(ipBroadcastStrem)
-                .process(new IpBroadcastProcessFunction())
-                .name("Signature BotDetection(IP)");
-
-        SingleOutputStreamOperator<UbiEvent> agentConnectDataStream = ipConnectDataStream
-                .connect(agentBroadcastStream)
-                .process(new AgentBroadcastProcessFunction())
-                .name("Signature BotDetection(Agent)");
-
-        SingleOutputStreamOperator<UbiEvent> agentIpConnectDataStream = agentConnectDataStream
-                .connect(agentIpBroadcastStream)
-                .process(new AgentIpBroadcastProcessFunction())
-                .name("Signature BotDetection(Agent+IP)");
+//        SingleOutputStreamOperator<UbiEvent> ipConnectDataStream = mappedEventStream
+//                .connect(ipBroadcastStrem)
+//                .process(new IpBroadcastProcessFunction())
+//                .name("Signature BotDetection(IP)");
+//
+//        SingleOutputStreamOperator<UbiEvent> agentConnectDataStream = ipConnectDataStream
+//                .connect(agentBroadcastStream)
+//                .process(new AgentBroadcastProcessFunction())
+//                .name("Signature BotDetection(Agent)");
+//
+//        SingleOutputStreamOperator<UbiEvent> agentIpConnectDataStream = agentConnectDataStream
+//                .connect(agentIpBroadcastStream)
+//                .process(new AgentIpBroadcastProcessFunction())
+//                .name("Signature BotDetection(Agent+IP)");
 
         // 5. Load data to file system for batch processing
         // 5.1 IP Signature
@@ -200,7 +200,7 @@ public class SojournerUBDRTJob {
         // 5.4 Events late
 
         ubiSessinDataStream.addSink(new DiscardingSink<>()).name("session discarding");
-        agentIpConnectDataStream.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId and bot");
+//        agentIpConnectDataStream.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId and bot");
 
         // Submit this job
         executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());

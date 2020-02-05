@@ -164,46 +164,46 @@ public class IntegrationTest {
 
 //        agentIpSignatureDataStream.print().name("Agent+IP Signature");
 
-        DataStream<AgentSignature> agentAttributeDataStream = agentIpAttributeDataStream
-                .keyBy("agent")
-                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
-//                .trigger(OnElementEarlyFiringTrigger.create())
-                .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
-                .name("Attribute Operator (Agent)");
-
-//        agentAttributeDataStream.print().name("Agent Signature");
-
-        DataStream<IpSignature> ipAttributeDataStream = agentIpAttributeDataStream
-                .keyBy("clientIp")
-                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
-//                .trigger(OnElementEarlyFiringTrigger.create())
-                .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
-                .name("Attribute Operator (IP)");
+//        DataStream<AgentSignature> agentAttributeDataStream = agentIpAttributeDataStream
+//                .keyBy("agent")
+//                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
+////                .trigger(OnElementEarlyFiringTrigger.create())
+//                .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
+//                .name("Attribute Operator (Agent)");
+//
+////        agentAttributeDataStream.print().name("Agent Signature");
+//
+//        DataStream<IpSignature> ipAttributeDataStream = agentIpAttributeDataStream
+//                .keyBy("clientIp")
+//                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
+////                .trigger(OnElementEarlyFiringTrigger.create())
+//                .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
+//                .name("Attribute Operator (IP)");
 
 //        ipAttributeDataStream.print().name("ipSigunature");
         // agent ip broadcast
-        BroadcastStream<AgentIpSignature> agentIpBroadcastStream = agentIpSignatureDataStream.broadcast(MapStateDesc.agentIpSignatureDesc);
+//        BroadcastStream<AgentIpSignature> agentIpBroadcastStream = agentIpSignatureDataStream.broadcast(MapStateDesc.agentIpSignatureDesc);
+//
+//        // agent broadcast
+//        BroadcastStream<AgentSignature> agentBroadcastStream = agentAttributeDataStream.broadcast(MapStateDesc.agentSignatureDesc);
+//
+//        // ip broadcast
+//        BroadcastStream<IpSignature> ipBroadcastStrem = ipAttributeDataStream.broadcast(MapStateDesc.ipSignatureDesc);
 
-        // agent broadcast
-        BroadcastStream<AgentSignature> agentBroadcastStream = agentAttributeDataStream.broadcast(MapStateDesc.agentSignatureDesc);
-
-        // ip broadcast
-        BroadcastStream<IpSignature> ipBroadcastStrem = ipAttributeDataStream.broadcast(MapStateDesc.ipSignatureDesc);
-
-        SingleOutputStreamOperator<UbiEvent> ipConnectDataStream = mappedEventStream
-                .connect(ipBroadcastStrem)
-                .process(new IpBroadcastProcessFunction())
-                .name("Signature BotDetection(IP)");
-
-        SingleOutputStreamOperator<UbiEvent> agentConnectDataStream = ipConnectDataStream
-                .connect(agentBroadcastStream)
-                .process(new AgentBroadcastProcessFunction())
-                .name("Signature BotDetection(Agent)");
-
-        SingleOutputStreamOperator<UbiEvent> agentIpConnectDataStream = agentConnectDataStream
-                .connect(agentIpBroadcastStream)
-                .process(new AgentIpBroadcastProcessFunction())
-                .name("Signature BotDetection(Agent+IP)").slotSharingGroup("session");
+//        SingleOutputStreamOperator<UbiEvent> ipConnectDataStream = mappedEventStream
+//                .connect(ipBroadcastStrem)
+//                .process(new IpBroadcastProcessFunction())
+//                .name("Signature BotDetection(IP)");
+//
+//        SingleOutputStreamOperator<UbiEvent> agentConnectDataStream = ipConnectDataStream
+//                .connect(agentBroadcastStream)
+//                .process(new AgentBroadcastProcessFunction())
+//                .name("Signature BotDetection(Agent)");
+//
+//        SingleOutputStreamOperator<UbiEvent> agentIpConnectDataStream = agentConnectDataStream
+//                .connect(agentIpBroadcastStream)
+//                .process(new AgentIpBroadcastProcessFunction())
+//                .name("Signature BotDetection(Agent+IP)").slotSharingGroup("session");
 //        SingleOutputStreamOperator<UbiSession> ipConnectDataStreamForSession = sessionStream
 //                .connect(ipBroadcastStrem)
 //                .process(new IpBroadcastProcessFunctionForSession())

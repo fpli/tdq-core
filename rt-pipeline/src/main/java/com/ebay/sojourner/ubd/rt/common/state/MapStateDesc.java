@@ -21,7 +21,7 @@ public class MapStateDesc {
             "broadcast-agentIpSignature-state", BasicTypeInfo.STRING_TYPE_INFO,TypeInformation.of(new TypeHint<Set<Integer>>() {})
     );
 
-    public static final MapStateDescriptor<String,Object> attributeSignatureDesc = new MapStateDescriptor<>(
-            "broadcast-agentIpSignature-state", BasicTypeInfo.STRING_TYPE_INFO,TypeInformation.of(Object.class)
+    public static final MapStateDescriptor<String,Set<Integer>> attributeSignatureDesc = new MapStateDescriptor<>(
+            "broadcast-agentIpSignature-state", BasicTypeInfo.STRING_TYPE_INFO,TypeInformation.of(new TypeHint<Set<Integer>>() {})
     );
 }

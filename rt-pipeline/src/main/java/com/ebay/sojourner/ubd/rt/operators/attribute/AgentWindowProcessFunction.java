@@ -2,9 +2,7 @@ package com.ebay.sojourner.ubd.rt.operators.attribute;
 
 import com.couchbase.client.java.document.json.JsonArray;
 import com.couchbase.client.java.document.json.JsonObject;
-import com.ebay.sojourner.ubd.common.model.AgentAttribute;
-import com.ebay.sojourner.ubd.common.model.AgentAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.AgentSignature;
+import com.ebay.sojourner.ubd.common.model.*;
 import com.ebay.sojourner.ubd.common.sharedlib.connectors.CouchBaseManager;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.AgentSignatureBotDetector;
 import org.apache.flink.api.java.tuple.Tuple;
@@ -17,9 +15,9 @@ import org.apache.log4j.Logger;
 import java.util.Set;
 
 public class AgentWindowProcessFunction
-        extends ProcessWindowFunction<AgentAttributeAccumulator, AgentSignature, Tuple, TimeWindow> {
+        extends ProcessWindowFunction<AgentAttributeAccumulator, AttributeSignature, Tuple, TimeWindow> {
     private static final Logger logger = Logger.getLogger(AgentWindowProcessFunction.class);
-    private AgentSignature agentSignature;
+    private AttributeSignature agentSignature;
     private AgentSignatureBotDetector agentSignatureBotDetector;
 //    private CouchBaseManager couchBaseManager;
 //    private static final String BUCKET_NAME = "botsignature";
@@ -28,7 +26,7 @@ public class AgentWindowProcessFunction
 
     @Override
     public void process(Tuple tuple, Context context, Iterable<AgentAttributeAccumulator> elements,
-                        Collector<AgentSignature> out) throws Exception {
+                        Collector<AttributeSignature> out) throws Exception {
 
         AgentAttributeAccumulator agentAttributeAccumulator = elements.iterator().next();
 //        System.out.println(agentAttributeAccumulator.getAgentAttribute());
@@ -40,7 +38,7 @@ public class AgentWindowProcessFunction
 //                    .put("botFlag", JsonArray.from(botFlagList.toArray()));
 //            couchBaseManager.upsert(agentSignature, agentAttributeAccumulator.getAttribute().getAgent());
 //            out.collect(ipSignature);
-            agentSignature.getAgentBotSignature().put(agentAttributeAccumulator.getAgentAttribute().getAgent(),botFlagList);
+            agentSignature.getAttributeSignature().put("agent" + agentAttributeAccumulator.getAgentAttribute().getAgent(),botFlagList);
             out.collect(agentSignature);
         }
 
@@ -51,7 +49,7 @@ public class AgentWindowProcessFunction
     public void open(Configuration conf) throws Exception {
         super.open(conf);
         agentSignatureBotDetector = AgentSignatureBotDetector.getInstance();
-        agentSignature = new AgentSignature();
+        agentSignature = new AttributeSignature();
 //        couchBaseManager = CouchBaseManager.getInstance();
     }
 
