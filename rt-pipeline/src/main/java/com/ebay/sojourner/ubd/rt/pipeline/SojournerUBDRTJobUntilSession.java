@@ -13,21 +13,26 @@ import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFuncti
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
 
+import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.api.common.typeinfo.SOjStringFactory;
 import org.apache.flink.api.common.typeinfo.TypeInfoFactory;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.core.fs.Path;
+import org.apache.flink.formats.parquet.avro.ParquetAvroWriters;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
+import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.transformations.OneInputTransformation;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.connectors.fs.bucketing.BucketingSink;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
 
@@ -78,7 +83,7 @@ public class SojournerUBDRTJobUntilSession {
         // 1.2 Assign timestamps and emit watermarks.
         DataStream<RawEvent> rawEventDataStream = executionEnvironment
                 .addSource(KafkaConnectorFactoryForSOJ.createKafkaConsumer()
-                        .setStartFromEarliest()
+                        .setStartFromLatest()
                         .assignTimestampsAndWatermarks(
                                 new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
                                     @Override
@@ -139,7 +144,19 @@ public class SojournerUBDRTJobUntilSession {
 //        ubiEventStreamWithSessionId.addSink(new DiscardingSink<>()).name("ubiEvent with SessionId").disableChaining();
 //        ubiSessinDataStream.addSink(StreamingFileSinkFactory.sessionSinkWithSojHdfs())
 //                .name("Sessions");
-        ubiEventDataStream.addSink(StreamingFileSinkFactory.eventSinkWithSojHdfs()).name("ubiEvent sink");
+//        ubiEventDataStream.addSink(StreamingFileSinkFactory.eventSinkWithSojHdfs()).name("ubiEvent sink");
+        StreamingFileSink ubiEventStreamingFileSink = StreamingFileSink
+                .forRowFormat(new Path("hdfs://apollo-rno//user/o_ubi/events/"), new SimpleStringEncoder<>("UTF-8"))
+                .build();
+
+
+//        StreamingFileSink ubiEventStreamingFileSink = StreamingFileSink
+//                .forBulkFormat(new Path("hdfs://apollo-rno//user/o_ubi/events/"),ParquetAvroWriters.forReflectRecord(UbiEvent.class))
+//                .build();
+
+//        BucketingSink<UbiEvent> ubiEventBucketingSink = new BucketingSink<>("viewfs:///user/o_ubi/events");
+
+        ubiEventDataStream.addSink(ubiEventStreamingFileSink).name("ubiEvent sink").disableChaining();
         // Submit this job
         executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
 
