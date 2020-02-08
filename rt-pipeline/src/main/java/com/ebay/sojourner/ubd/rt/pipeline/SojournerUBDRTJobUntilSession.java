@@ -4,6 +4,7 @@ import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
+import com.ebay.sojourner.ubd.rt.connectors.filesystem.RichParquetAvroWriters;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.StreamingFileSinkFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
@@ -145,14 +146,16 @@ public class SojournerUBDRTJobUntilSession {
 //        ubiSessinDataStream.addSink(StreamingFileSinkFactory.sessionSinkWithSojHdfs())
 //                .name("Sessions");
 //        ubiEventDataStream.addSink(StreamingFileSinkFactory.eventSinkWithSojHdfs()).name("ubiEvent sink");
-        StreamingFileSink ubiEventStreamingFileSink = StreamingFileSink
-                .forRowFormat(new Path("hdfs://apollo-rno//user/o_ubi/events/"), new SimpleStringEncoder<>("UTF-8"))
-                .build();
-
-
 //        StreamingFileSink ubiEventStreamingFileSink = StreamingFileSink
-//                .forBulkFormat(new Path("hdfs://apollo-rno//user/o_ubi/events/"),ParquetAvroWriters.forReflectRecord(UbiEvent.class))
+//                .forRowFormat(new Path("/tmp/soj-events/"), new SimpleStringEncoder<>("UTF-8"))
 //                .build();
+
+        // This path is for local test. For production, we should use "hdfs://apollo-rno//user/o_ubi/events/"
+        StreamingFileSink ubiEventStreamingFileSink = StreamingFileSink
+                .forBulkFormat(
+                    new Path("/tmp/soj-events/"),
+                    RichParquetAvroWriters.forAllowNullReflectRecord(UbiEvent.class))
+                .build();
 
 //        BucketingSink<UbiEvent> ubiEventBucketingSink = new BucketingSink<>("viewfs:///user/o_ubi/events");
 

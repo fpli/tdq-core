@@ -61,7 +61,7 @@ public class UbiEvent implements Serializable {
   private long sessionEndTime;
   private Set<Integer> botFlags= new LinkedHashSet<>();
   @Getter private long eventCnt;
-  private Map<String, Object> counters;
+//  private Map<String, Object> counters;
 
   public void updateSessionId() {
     int charPos = Constants.HEX_DIGITS.length;
@@ -91,27 +91,27 @@ public class UbiEvent implements Serializable {
     return Constants.NO_TIMESTAMP != sessionEndTime;
   }
 
-  public Object get(String key) {
-    if (counters == null) {
-      synchronized (this) {
-        if (counters == null) {
-          counters = new ConcurrentHashMap<>();
-        }
-      }
-    }
-
-    return counters.get(key);
-  }
-
-  public void put(String key, Object value) {
-    if (counters == null) {
-      synchronized (this) {
-        if (counters == null) {
-          counters = new ConcurrentHashMap<>();
-        }
-      }
-    }
-
-    counters.put(key, value);
-  }
+//  public Object get(String key) {
+//    if (counters == null) {
+//      synchronized (this) {
+//        if (counters == null) {
+//          counters = new ConcurrentHashMap<>();
+//        }
+//      }
+//    }
+//
+//    return counters.get(key);
+//  }
+//
+//  public void put(String key, Object value) {
+//    if (counters == null) {
+//      synchronized (this) {
+//        if (counters == null) {
+//          counters = new ConcurrentHashMap<>();
+//        }
+//      }
+//    }
+//
+//    counters.put(key, value);
+//  }
 }

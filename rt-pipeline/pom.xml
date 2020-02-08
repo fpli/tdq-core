@@ -258,6 +258,11 @@
                     <artifactId>flink-runtime-web_${scala.binary.version}</artifactId>
                     <scope>compile</scope>
                 </dependency>
+                <dependency>
+                    <groupId>org.apache.avro</groupId>
+                    <artifactId>avro</artifactId>
+                    <scope>compile</scope>
+                </dependency>
             </dependencies>
         </profile>
     </profiles>

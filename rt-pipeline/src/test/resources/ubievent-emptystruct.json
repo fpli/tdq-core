@@ -1,0 +1,288 @@
+{
+  "type": "record",
+  "name": "UbiEvent",
+  "namespace": "com.ebay.sojourner.ubd.common.model",
+  "fields": [
+    {
+      "name": "guid",
+      "type": "string"
+    },
+    {
+      "name": "sessionId",
+      "type": "string"
+    },
+    {
+      "name": "seqNum",
+      "type": "int"
+    },
+    {
+      "name": "sessionStartDt",
+      "type": "long"
+    },
+    {
+      "name": "sojDataDt",
+      "type": "long"
+    },
+    {
+      "name": "clickId",
+      "type": "int"
+    },
+    {
+      "name": "siteId",
+      "type": "int"
+    },
+    {
+      "name": "version",
+      "type": "int"
+    },
+    {
+      "name": "pageId",
+      "type": "int"
+    },
+    {
+      "name": "pageName",
+      "type": "string"
+    },
+    {
+      "name": "refererHash",
+      "type": "long"
+    },
+    {
+      "name": "eventTimestamp",
+      "type": "long"
+    },
+    {
+      "name": "urlQueryString",
+      "type": "string"
+    },
+    {
+      "name": "clientData",
+      "type": {
+        "type": "record",
+        "name": "ClientData",
+        "fields": [
+          {
+            "name": "ForwardFor",
+            "type": "string"
+          },
+          {
+            "name": "Script",
+            "type": "string"
+          },
+          {
+            "name": "Server",
+            "type": "string"
+          },
+          {
+            "name": "TMachine",
+            "type": "string"
+          },
+          {
+            "name": "TStamp",
+            "type": "long"
+          },
+          {
+            "name": "TName",
+            "type": "string"
+          },
+          {
+            "name": "TPayload",
+            "type": "string"
+          },
+          {
+            "name": "colo",
+            "type": "string"
+          },
+          {
+            "name": "pool",
+            "type": "string"
+          },
+          {
+            "name": "agent",
+            "type": "string"
+          },
+          {
+            "name": "remoteIP",
+            "type": "string"
+          },
+          {
+            "name": "TType",
+            "type": "string"
+          },
+          {
+            "name": "TStatus",
+            "type": "string"
+          },
+          {
+            "name": "corrId",
+            "type": "string"
+          },
+          {
+            "name": "contentLength",
+            "type": "int"
+          },
+          {
+            "name": "nodeId",
+            "type": "string"
+          },
+          {
+            "name": "requestGuid",
+            "type": "string"
+          },
+          {
+            "name": "urlQueryString",
+            "type": "string"
+          },
+          {
+            "name": "referrer",
+            "type": "string"
+          },
+          {
+            "name": "rlogid",
+            "type": "string"
+          },
+          {
+            "name": "acceptEncoding",
+            "type": "string"
+          },
+          {
+            "name": "TDuration",
+            "type": "long"
+          }
+        ]
+      }
+    },
+    {
+      "name": "cookies",
+      "type": "string"
+    },
+    {
+      "name": "applicationPayload",
+      "type": "string"
+    },
+    {
+      "name": "webServer",
+      "type": "string"
+    },
+    {
+      "name": "referrer",
+      "type": "string"
+    },
+    {
+      "name": "userId",
+      "type": "string"
+    },
+    {
+      "name": "itemId",
+      "type": "long"
+    },
+    {
+      "name": "flags",
+      "type": "string"
+    },
+    {
+      "name": "rdt",
+      "type": "boolean"
+    },
+    {
+      "name": "regu",
+      "type": "int"
+    },
+    {
+      "name": "sqr",
+      "type": "string"
+    },
+    {
+      "name": "staticPageType",
+      "type": "int"
+    },
+    {
+      "name": "reservedForFuture",
+      "type": "int"
+    },
+    {
+      "name": "eventAttr",
+      "type": "string"
+    },
+    {
+      "name": "currentImprId",
+      "type": "long"
+    },
+    {
+      "name": "sourceImprId",
+      "type": "long"
+    },
+    {
+      "name": "cobrand",
+      "type": "int"
+    },
+    {
+      "name": "iframe",
+      "type": "boolean"
+    },
+    {
+      "name": "agentInfo",
+      "type": "string"
+    },
+    {
+      "name": "forwardedFor",
+      "type": "string"
+    },
+    {
+      "name": "clientIP",
+      "type": "string"
+    },
+    {
+      "name": "bitVal",
+      "type": "int"
+    },
+    {
+      "name": "appId",
+      "type": "int"
+    },
+    {
+      "name": "oldSessionSkey",
+      "type": "long"
+    },
+    {
+      "name": "hashCode",
+      "type": "int"
+    },
+    {
+      "name": "partialValidPage",
+      "type": "boolean"
+    },
+    {
+      "name": "sessionStartTime",
+      "type": "long"
+    },
+    {
+      "name": "sessionEndTime",
+      "type": "long"
+    },
+    {
+      "name": "botFlags",
+      "type": {
+        "type": "array",
+        "items": "int",
+        "java-class": "java.util.Set"
+      }
+    },
+    {
+      "name": "eventCnt",
+      "type": "long"
+    },
+    {
+      "name": "counters",
+      "type": {
+        "type": "map",
+        "values": {
+          "type": "record",
+          "name": "Object",
+          "namespace": "java.lang",
+          "fields": []
+        }
+      }
+    }
+  ]
+}

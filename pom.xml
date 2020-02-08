@@ -32,7 +32,7 @@
         <slf4j.version>1.7.7</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
         <couchbase.client.version>2.7.6</couchbase.client.version>
-        <avro.version>1.7.7</avro.version>
+        <avro.version>1.8.2</avro.version>
         <flink.version>1.7.2</flink.version>
         <spark.version>2.3.1</spark.version>
         <rheos.client.version>2.0.6-SNAPSHOT</rheos.client.version>
@@ -240,6 +240,7 @@
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro</artifactId>
                 <version>${avro.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
