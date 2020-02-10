@@ -46,7 +46,7 @@
         <jackson.version>2.9.8</jackson.version>
         <fastjson.version>1.2.62</fastjson.version>
         <guava.version>28.1-jre</guava.version>
-        <jacoco.version>0.8.3</jacoco.version>
+        <jacoco.version>0.8.5</jacoco.version>
         <CodeCacheSize>512m</CodeCacheSize>
     </properties>
 
@@ -461,7 +461,6 @@
                 <artifactId>flink-shaded-hadoop2</artifactId>
                 <version>1.7.2</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
@@ -666,6 +665,26 @@
                     <artifactId>job-uploader-maven-plugin</artifactId>
                     <version>1.0-SNAPSHOT</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <!-- attached to Maven test phase -->
+                        <execution>
+                            <id>report</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -688,6 +707,10 @@
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
