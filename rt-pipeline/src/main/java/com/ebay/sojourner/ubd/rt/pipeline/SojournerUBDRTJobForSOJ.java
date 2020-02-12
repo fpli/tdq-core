@@ -9,9 +9,11 @@ import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
 import com.ebay.sojourner.ubd.rt.operators.attribute.*;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
+import com.ebay.sojourner.ubd.rt.operators.session.DetectableMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
+import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
@@ -30,9 +32,11 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
 
+import javax.xml.crypto.Data;
+
 public class SojournerUBDRTJobForSOJ {
 
-    public static void main(String[] args) throws Exception {
+    public static void main( String[] args ) throws Exception {
         // Make sure this is being executed at start up.
         ParameterTool parameterTool = ParameterTool.fromArgs(args);
         AppEnv.config(parameterTool);
@@ -71,7 +75,7 @@ public class SojournerUBDRTJobForSOJ {
                         .assignTimestampsAndWatermarks(
                                 new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
                                     @Override
-                                    public long extractTimestamp(RawEvent element) {
+                                    public long extractTimestamp( RawEvent element ) {
                                         return element.getRheosHeader().getEventCreateTimestamp();
                                     }
                                 }))
@@ -199,21 +203,25 @@ public class SojournerUBDRTJobForSOJ {
 
         BroadcastStream<AttributeSignature> attributeSignatureBroadcastStream = attributeSignatureDataStream.broadcast(MapStateDesc.attributeSignatureDesc);
 
-        SingleOutputStreamOperator<UbiSession> signatureBotDetectionForSession = ubiSessinDataStream
-                .connect(attributeSignatureBroadcastStream)
-                .process(new AttributeBroadcastProcessFunctionForSession())
-                .name("Signature BotDetection for session");
+
+//        SingleOutputStreamOperator<UbiSession> signatureBotDetectionForSession = ubiSessinDataStream
+//                .connect(attributeSignatureBroadcastStream)
+//                .process(new AttributeBroadcastProcessFunctionForSession())
+//                .name("Signature BotDetection for session");
 
         DataStream<UbiEvent> mappedEventStream = ubiSessinDataStream.getSideOutput(mappedEventOutputTag);
+        DataStream<SignatureDetectable> detectableDataStream = ubiSessinDataStream.map(new DetectableMapFunction()).union(mappedEventStream.map(new com.ebay.sojourner.ubd.rt.operators.event.DetectableMapFunction()));
+//        SingleOutputStreamOperator<UbiEvent> signatureBotDetectionForEvent = mappedEventStream
+//                .connect(attributeSignatureBroadcastStream)
+//                .process(new AttributeBroadcastProcessFunctionForEvent())
+//                .name("Signature BotDetection for event");
 
-        SingleOutputStreamOperator<UbiEvent> signatureBotDetectionForEvent = mappedEventStream
+        SingleOutputStreamOperator<UbiEvent> signatureBotDetectionForEvent = detectableDataStream
                 .connect(attributeSignatureBroadcastStream)
-                .process(new AttributeBroadcastProcessFunctionForEvent())
+                .process(new AttributeBroadcastProcessFunctionForDetectable(sessionOutputTag))
                 .name("Signature BotDetection for event");
 
-
-
-
+        DataStream<UbiSession> signatureBotDetectionForSession = signatureBotDetectionForEvent.getSideOutput(sessionOutputTag);
 //        SingleOutputStreamOperator<UbiEvent> agentConnectDataStream = ipConnectDataStream
 //                .connect(agentBroadcastStream
 //                .process(new AgentBroadcastProcessFunction())

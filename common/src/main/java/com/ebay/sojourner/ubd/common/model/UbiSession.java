@@ -8,7 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
-public class UbiSession implements Serializable,Cloneable{
+public class UbiSession implements Serializable,Cloneable,SignatureDetectable{
     private Long sojDataDt;
     private String guid;
     private String sessionId;

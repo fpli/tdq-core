@@ -2,40 +2,25 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.RichParquetAvroWriters;
-import com.ebay.sojourner.ubd.rt.connectors.filesystem.StreamingFileSinkFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
-import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
-import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
-import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
-
-import org.apache.flink.api.common.serialization.SimpleStringEncoder;
+import org.apache.avro.reflect.ReflectData;
 import org.apache.flink.api.common.typeinfo.SOjStringFactory;
 import org.apache.flink.api.common.typeinfo.TypeInfoFactory;
-import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.formats.parquet.avro.ParquetAvroWriters;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
 import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
-import org.apache.flink.streaming.api.transformations.OneInputTransformation;
-import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.streaming.connectors.fs.bucketing.BucketingSink;
-import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
-import org.apache.flink.util.OutputTag;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -44,6 +29,8 @@ import java.util.Map;
 public class SojournerUBDRTJobUntilSession {
 
     public static void main(String[] args) throws Exception {
+
+        System.out.println(ReflectData.AllowNull.get().getSchema(UbiEvent.class).toString());
         // Make sure this is being executed at start up.
         ParameterTool parameterTool = ExecutionEnvUtil.createParameterTool(args);
         AppEnv.config(parameterTool);
