@@ -134,6 +134,16 @@ public class SojournerUBDRTJobForSOJ {
                 .name("Tumbling Attribute Operator (Agent+IP)")
                 .setParallelism(24);
 
+        DataStream<AttributeSignature> guidSignatureDataStream = ubiSessinDataStream
+                .keyBy("guid")
+                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
+//                .trigger(OnElementEarlyFiringTrigger.create())
+                .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
+                .name("Attribute Operator (GUID)")
+                .setParallelism(24);
+
+        guidSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(24).name("GUID Signature");
+
         DataStream<AttributeSignature> agentIpSignatureDataStream = agentIpAttributeDatastream
                 .keyBy("agent", "clientIp")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
@@ -171,7 +181,11 @@ public class SojournerUBDRTJobForSOJ {
 
         ipSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(24).name("Ip Signature");
 
-        DataStream<AttributeSignature> attributeSignatureDataStream = agentIpSignatureDataStream.union(agentSignatureDataStream).union(ipSignatureDataStream);
+        // union attribute signature for broadcast
+        DataStream<AttributeSignature> attributeSignatureDataStream = agentIpSignatureDataStream
+                .union(agentSignatureDataStream)
+                .union(ipSignatureDataStream)
+                .union(guidSignatureDataStream);
 
 //        // agent ip broadcast
 //        BroadcastStream<AgentIpSignature> agentIpBroadcastStream = agentIpSignatureDataStream.broadcast(MapStateDesc.agentIpSignatureDesc);
@@ -210,8 +224,6 @@ public class SojournerUBDRTJobForSOJ {
                 .connect(attributeSignatureBroadcastStream)
                 .process(new AttributeBroadcastProcessFunctionForEvent())
                 .name("Signature BotDetection for event");
-
-
 
 
 //        SingleOutputStreamOperator<UbiEvent> agentConnectDataStream = ipConnectDataStream

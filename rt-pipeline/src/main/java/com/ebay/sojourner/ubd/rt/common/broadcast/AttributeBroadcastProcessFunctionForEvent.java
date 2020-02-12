@@ -33,6 +33,11 @@ public class AttributeBroadcastProcessFunctionForEvent extends BroadcastProcessF
             ubiEvent.getBotFlags().addAll(attributeSignature.get("agentIp" + ubiEvent.getAgentInfo() + ubiEvent.getClientIP()));
         }
 
+        // guid
+        if (attributeSignature.contains("guid" + ubiEvent.getGuid())) {
+            ubiEvent.getBotFlags().addAll(attributeSignature.get("guid" + ubiEvent.getGuid()));
+        }
+
         if ((ubiEvent.getBotFlags().contains(221) && ubiEvent.getBotFlags().contains(223))
                 || (ubiEvent.getBotFlags().contains(220) && ubiEvent.getBotFlags().contains(222))) {
             ubiEvent.getBotFlags().add(202);
