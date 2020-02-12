@@ -1,9 +1,9 @@
 package com.ebay.sojourner.ubd.rt.common.broadcast;
 
 import com.ebay.sojourner.ubd.common.model.AttributeSignature;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
@@ -12,6 +12,7 @@ import org.apache.flink.util.Collector;
 import java.util.Map;
 import java.util.Set;
 
+@Slf4j
 public class AttributeBroadcastProcessFunctionForSession extends BroadcastProcessFunction<UbiSession, AttributeSignature, UbiSession> {
     @Override
     public void processElement(UbiSession ubiSession, ReadOnlyContext context, Collector<UbiSession> out) throws Exception {
@@ -30,6 +31,11 @@ public class AttributeBroadcastProcessFunctionForSession extends BroadcastProces
         // agentIp
         if (attributeSignature.contains("agentIp" + ubiSession.getUserAgent() + ubiSession.getClientIp())) {
             ubiSession.getBotFlagList().addAll(attributeSignature.get("agentIp" + ubiSession.getUserAgent() + ubiSession.getClientIp()));
+        }
+
+        // guid
+        if (attributeSignature.contains("guid" + ubiSession.getGuid())) {
+            ubiSession.getBotFlagList().addAll(attributeSignature.get("guid" + ubiSession.getGuid()));
         }
 
         if ((ubiSession.getBotFlagList().contains(221) && ubiSession.getBotFlagList().contains(223))

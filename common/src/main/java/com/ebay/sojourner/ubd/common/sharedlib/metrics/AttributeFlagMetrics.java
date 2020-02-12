@@ -4,7 +4,7 @@ import com.ebay.sojourner.ubd.common.model.Attributes;
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.util.ByteArrayToNum;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
     private static final Integer EXCEPTION_NULL_INTEGER_VALUE = -99;

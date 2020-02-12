@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
+import com.ebay.sojourner.ubd.rt.connectors.filesystem.DateTimeBucketAssignerForEventTime;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.RichParquetAvroWriters;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
@@ -140,8 +141,9 @@ public class SojournerUBDRTJobUntilSession {
         // This path is for local test. For production, we should use "hdfs://apollo-rno//user/o_ubi/events/"
         StreamingFileSink ubiEventStreamingFileSink = StreamingFileSink
                 .forBulkFormat(
-                    new Path("/tmp/soj-events/"),
+                    new Path("hdfs://apollo-rno//user/o_ubi/events/"),
                     RichParquetAvroWriters.forAllowNullReflectRecord(UbiEvent.class))
+                .withBucketAssigner(new DateTimeBucketAssignerForEventTime<>())
                 .build();
 
 //        BucketingSink<UbiEvent> ubiEventBucketingSink = new BucketingSink<>("viewfs:///user/o_ubi/events");
