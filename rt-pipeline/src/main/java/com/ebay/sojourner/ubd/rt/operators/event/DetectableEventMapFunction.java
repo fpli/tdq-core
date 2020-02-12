@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-public class DetectableMapFunction extends RichMapFunction< UbiEvent, SignatureDetectable> {
+public class DetectableEventMapFunction extends RichMapFunction< UbiEvent, SignatureDetectable> {
 
     @Override
     public void open(Configuration conf) throws Exception {

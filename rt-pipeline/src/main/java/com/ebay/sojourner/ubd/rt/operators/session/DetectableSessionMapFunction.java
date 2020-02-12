@@ -8,7 +8,7 @@ import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.configuration.Configuration;
 
 @Slf4j
-public class DetectableMapFunction extends RichMapFunction<UbiSession, SignatureDetectable> {
+public class DetectableSessionMapFunction extends RichMapFunction<UbiSession, SignatureDetectable> {
 
     @Override
     public void open(Configuration conf) throws Exception {
