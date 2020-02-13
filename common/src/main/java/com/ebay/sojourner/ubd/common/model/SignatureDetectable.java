@@ -1,4 +1,10 @@
 package com.ebay.sojourner.ubd.common.model;
 
-public interface SignatureDetectable {
+import lombok.Data;
+
+@Data
+public class SignatureDetectable {
+
+    private int version=1;
+
 }

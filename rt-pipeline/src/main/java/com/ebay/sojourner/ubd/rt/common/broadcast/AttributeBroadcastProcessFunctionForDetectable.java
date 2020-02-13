@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
+import org.apache.flink.types.Either;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 
@@ -16,7 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastProcessFunction<SignatureDetectable, AttributeSignature, UbiEvent> {
+public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastProcessFunction<Either<UbiEvent,UbiSession>, AttributeSignature, UbiEvent> {
     private OutputTag outputTag = null;
 
     public AttributeBroadcastProcessFunctionForDetectable( OutputTag sessionOutputTag ) {
@@ -24,11 +25,11 @@ public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastPro
     }
 
     @Override
-    public void processElement( SignatureDetectable signatureDetectable, ReadOnlyContext context, Collector<UbiEvent> out ) throws Exception {
+    public void processElement( Either<UbiEvent,UbiSession> signatureDetectable, ReadOnlyContext context, Collector<UbiEvent> out ) throws Exception {
         ReadOnlyBroadcastState<String, Set<Integer>> attributeSignature = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
 
-        if (signatureDetectable instanceof UbiEvent) {
-            UbiEvent ubiEvent = (UbiEvent) signatureDetectable;
+        if (signatureDetectable.isLeft()) {
+            UbiEvent ubiEvent = signatureDetectable.left();
             // ip
             if (attributeSignature.contains("ip" + ubiEvent.getClientIP())) {
                 ubiEvent.getBotFlags().addAll(attributeSignature.get("ip" + ubiEvent.getClientIP()));
@@ -59,7 +60,7 @@ public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastPro
             }
             out.collect(ubiEvent);
         } else {
-            UbiSession ubiSession = (UbiSession) signatureDetectable;
+            UbiSession ubiSession =  signatureDetectable.right();
             // ip
             if (attributeSignature.contains("ip" + ubiSession.getClientIp())) {
                 ubiSession.getBotFlagList().addAll(attributeSignature.get("ip" + ubiSession.getClientIp()));

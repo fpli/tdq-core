@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Data
-public class UbiEvent implements Serializable,SignatureDetectable {
+public class UbiEvent  implements Serializable {
   private String guid;
   private String sessionId=Constants.NO_SESSION_ID;
   private int seqNum;

@@ -1,10 +1,9 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.*;
-import com.ebay.sojourner.ubd.rt.common.broadcast.*;
+import com.ebay.sojourner.ubd.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
-import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
 import com.ebay.sojourner.ubd.rt.operators.attribute.*;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
@@ -13,8 +12,9 @@ import com.ebay.sojourner.ubd.rt.operators.session.DetectableMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
-import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
@@ -30,9 +30,8 @@ import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindow
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
+import org.apache.flink.types.Either;
 import org.apache.flink.util.OutputTag;
-
-import javax.xml.crypto.Data;
 
 public class SojournerUBDRTJobForSOJ {
 
@@ -40,6 +39,8 @@ public class SojournerUBDRTJobForSOJ {
         // Make sure this is being executed at start up.
         ParameterTool parameterTool = ParameterTool.fromArgs(args);
         AppEnv.config(parameterTool);
+
+        System.out.println(TypeInformation.of(new TypeHint<Either<UbiEvent,UbiSession>>(){}));
 
         // hack StringValue to use the version 1.10
 //        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class, Class.class);
@@ -224,7 +225,8 @@ public class SojournerUBDRTJobForSOJ {
 //                .name("Signature BotDetection for session");
 
         DataStream<UbiEvent> mappedEventStream = ubiSessinDataStream.getSideOutput(mappedEventOutputTag);
-        DataStream<SignatureDetectable> detectableDataStream = ubiSessinDataStream.map(new DetectableMapFunction()).union(mappedEventStream.map(new com.ebay.sojourner.ubd.rt.operators.event.DetectableMapFunction()));
+        DataStream<Either<UbiEvent,UbiSession>> detectableDataStream =
+                ubiSessinDataStream.map(new DetectableMapFunction()).union(mappedEventStream.map(new com.ebay.sojourner.ubd.rt.operators.event.DetectableMapFunction()));
 //        SingleOutputStreamOperator<UbiEvent> signatureBotDetectionForEvent = mappedEventStream
 //                .connect(attributeSignatureBroadcastStream)
 //                .process(new AttributeBroadcastProcessFunctionForEvent())
