@@ -45,6 +45,11 @@ public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastPro
                 ubiEvent.getBotFlags().addAll(attributeSignature.get("agentIp" + ubiEvent.getAgentInfo() + ubiEvent.getClientIP()));
             }
 
+            // guid
+            if (attributeSignature.contains("guid" + ubiEvent.getGuid())) {
+                ubiEvent.getBotFlags().addAll(attributeSignature.get("guid" + ubiEvent.getGuid()));
+            }
+
             if ((ubiEvent.getBotFlags().contains(221) && ubiEvent.getBotFlags().contains(223))
                     || (ubiEvent.getBotFlags().contains(220) && ubiEvent.getBotFlags().contains(222))) {
                 ubiEvent.getBotFlags().add(202);
@@ -74,6 +79,11 @@ public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastPro
             // agentIp
             if (attributeSignature.contains("agentIp" + ubiSession.getUserAgent() + ubiSession.getClientIp())) {
                 ubiSession.getBotFlagList().addAll(attributeSignature.get("agentIp" + ubiSession.getUserAgent() + ubiSession.getClientIp()));
+            }
+
+            // guid
+            if (attributeSignature.contains("guid" + ubiSession.getGuid())) {
+                ubiSession.getBotFlagList().addAll(attributeSignature.get("guid" + ubiSession.getGuid()));
             }
 
             if ((ubiSession.getBotFlagList().contains(221) && ubiSession.getBotFlagList().contains(223))
