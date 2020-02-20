@@ -45,6 +45,18 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
     @Override
     public void initBotRules() {
         botRules.add(new BotRule1());
+        botRules.add(new IcfRule1());
+        botRules.add(new IcfRule2());
+        botRules.add(new IcfRule3());
+        botRules.add(new IcfRule4());
+        botRules.add(new IcfRule5());
+        botRules.add(new IcfRule6());
+        botRules.add(new IcfRule7());
+        botRules.add(new IcfRule10());
+        botRules.add(new IcfRule11());
+        botRules.add(new IcfRule12());
+        botRules.add(new IcfRule13());
+        botRules.add(new IcfRule56());
 
     }
 }

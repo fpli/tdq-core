@@ -34,4 +34,17 @@ public class BotRules {
     public static final int SUSPECTED_IP_ON_AGENT = 210;
     public static final int DECLARED_AGENT = 202;
     public static final int SAME_AGENT_IP = 211;
+    // ICF BOT Flag
+    public static final int ICF_RULE1 = 1;
+    public static final int ICF_RULE2 = 2;
+    public static final int ICF_RULE3 = 3;
+    public static final int ICF_RULE4 = 4;
+    public static final int ICF_RULE5 = 5;
+    public static final int ICF_RULE6 = 6;
+    public static final int ICF_RULE7 = 7;
+    public static final int ICF_RULE10 = 10;
+    public static final int ICF_RULE11 = 11;
+    public static final int ICF_RULE12 = 12;
+    public static final int ICF_RULE13 = 13;
+    public static final int ICF_RULE56 = 56;
 }
