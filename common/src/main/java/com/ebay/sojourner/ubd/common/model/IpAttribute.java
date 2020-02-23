@@ -5,6 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
@@ -14,6 +15,7 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
     public static final Set<Integer> pageSessionSet = new HashSet<>(Arrays.asList(2, 3, 4, 5));
     private String clientIp;
     private int scsCount = 0;
+    private Set<Integer> botFlagList = new LinkedHashSet<>();
 
     //for suspected IP
     private int totalCnt = 0;

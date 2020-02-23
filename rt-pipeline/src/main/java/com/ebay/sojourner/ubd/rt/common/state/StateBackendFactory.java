@@ -22,6 +22,7 @@ public class StateBackendFactory {
                 try {
                     RocksDBStateBackend rocksDBStateBackend = new RocksDBStateBackend(CHECKPOINT_DATA_URI, true);
                     rocksDBStateBackend.setPredefinedOptions(PredefinedOptions.SPINNING_DISK_OPTIMIZED_HIGH_MEM);
+                    rocksDBStateBackend.setPredefinedOptions(PredefinedOptions.FLASH_SSD_OPTIMIZED);
                     return rocksDBStateBackend;
                 } catch (Exception e) {
                     log.error("Failed to create RocksDB state backend", e);

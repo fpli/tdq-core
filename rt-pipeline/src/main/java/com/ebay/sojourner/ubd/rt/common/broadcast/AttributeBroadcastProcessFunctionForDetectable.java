@@ -8,16 +8,18 @@ import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.types.Either;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastProcessFunction<Either<UbiEvent,UbiSession>, AttributeSignature, UbiEvent> {
+public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastProcessFunction<Either<UbiEvent,UbiSession>, Tuple2<String,Set<Integer>>, UbiEvent> {
     private OutputTag outputTag = null;
 
     public AttributeBroadcastProcessFunctionForDetectable( OutputTag sessionOutputTag ) {
@@ -106,10 +108,12 @@ public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastPro
     }
 
     @Override
-    public void processBroadcastElement( AttributeSignature attributeSignature, Context context, Collector<UbiEvent> out ) throws Exception {
-        BroadcastState<String, Set<Integer>> attributeSignatureState = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
-        for (Map.Entry<String, Set<Integer>> entry : attributeSignature.getAttributeSignature().entrySet()) {
-            attributeSignatureState.put(entry.getKey(), entry.getValue());
+    public void processBroadcastElement( Tuple2<String,Set<Integer>> attributeSignature, Context context, Collector<UbiEvent> out ) throws Exception {
+        BroadcastState<String, Set<Integer>> agentBroadcastState = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
+
+        if (attributeSignature.f1 == null) {
+            agentBroadcastState.remove(attributeSignature.f0);
         }
+        agentBroadcastState.put(attributeSignature.f0, attributeSignature.f1);
     }
 }

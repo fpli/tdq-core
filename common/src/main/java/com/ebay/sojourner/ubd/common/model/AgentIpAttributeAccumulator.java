@@ -2,13 +2,18 @@ package com.ebay.sojourner.ubd.common.model;
 
 import lombok.Data;
 
+import java.util.HashMap;
+
 @Data
 public class AgentIpAttributeAccumulator {
     private AgentIpAttribute agentIpAttribute;
+    private HashMap<Integer,Integer> botFlagStatus = new HashMap<>();
 
 
     public AgentIpAttributeAccumulator() {
         this.agentIpAttribute = new AgentIpAttribute();
+        botFlagStatus.put(5,0);
+        botFlagStatus.put(8,0);
 
     }
 }

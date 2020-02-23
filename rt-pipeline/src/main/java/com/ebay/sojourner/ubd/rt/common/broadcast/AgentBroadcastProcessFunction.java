@@ -1,19 +1,18 @@
 package com.ebay.sojourner.ubd.rt.common.broadcast;
 
-import com.ebay.sojourner.ubd.common.model.AttributeSignature;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.util.Collector;
 
-import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-public class AgentBroadcastProcessFunction extends BroadcastProcessFunction<UbiSession, AttributeSignature,UbiSession> {
+public class AgentBroadcastProcessFunction extends BroadcastProcessFunction<UbiSession, Tuple2<String, Set<Integer>>, UbiSession> {
 
     @Override
     public void processElement(UbiSession ubiSession, ReadOnlyContext context, Collector<UbiSession> out) throws Exception {
@@ -38,10 +37,12 @@ public class AgentBroadcastProcessFunction extends BroadcastProcessFunction<UbiS
     }
 
     @Override
-    public void processBroadcastElement(AttributeSignature attributeSignature, Context context, Collector<UbiSession> out) throws Exception {
+    public void processBroadcastElement(Tuple2<String, Set<Integer>> attributeSignature, Context context, Collector<UbiSession> out) throws Exception {
         BroadcastState<String, Set<Integer>> agentBroadcastState = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
-        for (Map.Entry<String, Set<Integer>> entry : attributeSignature.getAttributeSignature().entrySet()) {
-            agentBroadcastState.put(entry.getKey(), entry.getValue());
+        if (attributeSignature.f1 == null) {
+            agentBroadcastState.remove(attributeSignature.f0);
         }
+        agentBroadcastState.put(attributeSignature.f0, attributeSignature.f1);
+
     }
 }

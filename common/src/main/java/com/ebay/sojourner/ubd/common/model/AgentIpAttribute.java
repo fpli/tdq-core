@@ -5,12 +5,14 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
 public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
     private String clientIp;
     private String agent;
+    private Set<Integer> botFlagList = new LinkedHashSet<>();
     private int scsCountForBot5 = 0;
     private int scsCountForBot6 = 0;
     private int scsCountForBot7 = 0;

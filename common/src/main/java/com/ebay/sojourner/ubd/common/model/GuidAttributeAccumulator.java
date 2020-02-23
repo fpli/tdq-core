@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class GuidAttributeAccumulator {
      private GuidAttribute guidAttribute;
+     private int flag = 0;
 
 
      public GuidAttributeAccumulator(){

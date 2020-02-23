@@ -4,11 +4,14 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Data
 public class GuidAttribute implements Attribute<UbiSession>, Serializable {
 
     private String guid;
+    private Set<Integer> botFlagList = new LinkedHashSet<>();
     @Getter
     private int absEventCount=0;
 

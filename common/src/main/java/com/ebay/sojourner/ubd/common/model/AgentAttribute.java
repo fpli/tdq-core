@@ -3,6 +3,8 @@ package com.ebay.sojourner.ubd.common.model;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Data
 public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable {
@@ -16,6 +18,7 @@ public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable
     private int directSessionCnt = 0;
     private int mktgSessionCnt = 0;
     private int ipCountForSuspect=0;
+    private Set<Integer> botFlagList = new LinkedHashSet<>();
 
     public AgentAttribute() {
     }
