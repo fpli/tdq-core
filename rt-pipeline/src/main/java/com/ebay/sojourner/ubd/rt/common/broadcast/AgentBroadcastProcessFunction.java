@@ -16,7 +16,7 @@ public class AgentBroadcastProcessFunction extends BroadcastProcessFunction<UbiS
 
     @Override
     public void processElement(UbiSession ubiSession, ReadOnlyContext context, Collector<UbiSession> out) throws Exception {
-        ReadOnlyBroadcastState<String, Set<Integer>> attributeSignature = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
+        ReadOnlyBroadcastState<String, Set<Integer>> attributeSignature = context.getBroadcastState(MapStateDesc.agentSignatureDesc);
         if (attributeSignature.contains("agent" + ubiSession.getUserAgent())) {
             ubiSession.getBotFlagList().addAll(attributeSignature.get("agent" + ubiSession.getUserAgent()));
         }
@@ -38,7 +38,7 @@ public class AgentBroadcastProcessFunction extends BroadcastProcessFunction<UbiS
 
     @Override
     public void processBroadcastElement(Tuple2<String, Set<Integer>> attributeSignature, Context context, Collector<UbiSession> out) throws Exception {
-        BroadcastState<String, Set<Integer>> agentBroadcastState = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
+        BroadcastState<String, Set<Integer>> agentBroadcastState = context.getBroadcastState(MapStateDesc.agentSignatureDesc);
         if (attributeSignature.f1 == null) {
             agentBroadcastState.remove(attributeSignature.f0);
         }

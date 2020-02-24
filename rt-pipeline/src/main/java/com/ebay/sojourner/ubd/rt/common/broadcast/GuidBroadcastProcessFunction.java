@@ -13,7 +13,7 @@ import java.util.Set;
 public class GuidBroadcastProcessFunction extends BroadcastProcessFunction<UbiSession, Tuple2<String, Set<Integer>>, UbiSession> {
     @Override
     public void processElement(UbiSession ubiSession, ReadOnlyContext context, Collector<UbiSession> out) throws Exception {
-        ReadOnlyBroadcastState<String, Set<Integer>> attributeSignature = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
+        ReadOnlyBroadcastState<String, Set<Integer>> attributeSignature = context.getBroadcastState(MapStateDesc.guidSignatureDesc);
 
         if (attributeSignature.contains("guid" + ubiSession.getGuid())) {
             ubiSession.getBotFlagList().addAll(attributeSignature.get("guid" + ubiSession.getGuid()));
@@ -23,7 +23,7 @@ public class GuidBroadcastProcessFunction extends BroadcastProcessFunction<UbiSe
 
     @Override
     public void processBroadcastElement(Tuple2<String, Set<Integer>> attributeSignature, Context context, Collector<UbiSession> out) throws Exception {
-        BroadcastState<String, Set<Integer>> guidBroadcastState = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
+        BroadcastState<String, Set<Integer>> guidBroadcastState = context.getBroadcastState(MapStateDesc.guidSignatureDesc);
         if (attributeSignature.f1 == null) {
             guidBroadcastState.remove(attributeSignature.f0);
         }

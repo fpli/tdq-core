@@ -23,6 +23,10 @@ public class MapStateDesc {
     );
 
     public static final MapStateDescriptor<String,HashMap<Integer,Long>> attributeSignatureDesc = new MapStateDescriptor<>(
-            "broadcast-agentIpSignature-state", BasicTypeInfo.STRING_TYPE_INFO,TypeInformation.of(new TypeHint<HashMap<Integer,Long>>() {})
+            "broadcast-attributeSignature-state", BasicTypeInfo.STRING_TYPE_INFO,TypeInformation.of(new TypeHint<HashMap<Integer,Long>>() {})
+    );
+
+    public static final MapStateDescriptor<String,Set<Integer>> guidSignatureDesc = new MapStateDescriptor<>(
+            "broadcast-guidSignature-state", BasicTypeInfo.STRING_TYPE_INFO,TypeInformation.of(new TypeHint<Set<Integer>>() {})
     );
 }

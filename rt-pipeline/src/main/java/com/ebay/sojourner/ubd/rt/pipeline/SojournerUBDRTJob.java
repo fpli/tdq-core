@@ -1,15 +1,12 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.*;
-import com.ebay.sojourner.ubd.rt.common.broadcast.AgentBroadcastProcessFunction;
-import com.ebay.sojourner.ubd.rt.common.broadcast.AgentIpBroadcastProcessFunction;
-import com.ebay.sojourner.ubd.rt.common.broadcast.IpBroadcastProcessFunction;
-import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
-import com.ebay.sojourner.ubd.rt.operators.attribute.*;
+import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAgg;
+import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
@@ -19,7 +16,6 @@ import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
-import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
