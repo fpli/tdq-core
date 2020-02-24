@@ -6,7 +6,6 @@ import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
-import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.types.Either;
@@ -28,7 +27,7 @@ public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastPro
 
     @Override
     public void processElement(Either<UbiEvent, UbiSession> signatureDetectable, ReadOnlyContext context, Collector<UbiEvent> out) throws Exception {
-        ReadOnlyBroadcastState<String, HashMap<Integer, Long>> attributeSignature = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
+        ReadOnlyBroadcastState<String, Map<Integer, Long>> attributeSignature = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
 
         if (signatureDetectable.isLeft()) {
             UbiEvent ubiEvent = signatureDetectable.left();
@@ -123,7 +122,7 @@ public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastPro
 
     @Override
     public void processBroadcastElement(Tuple3<String, Set<Integer>, Long> attributeSignature, Context context, Collector<UbiEvent> out) throws Exception {
-        BroadcastState<String, HashMap<Integer, Long>> attributeBroadcastStatus = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
+        BroadcastState<String, Map<Integer, Long>> attributeBroadcastStatus = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
 
         if (!attributeBroadcastStatus.contains(attributeSignature.f0)) {
             Iterator<Integer> botFlags = attributeSignature.f1.iterator();
@@ -133,7 +132,7 @@ public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastPro
                 attributeBroadcastStatus.put(attributeSignature.f0, botFlagStatus);
             }
         } else {
-            HashMap<Integer, Long> botFlagStatusMap = attributeBroadcastStatus.get(attributeSignature.f0);
+            Map<Integer, Long> botFlagStatusMap = attributeBroadcastStatus.get(attributeSignature.f0);
             for (Map.Entry<Integer, Long> botFlagStatus : botFlagStatusMap.entrySet()) {
                 if (!attributeSignature.f1.contains(botFlagStatus.getKey())) {
                     HashMap<Integer, Long> botFlag = new HashMap<>();
