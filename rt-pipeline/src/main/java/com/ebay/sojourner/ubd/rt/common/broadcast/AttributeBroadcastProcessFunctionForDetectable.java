@@ -22,7 +22,7 @@ import java.util.Set;
 public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastProcessFunction<Either<UbiEvent, UbiSession>, Tuple3<String, Set<Integer>, Long>, UbiEvent> {
     private OutputTag outputTag = null;
 
-    public AttributeBroadcastProcessFunctionForDetectable(OutputTag sessionOutputTag) {
+    public  AttributeBroadcastProcessFunctionForDetectable(OutputTag sessionOutputTag) {
         outputTag = sessionOutputTag;
     }
 
@@ -142,7 +142,13 @@ public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastPro
                 } else {
                     if (attributeSignature.f1 == null) {
                         if (attributeSignature.f2 <= botFlagStatus.getValue()) {
-                            attributeBroadcastStatus.remove(attributeSignature.f0);
+                            botFlagStatusMap.remove(botFlagStatus.getKey());
+                            if (botFlagStatusMap.size() > 0) {
+                                attributeBroadcastStatus.put(attributeSignature.f0,botFlagStatusMap);
+                            } else {
+                                attributeBroadcastStatus.remove(attributeSignature.f0);
+                            }
+
                         }
                     } else {
                         HashMap<Integer, Long> botFlag = new HashMap<>();
