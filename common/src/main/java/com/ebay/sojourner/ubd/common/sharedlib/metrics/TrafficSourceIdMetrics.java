@@ -55,84 +55,6 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
     private static Set<Integer> socialAgentId22 = new HashSet<Integer>();
     private static Set<Integer> socialAgentId23 = new HashSet<Integer>();
 
-    public static String getEbaystr() {
-        return ebayStr;
-    }
-
-    public static String getKijijistr() {
-        return kijijiStr;
-    }
-
-    static Set<Integer> getLandPageSet1() {
-        return landPageSet1;
-    }
-
-    static Set<Integer> getLandPageSet2() {
-        return landPageSet2;
-    }
-
-    public static String getRegString4Id21() {
-        return regString4Id21;
-    }
-
-    public static String getRegString4Id21_1() {
-        return regString4Id21_1;
-    }
-
-    public static String getRegString4Id22() {
-        return regString4Id22;
-    }
-
-    public static String getRegString4Id23() {
-        return regString4Id23;
-    }
-
-    static Set<Long> getRotSet() {
-        return rotSet;
-    }
-
-    static Set<Integer> getSwdSet() {
-        return swdSet;
-    }
-
-    static void setLandPageSet1(HashSet<Integer> pageIdSet1) {
-        TrafficSourceIdMetrics.landPageSet1 = pageIdSet1;
-    }
-
-    static void setLandPageSet2(HashSet<Integer> pageIdSet2) {
-        TrafficSourceIdMetrics.landPageSet2 = pageIdSet2;
-    }
-
-    public static void setRegString4Id21(String regString4Id21) {
-        TrafficSourceIdMetrics.regString4Id21 = regString4Id21;
-    }
-
-    public static void setRegString4Id21_1(String regString4Id21_1) {
-        TrafficSourceIdMetrics.regString4Id21_1 = regString4Id21_1;
-    }
-
-    public static void setRegString4Id22(String regString4Id22) {
-        TrafficSourceIdMetrics.regString4Id22 = regString4Id22;
-    }
-
-    public static void setRegString4Id23(String regString4Id23) {
-        TrafficSourceIdMetrics.regString4Id23 = regString4Id23;
-    }
-
-    static void setRotSet(HashSet<Long> rotSet) {
-        TrafficSourceIdMetrics.rotSet = rotSet;
-    }
-
-    static void setSwdSet(HashSet<Integer> swdSet) {
-        TrafficSourceIdMetrics.swdSet = swdSet;
-    }
-
-//    private Long startTSOnCurrentCobrandSite = null;
-//
-//    private IntermediateMetrics intermediateMetrics = null;
-//
-//    private Integer firstCobrand = null;
-
     private static StringBuilder stingBuilder = new StringBuilder();
 
     static {
@@ -174,15 +96,6 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
     @Override
     public void feed(UbiEvent ubiEvent, SessionAccumulator sessionAccumulator) throws Exception {
         sessionAccumulator.getUbiSession().getIntermediateMetrics().feed(ubiEvent);
-    }
-
-    public String getCobrandSiteId(UbiEvent event) {
-        if (event == null) {
-            return null;
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(event.getCobrand()).append("|").append(event.getSiteId());
-        return stringBuilder.toString();
     }
 
     private int getTrafficSourceId(SessionAccumulator sessionAccumulator) {
@@ -574,21 +487,5 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
         sessionAccumulator.getUbiSession().setIntermediateMetrics(intermediateMetrics);
 //        intermediateMetrics.start(source);
 //        feed(source, target);
-    }
-
-    public static Set<Integer> getSocialAgentId22() {
-        return socialAgentId22;
-    }
-
-    public static void setSocialAgentId22(Set<Integer> socialAgentId22) {
-        TrafficSourceIdMetrics.socialAgentId22 = socialAgentId22;
-    }
-
-    public static Set<Integer> getSocialAgentId23() {
-        return socialAgentId23;
-    }
-
-    public static void setSocialAgentId23(Set<Integer> socialAgentId23) {
-        TrafficSourceIdMetrics.socialAgentId23 = socialAgentId23;
     }
 }

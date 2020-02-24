@@ -13,9 +13,10 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
-    private static ArrayList<String> viPGT;
-    private static Map<Integer, String[]> pageFmlyNameMap;
-    private static LkpFetcher lkpFetcher;
+
+    private ArrayList<String> viPGT;
+    private Map<Integer, String[]> pageFmlyNameMap;
+    private LkpFetcher lkpFetcher;
 
     @Override
     public void start(SessionAccumulator sessionAccumulator) throws Exception {
@@ -25,9 +26,8 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
         Integer pageId = event.getPageId();
-        if (!event.isRdt() && !event.isIframe() && event.isPartialValidPage() &&
-                pageId != null
-                && ((pageFmlyNameMap.containsKey(pageId) && "GR".equals(pageFmlyNameMap.get(pageId)[1])) || (getImPGT(event) != null && "GR".equals(getImPGT(event))))) {
+        if (!event.isRdt() && !event.isIframe() && event.isPartialValidPage() && pageId != -1 &&
+                ((pageFmlyNameMap.containsKey(pageId) && "GR".equals(pageFmlyNameMap.get(pageId)[1])) || (getImPGT(event) != null && "GR".equals(getImPGT(event))))) {
             sessionAccumulator.getUbiSession().setGrCnt(sessionAccumulator.getUbiSession().getGrCnt() + 1);
         }
     }
@@ -43,14 +43,6 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
         lkpFetcher.loadPageFmlys();
         pageFmlyNameMap = lkpFetcher.getPageFmlyMaps();
         viPGT = new ArrayList<>(PropertyUtils.parseProperty(UBIConfig.getString(Property.VI_EVENT_VALUES), Property.PROPERTY_DELIMITER));
-    }
-
-    public boolean isVIPGT(UbiEvent event) {
-        if (StringUtils.isNotBlank(SOJNVL.getTagValue(event.getApplicationPayload(), "pgt")) && viPGT.contains(SOJNVL.getTagValue(event.getApplicationPayload(), "pgt"))) {
-            return true;
-        }
-
-        return false;
     }
 
     private String getImPGT(UbiEvent event) {

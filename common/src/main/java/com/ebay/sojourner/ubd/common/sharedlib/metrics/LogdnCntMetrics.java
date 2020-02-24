@@ -7,9 +7,9 @@ import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
 import java.util.Map;
 
 public class LogdnCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
-    public static final String SIGN_IN = "SIGNIN";
-    private static Map<Integer, String[]> pageFmlyNameMap;
-    private static LkpFetcher lkpFetcher;
+    private static final String SIGN_IN = "SIGNIN";
+    private Map<Integer, String[]> pageFmlyNameMap;
+    private LkpFetcher lkpFetcher;
 
     @Override
     public void start(SessionAccumulator sessionAccumulator) throws Exception {

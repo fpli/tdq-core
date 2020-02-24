@@ -12,13 +12,12 @@ public class OldSessionSkeyMetrics implements FieldMetrics<UbiEvent, SessionAccu
     @Override
     public void start(SessionAccumulator sessionAccumulator) {
         sessionAccumulator.getUbiSession().setOldSessionSkey(null);
-        sessionAccumulator.getUbiSession().setOldSessionSkeySet(new HashSet<Long>());
+        sessionAccumulator.getUbiSession().setOldSessionSkeySet(new HashSet<>());
     }
 
     @Override
     public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
         sessionAccumulator.getUbiSession().getOldSessionSkeySet().add(event.getOldSessionSkey());
-
     }
 
     @Override
@@ -32,7 +31,6 @@ public class OldSessionSkeyMetrics implements FieldMetrics<UbiEvent, SessionAccu
             value = value.substring(0, value.length() - OLD_SESSIONSKEY_DELIMITER.length());
             sessionAccumulator.getUbiSession().setOldSessionSkey(value);
         }
-
     }
 
     @Override

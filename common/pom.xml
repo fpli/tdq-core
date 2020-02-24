@@ -82,6 +82,20 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<!-- Exclude class from test coverage -->
+						<exclude>**/*com/ebay/sojourner/ubd/common/sharedlib/metrics/IntermediateMetrics.class</exclude>
+						<exclude>**/*com/ebay/sojourner/ubd/common/sharedlib/metrics/TrafficSourceIdMetrics.class</exclude>
+						<exclude>**/*com/ebay/sojourner/ubd/common/sharedlib/parser/LkpFetcher.class</exclude>
+						<!-- Exclude full package from test coverage -->
+<!--						<exclude>**/*com/khan/vaquar/config/**</exclude>-->
+					</excludes>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>

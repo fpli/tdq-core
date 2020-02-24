@@ -3,11 +3,10 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> {
-
-    private static Logger logger = Logger.getLogger(SessionMetrics.class);
 
     private static volatile SessionMetrics sessionMetrics;
 
@@ -27,8 +26,7 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
         try {
             init();
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
+            log.error("Failed to init session metrics", e);
         }
     }
 

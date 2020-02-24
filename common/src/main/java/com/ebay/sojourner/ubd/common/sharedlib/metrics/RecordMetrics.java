@@ -37,10 +37,11 @@ public abstract class RecordMetrics<Source, Target> implements Aggregator<Source
     }
     
     public void addFieldMetrics(FieldMetrics<Source, Target> metrics) {
+        //TODO: this line is always true sine FieldMetrics does not override equals()
         if (!fieldMetrics.contains(metrics)) {
             fieldMetrics.add(metrics);
         } else {
-            throw new RuntimeException("Duplicate Metrics!!  ");
+            throw new RuntimeException("Duplicate Metrics!");
         }
     }
 }

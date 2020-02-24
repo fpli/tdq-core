@@ -1,11 +1,11 @@
 -
-  name: test1
+  name: test_getImPGT_GR
   inputs:
     UbiEvent:
       pageId: 1521826
-      rdt: 0
-      iframe: 0
-      partialValidPage: 1
+      rdt: false
+      iframe: false
+      partialValidPage: true
     SessionAccumulator:
       ubiSession:
         grCnt: 0

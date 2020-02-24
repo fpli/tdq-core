@@ -248,7 +248,7 @@ public class LkpFetcher {
         }
     }
 
-    public  void loadPageFmlys() {
+    public void loadPageFmlys() {
         if (pageFmlyMap.isEmpty()) {
             boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
             String pageFmlys = UBIConfig.getString(Property.PAGE_FMLY);

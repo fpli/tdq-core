@@ -10,25 +10,23 @@ import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
-    public static final Integer ONE_VI_PAGEID = new Integer(1521826);
-    private int familyViCnt;
-    private ArrayList<String> viPGT;
-    private static LkpFetcher lkpFetcher;
+    private List<String> viPGT;
+    private LkpFetcher lkpFetcher;
 
     @Override
     public void init() throws Exception {
-        lkpFetcher = LkpFetcher.getInstance();
+        this.lkpFetcher = LkpFetcher.getInstance();
         lkpFetcher.loadPageFmlys();
         viPGT = new ArrayList<>(PropertyUtils.parseProperty(UBIConfig.getString(Property.VI_EVENT_VALUES), Property.PROPERTY_DELIMITER));
     }
 
     @Override
     public void start(SessionAccumulator sessionAccumulator) throws Exception {
-        familyViCnt = 0;
         sessionAccumulator.getUbiSession().setFamilyViCnt(0);
     }
 
@@ -54,7 +52,7 @@ public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     }
 
     private String getImPGT(UbiEvent event) {
-        if (event.getPageId() != Integer.MIN_VALUE) {
+        if (event.getPageId() != -1) {
             if (event.getPageId() == 1521826 && StringUtils.isNotBlank(SOJNVL.getTagValue(event.getApplicationPayload(), "pgt")) && viPGT.contains(SOJNVL.getTagValue(event.getApplicationPayload(), "pgt"))) {
                 return "VI";
             }

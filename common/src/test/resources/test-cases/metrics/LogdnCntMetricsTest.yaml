@@ -1,0 +1,14 @@
+-
+  name: test_signinPageCnt_pass
+  inputs:
+    UbiEvent:
+      pageId: 2045330
+      rdt: false
+      iframe: false
+      partialValidPage: true
+    SessionAccumulator:
+      ubiSession:
+        signinPageCnt: 2
+  expect:
+    UbiSession:
+      signinPageCnt: 3

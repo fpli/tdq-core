@@ -24,7 +24,7 @@ public class UbiEvent  implements Serializable {
   private Long sessionStartDt;
   private Long sojDataDt;
   private int clickId;
-  private int siteId;
+  private int siteId = -1;
   private int version;
   private int pageId = -1;
   private String pageName;

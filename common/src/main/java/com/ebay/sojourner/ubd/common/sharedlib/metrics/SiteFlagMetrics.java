@@ -4,6 +4,8 @@ import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.util.ByteArrayToNum;
 
+import java.util.Arrays;
+
 public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
     private static final Integer NUMBER_SITE_FLAG = 47;
 
@@ -22,35 +24,6 @@ public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
     void setSiteFlag(Integer siteId, SessionAccumulator sessionAccumulator) {
         siteFlags = sessionAccumulator.getUbiSession().getSiteFlagsSet();
         switch (siteId) {
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 20:
-            case 163:
-            case 500:
-            case 970:
-            case 971:
-            case 972:
-            case 973:
-            case 980:
-            case 981:
-            case 982:
-            case 983:
-            case 984:
-            case 985:
-            case 986:
-            case 987:
-            case 989:
-            case 990:
-            case 991:
-            case 992:
-            case 993:
-            case 994:
-            case 995:
-            case 996:
-            case 997:
             case 998:
                 siteFlags[0] = 1;
                 break;
@@ -195,10 +168,6 @@ public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
         }
     }
 
-    public byte[] getSiteFlag() {
-        return siteFlags;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -210,8 +179,7 @@ public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
     }
 
     public void initSiteFlags() {
-        for (int i = 0; i < siteFlags.length; i++)
-            siteFlags[i] = 0;
+        Arrays.fill(siteFlags, (byte) 0);
     }
 
     @Override
@@ -223,10 +191,8 @@ public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
 
     @Override
     public void feed(UbiEvent ubiEvent, SessionAccumulator sessionAccumulator) {
-
-        Integer siteId = ubiEvent.getSiteId();
-
-        if (siteId != null) {
+        int siteId = ubiEvent.getSiteId();
+        if (siteId != -1) {
             setSiteFlag(siteId, sessionAccumulator);
         }
     }
@@ -239,7 +205,6 @@ public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
     @Override
     public void init() throws Exception {
         // nothing to do
-
     }
 
 }
