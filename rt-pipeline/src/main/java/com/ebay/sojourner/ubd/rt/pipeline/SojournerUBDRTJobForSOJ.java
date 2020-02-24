@@ -19,6 +19,7 @@ import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
@@ -149,7 +150,7 @@ public class SojournerUBDRTJobForSOJ {
                 .name("Tumbling Attribute Operator (Agent+IP)")
                 .setParallelism(72);
 
-        DataStream<Tuple2<String, Set<Integer>>> guidSignatureDataStream = ubiSessinDataStream
+        DataStream<Tuple3<String, Set<Integer>,Long>> guidSignatureDataStream = ubiSessinDataStream
                 .keyBy("guid")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12)))
                 .trigger(OnElementEarlyFiringTrigger.create())
@@ -159,7 +160,7 @@ public class SojournerUBDRTJobForSOJ {
 
         guidSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(72).name("GUID Signature");
 
-        DataStream<Tuple2<String,Set<Integer>>> agentIpSignatureDataStream = agentIpAttributeDatastream
+        DataStream<Tuple3<String,Set<Integer>,Long>> agentIpSignatureDataStream = agentIpAttributeDatastream
                 .keyBy("agent", "clientIp")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12)))
                 .trigger(OnElementEarlyFiringTrigger.create())
@@ -169,7 +170,7 @@ public class SojournerUBDRTJobForSOJ {
 
         agentIpSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(72).name("Agent+IP Signature");
 
-        DataStream<Tuple2<String, Set<Integer>>> agentSignatureDataStream = agentIpAttributeDatastream
+        DataStream<Tuple3<String, Set<Integer>,Long>> agentSignatureDataStream = agentIpAttributeDatastream
                 .keyBy("agent")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12)))
                 .trigger(OnElementEarlyFiringTrigger.create())
@@ -179,7 +180,7 @@ public class SojournerUBDRTJobForSOJ {
 
         agentSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(72).name("Agent Signature");
 
-        DataStream<Tuple2<String, Set<Integer>>> ipSignatureDataStream = agentIpAttributeDatastream
+        DataStream<Tuple3<String, Set<Integer>,Long>> ipSignatureDataStream = agentIpAttributeDatastream
                 .keyBy("clientIp")
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12)))
                 .trigger(OnElementEarlyFiringTrigger.create())
@@ -190,14 +191,14 @@ public class SojournerUBDRTJobForSOJ {
         ipSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(72).name("Ip Signature");
 
         // union attribute signature for broadcast
-        DataStream<Tuple2<String, Set<Integer>>> attributeSignatureDataStream = agentIpSignatureDataStream
+        DataStream<Tuple3<String, Set<Integer>,Long>> attributeSignatureDataStream = agentIpSignatureDataStream
                 .union(agentSignatureDataStream)
                 .union(ipSignatureDataStream)
                 .union(guidSignatureDataStream);
 
 
         // attribute signature broadcast
-        BroadcastStream<Tuple2<String,Set<Integer>>> attributeSignatureBroadcastStream = attributeSignatureDataStream
+        BroadcastStream<Tuple3<String,Set<Integer>,Long>> attributeSignatureBroadcastStream = attributeSignatureDataStream
                 .broadcast(MapStateDesc.attributeSignatureDesc);
 
         // transform ubiEvent,ubiSession to same type and union

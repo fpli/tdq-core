@@ -5,6 +5,7 @@ import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 
+import java.util.HashMap;
 import java.util.Set;
 
 public class MapStateDesc {
@@ -21,7 +22,7 @@ public class MapStateDesc {
             "broadcast-agentIpSignature-state", BasicTypeInfo.STRING_TYPE_INFO,TypeInformation.of(new TypeHint<Set<Integer>>() {})
     );
 
-    public static final MapStateDescriptor<String,Set<Integer>> attributeSignatureDesc = new MapStateDescriptor<>(
-            "broadcast-agentIpSignature-state", BasicTypeInfo.STRING_TYPE_INFO,TypeInformation.of(new TypeHint<Set<Integer>>() {})
+    public static final MapStateDescriptor<String,HashMap<Integer,Long>> attributeSignatureDesc = new MapStateDescriptor<>(
+            "broadcast-agentIpSignature-state", BasicTypeInfo.STRING_TYPE_INFO,TypeInformation.of(new TypeHint<HashMap<Integer,Long>>() {})
     );
 }
