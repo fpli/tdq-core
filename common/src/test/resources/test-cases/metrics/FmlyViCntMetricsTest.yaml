@@ -10,7 +10,7 @@
       familyViCnt: 0
     SessionAccumulator:
       ubiSession:
-        familyViCnt:
+        familyViCnt: 0
   expect:
     UbiSession:
       familyViCnt: 1

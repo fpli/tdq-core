@@ -174,7 +174,7 @@ public class Soj2UbiEventDeserializationSchema implements DeserializationSchema<
 
     private int getInteger( Object o ) {
         if (StringUtils.isEmpty(getString(o))) {
-            return Integer.MIN_VALUE;
+            return -1;
         } else {
             return Integer.parseInt(getString(o));
         }

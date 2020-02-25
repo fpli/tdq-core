@@ -7,12 +7,12 @@ import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
 import java.util.Map;
 
 public class Gr1CntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
-	private int gr1Count;
-	private static Map<Integer, String[]> pageFmlyNameMap;
-    private static LkpFetcher lkpFetcher;
-	@Override
+
+	private LkpFetcher lkpFetcher;
+	private Map<Integer, String[]> pageFmlyNameMap;
+
+    @Override
 	public void start(SessionAccumulator sessionAccumulator) throws Exception {
-		this.gr1Count = 0;
 		sessionAccumulator.getUbiSession().setGr1Cnt(0);
 	}
 

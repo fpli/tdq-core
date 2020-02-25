@@ -3,8 +3,8 @@
   inputs:
     UbiEvent:
       pageId: 2034059
-      rdt: 0
-      iframe: 0
+      rdt: false
+      iframe: false
       partialValidPage: true
     SessionAccumulator:
       ubiSession:

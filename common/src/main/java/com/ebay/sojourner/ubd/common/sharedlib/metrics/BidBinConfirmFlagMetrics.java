@@ -4,6 +4,7 @@ import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 
 public class BidBinConfirmFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
     @Override
     public void start(SessionAccumulator sessionAccumulator) {
         // nothing to do

@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 import java.util.*;
 
+//FIXME: refactor this class
 public class IntermediateMetrics implements Serializable {
     private static Set<Integer> agentExcludePageSet = null;
     private static final String CHANNEL = "chnl";
