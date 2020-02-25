@@ -1,13 +1,20 @@
 package com.ebay.sojourner.ubd.common.sharedlib.parser;
 
+import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
 import com.ebay.sojourner.ubd.common.util.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 
-public class IcfParser {
+public class IcfParser implements FieldParser<RawEvent, UbiEvent> {
 
-    public static void parse(UbiEvent ubiEvent) throws Exception {
+    @Override
+    public void init() throws Exception {
+
+    }
+
+    @Override
+    public void parse(RawEvent rawEvent, UbiEvent ubiEvent) throws Exception {
 
         if (StringUtils.isBlank(ubiEvent.getApplicationPayload())) {
             ubiEvent.setIcfBinary(0L);

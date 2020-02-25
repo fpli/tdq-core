@@ -224,9 +224,9 @@ public class SojournerUBDRTJobForSOJ {
 
         DataStream<UbiSession> signatureBotDetectionForSession = signatureBotDetectionForEvent.getSideOutput(sessionOutputTag);
 //
-        signatureBotDetectionForSession.addSink(new DiscardingSink<>()).name("Sink:Session");
-        latedStream.addSink(new DiscardingSink<>()).name("Sink:Late Event");
-        signatureBotDetectionForEvent.addSink(new DiscardingSink<>()).name("Sink:Event");
+        signatureBotDetectionForSession.addSink(new DiscardingSink<>()).name("Session");
+        latedStream.addSink(new DiscardingSink<>()).name("Late Event");
+        signatureBotDetectionForEvent.addSink(new DiscardingSink<>()).name("Event");
 
         // Submit this job
         executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
