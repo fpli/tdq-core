@@ -125,11 +125,13 @@ public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastPro
         BroadcastState<String, Map<Integer, Long>> attributeBroadcastStatus = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
 
         if (!attributeBroadcastStatus.contains(attributeSignature.f0)) {
-            Iterator<Integer> botFlags = attributeSignature.f1.iterator();
-            while (botFlags.hasNext()) {
-                HashMap<Integer, Long> botFlagStatus = new HashMap<>();
-                botFlagStatus.put(botFlags.next(), attributeSignature.f2);
-                attributeBroadcastStatus.put(attributeSignature.f0, botFlagStatus);
+            if (attributeSignature.f1 != null && attributeSignature.f1.size() > 0) {
+                Iterator<Integer> botFlags = attributeSignature.f1.iterator();
+                while (botFlags.hasNext()) {
+                    HashMap<Integer, Long> botFlagStatus = new HashMap<>();
+                    botFlagStatus.put(botFlags.next(), attributeSignature.f2);
+                    attributeBroadcastStatus.put(attributeSignature.f0, botFlagStatus);
+                }
             }
         } else {
             Map<Integer, Long> botFlagStatusMap = attributeBroadcastStatus.get(attributeSignature.f0);
