@@ -144,7 +144,7 @@ public class SojournerUBDRTJobForSOJ {
                 .keyBy("userAgent", "clientIp")
                 .window(TumblingEventTimeWindows.of(Time.minutes(5)))
                 .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
-                .name("Tumbling Attribute Operator (Agent+IP)")
+                .name("Attribute Operator (Agent+IP Pre-Aggregation)")
                 .setParallelism(72);
 
         DataStream<Tuple3<String, Set<Integer>,Long>> guidSignatureDataStream = ubiSessinDataStream
@@ -162,7 +162,7 @@ public class SojournerUBDRTJobForSOJ {
                 .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
-                .name("Sliding Attribute Operator (Agent+IP)")
+                .name("Attribute Operator (Agent+IP)")
                 .setParallelism(72);
 
         agentIpSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(72).name("Agent+IP Signature");
@@ -185,7 +185,7 @@ public class SojournerUBDRTJobForSOJ {
                 .name("Attribute Operator (IP)")
                 .setParallelism(72);
 
-        ipSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(72).name("Ip Signature");
+        ipSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(72).name("IP Signature");
 
         // union attribute signature for broadcast
         DataStream<Tuple3<String, Set<Integer>,Long>> attributeSignatureDataStream = agentIpSignatureDataStream
@@ -214,7 +214,7 @@ public class SojournerUBDRTJobForSOJ {
         SingleOutputStreamOperator<UbiEvent> signatureBotDetectionForEvent = detectableDataStream
                 .connect(attributeSignatureBroadcastStream)
                 .process(new AttributeBroadcastProcessFunctionForDetectable(sessionOutputTag))
-                .name("Signature BotDetection for event");
+                .name("Signature Bot Detector");
 
         // 5. Load data to file system for batch processing
         // 5.1 IP Signature
@@ -224,9 +224,9 @@ public class SojournerUBDRTJobForSOJ {
 
         DataStream<UbiSession> signatureBotDetectionForSession = signatureBotDetectionForEvent.getSideOutput(sessionOutputTag);
 //
-        signatureBotDetectionForSession.addSink(new DiscardingSink<>()).name("session discarding");
-        latedStream.addSink(new DiscardingSink<>()).name("late stream discarding");
-        signatureBotDetectionForEvent.addSink(new DiscardingSink<>()).name("event discarding");
+        signatureBotDetectionForSession.addSink(new DiscardingSink<>()).name("Sink:Session");
+        latedStream.addSink(new DiscardingSink<>()).name("Sink:Late Event");
+        signatureBotDetectionForEvent.addSink(new DiscardingSink<>()).name("Sink:Event");
 
         // Submit this job
         executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());

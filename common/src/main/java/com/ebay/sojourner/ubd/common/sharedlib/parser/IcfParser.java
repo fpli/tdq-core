@@ -2,10 +2,10 @@ package com.ebay.sojourner.ubd.common.sharedlib.parser;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
-import com.ebay.sojourner.ubd.common.util.Converter;
+import com.ebay.sojourner.ubd.common.util.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 
-public class IcfTypeParser {
+public class IcfParser {
 
     public static void parse(UbiEvent ubiEvent) throws Exception {
 
@@ -16,7 +16,7 @@ public class IcfTypeParser {
             if (StringUtils.isBlank(hexString)) {
                 ubiEvent.setIcfBinary(0L);
             } else {
-                long icfDecNum = Converter.hexToDec(hexString);
+                long icfDecNum = NumberUtils.hexToDec(hexString);
                 ubiEvent.setIcfBinary(icfDecNum);
             }
         }

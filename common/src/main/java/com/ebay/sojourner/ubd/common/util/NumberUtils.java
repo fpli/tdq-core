@@ -1,6 +1,6 @@
 package com.ebay.sojourner.ubd.common.util;
 
-public class Converter {
+public class NumberUtils {
 
     public static String binaryToHex(String s) {
         return Long.toHexString(Long.parseLong(s, 2));

@@ -80,7 +80,7 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
         long startTime = System.nanoTime();
         parser.parse(rawEvent, event, eventParseMap);
-        IcfTypeParser.parse(event);
+        IcfParser.parse(event);
         avgDuration.add(System.nanoTime() - startTime);
         event.getBotFlags().addAll(eventBotDetector.getBotFlagList(event));
         return event;
