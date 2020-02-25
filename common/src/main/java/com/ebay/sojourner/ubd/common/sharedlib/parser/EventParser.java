@@ -42,6 +42,8 @@ public class EventParser extends RecordParser<RawEvent, UbiEvent> {
             // new metrics
             addFieldParser(new CobrandParser());
             addFieldParser(new PartialValidPageParser());
+            // icf
+            addFieldParser(new IcfParser());
         }        
     }
 }
