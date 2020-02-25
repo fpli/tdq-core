@@ -13,6 +13,6 @@ public class IcfRule12 implements Rule<UbiEvent> {
 
     @Override
     public int getBotFlag(UbiEvent ubiEvent) throws IOException, InterruptedException {
-        return IcfRuleUtils.getIcfRuleType(ubiEvent.getApplicationPayload());
+        return IcfRuleUtils.getIcfRuleType(ubiEvent.getIcfBinary(),12);
     }
 }

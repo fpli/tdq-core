@@ -35,16 +35,6 @@ public class BotRules {
     public static final int DECLARED_AGENT = 202;
     public static final int SAME_AGENT_IP = 211;
     // ICF BOT Flag (801 ~ 856 represent 1 ~ 56)
-    public static final int ICF_RULE1 = 801;
-    public static final int ICF_RULE2 = 802;
-    public static final int ICF_RULE3 = 803;
-    public static final int ICF_RULE4 = 804;
-    public static final int ICF_RULE5 = 805;
-    public static final int ICF_RULE6 = 806;
-    public static final int ICF_RULE7 = 807;
-    public static final int ICF_RULE10 = 810;
-    public static final int ICF_RULE11 = 811;
-    public static final int ICF_RULE12 = 812;
-    public static final int ICF_RULE13 = 813;
-    public static final int ICF_RULE56 = 856;
+    public static final int ICF_Prefix1 = 40;
+    public static final int ICF_Prefix2 = 4;
 }

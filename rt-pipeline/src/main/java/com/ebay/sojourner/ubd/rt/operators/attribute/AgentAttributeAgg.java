@@ -68,7 +68,7 @@ public class AgentAttributeAgg implements AggregateFunction<AgentIpAttribute, Ag
                             break;
                     }
                 } else if (agentBotFlag.contains(221)) {
-                    switch (agentAttributeAccumulator.getBotFlagStatus().get(2201)) {
+                    switch (agentAttributeAccumulator.getBotFlagStatus().get(221)) {
                         case 0:
                             agentAttributeAccumulator.getBotFlagStatus().put(221, 1);
                             break;

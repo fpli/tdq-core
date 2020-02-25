@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Data
-public class UbiEvent  implements Serializable {
+public class UbiEvent implements Serializable {
   private String guid;
   private String sessionId=Constants.NO_SESSION_ID;
   private int seqNum;
@@ -60,6 +60,7 @@ public class UbiEvent  implements Serializable {
   private long sessionStartTime;
   private long sessionEndTime;
   private Set<Integer> botFlags= new LinkedHashSet<>();
+  private long icfBinary;
   @Getter private long eventCnt;
 //  private Map<String, Object> counters;
 
