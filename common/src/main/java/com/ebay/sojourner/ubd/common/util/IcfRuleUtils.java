@@ -9,7 +9,7 @@ public class IcfRuleUtils {
         if (checkLocation > 64) {
             log.error("the max is 64");
         } else {
-            int icfType = (icfBinary & (1 << (checkLocation - 1))) > 0 ? 1 : 0;
+            int icfType = BitUtils.checkBit(icfBinary,checkLocation);
             if (icfType == 1) {
                 if (checkLocation < 10 && checkLocation >= 0) {
                     return Integer.valueOf(BotRules.ICF_Prefix1 + "" + checkLocation);

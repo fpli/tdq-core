@@ -13,6 +13,4 @@ public class Converter {
     public static long hexToDec(String s) {
         return Long.parseLong(s,16);
     }
-
-
 }

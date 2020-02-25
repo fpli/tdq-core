@@ -48,7 +48,7 @@ public class IpAttributeAgg implements AggregateFunction<AgentIpAttribute, IpAtt
         try {
             if (ipAttributeAccumulator.getBotFlagStatus().containsValue(0) || ipAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
                 ipBotFlag = ipSignatureBotDetector.getBotFlagList(ipAttributeAccumulator.getIpAttribute());
-                if (ipBotFlag.contains(6)) {
+                if (ipBotFlag.contains(7)) {
                     switch (ipAttributeAccumulator.getBotFlagStatus().get(7)) {
                         case 0:
                             ipAttributeAccumulator.getBotFlagStatus().put(7, 1);
