@@ -22,7 +22,8 @@ public class GuidWindowProcessFunction
         GuidAttributeAccumulator guidAttributeAccumulator = elements.iterator().next();
         GuidAttribute guidAttribute = guidAttributeAccumulator.getGuidAttribute();
 
-        if (context.currentWatermark() > context.window().maxTimestamp()) {
+        if (context.currentWatermark() > context.window().maxTimestamp()
+                && guidAttribute.getBotFlagList() != null && guidAttribute.getBotFlagList().size() > 0) {
             out.collect(new Tuple3<>("guid" + guidAttribute.getGuid(), null, context.window().maxTimestamp()));
         } else if (context.currentWatermark() <= context.window().maxTimestamp() && guidAttributeAccumulator.getFlag() == 1
                 && guidAttribute.getBotFlagList() != null && guidAttribute.getBotFlagList().size() > 0) {

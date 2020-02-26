@@ -22,7 +22,8 @@ public class AgentWindowProcessFunction
         AgentAttributeAccumulator agentAttributeAccumulator = elements.iterator().next();
         AgentAttribute agentAttribute = agentAttributeAccumulator.getAgentAttribute();
 
-        if (context.currentWatermark() > context.window().maxTimestamp()) {
+        if (context.currentWatermark() > context.window().maxTimestamp()
+                && agentAttribute.getBotFlagList() != null && agentAttribute.getBotFlagList().size() > 0) {
             out.collect(new Tuple3<>("agent" + agentAttribute.getAgent(), null, context.window().maxTimestamp()));
         } else if (context.currentWatermark() <= context.window().maxTimestamp() && agentAttributeAccumulator.getBotFlagStatus().containsValue(1)
                 && agentAttribute.getBotFlagList() != null && agentAttribute.getBotFlagList().size() > 0) {

@@ -21,7 +21,7 @@ import java.util.Set;
 public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastProcessFunction<Either<UbiEvent, UbiSession>, Tuple3<String, Set<Integer>, Long>, UbiEvent> {
     private OutputTag outputTag = null;
 
-    public  AttributeBroadcastProcessFunctionForDetectable(OutputTag sessionOutputTag) {
+    public AttributeBroadcastProcessFunctionForDetectable(OutputTag sessionOutputTag) {
         outputTag = sessionOutputTag;
     }
 
@@ -124,40 +124,26 @@ public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastPro
     public void processBroadcastElement(Tuple3<String, Set<Integer>, Long> attributeSignature, Context context, Collector<UbiEvent> out) throws Exception {
         BroadcastState<String, Map<Integer, Long>> attributeBroadcastStatus = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
 
-        if (!attributeBroadcastStatus.contains(attributeSignature.f0)) {
-            if (attributeSignature.f1 != null && attributeSignature.f1.size() > 0) {
-                Iterator<Integer> botFlags = attributeSignature.f1.iterator();
-                while (botFlags.hasNext()) {
-                    HashMap<Integer, Long> botFlagStatus = new HashMap<>();
-                    botFlagStatus.put(botFlags.next(), attributeSignature.f2);
-                    attributeBroadcastStatus.put(attributeSignature.f0, botFlagStatus);
+        if (attributeSignature.f1 == null) {
+            Map<Integer, Long> botFlagStatusMap = attributeBroadcastStatus.get(attributeSignature.f0);
+            for (Map.Entry<Integer, Long> botFlagStatus : botFlagStatusMap.entrySet()) {
+                if (attributeSignature.f2 <= botFlagStatus.getValue()) {
+                    botFlagStatusMap.remove(botFlagStatus.getKey());
+                    if (botFlagStatusMap.size() > 0) {
+                        attributeBroadcastStatus.put(attributeSignature.f0, botFlagStatusMap);
+                    } else {
+                        attributeBroadcastStatus.remove(attributeSignature.f0);
+                    }
                 }
             }
         } else {
-            Map<Integer, Long> botFlagStatusMap = attributeBroadcastStatus.get(attributeSignature.f0);
-            for (Map.Entry<Integer, Long> botFlagStatus : botFlagStatusMap.entrySet()) {
-                if (!attributeSignature.f1.contains(botFlagStatus.getKey())) {
-                    HashMap<Integer, Long> botFlag = new HashMap<>();
-                    botFlag.put(botFlagStatus.getKey(), attributeSignature.f2);
-                    attributeBroadcastStatus.put(attributeSignature.f0, botFlag);
-                } else {
-                    if (attributeSignature.f1 == null) {
-                        if (attributeSignature.f2 <= botFlagStatus.getValue()) {
-                            botFlagStatusMap.remove(botFlagStatus.getKey());
-                            if (botFlagStatusMap.size() > 0) {
-                                attributeBroadcastStatus.put(attributeSignature.f0,botFlagStatusMap);
-                            } else {
-                                attributeBroadcastStatus.remove(attributeSignature.f0);
-                            }
-
-                        }
-                    } else {
-                        HashMap<Integer, Long> botFlag = new HashMap<>();
-                        botFlag.put(botFlagStatus.getKey(), attributeSignature.f2);
-                        attributeBroadcastStatus.put(attributeSignature.f0, botFlag);
-                    }
-                }
+            Iterator<Integer> botFlags = attributeSignature.f1.iterator();
+            while (botFlags.hasNext()) {
+                HashMap<Integer, Long> botFlagStatus = new HashMap<>();
+                botFlagStatus.put(botFlags.next(), attributeSignature.f2);
+                attributeBroadcastStatus.put(attributeSignature.f0, botFlagStatus);
             }
         }
     }
 }
+

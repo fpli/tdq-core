@@ -22,7 +22,8 @@ public class IpWindowProcessFunction
         IpAttributeAccumulator ipAttributeAccumulator = elements.iterator().next();
         IpAttribute ipAttribute = ipAttributeAccumulator.getIpAttribute();
 
-        if (context.currentWatermark() > context.window().maxTimestamp()) {
+        if (context.currentWatermark() > context.window().maxTimestamp()
+                && ipAttribute.getBotFlagList() != null && ipAttribute.getBotFlagList().size() > 0) {
             out.collect(new Tuple3<>("ip" + ipAttribute.getClientIp(), null, context.window().maxTimestamp()));
         } else if (context.currentWatermark() <= context.window().maxTimestamp() && ipAttributeAccumulator.getBotFlagStatus().containsValue(1)
                 && ipAttribute.getBotFlagList() != null && ipAttribute.getBotFlagList().size() > 0) {
