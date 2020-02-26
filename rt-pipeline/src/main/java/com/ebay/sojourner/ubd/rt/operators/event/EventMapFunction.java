@@ -61,7 +61,8 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
                 SqrParser.class.getSimpleName(),
                 StaticPageTypeParser.class.getSimpleName(),
                 TimestampParser.class.getSimpleName(),
-                UserIdParser.class.getSimpleName()
+                UserIdParser.class.getSimpleName(),
+                IcfParser.class.getSimpleName()
         );
 
 
