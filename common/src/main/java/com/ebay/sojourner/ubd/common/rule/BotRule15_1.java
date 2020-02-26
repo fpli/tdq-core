@@ -1,10 +1,10 @@
 package com.ebay.sojourner.ubd.common.rule;
 
 import com.ebay.sojourner.ubd.common.model.GuidAttribute;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.BotRules;
 
-public class BotRule15_1 implements Rule<GuidAttribute> {
+public class BotRule15_1 extends AbstractBotRule<GuidAttribute> {
+
     public static final int MANY_EVENTS_BOUND = 10000;
 
     @Override
@@ -14,11 +14,6 @@ public class BotRule15_1 implements Rule<GuidAttribute> {
         } else {
             return BotRules.NON_BOT_FLAG;
         }
-    }
-
-    @Override
-    public void init() {
-
     }
 
 }

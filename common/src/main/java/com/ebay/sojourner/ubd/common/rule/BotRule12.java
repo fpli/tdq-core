@@ -1,18 +1,15 @@
 package com.ebay.sojourner.ubd.common.rule;
 
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import static com.ebay.sojourner.ubd.common.util.BotRules.*;
 
 import java.util.Set;
 
-public class BotRule12 implements Rule<UbiSession> {
+import static com.ebay.sojourner.ubd.common.util.BotRules.MANY_FAST_EVENTS_BOT_FLAG;
+import static com.ebay.sojourner.ubd.common.util.BotRules.NON_BOT_FLAG;
+
+public class BotRule12 extends AbstractBotRule<UbiSession> {
 
     public static final int TOTAL_INTERVAL_MICRO_SEC = 750000; // ms
-
-    @Override
-    public void init() {
-
-    }
 
     @Override
     public int getBotFlag(UbiSession ubiSession) {

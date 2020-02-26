@@ -4,7 +4,8 @@ import com.ebay.sojourner.ubd.common.model.AgentAttribute;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.BotRules;
 
-public class BotRuleForSuspectAgent implements Rule<AgentAttribute> {
+public class BotRuleForSuspectAgent extends AbstractBotRule<AgentAttribute> {
+
     public static final int SESSION_CNT_THRESHOLD = 100;
 
     @Override
@@ -21,11 +22,6 @@ public class BotRuleForSuspectAgent implements Rule<AgentAttribute> {
             }
         }
         return 0;
-    }
-
-    @Override
-    public void init() {
-
     }
 
 }

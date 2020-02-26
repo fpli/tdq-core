@@ -3,7 +3,7 @@ package com.ebay.sojourner.ubd.common.rule;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.BotRules;
 
-public class BotRule9 implements Rule<UbiSession> {
+public class BotRule9 extends AbstractBotRule<UbiSession> {
 
     public static final int SEARCH_VIEW_BOUND = 400;
 
@@ -14,10 +14,5 @@ public class BotRule9 implements Rule<UbiSession> {
         } else {
             return BotRules.NON_BOT_FLAG;
         }
-    }
-
-    @Override
-    public void init() {
-
     }
 }

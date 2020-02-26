@@ -6,9 +6,9 @@ import com.ebay.sojourner.ubd.common.util.BotRules;
 import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
 import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
 
-public class BotRule11 implements Rule<UbiSession> {
+public class BotRule11 extends AbstractBotRule<UbiSession> {
 
-    private static BotFilter botFilter ;
+    private BotFilter botFilter ;
 
     @Override
     public void init() {

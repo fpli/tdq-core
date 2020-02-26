@@ -2,22 +2,15 @@ package com.ebay.sojourner.ubd.common.rule;
 
 import com.ebay.sojourner.ubd.common.model.IpAttribute;
 
-import static com.ebay.sojourner.ubd.common.util.BotRules.*;
+import static com.ebay.sojourner.ubd.common.util.BotRules.NON_BOT_FLAG;
+import static com.ebay.sojourner.ubd.common.util.BotRules.SCS_ON_IP;
 
-public class BotRule7 implements Rule<IpAttribute> {
-
-    public static final int TOTAL_INTERVAL_MICRO_SEC = 750000; // ms
-
-    @Override
-    public void init() {
-
-    }
+public class BotRule7 extends AbstractBotRule<IpAttribute> {
 
     @Override
-    public int getBotFlag( IpAttribute ipAttribute ) {
+    public int getBotFlag(IpAttribute ipAttribute) {
         int botFlag = NON_BOT_FLAG;
-        if (ipAttribute.getScsCount() >= 1&&ipAttribute.getTotalCnt()>=20) {
-//            System.out.println("ipAttribute.getTotalCnt():"+ipAttribute);
+        if (ipAttribute.getScsCount() >= 1 && ipAttribute.getTotalCnt() >= 20) {
             botFlag = SCS_ON_IP;
         }
         return botFlag;

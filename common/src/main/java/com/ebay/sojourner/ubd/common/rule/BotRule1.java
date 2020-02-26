@@ -6,17 +6,9 @@ import com.ebay.sojourner.ubd.common.util.BotRules;
 
 import java.util.regex.Pattern;
 
-public class BotRule1 implements Rule<UbiEvent> {
-    //    private int botFlag = 0;
+public class BotRule1 extends AbstractBotRule<UbiEvent> {
+
     private static final Pattern pattern = Pattern.compile(".*bot[^a-z0-9_-].*|.*bot$|.*spider.*|.*crawl.*|.*ktxn.*", Pattern.CASE_INSENSITIVE);
-//    private boolean findValidEvent = false;
-//    private boolean first = true;
-
-    @Override
-    public void init() {
-
-
-    }
 
     private int detectSpiderAgent(UbiEvent event) {
         String agentInfo = event.getAgentInfo();
@@ -27,17 +19,9 @@ public class BotRule1 implements Rule<UbiEvent> {
         }
     }
 
-    boolean isValidEvent(UbiEvent event) {
-        return (!event.isIframe() && !event.isRdt());
-    }
-
-
     @Override
     public int getBotFlag(UbiEvent ubiEvent) {
-
-        int botFlag = detectSpiderAgent(ubiEvent);
-        return botFlag;
-
+        return detectSpiderAgent(ubiEvent);
     }
 
 }

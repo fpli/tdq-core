@@ -34,7 +34,7 @@ public class BotRule11Test {
         botRule11 = new BotRule11();
         initMocks(this);
         mockStatic(UbiSessionHelper.class);
-        setInternalState(BotRule11.class, mockBotFilter);
+        setInternalState(botRule11, mockBotFilter);
         when(mockBotFilter.filter(ubiSession, 11)).thenReturn(false);
     }
 

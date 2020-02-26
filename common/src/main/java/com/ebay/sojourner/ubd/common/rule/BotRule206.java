@@ -8,9 +8,9 @@ import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
 import java.util.Set;
 
-public class BotRule206 implements Rule<UbiSession> {
+public class BotRule206 extends AbstractBotRule<UbiSession> {
 
-    private static Set<Integer> lndgPageIds;
+    private Set<Integer> lndgPageIds;
 
     @Override
     public void init() {

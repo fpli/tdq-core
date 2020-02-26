@@ -1,10 +1,10 @@
 package com.ebay.sojourner.ubd.common.rule;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.BotRules;
 
-public class BotRule5 implements Rule<AgentIpAttribute> {
+public class BotRule5 extends AbstractBotRule<AgentIpAttribute> {
+
     public static final int MAX_COUNT = 50;
 
     @Override
@@ -15,10 +15,4 @@ public class BotRule5 implements Rule<AgentIpAttribute> {
             return BotRules.NON_BOT_FLAG;
         }
     }
-
-    @Override
-    public void init() {
-
-    }
-
 }

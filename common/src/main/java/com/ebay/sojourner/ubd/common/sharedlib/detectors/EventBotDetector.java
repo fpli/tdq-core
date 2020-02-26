@@ -2,6 +2,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.rule.*;
+import com.ebay.sojourner.ubd.common.rule.icf.*;
 
 import java.io.IOException;
 import java.util.LinkedHashSet;

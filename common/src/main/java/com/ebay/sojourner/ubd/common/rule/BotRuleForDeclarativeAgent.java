@@ -5,7 +5,7 @@ import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
 
 import java.io.IOException;
 
-public class BotRuleForDeclarativeAgent implements Rule<AgentAttribute> {
+public class BotRuleForDeclarativeAgent extends AbstractBotRule<AgentAttribute> {
 
     @Override
     public int getBotFlag(AgentAttribute agentAttribute) throws IOException, InterruptedException {
@@ -13,11 +13,6 @@ public class BotRuleForDeclarativeAgent implements Rule<AgentAttribute> {
             return 221;
         }
         return 0;
-    }
-
-    @Override
-    public void init() {
-
     }
 
 }

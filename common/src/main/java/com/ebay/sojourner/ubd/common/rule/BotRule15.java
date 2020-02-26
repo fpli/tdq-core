@@ -3,7 +3,8 @@ package com.ebay.sojourner.ubd.common.rule;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.BotRules;
 
-public class BotRule15 implements Rule<UbiSession> {
+public class BotRule15 extends AbstractBotRule<UbiSession> {
+
     public static final int MANY_EVENTS_BOUND = 10000;
 
     @Override
@@ -13,11 +14,6 @@ public class BotRule15 implements Rule<UbiSession> {
         } else {
             return BotRules.NON_BOT_FLAG;
         }
-    }
-
-    @Override
-    public void init() {
-
     }
 
 }

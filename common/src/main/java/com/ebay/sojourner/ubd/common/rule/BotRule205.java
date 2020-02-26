@@ -3,12 +3,7 @@ package com.ebay.sojourner.ubd.common.rule;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.BotRules;
 
-public class BotRule205 implements Rule<UbiSession> {
-
-    @Override
-    public void init() {
-
-    }
+public class BotRule205 extends AbstractBotRule<UbiSession> {
 
     @Override
     public int getBotFlag(UbiSession session) {
