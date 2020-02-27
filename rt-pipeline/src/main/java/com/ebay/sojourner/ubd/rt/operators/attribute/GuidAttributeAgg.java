@@ -45,15 +45,15 @@ public class GuidAttributeAgg implements AggregateFunction<UbiSession, GuidAttri
 
         Set<Integer> guidBotFlag = null;
         try {
-            if (guidAttributeAccumulator.getFlag() == 0 || guidAttributeAccumulator.getFlag() == 1) {
+            if (guidAttributeAccumulator.getBotFlagStatus().containsValue(0) || guidAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
                 guidBotFlag = guidSignatureBotDetector.getBotFlagList(guidAttributeAccumulator.getGuidAttribute());
-                if (guidBotFlag.size() > 0) {
-                    switch (guidAttributeAccumulator.getFlag()) {
+                if (guidBotFlag.contains(15)) {
+                    switch (guidAttributeAccumulator.getBotFlagStatus().get(15)) {
                         case 0:
-                            guidAttributeAccumulator.setFlag(1);
+                            guidAttributeAccumulator.getBotFlagStatus().put(15,1);
                             break;
                         case 1:
-                            guidAttributeAccumulator.setFlag(2);
+                            guidAttributeAccumulator.getBotFlagStatus().put(15,2);
                             break;
                     }
 

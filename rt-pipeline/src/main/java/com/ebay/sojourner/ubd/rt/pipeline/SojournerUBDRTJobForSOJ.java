@@ -1,6 +1,9 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
-import com.ebay.sojourner.ubd.common.model.*;
+import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
+import com.ebay.sojourner.ubd.common.model.RawEvent;
+import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
@@ -13,16 +16,19 @@ import com.ebay.sojourner.ubd.rt.operators.session.DetectableSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
+import org.apache.flink.streaming.api.collector.selector.OutputSelector;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
+import org.apache.flink.streaming.api.datastream.SplitStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
@@ -35,12 +41,14 @@ import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelp
 import org.apache.flink.types.Either;
 import org.apache.flink.util.OutputTag;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class SojournerUBDRTJobForSOJ {
 
-    public static void main( String[] args ) throws Exception {
+    public static void main(String[] args) throws Exception {
         // Make sure this is being executed at start up.
         ParameterTool parameterTool = ParameterTool.fromArgs(args);
         AppEnv.config(parameterTool);
@@ -85,7 +93,7 @@ public class SojournerUBDRTJobForSOJ {
                         .assignTimestampsAndWatermarks(
                                 new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
                                     @Override
-                                    public long extractTimestamp( RawEvent element ) {
+                                    public long extractTimestamp(RawEvent element) {
                                         return element.getRheosHeader().getEventCreateTimestamp();
                                     }
                                 }))
@@ -147,61 +155,70 @@ public class SojournerUBDRTJobForSOJ {
                 .name("Attribute Operator (Agent+IP Pre-Aggregation)")
                 .setParallelism(72);
 
-        DataStream<Tuple3<String, Set<Integer>,Long>> guidSignatureDataStream = ubiSessinDataStream
+        DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureDataStream = ubiSessinDataStream
                 .keyBy("guid")
-                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12)))
+                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
                 .name("Attribute Operator (GUID)")
                 .setParallelism(72);
 
-        guidSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(72).name("GUID Signature");
+        SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureSplitStream = guidSignatureDataStream.split(new SplitFunction());
+        guidSignatureSplitStream.select("generation").addSink(new DiscardingSink<>()).setParallelism(72).name("GUID Generation Signature");
+        guidSignatureSplitStream.select("expiration").addSink(new DiscardingSink<>()).setParallelism(72).name("GUID Expiration Signature");
 
-        DataStream<Tuple3<String,Set<Integer>,Long>> agentIpSignatureDataStream = agentIpAttributeDatastream
+        DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureDataStream = agentIpAttributeDatastream
                 .keyBy("agent", "clientIp")
-                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12)))
+                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
                 .name("Attribute Operator (Agent+IP)")
                 .setParallelism(72);
 
-        agentIpSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(72).name("Agent+IP Signature");
+        SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureSplitStream = agentIpSignatureDataStream.split(new SplitFunction());
+        agentIpSignatureSplitStream.select("generation").addSink(new DiscardingSink<>()).setParallelism(72).name("Agent+IP Generation Signature");
+        agentIpSignatureSplitStream.select("expiration").addSink(new DiscardingSink<>()).setParallelism(72).name("Agent+IP Expiration Signature");
 
-        DataStream<Tuple3<String, Set<Integer>,Long>> agentSignatureDataStream = agentIpAttributeDatastream
+        DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureDataStream = agentIpAttributeDatastream
                 .keyBy("agent")
-                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12)))
+                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
                 .name("Attribute Operator (Agent)")
                 .setParallelism(72);
 
-        agentSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(72).name("Agent Signature");
+        SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureSplitStream = agentSignatureDataStream.split(new SplitFunction());
+        agentSignatureSplitStream.select("generation").addSink(new DiscardingSink<>()).setParallelism(72).name("Agent Generation Signature");
+        agentSignatureSplitStream.select("expiration").addSink(new DiscardingSink<>()).setParallelism(72).name("Agent Expiration Signature");
 
-        DataStream<Tuple3<String, Set<Integer>,Long>> ipSignatureDataStream = agentIpAttributeDatastream
+        DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureDataStream = agentIpAttributeDatastream
                 .keyBy("clientIp")
-                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12)))
+                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
                 .name("Attribute Operator (IP)")
                 .setParallelism(72);
 
-        ipSignatureDataStream.addSink(new DiscardingSink<>()).setParallelism(72).name("IP Signature");
+        SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureSplitStream = ipSignatureDataStream.split(new SplitFunction());
+
+        ipSignatureSplitStream.select("generation").addSink(new DiscardingSink<>()).setParallelism(72).name("IP Generation Signature");
+        ipSignatureSplitStream.select("expiration").addSink(new DiscardingSink<>()).setParallelism(72).name("IP Expiration Signature");
 
         // union attribute signature for broadcast
-        DataStream<Tuple3<String, Set<Integer>,Long>> attributeSignatureDataStream = agentIpSignatureDataStream
+        DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> attributeSignatureDataStream = agentIpSignatureDataStream
                 .union(agentSignatureDataStream)
                 .union(ipSignatureDataStream)
                 .union(guidSignatureDataStream);
 
 
         // attribute signature broadcast
-        BroadcastStream<Tuple3<String,Set<Integer>,Long>> attributeSignatureBroadcastStream = attributeSignatureDataStream
+        BroadcastStream<Tuple4<String, Boolean, Set<Integer>, Long>> attributeSignatureBroadcastStream = attributeSignatureDataStream
                 .broadcast(MapStateDesc.attributeSignatureDesc);
 
         // transform ubiEvent,ubiSession to same type and union
         DataStream<UbiEvent> mappedEventStream = ubiSessinDataStream.getSideOutput(mappedEventOutputTag);
         DataStream<UbiEvent> latedStream = ubiSessinDataStream.getSideOutput(lateEventOutputTag);
-        DataStream<Either<UbiEvent,UbiSession>> detectableDataStream =
+        DataStream<Either<UbiEvent, UbiSession>> detectableDataStream =
                 ubiSessinDataStream.map(new DetectableSessionMapFunction())
                         .union(mappedEventStream.map(new com.ebay.sojourner.ubd.rt.operators.event.DetectableEventMapFunction()));
 //        SingleOutputStreamOperator<UbiSession> signatureBotDetectionForSession = ubiSessinDataStream

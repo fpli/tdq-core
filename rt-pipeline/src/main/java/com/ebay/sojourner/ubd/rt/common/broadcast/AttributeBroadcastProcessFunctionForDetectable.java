@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
 import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.types.Either;
 import org.apache.flink.util.Collector;
@@ -18,7 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastProcessFunction<Either<UbiEvent, UbiSession>, Tuple3<String, Set<Integer>, Long>, UbiEvent> {
+public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastProcessFunction<Either<UbiEvent, UbiSession>, Tuple4<String, Boolean, Set<Integer>, Long>, UbiEvent> {
     private OutputTag outputTag = null;
 
     public AttributeBroadcastProcessFunctionForDetectable(OutputTag sessionOutputTag) {
@@ -121,27 +122,31 @@ public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastPro
     }
 
     @Override
-    public void processBroadcastElement(Tuple3<String, Set<Integer>, Long> attributeSignature, Context context, Collector<UbiEvent> out) throws Exception {
+    public void processBroadcastElement(Tuple4<String, Boolean, Set<Integer>, Long> attributeSignature, Context context, Collector<UbiEvent> out) throws Exception {
         BroadcastState<String, Map<Integer, Long>> attributeBroadcastStatus = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
+        Iterator<Integer> botSignature = attributeSignature.f2.iterator();
 
-        if (attributeSignature.f1 == null) {
-            Map<Integer, Long> botFlagStatusMap = attributeBroadcastStatus.get(attributeSignature.f0);
-            for (Map.Entry<Integer, Long> botFlagStatus : botFlagStatusMap.entrySet()) {
-                if (attributeSignature.f2 <= botFlagStatus.getValue()) {
-                    botFlagStatusMap.remove(botFlagStatus.getKey());
-                    if (botFlagStatusMap.size() > 0) {
-                        attributeBroadcastStatus.put(attributeSignature.f0, botFlagStatusMap);
-                    } else {
-                        attributeBroadcastStatus.remove(attributeSignature.f0);
+        if (attributeSignature.f1 == true) {
+            while (botSignature.hasNext()) {
+                if (attributeBroadcastStatus.get(attributeSignature.f0).size() > 0 && attributeBroadcastStatus.get(attributeSignature.f0).containsKey(botSignature.next())) {
+                    if (attributeSignature.f3 > attributeBroadcastStatus.get(attributeSignature.f0).get(botSignature.next())) {
+                        attributeBroadcastStatus.get(attributeSignature.f0).put(botSignature.next(), attributeSignature.f3);
                     }
+                } else {
+                    HashMap<Integer, Long> newBotFlagStatus = new HashMap<>();
+                    newBotFlagStatus.put(botSignature.next(), attributeSignature.f3);
+                    attributeBroadcastStatus.put(attributeSignature.f0, newBotFlagStatus);
                 }
             }
         } else {
-            Iterator<Integer> botFlags = attributeSignature.f1.iterator();
-            while (botFlags.hasNext()) {
-                HashMap<Integer, Long> botFlagStatus = new HashMap<>();
-                botFlagStatus.put(botFlags.next(), attributeSignature.f2);
-                attributeBroadcastStatus.put(attributeSignature.f0, botFlagStatus);
+            Map<Integer, Long> signatureBotFlagStatus = attributeBroadcastStatus.get(attributeSignature.f0);
+            while (botSignature.hasNext()) {
+                if (attributeSignature.f3 > signatureBotFlagStatus.get(botSignature.next())) {
+                    signatureBotFlagStatus.remove(botSignature.next());
+                    if (signatureBotFlagStatus.size() == 0) {
+                        attributeBroadcastStatus.remove(attributeSignature.f0);
+                    }
+                }
             }
         }
     }
