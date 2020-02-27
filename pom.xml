@@ -36,6 +36,7 @@
         <flink.version>1.7.2</flink.version>
         <spark.version>2.3.1</spark.version>
         <rheos.client.version>2.0.6-SNAPSHOT</rheos.client.version>
+        <calcite.version>1.21.0</calcite.version>
         <junit-jupiter.version>5.5.2</junit-jupiter.version>
         <mockito.version>3.2.4</mockito.version>
         <powermock.version>2.0.4</powermock.version>
@@ -372,6 +373,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.calcite</groupId>
+                <artifactId>calcite-core</artifactId>
+                <version>${calcite.version}</version>
             </dependency>
 
 
