@@ -23,6 +23,10 @@ public class OnElementEarlyFiringTrigger<W extends Window> extends Trigger<Objec
 
     @Override
     public TriggerResult onElement(Object element, long timestamp, W window, TriggerContext ctx) throws Exception {
+        if(ctx.getCurrentWatermark() >= window.maxTimestamp()) {
+            return TriggerResult.CONTINUE;
+        }
+
         List<TriggerResult> results = new ArrayList<>();
         for (Trigger trigger: triggers) {
             results.add(trigger.onElement(element, timestamp, window, ctx));
