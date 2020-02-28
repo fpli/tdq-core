@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.util.Set;
 
 @Slf4j
-public class GuidAttributeAgg implements AggregateFunction<UbiSession, GuidAttributeAccumulator, GuidAttributeAccumulator> {
+public class GuidAttributeAgg
+        implements AggregateFunction<UbiSession, GuidAttributeAccumulator, GuidAttributeAccumulator> {
 
     private GuidIndicators guidIndicators;
     private GuidSignatureBotDetector guidSignatureBotDetector;
@@ -45,7 +46,8 @@ public class GuidAttributeAgg implements AggregateFunction<UbiSession, GuidAttri
 
         Set<Integer> guidBotFlag = null;
         try {
-            if (guidAttributeAccumulator.getBotFlagStatus().containsValue(0) || guidAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
+            if (guidAttributeAccumulator.getBotFlagStatus().containsValue(0)
+                    || guidAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
                 guidBotFlag = guidSignatureBotDetector.getBotFlagList(guidAttributeAccumulator.getGuidAttribute());
                 if (guidBotFlag.contains(15)) {
                     switch (guidAttributeAccumulator.getBotFlagStatus().get(15)) {

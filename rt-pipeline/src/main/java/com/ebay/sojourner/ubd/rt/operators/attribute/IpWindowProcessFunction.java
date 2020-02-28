@@ -2,10 +2,7 @@ package com.ebay.sojourner.ubd.rt.operators.attribute;
 
 import com.ebay.sojourner.ubd.common.model.IpAttribute;
 import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.flink.api.java.tuple.Tuple;
-import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
@@ -28,18 +25,21 @@ public class IpWindowProcessFunction
         IpAttributeAccumulator ipAttributeAccumulator = elements.iterator().next();
         IpAttribute ipAttribute = ipAttributeAccumulator.getIpAttribute();
 
-        if (context.currentWatermark() > context.window().maxTimestamp()
+        if (context.currentWatermark() >= context.window().maxTimestamp()
                 && ipAttribute.getBotFlagList() != null && ipAttribute.getBotFlagList().size() > 0) {
-            out.collect(new Tuple4<>("ip" + ipAttribute.getClientIp(), false, ipAttribute.getBotFlagList(), context.window().maxTimestamp()));
-        } else if (context.currentWatermark() <= context.window().maxTimestamp() && ipAttributeAccumulator.getBotFlagStatus().containsValue(1)
+            out.collect(new Tuple4<>("ip" + ipAttribute.getClientIp(), false, ipAttribute.getBotFlagList(),
+                    context.window().maxTimestamp()));
+        } else if (context.currentWatermark() < context.window().maxTimestamp()
+                && ipAttributeAccumulator.getBotFlagStatus().containsValue(1)
                 && ipAttribute.getBotFlagList() != null && ipAttribute.getBotFlagList().size() > 0) {
             generationBotFlag = new HashSet<>();
             for (Map.Entry<Integer, Integer> newBotFlagMap : ipAttributeAccumulator.getBotFlagStatus().entrySet()) {
-                if (newBotFlagMap.getKey() == 1) {
-                    generationBotFlag.add(newBotFlagMap.getValue());
+                if (newBotFlagMap.getValue() == 1) {
+                    generationBotFlag.add(newBotFlagMap.getKey());
                 }
             }
-            out.collect(new Tuple4<>("ip" + ipAttribute.getClientIp(), true, generationBotFlag, context.window().maxTimestamp()));
+            out.collect(new Tuple4<>("ip" + ipAttribute.getClientIp(), true, generationBotFlag,
+                    context.window().maxTimestamp()));
         }
     }
 

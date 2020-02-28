@@ -28,16 +28,19 @@ public class GuidWindowProcessFunction
 
         if (context.currentWatermark() > context.window().maxTimestamp()
                 && guidAttribute.getBotFlagList() != null && guidAttribute.getBotFlagList().size() > 0) {
-            out.collect(new Tuple4<>("guid" + guidAttribute.getGuid(), false, guidAttribute.getBotFlagList(), context.window().maxTimestamp()));
-        } else if (context.currentWatermark() <= context.window().maxTimestamp() && guidAttributeAccumulator.getBotFlagStatus().containsValue(1)
+            out.collect(new Tuple4<>("guid" + guidAttribute.getGuid(), false, guidAttribute.getBotFlagList(),
+                    context.window().maxTimestamp()));
+        } else if (context.currentWatermark() <= context.window().maxTimestamp()
+                && guidAttributeAccumulator.getBotFlagStatus().containsValue(1)
                 && guidAttribute.getBotFlagList() != null && guidAttribute.getBotFlagList().size() > 0) {
             generationBotFlag = new HashSet<>();
             for (Map.Entry<Integer, Integer> newBotFlagMap : guidAttributeAccumulator.getBotFlagStatus().entrySet()) {
-                if (newBotFlagMap.getKey() == 1) {
-                    generationBotFlag.add(newBotFlagMap.getValue());
+                if (newBotFlagMap.getValue() == 1) {
+                    generationBotFlag.add(newBotFlagMap.getKey());
                 }
             }
-            out.collect(new Tuple4<>("guid" + guidAttribute.getGuid(), true, generationBotFlag, context.window().maxTimestamp()));
+            out.collect(new Tuple4<>("guid" + guidAttribute.getGuid(), true, generationBotFlag,
+                    context.window().maxTimestamp()));
         }
     }
 

@@ -7,7 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.functions.AggregateFunction;
 
 @Slf4j
-public class AgentIpAttributeAgg implements AggregateFunction<UbiSession, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
+public class AgentIpAttributeAgg
+        implements AggregateFunction<UbiSession, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
 
     private AgentIpIndicators agentIpIndicators;
 
@@ -28,7 +29,8 @@ public class AgentIpAttributeAgg implements AggregateFunction<UbiSession, AgentI
 
     @Override
     public AgentIpAttributeAccumulator add(UbiSession session, AgentIpAttributeAccumulator agentIpAttributeAccumulator) {
-        if (agentIpAttributeAccumulator.getAgentIpAttribute().getClientIp() == null && agentIpAttributeAccumulator.getAgentIpAttribute().getAgent() == null) {
+        if (agentIpAttributeAccumulator.getAgentIpAttribute().getClientIp() == null
+                && agentIpAttributeAccumulator.getAgentIpAttribute().getAgent() == null) {
             agentIpAttributeAccumulator.getAgentIpAttribute().setClientIp(session.getClientIp());
             agentIpAttributeAccumulator.getAgentIpAttribute().setAgent(session.getUserAgent());
         }

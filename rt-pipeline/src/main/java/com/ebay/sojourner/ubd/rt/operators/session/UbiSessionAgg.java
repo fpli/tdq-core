@@ -18,6 +18,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumul
     //    private CouchBaseManager couchBaseManager;
 //    private static final String BUCKET_NAME="botsignature";
     private static final Logger logger = Logger.getLogger(UbiSessionAgg.class);
+
     @Override
     public SessionAccumulator createAccumulator() {
         SessionAccumulator sessionAccumulator = new SessionAccumulator();
@@ -33,7 +34,7 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumul
     }
 
     @Override
-    public SessionAccumulator add( UbiEvent value, SessionAccumulator accumulator ) {
+    public SessionAccumulator add(UbiEvent value, SessionAccumulator accumulator) {
         Set<Integer> eventBotFlagSet = value.getBotFlags();
 
         try {
@@ -43,7 +44,8 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumul
 //            }
             sessionMetrics.feed(value, accumulator);
         } catch (Exception e) {
-            log.error("start-session metrics collection issue:" + value.getGuid()+"||"+(value.getSessionId()==null?"":value.getSessionId())+"||"+value.getSeqNum(), e);
+            log.error("start-session metrics collection issue:" + value.getGuid() + "||"
+                    + (value.getSessionId() == null ? "" : value.getSessionId()) + "||" + value.getSeqNum(), e);
         }
         if (accumulator.getUbiSession().getGuid() == null) {
             accumulator.getUbiSession().setGuid(value.getGuid());
@@ -70,7 +72,8 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumul
             sessionBotFlagSet.addAll(sessionBotFlagSetDetect);
             eventBotFlagSet.addAll(sessionBotFlagSetDetect);
         }
-        if (value.getEventTimestamp() != null&&(accumulator.getUbiSession().getEndTimestamp()==null||value.getEventTimestamp()>accumulator.getUbiSession().getEndTimestamp())) {
+        if (value.getEventTimestamp() != null && (accumulator.getUbiSession().getEndTimestamp() == null
+                || value.getEventTimestamp() > accumulator.getUbiSession().getEndTimestamp())) {
             accumulator.getUbiSession().setEndTimestamp(value.getEventTimestamp());
         } else {
 //            log.error( value.getGuid()+"||"+(value.getSessionId()==null?"":value.getSessionId())+"||"+value.getSeqNum(), e);
@@ -135,12 +138,12 @@ public class UbiSessionAgg implements AggregateFunction<UbiEvent, SessionAccumul
     }
 
     @Override
-    public SessionAccumulator getResult( SessionAccumulator sessionAccumulator ) {
+    public SessionAccumulator getResult(SessionAccumulator sessionAccumulator) {
         return sessionAccumulator;
     }
 
     @Override
-    public SessionAccumulator merge( SessionAccumulator a, SessionAccumulator b ) {
+    public SessionAccumulator merge(SessionAccumulator a, SessionAccumulator b) {
         log.info("SessionAccumulator merge:");
         a.setUbiSession(a.getUbiSession().merge(b.getUbiSession()));
         return a;

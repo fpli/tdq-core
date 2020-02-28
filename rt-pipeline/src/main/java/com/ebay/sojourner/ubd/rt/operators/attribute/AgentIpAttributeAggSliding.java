@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.util.Set;
 
 @Slf4j
-public class AgentIpAttributeAggSliding implements AggregateFunction<AgentIpAttribute, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
+public class AgentIpAttributeAggSliding
+        implements AggregateFunction<AgentIpAttribute, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
 
     private AgentIpIndicatorsSliding agentIpIndicators;
     private AgentIpSignatureBotDetector agentIpSignatureBotDetector;
@@ -33,8 +34,10 @@ public class AgentIpAttributeAggSliding implements AggregateFunction<AgentIpAttr
     }
 
     @Override
-    public AgentIpAttributeAccumulator add(AgentIpAttribute agentIpAttribute, AgentIpAttributeAccumulator agentIpAttributeAccumulator) {
-        if (agentIpAttributeAccumulator.getAgentIpAttribute().getClientIp() == null && agentIpAttributeAccumulator.getAgentIpAttribute().getAgent() == null) {
+    public AgentIpAttributeAccumulator add(AgentIpAttribute agentIpAttribute,
+                                           AgentIpAttributeAccumulator agentIpAttributeAccumulator) {
+        if (agentIpAttributeAccumulator.getAgentIpAttribute().getClientIp() == null
+                && agentIpAttributeAccumulator.getAgentIpAttribute().getAgent() == null) {
             agentIpAttributeAccumulator.getAgentIpAttribute().setClientIp(agentIpAttribute.getClientIp());
             agentIpAttributeAccumulator.getAgentIpAttribute().setAgent(agentIpAttribute.getAgent());
         }
@@ -47,7 +50,8 @@ public class AgentIpAttributeAggSliding implements AggregateFunction<AgentIpAttr
         Set<Integer> agentIpBotFlag = null;
 
         try {
-            if (agentIpAttributeAccumulator.getBotFlagStatus().containsValue(0) || agentIpAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
+            if (agentIpAttributeAccumulator.getBotFlagStatus().containsValue(0)
+                    || agentIpAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
                 agentIpBotFlag = agentIpSignatureBotDetector.getBotFlagList(agentIpAttributeAccumulator.getAgentIpAttribute());
                 if (agentIpBotFlag.contains(5)) {
                     switch (agentIpAttributeAccumulator.getBotFlagStatus().get(5)) {

@@ -47,7 +47,8 @@ public class AgentAttributeAgg implements AggregateFunction<AgentIpAttribute, Ag
         Set<Integer> agentBotFlag = null;
 
         try {
-            if (agentAttributeAccumulator.getBotFlagStatus().containsValue(0) || agentAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
+            if (agentAttributeAccumulator.getBotFlagStatus().containsValue(0)
+                    || agentAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
                 agentBotFlag = agentSignatureBotDetector.getBotFlagList(agentAttributeAccumulator.getAgentAttribute());
                 if (agentBotFlag.contains(6)) {
                     switch (agentAttributeAccumulator.getBotFlagStatus().get(6)) {

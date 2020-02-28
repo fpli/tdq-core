@@ -3,8 +3,6 @@ package com.ebay.sojourner.ubd.rt.operators.attribute;
 import com.ebay.sojourner.ubd.common.model.AgentAttribute;
 import com.ebay.sojourner.ubd.common.model.AgentAttributeAccumulator;
 import org.apache.flink.api.java.tuple.Tuple;
-import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
@@ -29,16 +27,19 @@ public class AgentWindowProcessFunction
 
         if (context.currentWatermark() > context.window().maxTimestamp()
                 && agentAttribute.getBotFlagList() != null && agentAttribute.getBotFlagList().size() > 0) {
-            out.collect(new Tuple4<>("agent" + agentAttribute.getAgent(), false, agentAttribute.getBotFlagList(), context.window().maxTimestamp()));
-        } else if (context.currentWatermark() <= context.window().maxTimestamp() && agentAttributeAccumulator.getBotFlagStatus().containsValue(1)
+            out.collect(new Tuple4<>("agent" + agentAttribute.getAgent(), false, agentAttribute.getBotFlagList(),
+                    context.window().maxTimestamp()));
+        } else if (context.currentWatermark() <= context.window().maxTimestamp()
+                && agentAttributeAccumulator.getBotFlagStatus().containsValue(1)
                 && agentAttribute.getBotFlagList() != null && agentAttribute.getBotFlagList().size() > 0) {
             generationBotFlag = new HashSet<>();
             for (Map.Entry<Integer, Integer> newBotFlagMap : agentAttributeAccumulator.getBotFlagStatus().entrySet()) {
-                if (newBotFlagMap.getKey() == 1) {
-                    generationBotFlag.add(newBotFlagMap.getValue());
+                if (newBotFlagMap.getValue() == 1) {
+                    generationBotFlag.add(newBotFlagMap.getKey());
                 }
             }
-            out.collect(new Tuple4<>("agent" + agentAttribute.getAgent(), true, generationBotFlag, context.window().maxTimestamp()));
+            out.collect(new Tuple4<>("agent" + agentAttribute.getAgent(), true, generationBotFlag,
+                    context.window().maxTimestamp()));
         }
     }
 

@@ -6,7 +6,6 @@ import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
-import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.types.Either;
@@ -14,12 +13,13 @@ import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastProcessFunction<Either<UbiEvent, UbiSession>, Tuple4<String, Boolean, Set<Integer>, Long>, UbiEvent> {
+public class AttributeBroadcastProcessFunctionForDetectable
+        extends BroadcastProcessFunction<Either<UbiEvent, UbiSession>,
+        Tuple4<String, Boolean, Set<Integer>, Long>, UbiEvent> {
     private OutputTag outputTag = null;
 
     public AttributeBroadcastProcessFunctionForDetectable(OutputTag sessionOutputTag) {
@@ -27,35 +27,42 @@ public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastPro
     }
 
     @Override
-    public void processElement(Either<UbiEvent, UbiSession> signatureDetectable, ReadOnlyContext context, Collector<UbiEvent> out) throws Exception {
-        ReadOnlyBroadcastState<String, Map<Integer, Long>> attributeSignature = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
+    public void processElement(Either<UbiEvent, UbiSession> signatureDetectable,
+                               ReadOnlyContext context, Collector<UbiEvent> out) throws Exception {
+        ReadOnlyBroadcastState<String, Map<Integer, Long>> attributeSignature
+                = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
 
         if (signatureDetectable.isLeft()) {
             UbiEvent ubiEvent = signatureDetectable.left();
             // ip
             if (attributeSignature.contains("ip" + ubiEvent.getClientIP())) {
-                for (Map.Entry<Integer, Long> ipBotFlagMap : attributeSignature.get("ip" + ubiEvent.getClientIP()).entrySet()) {
+                for (Map.Entry<Integer, Long> ipBotFlagMap :
+                        attributeSignature.get("ip" + ubiEvent.getClientIP()).entrySet()) {
                     ubiEvent.getBotFlags().add(ipBotFlagMap.getKey());
                 }
             }
 
             // agent
             if (attributeSignature.contains("agent" + ubiEvent.getAgentInfo())) {
-                for (Map.Entry<Integer, Long> agentBotFlagMap : attributeSignature.get("agent" + ubiEvent.getAgentInfo()).entrySet()) {
+                for (Map.Entry<Integer, Long> agentBotFlagMap :
+                        attributeSignature.get("agent" + ubiEvent.getAgentInfo()).entrySet()) {
                     ubiEvent.getBotFlags().add(agentBotFlagMap.getKey());
                 }
             }
 
             // agentIp
             if (attributeSignature.contains("agentIp" + ubiEvent.getAgentInfo() + ubiEvent.getClientIP())) {
-                for (Map.Entry<Integer, Long> agentIpBotFlagMap : attributeSignature.get("agentIp" + ubiEvent.getAgentInfo() + ubiEvent.getClientIP()).entrySet()) {
+                for (Map.Entry<Integer, Long> agentIpBotFlagMap :
+                        attributeSignature.get("agentIp" + ubiEvent.getAgentInfo()
+                                + ubiEvent.getClientIP()).entrySet()) {
                     ubiEvent.getBotFlags().add(agentIpBotFlagMap.getKey());
                 }
             }
 
             // guid
             if (attributeSignature.contains("guid" + ubiEvent.getGuid())) {
-                for (Map.Entry<Integer, Long> guidIpBotFlagMap : attributeSignature.get("guid" + ubiEvent.getGuid()).entrySet()) {
+                for (Map.Entry<Integer, Long> guidIpBotFlagMap :
+                        attributeSignature.get("guid" + ubiEvent.getGuid()).entrySet()) {
                     ubiEvent.getBotFlags().add(guidIpBotFlagMap.getKey());
                 }
             }
@@ -78,28 +85,33 @@ public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastPro
             UbiSession ubiSession = signatureDetectable.right();
             // ip
             if (attributeSignature.contains("ip" + ubiSession.getClientIp())) {
-                for (Map.Entry<Integer, Long> ipBotFlagMap : attributeSignature.get("ip" + ubiSession.getClientIp()).entrySet()) {
+                for (Map.Entry<Integer, Long> ipBotFlagMap :
+                        attributeSignature.get("ip" + ubiSession.getClientIp()).entrySet()) {
                     ubiSession.getBotFlagList().add(ipBotFlagMap.getKey());
                 }
             }
 
             // agent
             if (attributeSignature.contains("agent" + ubiSession.getUserAgent())) {
-                for (Map.Entry<Integer, Long> agentBotFlagMap : attributeSignature.get("agent" + ubiSession.getUserAgent()).entrySet()) {
+                for (Map.Entry<Integer, Long> agentBotFlagMap :
+                        attributeSignature.get("agent" + ubiSession.getUserAgent()).entrySet()) {
                     ubiSession.getBotFlagList().add(agentBotFlagMap.getKey());
                 }
             }
 
             // agentIp
             if (attributeSignature.contains("agentIp" + ubiSession.getUserAgent() + ubiSession.getClientIp())) {
-                for (Map.Entry<Integer, Long> agentIpBotFlagMap : attributeSignature.get("agentIp" + ubiSession.getUserAgent() + ubiSession.getClientIp()).entrySet()) {
+                for (Map.Entry<Integer, Long> agentIpBotFlagMap :
+                        attributeSignature.get("agentIp" + ubiSession.getUserAgent()
+                                + ubiSession.getClientIp()).entrySet()) {
                     ubiSession.getBotFlagList().add(agentIpBotFlagMap.getKey());
                 }
             }
 
             // guid
             if (attributeSignature.contains("guid" + ubiSession.getGuid())) {
-                for (Map.Entry<Integer, Long> guidBotFlagMap : attributeSignature.get("guid" + ubiSession.getGuid()).entrySet()) {
+                for (Map.Entry<Integer, Long> guidBotFlagMap :
+                        attributeSignature.get("guid" + ubiSession.getGuid()).entrySet()) {
                     ubiSession.getBotFlagList().add(guidBotFlagMap.getKey());
                 }
             }
@@ -122,29 +134,44 @@ public class AttributeBroadcastProcessFunctionForDetectable extends BroadcastPro
     }
 
     @Override
-    public void processBroadcastElement(Tuple4<String, Boolean, Set<Integer>, Long> attributeSignature, Context context, Collector<UbiEvent> out) throws Exception {
-        BroadcastState<String, Map<Integer, Long>> attributeBroadcastStatus = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
-        Iterator<Integer> botSignature = attributeSignature.f2.iterator();
+    public void processBroadcastElement(Tuple4<String, Boolean, Set<Integer>, Long> attributeSignature,
+                                        Context context, Collector<UbiEvent> out) throws Exception {
+        BroadcastState<String, Map<Integer, Long>> attributeBroadcastStatus
+                = context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
+        Set<Integer> botFlags = attributeSignature.f2;
+        String signatureType = attributeSignature.f0;
+        Long expirationTime = attributeSignature.f3;
+        Boolean isGeneration = attributeSignature.f1;
 
-        if (attributeSignature.f1 == true) {
-            while (botSignature.hasNext()) {
-                if (attributeBroadcastStatus.get(attributeSignature.f0).size() > 0 && attributeBroadcastStatus.get(attributeSignature.f0).containsKey(botSignature.next())) {
-                    if (attributeSignature.f3 > attributeBroadcastStatus.get(attributeSignature.f0).get(botSignature.next())) {
-                        attributeBroadcastStatus.get(attributeSignature.f0).put(botSignature.next(), attributeSignature.f3);
+        if (isGeneration == true) {
+            for (int botFlag : botFlags) {
+                if (attributeBroadcastStatus.get(signatureType) != null) {
+                    if (attributeBroadcastStatus.get(signatureType).containsKey(botFlag)) {
+                        if (expirationTime > attributeBroadcastStatus.get(signatureType).get(botFlag)) {
+                            attributeBroadcastStatus.get(signatureType).put(botFlag, expirationTime);
+                        }
+                    } else {
+                        HashMap<Integer, Long> newBotFlagStatus = new HashMap<>();
+                        newBotFlagStatus.put(botFlag, expirationTime);
+                        attributeBroadcastStatus.put(signatureType, newBotFlagStatus);
                     }
                 } else {
                     HashMap<Integer, Long> newBotFlagStatus = new HashMap<>();
-                    newBotFlagStatus.put(botSignature.next(), attributeSignature.f3);
-                    attributeBroadcastStatus.put(attributeSignature.f0, newBotFlagStatus);
+                    newBotFlagStatus.put(botFlag, expirationTime);
+                    attributeBroadcastStatus.put(signatureType, newBotFlagStatus);
                 }
             }
         } else {
-            Map<Integer, Long> signatureBotFlagStatus = attributeBroadcastStatus.get(attributeSignature.f0);
-            while (botSignature.hasNext()) {
-                if (attributeSignature.f3 > signatureBotFlagStatus.get(botSignature.next())) {
-                    signatureBotFlagStatus.remove(botSignature.next());
-                    if (signatureBotFlagStatus.size() == 0) {
-                        attributeBroadcastStatus.remove(attributeSignature.f0);
+            Map<Integer, Long> signatureBotFlagStatus = attributeBroadcastStatus.get(signatureType);
+            if (signatureBotFlagStatus != null) {
+                for (int botFlag : botFlags) {
+                    if (signatureBotFlagStatus.containsKey(botFlag)) {
+                        if (expirationTime > signatureBotFlagStatus.get(botFlag)) {
+                            signatureBotFlagStatus.remove(botFlag);
+                            if (signatureBotFlagStatus.size() == 0) {
+                                attributeBroadcastStatus.remove(signatureType);
+                            }
+                        }
                     }
                 }
             }
