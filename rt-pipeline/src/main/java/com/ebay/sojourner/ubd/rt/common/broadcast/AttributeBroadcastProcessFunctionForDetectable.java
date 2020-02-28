@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
 import org.apache.flink.api.java.tuple.Tuple4;
+import org.apache.flink.configuration.Configuration;
+import org.apache.flink.metrics.Counter;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.types.Either;
 import org.apache.flink.util.Collector;
@@ -21,6 +23,10 @@ public class AttributeBroadcastProcessFunctionForDetectable
         extends BroadcastProcessFunction<Either<UbiEvent, UbiSession>,
         Tuple4<String, Boolean, Set<Integer>, Long>, UbiEvent> {
     private OutputTag outputTag = null;
+    private Counter guidCounter;
+    private Counter ipCounter;
+    private Counter agentCounter;
+    private Counter agentIpCounter;
 
     public AttributeBroadcastProcessFunctionForDetectable(OutputTag sessionOutputTag) {
         outputTag = sessionOutputTag;
@@ -159,6 +165,15 @@ public class AttributeBroadcastProcessFunctionForDetectable
                     HashMap<Integer, Long> newBotFlagStatus = new HashMap<>();
                     newBotFlagStatus.put(botFlag, expirationTime);
                     attributeBroadcastStatus.put(signatureType, newBotFlagStatus);
+                    if (signatureType.contains("ip")) {
+                        ipCounter.inc();
+                    } else if (signatureType.contains("agent")) {
+                        agentCounter.inc();
+                    } else if (signatureType.contains("agentIp")) {
+                        agentIpCounter.inc();
+                    } else if (signatureType.contains("guid")) {
+                        guidCounter.inc();
+                    }
                 }
             }
         } else {
@@ -170,12 +185,29 @@ public class AttributeBroadcastProcessFunctionForDetectable
                             signatureBotFlagStatus.remove(botFlag);
                             if (signatureBotFlagStatus.size() == 0) {
                                 attributeBroadcastStatus.remove(signatureType);
+                                if (signatureType.contains("ip")) {
+                                    ipCounter.dec();
+                                } else if (signatureType.contains("agent")) {
+                                    agentCounter.dec();
+                                } else if (signatureType.contains("agentIp")) {
+                                    agentIpCounter.dec();
+                                } else if (signatureType.contains("guid")) {
+                                    guidCounter.dec();
+                                }
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    @Override
+    public void open(Configuration parameters) throws Exception {
+        guidCounter = getRuntimeContext().getMetricGroup().addGroup("flink-metrics-test").counter("guid signature count");
+        ipCounter = getRuntimeContext().getMetricGroup().addGroup("flink-metrics-test").counter("ip signature count");
+        agentCounter = getRuntimeContext().getMetricGroup().addGroup("flink-metrics-test").counter("agent signature count");
+        agentIpCounter = getRuntimeContext().getMetricGroup().addGroup("flink-metrics-test").counter("agentIp signature count");
     }
 }
 

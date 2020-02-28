@@ -26,11 +26,11 @@ public class AgentIpSignatureWindowProcessFunction
         AgentIpAttribute agentIpAttribute = agentIpAttributeAccumulator.getAgentIpAttribute();
 
 
-        if (context.currentWatermark() > context.window().maxTimestamp()
+        if (context.currentWatermark() >= context.window().maxTimestamp()
                 && agentIpAttribute.getBotFlagList() != null && agentIpAttribute.getBotFlagList().size() > 0) {
             out.collect(new Tuple4<>("agentIp" + agentIpAttribute.getAgent() + agentIpAttribute.getClientIp(), false,
                     agentIpAttribute.getBotFlagList(), context.window().maxTimestamp()));
-        } else if (context.currentWatermark() <= context.window().maxTimestamp()
+        } else if (context.currentWatermark() < context.window().maxTimestamp()
                 && agentIpAttributeAccumulator.getBotFlagStatus().containsValue(1)
                 && agentIpAttribute.getBotFlagList() != null && agentIpAttribute.getBotFlagList().size() > 0) {
             generationBotFlag = new HashSet<>();

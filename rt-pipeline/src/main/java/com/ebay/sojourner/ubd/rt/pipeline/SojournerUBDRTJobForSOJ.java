@@ -169,13 +169,13 @@ public class SojournerUBDRTJobForSOJ {
                 .select("generation")
                 .addSink(new DiscardingSink<>())
                 .setParallelism(72)
-                .name("GUID Generation Signature");
+                .name("GUID Signature Generation");
 
         guidSignatureSplitStream
                 .select("expiration")
                 .addSink(new DiscardingSink<>())
                 .setParallelism(72)
-                .name("GUID Expiration Signature");
+                .name("GUID Signature Expiration");
 
         DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureDataStream = agentIpAttributeDatastream
                 .keyBy("agent", "clientIp")
@@ -192,13 +192,13 @@ public class SojournerUBDRTJobForSOJ {
                 .select("generation")
                 .addSink(new DiscardingSink<>())
                 .setParallelism(72)
-                .name("Agent+IP Generation Signature");
+                .name("Agent+IP Signature Generation");
 
         agentIpSignatureSplitStream
                 .select("expiration")
                 .addSink(new DiscardingSink<>())
                 .setParallelism(72)
-                .name("Agent+IP Expiration Signature");
+                .name("Agent+IP Signature Expiration");
 
         DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureDataStream = agentIpAttributeDatastream
                 .keyBy("agent")
@@ -215,13 +215,13 @@ public class SojournerUBDRTJobForSOJ {
                 .select("generation")
                 .addSink(new DiscardingSink<>())
                 .setParallelism(72)
-                .name("Agent Generation Signature");
+                .name("Agent Signature Generation");
 
         agentSignatureSplitStream
                 .select("expiration")
                 .addSink(new DiscardingSink<>())
                 .setParallelism(72)
-                .name("Agent Expiration Signature");
+                .name("Agent Signature Expiration");
 
         DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureDataStream = agentIpAttributeDatastream
                 .keyBy("clientIp")
@@ -238,13 +238,13 @@ public class SojournerUBDRTJobForSOJ {
                 .select("generation")
                 .addSink(new DiscardingSink<>())
                 .setParallelism(72)
-                .name("IP Generation Signature");
+                .name("IP Signature Generation");
 
         ipSignatureSplitStream
                 .select("expiration")
                 .addSink(new DiscardingSink<>())
                 .setParallelism(72)
-                .name("IP Expiration Signature");
+                .name("IP Signature Expiration");
 
         // union attribute signature for broadcast
         DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> attributeSignatureDataStream = agentIpSignatureDataStream
