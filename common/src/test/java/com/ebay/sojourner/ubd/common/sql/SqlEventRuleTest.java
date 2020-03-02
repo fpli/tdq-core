@@ -46,8 +46,6 @@ public class SqlEventRuleTest {
       assertEquals(0, ICF_RULE_5.getBotFlag(ubiEvent));
       assertEquals(0, ICF_RULE_6.getBotFlag(ubiEvent));
       assertEquals(0, ICF_RULE_7.getBotFlag(ubiEvent));
-      assertEquals(0, ICF_RULE_8.getBotFlag(ubiEvent));
-      assertEquals(0, ICF_RULE_9.getBotFlag(ubiEvent));
       assertEquals(0, ICF_RULE_10.getBotFlag(ubiEvent));
       assertEquals(0, ICF_RULE_11.getBotFlag(ubiEvent));
       assertEquals(0, ICF_RULE_12.getBotFlag(ubiEvent));
@@ -63,20 +61,18 @@ public class SqlEventRuleTest {
     try {
       long icfBinary = 0b0001111111111111 | (1 << 55);
       UbiEvent ubiEvent = new UbiEventBuilder().icfBinary(icfBinary).build();
-      assertEquals(401, ICF_RULE_1.getBotFlag(ubiEvent));
-      assertEquals(402, ICF_RULE_2.getBotFlag(ubiEvent));
-      assertEquals(403, ICF_RULE_3.getBotFlag(ubiEvent));
-      assertEquals(404, ICF_RULE_4.getBotFlag(ubiEvent));
-      assertEquals(405, ICF_RULE_5.getBotFlag(ubiEvent));
-      assertEquals(406, ICF_RULE_6.getBotFlag(ubiEvent));
-      assertEquals(407, ICF_RULE_7.getBotFlag(ubiEvent));
-      assertEquals(408, ICF_RULE_8.getBotFlag(ubiEvent));
-      assertEquals(409, ICF_RULE_9.getBotFlag(ubiEvent));
-      assertEquals(410, ICF_RULE_10.getBotFlag(ubiEvent));
-      assertEquals(411, ICF_RULE_11.getBotFlag(ubiEvent));
-      assertEquals(412, ICF_RULE_12.getBotFlag(ubiEvent));
-      assertEquals(413, ICF_RULE_13.getBotFlag(ubiEvent));
-      assertEquals(456, ICF_RULE_56.getBotFlag(ubiEvent));
+      assertEquals(801, ICF_RULE_1.getBotFlag(ubiEvent));
+      assertEquals(802, ICF_RULE_2.getBotFlag(ubiEvent));
+      assertEquals(803, ICF_RULE_3.getBotFlag(ubiEvent));
+      assertEquals(804, ICF_RULE_4.getBotFlag(ubiEvent));
+      assertEquals(805, ICF_RULE_5.getBotFlag(ubiEvent));
+      assertEquals(806, ICF_RULE_6.getBotFlag(ubiEvent));
+      assertEquals(807, ICF_RULE_7.getBotFlag(ubiEvent));
+      assertEquals(808, ICF_RULE_10.getBotFlag(ubiEvent));
+      assertEquals(809, ICF_RULE_11.getBotFlag(ubiEvent));
+      assertEquals(810, ICF_RULE_12.getBotFlag(ubiEvent));
+      assertEquals(811, ICF_RULE_13.getBotFlag(ubiEvent));
+      assertEquals(812, ICF_RULE_56.getBotFlag(ubiEvent));
     } catch (Exception e) {
       fail();
     }
@@ -94,12 +90,11 @@ public class SqlEventRuleTest {
       assertEquals(0, ICF_RULE_5.getBotFlag(ubiEvent));
       assertEquals(0, ICF_RULE_6.getBotFlag(ubiEvent));
       assertEquals(0, ICF_RULE_7.getBotFlag(ubiEvent));
-      assertEquals(0, ICF_RULE_8.getBotFlag(ubiEvent));
-      assertEquals(0, ICF_RULE_9.getBotFlag(ubiEvent));
-      assertEquals(410, ICF_RULE_10.getBotFlag(ubiEvent));
+      assertEquals(808, ICF_RULE_10.getBotFlag(ubiEvent));
       assertEquals(0, ICF_RULE_11.getBotFlag(ubiEvent));
       assertEquals(0, ICF_RULE_12.getBotFlag(ubiEvent));
-      assertEquals(413, ICF_RULE_13.getBotFlag(ubiEvent));
+      assertEquals(811, ICF_RULE_13.getBotFlag(ubiEvent));
+      assertEquals(0, ICF_RULE_56.getBotFlag(ubiEvent));
     } catch (Exception e) {
       fail();
     }

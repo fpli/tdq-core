@@ -8,85 +8,73 @@ public class Rules {
     );
 
     public static final SqlEventRule ICF_RULE_1 = new SqlEventRule(
-        "SELECT 401 as bot_flag " +
+        "SELECT 801 as bot_flag " +
             "FROM \"soj\".\"ubiEvents\"" +
             "WHERE \"checkBit\"(\"icfBinary\", 1)"
     );
 
     public static final SqlEventRule ICF_RULE_2 = new SqlEventRule(
-        "SELECT 402 as bot_flag " +
+        "SELECT 802 as bot_flag " +
             "FROM \"soj\".\"ubiEvents\"" +
             "WHERE \"checkBit\"(\"icfBinary\", 2)"
     );
 
     public static final SqlEventRule ICF_RULE_3 = new SqlEventRule(
-        "SELECT 403 as bot_flag " +
+        "SELECT 803 as bot_flag " +
             "FROM \"soj\".\"ubiEvents\"" +
             "WHERE \"checkBit\"(\"icfBinary\", 3)"
     );
 
     public static final SqlEventRule ICF_RULE_4 = new SqlEventRule(
-        "SELECT 404 as bot_flag " +
+        "SELECT 804 as bot_flag " +
             "FROM \"soj\".\"ubiEvents\"" +
             "WHERE \"checkBit\"(\"icfBinary\", 4)"
     );
 
     public static final SqlEventRule ICF_RULE_5 = new SqlEventRule(
-        "SELECT 405 as bot_flag " +
+        "SELECT 805 as bot_flag " +
             "FROM \"soj\".\"ubiEvents\"" +
             "WHERE \"checkBit\"(\"icfBinary\", 5)"
     );
 
     public static final SqlEventRule ICF_RULE_6 = new SqlEventRule(
-        "SELECT 406 as bot_flag " +
+        "SELECT 806 as bot_flag " +
             "FROM \"soj\".\"ubiEvents\"" +
             "WHERE \"checkBit\"(\"icfBinary\", 6)"
     );
 
     public static final SqlEventRule ICF_RULE_7 = new SqlEventRule(
-        "SELECT 407 as bot_flag " +
+        "SELECT 807 as bot_flag " +
             "FROM \"soj\".\"ubiEvents\"" +
             "WHERE \"checkBit\"(\"icfBinary\", 7)"
     );
 
-    public static final SqlEventRule ICF_RULE_8 = new SqlEventRule(
-        "SELECT 408 as bot_flag " +
-            "FROM \"soj\".\"ubiEvents\"" +
-            "WHERE \"checkBit\"(\"icfBinary\", 8)"
-    );
-
-    public static final SqlEventRule ICF_RULE_9 = new SqlEventRule(
-        "SELECT 409 as bot_flag " +
-            "FROM \"soj\".\"ubiEvents\"" +
-            "WHERE \"checkBit\"(\"icfBinary\", 9)"
-    );
-
     public static final SqlEventRule ICF_RULE_10 = new SqlEventRule(
-        "SELECT 410 as bot_flag " +
+        "SELECT 808 as bot_flag " +
             "FROM \"soj\".\"ubiEvents\"" +
             "WHERE \"checkBit\"(\"icfBinary\", 10)"
     );
 
     public static final SqlEventRule ICF_RULE_11 = new SqlEventRule(
-        "SELECT 411 as bot_flag " +
+        "SELECT 809 as bot_flag " +
             "FROM \"soj\".\"ubiEvents\"" +
             "WHERE \"checkBit\"(\"icfBinary\", 11)"
     );
 
     public static final SqlEventRule ICF_RULE_12 = new SqlEventRule(
-        "SELECT 412 as bot_flag " +
+        "SELECT 810 as bot_flag " +
             "FROM \"soj\".\"ubiEvents\"" +
             "WHERE \"checkBit\"(\"icfBinary\", 12)"
     );
 
     public static final SqlEventRule ICF_RULE_13 = new SqlEventRule(
-        "SELECT 413 as bot_flag " +
+        "SELECT 811 as bot_flag " +
             "FROM \"soj\".\"ubiEvents\"" +
             "WHERE \"checkBit\"(\"icfBinary\", 13)"
     );
 
     public static final SqlEventRule ICF_RULE_56 = new SqlEventRule(
-        "SELECT 456 as bot_flag " +
+        "SELECT 812 as bot_flag " +
             "FROM \"soj\".\"ubiEvents\"" +
             "WHERE \"checkBit\"(\"icfBinary\", 56)"
     );
