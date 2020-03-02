@@ -9,16 +9,10 @@ import com.ebay.sojourner.ubd.common.util.BotRules;
 import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
 
 
-public class ScsCountForBot7Indicator<Source, Target> implements Indicator<Source, Target> {
-    private BotFilter botFilter;
+public class ScsCountForBot7Indicator<Source, Target> extends AbstractIndicator<Source, Target> {
 
     public ScsCountForBot7Indicator(BotFilter botFilter) {
         this.botFilter = botFilter;
-    }
-
-    @Override
-    public void init() throws Exception {
-
     }
 
     @Override
@@ -34,41 +28,26 @@ public class ScsCountForBot7Indicator<Source, Target> implements Indicator<Sourc
     }
 
     @Override
-    public void feed( Source source, Target target ) throws Exception {
-
-    }
-
-    @Override
-    public void feed(Source source, Target target,boolean isNeeded) throws Exception {
-
+    public void feed(Source source, Target target, boolean isNeeded) throws Exception {
         if (source instanceof UbiSession) {
             UbiSession ubiSession = (UbiSession) source;
             AgentIpAttributeAccumulator agentIpAttributeAccumulator = (AgentIpAttributeAccumulator) target;
-            if (agentIpAttributeAccumulator.getAgentIpAttribute().getScsCountForBot7() < 0) {
-
-            } else {
+            if (agentIpAttributeAccumulator.getAgentIpAttribute().getScsCountForBot7() >= 0) {
                 if (isValid(ubiSession)) {
                     if (UbiSessionHelper.isSingleClickSession(ubiSession)) {
-                        agentIpAttributeAccumulator.getAgentIpAttribute().feed(ubiSession, BotRules.SCS_ON_IP,isNeeded);
+                        agentIpAttributeAccumulator.getAgentIpAttribute().feed(ubiSession, BotRules.SCS_ON_IP, isNeeded);
                     } else {
                         agentIpAttributeAccumulator.getAgentIpAttribute().revert(ubiSession, BotRules.SCS_ON_IP);
                     }
                 }
             }
-
         } else {
             AgentIpAttribute agentIpAttribute = (AgentIpAttribute) source;
             IpAttributeAccumulator ipAttributeAccumulator = (IpAttributeAccumulator) target;
-            ipAttributeAccumulator.getIpAttribute().feed(agentIpAttribute,BotRules.SCS_ON_IP,isNeeded);
+            ipAttributeAccumulator.getIpAttribute().feed(agentIpAttribute, BotRules.SCS_ON_IP, isNeeded);
         }
 
     }
-
-    @Override
-    public void end(Target target) throws Exception {
-        // to do nonthing;
-    }
-
 
     @Override
     public boolean filter(Source source, Target target) throws Exception {
@@ -81,16 +60,14 @@ public class ScsCountForBot7Indicator<Source, Target> implements Indicator<Sourc
             if (ubiSession.getBotFlag() > 0 && ubiSession.getBotFlag() < 200) {
                 return true;
             }
-
             if (ubiSession.getIp() == null) {
                 return true;
             }
-
         }
         return false;
-
     }
-    private boolean isValid(UbiSession ubiSession){
+
+    private boolean isValid(UbiSession ubiSession) {
         return !UbiSessionHelper.isNonIframRdtCountZero(ubiSession)
                 && !isAgentBlank(ubiSession.getIp())
                 && !UbiSessionHelper.isSingleClickNull(ubiSession);

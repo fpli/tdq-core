@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public class IpIndicators extends AttributeIndicators<AgentIpAttribute, IpAttributeAccumulator> {
 
     private static volatile IpIndicators ipIndicators;
-    private static BotFilter botFilter ;
+    private BotFilter botFilter;
 
     public static IpIndicators getInstance() {
         if (ipIndicators == null) {
@@ -35,9 +35,9 @@ public class IpIndicators extends AttributeIndicators<AgentIpAttribute, IpAttrib
 
     @Override
     public void initIndicators() {
-//        addIndicators(new <AgentIpAttribute,IpAttributeAccumulator>ScsCountForBot8Indicator(botFilter));
-        addIndicators(new <AgentIpAttribute,IpAttributeAccumulator>ScsCountForBot7Indicator(botFilter));
-        addIndicators(new <AgentIpAttribute,IpAttributeAccumulator>SuspectIPIndicator(botFilter));
+//        addIndicators(new ScsCountForBot8Indicator<>(botFilter));
+        addIndicators(new ScsCountForBot7Indicator<>(botFilter));
+        addIndicators(new SuspectIPIndicator<>(botFilter));
     }
 
 }

@@ -9,20 +9,20 @@ public class IcfRuleUtilTest {
     public void testIcfRuleUtil_10() {
         String checkString = "1200";
         long checkLong = NumberUtils.hexToDec(checkString);
-        Assert.assertEquals(IcfRuleUtils.getIcfRuleType(checkLong, 10),410);
+        Assert.assertEquals(808, IcfRuleUtils.getIcfRuleType(checkLong, 10));
     }
 
     @Test
     public void testIcfRuleUtil_13() {
         String checkString = "1200";
         long checkLong = NumberUtils.hexToDec(checkString);
-        Assert.assertEquals(IcfRuleUtils.getIcfRuleType(checkLong, 13),413);
+        Assert.assertEquals(811, IcfRuleUtils.getIcfRuleType(checkLong, 13));
     }
 
     @Test
     public void testIcfRuleUtil_0() {
         String checkString = "1200";
         long checkLong = NumberUtils.hexToDec(checkString);
-        Assert.assertEquals(IcfRuleUtils.getIcfRuleType(checkLong, 3),0);
+        Assert.assertEquals(0, IcfRuleUtils.getIcfRuleType(checkLong, 3));
     }
 }

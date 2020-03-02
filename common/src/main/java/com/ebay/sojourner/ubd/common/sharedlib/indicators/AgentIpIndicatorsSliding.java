@@ -2,7 +2,6 @@ package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
 import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AgentIpIndicatorsSliding extends AttributeIndicators<AgentIpAttribute, AgentIpAttributeAccumulator> {
 
     private static volatile AgentIpIndicatorsSliding agentIpIndicators;
-    private static BotFilter botFilter;
+    private BotFilter botFilter;
 
     public static AgentIpIndicatorsSliding getInstance() {
         if (agentIpIndicators == null) {

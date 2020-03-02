@@ -1,21 +1,16 @@
 package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
-import com.ebay.sojourner.ubd.common.model.*;
+import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
+import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
+import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
+import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
 import com.ebay.sojourner.ubd.common.util.BotRules;
-import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
 
-
-public class SuspectIPIndicator<Source, Target> implements Indicator<Source, Target> {
-    private BotFilter botFilter;
+public class SuspectIPIndicator<Source, Target> extends AbstractIndicator<Source, Target> {
 
     public SuspectIPIndicator(BotFilter botFilter) {
         this.botFilter = botFilter;
-    }
-
-    @Override
-    public void init() throws Exception {
-
     }
 
     @Override
@@ -28,32 +23,18 @@ public class SuspectIPIndicator<Source, Target> implements Indicator<Source, Tar
             ipAttributeAccumulator.getIpAttribute().clear();
         }
     }
-    @Override
-    public void feed( Source source, Target target ) throws Exception {
-
-    }
 
     @Override
     public void feed(Source source, Target target, boolean isNeeded) throws Exception {
-
         if (source instanceof UbiSession) {
             UbiSession ubiSession = (UbiSession) source;
             AgentIpAttributeAccumulator agentIpAttributeAccumulator = (AgentIpAttributeAccumulator) target;
-            agentIpAttributeAccumulator.getAgentIpAttribute().feed(ubiSession, BotRules.SUSPECTED_IP_ON_AGENT,isNeeded);
-        }
-        else if(source instanceof AgentIpAttribute)
-        {
+            agentIpAttributeAccumulator.getAgentIpAttribute().feed(ubiSession, BotRules.SUSPECTED_IP_ON_AGENT, isNeeded);
+        } else if (source instanceof AgentIpAttribute) {
             AgentIpAttribute agentIpAttribute = (AgentIpAttribute) source;
             IpAttributeAccumulator ipAttributeAccumulator = (IpAttributeAccumulator) target;
-            ipAttributeAccumulator.getIpAttribute().feed(agentIpAttribute, BotRules.SUSPECTED_IP_ON_AGENT,isNeeded);
-
+            ipAttributeAccumulator.getIpAttribute().feed(agentIpAttribute, BotRules.SUSPECTED_IP_ON_AGENT, isNeeded);
         }
-
-    }
-
-    @Override
-    public void end(Target target) throws Exception {
-        // to do nonthing;
     }
 
 
@@ -70,15 +51,5 @@ public class SuspectIPIndicator<Source, Target> implements Indicator<Source, Tar
             }
         }
         return false;
-
-    }
-
-    private boolean isValid(UbiSession ubiSession) {
-        return !UbiSessionHelper.isNonIframRdtCountZero(ubiSession)
-                && !UbiSessionHelper.isSingleClickNull(ubiSession);
-    }
-
-    protected boolean isAgentBlank(String agent) {
-        return agent == null || "".equals(agent);
     }
 }
