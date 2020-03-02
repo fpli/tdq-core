@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 
 class EventParserTest {
 
-    EventParser eventParser;
+  EventParser eventParser;
 
-    @Test
-    void test_eventParser() throws Exception {
-        eventParser = new EventParser();
-        Assertions.assertThat(eventParser.fieldParsers.size()).isEqualTo(26);
-    }
+  @Test
+  void test_eventParser() throws Exception {
+    eventParser = new EventParser();
+    Assertions.assertThat(eventParser.fieldParsers.size()).isEqualTo(26);
+  }
 }

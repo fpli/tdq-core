@@ -8,21 +8,21 @@ import org.junit.jupiter.api.Test;
 
 class BidBinConfirmFlagMetricsTest {
 
-    BidBinConfirmFlagMetrics bidBinConfirmFlagMetrics;
+  BidBinConfirmFlagMetrics bidBinConfirmFlagMetrics;
 
-    @BeforeEach
-    void setUp() {
-        bidBinConfirmFlagMetrics = new BidBinConfirmFlagMetrics();
-    }
+  @BeforeEach
+  void setUp() {
+    bidBinConfirmFlagMetrics = new BidBinConfirmFlagMetrics();
+  }
 
-    @Test
-    void test_end() {
-        UbiSession ubiSession = new UbiSession();
-        ubiSession.setBidCoreCnt(1);
+  @Test
+  void test_end() {
+    UbiSession ubiSession = new UbiSession();
+    ubiSession.setBidCoreCnt(1);
 
-        SessionAccumulator sessionAccumulator = new SessionAccumulator(ubiSession);
-        bidBinConfirmFlagMetrics.end(sessionAccumulator);
+    SessionAccumulator sessionAccumulator = new SessionAccumulator(ubiSession);
+    bidBinConfirmFlagMetrics.end(sessionAccumulator);
 
-        Assertions.assertThat(sessionAccumulator.getUbiSession().getBidBinConfirmFlag()).isTrue();
-    }
+    Assertions.assertThat(sessionAccumulator.getUbiSession().getBidBinConfirmFlag()).isTrue();
+  }
 }

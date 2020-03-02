@@ -1,12 +1,8 @@
 package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import com.ebay.sojourner.ubd.common.model.GuidAttribute;
-import com.ebay.sojourner.ubd.common.model.IpAttribute;
 import com.ebay.sojourner.ubd.common.rule.BotRule15_1;
-import com.ebay.sojourner.ubd.common.rule.BotRule7;
 import com.ebay.sojourner.ubd.common.rule.Rule;
-import com.ebay.sojourner.ubd.common.sharedlib.connectors.CouchBaseManager;
-
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -14,59 +10,59 @@ import java.util.Set;
 
 public class GuidSignatureBotDetector implements BotDetector<GuidAttribute> {
 
-    private static volatile GuidSignatureBotDetector singnatureBotDetector;
-    private Set<Rule> botRules = new LinkedHashSet<Rule>();
+  private static volatile GuidSignatureBotDetector singnatureBotDetector;
+  private Set<Rule> botRules = new LinkedHashSet<Rule>();
 
+  private GuidSignatureBotDetector() {
 
-    private GuidSignatureBotDetector() {
-
-        initBotRules();
-        for (Rule rule : botRules) {
-            rule.init();
-        }
+    initBotRules();
+    for (Rule rule : botRules) {
+      rule.init();
     }
+  }
 
-    public static GuidSignatureBotDetector getInstance() {
+  public static GuidSignatureBotDetector getInstance() {
+    if (singnatureBotDetector == null) {
+      synchronized (GuidSignatureBotDetector.class) {
         if (singnatureBotDetector == null) {
-            synchronized (GuidSignatureBotDetector.class) {
-                if (singnatureBotDetector == null) {
-                    singnatureBotDetector = new GuidSignatureBotDetector();
-                }
-            }
+          singnatureBotDetector = new GuidSignatureBotDetector();
         }
-        return singnatureBotDetector;
+      }
     }
+    return singnatureBotDetector;
+  }
 
-    @Override
-    public Set<Integer> getBotFlagList(GuidAttribute guidAttribute) throws IOException, InterruptedException {
-        Set<Integer> signature = null;
-        Set<Integer> botflagSet = new HashSet<Integer>();
-//        if (ubiSession.getClientIp() != null) {
-//            signature = scanSignature("ip",ubiSession.getClientIp(),"botFlag","botsignature");
-//
-//        }
-        if (guidAttribute != null) {
-            for (Rule rule : botRules) {
-                int botFlag = rule.getBotFlag(guidAttribute);
-                if (botFlag != 0) {
-                    botflagSet.add(botFlag);
-                }
-            }
+  @Override
+  public Set<Integer> getBotFlagList(GuidAttribute guidAttribute)
+      throws IOException, InterruptedException {
+    Set<Integer> signature = null;
+    Set<Integer> botflagSet = new HashSet<Integer>();
+    //        if (ubiSession.getClientIp() != null) {
+    //            signature = scanSignature("ip",ubiSession.getClientIp(),"botFlag","botsignature");
+    //
+    //        }
+    if (guidAttribute != null) {
+      for (Rule rule : botRules) {
+        int botFlag = rule.getBotFlag(guidAttribute);
+        if (botFlag != 0) {
+          botflagSet.add(botFlag);
         }
-
-        return botflagSet;
+      }
     }
 
-    @Override
-    public void initBotRules() {
+    return botflagSet;
+  }
 
-        botRules.add(new BotRule15_1());
-    }
+  @Override
+  public void initBotRules() {
 
-    private Set<Integer> scanSignature(String inColumnName, String inColumnValue, String outColumnName, String bucketName) {
-//        return CouchBaseManager.getInstance().getSignatureWithColumn(inColumnName, inColumnValue, outColumnName);
-        return null;
-    }
+    botRules.add(new BotRule15_1());
+  }
 
-
+  private Set<Integer> scanSignature(
+      String inColumnName, String inColumnValue, String outColumnName, String bucketName) {
+    //        return CouchBaseManager.getInstance().getSignatureWithColumn(inColumnName,
+    // inColumnValue, outColumnName);
+    return null;
+  }
 }

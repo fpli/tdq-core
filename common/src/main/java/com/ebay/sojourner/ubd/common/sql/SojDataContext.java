@@ -7,32 +7,31 @@ import org.apache.calcite.schema.SchemaPlus;
 import org.apache.calcite.tools.Planner;
 
 public class SojDataContext implements DataContext {
-    private SchemaPlus rootSchema;
-    private final Planner planner;
+  private final Planner planner;
+  private SchemaPlus rootSchema;
 
-    SojDataContext(Planner planner, SchemaPlus rootSchema) {
-        this.planner = planner;
-        this.rootSchema = rootSchema;
-    }
+  SojDataContext(Planner planner, SchemaPlus rootSchema) {
+    this.planner = planner;
+    this.rootSchema = rootSchema;
+  }
 
-    public Planner getPlanner() {
-        return this.planner;
-    }
+  public Planner getPlanner() {
+    return this.planner;
+  }
 
-    public SchemaPlus getRootSchema() {
-        return rootSchema;
-    }
+  public SchemaPlus getRootSchema() {
+    return rootSchema;
+  }
 
-    public JavaTypeFactory getTypeFactory() {
-        return (JavaTypeFactory) planner.getTypeFactory();
-    }
+  public JavaTypeFactory getTypeFactory() {
+    return (JavaTypeFactory) planner.getTypeFactory();
+  }
 
-    public QueryProvider getQueryProvider() {
-        return null;
-    }
+  public QueryProvider getQueryProvider() {
+    return null;
+  }
 
-    public Object get(String name) {
-        return null;
-    }
-
+  public Object get(String name) {
+    return null;
+  }
 }

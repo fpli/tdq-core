@@ -7,36 +7,36 @@ import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class AgentIndicators extends AttributeIndicators<AgentIpAttribute, AgentAttributeAccumulator> {
+public class AgentIndicators
+    extends AttributeIndicators<AgentIpAttribute, AgentAttributeAccumulator> {
 
-    private static volatile AgentIndicators agentIpIndicators;
-    private BotFilter botFilter;
+  private static volatile AgentIndicators agentIpIndicators;
+  private BotFilter botFilter;
 
-    public static AgentIndicators getInstance() {
+  public AgentIndicators() {
+    botFilter = new UbiBotFilter();
+    initIndicators();
+    try {
+      init();
+    } catch (Exception e) {
+      log.error(e.getMessage());
+    }
+  }
+
+  public static AgentIndicators getInstance() {
+    if (agentIpIndicators == null) {
+      synchronized (AgentIndicators.class) {
         if (agentIpIndicators == null) {
-            synchronized (AgentIndicators.class) {
-                if (agentIpIndicators == null) {
-                    agentIpIndicators = new AgentIndicators();
-                }
-            }
+          agentIpIndicators = new AgentIndicators();
         }
-        return agentIpIndicators;
+      }
     }
+    return agentIpIndicators;
+  }
 
-    public AgentIndicators() {
-        botFilter = new UbiBotFilter();
-        initIndicators();
-        try {
-            init();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    @Override
-    public void initIndicators() {
-        addIndicators(new ScsCountForBot6Indicator<>(botFilter));
-        addIndicators(new SuspectAgentIndicator<>(botFilter));
-    }
-
+  @Override
+  public void initIndicators() {
+    addIndicators(new ScsCountForBot6Indicator<>(botFilter));
+    addIndicators(new SuspectAgentIndicator<>(botFilter));
+  }
 }

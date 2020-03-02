@@ -1,25 +1,23 @@
 package com.ebay.sojourner.ubd.common.sharedlib.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.IOException;
 import java.net.URL;
+import org.apache.commons.lang3.StringUtils;
 
 public class SOJGetUrlPath {
-    /*
-     * this function is to get path from a url string
-     */
-    public static String getUrlPath(String urlString){
-        if (StringUtils.isBlank(urlString))
-            return "";
-        URL url;
+  /*
+   * this function is to get path from a url string
+   */
+  public static String getUrlPath(String urlString) {
+    if (StringUtils.isBlank(urlString)) return "";
+    URL url;
 
-        try{
-            url  = new URL(urlString);
-        }catch (IOException e){
-            return "";
-        }
-        
-        return url.getPath();
+    try {
+      url = new URL(urlString);
+    } catch (IOException e) {
+      return "";
     }
+
+    return url.getPath();
+  }
 }

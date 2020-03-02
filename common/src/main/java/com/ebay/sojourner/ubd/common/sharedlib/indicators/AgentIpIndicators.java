@@ -7,40 +7,40 @@ import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class AgentIpIndicators extends AttributeIndicators<UbiSession, AgentIpAttributeAccumulator> {
+public class AgentIpIndicators
+    extends AttributeIndicators<UbiSession, AgentIpAttributeAccumulator> {
 
-    private static volatile AgentIpIndicators agentIpIndicators;
-    private BotFilter botFilter;
+  private static volatile AgentIpIndicators agentIpIndicators;
+  private BotFilter botFilter;
 
-    public static AgentIpIndicators getInstance() {
+  public AgentIpIndicators() {
+    botFilter = new UbiBotFilter();
+    initIndicators();
+    try {
+      init();
+    } catch (Exception e) {
+      log.error(e.getMessage());
+    }
+  }
+
+  public static AgentIpIndicators getInstance() {
+    if (agentIpIndicators == null) {
+      synchronized (AgentIpIndicators.class) {
         if (agentIpIndicators == null) {
-            synchronized (AgentIpIndicators.class) {
-                if (agentIpIndicators == null) {
-                    agentIpIndicators = new AgentIpIndicators();
-                }
-            }
+          agentIpIndicators = new AgentIpIndicators();
         }
-        return agentIpIndicators;
+      }
     }
+    return agentIpIndicators;
+  }
 
-    public AgentIpIndicators() {
-        botFilter = new UbiBotFilter();
-        initIndicators();
-        try {
-            init();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    @Override
-    public void initIndicators() {
-        addIndicators(new ScsCountForBot5Indicator<>(botFilter));
-        addIndicators(new ScsCountForBot6Indicator<>(botFilter));
-        addIndicators(new ScsCountForBot7Indicator<>(botFilter));
-        addIndicators(new ScsCountForBot8Indicator<>(botFilter));
-        addIndicators(new SuspectAgentIndicator<>(botFilter));
-        addIndicators(new SuspectIPIndicator<>(botFilter));
-    }
-
+  @Override
+  public void initIndicators() {
+    addIndicators(new ScsCountForBot5Indicator<>(botFilter));
+    addIndicators(new ScsCountForBot6Indicator<>(botFilter));
+    addIndicators(new ScsCountForBot7Indicator<>(botFilter));
+    addIndicators(new ScsCountForBot8Indicator<>(botFilter));
+    addIndicators(new SuspectAgentIndicator<>(botFilter));
+    addIndicators(new SuspectIPIndicator<>(botFilter));
+  }
 }

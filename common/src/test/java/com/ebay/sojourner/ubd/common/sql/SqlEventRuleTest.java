@@ -1,11 +1,23 @@
 package com.ebay.sojourner.ubd.common.sql;
 
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import org.junit.Test;
-
-import static com.ebay.sojourner.ubd.common.sql.Rules.*;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_1;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_10;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_11;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_12;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_13;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_2;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_3;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_4;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_5;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_56;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_6;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_7;
+import static com.ebay.sojourner.ubd.common.sql.Rules.RULE_1;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import org.junit.Test;
 
 public class SqlEventRuleTest {
 
@@ -24,10 +36,7 @@ public class SqlEventRuleTest {
   @Test
   public void testUdf() {
     try {
-      SqlEventRule rule = new SqlEventRule(
-          "SELECT \"square\"(2) " +
-              "FROM \"soj\".\"ubiEvents\""
-      );
+      SqlEventRule rule = new SqlEventRule("SELECT \"square\"(2) " + "FROM \"soj\".\"ubiEvents\"");
       assertEquals(4, rule.getBotFlag(new UbiEventBuilder().build()));
     } catch (Exception e) {
       fail();

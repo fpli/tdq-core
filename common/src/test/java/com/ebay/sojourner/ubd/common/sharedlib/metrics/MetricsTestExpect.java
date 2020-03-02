@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 public class MetricsTestExpect {
 
-    @JsonProperty("UbiSession")
-    private UbiSession ubiSession;
+  @JsonProperty("UbiSession")
+  private UbiSession ubiSession;
 }

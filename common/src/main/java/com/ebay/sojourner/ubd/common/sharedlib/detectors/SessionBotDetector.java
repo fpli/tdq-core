@@ -1,61 +1,74 @@
 package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.rule.*;
-
+import com.ebay.sojourner.ubd.common.rule.BotRule10;
+import com.ebay.sojourner.ubd.common.rule.BotRule11;
+import com.ebay.sojourner.ubd.common.rule.BotRule12;
+import com.ebay.sojourner.ubd.common.rule.BotRule15;
+import com.ebay.sojourner.ubd.common.rule.BotRule203;
+import com.ebay.sojourner.ubd.common.rule.BotRule204;
+import com.ebay.sojourner.ubd.common.rule.BotRule205;
+import com.ebay.sojourner.ubd.common.rule.BotRule206;
+import com.ebay.sojourner.ubd.common.rule.BotRule207;
+import com.ebay.sojourner.ubd.common.rule.BotRule208;
+import com.ebay.sojourner.ubd.common.rule.BotRule212;
+import com.ebay.sojourner.ubd.common.rule.BotRule215;
+import com.ebay.sojourner.ubd.common.rule.BotRule9;
+import com.ebay.sojourner.ubd.common.rule.Rule;
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class SessionBotDetector implements BotDetector<UbiSession> {
 
-    private static volatile SessionBotDetector sessionBotDetector;
-    private Set<Rule> botRules = new LinkedHashSet<Rule>();
-    private SessionBotDetector() {
-        initBotRules();
-        for (Rule rule:botRules)
-        {
-            rule.init();
-        }
+  private static volatile SessionBotDetector sessionBotDetector;
+  private Set<Rule> botRules = new LinkedHashSet<Rule>();
+
+  private SessionBotDetector() {
+    initBotRules();
+    for (Rule rule : botRules) {
+      rule.init();
     }
-    public static SessionBotDetector getInstance() {
+  }
+
+  public static SessionBotDetector getInstance() {
+    if (sessionBotDetector == null) {
+      synchronized (SessionBotDetector.class) {
         if (sessionBotDetector == null) {
-            synchronized (SessionBotDetector.class) {
-                if (sessionBotDetector == null) {
-                    sessionBotDetector = new SessionBotDetector();
-                }
-            }
+          sessionBotDetector = new SessionBotDetector();
         }
-        return sessionBotDetector;
+      }
     }
+    return sessionBotDetector;
+  }
 
-    @Override
-    public Set<Integer> getBotFlagList(UbiSession ubiSession) throws IOException, InterruptedException {
-        Set<Integer> botRuleList = new LinkedHashSet<Integer>(botRules.size());
-        for (Rule rule:botRules)
-        {
-            Integer botRule =rule.getBotFlag(ubiSession);
-            if(botRule!=0) {
-                botRuleList.add(botRule);
-            }
-        }
-        return botRuleList;
+  @Override
+  public Set<Integer> getBotFlagList(UbiSession ubiSession)
+      throws IOException, InterruptedException {
+    Set<Integer> botRuleList = new LinkedHashSet<Integer>(botRules.size());
+    for (Rule rule : botRules) {
+      Integer botRule = rule.getBotFlag(ubiSession);
+      if (botRule != 0) {
+        botRuleList.add(botRule);
+      }
     }
+    return botRuleList;
+  }
 
-    @Override
-    public void initBotRules() {
-        botRules.add(new BotRule15());
-        botRules.add(new BotRule9());
-        botRules.add(new BotRule10());
-        botRules.add(new BotRule12());
-        botRules.add(new BotRule203());
-        botRules.add(new BotRule204());
-        botRules.add(new BotRule205());
-        botRules.add(new BotRule206());
-        botRules.add(new BotRule207());
-        botRules.add(new BotRule208());
-        botRules.add(new BotRule212());
-        botRules.add(new BotRule215());
-        botRules.add(new BotRule11());
-    }
+  @Override
+  public void initBotRules() {
+    botRules.add(new BotRule15());
+    botRules.add(new BotRule9());
+    botRules.add(new BotRule10());
+    botRules.add(new BotRule12());
+    botRules.add(new BotRule203());
+    botRules.add(new BotRule204());
+    botRules.add(new BotRule205());
+    botRules.add(new BotRule206());
+    botRules.add(new BotRule207());
+    botRules.add(new BotRule208());
+    botRules.add(new BotRule212());
+    botRules.add(new BotRule215());
+    botRules.add(new BotRule11());
+  }
 }

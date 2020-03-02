@@ -1,12 +1,13 @@
-//package com.ebay.sojourner.ubd.rt.operators.attrubite;
+// package com.ebay.sojourner.ubd.rt.operators.attrubite;
 //
-//import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
-//import com.ebay.sojourner.ubd.common.model.UbiSession;
-//import com.ebay.sojourner.ubd.common.sharedlib.indicators.IpIndicators;
-//import org.apache.flink.api.common.functions.AggregateFunction;
-//import org.apache.log4j.Logger;
+// import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
+// import com.ebay.sojourner.ubd.common.model.UbiSession;
+// import com.ebay.sojourner.ubd.common.sharedlib.indicators.IpIndicators;
+// import org.apache.flink.api.common.functions.AggregateFunction;
+// import org.apache.log4j.Logger;
 //
-//public class AgentStringAttributeAgg implements AggregateFunction<UbiSession, IpAttributeAccumulator, IpAttributeAccumulator> {
+// public class AgentStringAttributeAgg implements AggregateFunction<UbiSession,
+// IpAttributeAccumulator, IpAttributeAccumulator> {
 //    private static final Logger logger = Logger.getLogger(AgentStringAttributeAgg.class);
 //    private IpIndicators ipIndicators;
 //
@@ -48,4 +49,4 @@
 //    public IpAttributeAccumulator merge(IpAttributeAccumulator a, IpAttributeAccumulator b) {
 //        return null;
 //    }
-//}
+// }

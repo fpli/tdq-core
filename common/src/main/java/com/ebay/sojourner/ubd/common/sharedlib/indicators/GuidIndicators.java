@@ -7,32 +7,31 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GuidIndicators extends AttributeIndicators<UbiSession, GuidAttributeAccumulator> {
 
-    private static volatile GuidIndicators guidIndicators;
+  private static volatile GuidIndicators guidIndicators;
 
-    public static GuidIndicators getInstance() {
+  public GuidIndicators() {
+    initIndicators();
+    try {
+      init();
+    } catch (Exception e) {
+      log.error(e.getMessage());
+    }
+  }
+
+  public static GuidIndicators getInstance() {
+    if (guidIndicators == null) {
+      synchronized (GuidIndicators.class) {
         if (guidIndicators == null) {
-            synchronized (GuidIndicators.class) {
-                if (guidIndicators == null) {
-                    guidIndicators = new GuidIndicators();
-                }
-            }
+          guidIndicators = new GuidIndicators();
         }
-        return guidIndicators;
+      }
     }
+    return guidIndicators;
+  }
 
-    public GuidIndicators() {
-        initIndicators();
-        try {
-            init();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-    }
+  @Override
+  public void initIndicators() {
 
-    @Override
-    public void initIndicators() {
-
-        addIndicators(new AbsEventCountIndicator());
-    }
-
+    addIndicators(new AbsEventCountIndicator());
+  }
 }

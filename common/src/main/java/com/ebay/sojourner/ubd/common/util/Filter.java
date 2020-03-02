@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public interface Filter<Source> {
 
-    public boolean filter(Source source) throws IOException, InterruptedException;
+  boolean filter(Source source) throws IOException, InterruptedException;
 
-    public void cleanup() throws IOException, InterruptedException;
+  void cleanup() throws IOException, InterruptedException;
 }

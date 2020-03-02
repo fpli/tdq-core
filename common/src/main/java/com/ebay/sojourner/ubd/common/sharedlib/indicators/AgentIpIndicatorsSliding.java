@@ -7,36 +7,36 @@ import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class AgentIpIndicatorsSliding extends AttributeIndicators<AgentIpAttribute, AgentIpAttributeAccumulator> {
+public class AgentIpIndicatorsSliding
+    extends AttributeIndicators<AgentIpAttribute, AgentIpAttributeAccumulator> {
 
-    private static volatile AgentIpIndicatorsSliding agentIpIndicators;
-    private BotFilter botFilter;
+  private static volatile AgentIpIndicatorsSliding agentIpIndicators;
+  private BotFilter botFilter;
 
-    public static AgentIpIndicatorsSliding getInstance() {
+  public AgentIpIndicatorsSliding() {
+    botFilter = new UbiBotFilter();
+    initIndicators();
+    try {
+      init();
+    } catch (Exception e) {
+      log.error(e.getMessage());
+    }
+  }
+
+  public static AgentIpIndicatorsSliding getInstance() {
+    if (agentIpIndicators == null) {
+      synchronized (AgentIpIndicatorsSliding.class) {
         if (agentIpIndicators == null) {
-            synchronized (AgentIpIndicatorsSliding.class) {
-                if (agentIpIndicators == null) {
-                    agentIpIndicators = new AgentIpIndicatorsSliding();
-                }
-            }
+          agentIpIndicators = new AgentIpIndicatorsSliding();
         }
-        return agentIpIndicators;
+      }
     }
+    return agentIpIndicators;
+  }
 
-    public AgentIpIndicatorsSliding() {
-        botFilter = new UbiBotFilter();
-        initIndicators();
-        try {
-            init();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    @Override
-    public void initIndicators() {
-        addIndicators(new <AgentIpAttribute, AgentIpAttributeAccumulator>ScsCountForBot5Indicator(botFilter));
-        addIndicators(new <AgentIpAttribute, AgentIpAttributeAccumulator>ScsCountForBot8Indicator(botFilter));
-    }
-
+  @Override
+  public void initIndicators() {
+    addIndicators(new ScsCountForBot5Indicator<>(botFilter));
+    addIndicators(new ScsCountForBot8Indicator<>(botFilter));
+  }
 }

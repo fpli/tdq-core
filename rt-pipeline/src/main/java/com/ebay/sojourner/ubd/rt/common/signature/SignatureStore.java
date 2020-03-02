@@ -5,8 +5,7 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 
 public interface SignatureStore {
 
-    void save(DataStream<IpSignature> signatureStream);
+  void save(DataStream<IpSignature> signatureStream);
 
-    IpSignature load(String ip);
-
+  IpSignature load(String ip);
 }

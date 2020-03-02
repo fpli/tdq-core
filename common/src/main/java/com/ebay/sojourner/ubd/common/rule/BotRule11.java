@@ -8,34 +8,31 @@ import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
 
 public class BotRule11 extends AbstractBotRule<UbiSession> {
 
-    private BotFilter botFilter ;
+  private BotFilter botFilter;
 
-    @Override
-    public void init() {
-        botFilter = new UbiBotFilter();
-    }
+  @Override
+  public void init() {
+    botFilter = new UbiBotFilter();
+  }
 
-    @Override
-    public int getBotFlag(UbiSession ubiSession) {
-        if(!filter(ubiSession)) {
-            if (UbiSessionHelper.isIabAgent(ubiSession)) {
-                return BotRules.SPECIFIC_SPIDER_IAB;
-            } else {
-                return BotRules.NON_BOT_FLAG;
-            }
-        }
+  @Override
+  public int getBotFlag(UbiSession ubiSession) {
+    if (!filter(ubiSession)) {
+      if (UbiSessionHelper.isIabAgent(ubiSession)) {
+        return BotRules.SPECIFIC_SPIDER_IAB;
+      } else {
         return BotRules.NON_BOT_FLAG;
+      }
+    }
+    return BotRules.NON_BOT_FLAG;
+  }
+
+  private boolean filter(UbiSession ubiSession) {
+    if (botFilter.filter(ubiSession, BotRules.SPECIFIC_SPIDER_IAB)) {
+      return true;
     }
 
-    private boolean filter(UbiSession ubiSession ) {
-        if (botFilter.filter(ubiSession, BotRules.SPECIFIC_SPIDER_IAB)) {
-            return true;
-        }
+    return ubiSession.getBotFlag() > 0;
 
-        if (ubiSession.getBotFlag() > 0) {
-            return true;
-        }
-
-        return false;
-    }
+  }
 }

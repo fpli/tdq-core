@@ -1,12 +1,12 @@
 package com.ebay.sojourner.ubd.common.sharedlib.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import org.apache.commons.lang3.StringUtils;
 
 public class SOJURLDecodeEscape {
-  public static int hexlookup[] = { 
+
+  public static int[] hexlookup = {
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 0-15
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 16-31
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 32-47
@@ -19,6 +19,7 @@ public class SOJURLDecodeEscape {
 
   /**
    * this func cannot suppot no-ascii chars, recommend to use javaNetUrlDecode
+   *
    * @param url
    * @param esc_char
    * @return String
@@ -29,7 +30,7 @@ public class SOJURLDecodeEscape {
     }
 
     int i = 0;
-    char src[] = null;
+    char[] src = null;
     int srcend;
     int h1;
     int h2;
@@ -72,29 +73,29 @@ public class SOJURLDecodeEscape {
   private static int sg_get_hex(char c) {
     int res = -1;
 
-    if (c > 0 && c < 127)
-      res = hexlookup[c];
+    if (c > 0 && c < 127) res = hexlookup[c];
 
     return res;
   }
 
   /**
-   * UrlDecode first to support utf-8 
-   * if failed on UnsupportedEncodingException or IllegalArgumentException, use old func instead
+   * UrlDecode first to support utf-8 if failed on UnsupportedEncodingException or
+   * IllegalArgumentException, use old func instead
+   *
    * @param url
    * @param enc
    * @return
    */
-  public static String javaNetUrlDecode(String url, String enc){
+  public static String javaNetUrlDecode(String url, String enc) {
     if (StringUtils.isBlank(url)) {
       return null;
     }
-    
+
     try {
       return URLDecoder.decode(url, enc);
     } catch (UnsupportedEncodingException e) {
       return decodeEscapes(url, '%');
-    } catch (IllegalArgumentException e){
+    } catch (IllegalArgumentException e) {
       return decodeEscapes(url, '%');
     }
   }

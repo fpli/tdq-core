@@ -7,17 +7,17 @@ import lombok.Data;
 
 @Data
 public class AttributeTestInputObjects {
-    @JsonProperty("UbiSession")
-    private UbiSession ubiSession;
+  @JsonProperty("UbiSession")
+  private UbiSession ubiSession;
 
-    @JsonProperty("AgentIpAttribute")
-    private AgentIpAttribute agentIpAttribute;
+  @JsonProperty("AgentIpAttribute")
+  private AgentIpAttribute agentIpAttribute;
 
-    private int botFlag;
+  private int botFlag;
 
-    private boolean needed;
+  private boolean needed;
 
-    public void setNeeded(boolean needed) {
-        this.needed = needed;
-    }
+  public void setNeeded(boolean needed) {
+    this.needed = needed;
+  }
 }

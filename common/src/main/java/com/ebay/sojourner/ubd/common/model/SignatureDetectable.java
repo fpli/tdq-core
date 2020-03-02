@@ -5,6 +5,5 @@ import lombok.Data;
 @Data
 public class SignatureDetectable {
 
-    private int version=1;
-
+  private int version = 1;
 }

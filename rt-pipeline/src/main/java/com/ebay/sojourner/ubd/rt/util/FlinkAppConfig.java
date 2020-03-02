@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Data
 public class FlinkAppConfig {
-    private String name;
-    @JsonProperty("source-parallelism")
-    private Integer sourceParallelism;
+  private String name;
 
-    @JsonProperty("event-parallelism")
-    private Integer eventParallelism;
+  @JsonProperty("source-parallelism")
+  private Integer sourceParallelism;
 
+  @JsonProperty("event-parallelism")
+  private Integer eventParallelism;
 }
