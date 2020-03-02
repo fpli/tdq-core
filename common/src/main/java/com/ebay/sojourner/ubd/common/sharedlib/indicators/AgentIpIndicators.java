@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AgentIpIndicators extends AttributeIndicators<UbiSession, AgentIpAttributeAccumulator> {
 
     private static volatile AgentIpIndicators agentIpIndicators;
-    private static BotFilter botFilter ;
+    private BotFilter botFilter;
 
     public static AgentIpIndicators getInstance() {
         if (agentIpIndicators == null) {
@@ -35,14 +35,12 @@ public class AgentIpIndicators extends AttributeIndicators<UbiSession, AgentIpAt
 
     @Override
     public void initIndicators() {
-
-        addIndicators(new <UbiSession, AgentIpAttributeAccumulator>ScsCountForBot5Indicator(botFilter));
-        addIndicators(new <UbiSession, AgentIpAttributeAccumulator>ScsCountForBot6Indicator(botFilter));
-        addIndicators(new <UbiSession, AgentIpAttributeAccumulator>ScsCountForBot7Indicator(botFilter));
-        addIndicators(new <UbiSession, AgentIpAttributeAccumulator>ScsCountForBot8Indicator(botFilter));
-        addIndicators(new <UbiSession, AgentIpAttributeAccumulator>SuspectAgentIndicator(botFilter));
-        addIndicators(new <UbiSession, AgentIpAttributeAccumulator>SuspectIPIndicator(botFilter));
-
+        addIndicators(new ScsCountForBot5Indicator<>(botFilter));
+        addIndicators(new ScsCountForBot6Indicator<>(botFilter));
+        addIndicators(new ScsCountForBot7Indicator<>(botFilter));
+        addIndicators(new ScsCountForBot8Indicator<>(botFilter));
+        addIndicators(new SuspectAgentIndicator<>(botFilter));
+        addIndicators(new SuspectIPIndicator<>(botFilter));
     }
 
 }

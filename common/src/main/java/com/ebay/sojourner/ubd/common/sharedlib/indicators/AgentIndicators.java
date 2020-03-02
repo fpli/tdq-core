@@ -2,7 +2,6 @@ package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
 import com.ebay.sojourner.ubd.common.model.AgentAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
-import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
 import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AgentIndicators extends AttributeIndicators<AgentIpAttribute, AgentAttributeAccumulator> {
 
     private static volatile AgentIndicators agentIpIndicators;
-    private static BotFilter botFilter ;
+    private BotFilter botFilter;
 
     public static AgentIndicators getInstance() {
         if (agentIpIndicators == null) {
@@ -36,10 +35,8 @@ public class AgentIndicators extends AttributeIndicators<AgentIpAttribute, Agent
 
     @Override
     public void initIndicators() {
-
-        addIndicators(new <AgentIpAttribute, AgentIpAttributeAccumulator>ScsCountForBot6Indicator(botFilter));
-        addIndicators(new <AgentIpAttribute, AgentIpAttributeAccumulator>SuspectAgentIndicator(botFilter));
-
+        addIndicators(new ScsCountForBot6Indicator<>(botFilter));
+        addIndicators(new SuspectAgentIndicator<>(botFilter));
     }
 
 }

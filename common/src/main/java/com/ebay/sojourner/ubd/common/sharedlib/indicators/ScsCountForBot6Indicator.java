@@ -1,21 +1,17 @@
 package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
-import com.ebay.sojourner.ubd.common.model.*;
+import com.ebay.sojourner.ubd.common.model.AgentAttributeAccumulator;
+import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
+import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
+import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
 import com.ebay.sojourner.ubd.common.util.BotRules;
 import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
 
-
-public class ScsCountForBot6Indicator<Source, Target> implements Indicator<Source, Target> {
-    private BotFilter botFilter;
+public class ScsCountForBot6Indicator<Source, Target> extends AbstractIndicator<Source, Target> {
 
     public ScsCountForBot6Indicator(BotFilter botFilter) {
         this.botFilter = botFilter;
-    }
-
-    @Override
-    public void init() throws Exception {
-
     }
 
     @Override
@@ -30,10 +26,7 @@ public class ScsCountForBot6Indicator<Source, Target> implements Indicator<Sourc
             agentAttributeAccumulator.getAgentAttribute().clear();
         }
     }
-    @Override
-    public void feed( Source source, Target target ) throws Exception {
 
-    }
     @Override
     public void feed(Source source, Target target, boolean isNeeded) throws Exception {
 
@@ -52,20 +45,15 @@ public class ScsCountForBot6Indicator<Source, Target> implements Indicator<Sourc
                 }
             }
 
-            if (UbiSessionHelper.isNonIframRdtCountZero(ubiSession) && !isIpBlank(ubiSession.getIp())&&agentIpAttributeAccumulator.getAgentIpAttribute().getIpCount()<=0) {
+            if (UbiSessionHelper.isNonIframRdtCountZero(ubiSession) && !isIpBlank(ubiSession.getIp()) && agentIpAttributeAccumulator.getAgentIpAttribute().getIpCount() <= 0) {
                 agentIpAttributeAccumulator.getAgentIpAttribute().setIpCount(1);
             }
         } else {
             AgentIpAttribute agentIpAttribute = (AgentIpAttribute) source;
             AgentAttributeAccumulator agentAttributeAccumulator = (AgentAttributeAccumulator) target;
-            agentAttributeAccumulator.getAgentAttribute().feed(agentIpAttribute,BotRules.SCS_ON_AGENT,isNeeded);
+            agentAttributeAccumulator.getAgentAttribute().feed(agentIpAttribute, BotRules.SCS_ON_AGENT, isNeeded);
         }
 
-    }
-
-    @Override
-    public void end(Target target) throws Exception {
-        // to do nonthing;
     }
 
 

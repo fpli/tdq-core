@@ -2,12 +2,10 @@ package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
 import com.ebay.sojourner.ubd.common.model.GuidAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class GuidIndicators extends AttributeIndicators<UbiSession, GuidAttributeAccumulator> {
-
-    private static Logger logger = Logger.getLogger(SessionMetrics.class);
 
     private static volatile GuidIndicators guidIndicators;
 
@@ -23,14 +21,11 @@ public class GuidIndicators extends AttributeIndicators<UbiSession, GuidAttribut
     }
 
     public GuidIndicators() {
-
         initIndicators();
-
         try {
             init();
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 

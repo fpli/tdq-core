@@ -95,8 +95,19 @@
 						<exclude>**/*com/ebay/sojourner/ubd/common/sharedlib/metrics/IntermediateMetrics.class</exclude>
 						<exclude>**/*com/ebay/sojourner/ubd/common/sharedlib/metrics/TrafficSourceIdMetrics.class</exclude>
 						<exclude>**/*com/ebay/sojourner/ubd/common/sharedlib/parser/LkpFetcher.class</exclude>
+						<exclude>**/*com/ebay/sojourner/ubd/common/sharedlib/parser/EventParserFactory.class</exclude>
+						<exclude>**/*com/ebay/sojourner/ubd/common/sharedlib/indicators/ScsCountForBot5Indicator.class</exclude>
+						<exclude>**/*com/ebay/sojourner/ubd/common/sharedlib/indicators/ScsCountForBot6Indicator.class</exclude>
+						<exclude>**/*com/ebay/sojourner/ubd/common/sharedlib/indicators/ScsCountForBot7Indicator.class</exclude>
+						<exclude>**/*com/ebay/sojourner/ubd/common/sharedlib/indicators/ScsCountForBot8Indicator.class</exclude>
 						<!-- Exclude full package from test coverage -->
-<!--						<exclude>**/*com/khan/vaquar/config/**</exclude>-->
+						<exclude>**/*com/ebay/sojourner/ubd/common/model/**</exclude>
+						<exclude>**/*com/ebay/sojourner/ubd/common/sharedlib/util/**</exclude>
+						<exclude>**/*com/ebay/sojourner/ubd/common/sharedlib/detectors/**</exclude>
+						<exclude>**/*com/ebay/sojourner/ubd/common/sharedlib/connectors/**</exclude>
+						<exclude>**/*com/ebay/sojourner/ubd/common/util/**</exclude>
+						<exclude>**/*com/ebay/sojourner/ubd/common/sql/**</exclude>
+						<exclude>**/*com/ebay/sojourner/ubd/common/rule/icf/**</exclude>
 					</excludes>
 				</configuration>
 			</plugin>

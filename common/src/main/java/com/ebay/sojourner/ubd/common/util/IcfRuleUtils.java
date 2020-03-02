@@ -11,10 +11,14 @@ public class IcfRuleUtils {
         } else {
             int icfType = BitUtils.checkBit(icfBinary,checkLocation);
             if (icfType == 1) {
-                if (checkLocation < 10 && checkLocation >= 0) {
+                if (checkLocation <= 7 && checkLocation >= 0) {
                     return Integer.valueOf(BotRules.ICF_Prefix1 + "" + checkLocation);
-                } else if (checkLocation >= 10 && checkLocation <= 64) {
-                    return Integer.valueOf(BotRules.ICF_Prefix2 + "" + checkLocation);
+                } else if (checkLocation >= 10 && checkLocation <= 11) {
+                    return Integer.valueOf(BotRules.ICF_Prefix1 + "" + (checkLocation-2));
+                } else if (checkLocation >= 12 && checkLocation <= 13) {
+                    return Integer.valueOf(BotRules.ICF_Prefix2 + "" + (checkLocation-2));
+                } else if (checkLocation == 56) {
+                    return Integer.valueOf(BotRules.ICF_Prefix2 + "" + 12);
                 }
             }
         }
