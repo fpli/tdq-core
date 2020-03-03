@@ -9,24 +9,29 @@ import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
 public class AgentIpWindowProcessFunction
-        extends ProcessWindowFunction<AgentIpAttributeAccumulator, AgentIpAttribute, Tuple, TimeWindow> {
+    extends ProcessWindowFunction<
+        AgentIpAttributeAccumulator, AgentIpAttribute, Tuple, TimeWindow> {
 
-    @Override
-    public void process(Tuple tuple, Context context, Iterable<AgentIpAttributeAccumulator> elements,
-                        Collector<AgentIpAttribute> out) throws Exception {
+  @Override
+  public void process(
+      Tuple tuple,
+      Context context,
+      Iterable<AgentIpAttributeAccumulator> elements,
+      Collector<AgentIpAttribute> out)
+      throws Exception {
 
-        AgentIpAttributeAccumulator agentIpAttributeAccumulator = elements.iterator().next();
-        out.collect(agentIpAttributeAccumulator.getAgentIpAttribute());
-    }
+    AgentIpAttributeAccumulator agentIpAttributeAccumulator = elements.iterator().next();
+    out.collect(agentIpAttributeAccumulator.getAgentIpAttribute());
+  }
 
-    @Override
-    public void open(Configuration conf) throws Exception {
-        super.open(conf);
-        System.out.println("agentIpWindowProcess thread id:" + Thread.currentThread().getId());
-    }
+  @Override
+  public void open(Configuration conf) throws Exception {
+    super.open(conf);
+    System.out.println("agentIpWindowProcess thread id:" + Thread.currentThread().getId());
+  }
 
-    @Override
-    public void clear(Context context) throws Exception {
-        super.clear(context);
-    }
+  @Override
+  public void clear(Context context) throws Exception {
+    super.clear(context);
+  }
 }

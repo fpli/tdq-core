@@ -5,8 +5,8 @@ import com.ebay.sojourner.ubd.common.util.IcfRuleUtils;
 
 public class IcfRule1 extends AbstractIcfRule<UbiEvent> {
 
-    @Override
-    public int getBotFlag(UbiEvent ubiEvent) {
-        return IcfRuleUtils.getIcfRuleType(ubiEvent.getIcfBinary(),1);
-    }
+  @Override
+  public int getBotFlag(UbiEvent ubiEvent) {
+    return IcfRuleUtils.getIcfRuleType(ubiEvent.getIcfBinary(), 1);
+  }
 }

@@ -9,35 +9,34 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class IpIndicators extends AttributeIndicators<AgentIpAttribute, IpAttributeAccumulator> {
 
-    private static volatile IpIndicators ipIndicators;
-    private BotFilter botFilter;
+  private static volatile IpIndicators ipIndicators;
+  private BotFilter botFilter;
 
-    public static IpIndicators getInstance() {
+  public IpIndicators() {
+    botFilter = new UbiBotFilter();
+    initIndicators();
+    try {
+      init();
+    } catch (Exception e) {
+      log.error(e.getMessage());
+    }
+  }
+
+  public static IpIndicators getInstance() {
+    if (ipIndicators == null) {
+      synchronized (IpIndicators.class) {
         if (ipIndicators == null) {
-            synchronized (IpIndicators.class) {
-                if (ipIndicators == null) {
-                    ipIndicators = new IpIndicators();
-                }
-            }
+          ipIndicators = new IpIndicators();
         }
-        return ipIndicators;
+      }
     }
+    return ipIndicators;
+  }
 
-    public IpIndicators() {
-        botFilter = new UbiBotFilter();
-        initIndicators();
-        try {
-            init();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    @Override
-    public void initIndicators() {
-//        addIndicators(new ScsCountForBot8Indicator<>(botFilter));
-        addIndicators(new ScsCountForBot7Indicator<>(botFilter));
-        addIndicators(new SuspectIPIndicator<>(botFilter));
-    }
-
+  @Override
+  public void initIndicators() {
+    //        addIndicators(new ScsCountForBot8Indicator<>(botFilter));
+    addIndicators(new ScsCountForBot7Indicator<>(botFilter));
+    addIndicators(new SuspectIPIndicator<>(botFilter));
+  }
 }

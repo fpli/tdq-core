@@ -2,29 +2,29 @@ package examples.flink.broadcast;
 
 public class Action {
 
-    public Action() {}
+  private Long userId;
+  private ActionType action;
 
-    public Action(Long userId, ActionType action) {
-        this.userId = userId;
-        this.action = action;
-    }
+  public Action() {}
 
-    public Long getUserId() {
-        return userId;
-    }
+  public Action(Long userId, ActionType action) {
+    this.userId = userId;
+    this.action = action;
+  }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+  public Long getUserId() {
+    return userId;
+  }
 
-    public ActionType getAction() {
-        return action;
-    }
+  public void setUserId(Long userId) {
+    this.userId = userId;
+  }
 
-    public void setAction(ActionType action) {
-        this.action = action;
-    }
+  public ActionType getAction() {
+    return action;
+  }
 
-    private Long userId;
-    private ActionType action;
+  public void setAction(ActionType action) {
+    this.action = action;
+  }
 }

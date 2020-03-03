@@ -1,24 +1,23 @@
 package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import java.util.Collection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import java.util.Collection;
-
 public class AppIdMetricsTest extends BaseMetricsTest {
-    private AppIdMetrics appIdMetrics;
-    private JsonNode yaml;
+  private AppIdMetrics appIdMetrics;
+  private JsonNode yaml;
 
-    @BeforeEach
-    public void setup() throws Exception {
-        appIdMetrics = new AppIdMetrics();
-        yaml = loadTestCasesYaml("AppIdMetricsTest.yaml");
-    }
+  @BeforeEach
+  public void setup() throws Exception {
+    appIdMetrics = new AppIdMetrics();
+    yaml = loadTestCasesYaml("AppIdMetricsTest.yaml");
+  }
 
-    @TestFactory
-    public Collection<DynamicTest> dynamicTests() throws Exception {
-        return generateDynamicTests(yaml, appIdMetrics);
-    }
+  @TestFactory
+  public Collection<DynamicTest> dynamicTests() throws Exception {
+    return generateDynamicTests(yaml, appIdMetrics);
+  }
 }

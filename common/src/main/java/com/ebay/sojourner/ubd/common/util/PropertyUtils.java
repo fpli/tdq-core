@@ -1,12 +1,15 @@
 package com.ebay.sojourner.ubd.common.util;
 
-
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 
 public class PropertyUtils {
 
@@ -23,7 +26,8 @@ public class PropertyUtils {
       if (instream != null) {
         try {
           instream.close();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
       }
     }
 
@@ -31,7 +35,7 @@ public class PropertyUtils {
   }
 
   public static Properties loadInProperties(InputStream configFileStream)
-          throws FileNotFoundException {
+      throws FileNotFoundException {
     Properties properties = new Properties();
     InputStream instream = null;
     try {
@@ -43,7 +47,8 @@ public class PropertyUtils {
       if (instream != null) {
         try {
           instream.close();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
       }
     }
 
@@ -52,7 +57,7 @@ public class PropertyUtils {
 
   /**
    * Return the values with sequential order by splitting property value with the delimiter
-   * 
+   *
    * @param property
    * @param delimiter
    * @return
@@ -75,12 +80,11 @@ public class PropertyUtils {
       String[] list = property.split(delimiter);
       for (int i = 0; i < list.length; i++) {
         propertySet.add(Integer.valueOf(list[i].trim()));
-     // Do not ignore the NumberFormatException as it indicates the configuration errors.
+        // Do not ignore the NumberFormatException as it indicates the configuration errors.
       }
     }
     return propertySet;
   }
-  
 
   public static Set<Long> getLongSet(String property, String delimiter) {
     HashSet<Long> propertySet = new HashSet<Long>();
@@ -93,8 +97,9 @@ public class PropertyUtils {
     }
     return propertySet;
   }
+
   public static String mapToString(Map<String, String> sojMap) {
-    StringBuilder sb = new StringBuilder("");
+    StringBuilder sb = new StringBuilder();
     for (Map.Entry<String, String> pair : sojMap.entrySet()) {
       sb.append(pair.getKey()).append("=").append(pair.getValue()).append("&");
     }

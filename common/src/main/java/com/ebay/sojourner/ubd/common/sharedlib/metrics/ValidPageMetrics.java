@@ -5,9 +5,8 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * SUM ( CASE WHEN e.partial_valid_page = 0 THEN 0 WHEN PG.FRAME_BASED_PAGE_YN_ID = 1 THEN 0 WHEN
@@ -21,33 +20,40 @@ import java.util.Set;
  * @author kofeng
  */
 public class ValidPageMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
-    private Set<Integer> invalidPageIds;
+  private Set<Integer> invalidPageIds;
 
-    @Override
-    public void init() throws Exception {
-        invalidPageIds = PropertyUtils.getIntegerSet(UBIConfig.getString(Property.INVALID_PAGE_IDS), Property.PROPERTY_DELIMITER);
+  @Override
+  public void init() throws Exception {
+    invalidPageIds =
+        PropertyUtils.getIntegerSet(
+            UBIConfig.getString(Property.INVALID_PAGE_IDS), Property.PROPERTY_DELIMITER);
+  }
+
+  @Override
+  public void start(SessionAccumulator sessionAccumulator) throws Exception {
+    sessionAccumulator.getUbiSession().setValidPageCnt(0);
+  }
+
+  @Override
+  public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
+    // here simplify e.page_id IS NULL AND e.cs_tracking = 1 to e.page_id IS NULL
+    // change logic to allign with caleb on 2018-02-26
+    int csTracking = 0;
+    if (StringUtils.isNotBlank(event.getUrlQueryString())
+        && (event.getUrlQueryString().startsWith("/roverimp")
+            || event.getUrlQueryString().contains("SojPageView"))) {
+      csTracking = 1;
     }
-
-    @Override
-    public void start(SessionAccumulator sessionAccumulator) throws Exception {
-        sessionAccumulator.getUbiSession().setValidPageCnt(0);
+    if (event.isPartialValidPage()
+        && !event.isIframe()
+        && ((event.getPageId() != Integer.MIN_VALUE && !invalidPageIds.contains(event.getPageId()))
+            || csTracking == 0)) {
+      sessionAccumulator
+          .getUbiSession()
+          .setValidPageCnt(sessionAccumulator.getUbiSession().getValidPageCnt() + 1);
     }
+  }
 
-    @Override
-    public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
-        // here simplify e.page_id IS NULL AND e.cs_tracking = 1 to e.page_id IS NULL
-        //change logic to allign with caleb on 2018-02-26
-        int csTracking = 0;
-        if (StringUtils.isNotBlank(event.getUrlQueryString()) && (event.getUrlQueryString().startsWith("/roverimp") || event.getUrlQueryString().contains("SojPageView"))) {
-            csTracking = 1;
-        }
-        if (event.isPartialValidPage() && !event.isIframe() && ((event.getPageId() != Integer.MIN_VALUE && !invalidPageIds.contains(event.getPageId())) || csTracking == 0)) {
-            sessionAccumulator.getUbiSession().setValidPageCnt(sessionAccumulator.getUbiSession().getValidPageCnt() + 1);
-        }
-    }
-
-    @Override
-    public void end(SessionAccumulator sessionAccumulator) throws Exception {
-
-    }
+  @Override
+  public void end(SessionAccumulator sessionAccumulator) throws Exception {}
 }

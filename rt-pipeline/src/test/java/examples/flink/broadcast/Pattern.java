@@ -2,29 +2,29 @@ package examples.flink.broadcast;
 
 public class Pattern {
 
-    public Pattern() {}
+  private ActionType firstAction;
+  private ActionType secondAction;
 
-    public Pattern(ActionType firstAction, ActionType secondAction) {
-        this.firstAction = firstAction;
-        this.secondAction = secondAction;
-    }
+  public Pattern() {}
 
-    public ActionType getFirstAction() {
-        return firstAction;
-    }
+  public Pattern(ActionType firstAction, ActionType secondAction) {
+    this.firstAction = firstAction;
+    this.secondAction = secondAction;
+  }
 
-    public void setFirstAction(ActionType firstAction) {
-        this.firstAction = firstAction;
-    }
+  public ActionType getFirstAction() {
+    return firstAction;
+  }
 
-    public ActionType getSecondAction() {
-        return secondAction;
-    }
+  public void setFirstAction(ActionType firstAction) {
+    this.firstAction = firstAction;
+  }
 
-    public void setSecondAction(ActionType secondAction) {
-        this.secondAction = secondAction;
-    }
+  public ActionType getSecondAction() {
+    return secondAction;
+  }
 
-    private ActionType firstAction;
-    private ActionType secondAction;
+  public void setSecondAction(ActionType secondAction) {
+    this.secondAction = secondAction;
+  }
 }

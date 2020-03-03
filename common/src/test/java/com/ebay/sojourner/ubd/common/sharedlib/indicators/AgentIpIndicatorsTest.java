@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 
 class AgentIpIndicatorsTest {
 
-    @Test
-    void test_getInstance() {
-        AgentIpIndicators agentIpIndicators = AgentIpIndicators.getInstance();
-        Assertions.assertThat(agentIpIndicators.indicators.size()).isEqualTo(6);
-    }
+  @Test
+  void test_getInstance() {
+    AgentIpIndicators agentIpIndicators = AgentIpIndicators.getInstance();
+    Assertions.assertThat(agentIpIndicators.indicators.size()).isEqualTo(6);
+  }
 }

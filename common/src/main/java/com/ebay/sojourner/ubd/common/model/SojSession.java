@@ -1,13 +1,12 @@
 package com.ebay.sojourner.ubd.common.model;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import lombok.Data;
 
 @Data
-public class SojSession implements Serializable,Cloneable{
+public class SojSession implements Serializable, Cloneable {
   private Long sojDataDt;
   private String guid;
   private String sessionId;
@@ -26,7 +25,7 @@ public class SojSession implements Serializable,Cloneable{
   private int endPageId;
   private Long startTimestamp;
   private int durationSec;
-  private int eventCnt ;
+  private int eventCnt;
   private int viCoreCnt;
   private int bidCoreCnt;
   private int binCoreCnt;
@@ -49,12 +48,8 @@ public class SojSession implements Serializable,Cloneable{
   private int nonIframeRdtEventCnt;
   private Set<Integer> botFlagList = new LinkedHashSet<>();
 
-  public SojSession()
-  {
-//        this.distinctClickIdSet = new HashSet<Integer>();
-//        this.agentSets= new HashSet<String>();
+  public SojSession() {
+    //        this.distinctClickIdSet = new HashSet<Integer>();
+    //        this.agentSets= new HashSet<String>();
   }
-
-
-
 }

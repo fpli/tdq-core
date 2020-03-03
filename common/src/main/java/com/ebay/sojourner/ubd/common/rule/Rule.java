@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public interface Rule<T> {
 
-    void init();
+  void init();
 
-    int getBotFlag(T t) throws IOException, InterruptedException;
+  int getBotFlag(T t) throws IOException, InterruptedException;
 }
