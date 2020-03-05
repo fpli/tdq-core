@@ -5,8 +5,7 @@ import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
-import com.ebay.sojourner.ubd.rt.connectors.filesystem.DateTimeBucketAssignerForEventTime;
-import com.ebay.sojourner.ubd.rt.connectors.filesystem.RichParquetAvroWriters;
+import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
@@ -24,7 +23,6 @@ import org.apache.flink.api.common.typeinfo.TypeInfoFactory;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.api.java.utils.ParameterTool;
-import org.apache.flink.core.fs.Path;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -133,22 +131,16 @@ public class SojournerUBDRTJobUntilSession {
         new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
     OutputTag<UbiEvent> mappedEventOutputTag =
         new OutputTag<>("mapped-event-output-tag", TypeInformation.of(UbiEvent.class));
-    //        JobID jobId = executionEnvironment.getStreamGraph().getJobGraph().getJobID();
     SingleOutputStreamOperator<UbiSession> ubiSessinDataStream =
         ubiEventDataStream
             .keyBy("guid")
             .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-            //                .trigger(OnElementEarlyFiringTrigger.create())   //no need to
-            // customize the triiger, use the default eventtimeTrigger
             .allowedLateness(Time.hours(1))
             .sideOutputLateData(lateEventOutputTag)
             .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction());
+
     // Hack here to use MapWithStateWindowOperator instead while bypassing DataStream API which
     // cannot be enhanced easily since we do not want to modify Flink framework sourcecode.
-    //        WindowOperatorHelper.enrichWindowOperator(
-    //            (OneInputTransformation) ubiEventStreamWithSessionId.getTransformation(),
-    //            mappedEventOutputTag
-    //        );
     WindowOperatorHelper.enrichWindowOperator(
         (OneInputTransformation) ubiSessinDataStream.getTransformation(),
         new UbiEventMapWithStateFunction(),
@@ -162,35 +154,10 @@ public class SojournerUBDRTJobUntilSession {
             .map(new UbiSessionToSojSessionMapFunction())
             .name("UbiSession to SojSession");
 
-    //        DataStream<UbiEvent> mappedEventStream =
-    // ubiSessinDataStream.getSideOutput(mappedEventOutputTag);
-    //        mappedEventStream.addSink(new DiscardingSink<>()).name("Mapped
-    // UbiEvent").disableChaining();
-
-    //        ubiSessinDataStream.addSink(new DiscardingSink<>()).name("d").disableChaining();
-    //        ubiEventStreamWithSessionId.addSink(new DiscardingSink<>()).name("ubiEvent with
-    // SessionId").disableChaining();
-    //        ubiSessinDataStream.addSink(StreamingFileSinkFactory.sessionSinkWithSojHdfs())
-    //                .name("Sessions");
-    //
-    // ubiEventDataStream.addSink(StreamingFileSinkFactory.eventSinkWithSojHdfs()).name("ubiEvent
-    // sink");
-    //        StreamingFileSink ubiEventStreamingFileSink = StreamingFileSink
-    //                .forRowFormat(new Path("/tmp/soj-events/"), new
-    // SimpleStringEncoder<>("UTF-8"))
-    //                .build();
-
     // This path is for local test. For production, we should use
     // "hdfs://apollo-rno//user/o_ubi/events/"
-    StreamingFileSink ubiSessionStreamingFileSink =
-        StreamingFileSink.forBulkFormat(
-                new Path("hdfs://apollo-rno//user/o_ubi/sessions/"),
-                RichParquetAvroWriters.forAllowNullReflectRecord(SojSession.class))
-            .withBucketAssigner(new DateTimeBucketAssignerForEventTime<>())
-            .build();
-
-    //        BucketingSink<UbiEvent> ubiEventBucketingSink = new
-    // BucketingSink<>("viewfs:///user/o_ubi/events");
+    StreamingFileSink ubiSessionStreamingFileSink = HdfsSinkUtil
+        .createWithParquet("hdfs://apollo-rno//user/o_ubi/sessions/", SojSession.class);
 
     sojSessionStream.addSink(ubiSessionStreamingFileSink).name("sojSession sink").disableChaining();
     // Submit this job
