@@ -8,11 +8,10 @@ import org.apache.flink.streaming.api.collector.selector.OutputSelector;
 
 public class SplitFunction implements OutputSelector<Tuple4<String, Boolean, Set<Integer>, Long>> {
 
-  List<String> output = new ArrayList<>();
-
   @Override
   public Iterable<String> select(Tuple4<String, Boolean, Set<Integer>, Long> value) {
-    if (value.f1 == true) {
+    List<String> output = new ArrayList<>();
+    if (value.f1) {
       output.add("generation");
     } else {
       output.add("expiration");

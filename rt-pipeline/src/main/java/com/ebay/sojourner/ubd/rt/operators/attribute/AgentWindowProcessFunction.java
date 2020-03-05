@@ -14,9 +14,7 @@ import org.apache.flink.util.Collector;
 
 public class AgentWindowProcessFunction
     extends ProcessWindowFunction<
-        AgentAttributeAccumulator, Tuple4<String, Boolean, Set<Integer>, Long>, Tuple, TimeWindow> {
-
-  private HashSet<Integer> generationBotFlag;
+    AgentAttributeAccumulator, Tuple4<String, Boolean, Set<Integer>, Long>, Tuple, TimeWindow> {
 
   @Override
   public void process(
@@ -42,7 +40,7 @@ public class AgentWindowProcessFunction
         && agentAttributeAccumulator.getBotFlagStatus().containsValue(1)
         && agentAttribute.getBotFlagList() != null
         && agentAttribute.getBotFlagList().size() > 0) {
-      generationBotFlag = new HashSet<>();
+      HashSet<Integer> generationBotFlag = new HashSet<>();
       for (Map.Entry<Integer, Integer> newBotFlagMap :
           agentAttributeAccumulator.getBotFlagStatus().entrySet()) {
         if (newBotFlagMap.getValue() == 1) {

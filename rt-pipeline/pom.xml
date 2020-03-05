@@ -55,6 +55,10 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-test-utils_${scala.binary.version}</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-metrics-dropwizard</artifactId>
+        </dependency>
 
         <!-- Add connector dependencies here. They must be in the default scope (compile). -->
         <dependency>

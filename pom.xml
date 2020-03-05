@@ -302,6 +302,11 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-metrics-dropwizard</artifactId>
+                <version>${flink.version}</version>
+            </dependency>
             <!-- queryable-state-runtime is needed to start queryable server in TaskManager -->
             <dependency>
                 <groupId>org.apache.flink</groupId>

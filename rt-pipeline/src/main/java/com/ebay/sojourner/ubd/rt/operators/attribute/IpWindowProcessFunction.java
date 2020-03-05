@@ -16,8 +16,6 @@ public class IpWindowProcessFunction
     extends ProcessWindowFunction<
         IpAttributeAccumulator, Tuple4<String, Boolean, Set<Integer>, Long>, Tuple, TimeWindow> {
 
-  private HashSet<Integer> generationBotFlag;
-
   @Override
   public void process(
       Tuple tuple,
@@ -42,7 +40,7 @@ public class IpWindowProcessFunction
         && ipAttributeAccumulator.getBotFlagStatus().containsValue(1)
         && ipAttribute.getBotFlagList() != null
         && ipAttribute.getBotFlagList().size() > 0) {
-      generationBotFlag = new HashSet<>();
+      HashSet<Integer> generationBotFlag = new HashSet<>();
       for (Map.Entry<Integer, Integer> newBotFlagMap :
           ipAttributeAccumulator.getBotFlagStatus().entrySet()) {
         if (newBotFlagMap.getValue() == 1) {

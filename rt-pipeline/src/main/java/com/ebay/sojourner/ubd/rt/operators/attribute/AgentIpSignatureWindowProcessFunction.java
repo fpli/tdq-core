@@ -19,8 +19,6 @@ public class AgentIpSignatureWindowProcessFunction
         Tuple,
         TimeWindow> {
 
-  private HashSet<Integer> generationBotFlag;
-
   @Override
   public void process(
       Tuple tuple,
@@ -45,7 +43,7 @@ public class AgentIpSignatureWindowProcessFunction
         && agentIpAttributeAccumulator.getBotFlagStatus().containsValue(1)
         && agentIpAttribute.getBotFlagList() != null
         && agentIpAttribute.getBotFlagList().size() > 0) {
-      generationBotFlag = new HashSet<>();
+      HashSet<Integer> generationBotFlag = new HashSet<>();
       for (Map.Entry<Integer, Integer> newBotFlagMap :
           agentIpAttributeAccumulator.getBotFlagStatus().entrySet()) {
         if (newBotFlagMap.getValue() == 1) {

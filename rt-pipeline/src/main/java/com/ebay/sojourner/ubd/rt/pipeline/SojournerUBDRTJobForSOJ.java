@@ -21,6 +21,7 @@ import com.ebay.sojourner.ubd.rt.operators.attribute.IpAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.IpWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.SplitFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.DetectableEventMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.EventDiscardingSink;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.DetectableSessionMapFunction;
@@ -101,12 +102,15 @@ public class SojournerUBDRTJobForSOJ {
         RestartStrategies.fixedDelayRestart(
             3, // number of restart attempts
             org.apache.flink.api.common.time.Time.of(10, TimeUnit.SECONDS) // delay
-            ));
+        ));
+
+    executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
 
     // for soj nrt output
     // 1. Rheos Consumer
     // 1.1 Consume RawEvent from Rheos PathFinder topic
     // 1.2 Assign timestamps and emit watermarks.
+
     DataStream<RawEvent> rawEventDataStream =
         executionEnvironment
             .addSource(
@@ -318,7 +322,7 @@ public class SojournerUBDRTJobForSOJ {
     //
     signatureBotDetectionForSession.addSink(new DiscardingSink<>()).name("Session");
     latedStream.addSink(new DiscardingSink<>()).name("Late Event");
-    signatureBotDetectionForEvent.addSink(new DiscardingSink<>()).name("Event");
+    signatureBotDetectionForEvent.addSink(new EventDiscardingSink()).name("Event");
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());

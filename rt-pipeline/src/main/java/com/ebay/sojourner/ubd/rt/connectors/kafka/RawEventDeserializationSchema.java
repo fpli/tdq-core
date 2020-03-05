@@ -18,6 +18,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
 
   @Override
   public RawEvent deserialize(byte[] message) throws IOException {
+    long ingestTime = System.nanoTime();
     RheosEvent rheosEvent =
         RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
     GenericRecord genericRecord =
@@ -88,7 +89,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
     clientData.setAcceptEncoding(getString(genericClientData.get("acceptEncoding")));
     clientData.setTDuration((Long) genericClientData.get("TDuration"));
 
-    return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData);
+    return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData,ingestTime);
   }
 
   private String getString(Object o) {

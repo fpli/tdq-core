@@ -50,19 +50,15 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
   @Override
   public void open(Configuration conf) throws Exception {
-
-    System.out.println("eventMap thread id:" + Thread.currentThread().getId());
     super.open(conf);
-
     parser = new EventParser();
     eventBotDetector = EventBotDetector.getInstance();
 
-    //        getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
     getRuntimeContext().addAccumulator("Average Duration of Event Parsing", avgDuration);
     counter =
         getRuntimeContext()
             .getMetricGroup()
-            .addGroup("flink-metrics-test")
+            .addGroup("sojourner-ubd")
             .counter("ubiEvent count");
 
     List<String> classNames =
@@ -107,7 +103,6 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
   public UbiEvent map(RawEvent rawEvent) throws Exception {
     counter.inc();
     UbiEvent event = new UbiEvent();
-
     long startTime = System.nanoTime();
     parser.parse(rawEvent, event, eventParseMap);
     avgDuration.add(System.nanoTime() - startTime);

@@ -16,8 +16,6 @@ public class GuidWindowProcessFunction
     extends ProcessWindowFunction<
         GuidAttributeAccumulator, Tuple4<String, Boolean, Set<Integer>, Long>, Tuple, TimeWindow> {
 
-  private HashSet<Integer> generationBotFlag;
-
   @Override
   public void process(
       Tuple tuple,
@@ -42,7 +40,7 @@ public class GuidWindowProcessFunction
         && guidAttributeAccumulator.getBotFlagStatus().containsValue(1)
         && guidAttribute.getBotFlagList() != null
         && guidAttribute.getBotFlagList().size() > 0) {
-      generationBotFlag = new HashSet<>();
+      HashSet<Integer> generationBotFlag = new HashSet<>();
       for (Map.Entry<Integer, Integer> newBotFlagMap :
           guidAttributeAccumulator.getBotFlagStatus().entrySet()) {
         if (newBotFlagMap.getValue() == 1) {

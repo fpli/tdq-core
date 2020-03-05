@@ -36,6 +36,7 @@ public class SojEventDeserializationSchema implements DeserializationSchema<RawE
 
   @Override
   public RawEvent deserialize(byte[] message) throws IOException {
+    long ingestTime = System.nanoTime();
 
     RheosEvent rheosEvent =
         RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
@@ -150,7 +151,7 @@ public class SojEventDeserializationSchema implements DeserializationSchema<RawE
     clientData.setRlogid(getString(genericRecord.get("rlogid")));
     clientData.setUrlQueryString(getString(applicationPayload.get("urlQueryString")));
 
-    return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData);
+    return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData, ingestTime);
     //        return genericRecord;
   }
 
