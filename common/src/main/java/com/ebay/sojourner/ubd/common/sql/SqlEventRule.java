@@ -97,8 +97,8 @@ public class SqlEventRule implements Rule<UbiEvent> {
       this.relTree = relTree;
       this.interpreter = new Interpreter(dataContext, relTree);
       long end = System.nanoTime();
-      // printDuration("parse to rel", beforeParse, afterRel);
-      // printDuration("interpreter.new*", afterRel, end);
+      System.out.println("parse to rel      : " + (afterRel - beforeParse) / 1000000);
+      System.out.println("interpreter.new1  : " + (end - afterRel) / 1000000);
     } catch (Exception e) {
       throw new RuntimeException("SQL rule cannot be interpreted.", e);
     }
@@ -129,9 +129,10 @@ public class SqlEventRule implements Rule<UbiEvent> {
         botFlag = (int) interpreter.first()[0];
       }
       long end = System.nanoTime();
-      // printDuration("interpreter.new", beforeCreateInterpreter, beforeInterpreterFirst);
-      // printDuration("interpreter.first", beforeInterpreterFirst, end);
-      // printDuration("getBotFlag", start, end);
+      System.out.println("interpreter.new2  : " +
+          (beforeInterpreterFirst - beforeCreateInterpreter) / 1000000);
+      System.out.println("interpreter.first : " + (end - beforeInterpreterFirst) / 1000000);
+      System.out.println("getBotFlag        : " + (end - start) / 1000000);
     } catch (Exception e) {
       botFlag = 0;
       LOGGER.warn("Fail to get bot flag.", e);
