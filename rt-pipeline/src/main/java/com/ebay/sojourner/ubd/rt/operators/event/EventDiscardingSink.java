@@ -32,9 +32,9 @@ public class EventDiscardingSink extends RichSinkFunction<UbiEvent> {
   @Override
   public void invoke(UbiEvent value, Context context) throws Exception {
     long end = System.nanoTime();
-    System.out.println(end);
-    System.out.println(value.getIngestTime());
-    System.out.println(value.getGenerateTime());
+    System.out.println("endTime==============="+end);
+    System.out.println("ingestTime============"+value.getIngestTime());
+    System.out.println("generateTime=========="+value.getGenerateTime());
     long siteToSource = value.getIngestTime() / 1000 / 1000 - value.getGenerateTime();
     long siteToSink = end / 1000 / 1000 - value.getGenerateTime();
     long sourceToSink = (end - value.getIngestTime()) / 1000 / 1000;
