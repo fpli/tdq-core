@@ -8,6 +8,7 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.util.Collector;
 
 public class CassandraConnectorTest {
+
   // get the execution environment
   final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
@@ -17,21 +18,21 @@ public class CassandraConnectorTest {
   // parse the data, group it, window it, and aggregate the counts
   DataStream<Tuple2<String, Long>> result =
       text.flatMap(
-              new FlatMapFunction<String, Tuple2<String, Long>>() {
-                @Override
-                public void flatMap(String value, Collector<Tuple2<String, Long>> out) {
-                  // normalize and split the line
-                  String[] words = value.toLowerCase().split("\\s");
+          new FlatMapFunction<String, Tuple2<String, Long>>() {
+            @Override
+            public void flatMap(String value, Collector<Tuple2<String, Long>> out) {
+              // normalize and split the line
+              String[] words = value.toLowerCase().split("\\s");
 
-                  // emit the pairs
-                  for (String word : words) {
-                    // Do not accept empty word, since word is defined as primary key in C* table
-                    if (!word.isEmpty()) {
-                      out.collect(new Tuple2<String, Long>(word, 1L));
-                    }
-                  }
+              // emit the pairs
+              for (String word : words) {
+                // Do not accept empty word, since word is defined as primary key in C* table
+                if (!word.isEmpty()) {
+                  out.collect(new Tuple2<String, Long>(word, 1L));
                 }
-              })
+              }
+            }
+          })
           .keyBy(0)
           .timeWindow(Time.seconds(5))
           .sum(1);

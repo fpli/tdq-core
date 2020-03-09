@@ -5,7 +5,8 @@ public class Pattern {
   private ActionType firstAction;
   private ActionType secondAction;
 
-  public Pattern() {}
+  public Pattern() {
+  }
 
   public Pattern(ActionType firstAction, ActionType secondAction) {
     this.firstAction = firstAction;

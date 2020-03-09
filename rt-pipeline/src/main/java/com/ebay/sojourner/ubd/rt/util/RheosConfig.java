@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class RheosConfig {
+
   private String serviceUrl;
   private IafConfig iaf;
 }

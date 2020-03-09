@@ -26,13 +26,13 @@ public class AgentBroadcastProcessFunction
     }
     if ((ubiSession.getBotFlagList().contains(221) && ubiSession.getBotFlagList().contains(223))
         || (ubiSession.getBotFlagList().contains(220)
-            && ubiSession.getBotFlagList().contains(222))) {
+        && ubiSession.getBotFlagList().contains(222))) {
       ubiSession.getBotFlagList().add(202);
     }
 
     if ((ubiSession.getBotFlagList().contains(221) && ubiSession.getBotFlagList().contains(223))
         || (ubiSession.getBotFlagList().contains(220)
-            && ubiSession.getBotFlagList().contains(222))) {
+        && ubiSession.getBotFlagList().contains(222))) {
       ubiSession.getBotFlagList().add(210);
     }
 

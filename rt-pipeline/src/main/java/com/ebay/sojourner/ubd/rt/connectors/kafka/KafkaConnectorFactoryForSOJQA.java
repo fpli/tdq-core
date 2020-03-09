@@ -21,11 +21,11 @@ public class KafkaConnectorFactoryForSOJQA {
   public static String TOPIC_PATHFINDER_EVENTS = "behavior.pulsar.misc.bot";
   public static String BOOTSTRAP_SERVERS =
       Arrays.asList(
-              "rhs-nbrvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092",
-              "rhs-nbrvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092",
-              "rhs-nbrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092",
-              "rhs-nbrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092",
-              "rhs-nbrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092")
+          "rhs-nbrvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092",
+          "rhs-nbrvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092",
+          "rhs-nbrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092",
+          "rhs-nbrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092",
+          "rhs-nbrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092")
           .stream()
           .collect(Collectors.joining(","));
 

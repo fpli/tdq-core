@@ -132,10 +132,14 @@ public class SojHdfsSink<T> extends RichSinkFunction<T>
     try {
       if (t instanceof UbiEvent) {
         DataFileWriter<T> invokeWriter = switchWriter(((UbiEvent) t).getEventTimestamp());
-        if (invokeWriter != null) invokeWriter.append(t);
+        if (invokeWriter != null) {
+          invokeWriter.append(t);
+        }
       } else {
         DataFileWriter<T> invokeWriter = switchWriter(((UbiSession) t).getEndTimestamp());
-        if (invokeWriter != null) invokeWriter.append(t);
+        if (invokeWriter != null) {
+          invokeWriter.append(t);
+        }
       }
 
     } catch (Exception e) {
@@ -197,7 +201,9 @@ public class SojHdfsSink<T> extends RichSinkFunction<T>
 
                 threadLocalActiveFilePath.set(activeFile);
 
-                if (!fileSystem.exists(sourcFolder)) fileSystem.mkdirs(sourcFolder);
+                if (!fileSystem.exists(sourcFolder)) {
+                  fileSystem.mkdirs(sourcFolder);
+                }
 
                 activeStream =
                     dataFileWriter.create(
@@ -242,7 +248,7 @@ public class SojHdfsSink<T> extends RichSinkFunction<T>
                               + fileCount
                               + "-"
                               + DateUtil.stampToDate(
-                                  System.currentTimeMillis(), "yyyyMMddHHmmssSSS")
+                              System.currentTimeMillis(), "yyyyMMddHHmmssSSS")
                               + ".avro");
 
                   if (fileSystem.exists(newFilePath)) {
@@ -277,7 +283,8 @@ public class SojHdfsSink<T> extends RichSinkFunction<T>
     ListStateDescriptor<Tuple2<Integer, String>> listStateDescriptor =
         new ListStateDescriptor<Tuple2<Integer, String>>(
             "checkPointTaskFileMapList",
-            TypeInformation.of(new TypeHint<Tuple2<Integer, String>>() {}));
+            TypeInformation.of(new TypeHint<Tuple2<Integer, String>>() {
+            }));
     checkPointTaskFileList = context.getOperatorStateStore().getUnionListState(listStateDescriptor);
 
     // checkPointTaskFileUnionList=context.getOperatorStateStore().

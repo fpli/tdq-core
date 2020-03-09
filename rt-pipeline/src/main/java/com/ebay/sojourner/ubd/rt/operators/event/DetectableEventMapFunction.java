@@ -12,7 +12,8 @@ public class DetectableEventMapFunction
     extends RichMapFunction<UbiEvent, Either<UbiEvent, UbiSession>> {
 
   @Override
-  public void open(Configuration conf) throws Exception {}
+  public void open(Configuration conf) throws Exception {
+  }
 
   @Override
   public Either<UbiEvent, UbiSession> map(UbiEvent value) throws Exception {

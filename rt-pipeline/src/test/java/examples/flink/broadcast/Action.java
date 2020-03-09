@@ -5,7 +5,8 @@ public class Action {
   private Long userId;
   private ActionType action;
 
-  public Action() {}
+  public Action() {
+  }
 
   public Action(Long userId, ActionType action) {
     this.userId = userId;

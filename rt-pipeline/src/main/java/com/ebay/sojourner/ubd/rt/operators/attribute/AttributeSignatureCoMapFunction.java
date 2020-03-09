@@ -7,6 +7,7 @@ import org.apache.flink.streaming.api.functions.co.CoMapFunction;
 
 public class AttributeSignatureCoMapFunction
     implements CoMapFunction<AgentIpSignature, Map<String, Object>, Map<String, Object>> {
+
   Map<String, Object> attributeSignature = new HashMap<>();
 
   @Override

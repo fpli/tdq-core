@@ -10,7 +10,7 @@ import org.apache.flink.util.Collector;
 
 public class AgentIpWindowProcessFunction
     extends ProcessWindowFunction<
-        AgentIpAttributeAccumulator, AgentIpAttribute, Tuple, TimeWindow> {
+    AgentIpAttributeAccumulator, AgentIpAttribute, Tuple, TimeWindow> {
 
   @Override
   public void process(

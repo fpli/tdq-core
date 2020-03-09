@@ -11,6 +11,7 @@ import org.apache.flink.util.Collector;
 
 public class GuidBroadcastProcessFunction
     extends BroadcastProcessFunction<UbiSession, Tuple2<String, Set<Integer>>, UbiSession> {
+
   @Override
   public void processElement(
       UbiSession ubiSession, ReadOnlyContext context, Collector<UbiSession> out) throws Exception {

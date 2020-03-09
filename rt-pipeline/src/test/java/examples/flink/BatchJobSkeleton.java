@@ -23,7 +23,8 @@ import org.apache.flink.api.java.ExecutionEnvironment;
 /**
  * Skeleton for a Flink Batch Job.
  *
- * <p>For a tutorial how to write a Flink batch application, check the tutorials and examples on the
+ * <p>For a tutorial how to write a Flink batch application, check the tutorials and examples on
+ * the
  * <a href="http://flink.apache.org/docs/stable/">Flink Website</a>.
  *
  * <p>To package your application into a JAR file for execution, change the main class in the

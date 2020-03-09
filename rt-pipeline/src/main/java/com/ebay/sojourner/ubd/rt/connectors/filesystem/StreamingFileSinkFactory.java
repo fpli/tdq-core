@@ -27,21 +27,21 @@ public class StreamingFileSinkFactory {
 
     StreamingFileSink streamingFileSink =
         StreamingFileSink.forBulkFormat(
-                new Path(sinkPath), ParquetAvroWriters.forReflectRecord(IpSignature.class))
+            new Path(sinkPath), ParquetAvroWriters.forReflectRecord(IpSignature.class))
             .build();
     return new SojHdfsSinkWithKeytab(streamingFileSink);
   }
 
   public static StreamingFileSink<IpSignature> createWithAP(String sinkPath) {
     return StreamingFileSink.forBulkFormat(
-            new Path(sinkPath), ParquetAvroWriters.forReflectRecord(IpSignature.class))
+        new Path(sinkPath), ParquetAvroWriters.forReflectRecord(IpSignature.class))
         .build();
   }
 
   public static <T> SojHdfsSinkWithKeytab createWithParquet(String sinkPath, Class<T> sinkClass) {
     StreamingFileSink streamingFileSink =
         StreamingFileSink.forBulkFormat(
-                new Path(sinkPath), ParquetAvroWriters.forReflectRecord(sinkClass))
+            new Path(sinkPath), ParquetAvroWriters.forReflectRecord(sinkClass))
             .build();
     return new SojHdfsSinkWithKeytab(streamingFileSink);
   }

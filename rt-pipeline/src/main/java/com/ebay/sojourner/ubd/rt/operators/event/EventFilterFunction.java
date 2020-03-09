@@ -33,7 +33,9 @@ public class EventFilterFunction extends RichFilterFunction<RawEvent> {
     }
 
     // else set C record
-    if (applicationPayload == null) applicationPayload = mCRecString;
+    if (applicationPayload == null) {
+      applicationPayload = mCRecString;
+    }
     if (map.containsKey("g")) {
       String g = map.get("g");
       return g.hashCode() % 2 == 0;

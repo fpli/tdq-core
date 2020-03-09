@@ -235,7 +235,9 @@ public class IntegrationTest {
           ctx.collect(rawEvent);
         }
         idx++;
-        if (idx > 2) isRunning = false;
+        if (idx > 2) {
+          isRunning = false;
+        }
         //                TimeUnit.SECONDS.sleep(1);
         TimeUnit.SECONDS.sleep(60);
       }

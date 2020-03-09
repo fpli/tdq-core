@@ -215,7 +215,7 @@ public class KeytabHdfsFactory {
     Configuration conf = new Configuration();
     // conf.addResource("/opt/jediael/hadoop-1.2.1/conf/core-site.xml");
     conf.addResource("/core-site.xml");
-    getUGI(ExecutionEnvUtil.createParameterTool(new String[] {"--a=b"}));
+    getUGI(ExecutionEnvUtil.createParameterTool(new String[]{"--a=b"}));
     System.out.println(
         conf.get("hadoop.http.authentication.composite.default-non-browser-handler-type"));
     System.out.println(conf.get("hadoop.tmp.dir"));

@@ -9,6 +9,7 @@ import org.apache.flink.streaming.api.windowing.triggers.TriggerResult;
 import org.apache.flink.streaming.api.windowing.windows.Window;
 
 public class SojTrigger<W extends Window> extends Trigger<Object, W> {
+
   private static final long serialVersionUID = 1L;
 
   private Trigger countTrigger = CountTrigger.of(1);

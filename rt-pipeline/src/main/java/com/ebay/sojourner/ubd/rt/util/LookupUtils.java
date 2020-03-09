@@ -5,12 +5,9 @@ import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 public class LookupUtils {
+
   /**
    * Upload lookup files to Flink distributed cache.
-   *
-   * @param executionEnvironment
-   * @param params
-   * @param ubiConfig
    */
   public static void uploadFiles(
       StreamExecutionEnvironment executionEnvironment, ParameterTool params, UBIConfig ubiConfig) {

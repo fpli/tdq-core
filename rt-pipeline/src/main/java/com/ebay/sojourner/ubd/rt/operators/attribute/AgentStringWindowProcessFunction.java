@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 public class AgentStringWindowProcessFunction
     extends ProcessWindowFunction<IpAttributeAccumulator, IpSignature, Tuple, TimeWindow> {
+
   private static final Logger logger = Logger.getLogger(AgentStringWindowProcessFunction.class);
   //    private CouchBaseManager couchBaseManager;
   private static final String BUCKET_NAME = "botsignature";

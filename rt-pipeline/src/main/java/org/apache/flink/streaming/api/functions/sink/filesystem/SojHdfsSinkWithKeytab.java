@@ -1,7 +1,10 @@
 package org.apache.flink.streaming.api.functions.sink.filesystem;
 
 
+import static com.ebay.sojourner.ubd.rt.common.constants.PropertiesConstants.PROD_CONFIG;
+
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.KeytabHdfsFactory;
+import java.security.PrivilegedExceptionAction;
 import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.api.common.functions.util.FunctionUtils;
@@ -16,91 +19,30 @@ import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.flink.streaming.runtime.tasks.ProcessingTimeCallback;
 import org.apache.hadoop.security.UserGroupInformation;
 
-import java.security.PrivilegedExceptionAction;
-
-import static com.ebay.sojourner.ubd.rt.common.constants.PropertiesConstants.PROD_CONFIG;
-
 
 /**
- * @param <IN>
+ *
  */
 
 @PublicEvolving
 public class SojHdfsSinkWithKeytab<IN>
-        extends RichSinkFunction<IN>
-        implements CheckpointedFunction, CheckpointListener, ProcessingTimeCallback {
+    extends RichSinkFunction<IN>
+    implements CheckpointedFunction, CheckpointListener, ProcessingTimeCallback {
 
-    private static final long serialVersionUID = 1L;
-    private org.apache.hadoop.conf.Configuration conf;
-    private transient UserGroupInformation ugi;
-    private StreamingFileSink streamingFileSink;
+  private static final long serialVersionUID = 1L;
+  private org.apache.hadoop.conf.Configuration conf;
+  private transient UserGroupInformation ugi;
+  private StreamingFileSink streamingFileSink;
 
-    public SojHdfsSinkWithKeytab( StreamingFileSink streamingFileSink ) {
-        super();
+  public SojHdfsSinkWithKeytab(StreamingFileSink streamingFileSink) {
+    super();
 
-        this.streamingFileSink = streamingFileSink;
-    }
+    this.streamingFileSink = streamingFileSink;
+  }
 
-    // --------------------------- Sink Methods -----------------------------
+  // --------------------------- Sink Methods -----------------------------
 
-    @Override
-    public void initializeState( FunctionInitializationContext context ) throws Exception {
-
-        streamingFileSink.initializeState(context);
-    }
-
-    @Override
-    public void notifyCheckpointComplete( long checkpointId ) throws Exception {
-        streamingFileSink.notifyCheckpointComplete(checkpointId);
-    }
-
-    @Override
-    public void snapshotState( FunctionSnapshotContext context ) throws Exception {
-
-        streamingFileSink.snapshotState(context);
-
-    }
-
-    @Override
-    public void setRuntimeContext( RuntimeContext t ) {
-        super.setRuntimeContext(t);
-        FunctionUtils.setFunctionRuntimeContext(streamingFileSink, t);
-    }
-
-    @Override
-    public void open( Configuration parameters ) throws Exception {
-        streamingFileSink.open(parameters);
-        ParameterTool parameterTool = (ParameterTool) getRuntimeContext().getExecutionConfig().getGlobalJobParameters();
-        ugi = KeytabHdfsFactory.getUGI(parameterTool);
-        boolean isProd = parameterTool.getBoolean(PROD_CONFIG);
-        conf = KeytabHdfsFactory.getConf(isProd);
-    }
-
-    @Override
-    public void onProcessingTime( long timestamp ) throws Exception {
-        streamingFileSink.onProcessingTime(timestamp);
-    }
-
-    @Override
-    public void invoke( IN value, SinkFunction.Context context ) throws Exception {
-        ugi.checkTGTAndReloginFromKeytab();
-        ugi.doAs((PrivilegedExceptionAction<?>) () -> {
-            streamingFileSink.invoke(value, context);
-            return null;
-        });
-    }
-
-    @Override
-    public void close() throws Exception {
-        ugi.checkTGTAndReloginFromKeytab();
-        ugi.doAs((PrivilegedExceptionAction<?>) () -> {
-            streamingFileSink.close();
-            return null;
-        });
-    }
-
-
-    public static void main( String[] args ) throws IllegalAccessException, NoSuchFieldException {
+  public static void main(String[] args) throws IllegalAccessException, NoSuchFieldException {
 
 //        Field modifiersField = TypeExtractor.class.getDeclaredField("registeredTypeInfoFactories");
 //        modifiersField.setAccessible(true);
@@ -113,8 +55,8 @@ public class SojHdfsSinkWithKeytab<IN>
 //            System.out.println(entry.getKey());
 //            System.out.println(entry.getValue());
 //        }
-        Class classList = StreamingFileSink.class.getDeclaringClass();
-        System.out.println(classList.getSimpleName());
+    Class classList = StreamingFileSink.class.getDeclaringClass();
+    System.out.println(classList.getSimpleName());
 //        for(Class classname:classList)
 //        {
 //            if(classname.getSimpleName().equals("BulkFormatBuilder")) {
@@ -135,6 +77,63 @@ public class SojHdfsSinkWithKeytab<IN>
 //
 //        ByteBuffer buffer = ByteBuffer.allocateDirect(10 * 1024 * 1024);
 
-    }
+  }
+
+  @Override
+  public void initializeState(FunctionInitializationContext context) throws Exception {
+
+    streamingFileSink.initializeState(context);
+  }
+
+  @Override
+  public void notifyCheckpointComplete(long checkpointId) throws Exception {
+    streamingFileSink.notifyCheckpointComplete(checkpointId);
+  }
+
+  @Override
+  public void snapshotState(FunctionSnapshotContext context) throws Exception {
+
+    streamingFileSink.snapshotState(context);
+
+  }
+
+  @Override
+  public void setRuntimeContext(RuntimeContext t) {
+    super.setRuntimeContext(t);
+    FunctionUtils.setFunctionRuntimeContext(streamingFileSink, t);
+  }
+
+  @Override
+  public void open(Configuration parameters) throws Exception {
+    streamingFileSink.open(parameters);
+    ParameterTool parameterTool = (ParameterTool) getRuntimeContext().getExecutionConfig()
+        .getGlobalJobParameters();
+    ugi = KeytabHdfsFactory.getUGI(parameterTool);
+    boolean isProd = parameterTool.getBoolean(PROD_CONFIG);
+    conf = KeytabHdfsFactory.getConf(isProd);
+  }
+
+  @Override
+  public void onProcessingTime(long timestamp) throws Exception {
+    streamingFileSink.onProcessingTime(timestamp);
+  }
+
+  @Override
+  public void invoke(IN value, SinkFunction.Context context) throws Exception {
+    ugi.checkTGTAndReloginFromKeytab();
+    ugi.doAs((PrivilegedExceptionAction<?>) () -> {
+      streamingFileSink.invoke(value, context);
+      return null;
+    });
+  }
+
+  @Override
+  public void close() throws Exception {
+    ugi.checkTGTAndReloginFromKeytab();
+    ugi.doAs((PrivilegedExceptionAction<?>) () -> {
+      streamingFileSink.close();
+      return null;
+    });
+  }
 }
 

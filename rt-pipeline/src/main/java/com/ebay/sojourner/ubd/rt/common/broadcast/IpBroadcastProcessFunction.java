@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 public class IpBroadcastProcessFunction
     extends BroadcastProcessFunction<UbiEvent, IpSignature, UbiEvent> implements Serializable {
+
   private static volatile Logger logger = Logger.getLogger(IpBroadcastProcessFunction.class);
 
   @Override

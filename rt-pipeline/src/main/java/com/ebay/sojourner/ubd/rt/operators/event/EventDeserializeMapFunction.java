@@ -18,6 +18,7 @@ import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.log4j.Logger;
 
 public class EventDeserializeMapFunction extends RichMapFunction<byte[], UbiEvent> {
+
   private static final Logger logger = Logger.getLogger(EventDeserializeMapFunction.class);
 
   @Override

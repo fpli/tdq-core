@@ -42,6 +42,7 @@ import org.apache.flink.metrics.Counter;
 
 @Slf4j
 public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
+
   private EventParser parser;
   private EventBotDetector eventBotDetector;
   private AverageAccumulator avgDuration = new AverageAccumulator();

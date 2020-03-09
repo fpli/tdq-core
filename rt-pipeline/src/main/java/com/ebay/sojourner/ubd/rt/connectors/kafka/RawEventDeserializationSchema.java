@@ -89,7 +89,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
     clientData.setAcceptEncoding(getString(genericClientData.get("acceptEncoding")));
     clientData.setTDuration((Long) genericClientData.get("TDuration"));
 
-    return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData,ingestTime);
+    return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData, ingestTime);
   }
 
   private String getString(Object o) {

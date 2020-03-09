@@ -8,7 +8,8 @@ import org.apache.flink.configuration.Configuration;
 public class RawEvent2JSONMapFunction extends RichMapFunction<RawEvent, String> {
 
   @Override
-  public void open(Configuration conf) throws Exception {}
+  public void open(Configuration conf) throws Exception {
+  }
 
   @Override
   public String map(RawEvent rawEvent) throws Exception {

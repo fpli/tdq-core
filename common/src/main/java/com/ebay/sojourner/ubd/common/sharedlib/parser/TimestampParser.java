@@ -110,6 +110,7 @@ public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
 
     // Keep original session key from UBI Listener
     ubiEvent.setIngestTime(rawEvent.getIngestTime());
+    ubiEvent.setGenerateTime(rawEvent.getRheosHeader().getEventCreateTimestamp());
     ubiEvent.setOldSessionSkey(null);
   }
 

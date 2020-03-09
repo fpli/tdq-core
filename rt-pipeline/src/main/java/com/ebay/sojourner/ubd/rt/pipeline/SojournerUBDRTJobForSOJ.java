@@ -59,24 +59,12 @@ public class SojournerUBDRTJobForSOJ {
     ParameterTool parameterTool = ParameterTool.fromArgs(args);
     AppEnv.config(parameterTool);
 
-    //        System.out.println(TypeInformation.of(new TypeHint<Either<UbiEvent,UbiSession>>(){}));
-
-    // hack StringValue to use the version 1.10
-    //        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class,
-    // Class.class);
-    //        m.setAccessible(true);
-    //        m.invoke(null, String.class, SOjStringFactory.class);
-
     // 0.0 Prepare execution environment
     // 0.1 UBI configuration
     // 0.2 Flink configuration
     final StreamExecutionEnvironment executionEnvironment =
         StreamExecutionEnvironment.getExecutionEnvironment();
-    //        final ParameterTool params = ParameterTool.fromArgs(args);
-    //        executionEnvironment.getConfig().setGlobalJobParameters(new SojJobParameters());
-    //         LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
     executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
-    //        executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
 
     // checkpoint settings
     executionEnvironment.enableCheckpointing(
@@ -103,8 +91,6 @@ public class SojournerUBDRTJobForSOJ {
             3, // number of restart attempts
             org.apache.flink.api.common.time.Time.of(10, TimeUnit.SECONDS) // delay
         ));
-
-    executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
 
     // for soj nrt output
     // 1. Rheos Consumer
@@ -161,8 +147,6 @@ public class SojournerUBDRTJobForSOJ {
         ubiEventDataStream
             .keyBy("guid")
             .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-            //                .trigger(OnElementEarlyFiringTrigger.create())   //no need to
-            // customize the triiger, use the default eventtimeTrigger
             .allowedLateness(Time.minutes(1))
             .sideOutputLateData(lateEventOutputTag)
             .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction())

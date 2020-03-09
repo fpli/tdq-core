@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.flink.api.common.ExecutionConfig;
 
 public class SojJobParameters extends ExecutionConfig.GlobalJobParameters {
+
   private static final long serialVersionUID = -1L;
   private Map<String, String> parameters;
 

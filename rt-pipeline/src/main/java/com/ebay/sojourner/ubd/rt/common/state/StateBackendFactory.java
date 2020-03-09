@@ -26,6 +26,7 @@ public class StateBackendFactory {
           rocksDBStateBackend.setPredefinedOptions(
               PredefinedOptions.SPINNING_DISK_OPTIMIZED_HIGH_MEM);
           rocksDBStateBackend.setPredefinedOptions(PredefinedOptions.FLASH_SSD_OPTIMIZED);
+          rocksDBStateBackend.setOptions(new SojOptions());
           return rocksDBStateBackend;
         } catch (Exception e) {
           log.error("Failed to create RocksDB state backend", e);

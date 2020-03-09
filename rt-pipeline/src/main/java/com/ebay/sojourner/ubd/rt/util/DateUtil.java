@@ -12,10 +12,8 @@ public class DateUtil {
   /**
    * Convert date to timestamp
    *
-   * @param date
    * @param format e.g yyyy-MM-dd HH:mm:ss
    * @return long value in milliseconds
-   * @throws ParseException
    */
   public static long dateToStamp(String dateStr, String format) throws ParseException {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.US);
@@ -27,7 +25,6 @@ public class DateUtil {
   /**
    * Convert timestamp to date
    *
-   * @param ts
    * @param format e.g yyyy-MM-dd HH:mm:ss
    * @return date in string
    */
@@ -50,7 +47,6 @@ public class DateUtil {
   /**
    * Get hour for a specified timestamp
    *
-   * @param ts
    * @return int value for hour
    */
   public static long addHourAndGetTime(long ts, int amount) {
