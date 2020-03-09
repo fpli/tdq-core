@@ -8,7 +8,7 @@ import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAgg;
-import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpMapFunction;
+import com.ebay.sojourner.ubd.rt.operator.AgentIpMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
