@@ -6,10 +6,11 @@ import com.ebay.sojourner.ubd.common.sharedlib.util.IntegerField;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SiteIdParser implements FieldParser<RawEvent, UbiEvent> {
-  private static final Logger log = Logger.getLogger(SiteIdParser.class);
+  private static final Logger log = LoggerFactory.getLogger(SiteIdParser.class);
   private static final String T_TAG = "t";
 
   public void parse(RawEvent rawEvent, UbiEvent ubiEvent) {

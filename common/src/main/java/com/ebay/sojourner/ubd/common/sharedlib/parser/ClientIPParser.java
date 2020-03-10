@@ -11,13 +11,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 public class ClientIPParser implements FieldParser<RawEvent, UbiEvent> {
-  public static final String REMOTE_IP = "RemoteIP";
-  public static final String FORWARDED_FOR = "ForwardedFor";
-  public static final String AGENT = "Agent";
+
   private static final Logger log = Logger.getLogger(ClientIPParser.class);
 
   @Override
-  public void init() throws Exception {}
+  public void init() throws Exception {
+  }
 
   @Override
   public void parse(RawEvent rawEvent, UbiEvent ubiEvent) throws Exception {

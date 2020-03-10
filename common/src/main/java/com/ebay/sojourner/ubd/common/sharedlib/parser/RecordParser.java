@@ -6,7 +6,6 @@ import org.apache.flink.api.common.accumulators.AverageAccumulator;
 
 /**
  * @author kofeng
- * @param <Source>
  */
 public abstract class RecordParser<Source, Target> implements Parser<Source, Target> {
 
@@ -20,7 +19,8 @@ public abstract class RecordParser<Source, Target> implements Parser<Source, Tar
     }
   }
 
-  public void parse(Source source, Target target) throws Exception {}
+  public void parse(Source source, Target target) throws Exception {
+  }
 
   public void parse(Source source, Target target, Map<String, AverageAccumulator> map)
       throws Exception {
