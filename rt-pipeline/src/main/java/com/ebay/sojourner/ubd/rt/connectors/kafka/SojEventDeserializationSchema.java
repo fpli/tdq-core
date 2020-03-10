@@ -55,28 +55,14 @@ public class SojEventDeserializationSchema implements DeserializationSchema<RawE
     //        genericRecord.put("rheosHeader",rheosHeader);
 
     // Generate sojA, sojK, sojC
-    //        Map<Utf8, Utf8> sojA = (Map<Utf8, Utf8>) genericRecord.get("sojA");
-    //        Map<Utf8, Utf8> sojK = (Map<Utf8, Utf8>) genericRecord.get("sojK");
-    //        Map<Utf8, Utf8> sojC = (Map<Utf8, Utf8>) genericRecord.get("sojC");
+    // Map<Utf8, Utf8> sojA = (Map<Utf8, Utf8>) genericRecord.get("sojA");
+    // Map<Utf8, Utf8> sojK = (Map<Utf8, Utf8>) genericRecord.get("sojK");
+    // Map<Utf8, Utf8> sojC = (Map<Utf8, Utf8>) genericRecord.get("sojC");
     Map<String, String> sojAMap = new HashMap<>();
-    //        if (sojA != null) {
-    //            for (Map.Entry<Utf8, Utf8> entry : sojA.entrySet()) {
-    //                sojAMap.put(entry.getKey().toString(), entry.getValue().toString());
-    //            }
-    //        }
+
     Map<String, String> sojKMap = new HashMap<>();
-    //        if (sojK != null) {
-    //            for (Map.Entry<Utf8, Utf8> entry : sojK.entrySet()) {
-    //                sojKMap.put(entry.getKey().toString(), entry.getValue().toString());
-    //            }
-    //        }
 
     Map<String, String> sojCMap = new HashMap<>();
-    //        if (sojC != null) {
-    //            for (Map.Entry<Utf8, Utf8> entry : sojC.entrySet()) {
-    //                sojCMap.put(entry.getKey().toString(), entry.getValue().toString());
-    //            }
-    //        }
 
     // Generate ClientData
     // If clientData is not of type GenericRecord, just skip this message.
@@ -122,7 +108,7 @@ public class SojEventDeserializationSchema implements DeserializationSchema<RawE
     clientData.setTStamp(
         StringUtils.isEmpty(applicationPayload.get("timestamp"))
             ? null
-            : Long.valueOf(getString(applicationPayload.get("timestamp"))));
+            : getString(applicationPayload.get("timestamp")));
     clientData.setTName(getString(clientDataMap.get("TName")));
     clientData.setTPayload(getString(clientDataMap.get("TPayload")));
     clientData.setColo(getString(applicationPayload.get("colo")));
@@ -134,7 +120,7 @@ public class SojEventDeserializationSchema implements DeserializationSchema<RawE
     clientData.setContentLength(
         StringUtils.isEmpty(clientDataMap.get("ContentLength"))
             ? null
-            : Integer.valueOf(getString(clientDataMap.get("ContentLength"))));
+            : getString(clientDataMap.get("ContentLength")));
     clientData.setNodeId(getString(applicationPayload.get("nodeId")));
     clientData.setRequestGuid(getString(applicationPayload.get("requestGuid")));
 
@@ -144,7 +130,7 @@ public class SojEventDeserializationSchema implements DeserializationSchema<RawE
     clientData.setTDuration(
         StringUtils.isEmpty(clientDataMap.get("TDuration"))
             ? null
-            : Long.valueOf(clientDataMap.get("TDuration")));
+            : clientDataMap.get("TDuration"));
 
     clientData.setAgent(agentCLI);
     clientData.setRemoteIP(getString(genericRecord.get("remoteIP")));

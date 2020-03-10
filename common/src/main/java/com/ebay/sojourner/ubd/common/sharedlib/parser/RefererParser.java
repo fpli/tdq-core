@@ -6,8 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 
 public class RefererParser implements FieldParser<RawEvent, UbiEvent> {
 
-  public static final String REFERER = "Referer";
-
   @Override
   public void parse(RawEvent rawEvent, UbiEvent ubiEvent) throws Exception {
     String clientData = rawEvent.getClientData().getReferrer();

@@ -13,8 +13,9 @@ public class PartialValidPageParser implements FieldParser<RawEvent, UbiEvent> {
   private Integer[] CLFGPageIds = {2588, 3030, 3907, 4939, 5108};
   // add more pages on 2018-02-09 2047675,2054574,2057587,2052197,2049334,2052122,2051865,4853
   private Integer[] WSPageIds = {
-    1702440, 2043183, 2043216, 2047524, 2051322, 2051319, 2052193, 2051542, 2052317, 3693, 2047675,
-    2054574, 2057587, 2052197, 2049334, 2052122, 2051865, 4853
+      1702440, 2043183, 2043216, 2047524, 2051322, 2051319, 2052193, 2051542, 2052317, 3693,
+      2047675,
+      2054574, 2057587, 2052197, 2049334, 2052122, 2051865, 4853
   };
   private Integer[] STATEPageIds = {2765, 2771, 2685, 3306, 2769, 4034, 4026};
   // add 5713,2053584,6024,2053898,6053,2054900 on 2018-02-09
@@ -22,17 +23,17 @@ public class PartialValidPageParser implements FieldParser<RawEvent, UbiEvent> {
   private String[] IpLists = {"10.2.137.50", "10.2.182.150", "10.2.137.51", "10.2.182.151"};
   // add "MainCheckoutPage" on 2018-02-09
   private String[] pageLists = {
-    "ryprender", "cyp", "success", "pots", "error", "rypexpress", "MainCheckoutPage"
+      "ryprender", "cyp", "success", "pots", "error", "rypexpress", "MainCheckoutPage"
   };
   private String[] checkoutCleanList = {
-    "MainCheckoutPage",
-    "CheckoutPaymentSuccess",
-    "CheckoutPayPalWeb",
-    "PaymentSent",
-    "CheckoutPaymentMethod",
-    "Autopay",
-    "CheckoutPayPalError1",
-    "CheckoutPaymentFailed"
+      "MainCheckoutPage",
+      "CheckoutPaymentSuccess",
+      "CheckoutPayPalWeb",
+      "PaymentSent",
+      "CheckoutPaymentMethod",
+      "Autopay",
+      "CheckoutPayPalError1",
+      "CheckoutPaymentFailed"
   };
 
   @Override
@@ -95,26 +96,26 @@ public class PartialValidPageParser implements FieldParser<RawEvent, UbiEvent> {
     }
     if (StringUtils.isNotBlank(sqr)
         && ("null".equals(sqr)
-            || "undefined".equals(sqr)
-            || sqr.endsWith(".htm")
-            || sqr.endsWith(".asp")
-            || sqr.endsWith(".jsp")
-            || sqr.endsWith(".gif")
-            || sqr.endsWith(".png")
-            || sqr.endsWith(".pdf")
-            || sqr.endsWith(".html")
-            || sqr.endsWith(".php")
-            || sqr.endsWith(".cgi")
-            || sqr.endsWith(".jpeg")
-            || sqr.endsWith(".swf")
-            || sqr.endsWith(".txt")
-            || sqr.endsWith(".wav")
-            || sqr.endsWith(".zip")
-            || sqr.endsWith(".flv")
-            || sqr.endsWith(".dll")
-            || sqr.endsWith(".ico")
-            || sqr.endsWith(".jpg")
-            || sqr.contains("hideoutput"))) {
+        || "undefined".equals(sqr)
+        || sqr.endsWith(".htm")
+        || sqr.endsWith(".asp")
+        || sqr.endsWith(".jsp")
+        || sqr.endsWith(".gif")
+        || sqr.endsWith(".png")
+        || sqr.endsWith(".pdf")
+        || sqr.endsWith(".html")
+        || sqr.endsWith(".php")
+        || sqr.endsWith(".cgi")
+        || sqr.endsWith(".jpeg")
+        || sqr.endsWith(".swf")
+        || sqr.endsWith(".txt")
+        || sqr.endsWith(".wav")
+        || sqr.endsWith(".zip")
+        || sqr.endsWith(".flv")
+        || sqr.endsWith(".dll")
+        || sqr.endsWith(".ico")
+        || sqr.endsWith(".jpg")
+        || sqr.contains("hideoutput"))) {
       ubiEvent.setPartialValidPage(false);
       return;
     }
@@ -154,14 +155,14 @@ public class PartialValidPageParser implements FieldParser<RawEvent, UbiEvent> {
     }
     if (StringUtils.isNotBlank(urlQueryString)
         && (urlQueryString.startsWith("/_vti_bin")
-            || urlQueryString.startsWith("/MSOffice/cltreq.asp"))) {
+        || urlQueryString.startsWith("/MSOffice/cltreq.asp"))) {
       ubiEvent.setPartialValidPage(false);
       return;
     }
     if ("1".equals(SOJNVL.getTagValue(ubiEvent.getApplicationPayload(), "mr"))
         || StringUtils.isNotBlank(urlQueryString)
-            && (urlQueryString.contains("?redirect=mobile")
-                || urlQueryString.contains("&redirect=mobile"))) {
+        && (urlQueryString.contains("?redirect=mobile")
+        || urlQueryString.contains("&redirect=mobile"))) {
       ubiEvent.setPartialValidPage(false);
       return;
     }
@@ -234,18 +235,18 @@ public class PartialValidPageParser implements FieldParser<RawEvent, UbiEvent> {
     }
     if (StringUtils.isNotBlank(urlQueryString)
         && ("null".equals(urlQueryString)
-            || "undefined".equals(urlQueryString)
-            || urlQueryString.endsWith(".gif")
-            || urlQueryString.endsWith(".png")
-            || urlQueryString.endsWith(".pdf")
-            || urlQueryString.endsWith(".jpeg")
-            || urlQueryString.endsWith(".swf")
-            || urlQueryString.endsWith(".txt")
-            || urlQueryString.endsWith(".wav")
-            || urlQueryString.endsWith(".zip")
-            || urlQueryString.endsWith(".flv")
-            || urlQueryString.endsWith(".ico")
-            || urlQueryString.endsWith(".jpg"))) {
+        || "undefined".equals(urlQueryString)
+        || urlQueryString.endsWith(".gif")
+        || urlQueryString.endsWith(".png")
+        || urlQueryString.endsWith(".pdf")
+        || urlQueryString.endsWith(".jpeg")
+        || urlQueryString.endsWith(".swf")
+        || urlQueryString.endsWith(".txt")
+        || urlQueryString.endsWith(".wav")
+        || urlQueryString.endsWith(".zip")
+        || urlQueryString.endsWith(".flv")
+        || urlQueryString.endsWith(".ico")
+        || urlQueryString.endsWith(".jpg"))) {
       ubiEvent.setPartialValidPage(false);
       return;
     }
@@ -268,7 +269,7 @@ public class PartialValidPageParser implements FieldParser<RawEvent, UbiEvent> {
         && pageId == 2056116
         && StringUtils.isNotBlank(urlQueryString)
         && (urlQueryString.startsWith("/itm/watchInline")
-            || urlQueryString.startsWith("/itm/ajaxSmartAppBanner"))) {
+        || urlQueryString.startsWith("/itm/ajaxSmartAppBanner"))) {
       ubiEvent.setPartialValidPage(false);
       return;
     }
@@ -286,7 +287,7 @@ public class PartialValidPageParser implements FieldParser<RawEvent, UbiEvent> {
         && pageId == 2052197
         && StringUtils.isNotBlank(urlQueryString)
         && (urlQueryString.contains("ImportHubItemDescription")
-            || urlQueryString.contains("ImportHubCreateListing"))) {
+        || urlQueryString.contains("ImportHubCreateListing"))) {
       ubiEvent.setPartialValidPage(false);
       return;
     }
@@ -311,8 +312,8 @@ public class PartialValidPageParser implements FieldParser<RawEvent, UbiEvent> {
     if (pageId != null
         && pageId == 2053898
         && (!StringUtils.isNotBlank(urlQueryPage)
-            || !isCorrespondingString(urlQueryPage, checkoutCleanList)
-            || sojPage == null)) {
+        || !isCorrespondingString(urlQueryPage, checkoutCleanList)
+        || sojPage == null)) {
       ubiEvent.setPartialValidPage(false);
       return;
     }
@@ -337,7 +338,7 @@ public class PartialValidPageParser implements FieldParser<RawEvent, UbiEvent> {
         && appId == 3564
         && StringUtils.isNotBlank(agentString)
         && (agentString.startsWith("ebayUserAgent/eBayIOS")
-            || agentString.startsWith("ebayUserAgent/eBayAndroid"))) {
+        || agentString.startsWith("ebayUserAgent/eBayAndroid"))) {
       ubiEvent.setPartialValidPage(false);
       return;
     }

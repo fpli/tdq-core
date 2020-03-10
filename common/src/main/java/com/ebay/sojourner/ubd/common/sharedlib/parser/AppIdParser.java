@@ -4,7 +4,6 @@ import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJGetUrlParams;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
-import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,9 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 public class AppIdParser implements FieldParser<RawEvent, UbiEvent> {
 
   public static final String APPID = "app";
-  public static final String REFERER = "Referer";
   public static final String TRACKING_SRC_APPID = "trackingSrcAppId";
-  public static final String AGENT = "Agent";
   public static final String SRCAPPID = "srcAppId";
   private static final String PREFIX = "http://www.ebay.com";
   private static final String matchStr1 = ";iPad";
@@ -53,19 +50,7 @@ public class AppIdParser implements FieldParser<RawEvent, UbiEvent> {
     map.putAll(rawEvent.getSojA());
     map.putAll(rawEvent.getSojK());
     map.putAll(rawEvent.getSojC());
-    String mARecString = PropertyUtils.mapToString(rawEvent.getSojA());
-    String mKRecString = PropertyUtils.mapToString(rawEvent.getSojK());
-    String mCRecString = PropertyUtils.mapToString(rawEvent.getSojC());
-    String applicationPayload = null;
-    if (mARecString != null) {
-      applicationPayload = mARecString;
-    }
-    if ((applicationPayload != null) && (mKRecString != null)) {
-      applicationPayload = applicationPayload + "&" + mKRecString;
-    }
-
-    // else set C record
-    if (applicationPayload == null) applicationPayload = mCRecString;
+    String applicationPayload = ubiEvent.getApplicationPayload();
 
     String urlQueryStr =
         rawEvent.getClientData().getUrlQueryString() == null
@@ -94,7 +79,7 @@ public class AppIdParser implements FieldParser<RawEvent, UbiEvent> {
       appid = SOJNVL.getTagValue(SOJGetUrlParams.getUrlParams(referrer), TRACKING_SRC_APPID);
     } else if (StringUtils.startsWithIgnoreCase(agentInfo, prefix1)
         && StringUtils.containsIgnoreCase(
-            StringUtils.substring(agentInfo, prefix1.length()), matchStr1)) {
+        StringUtils.substring(agentInfo, prefix1.length()), matchStr1)) {
       appid = "2878";
     } else if (StringUtils.startsWithIgnoreCase(agentInfo, prefix1)) {
       appid = "1462";
@@ -170,5 +155,6 @@ public class AppIdParser implements FieldParser<RawEvent, UbiEvent> {
   }
 
   @Override
-  public void init() throws Exception {}
+  public void init() throws Exception {
+  }
 }
