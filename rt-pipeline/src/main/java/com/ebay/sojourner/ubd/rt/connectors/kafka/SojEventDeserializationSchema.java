@@ -5,6 +5,7 @@ import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.RheosHeader;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,7 +37,7 @@ public class SojEventDeserializationSchema implements DeserializationSchema<RawE
 
   @Override
   public RawEvent deserialize(byte[] message) throws IOException {
-    long ingestTime = System.nanoTime();
+    long ingestTime = new Date().getTime();
 
     RheosEvent rheosEvent =
         RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
