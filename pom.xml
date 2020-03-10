@@ -19,7 +19,7 @@
     </modules>
 
     <properties>
-        <global.version>5.0.0-SNAPSHOT</global.version>
+        <global.version>7.0.0-SNAPSHOT</global.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -283,6 +283,7 @@
                 <groupId>org.apache.flink</groupId>
                 <artifactId>flink-statebackend-rocksdb_${scala.binary.version}</artifactId>
                 <version>${flink.version}</version>
+                <scope>provided</scope>
             </dependency>
             <!-- runtime-web is needed to start Web UI from IDE -->
             <dependency>

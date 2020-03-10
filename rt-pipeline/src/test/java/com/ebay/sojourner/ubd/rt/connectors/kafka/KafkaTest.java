@@ -13,8 +13,6 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 public class KafkaTest {
 
   /**
-   *
-   *
    * <pre>
    * bin/zkServer.sh start
    * bin/kafka-server-start.sh config/server.properties

@@ -58,7 +58,9 @@ public class CustomDurationDeserializer extends StdDeserializer<Duration> {
   }
 
   private Long getMillis(String period) {
-    if (period == null) return null;
+    if (period == null) {
+      return null;
+    }
     period = period.toLowerCase();
     Matcher matcher = periodPattern.matcher(period);
     Instant instant = Instant.EPOCH;

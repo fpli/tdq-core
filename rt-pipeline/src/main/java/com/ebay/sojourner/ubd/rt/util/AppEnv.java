@@ -46,7 +46,9 @@ public class AppEnv {
   }
 
   public static AppEnv config(ParameterTool parameterTool) {
-    if (parameterTool == null || parameterTool.getNumberOfParameters() == 0) return config();
+    if (parameterTool == null || parameterTool.getNumberOfParameters() == 0) {
+      return config();
+    }
 
     if (appEnv == null) {
       synchronized (AppEnv.class) {
@@ -58,7 +60,8 @@ public class AppEnv {
             InputStream inputStream =
                 AppEnv.class.getClassLoader().getResourceAsStream(CONFIG_FILE_NAME);
             Map<String, Object> config =
-                objectMapper.readValue(inputStream, new TypeReference<Map<String, Object>>() {});
+                objectMapper.readValue(inputStream, new TypeReference<Map<String, Object>>() {
+                });
             replaceWithParamTool(config, parameterTool);
             String jsonStr = objectMapper.writeValueAsString(config);
 

@@ -16,7 +16,7 @@ public class KafkaConnectorFactory {
 
   //    public static String CLIENT_ID = "82034abc-572d-4b71-82df-c9820ef1627c";
   public static String GROUP_ID = AppEnv.config().getKafka().getGroupId();
-  public static String TOPIC_PATHFINDER_EVENTS = "behavior.pathfinder.events.total";
+  public static String TOPIC_PATHFINDER_EVENTS = AppEnv.config().getKafka().getTopic();;
   public static String BOOTSTRAP_SERVERS =
       String.join(",", AppEnv.config().getKafka().getBootstrapServers());
 
@@ -34,12 +34,19 @@ public class KafkaConnectorFactory {
     props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
     props.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
 
+    props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 3000);
+    props.put(ConsumerConfig.RECEIVE_BUFFER_CONFIG, 8 * 1024 * 1024);
+    props.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 250 * 1024 * 1024);
+    props.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 1000);
+
+    props.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, 8 * 1024 * 1024);
+
     props.put(
         ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, RoundRobinAssignor.class.getName());
     props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ByteArrayDeserializer.class.getName());
     props.put(
         ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, RheosEventDeserializer.class.getName());
-    props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+    props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
     //        props.put(ConsumerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
 
     return new FlinkKafkaConsumer<>(

@@ -5,6 +5,7 @@ import com.ebay.sojourner.ubd.common.model.UbiSession;
 import org.apache.flink.api.common.functions.RichMapFunction;
 
 public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSession, SojSession> {
+
   @Override
   public SojSession map(UbiSession ubiSession) throws Exception {
     SojSession sojSession = new SojSession();

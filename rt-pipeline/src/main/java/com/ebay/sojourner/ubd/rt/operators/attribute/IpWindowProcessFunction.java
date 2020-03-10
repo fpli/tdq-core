@@ -14,7 +14,7 @@ import org.apache.flink.util.Collector;
 
 public class IpWindowProcessFunction
     extends ProcessWindowFunction<
-        IpAttributeAccumulator, Tuple4<String, Boolean, Set<Integer>, Long>, Tuple, TimeWindow> {
+    IpAttributeAccumulator, Tuple4<String, Boolean, Set<Integer>, Long>, Tuple, TimeWindow> {
 
   @Override
   public void process(

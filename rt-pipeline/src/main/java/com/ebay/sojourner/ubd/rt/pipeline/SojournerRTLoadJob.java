@@ -6,6 +6,7 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
@@ -28,7 +29,6 @@ import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.transformations.OneInputTransformation;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
@@ -36,7 +36,7 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
 
-public class SojournerUBDRTJobUntilSession {
+public class SojournerRTLoadJob {
 
   public static void main(String[] args) throws Exception {
 
@@ -44,29 +44,20 @@ public class SojournerUBDRTJobUntilSession {
     // Make sure this is being executed at start up.
     ParameterTool parameterTool = ExecutionEnvUtil.createParameterTool(args);
     AppEnv.config(parameterTool);
-
-    // hack StringValue to use the version 1.10
-    //        Method m = TypeExtractor.class.getDeclaredMethod("registerFactory", Type.class,
-    // Class.class);
-    //        m.setAccessible(true);
-    //        m.invoke(null, String.class, SOjStringFactory.class);
-    //        final ParameterTool parameterTool = ExecutionEnvUtil.createParameterTool(args);
     Field modifiersField = TypeExtractor.class.getDeclaredField("registeredTypeInfoFactories");
     modifiersField.setAccessible(true);
     Map<Type, Class<? extends TypeInfoFactory>> registeredTypeInfoFactories =
         (Map<Type, Class<? extends TypeInfoFactory>>) modifiersField.get(null);
     registeredTypeInfoFactories.put(String.class, SOjStringFactory.class);
     modifiersField.set(null, registeredTypeInfoFactories);
+
     // 0.0 Prepare execution environment
     // 0.1 UBI configuration
     // 0.2 Flink configuration
     final StreamExecutionEnvironment executionEnvironment =
         StreamExecutionEnvironment.getExecutionEnvironment();
     executionEnvironment.getConfig().setGlobalJobParameters(parameterTool);
-    //         LookupUtils.uploadFiles(executionEnvironment, params, ubiConfig);
     executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
-    //        executionEnvironment.getConfig().setLatencyTrackingInterval(2000);
-    //        executionEnvironment.setParallelism(1);
 
     // checkpoint settings
     executionEnvironment.enableCheckpointing(
@@ -96,7 +87,7 @@ public class SojournerUBDRTJobUntilSession {
     DataStream<RawEvent> rawEventDataStream =
         executionEnvironment
             .addSource(
-                KafkaConnectorFactoryForSOJ.createKafkaConsumer()
+                KafkaConnectorFactory.createKafkaConsumer()
                     .setStartFromLatest()
                     .assignTimestampsAndWatermarks(
                         new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
@@ -107,7 +98,7 @@ public class SojournerUBDRTJobUntilSession {
                         }))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
-                    ? 30
+                    ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
             .name("Rheos Kafka Consumer");
 
@@ -154,12 +145,16 @@ public class SojournerUBDRTJobUntilSession {
             .map(new UbiSessionToSojSessionMapFunction())
             .name("UbiSession to SojSession");
 
+    DataStream<UbiEvent> ubiEventWithSessionId = ubiSessinDataStream
+        .getSideOutput(mappedEventOutputTag);
+
     // This path is for local test. For production, we should use
     // "hdfs://apollo-rno//user/o_ubi/events/"
-    StreamingFileSink ubiSessionStreamingFileSink = HdfsSinkUtil
-        .createWithParquet("hdfs://apollo-rno//user/o_ubi/sessions/", SojSession.class);
 
-    sojSessionStream.addSink(ubiSessionStreamingFileSink).name("sojSession sink").disableChaining();
+    sojSessionStream.addSink(HdfsSinkUtil.sojSessionSinkWithParquet()).name("sojSession sink")
+        .disableChaining();
+    ubiEventWithSessionId.addSink(HdfsSinkUtil.ubiEventSinkWithParquet()).name("ubiEvent sink")
+        .disableChaining();
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
   }

@@ -9,7 +9,7 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 @Slf4j
 public class AgentIpAttributeAgg
     implements AggregateFunction<
-        UbiSession, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
+    UbiSession, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
 
   private AgentIpIndicators agentIpIndicators;
 

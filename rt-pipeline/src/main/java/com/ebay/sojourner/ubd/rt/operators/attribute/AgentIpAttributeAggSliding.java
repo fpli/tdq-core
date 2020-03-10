@@ -12,7 +12,7 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 @Slf4j
 public class AgentIpAttributeAggSliding
     implements AggregateFunction<
-        AgentIpAttribute, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
+    AgentIpAttribute, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
 
   private AgentIpIndicatorsSliding agentIpIndicators;
   private AgentIpSignatureBotDetector agentIpSignatureBotDetector;

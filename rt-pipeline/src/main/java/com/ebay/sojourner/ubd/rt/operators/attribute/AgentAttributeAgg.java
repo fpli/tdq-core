@@ -12,7 +12,7 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 @Slf4j
 public class AgentAttributeAgg
     implements AggregateFunction<
-        AgentIpAttribute, AgentAttributeAccumulator, AgentAttributeAccumulator> {
+    AgentIpAttribute, AgentAttributeAccumulator, AgentAttributeAccumulator> {
 
   private AgentIndicators agentIndicators;
   private AgentSignatureBotDetector agentSignatureBotDetector;

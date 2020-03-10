@@ -10,8 +10,10 @@ import org.apache.flink.types.Either;
 @Slf4j
 public class DetectableSessionMapFunction
     extends RichMapFunction<UbiSession, Either<UbiEvent, UbiSession>> {
+
   @Override
-  public void open(Configuration conf) throws Exception {}
+  public void open(Configuration conf) throws Exception {
+  }
 
   @Override
   public Either<UbiEvent, UbiSession> map(UbiSession value) throws Exception {

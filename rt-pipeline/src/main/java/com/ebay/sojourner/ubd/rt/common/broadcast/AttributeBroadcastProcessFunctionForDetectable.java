@@ -20,7 +20,8 @@ import org.apache.flink.util.OutputTag;
 @Slf4j
 public class AttributeBroadcastProcessFunctionForDetectable
     extends BroadcastProcessFunction<
-        Either<UbiEvent, UbiSession>, Tuple4<String, Boolean, Set<Integer>, Long>, UbiEvent> {
+    Either<UbiEvent, UbiSession>, Tuple4<String, Boolean, Set<Integer>, Long>, UbiEvent> {
+
   private OutputTag outputTag = null;
   private Counter guidCounter;
   private Counter ipCounter;
@@ -138,13 +139,13 @@ public class AttributeBroadcastProcessFunctionForDetectable
 
       if ((ubiSession.getBotFlagList().contains(221) && ubiSession.getBotFlagList().contains(223))
           || (ubiSession.getBotFlagList().contains(220)
-              && ubiSession.getBotFlagList().contains(222))) {
+          && ubiSession.getBotFlagList().contains(222))) {
         ubiSession.getBotFlagList().add(202);
       }
 
       if ((ubiSession.getBotFlagList().contains(221) && ubiSession.getBotFlagList().contains(223))
           || (ubiSession.getBotFlagList().contains(220)
-              && ubiSession.getBotFlagList().contains(222))) {
+          && ubiSession.getBotFlagList().contains(222))) {
         ubiSession.getBotFlagList().add(210);
       }
 
@@ -176,7 +177,7 @@ public class AttributeBroadcastProcessFunctionForDetectable
               attributeBroadcastStatus.get(signatureId).put(botFlag, expirationTime);
             }
           } else {
-            attributeBroadcastStatus.get(signatureId).put(botFlag,expirationTime);
+            attributeBroadcastStatus.get(signatureId).put(botFlag, expirationTime);
           }
         } else {
           HashMap<Integer, Long> newBotFlagStatus = new HashMap<>();

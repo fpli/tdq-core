@@ -23,6 +23,7 @@ public class PatternEvaluator
         getRuntimeContext()
             .getState(new ValueStateDescriptor<>("lastAction", Types.ENUM(ActionType.class)));
   }
+
   /**
    * Called for each user action. Evaluates the current pattern against the previous and current
    * action of the user.
@@ -33,7 +34,7 @@ public class PatternEvaluator
     // get current pattern from broadcast state
     Pattern pattern =
         ctx.getBroadcastState(
-                new MapStateDescriptor<>("patterns", Types.VOID, Types.POJO(Pattern.class)))
+            new MapStateDescriptor<>("patterns", Types.VOID, Types.POJO(Pattern.class)))
             // access MapState with null as VOID default value
             .get(null);
     // get previous action of current user from keyed state
@@ -49,7 +50,10 @@ public class PatternEvaluator
     // update keyed state and remember action for next pattern evaluation
     prevActionState.update(action.getAction());
   }
-  /** Called for each new pattern. Overwrites the current pattern with the new pattern. */
+
+  /**
+   * Called for each new pattern. Overwrites the current pattern with the new pattern.
+   */
   @Override
   public void processBroadcastElement(
       Pattern pattern, Context ctx, Collector<Tuple2<Long, Pattern>> out) throws Exception {

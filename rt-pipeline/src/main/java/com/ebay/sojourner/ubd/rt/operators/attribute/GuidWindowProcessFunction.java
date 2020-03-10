@@ -14,7 +14,7 @@ import org.apache.flink.util.Collector;
 
 public class GuidWindowProcessFunction
     extends ProcessWindowFunction<
-        GuidAttributeAccumulator, Tuple4<String, Boolean, Set<Integer>, Long>, Tuple, TimeWindow> {
+    GuidAttributeAccumulator, Tuple4<String, Boolean, Set<Integer>, Long>, Tuple, TimeWindow> {
 
   @Override
   public void process(
