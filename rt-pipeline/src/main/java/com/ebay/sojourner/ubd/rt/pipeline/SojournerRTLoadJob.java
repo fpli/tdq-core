@@ -6,6 +6,7 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
@@ -86,7 +87,7 @@ public class SojournerRTLoadJob {
     DataStream<RawEvent> rawEventDataStream =
         executionEnvironment
             .addSource(
-                KafkaConnectorFactoryForSOJ.createKafkaConsumer()
+                KafkaConnectorFactory.createKafkaConsumer()
                     .setStartFromLatest()
                     .assignTimestampsAndWatermarks(
                         new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
@@ -97,7 +98,7 @@ public class SojournerRTLoadJob {
                         }))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
-                    ? 30
+                    ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
             .name("Rheos Kafka Consumer");
 

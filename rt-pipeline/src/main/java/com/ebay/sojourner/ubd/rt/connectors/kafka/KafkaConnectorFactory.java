@@ -16,7 +16,7 @@ public class KafkaConnectorFactory {
 
   //    public static String CLIENT_ID = "82034abc-572d-4b71-82df-c9820ef1627c";
   public static String GROUP_ID = AppEnv.config().getKafka().getGroupId();
-  public static String TOPIC_PATHFINDER_EVENTS = "behavior.pathfinder.events.total";
+  public static String TOPIC_PATHFINDER_EVENTS = AppEnv.config().getKafka().getTopic();;
   public static String BOOTSTRAP_SERVERS =
       String.join(",", AppEnv.config().getKafka().getBootstrapServers());
 
@@ -46,7 +46,7 @@ public class KafkaConnectorFactory {
     props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ByteArrayDeserializer.class.getName());
     props.put(
         ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, RheosEventDeserializer.class.getName());
-    props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+    props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
     //        props.put(ConsumerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
 
     return new FlinkKafkaConsumer<>(
