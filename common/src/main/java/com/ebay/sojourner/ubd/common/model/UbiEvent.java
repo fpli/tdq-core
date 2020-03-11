@@ -25,7 +25,7 @@ public class UbiEvent implements Serializable {
   private int version;
   private int pageId = -1;
   private String pageName;
-  private Long refererHash;
+  private Long refererHash; // String in jetstream
   private Long eventTimestamp;
   private String urlQueryString;
   private ClientData clientData;
@@ -36,14 +36,14 @@ public class UbiEvent implements Serializable {
   private String userId;
   private Long itemId;
   private String flags;
-  private boolean rdt;
+  private boolean rdt; //int in jetstream
   private int regu;
   private String sqr;
   private int staticPageType;
   private int reservedForFuture;
   private String eventAttr;
-  private Long currentImprId;
-  private Long sourceImprId;
+  private Long currentImprId;//ciid in jetstream
+  private Long sourceImprId;//siid in jetstream
   private int cobrand;
   private boolean iframe;
   private String agentInfo;
@@ -56,10 +56,31 @@ public class UbiEvent implements Serializable {
   private boolean partialValidPage = true;
   private long sessionStartTime;
   private long sessionEndTime;
-  private Set<Integer> botFlags = new LinkedHashSet<>();
+  private Set<Integer> botFlags = new LinkedHashSet<>(); // bot in jetstream int
   private long icfBinary;
   private long ingestTime;
   @Getter private long eventCnt;
+
+  //new columns from jetstream
+  private String sid;
+  private long eventCaptureTime;//didn't find logic
+  private String requestCorrelationId;
+  private String pageFamily; // need to lookup
+
+  private String remoteIP;
+  private String appVersion;
+  private String eventFamily;
+  private String eventAction;
+  private String trafficSource;
+  private String osVersion;
+  private String deviceFamily;
+  private String deviceType;
+  private String browserVersion;
+  private String browserFamily;
+  private String osFamily;
+  private String enrichedOsVersion;
+  private String rlogid;
+
   //  private Map<String, Object> counters;
 
   public void updateSessionId() {

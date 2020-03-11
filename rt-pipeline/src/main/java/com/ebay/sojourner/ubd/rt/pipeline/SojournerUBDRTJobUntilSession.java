@@ -110,56 +110,56 @@ public class SojournerUBDRTJobUntilSession {
                     ? 30
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
             .name("Rheos Kafka Consumer");
-
-    // 2. Event Operator
-    // 2.1 Parse and transform RawEvent to UbiEvent
-    // 2.2 Event level bot detection via bot rule
-    DataStream<UbiEvent> ubiEventDataStream =
-        rawEventDataStream
-            .map(new EventMapFunction())
-            .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
-            .name("Event Operator");
-
-    // 3. Session Operator
-    // 3.1 Session window
-    // 3.2 Session indicator accumulation
-    // 3.3 Session Level bot detection (via bot rule & signature)
-    // 3.4 Event level bot detection (via session flag)
-    OutputTag<UbiSession> sessionOutputTag =
-        new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
-    OutputTag<UbiEvent> lateEventOutputTag =
-        new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
-    OutputTag<UbiEvent> mappedEventOutputTag =
-        new OutputTag<>("mapped-event-output-tag", TypeInformation.of(UbiEvent.class));
-    SingleOutputStreamOperator<UbiSession> ubiSessinDataStream =
-        ubiEventDataStream
-            .keyBy("guid")
-            .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-            .allowedLateness(Time.hours(1))
-            .sideOutputLateData(lateEventOutputTag)
-            .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction());
-
-    // Hack here to use MapWithStateWindowOperator instead while bypassing DataStream API which
-    // cannot be enhanced easily since we do not want to modify Flink framework sourcecode.
-    WindowOperatorHelper.enrichWindowOperator(
-        (OneInputTransformation) ubiSessinDataStream.getTransformation(),
-        new UbiEventMapWithStateFunction(),
-        mappedEventOutputTag);
-
-    ubiSessinDataStream.name("Session Operator");
-
-    // UbiSession to SojSession
-    SingleOutputStreamOperator<SojSession> sojSessionStream =
-        ubiSessinDataStream
-            .map(new UbiSessionToSojSessionMapFunction())
-            .name("UbiSession to SojSession");
-
-    // This path is for local test. For production, we should use
-    // "hdfs://apollo-rno//user/o_ubi/events/"
-    StreamingFileSink ubiSessionStreamingFileSink = HdfsSinkUtil
-        .createWithParquet("hdfs://apollo-rno//user/o_ubi/sessions/", SojSession.class);
-
-    sojSessionStream.addSink(ubiSessionStreamingFileSink).name("sojSession sink").disableChaining();
+    rawEventDataStream.print();
+//    // 2. Event Operator
+//    // 2.1 Parse and transform RawEvent to UbiEvent
+//    // 2.2 Event level bot detection via bot rule
+//    DataStream<UbiEvent> ubiEventDataStream =
+//        rawEventDataStream
+//            .map(new EventMapFunction())
+//            .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
+//            .name("Event Operator");
+//
+//    // 3. Session Operator
+//    // 3.1 Session window
+//    // 3.2 Session indicator accumulation
+//    // 3.3 Session Level bot detection (via bot rule & signature)
+//    // 3.4 Event level bot detection (via session flag)
+//    OutputTag<UbiSession> sessionOutputTag =
+//        new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
+//    OutputTag<UbiEvent> lateEventOutputTag =
+//        new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
+//    OutputTag<UbiEvent> mappedEventOutputTag =
+//        new OutputTag<>("mapped-event-output-tag", TypeInformation.of(UbiEvent.class));
+//    SingleOutputStreamOperator<UbiSession> ubiSessinDataStream =
+//        ubiEventDataStream
+//            .keyBy("guid")
+//            .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
+//            .allowedLateness(Time.hours(1))
+//            .sideOutputLateData(lateEventOutputTag)
+//            .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction());
+//
+//    // Hack here to use MapWithStateWindowOperator instead while bypassing DataStream API which
+//    // cannot be enhanced easily since we do not want to modify Flink framework sourcecode.
+//    WindowOperatorHelper.enrichWindowOperator(
+//        (OneInputTransformation) ubiSessinDataStream.getTransformation(),
+//        new UbiEventMapWithStateFunction(),
+//        mappedEventOutputTag);
+//
+//    ubiSessinDataStream.name("Session Operator");
+//
+//    // UbiSession to SojSession
+//    SingleOutputStreamOperator<SojSession> sojSessionStream =
+//        ubiSessinDataStream
+//            .map(new UbiSessionToSojSessionMapFunction())
+//            .name("UbiSession to SojSession");
+//
+//    // This path is for local test. For production, we should use
+//    // "hdfs://apollo-rno//user/o_ubi/events/"
+//    StreamingFileSink ubiSessionStreamingFileSink = HdfsSinkUtil
+//        .createWithParquet("hdfs://apollo-rno//user/o_ubi/sessions/", SojSession.class);
+//
+//    sojSessionStream.addSink(ubiSessionStreamingFileSink).name("sojSession sink").disableChaining();
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
   }
