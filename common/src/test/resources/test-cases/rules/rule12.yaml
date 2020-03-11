@@ -1,5 +1,4 @@
--
-  name: case1
+- name: case1
   type: UbiSession
   input:
     UbiSession:
@@ -11,8 +10,7 @@
         - 12
   expectResult: 12
 
--
-  name: case2
+- name: case2
   type: UbiSession
   input:
     UbiSession:
@@ -24,8 +22,7 @@
         - 0
   expectResult: 0
 
--
-  name: case3
+- name: case3
   type: UbiSession
   input:
     UbiSession:
@@ -37,8 +34,7 @@
         - 0
   expectResult: 0
 
--
-  name: case4
+- name: case4
   type: UbiSession
   input:
     UbiSession:
@@ -50,8 +46,7 @@
         - 0
   expectResult: 0
 
--
-  name: case5
+- name: case5
   type: UbiSession
   input:
     UbiSession:
@@ -63,8 +58,7 @@
         - 0
   expectResult: 0
 
--
-  name: case6
+- name: case6
   type: UbiSession
   input:
     UbiSession:

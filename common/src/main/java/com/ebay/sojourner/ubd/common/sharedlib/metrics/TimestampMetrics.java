@@ -8,10 +8,12 @@ import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
 public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
   private PageIndicator indicator;
 
   @Override
-  public void start(SessionAccumulator sessionAccumulator) {}
+  public void start(SessionAccumulator sessionAccumulator) {
+  }
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
@@ -50,16 +52,16 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     // Fix bug HDMIT-3732 to avoid integer result overflow
     int durationSec =
         (sessionAccumulator.getUbiSession().getStartTimestamp() == null
-                || sessionAccumulator.getUbiSession().getEndTimestamp() == null)
+            || sessionAccumulator.getUbiSession().getEndTimestamp() == null)
             ? 0
             : (int)
                 ((sessionAccumulator.getUbiSession().getEndTimestamp()
-                        - sessionAccumulator.getUbiSession().getStartTimestamp())
+                    - sessionAccumulator.getUbiSession().getStartTimestamp())
                     / 1000000);
     int absDuration =
         (int)
             ((sessionAccumulator.getUbiSession().getAbsEndTimestamp()
-                    - sessionAccumulator.getUbiSession().getAbsStartTimestamp())
+                - sessionAccumulator.getUbiSession().getAbsStartTimestamp())
                 / 1000000);
     sessionAccumulator.getUbiSession().setDurationSec(durationSec);
     sessionAccumulator.getUbiSession().setAbsDuration(absDuration);

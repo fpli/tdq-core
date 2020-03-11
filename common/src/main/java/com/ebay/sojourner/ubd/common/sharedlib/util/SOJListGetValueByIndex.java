@@ -25,7 +25,10 @@ public class SOJListGetValueByIndex {
     String[] vect;
 
     vect = str_vec.split(vec_delimit, -1);
-    if (vec_idx < vect.length) return vect[vec_idx];
-    else return null;
+    if (vec_idx < vect.length) {
+      return vect[vec_idx];
+    } else {
+      return null;
+    }
   }
 }

@@ -12,10 +12,11 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author yunjzhang init version by Daniel: logic from BI sql 2014/4/9 by Daniel: new traffic
- *     source id (30,31) new landing page id (2056089,2057337,2059705) *.yandex.ru to *.yandex.*
- *     roverentry_src_string.mppid > 0 THEN 14 session_details.mppid > 0 THEN 14
+ * source id (30,31) new landing page id (2056089,2057337,2059705) *.yandex.ru to *.yandex.*
+ * roverentry_src_string.mppid > 0 THEN 14 session_details.mppid > 0 THEN 14
  */
 public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
   public static final Long INITIALSESSIONDATE = 3542227200000000L; // 2012-04-01
   public static final Long SESCOND1 = 1000000L;
   public static final Long SECOND8 = 8 * SESCOND1;
@@ -119,7 +120,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
 
     // calculate the traffic source id base on intermedia parameters
     if (("11030".equals(intermediateMetrics.getScEventE())
-            || "11030".equals(intermediateMetrics.getRoverClickE()))
+        || "11030".equals(intermediateMetrics.getRoverClickE()))
         && INITIALSESSIONDATE.compareTo(startTSOnCurrentCobrandSite) <= 0) {
       return 23;
     } else if (intermediateMetrics.getRoverEntryTs() != null
@@ -169,51 +170,51 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
         && intermediateMetrics.getActualKeyword().matches(kijijiStr)) {
       return 9;
     } else if ((!FIVE.equals(firstCobrand)
-            && !NINE.equals(firstCobrand)
-            && !ONE.equals(firstCobrand)
-            && !EIGHT.equals(firstCobrand))
+        && !NINE.equals(firstCobrand)
+        && !ONE.equals(firstCobrand)
+        && !EIGHT.equals(firstCobrand))
         && intermediateMetrics.getRoverEntryTs() != null
         && intermediateMetrics.getRoverEntryTs() <= startTSOnCurrentCobrandSite + SESCOND1
         && ("2".equals(intermediateMetrics.getMpxChannelId())
-            || "14".equals(intermediateMetrics.getMpxChannelId()))
+        || "14".equals(intermediateMetrics.getMpxChannelId()))
         && intermediateMetrics.getActualKeyword().matches(ebayStr)
         && rotSet.contains(intermediateMetrics.getRotId())) {
       return 29;
     } else if ((!FIVE.equals(firstCobrand)
-            && !NINE.equals(firstCobrand)
-            && !ONE.equals(firstCobrand)
-            && !EIGHT.equals(firstCobrand))
+        && !NINE.equals(firstCobrand)
+        && !ONE.equals(firstCobrand)
+        && !EIGHT.equals(firstCobrand))
         && intermediateMetrics.getRoverEntryTs() != null
         && intermediateMetrics.getRoverEntryTs() <= startTSOnCurrentCobrandSite + SESCOND1
         && "25".equals(intermediateMetrics.getMpxChannelId())
         && intermediateMetrics.getActualKeyword().matches(ebayStr)) {
       return 6;
     } else if ((!FIVE.equals(firstCobrand)
-            && !NINE.equals(firstCobrand)
-            && !ONE.equals(firstCobrand)
-            && !EIGHT.equals(firstCobrand))
+        && !NINE.equals(firstCobrand)
+        && !ONE.equals(firstCobrand)
+        && !EIGHT.equals(firstCobrand))
         && intermediateMetrics.getRoverEntryTs() != null
         && intermediateMetrics.getRoverEntryTs() <= startTSOnCurrentCobrandSite + SESCOND1
         && "2".equals(intermediateMetrics.getMpxChannelId())
         && intermediateMetrics.getActualKeyword().matches(ebayStr)) {
       return 7;
     } else if ((!FIVE.equals(firstCobrand)
-            && !NINE.equals(firstCobrand)
-            && !ONE.equals(firstCobrand)
-            && !EIGHT.equals(firstCobrand))
+        && !NINE.equals(firstCobrand)
+        && !ONE.equals(firstCobrand)
+        && !EIGHT.equals(firstCobrand))
         && intermediateMetrics.getRoverEntryTs() != null
         && intermediateMetrics.getRoverEntryTs() <= startTSOnCurrentCobrandSite + SESCOND1
         && "26".equals(intermediateMetrics.getMpxChannelId())
         && intermediateMetrics.getActualKeyword().matches(ebayStr)) {
       return 9;
     } else if ((!FIVE.equals(firstCobrand)
-            && !NINE.equals(firstCobrand)
-            && !ONE.equals(firstCobrand)
-            && !EIGHT.equals(firstCobrand))
+        && !NINE.equals(firstCobrand)
+        && !ONE.equals(firstCobrand)
+        && !EIGHT.equals(firstCobrand))
         && intermediateMetrics.getRoverEntryTs() != null
         && intermediateMetrics.getRoverEntryTs() <= startTSOnCurrentCobrandSite + SESCOND1
         && ("2".equals(intermediateMetrics.getMpxChannelId())
-            || "14".equals(intermediateMetrics.getMpxChannelId()))
+        || "14".equals(intermediateMetrics.getMpxChannelId()))
         && rotSet.contains(intermediateMetrics.getRotId())) {
       return 28;
     } else if (intermediateMetrics.getRoverEntryTs() != null
@@ -287,9 +288,9 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
         && intermediateMetrics.getRefKeyword().matches(kijijiStr)) {
       return 6;
     } else if ((!FIVE.equals(firstCobrand)
-            && !NINE.equals(firstCobrand)
-            && !ONE.equals(firstCobrand)
-            && !EIGHT.equals(firstCobrand))
+        && !NINE.equals(firstCobrand)
+        && !ONE.equals(firstCobrand)
+        && !EIGHT.equals(firstCobrand))
         && "25".equals(intermediateMetrics.getImgMpxChannelId())
         && intermediateMetrics.getRefKeyword().matches(ebayStr)) {
       return 6;
@@ -302,9 +303,9 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
         && intermediateMetrics.getRefKeyword().matches(kijijiStr)) {
       return 7;
     } else if ((!FIVE.equals(firstCobrand)
-            && !NINE.equals(firstCobrand)
-            && !ONE.equals(firstCobrand)
-            && !EIGHT.equals(firstCobrand))
+        && !NINE.equals(firstCobrand)
+        && !ONE.equals(firstCobrand)
+        && !EIGHT.equals(firstCobrand))
         && "2".equals(intermediateMetrics.getImgMpxChannelId())
         && intermediateMetrics.getRefKeyword().matches(ebayStr)) {
       return 7;
@@ -317,9 +318,9 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
         && intermediateMetrics.getRefKeyword().matches(kijijiStr)) {
       return 9;
     } else if ((!FIVE.equals(firstCobrand)
-            && !NINE.equals(firstCobrand)
-            && !ONE.equals(firstCobrand)
-            && !EIGHT.equals(firstCobrand))
+        && !NINE.equals(firstCobrand)
+        && !ONE.equals(firstCobrand)
+        && !EIGHT.equals(firstCobrand))
         && "26".equals(intermediateMetrics.getImgMpxChannelId())
         && intermediateMetrics.getRefKeyword().matches(ebayStr)) {
       return 9;
@@ -361,7 +362,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
     } else if (intermediateMetrics.getRefDomain().matches(".*\\.(google|googleusercontent)\\..*")
         && intermediateMetrics.getRefKeyword().equals("")
         && !SOJGetUrlPath.getUrlPath(intermediateMetrics.getReferrer())
-            .matches("/url|/imgres|/search|/")) {
+        .matches("/url|/imgres|/search|/")) {
       return 24;
     } else if ((ONE.equals(firstCobrand) || EIGHT.equals(firstCobrand))
         && intermediateMetrics.getRefDomain().contains(".google.")
@@ -374,9 +375,9 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
         && intermediateMetrics.getRefKeyword().matches(".*(kijiji|e.*bay.*classified).*")) {
       return 9;
     } else if ((!FIVE.equals(firstCobrand)
-            && !NINE.equals(firstCobrand)
-            && !ONE.equals(firstCobrand)
-            && !EIGHT.equals(firstCobrand))
+        && !NINE.equals(firstCobrand)
+        && !ONE.equals(firstCobrand)
+        && !EIGHT.equals(firstCobrand))
         && intermediateMetrics.getRefDomain().contains(".google.")
         && SOJGetUrlPath.getUrlPath(intermediateMetrics.getReferrer()).startsWith("/products")
         && intermediateMetrics.getRefKeyword().matches(ebayStr)) {

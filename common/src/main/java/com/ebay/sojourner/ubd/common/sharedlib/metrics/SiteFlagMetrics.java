@@ -6,19 +6,20 @@ import com.ebay.sojourner.ubd.common.sharedlib.util.ByteArrayToNum;
 import java.util.Arrays;
 
 public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
   private static final Integer NUMBER_SITE_FLAG = 47;
 
   // idx 0~46 used
   // private BitSet siteFlags = new BitSet();
   private byte[] siteFlags = {
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0
   };
 
   void setSiteFlag(Integer siteId, SessionAccumulator sessionAccumulator) {
@@ -172,7 +173,9 @@ public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("{");
-    for (int i = 0; i < NUMBER_SITE_FLAG - 1; i++) sb.append(siteFlags[i]).append(",");
+    for (int i = 0; i < NUMBER_SITE_FLAG - 1; i++) {
+      sb.append(siteFlags[i]).append(",");
+    }
     sb.append(siteFlags[NUMBER_SITE_FLAG - 1]).append("}");
     return sb.toString();
   }

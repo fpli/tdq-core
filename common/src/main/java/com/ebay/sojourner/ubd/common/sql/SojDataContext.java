@@ -7,6 +7,7 @@ import org.apache.calcite.schema.SchemaPlus;
 import org.apache.calcite.tools.Planner;
 
 public class SojDataContext implements DataContext {
+
   private final Planner planner;
   private SchemaPlus rootSchema;
 

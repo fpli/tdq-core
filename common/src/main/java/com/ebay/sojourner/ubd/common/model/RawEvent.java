@@ -13,7 +13,8 @@ public class RawEvent implements Serializable {
   private ClientData clientData;
   private long ingestTime;
 
-  public RawEvent() {}
+  public RawEvent() {
+  }
 
   public RawEvent(
       RheosHeader rheosHeader,

@@ -9,7 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 public class IcfParser implements FieldParser<RawEvent, UbiEvent> {
 
   @Override
-  public void init() throws Exception {}
+  public void init() throws Exception {
+  }
 
   @Override
   public void parse(RawEvent rawEvent, UbiEvent ubiEvent) throws Exception {

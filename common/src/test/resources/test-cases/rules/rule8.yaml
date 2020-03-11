@@ -1,5 +1,4 @@
--
-  name: case1
+- name: case1
   type: AgentIpAttribute
   input:
     AgentIpAttribute:
@@ -7,8 +6,7 @@
       bbcCount: 5
   expectResult: 0
 
--
-  name: case2
+- name: case2
   type: AgentIpAttribute
   input:
     AgentIpAttribute:

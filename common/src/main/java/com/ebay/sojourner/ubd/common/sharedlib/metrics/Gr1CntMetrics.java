@@ -30,7 +30,8 @@ public class Gr1CntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) throws Exception {}
+  public void end(SessionAccumulator sessionAccumulator) throws Exception {
+  }
 
   @Override
   public void init() throws Exception {

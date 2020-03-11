@@ -11,7 +11,8 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
   private Integer seqNum;
 
   @Override
-  public void init() throws Exception {}
+  public void init() throws Exception {
+  }
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
@@ -41,5 +42,6 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) {}
+  public void end(SessionAccumulator sessionAccumulator) {
+  }
 }

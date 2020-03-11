@@ -12,14 +12,15 @@ import org.apache.kafka.clients.consumer.RoundRobinAssignor;
 import org.apache.kafka.common.config.SaslConfigs;
 import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 
-public class KafkaConnectorFactoryForSOJ {
+public class KafkaConnectorFactoryForRNO {
 
-  public static final String GROUP_ID = AppEnv.config().getKafka().getGroupId();
-  public static final String TOPIC_PATHFINDER_EVENTS = AppEnv.config().getKafka().getTopic();
-  public static final String BOOTSTRAP_SERVERS =
-      String.join(",", AppEnv.config().getKafka().getBootstrapServersForSOJ());
+  public static String GROUP_ID = AppEnv.config().getKafka().getGroupId();
+  public static String TOPIC_PATHFINDER_EVENTS = AppEnv.config().getKafka().getTopic();
+  public static String BOOTSTRAP_SERVERS =
+      String.join(",", AppEnv.config().getKafka().getBootstrapServersForRNO());
 
   public static FlinkKafkaConsumer<RawEvent> createKafkaConsumer() {
+
     Properties props = new Properties();
     props.put("sasl.mechanism", "IAF");
     props.put("security.protocol", "SASL_PLAINTEXT");
@@ -33,7 +34,6 @@ public class KafkaConnectorFactoryForSOJ {
             AppEnv.config().getRheos().getIaf().getEnv());
 
     props.put(SaslConfigs.SASL_JAAS_CONFIG, saslJaasConfig);
-
     props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
     props.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
 
@@ -49,11 +49,11 @@ public class KafkaConnectorFactoryForSOJ {
     props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ByteArrayDeserializer.class.getName());
     props.put(
         ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, RheosEventDeserializer.class.getName());
-    props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+    props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
     //        props.put(ConsumerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
 
     return new FlinkKafkaConsumer<>(
-        TOPIC_PATHFINDER_EVENTS, new SojEventDeserializationSchema(), props);
+        TOPIC_PATHFINDER_EVENTS, new RawEventDeserializationSchema(), props);
   }
 
   public static FlinkKafkaProducer<SojEvent> createKafkaProducer() {

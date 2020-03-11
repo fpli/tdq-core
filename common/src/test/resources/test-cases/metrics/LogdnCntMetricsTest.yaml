@@ -1,5 +1,4 @@
--
-  name: test_signinPageCnt_pass
+- name: test_signinPageCnt_pass
   inputs:
     UbiEvent:
       pageId: 2045330

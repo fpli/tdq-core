@@ -15,6 +15,7 @@ import lombok.Getter;
 
 @Data
 public class UbiEvent implements Serializable {
+
   private String guid;
   private String sessionId = Constants.NO_SESSION_ID;
   private int seqNum;
@@ -60,7 +61,8 @@ public class UbiEvent implements Serializable {
   private long icfBinary;
   private long ingestTime;
   private long generateTime;
-  @Getter private long eventCnt;
+  @Getter
+  private long eventCnt;
   //  private Map<String, Object> counters;
 
   public void updateSessionId() {

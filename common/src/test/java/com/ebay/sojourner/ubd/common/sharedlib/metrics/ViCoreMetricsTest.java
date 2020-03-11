@@ -26,9 +26,12 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(FlagUtils.class)
 public class ViCoreMetricsTest {
 
-  @Mock PageIndicator mockPageIndicator;
-  @Mock UbiEvent ubiEvent;
-  @Mock SessionAccumulator sessionAccumulator;
+  @Mock
+  PageIndicator mockPageIndicator;
+  @Mock
+  UbiEvent ubiEvent;
+  @Mock
+  SessionAccumulator sessionAccumulator;
   private ViCoreMetrics viCoreMetrics;
   private UbiSession ubiSession;
 

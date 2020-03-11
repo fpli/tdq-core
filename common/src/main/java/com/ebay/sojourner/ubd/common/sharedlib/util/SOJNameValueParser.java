@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 
 public class SOJNameValueParser {
+
   public static final String KV_DELIMITER = "&";
   public static final String BLANK_STRING = "";
 
@@ -99,7 +100,9 @@ public class SOJNameValueParser {
         endpos = string.length();
       }
 
-      if (endpos < 0) endpos = string.length() - 1;
+      if (endpos < 0) {
+        endpos = string.length() - 1;
+      }
 
       String[] kvPair = string.substring(startpos + 1, endpos).split("=", 2);
       if (!kvMap.containsKey(kvPair[0])) {

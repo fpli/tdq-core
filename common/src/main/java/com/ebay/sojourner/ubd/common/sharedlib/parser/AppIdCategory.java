@@ -10,6 +10,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 public class AppIdCategory {
+
   public static final Logger log = Logger.getLogger(AppIdCategory.class);
 
   public static final Set<Long> MOBILE_APP = new HashSet<Long>();

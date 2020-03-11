@@ -9,7 +9,9 @@ import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-/** @author kofeng */
+/**
+ * @author kofeng
+ */
 @Slf4j
 public class UBIConfig {
 

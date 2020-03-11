@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 public class BotRule212Test extends BaseRulesTest<UbiSession> {
+
   private BotRule212 botRule212;
   private List<RulesTestCase> rulesTestCaseList;
 

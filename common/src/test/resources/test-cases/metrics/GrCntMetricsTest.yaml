@@ -1,5 +1,4 @@
--
-  name: test_getImPGT_GR
+- name: test_getImPGT_GR
   inputs:
     UbiEvent:
       pageId: 1521826

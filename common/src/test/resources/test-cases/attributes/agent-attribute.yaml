@@ -1,5 +1,4 @@
--
-  name: bot6_scsCount_lt_0
+- name: bot6_scsCount_lt_0
   type: AgentIpAttribute
   input:
     AgentIpAttribute:
@@ -11,8 +10,7 @@
     scsCount: -1
     ipCount: 0
 
--
-  name: bot6_scsCount_gt_0
+- name: bot6_scsCount_gt_0
   type: AgentIpAttribute
   input:
     AgentIpAttribute:
@@ -24,8 +22,7 @@
     scsCount: 1
     ipCount: 1
 
--
-  name: bot202
+- name: bot202
   type: AgentIpAttribute
   input:
     AgentIpAttribute:

@@ -48,7 +48,8 @@ public final class Base64Ebay {
     alphabet[63] = '/';
   }
 
-  private Base64Ebay() {}
+  private Base64Ebay() {
+  }
 
   /**
    * this method uses standard ending character '=' to encode a string
@@ -65,7 +66,7 @@ public final class Base64Ebay {
    *
    * @param byte[] data - the array of bytes to encode
    * @param boolean isStandard, true means to use standard ending char '=', false to use eBay ending
-   *     character '*'. For eBay cookie, use false instead.
+   * character '*'. For eBay cookie, use false instead.
    * @return base64-coded String.
    */
   public static String encode(byte[] data, boolean isStandard) {
@@ -117,7 +118,7 @@ public final class Base64Ebay {
    *
    * @param String strData a base64-encoded string
    * @param boolean isStandard - indicating whether the string was encoded with standard ending
-   *     character("=").
+   * character("=").
    * @return decoded byte array
    */
   public static byte[] decode(String strData, boolean isStandard) {

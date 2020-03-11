@@ -1,7 +1,10 @@
 package com.ebay.sojourner.ubd.common.util;
 
-/** @author weifang. */
+/**
+ * @author weifang.
+ */
 public class MiscUtil {
+
   public static final boolean objEquals(Object obj1, Object obj2) {
     if (obj1 == null) {
       return obj2 == null;

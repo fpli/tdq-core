@@ -15,13 +15,16 @@ public class UdfManager {
   }
 
   public static class SquareFunction {
+
     public int eval(int a) {
       return a * a;
     }
   }
 
   public static class FirstFunction {
-    public FirstFunction() {}
+
+    public FirstFunction() {
+    }
 
     public String init() {
       return "";

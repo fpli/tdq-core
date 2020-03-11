@@ -6,22 +6,19 @@ import com.ebay.sojourner.ubd.common.util.BotFilter;
 /**
  * The aggregation
  *
- * @param <Source>
- * @param <Target>
  * @author kofeng
  */
 public abstract class AbstractIndicator<Source, Target> implements Aggregator<Source, Target> {
 
   protected BotFilter botFilter;
 
-  /** @param target */
+  /**
+   *
+   */
   abstract boolean filter(Source source, Target target) throws Exception;
 
   /**
    * Feed the source to be aggregated for the target.
-   *
-   * @param source
-   * @param target
    */
   abstract void feed(Source source, Target target, boolean isNeeded) throws Exception;
 

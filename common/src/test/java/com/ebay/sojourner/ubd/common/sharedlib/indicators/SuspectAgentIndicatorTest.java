@@ -18,7 +18,8 @@ class SuspectAgentIndicatorTest {
   AgentIpAttributeAccumulator agentIpAttributeAccumulator;
   AgentAttributeAccumulator agentAttributeAccumulator;
   UbiSession ubiSession;
-  @Mock UbiBotFilter mockBotFilter;
+  @Mock
+  UbiBotFilter mockBotFilter;
 
   @BeforeEach
   void setup() {

@@ -4,7 +4,8 @@ public class SojReflectiveDataSource {
 
   public SojReflectiveEvent[] ubiEvents = {new SojReflectiveEvent.Builder().build()};
 
-  public SojReflectiveDataSource() {}
+  public SojReflectiveDataSource() {
+  }
 
   public void updateData(SojReflectiveEvent newEvent) {
     ubiEvents[0] = newEvent;

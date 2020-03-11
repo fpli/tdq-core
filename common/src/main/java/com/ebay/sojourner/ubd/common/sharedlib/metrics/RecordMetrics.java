@@ -6,7 +6,9 @@ public abstract class RecordMetrics<Source, Target> implements Aggregator<Source
 
   protected LinkedHashSet<FieldMetrics<Source, Target>> fieldMetrics = new LinkedHashSet<>();
 
-  /** Initialize the field metrics for being used in aggregator operations. */
+  /**
+   * Initialize the field metrics for being used in aggregator operations.
+   */
   public abstract void initFieldMetrics();
 
   public void init() throws Exception {

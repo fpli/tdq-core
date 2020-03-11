@@ -45,7 +45,8 @@ public abstract class BaseMetricsTest {
   protected List<DynamicTest> generateDynamicTests(
       JsonNode yaml, FieldMetrics<UbiEvent, SessionAccumulator> fieldMetrics) throws IOException {
     List<MetricsTestCase> testCases =
-        objectMapper.readValue(yaml.toString(), new TypeReference<List<MetricsTestCase>>() {});
+        objectMapper.readValue(yaml.toString(), new TypeReference<List<MetricsTestCase>>() {
+        });
 
     List<DynamicTest> dynamicTestList = Lists.newArrayList();
 

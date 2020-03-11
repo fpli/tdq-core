@@ -335,7 +335,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
       String transactionTPayload = URLEncoder.encode(tpStr.toString(), "UTF-8");
       return encodePayloadForSpecialCharacters(transactionTPayload);
     } catch (UnsupportedEncodingException e) {
-      log.error("encoding failed:"+e);
+      log.error("encoding failed:" + e);
     }
     return null;
   }

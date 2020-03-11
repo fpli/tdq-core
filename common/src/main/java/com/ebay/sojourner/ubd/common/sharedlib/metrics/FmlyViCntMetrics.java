@@ -53,7 +53,8 @@ public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) throws Exception {}
+  public void end(SessionAccumulator sessionAccumulator) throws Exception {
+  }
 
   private String getImPGT(UbiEvent event) {
     if (event.getPageId() != -1) {
@@ -65,7 +66,7 @@ public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
       if (event.getPageId() == 2066804
           && StringUtils.isNotBlank(event.getUrlQueryString())
           && (event.getUrlQueryString().startsWith("/itm/like")
-              || event.getUrlQueryString().startsWith("/itm/future"))) {
+          || event.getUrlQueryString().startsWith("/itm/future"))) {
         return "VI";
       }
       if (event.getPageId() == 1521826 || event.getPageId() == 2066804) {

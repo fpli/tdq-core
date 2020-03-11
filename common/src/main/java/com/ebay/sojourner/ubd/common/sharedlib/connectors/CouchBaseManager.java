@@ -17,6 +17,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 public class CouchBaseManager {
+
   private static final String serverName = "127.0.0.1";
   private static final String USER_NAME = "Administrator";
   private static final String USER_PASS = "111111";

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 public class CobrandMetricsTest extends BaseMetricsTest {
+
   private CobrandMetrics cobrandMetrics;
   private JsonNode yaml;
 

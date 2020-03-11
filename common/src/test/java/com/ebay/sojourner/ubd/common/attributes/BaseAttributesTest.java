@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
 
 public class BaseAttributesTest<T> {
+
   private AttributeTestInputObjects attributesInput;
   private AttributesTestCase attributesTestCase;
   private List<AttributesTestCase> attributesTestCaseList;

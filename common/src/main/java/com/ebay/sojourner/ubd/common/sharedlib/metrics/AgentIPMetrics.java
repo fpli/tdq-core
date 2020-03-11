@@ -102,8 +102,8 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
         .setExInternalIp(
             (sessionAccumulator.getUbiSession().getExternalIp() == null)
                 ? (sessionAccumulator.getUbiSession().getExternalIp2() == null
-                    ? sessionAccumulator.getUbiSession().getInternalIp()
-                    : sessionAccumulator.getUbiSession().getExternalIp2())
+                ? sessionAccumulator.getUbiSession().getInternalIp()
+                : sessionAccumulator.getUbiSession().getExternalIp2())
                 : sessionAccumulator.getUbiSession().getExternalIp());
   }
 

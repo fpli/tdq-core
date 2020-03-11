@@ -17,9 +17,12 @@ import org.mockito.Mock;
 
 public class PageCntMetricsTest {
 
-  @Mock PageIndicator mockPageIndicator;
-  @Mock UbiEvent ubiEvent;
-  @Mock SessionAccumulator sessionAccumulator;
+  @Mock
+  PageIndicator mockPageIndicator;
+  @Mock
+  UbiEvent ubiEvent;
+  @Mock
+  SessionAccumulator sessionAccumulator;
   private PageCntMetrics pageCntMetrics;
   private UbiSession ubiSession;
 

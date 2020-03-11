@@ -7,6 +7,7 @@ import com.ebay.sojourner.ubd.common.sharedlib.util.ByteArrayToNum;
 import org.apache.commons.lang3.StringUtils;
 
 public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
   private static final Integer EXCEPTION_NULL_INTEGER_VALUE = -99;
   private static final Long DEFAULTDATE = 0L;
   private static final Integer NUMBER_ATTRIBUTE_FLAG = 13;
@@ -22,7 +23,9 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
      * Application_Payload.contain('&Motors20Group='|'&m2g=' )
      */
     Long eventDate = event.getSojDataDt();
-    if (eventDate == null) eventDate = DEFAULTDATE;
+    if (eventDate == null) {
+      eventDate = DEFAULTDATE;
+    }
     String applicationPayload = event.getApplicationPayload();
     String webServer = event.getWebServer();
     String referrer = event.getReferrer();
@@ -30,10 +33,18 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
     String userId = event.getUserId();
 
     // replace null with default value
-    if (applicationPayload == null) applicationPayload = "";
-    if (webServer == null) webServer = "";
-    if (referrer == null) referrer = "";
-    if (pageId == null) pageId = EXCEPTION_NULL_INTEGER_VALUE;
+    if (applicationPayload == null) {
+      applicationPayload = "";
+    }
+    if (webServer == null) {
+      webServer = "";
+    }
+    if (referrer == null) {
+      referrer = "";
+    }
+    if (pageId == null) {
+      pageId = EXCEPTION_NULL_INTEGER_VALUE;
+    }
     // update user list
     if (StringUtils.isNotBlank(userId)
         && sessionAccumulator.getUbiSession().getUserIdSet().size() < 3) {
@@ -64,7 +75,7 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
 
     if (pageId == 2588
         && (referrer.indexOf("http://www.express.ebay") >= 0
-            || referrer.indexOf("http://www.ebayexpress") >= 0)) {
+        || referrer.indexOf("http://www.ebayexpress") >= 0)) {
       sessionAccumulator.getUbiSession().getAttributes().isEbxRef = true;
     }
 
@@ -100,7 +111,9 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
   void flagProcess(Attributes attributes, SessionAccumulator sessionAccumulator) {
     // 13 Flags except 0 and 10
     byte[] attributeFlags = sessionAccumulator.getUbiSession().getAttributeFlags();
-    if (attributes.isCustRule) attributeFlags[1] = 1;
+    if (attributes.isCustRule) {
+      attributeFlags[1] = 1;
+    }
 
     if (attributes.isWeb_ee || attributes.isSofe) {
       attributeFlags[3] = 1;
@@ -110,7 +123,9 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
       attributeFlags[4] = 1;
     }
 
-    if (attributes.isEbxRef) attributeFlags[5] = 1;
+    if (attributes.isEbxRef) {
+      attributeFlags[5] = 1;
+    }
 
     if (attributes.isAbvar) {
       attributeFlags[7] = 1;
@@ -135,7 +150,8 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
   }
 
   @Override
-  public void init() throws Exception {}
+  public void init() throws Exception {
+  }
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {

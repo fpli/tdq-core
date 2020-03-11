@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class SqrParserTest {
+
   private static final Logger logger = Logger.getLogger(SqrParserTest.class);
 
   private static UbiEvent ubiEvent = null;

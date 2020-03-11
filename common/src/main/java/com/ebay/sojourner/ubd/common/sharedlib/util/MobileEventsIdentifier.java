@@ -32,6 +32,7 @@ public class MobileEventsIdentifier {
       }
     }
   }
+
   public boolean isMobileEvent(UbiEvent event) {
     String agent = event.getAgentInfo();
     if (StringUtils.isNotBlank(agent)) {

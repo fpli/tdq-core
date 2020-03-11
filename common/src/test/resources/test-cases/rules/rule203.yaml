@@ -1,5 +1,4 @@
--
-  name: case1
+- name: case1
   type: UbiSession
   input:
     UbiSession:
@@ -9,8 +8,7 @@
       firstSiteId:
   expectResult: 203
 
--
-  name: case2
+- name: case2
   type: UbiSession
   input:
     UbiSession:
@@ -20,8 +18,7 @@
       firstSiteId:
   expectResult: 0
 
--
-  name: case3
+- name: case3
   type: UbiSession
   input:
     UbiSession:

@@ -44,15 +44,19 @@ class RecordMetricsTest {
   class TestFieldMetrics implements FieldMetrics<String, String> {
 
     @Override
-    public void init() throws Exception {}
+    public void init() throws Exception {
+    }
 
     @Override
-    public void start(String s) throws Exception {}
+    public void start(String s) throws Exception {
+    }
 
     @Override
-    public void feed(String s, String s2) throws Exception {}
+    public void feed(String s, String s2) throws Exception {
+    }
 
     @Override
-    public void end(String s) throws Exception {}
+    public void end(String s) throws Exception {
+    }
   }
 }

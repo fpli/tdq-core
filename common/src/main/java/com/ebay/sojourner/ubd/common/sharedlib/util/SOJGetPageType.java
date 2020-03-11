@@ -50,7 +50,7 @@ public class SOJGetPageType {
           }
           if (!(id == 2499 || id == 2501)
               && (SOJExtractFlag.extractFlag(flags, 6) == 1
-                  || SOJExtractFlag.extractFlag(flags, 48) == 1)
+              || SOJExtractFlag.extractFlag(flags, 48) == 1)
               && SOJExtractFlag.extractFlag(flags, 47) != 1) {
             return 5;
           }
@@ -78,15 +78,15 @@ public class SOJGetPageType {
       default:
         if ((id == 1637 || id == 1638)
             && (SOJExtractFlag.extractFlag(flags, 78) == 1
-                || SOJExtractFlag.extractFlag(flags, 237) == 1
-                || SOJExtractFlag.extractFlag(flags, 13) == 1)) {
+            || SOJExtractFlag.extractFlag(flags, 237) == 1
+            || SOJExtractFlag.extractFlag(flags, 13) == 1)) {
           return 0;
         } else if ((id == 3286
-                || id == 4506
-                || id == 3756
-                || id == 4737
-                || id == 4011
-                || id == 4978)
+            || id == 4506
+            || id == 3756
+            || id == 4737
+            || id == 4011
+            || id == 4978)
             && SOJExtractFlag.extractFlag(flags, 267) == 1) {
           return 0;
         } else {

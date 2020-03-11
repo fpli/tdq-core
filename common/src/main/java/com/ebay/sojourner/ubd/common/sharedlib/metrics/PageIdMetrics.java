@@ -7,6 +7,7 @@ import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
 public class PageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
   private static final Integer ZERO = 0;
   private PageIndicator indicator = null;
 

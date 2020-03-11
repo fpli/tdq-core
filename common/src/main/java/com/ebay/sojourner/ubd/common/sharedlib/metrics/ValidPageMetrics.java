@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author kofeng
  */
 public class ValidPageMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
   private Set<Integer> invalidPageIds;
 
   @Override
@@ -41,13 +42,13 @@ public class ValidPageMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     int csTracking = 0;
     if (StringUtils.isNotBlank(event.getUrlQueryString())
         && (event.getUrlQueryString().startsWith("/roverimp")
-            || event.getUrlQueryString().contains("SojPageView"))) {
+        || event.getUrlQueryString().contains("SojPageView"))) {
       csTracking = 1;
     }
     if (event.isPartialValidPage()
         && !event.isIframe()
         && ((event.getPageId() != Integer.MIN_VALUE && !invalidPageIds.contains(event.getPageId()))
-            || csTracking == 0)) {
+        || csTracking == 0)) {
       sessionAccumulator
           .getUbiSession()
           .setValidPageCnt(sessionAccumulator.getUbiSession().getValidPageCnt() + 1);
@@ -55,5 +56,6 @@ public class ValidPageMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) throws Exception {}
+  public void end(SessionAccumulator sessionAccumulator) throws Exception {
+  }
 }

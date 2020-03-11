@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class SOJTS2Date {
+
   // the offset align with UTC-7
   public static final long OFFSET =
       2208963600000000L; // 25567L *24 * 3600 * 1000 * 1000 - 7 * 3600 * 1000 * 1000;
@@ -17,8 +18,6 @@ public class SOJTS2Date {
 
   /**
    * Get Sojourner default Calendar for being used.
-   *
-   * @return
    */
   public static Calendar getCalender() {
     return Calendar.getInstance(TimeZone.getTimeZone(EBAY_TIMEZONE), Locale.US);

@@ -1,5 +1,4 @@
--
-  name: test_findFirst_clientIPNotNull
+- name: test_findFirst_clientIPNotNull
   inputs:
     UbiEvent:
       clientIP: "1.1.1.1"
@@ -14,8 +13,7 @@
       clientIp: "1.1.1.1"
       agentInfo: "I am an agent"
 
--
-  name: test_rdt_iframe_findFirst
+- name: test_rdt_iframe_findFirst
   inputs:
     UbiEvent:
       rdt: false
@@ -33,8 +31,7 @@
       agentInfo: "I am an agent"
       findFirst: true
 
--
-  name: test_partialValidPage
+- name: test_partialValidPage
   inputs:
     UbiEvent:
       rdt: false

@@ -1,6 +1,7 @@
 package com.ebay.sojourner.ubd.common.util;
 
 public class BotRules {
+
   // Intraday BOT Flag
   public static final int NON_BOT_FLAG = 0;
   public static final int SPIDER_BOT_FLAG = 1;

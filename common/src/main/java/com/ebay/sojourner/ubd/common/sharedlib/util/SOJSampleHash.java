@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class SOJSampleHash {
+
   public static final String MD5_ALGORITHM = "MD5";
   private static MessageDigest msgDigest;
 

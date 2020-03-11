@@ -8,7 +8,7 @@ import com.ebay.sojourner.ubd.rt.common.broadcast.AttributeBroadcastProcessFunct
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForRNO;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAggSliding;
@@ -100,7 +100,7 @@ public class SojournerUBDRTJob {
     DataStream<RawEvent> rawEventDataStream =
         executionEnvironment
             .addSource(
-                KafkaConnectorFactory.createKafkaConsumer()
+                KafkaConnectorFactoryForRNO.createKafkaConsumer()
                     .setStartFromLatest()
                     .assignTimestampsAndWatermarks(
                         new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {

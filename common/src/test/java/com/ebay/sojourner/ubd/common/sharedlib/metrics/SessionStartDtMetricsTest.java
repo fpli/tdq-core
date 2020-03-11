@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 public class SessionStartDtMetricsTest extends BaseMetricsTest {
+
   private SessionStartDtMetrics sessionStartDtMetrics;
   private JsonNode yaml;
 

@@ -30,7 +30,8 @@ public class ViCoreMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) {}
+  public void end(SessionAccumulator sessionAccumulator) {
+  }
 
   @Override
   public void init() throws Exception {

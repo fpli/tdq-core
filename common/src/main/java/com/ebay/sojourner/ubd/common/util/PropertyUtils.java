@@ -57,10 +57,6 @@ public class PropertyUtils {
 
   /**
    * Return the values with sequential order by splitting property value with the delimiter
-   *
-   * @param property
-   * @param delimiter
-   * @return
    */
   public static Collection<String> parseProperty(String property, String delimiter) {
     Collection<String> pageIdCollection = new ArrayList<String>();

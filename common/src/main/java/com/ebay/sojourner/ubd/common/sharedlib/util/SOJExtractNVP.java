@@ -52,7 +52,9 @@ public class SOJExtractNVP {
         // if not next delimiter, get the max position
         endpos = value.length();
       }
-      if (endpos < 0) endpos = value.length() - 1;
+      if (endpos < 0) {
+        endpos = value.length() - 1;
+      }
       String[] kvPair = value.substring(startpos, endpos).split(V_DELIMITER, 2);
       return BLANK_STRING.equals(kvPair[1]) ? null : kvPair[1];
     }

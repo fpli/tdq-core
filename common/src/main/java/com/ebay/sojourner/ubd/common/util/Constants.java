@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.common.util;
 import java.io.File;
 
 public class Constants {
+
   // Version Control for POJO
   public static final int SESSION_VERSION = 3;
   public static final int EVENT_VERSION = 3;
@@ -28,7 +29,7 @@ public class Constants {
           .append(File.pathSeparator)
           .toString();
   public static final char[] HEX_DIGITS =
-      new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+      new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
   public static final String NO_SESSION_ID = "NO_SESSION_ID";
   public static final long NO_TIMESTAMP = Long.MIN_VALUE;
   public static final String DEFAULT_SESSION_FILE_NAME = "session";

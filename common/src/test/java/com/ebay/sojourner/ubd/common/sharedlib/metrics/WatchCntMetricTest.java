@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 public class WatchCntMetricTest extends BaseMetricsTest {
+
   private WatchCntMetric watchCntMetric;
   private JsonNode yaml;
 

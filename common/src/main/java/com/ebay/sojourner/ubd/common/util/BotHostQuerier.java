@@ -3,8 +3,11 @@ package com.ebay.sojourner.ubd.common.util;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/** @author weifang. */
+/**
+ * @author weifang.
+ */
 public class BotHostQuerier {
+
   private final ExecutorService executor;
 
   public BotHostQuerier(int threadPoolSize) {
@@ -25,6 +28,7 @@ public class BotHostQuerier {
   }
 
   public interface Callback {
+
     void postProcess(String ip, boolean isBotIp);
   }
 }

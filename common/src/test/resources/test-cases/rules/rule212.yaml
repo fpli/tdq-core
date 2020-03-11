@@ -1,13 +1,11 @@
--
-  name: case1
+- name: case1
   type: UbiSession
   input:
     UbiSession:
       validPageCnt: 4000
   expectResult: 212
 
--
-  name: case2
+- name: case2
   type: UbiSession
   input:
     UbiSession:

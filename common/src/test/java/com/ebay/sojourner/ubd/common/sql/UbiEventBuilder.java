@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.common.sql;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 
 public class UbiEventBuilder {
+
   private String agentInfo;
   private int staticPageType;
   private int pageId;

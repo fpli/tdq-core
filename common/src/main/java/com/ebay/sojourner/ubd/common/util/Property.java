@@ -6,6 +6,7 @@ package com.ebay.sojourner.ubd.common.util;
  * @author kofeng
  */
 public class Property {
+
   // --------------------- UBI Property File -------------------------------------
   // Session properties
   public static final String SESSION_IDLE_TIMEOUT = "session.idleTimeOut";

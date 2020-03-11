@@ -4,8 +4,11 @@ import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
 
-/** @author yunjzhang */
+/**
+ * @author yunjzhang
+ */
 public class FirstMappedUserIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
   private static final Integer ONE = 1;
 
   @Override
@@ -13,7 +16,9 @@ public class FirstMappedUserIdMetrics implements FieldMetrics<UbiEvent, SessionA
     sessionAccumulator.getUbiSession().setFirstMappedUserId(null);
   }
 
-  /** get first valid bu tag in application_payload of valid events */
+  /**
+   * get first valid bu tag in application_payload of valid events
+   */
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
     String bestGuessUserId = null;
@@ -38,7 +43,8 @@ public class FirstMappedUserIdMetrics implements FieldMetrics<UbiEvent, SessionA
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) {}
+  public void end(SessionAccumulator sessionAccumulator) {
+  }
 
   @Override
   public void init() throws Exception {

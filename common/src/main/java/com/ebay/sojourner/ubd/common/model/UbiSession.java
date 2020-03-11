@@ -9,6 +9,7 @@ import lombok.Data;
 
 @Data
 public class UbiSession implements Serializable, Cloneable {
+
   private Long sojDataDt;
   private String guid;
   private String sessionId;
@@ -85,8 +86,9 @@ public class UbiSession implements Serializable, Cloneable {
   private Set<String> userIdSet = new HashSet<>();
   private Attributes attributes = new Attributes();
   private byte[] attributeFlags = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   };
   private int seqNum;
   private IntermediateMetrics intermediateMetrics;

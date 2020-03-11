@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class FindingFlagParserTest {
+
   private static final Logger logger = Logger.getLogger(FindingFlagParserTest.class);
 
   private static UbiEvent ubiEvent = null;

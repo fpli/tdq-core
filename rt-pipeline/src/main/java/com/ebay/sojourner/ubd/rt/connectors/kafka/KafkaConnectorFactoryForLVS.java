@@ -4,36 +4,31 @@ import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import io.ebay.rheos.schema.avro.RheosEventDeserializer;
+import java.util.Arrays;
 import java.util.Properties;
+import java.util.stream.Collectors;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.RoundRobinAssignor;
-import org.apache.kafka.common.config.SaslConfigs;
 import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 
-public class KafkaConnectorFactoryForSOJ {
+public class KafkaConnectorFactoryForLVS {
 
-  public static final String GROUP_ID = AppEnv.config().getKafka().getGroupId();
-  public static final String TOPIC_PATHFINDER_EVENTS = AppEnv.config().getKafka().getTopic();
-  public static final String BOOTSTRAP_SERVERS =
-      String.join(",", AppEnv.config().getKafka().getBootstrapServersForSOJ());
+  public static String GROUP_ID = AppEnv.config().getKafka().getGroupId();
+  public static String TOPIC_PATHFINDER_EVENTS = AppEnv.config().getKafka().getTopic();
+  public static String BOOTSTRAP_SERVERS =
+      Arrays.asList(
+          "rheos-kafka-proxy-1.stratus.lvs.ebay.com:9092",
+          "rheos-kafka-proxy-2.stratus.lvs.ebay.com:9092",
+          "rheos-kafka-proxy-3.stratus.lvs.ebay.com:9092",
+          "rheos-kafka-proxy-4.stratus.lvs.ebay.com:9092",
+          "rheos-kafka-proxy-5.stratus.lvs.ebay.com:9092")
+          .stream().collect(Collectors.joining(","));
 
   public static FlinkKafkaConsumer<RawEvent> createKafkaConsumer() {
+
     Properties props = new Properties();
-    props.put("sasl.mechanism", "IAF");
-    props.put("security.protocol", "SASL_PLAINTEXT");
-
-    final String saslJaasConfig =
-        String.format(
-            "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId="
-                + "\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" "
-                + "iafSecret=\"%s\" iafEnv=\"%s\";",
-            AppEnv.config().getRheos().getIaf().getSecret(),
-            AppEnv.config().getRheos().getIaf().getEnv());
-
-    props.put(SaslConfigs.SASL_JAAS_CONFIG, saslJaasConfig);
-
     props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
     props.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
 
@@ -49,11 +44,10 @@ public class KafkaConnectorFactoryForSOJ {
     props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ByteArrayDeserializer.class.getName());
     props.put(
         ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, RheosEventDeserializer.class.getName());
-    props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-    //        props.put(ConsumerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
+    props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
 
     return new FlinkKafkaConsumer<>(
-        TOPIC_PATHFINDER_EVENTS, new SojEventDeserializationSchema(), props);
+        TOPIC_PATHFINDER_EVENTS, new RawEventDeserializationSchema(), props);
   }
 
   public static FlinkKafkaProducer<SojEvent> createKafkaProducer() {

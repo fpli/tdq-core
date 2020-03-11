@@ -109,7 +109,8 @@ public class SqlEventRule implements Rule<UbiEvent> {
   }
 
   @Override
-  public void init() {}
+  public void init() {
+  }
 
   @Override
   public int getBotFlag(UbiEvent ubiEvent) {

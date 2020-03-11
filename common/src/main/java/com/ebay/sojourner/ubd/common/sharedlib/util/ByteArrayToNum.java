@@ -1,6 +1,7 @@
 package com.ebay.sojourner.ubd.common.sharedlib.util;
 
 public class ByteArrayToNum {
+
   public static final int ARRAY_LENGTH = 64;
 
   public static int getInt(byte[] b64) {

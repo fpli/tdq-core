@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class GuidAttributeAccumulator {
+
   private GuidAttribute guidAttribute;
   private HashMap<Integer, Integer> botFlagStatus = new HashMap<>();
 

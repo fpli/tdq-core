@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 public class BotRule5Test extends BaseRulesTest<AgentIpAttribute> {
+
   private BotRule5 botRule5;
   private List<RulesTestCase> rulesTestCaseList;
 

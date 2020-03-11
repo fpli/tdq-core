@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 
 // FIXME: refactor this class
 public class IntermediateMetrics implements Serializable {
+
   private static final String CHANNEL = "chnl";
   private static final String EUID = "euid";
   private static final String MPPID = "mppid";
@@ -911,7 +912,7 @@ public class IntermediateMetrics implements Serializable {
                       SOJGetUrlPath.getUrlPath(
                           ("http://x.ebay.com"
                               + SOJURLDecodeEscape.javaNetUrlDecode(
-                                  event.getUrlQueryString(), "UTF-8"))),
+                              event.getUrlQueryString(), "UTF-8"))),
                       "/",
                       5));
           return channel;
@@ -980,9 +981,9 @@ public class IntermediateMetrics implements Serializable {
               SOJGetUrlParams.getUrlParams(
                   "http://www.gooogle.com"
                       + SOJURLDecodeEscape.javaNetUrlDecode(
-                          SOJNameValueParser.getTagValue(
-                              SOJGetUrlParams.getUrlParams(url2Parse), PREV),
-                          "UTF-8")),
+                      SOJNameValueParser.getTagValue(
+                          SOJGetUrlParams.getUrlParams(url2Parse), PREV),
+                      "UTF-8")),
               "q");
     } else if (SOJNameValueParser.getTagValue(SOJGetUrlParams.getUrlParams(url2Parse), "q")
         != null) {
@@ -1305,17 +1306,17 @@ public class IntermediateMetrics implements Serializable {
       try {
         sspagename =
             SOJNameValueParser.getTagValue(
-                    SOJGetUrlParams.getUrlParams(
-                        "http://x.ebay.com"
-                            + SOJURLDecodeEscape.javaNetUrlDecode(
-                                    urlQueryString
-                                        .replace("_W0QQ", "?")
-                                        .replace("QQ", "&")
-                                        .replace('Z', '=')
-                                        .replace('Q', '%'),
-                                    "UTF-8")
-                                .toLowerCase()),
-                    "sspagename")
+                SOJGetUrlParams.getUrlParams(
+                    "http://x.ebay.com"
+                        + SOJURLDecodeEscape.javaNetUrlDecode(
+                        urlQueryString
+                            .replace("_W0QQ", "?")
+                            .replace("QQ", "&")
+                            .replace('Z', '=')
+                            .replace('Q', '%'),
+                        "UTF-8")
+                        .toLowerCase()),
+                "sspagename")
                 .toUpperCase();
       } catch (NullPointerException e) {
         sspagename = "";
@@ -1324,9 +1325,9 @@ public class IntermediateMetrics implements Serializable {
       try {
         sspagename =
             SOJNameValueParser.getTagValue(
-                    SOJGetUrlParams.getUrlParams(
-                        "http://x.ebay.com" + urlQueryString.toLowerCase()),
-                    "sspagename")
+                SOJGetUrlParams.getUrlParams(
+                    "http://x.ebay.com" + urlQueryString.toLowerCase()),
+                "sspagename")
                 .toUpperCase();
       } catch (NullPointerException e) {
         sspagename = "";
@@ -1492,7 +1493,7 @@ public class IntermediateMetrics implements Serializable {
         refKeyword = "ebay";
       } else if (refDomain.matches("(.*aolsearch.*)|(.*search\\.aol\\..*)")
           && SOJNameValueParser.getTagValue(SOJGetUrlParams.getUrlParams(referrer), QUERY)
-              != null) {
+          != null) {
         refKeyword = SOJNameValueParser.getTagValue(SOJGetUrlParams.getUrlParams(referrer), QUERY);
       } else if (referrer.matches(".*google.*/imgres\\?.*prev=.*")) {
         refKeyword =
@@ -1500,9 +1501,9 @@ public class IntermediateMetrics implements Serializable {
                 SOJGetUrlParams.getUrlParams(
                     "http://www.gooogle.com"
                         + SOJURLDecodeEscape.javaNetUrlDecode(
-                            SOJNameValueParser.getTagValue(
-                                SOJGetUrlParams.getUrlParams(referrer), PREV),
-                            "UTF-8")),
+                        SOJNameValueParser.getTagValue(
+                            SOJGetUrlParams.getUrlParams(referrer), PREV),
+                        "UTF-8")),
                 "q");
       } else if (referrer.endsWith("yahoo.com/?p=us")) {
         refKeyword = "";
