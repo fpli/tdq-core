@@ -6,7 +6,9 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForLVS;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForRNO;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSLC;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
@@ -69,7 +71,7 @@ public class SojournerRTLoadJob {
     // 1. Rheos Consumer
     // 1.1 Consume RawEvent from Rheos PathFinder topic(RNO/LVS/SLC)
     // 1.2 Assign timestamps and emit watermarks.
-    DataStream<RawEvent> rawEventDataStream =
+    DataStream<RawEvent> rawEventDataStreamForRNO =
         executionEnvironment
             .addSource(
                 KafkaConnectorFactoryForRNO.createKafkaConsumer()
@@ -87,7 +89,46 @@ public class SojournerRTLoadJob {
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
             .name("Rheos Kafka Consumer For RNO");
 
+    DataStream<RawEvent> rawEventDataStreamForSLC =
+        executionEnvironment
+            .addSource(
+                KafkaConnectorFactoryForSLC.createKafkaConsumer()
+                    .setStartFromLatest()
+                    .assignTimestampsAndWatermarks(
+                        new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
+                          @Override
+                          public long extractTimestamp(RawEvent element) {
+                            return element.getRheosHeader().getEventCreateTimestamp();
+                          }
+                        }))
+            .setParallelism(
+                AppEnv.config().getFlink().getApp().getSourceParallelism() == null
+                    ? 100
+                    : AppEnv.config().getFlink().getApp().getSourceParallelism())
+            .name("Rheos Kafka Consumer For SLC");
+
+    DataStream<RawEvent> rawEventDataStreamForLVS =
+        executionEnvironment
+            .addSource(
+                KafkaConnectorFactoryForLVS.createKafkaConsumer()
+                    .setStartFromLatest()
+                    .assignTimestampsAndWatermarks(
+                        new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
+                          @Override
+                          public long extractTimestamp(RawEvent element) {
+                            return element.getRheosHeader().getEventCreateTimestamp();
+                          }
+                        }))
+            .setParallelism(
+                AppEnv.config().getFlink().getApp().getSourceParallelism() == null
+                    ? 100
+                    : AppEnv.config().getFlink().getApp().getSourceParallelism())
+            .name("Rheos Kafka Consumer For LVS");
+
     // union three DC data
+    DataStream<RawEvent> rawEventDataStream = rawEventDataStreamForRNO
+        .union(rawEventDataStreamForLVS)
+        .union(rawEventDataStreamForSLC);
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent

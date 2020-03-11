@@ -6,17 +6,17 @@ kafka:
     - rhs-glrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
     - rhs-glrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
   bootstrapServersForSLC:
-    - rhs-mwsvkiaa-kfk-slc-1.rheos-streaming-prod.svc.45.tess.io:9092
-    - rhs-mwsvkiaa-kfk-slc-2.rheos-streaming-prod.svc.45.tess.io:9092
-    - rhs-mwsvkiaa-kfk-slc-3.rheos-streaming-prod.svc.45.tess.io:9092
-    - rhs-mwsvkiaa-kfk-slc-4.rheos-streaming-prod.svc.45.tess.io:9092
-    - rhs-mwsvkiaa-kfk-slc-5.rheos-streaming-prod.svc.45.tess.io:9092
+    - rhs-pathfinder-kfk-1.stratus.slc.ebay.com:9092
+    - rhs-pathfinder-kfk-2.stratus.slc.ebay.com:9092
+    - rhs-pathfinder-kfk-3.stratus.slc.ebay.com:9092
+    - rhs-pathfinder-kfk-4.stratus.slc.ebay.com:9092
+    - rhs-pathfinder-kfk-5.stratus.slc.ebay.com:9092
   bootstrapServersForLVS:
-    - rhs-swsvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
-    - rhs-swsvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
-    - rhs-swsvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
-    - rhs-swsvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
-    - rhs-swsvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
+    - rhs-pathfinder-kfk-2.stratus.lvs.ebay.com:9092
+    - rhs-pathfinder-kfk-3.stratus.lvs.ebay.com:9092
+    - rhs-pathfinder-kfk-4.stratus.lvs.ebay.com:9092
+    - rhs-pathfinder-kfk-5.stratus.lvs.ebay.com:9092
+    - rhs-pathfinder-kfk-6.stratus.lvs.ebay.com:9092
   bootstrapServersForSOJ:
     - rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
     - rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092

@@ -4,9 +4,7 @@ import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import io.ebay.rheos.schema.avro.RheosEventDeserializer;
-import java.util.Arrays;
 import java.util.Properties;
-import java.util.stream.Collectors;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -15,22 +13,18 @@ import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 
 public class KafkaConnectorFactoryForLVS {
 
+  public static String CLIENT_ID = "lvs";
   public static String GROUP_ID = AppEnv.config().getKafka().getGroupId();
   public static String TOPIC_PATHFINDER_EVENTS = AppEnv.config().getKafka().getTopic();
   public static String BOOTSTRAP_SERVERS =
-      Arrays.asList(
-          "rheos-kafka-proxy-1.stratus.lvs.ebay.com:9092",
-          "rheos-kafka-proxy-2.stratus.lvs.ebay.com:9092",
-          "rheos-kafka-proxy-3.stratus.lvs.ebay.com:9092",
-          "rheos-kafka-proxy-4.stratus.lvs.ebay.com:9092",
-          "rheos-kafka-proxy-5.stratus.lvs.ebay.com:9092")
-          .stream().collect(Collectors.joining(","));
+      String.join(",", AppEnv.config().getKafka().getBootstrapServersForLVS());
 
   public static FlinkKafkaConsumer<RawEvent> createKafkaConsumer() {
 
     Properties props = new Properties();
     props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
     props.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
+    props.put(ConsumerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
 
     props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 3000);
     props.put(ConsumerConfig.RECEIVE_BUFFER_CONFIG, 8 * 1024 * 1024);
