@@ -360,6 +360,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
   public String toCALDateString(long time) {
     CalTimeOfDay calTimeOfDay = new CalTimeOfDay(time);
     return calTimeOfDay.toString();
+
   }
 
   private String getString(Object o) {

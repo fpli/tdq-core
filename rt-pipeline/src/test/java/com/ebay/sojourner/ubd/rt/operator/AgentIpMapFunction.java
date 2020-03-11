@@ -1,4 +1,4 @@
-package com.ebay.sojourner.ubd.rt.operators.attribute;
+package com.ebay.sojourner.ubd.rt.operator;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.AgentIpSignature;
@@ -9,6 +9,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.log4j.Logger;
 
 public class AgentIpMapFunction extends RichMapFunction<AgentIpAttribute, AgentIpSignature> {
+
   private static final Logger logger = Logger.getLogger(AgentIpMapFunction.class);
   private AgentIpSignatureBotDetector agentIpSignatureBotDetector;
   private AgentIpSignature agentIpSignature;

@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class FlinkCheckpointConfig {
+
   @JsonProperty("data-dir")
   private String dataDir;
 

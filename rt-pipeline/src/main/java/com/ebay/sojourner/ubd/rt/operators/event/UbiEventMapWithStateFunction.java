@@ -6,6 +6,7 @@ import org.apache.flink.streaming.runtime.operators.windowing.MapWithStateFuncti
 
 public class UbiEventMapWithStateFunction
     implements MapWithStateFunction<UbiEvent, SessionAccumulator, UbiEvent> {
+
   @Override
   public UbiEvent map(UbiEvent value, SessionAccumulator sessionAccumulator) throws Exception {
     if (value.isNewSession() && sessionAccumulator.getUbiSession().getSessionId() == null) {

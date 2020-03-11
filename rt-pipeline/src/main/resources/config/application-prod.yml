@@ -1,12 +1,12 @@
 kafka:
   bootstrapServers:
-    - rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
-    - rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
-    - rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
-    - rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
-    - rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
-  groupId: sojourner
-  topic: behavior.pulsar.misc.bot
+    - rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-glrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-glrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-glrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-glrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
+  groupId: sojourner-pathfinder
+  topic: behavior.pathfinder.events.total
 
 rheos:
   serviceUrl: https://rheos-services.stratus.ebay.com
@@ -17,8 +17,8 @@ rheos:
 flink:
   app:
     name: Unified Bot Detection RT Pipeline
-    source-parallelism: 30
-    event-parallelism: 72
+    source-parallelism: 100
+    event-parallelism: 145
   checkpoint:
     data-dir: /opt/sojourner-ubd/checkpoint
     interval: 5m

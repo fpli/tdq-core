@@ -1,178 +1,178 @@
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./APOLLOCONFIGTARS</name>
-        <value>hdfs://apollo-rno/APOLLOCONFIGTARS</value>
+  <name>fs.viewfs.mounttable.apollo-rno.link./APOLLOCONFIGTARS</name>
+  <value>hdfs://apollo-rno/APOLLOCONFIGTARS</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./app-logs</name>
-        <value>hdfs://apollo-rno/app-logs</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./app-logs</name>
+<value>hdfs://apollo-rno/app-logs</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./ats</name>
-        <value>hdfs://apollo-rno/ats</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./ats</name>
+<value>hdfs://apollo-rno/ats</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./avro</name>
-        <value>hdfs://apollo-rno/avro</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./avro</name>
+<value>hdfs://apollo-rno/avro</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./backup</name>
-        <value>hdfs://apollo-rno/backup</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./backup</name>
+<value>hdfs://apollo-rno/backup</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./axion-BKP</name>
-        <value>hdfs://apollo-rno/axion-BKP</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./axion-BKP</name>
+<value>hdfs://apollo-rno/axion-BKP</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./benchmarks</name>
-        <value>hdfs://apollo-rno/benchmarks</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./benchmarks</name>
+<value>hdfs://apollo-rno/benchmarks</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./data</name>
-        <value>hdfs://apollo-rno/data</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./data</name>
+<value>hdfs://apollo-rno/data</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./hadoop_credential</name>
-        <value>hdfs://apollo-rno/hadoop_credential</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./hadoop_credential</name>
+<value>hdfs://apollo-rno/hadoop_credential</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./hbase</name>
-        <value>hdfs://apollo-rno/hbase</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./hbase</name>
+<value>hdfs://apollo-rno/hbase</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./hbase-sideline</name>
-        <value>hdfs://apollo-rno/hbase-sideline</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./hbase-sideline</name>
+<value>hdfs://apollo-rno/hbase-sideline</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./hbck</name>
-        <value>hdfs://apollo-rno/hbck</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./hbck</name>
+<value>hdfs://apollo-rno/hbck</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./hdp</name>
-        <value>hdfs://apollo-rno/hdp</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./hdp</name>
+<value>hdfs://apollo-rno/hdp</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./home</name>
-        <value>hdfs://apollo-rno/home</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./home</name>
+<value>hdfs://apollo-rno/home</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./jobhistory</name>
-        <value>hdfs://apollo-rno/jobhistory</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./jobhistory</name>
+<value>hdfs://apollo-rno/jobhistory</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./logs</name>
-        <value>hdfs://apollo-rno/logs</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./logs</name>
+<value>hdfs://apollo-rno/logs</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./mapred</name>
-        <value>hdfs://apollo-rno/mapred</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./mapred</name>
+<value>hdfs://apollo-rno/mapred</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./mr-history</name>
-        <value>hdfs://apollo-rno/mr-history</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./mr-history</name>
+<value>hdfs://apollo-rno/mr-history</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./rajeshsnap</name>
-        <value>hdfs://apollo-rno/rajeshsnap</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./rajeshsnap</name>
+<value>hdfs://apollo-rno/rajeshsnap</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./sql-on-hadoop</name>
-        <value>hdfs://apollo-rno/sql-on-hadoop</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./sql-on-hadoop</name>
+<value>hdfs://apollo-rno/sql-on-hadoop</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./sys</name>
-        <value>hdfs://apollo-rno/sys</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./sys</name>
+<value>hdfs://apollo-rno/sys</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./system</name>
-        <value>hdfs://apollo-rno/system</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./system</name>
+<value>hdfs://apollo-rno/system</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./tez-history</name>
-        <value>hdfs://apollo-rno/tez-history</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./tez-history</name>
+<value>hdfs://apollo-rno/tez-history</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./tmp</name>
-        <value>hdfs://apollo-rno/tmp</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./tmp</name>
+<value>hdfs://apollo-rno/tmp</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./user</name>
-        <value>hdfs://apollo-rno/user</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./user</name>
+<value>hdfs://apollo-rno/user</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./workspaces</name>
-        <value>hdfs://apollo-rno/workspaces</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./workspaces</name>
+<value>hdfs://apollo-rno/workspaces</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./apps</name>
-        <value>hdfs://apollo-rno-ns01/apps</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./apps</name>
+<value>hdfs://apollo-rno-ns01/apps</value>
 </property>
 
-<!-- RENO Specific -->
+  <!-- RENO Specific -->
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./APOLLO-RNO-ETL-BINARY</name>
-        <value>hdfs://apollo-rno/APOLLO-RNO-ETL-BINARY</value>
-</property>
-
-<property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./APOLLORNO</name>
-        <value>hdfs://apollo-rno/APOLLORNO</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./APOLLO-RNO-ETL-BINARY</name>
+<value>hdfs://apollo-rno/APOLLO-RNO-ETL-BINARY</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./Tools</name>
-        <value>hdfs://apollo-rno/Tools</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./APOLLORNO</name>
+<value>hdfs://apollo-rno/APOLLORNO</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./hdfs</name>
-        <value>hdfs://apollo-rno/hdfs</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./Tools</name>
+<value>hdfs://apollo-rno/Tools</value>
 </property>
 
-
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./jenas</name>
-        <value>hdfs://apollo-rno/jenas</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./hdfs</name>
+<value>hdfs://apollo-rno/hdfs</value>
 </property>
 
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./lost+found</name>
-        <value>hdfs://apollo-rno/lost+found</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./jenas</name>
+<value>hdfs://apollo-rno/jenas</value>
+</property>
+
+
+<property>
+<name>fs.viewfs.mounttable.apollo-rno.link./lost+found</name>
+<value>hdfs://apollo-rno/lost+found</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./spark-logs</name>
-        <value>hdfs://apollo-rno/spark-logs</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./spark-logs</name>
+<value>hdfs://apollo-rno/spark-logs</value>
 </property>
 
 <property>
-        <name>fs.viewfs.mounttable.apollo-rno.link./ys</name>
-        <value>hdfs://apollo-rno/ys</value>
+<name>fs.viewfs.mounttable.apollo-rno.link./ys</name>
+<value>hdfs://apollo-rno/ys</value>
 </property>

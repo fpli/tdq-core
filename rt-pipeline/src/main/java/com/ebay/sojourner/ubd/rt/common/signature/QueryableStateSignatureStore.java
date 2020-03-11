@@ -7,13 +7,15 @@ import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.streaming.api.datastream.DataStream;
 
 public class QueryableStateSignatureStore implements SignatureStore {
+
   @Override
   public void save(DataStream<IpSignature> signatureStream) {
     signatureStream
         .keyBy("clientIp")
         .asQueryableState(
             "bot7",
-            new ValueStateDescriptor<>("", TypeInformation.of(new TypeHint<IpSignature>() {})));
+            new ValueStateDescriptor<>("", TypeInformation.of(new TypeHint<IpSignature>() {
+            })));
   }
 
   @Override

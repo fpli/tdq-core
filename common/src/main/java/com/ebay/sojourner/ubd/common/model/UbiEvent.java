@@ -59,6 +59,7 @@ public class UbiEvent implements Serializable {
   private Set<Integer> botFlags = new LinkedHashSet<>(); // bot in jetstream int
   private long icfBinary;
   private long ingestTime;
+  private long generateTime;
   @Getter private long eventCnt;
 
   //new columns from jetstream

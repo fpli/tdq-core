@@ -14,10 +14,10 @@ import org.apache.flink.util.Collector;
 
 public class AgentIpSignatureWindowProcessFunction
     extends ProcessWindowFunction<
-        AgentIpAttributeAccumulator,
-        Tuple4<String, Boolean, Set<Integer>, Long>,
-        Tuple,
-        TimeWindow> {
+    AgentIpAttributeAccumulator,
+    Tuple4<String, Boolean, Set<Integer>, Long>,
+    Tuple,
+    TimeWindow> {
 
   @Override
   public void process(

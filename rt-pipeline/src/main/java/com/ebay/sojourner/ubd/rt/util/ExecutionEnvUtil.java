@@ -13,14 +13,15 @@ import org.apache.flink.api.java.utils.ParameterTool;
  * @version : 1.0.0
  */
 public class ExecutionEnvUtil {
+
   public static final ParameterTool PARAMETER_TOOL = createParameterTool();
 
   public static ParameterTool createParameterTool(final String[] args) throws Exception {
 
     ParameterTool parameterTool =
         ParameterTool.fromPropertiesFile(
-                ExecutionEnvUtil.class.getResourceAsStream(
-                    PropertiesConstants.DEFAULT_APPLICATION_PROPERTIES_FILENAME))
+            ExecutionEnvUtil.class.getResourceAsStream(
+                PropertiesConstants.DEFAULT_APPLICATION_PROPERTIES_FILENAME))
             .mergeWith(ParameterTool.fromArgs(args))
             .mergeWith(ParameterTool.fromSystemProperties())
             .mergeWith(ParameterTool.fromMap(getenv()));
@@ -43,8 +44,8 @@ public class ExecutionEnvUtil {
   private static ParameterTool createParameterTool() {
     try {
       return ParameterTool.fromPropertiesFile(
-              ExecutionEnvUtil.class.getResourceAsStream(
-                  PropertiesConstants.DEFAULT_APPLICATION_PROPERTIES_FILENAME))
+          ExecutionEnvUtil.class.getResourceAsStream(
+              PropertiesConstants.DEFAULT_APPLICATION_PROPERTIES_FILENAME))
           .mergeWith(ParameterTool.fromSystemProperties())
           .mergeWith(ParameterTool.fromMap(getenv()));
     } catch (IOException e) {

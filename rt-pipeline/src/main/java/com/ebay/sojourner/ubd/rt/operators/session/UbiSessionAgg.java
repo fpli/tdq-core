@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 @Slf4j
 public class UbiSessionAgg
     implements AggregateFunction<UbiEvent, SessionAccumulator, SessionAccumulator> {
+
   //    private CouchBaseManager couchBaseManager;
   //    private static final String BUCKET_NAME="botsignature";
   private static final Logger logger = Logger.getLogger(UbiSessionAgg.class);
@@ -86,7 +87,7 @@ public class UbiSessionAgg
     }
     if (value.getEventTimestamp() != null
         && (accumulator.getUbiSession().getEndTimestamp() == null
-            || value.getEventTimestamp() > accumulator.getUbiSession().getEndTimestamp())) {
+        || value.getEventTimestamp() > accumulator.getUbiSession().getEndTimestamp())) {
       accumulator.getUbiSession().setEndTimestamp(value.getEventTimestamp());
     } else {
       //            log.error(
