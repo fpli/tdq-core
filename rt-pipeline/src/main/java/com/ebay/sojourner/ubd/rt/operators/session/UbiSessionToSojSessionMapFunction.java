@@ -10,33 +10,22 @@ public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSessio
   public SojSession map(UbiSession ubiSession) throws Exception {
     SojSession sojSession = new SojSession();
     sojSession.setGuid(ubiSession.getGuid());
-    //        sojSession.setAgentString(ubiSession.getAgentString());
     sojSession.setSessionId(ubiSession.getSessionId());
+    sojSession.setSessionSkey(ubiSession.getSessionSkey());
     sojSession.setIp(ubiSession.getIp());
-    sojSession.setUserAgent(sojSession.getUserAgent());
-    //        sojSession.setExInternalIp(sessionAccumulator.getUbiSession().getExInternalIp());
-    sojSession.setSojDataDt(sojSession.getSojDataDt());
-    sojSession.setSessionStartDt(sojSession.getSessionStartDt());
-    //        sojSession.setAgentCnt(sojSession.getAgentCnt());
+    sojSession.setUserAgent(ubiSession.getUserAgent());
+    sojSession.setSojDataDt(ubiSession.getSojDataDt());
+    sojSession.setSessionStartDt(ubiSession.getSessionStartDt());
     sojSession.setStartTimestamp(ubiSession.getStartTimestamp());
     sojSession.setEndTimestamp(ubiSession.getEndTimestamp());
     sojSession.setAbsStartTimestamp(ubiSession.getAbsStartTimestamp());
     sojSession.setAbsEndTimestamp(ubiSession.getAbsEndTimestamp());
-    //        sojSession.setClientIp(sessionAccumulator.getUbiSession().getClientIp());
-    //        sojSession.setInternalIp(sessionAccumulator.getUbiSession().getInternalIp());
-    //
-    // sojSession.setSingleClickSessionFlag(sessionAccumulator.getUbiSession().
-    // getSingleClickSessionFlag());
     sojSession.setBotFlagList(ubiSession.getBotFlagList());
     sojSession.setNonIframeRdtEventCnt(ubiSession.getNonIframeRdtEventCnt());
-    //
-    // sojSession.setSingleClickSessionFlag(sessionAccumulator.getUbiSession().
-    // getSingleClickSessionFlag());
     sojSession.setSessionReferrer(ubiSession.getSessionReferrer());
     sojSession.setBotFlag(ubiSession.getBotFlag());
     sojSession.setVersion(ubiSession.getVersion());
     sojSession.setFirstUserId(ubiSession.getFirstUserId());
-    //        sojSession.setSiteFlagsSet(sessionAccumulator.getUbiSession().getSiteFlagsSet());
     sojSession.setSiteFlags(ubiSession.getSiteFlags());
     sojSession.setAttrFlags(ubiSession.getAttrFlags());
     sojSession.setBotFlags(ubiSession.getBotFlags());
@@ -44,6 +33,23 @@ public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSessio
     sojSession.setStartPageId(ubiSession.getStartPageId());
     sojSession.setEndPageId(ubiSession.getEndPageId());
     sojSession.setDurationSec(ubiSession.getDurationSec());
+    sojSession.setEventCnt(ubiSession.getEventCnt());
+    sojSession.setViCoreCnt(ubiSession.getViCoreCnt());
+    sojSession.setBidCoreCnt(ubiSession.getBidCoreCnt());
+    sojSession.setBinCoreCnt(ubiSession.getBinCoreCnt());
+    sojSession.setWatchCoreCnt(ubiSession.getWatchCoreCnt());
+    sojSession.setTrafficSrcId(ubiSession.getTrafficSrcId());
+    sojSession.setAbsDuration(ubiSession.getAbsDuration());
+    sojSession.setCobrand(ubiSession.getCobrand());
+    sojSession.setFirstAppId(ubiSession.getFirstAppId());
+    sojSession.setFirstSiteId(ubiSession.getFirstSiteId());
+    sojSession.setFirstCguid(ubiSession.getFirstCguid());
+    sojSession.setFirstMappedUserId(ubiSession.getFirstMappedUserId());
+    sojSession.setHomepageCnt(ubiSession.getHomepageCnt());
+    sojSession.setGr1Cnt(ubiSession.getGr1Cnt());
+    sojSession.setGrCnt(ubiSession.getGrCnt());
+    sojSession.setMyebayCnt(ubiSession.getMyebayCnt());
+    sojSession.setSigninPageCnt(ubiSession.getSigninPageCnt());
     return sojSession;
   }
 }

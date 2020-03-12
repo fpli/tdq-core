@@ -30,6 +30,7 @@ public class AgentStringMetrics implements FieldMetrics<UbiEvent, SessionAccumul
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
     // do clear first as end method may not been invoked.
     sessionAccumulator.getUbiSession().setAgentString(null);
+    sessionAccumulator.getUbiSession().getAgentSets().clear();
   }
 
   @Override

@@ -5,10 +5,6 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 
 public class AppIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
-  private Integer appid;
-  private boolean prior = false;
-  private Integer firstAppid;
-
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
     sessionAccumulator.getUbiSession().setFirstAppId(null);

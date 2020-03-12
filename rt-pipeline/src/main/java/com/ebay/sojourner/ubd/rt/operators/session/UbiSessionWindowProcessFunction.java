@@ -47,6 +47,7 @@ public class UbiSessionWindowProcessFunction
     ubiSession.setGuid(sessionAccumulator.getUbiSession().getGuid());
     ubiSession.setAgentString(sessionAccumulator.getUbiSession().getAgentString());
     ubiSession.setSessionId(sessionAccumulator.getUbiSession().getSessionId());
+    ubiSession.setSessionSkey(sessionAccumulator.getUbiSession().getSessionSkey());
     ubiSession.setIp(sessionAccumulator.getUbiSession().getIp());
     ubiSession.setUserAgent(sessionAccumulator.getUbiSession().getUserAgent());
     ubiSession.setExInternalIp(sessionAccumulator.getUbiSession().getExInternalIp());
