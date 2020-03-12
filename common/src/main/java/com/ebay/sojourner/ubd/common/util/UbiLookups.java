@@ -4,7 +4,9 @@ import java.util.Collection;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 
-/** @author weifang. */
+/**
+ * @author weifang.
+ */
 @Slf4j
 public class UbiLookups {
 

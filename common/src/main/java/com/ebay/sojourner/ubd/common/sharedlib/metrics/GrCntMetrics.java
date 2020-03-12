@@ -30,7 +30,7 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
         && event.isPartialValidPage()
         && pageId != -1
         && ((pageFmlyNameMap.containsKey(pageId) && "GR".equals(pageFmlyNameMap.get(pageId)[1]))
-            || (getImPGT(event) != null && "GR".equals(getImPGT(event))))) {
+        || (getImPGT(event) != null && "GR".equals(getImPGT(event))))) {
       sessionAccumulator
           .getUbiSession()
           .setGrCnt(sessionAccumulator.getUbiSession().getGrCnt() + 1);
@@ -38,7 +38,8 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) throws Exception {}
+  public void end(SessionAccumulator sessionAccumulator) throws Exception {
+  }
 
   @Override
   public void init() throws Exception {
@@ -60,7 +61,7 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
     if (event.getPageId() == 2066804
         && StringUtils.isNotBlank(event.getUrlQueryString())
         && (event.getUrlQueryString().startsWith("/itm/like")
-            || event.getUrlQueryString().startsWith("/itm/future"))) {
+        || event.getUrlQueryString().startsWith("/itm/future"))) {
       return "VI";
     }
     if (event.getPageId() == 1521826 || event.getPageId() == 2066804) {

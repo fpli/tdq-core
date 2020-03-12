@@ -1,6 +1,7 @@
 package com.ebay.sojourner.ubd.common.sql;
 
 public class Rules {
+
   public static final SqlEventRule RULE_1 =
       new SqlEventRule(
           "SELECT 1 as bot_1 "

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 public class LoadRawEventAndExpect {
+
   private static final Logger logger = Logger.getLogger(LoadRawEventAndExpect.class);
   private static RawEvent rawEvent = null;
   private static Object expectResult = null;

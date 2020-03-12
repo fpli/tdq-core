@@ -8,7 +8,9 @@ import lombok.Data;
 
 @Data
 public class AgentIpSignature implements Signature, Serializable {
+
   private Map<String, Set<Integer>> agentIpBotSignature = new HashMap<>();
 
-  public AgentIpSignature() {}
+  public AgentIpSignature() {
+  }
 }

@@ -19,7 +19,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class BotRuleForDeclarativeAgentTest {
 
   BotRuleForDeclarativeAgent botRuleForDeclarativeAgent;
-  @Mock AgentAttribute agentAttribute;
+  @Mock
+  AgentAttribute agentAttribute;
 
   @Before
   public void setup() throws Exception {

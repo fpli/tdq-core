@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class AttributeTestInputObjects {
+
   @JsonProperty("UbiSession")
   private UbiSession ubiSession;
 

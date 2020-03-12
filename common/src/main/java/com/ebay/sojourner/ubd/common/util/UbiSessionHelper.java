@@ -12,7 +12,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
-/** @author Xiaoding */
+/**
+ * @author Xiaoding
+ */
 public class UbiSessionHelper {
 
   public static final long MINUS_GUID_MIN_MS =

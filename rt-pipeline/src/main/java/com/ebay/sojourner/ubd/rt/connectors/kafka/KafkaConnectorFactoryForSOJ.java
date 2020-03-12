@@ -17,7 +17,7 @@ public class KafkaConnectorFactoryForSOJ {
   public static final String GROUP_ID = AppEnv.config().getKafka().getGroupId();
   public static final String TOPIC_PATHFINDER_EVENTS = AppEnv.config().getKafka().getTopic();
   public static final String BOOTSTRAP_SERVERS =
-      String.join(",", AppEnv.config().getKafka().getBootstrapServers());
+      String.join(",", AppEnv.config().getKafka().getBootstrapServersForSOJ());
 
   public static FlinkKafkaConsumer<RawEvent> createKafkaConsumer() {
     Properties props = new Properties();

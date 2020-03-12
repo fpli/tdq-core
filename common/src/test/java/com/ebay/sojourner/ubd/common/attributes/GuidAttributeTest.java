@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 public class GuidAttributeTest extends BaseAttributesTest<UbiSession> {
+
   private GuidAttribute guidAttribute;
   private Pair<JsonNode, List<AttributesTestCase>> pair;
 

@@ -8,7 +8,9 @@ public abstract class AttributeIndicators<Source, Target> implements Aggregator<
 
   protected Set<AbstractIndicator<Source, Target>> indicators = new LinkedHashSet<>();
 
-  /** Initialize the field metrics for being used in aggregator operations. */
+  /**
+   * Initialize the field metrics for being used in aggregator operations.
+   */
   public abstract void initIndicators();
 
   @Override
@@ -25,7 +27,8 @@ public abstract class AttributeIndicators<Source, Target> implements Aggregator<
   }
 
   @Override
-  public void feed(Source ubiSession, Target agentIpAttributeAccumulator) throws Exception {}
+  public void feed(Source ubiSession, Target agentIpAttributeAccumulator) throws Exception {
+  }
 
   public void feed(Source source, Target target, boolean isNeeded) throws Exception {
     for (AbstractIndicator<Source, Target> indicator : indicators) {

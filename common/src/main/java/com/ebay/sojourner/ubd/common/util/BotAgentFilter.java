@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 public class BotAgentFilter implements Filter<String> {
+
   public static final String LIKE_STRING = "%";
   public static final int queueCapacity = 100;
   // WHEN browser_actual_type IS NULL AND agent_string LIKE '%AdobeAIR%'
@@ -47,11 +48,11 @@ public class BotAgentFilter implements Filter<String> {
     } else {
       return agent.contains(ADOBE_AIR)
           && !match(
-              agent,
-              browserAgentStarts,
-              browserAgentEnds,
-              browserAgentContains,
-              browserAgentMultiContains)
+          agent,
+          browserAgentStarts,
+          browserAgentEnds,
+          browserAgentContains,
+          browserAgentMultiContains)
           && !matchMulti(agent);
     }
   }
@@ -67,11 +68,7 @@ public class BotAgentFilter implements Filter<String> {
   }
 
   /**
-   * @param agent
-   * @param agentStarts
-   * @param agentEnds
-   * @param agentContains
-   * @return
+   *
    */
   private boolean match(
       String agent,
@@ -143,12 +140,14 @@ public class BotAgentFilter implements Filter<String> {
   private boolean matchMulti(String agent) {
     if (agent.contains("Sleipnir")
         && (agent.contains("Mobile")
-            || agent.contains("iPhone")
-            || agent.contains("iPad")
-            || agent.contains("iPod"))) {
+        || agent.contains("iPhone")
+        || agent.contains("iPad")
+        || agent.contains("iPod"))) {
       return true;
     } else if (agent.contains("Chrome/") && !agent.contains("chromeframe")) {
       return true;
-    } else return agent.startsWith("Dalvik/") && !agent.contains("Safari");
+    } else {
+      return agent.startsWith("Dalvik/") && !agent.contains("Safari");
+    }
   }
 }

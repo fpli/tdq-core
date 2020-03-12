@@ -6,7 +6,9 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForLVS;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForRNO;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSLC;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
@@ -14,14 +16,8 @@ import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSojSessionMapFunc
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
-import java.util.Map;
-import org.apache.avro.reflect.ReflectData;
-import org.apache.flink.api.common.typeinfo.SOjStringFactory;
-import org.apache.flink.api.common.typeinfo.TypeInfoFactory;
+
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
@@ -39,16 +35,9 @@ public class SojournerRTLoadJob {
 
   public static void main(String[] args) throws Exception {
 
-    System.out.println(ReflectData.AllowNull.get().getSchema(UbiEvent.class).toString());
     // Make sure this is being executed at start up.
     ParameterTool parameterTool = ExecutionEnvUtil.createParameterTool(args);
     AppEnv.config(parameterTool);
-    Field modifiersField = TypeExtractor.class.getDeclaredField("registeredTypeInfoFactories");
-    modifiersField.setAccessible(true);
-    Map<Type, Class<? extends TypeInfoFactory>> registeredTypeInfoFactories =
-        (Map<Type, Class<? extends TypeInfoFactory>>) modifiersField.get(null);
-    registeredTypeInfoFactories.put(String.class, SOjStringFactory.class);
-    modifiersField.set(null, registeredTypeInfoFactories);
 
     // 0.0 Prepare execution environment
     // 0.1 UBI configuration
@@ -81,12 +70,12 @@ public class SojournerRTLoadJob {
 
     // for soj nrt output
     // 1. Rheos Consumer
-    // 1.1 Consume RawEvent from Rheos PathFinder topic
+    // 1.1 Consume RawEvent from Rheos PathFinder topic(RNO/LVS/SLC)
     // 1.2 Assign timestamps and emit watermarks.
-    DataStream<RawEvent> rawEventDataStream =
+    DataStream<RawEvent> rawEventDataStreamForRNO =
         executionEnvironment
             .addSource(
-                KafkaConnectorFactory.createKafkaConsumer()
+                KafkaConnectorFactoryForRNO.createKafkaConsumer()
                     .setStartFromLatest()
                     .assignTimestampsAndWatermarks(
                         new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
@@ -99,7 +88,48 @@ public class SojournerRTLoadJob {
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer");
+            .name("Rheos Kafka Consumer For RNO");
+
+    DataStream<RawEvent> rawEventDataStreamForSLC =
+        executionEnvironment
+            .addSource(
+                KafkaConnectorFactoryForSLC.createKafkaConsumer()
+                    .setStartFromLatest()
+                    .assignTimestampsAndWatermarks(
+                        new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
+                          @Override
+                          public long extractTimestamp(RawEvent element) {
+                            return element.getRheosHeader().getEventCreateTimestamp();
+                          }
+                        }))
+            .setParallelism(
+                AppEnv.config().getFlink().getApp().getSourceParallelism() == null
+                    ? 100
+                    : AppEnv.config().getFlink().getApp().getSourceParallelism())
+            .name("Rheos Kafka Consumer For SLC");
+
+    DataStream<RawEvent> rawEventDataStreamForLVS =
+        executionEnvironment
+            .addSource(
+                KafkaConnectorFactoryForLVS.createKafkaConsumer()
+                    .setStartFromLatest()
+                    .assignTimestampsAndWatermarks(
+                        new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
+                          @Override
+                          public long extractTimestamp(RawEvent element) {
+                            return element.getRheosHeader().getEventCreateTimestamp();
+                          }
+                        }))
+            .setParallelism(
+                AppEnv.config().getFlink().getApp().getSourceParallelism() == null
+                    ? 100
+                    : AppEnv.config().getFlink().getApp().getSourceParallelism())
+            .name("Rheos Kafka Consumer For LVS");
+
+    // union three DC data
+    DataStream<RawEvent> rawEventDataStream = rawEventDataStreamForRNO
+        .union(rawEventDataStreamForLVS)
+        .union(rawEventDataStreamForSLC);
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent

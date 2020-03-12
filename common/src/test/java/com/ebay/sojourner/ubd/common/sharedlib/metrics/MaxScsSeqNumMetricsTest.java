@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 public class MaxScsSeqNumMetricsTest extends BaseMetricsTest {
+
   private MaxScsSeqNumMetrics maxScsSeqNumMetrics;
   private JsonNode yaml;
 

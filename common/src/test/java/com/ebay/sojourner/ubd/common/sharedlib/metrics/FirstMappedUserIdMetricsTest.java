@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 public class FirstMappedUserIdMetricsTest extends BaseMetricsTest {
+
   private FirstMappedUserIdMetrics firstMappedUserIdMetrics;
   private JsonNode yaml;
 

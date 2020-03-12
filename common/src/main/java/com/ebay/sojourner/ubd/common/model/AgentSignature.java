@@ -11,5 +11,6 @@ public class AgentSignature implements Signature, Serializable {
 
   private Map<String, Set<Integer>> agentBotSignature = new HashMap<>();
 
-  public AgentSignature() {}
+  public AgentSignature() {
+  }
 }

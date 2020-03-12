@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 public class HomepgCntMetricsTest extends BaseMetricsTest {
+
   private HomepgCntMetrics homepgCntMetrics;
   private JsonNode yaml;
 

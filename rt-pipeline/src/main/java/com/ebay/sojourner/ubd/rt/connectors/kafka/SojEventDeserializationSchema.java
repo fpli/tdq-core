@@ -19,6 +19,7 @@ import org.apache.flink.api.common.typeinfo.TypeInformation;
 @Slf4j
 public class SojEventDeserializationSchema implements DeserializationSchema<RawEvent> {
 
+  private static final String DC_RNO = "RNO";
   private static Map<String, String> fieldMap = new ConcurrentHashMap<>();
 
   static {
@@ -138,7 +139,7 @@ public class SojEventDeserializationSchema implements DeserializationSchema<RawE
     clientData.setRlogid(getString(genericRecord.get("rlogid")));
     clientData.setUrlQueryString(getString(applicationPayload.get("urlQueryString")));
 
-    return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData, ingestTime);
+    return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData, DC_RNO, ingestTime);
     //        return genericRecord;
   }
 

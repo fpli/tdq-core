@@ -1,6 +1,7 @@
 package com.ebay.sojourner.ubd.common.util;
 
 public class ParserConstants {
+
   public static final String FILEPATH = "parsertest.yaml";
 
   // expect result

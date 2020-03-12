@@ -10,11 +10,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 public class CiidParser implements FieldParser<RawEvent, UbiEvent> {
+
   private static final Logger log = Logger.getLogger(CiidParser.class);
   private static final String CIID_TAG = "ciid";
 
   @Override
-  public void init() throws Exception {}
+  public void init() throws Exception {
+  }
 
   public void parse(RawEvent event, UbiEvent ubiEvent) {
     Map<String, String> map = new HashMap<>();

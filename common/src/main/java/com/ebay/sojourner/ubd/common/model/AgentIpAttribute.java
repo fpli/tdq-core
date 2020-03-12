@@ -9,6 +9,7 @@ import lombok.Data;
 
 @Data
 public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
+
   private String clientIp;
   private String agent;
   private Set<Integer> botFlagList = new LinkedHashSet<>();
@@ -47,7 +48,8 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
   private Boolean isAllAgentHoper = true;
   private int totalCntForSec1 = 0;
 
-  public AgentIpAttribute() {}
+  public AgentIpAttribute() {
+  }
 
   @Override
   public void feed(UbiSession ubiSession, int botFlag, boolean isNeeded) {
@@ -83,8 +85,8 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
       consistent =
           consistent
               && (validPageCnt == ubiSession.getValidPageCnt()
-                  || validPageCnt < 0
-                  || ubiSession.getValidPageCnt() < 0);
+              || validPageCnt < 0
+              || ubiSession.getValidPageCnt() < 0);
 
       if (ubiSession.getValidPageCnt() >= 0) {
         validPageCnt = ubiSession.getValidPageCnt();

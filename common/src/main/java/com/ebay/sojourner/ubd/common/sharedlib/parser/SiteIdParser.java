@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SiteIdParser implements FieldParser<RawEvent, UbiEvent> {
+
   private static final Logger log = LoggerFactory.getLogger(SiteIdParser.class);
   private static final String T_TAG = "t";
 

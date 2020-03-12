@@ -1,5 +1,4 @@
--
-  name: test1
+- name: test1
   inputs:
     UbiEvent:
       iframe: false
@@ -15,8 +14,7 @@
         -
         - 4018
 
--
-  name: test2
+- name: test2
   inputs:
     UbiEvent:
       iframe: false

@@ -1,5 +1,4 @@
--
-  name: case1
+- name: case1
   type: IpAttribute
   input:
     IpAttribute:
@@ -7,8 +6,7 @@
       totalCnt: 21
   expectResult: 0
 
--
-  name: case2
+- name: case2
   type: IpAttribute
   input:
     IpAttribute:
@@ -16,8 +14,7 @@
       totalCnt: 0
   expectResult: 0
 
--
-  name: case3
+- name: case3
   type: IpAttribute
   input:
     IpAttribute:

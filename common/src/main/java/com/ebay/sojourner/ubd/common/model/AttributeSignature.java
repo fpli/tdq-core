@@ -7,7 +7,9 @@ import lombok.Data;
 
 @Data
 public class AttributeSignature {
+
   private Map<String, Set<Integer>> attributeSignature = new HashMap<>();
 
-  public AttributeSignature() {}
+  public AttributeSignature() {
+  }
 }

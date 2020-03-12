@@ -6,6 +6,7 @@ import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
 import java.util.Map;
 
 public class HomepgCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
   private static Map<Integer, String[]> pageFmlyNameMap;
   private static LkpFetcher lkpFetcher;
 
@@ -34,7 +35,8 @@ public class HomepgCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) throws Exception {}
+  public void end(SessionAccumulator sessionAccumulator) throws Exception {
+  }
 
   @Override
   public void init() throws Exception {

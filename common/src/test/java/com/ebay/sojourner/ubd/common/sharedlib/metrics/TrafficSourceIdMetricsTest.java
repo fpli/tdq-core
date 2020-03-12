@@ -13,14 +13,18 @@ class TrafficSourceIdMetricsTest {
   }
 
   @Test
-  void test_end() {}
+  void test_end() {
+  }
 
   @Test
-  void test_feed() {}
+  void test_feed() {
+  }
 
   @Test
-  void test_init() {}
+  void test_init() {
+  }
 
   @Test
-  void test_start() {}
+  void test_start() {
+  }
 }

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 public class TimestampMetricsTest extends BaseMetricsTest {
+
   private TimestampMetrics timestampMetrics;
   private JsonNode yaml;
 

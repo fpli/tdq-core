@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
 
 public class InitRawEvent {
+
   private static RawEvent rawEvent;
   private static RheosHeader rheosHeader;
   private static ClientData clientData;

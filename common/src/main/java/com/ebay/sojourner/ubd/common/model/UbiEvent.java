@@ -15,6 +15,7 @@ import lombok.Getter;
 
 @Data
 public class UbiEvent implements Serializable {
+
   private String guid;
   private String sessionId = Constants.NO_SESSION_ID;
   private int seqNum;
@@ -58,9 +59,13 @@ public class UbiEvent implements Serializable {
   private long sessionEndTime;
   private Set<Integer> botFlags = new LinkedHashSet<>(); // bot in jetstream int
   private long icfBinary;
+  // collect some metrics for monitor and validation
   private long ingestTime;
   private long generateTime;
   @Getter private long eventCnt;
+
+  //metric for monitor
+  private String dataCenter;
 
   //new columns from jetstream
   private String sid;
@@ -81,6 +86,7 @@ public class UbiEvent implements Serializable {
   private String osFamily;
   private String enrichedOsVersion;
   private String rlogid;
+
 
   //  private Map<String, Object> counters;
 

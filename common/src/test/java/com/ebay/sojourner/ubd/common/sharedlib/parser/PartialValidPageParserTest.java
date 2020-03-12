@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class PartialValidPageParserTest {
+
   private static final Logger logger = Logger.getLogger(PartialValidPageParser.class);
 
   private static UbiEvent ubiEvent = null;

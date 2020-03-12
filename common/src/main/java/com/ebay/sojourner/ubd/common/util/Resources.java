@@ -6,6 +6,7 @@ package com.ebay.sojourner.ubd.common.util;
  * @author kofeng
  */
 public class Resources {
+
   // Application Configuration
   public static final String UBI_CONFIG = "/ubi.properties";
   public static final String LKP_CONFIG = "/lkp.properties";

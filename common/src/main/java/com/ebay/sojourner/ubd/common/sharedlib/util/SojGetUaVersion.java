@@ -2,7 +2,9 @@ package com.ebay.sojourner.ubd.common.sharedlib.util;
 
 import java.util.HashSet;
 
-/** Created by xiaoding on 2017/1/20. */
+/**
+ * Created by xiaoding on 2017/1/20.
+ */
 public class SojGetUaVersion {
 
   public static String getUaVersion(String userAgent, int startPos) {

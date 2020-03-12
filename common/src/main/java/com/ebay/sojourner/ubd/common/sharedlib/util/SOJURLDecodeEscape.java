@@ -7,21 +7,19 @@ import org.apache.commons.lang3.StringUtils;
 public class SOJURLDecodeEscape {
 
   public static int[] hexlookup = {
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 0-15
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 16-31
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 32-47
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -1, -1, -1, -1, -1, // 48-63
-    -1, 10, 11, 12, 13, 14, 15, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 64-79
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 80-95
-    -1, 10, 11, 12, 13, 14, 15, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 96-111
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 112-127
+      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 0-15
+      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 16-31
+      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 32-47
+      0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -1, -1, -1, -1, -1, // 48-63
+      -1, 10, 11, 12, 13, 14, 15, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 64-79
+      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 80-95
+      -1, 10, 11, 12, 13, 14, 15, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 96-111
+      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 112-127
   };
 
   /**
    * this func cannot suppot no-ascii chars, recommend to use javaNetUrlDecode
    *
-   * @param url
-   * @param esc_char
    * @return String
    */
   public static String decodeEscapes(String url, char esc_char) {
@@ -73,7 +71,9 @@ public class SOJURLDecodeEscape {
   private static int sg_get_hex(char c) {
     int res = -1;
 
-    if (c > 0 && c < 127) res = hexlookup[c];
+    if (c > 0 && c < 127) {
+      res = hexlookup[c];
+    }
 
     return res;
   }
@@ -81,10 +81,6 @@ public class SOJURLDecodeEscape {
   /**
    * UrlDecode first to support utf-8 if failed on UnsupportedEncodingException or
    * IllegalArgumentException, use old func instead
-   *
-   * @param url
-   * @param enc
-   * @return
    */
   public static String javaNetUrlDecode(String url, String enc) {
     if (StringUtils.isBlank(url)) {

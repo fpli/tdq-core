@@ -1,13 +1,14 @@
 package com.ebay.sojourner.ubd.common.sharedlib.util;
 
 public class SOJSetBit64 {
+
   static int OK = 0;
   static int FAIL = -1;
   static int NULLIND = -1;
 
   public static final byte[] intToByteArray(int value) {
-    return new byte[] {
-      (byte) (value), (byte) (value >>> 8), (byte) (value >>> 16), (byte) (value >>> 24)
+    return new byte[]{
+        (byte) (value), (byte) (value >>> 8), (byte) (value >>> 16), (byte) (value >>> 24)
     };
   }
 
@@ -130,7 +131,9 @@ public class SOJSetBit64 {
     // Pad 0 bits to flag if result is larger than input.
     if (byte_offset >= flags_len) {
       int i = 0;
-      for (i = flags_len; i < byte_offset; i++) flags_out[i] = 0;
+      for (i = flags_len; i < byte_offset; i++) {
+        flags_out[i] = 0;
+      }
     }
 
     if (byte_offset < flags_len) {

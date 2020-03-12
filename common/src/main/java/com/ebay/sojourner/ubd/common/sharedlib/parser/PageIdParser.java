@@ -24,7 +24,7 @@ public class PageIdParser implements FieldParser<RawEvent, UbiEvent> {
         pageid = map.get(P_TAG);
       }
       String value = IntegerField.parse(pageid);
-      if (ubiEvent.getGuid()!=null&&StringUtils.isNotBlank(pageid)) {
+      if (ubiEvent.getGuid() != null && StringUtils.isNotBlank(pageid)) {
         ubiEvent.setPageId(Integer.parseInt(value));
       }
     } catch (NumberFormatException e) {

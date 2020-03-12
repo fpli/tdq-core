@@ -13,7 +13,7 @@ public class BotRule205 extends AbstractBotRule<UbiSession> {
         && ip.startsWith("10.")
         && sessionReferrer != null
         && (sessionReferrer.startsWith("http://cs.ebay.")
-            || sessionReferrer.startsWith("https://cs.ebay."))) {
+        || sessionReferrer.startsWith("https://cs.ebay."))) {
       return BotRules.CS_IP_BOTFLAG;
     }
     return 0;

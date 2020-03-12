@@ -1,5 +1,4 @@
--
-  name: test1
+- name: test1
   inputs:
     UbiEvent:
       partialValidPage: 1
@@ -15,8 +14,7 @@
     UbiSession:
       familyViCnt: 1
 
--
-  name: test2
+- name: test2
   inputs:
     UbiEvent:
       partialValidPage: 1

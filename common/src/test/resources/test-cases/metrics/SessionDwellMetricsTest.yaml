@@ -1,5 +1,4 @@
--
-  name: test1
+- name: test1
   inputs:
     UbiEvent:
       eventTimestamp: 1578366462
@@ -16,8 +15,7 @@
         - 1578366462
         - 1578366462
 
--
-  name: test2
+- name: test2
   inputs:
     UbiEvent:
       eventTimestamp: 1578366463

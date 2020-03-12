@@ -6,9 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author yunjzhang search the partten "&key={value}" in the source string if match then return
- *     "value"
+ * "value"
  */
 public class SOJParseClientInfo {
+
   public static final String keyWords =
       "ForwardedFor|RemoteIP|Referer|ContentLength|Script|Server|Agent|Encoding|TPool|"
           + "TStamp|TType|TName|TStatus|TDuration|TPayload|TMachine";
@@ -68,7 +69,9 @@ public class SOJParseClientInfo {
 
   private static int isValidCIname(String key) {
     Matcher m1 = p1.matcher(key);
-    if (m1.find()) return 1;
+    if (m1.find()) {
+      return 1;
+    }
     return 0;
   }
 }

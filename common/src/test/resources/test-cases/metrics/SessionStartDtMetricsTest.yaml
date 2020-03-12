@@ -1,5 +1,4 @@
--
-  name: test1
+- name: test1
   inputs:
     UbiEvent:
       iframe: false
@@ -17,8 +16,7 @@
       sessionStartDt: 20200124
       sessionId: 123
 
--
-  name: test2
+- name: test2
   inputs:
     UbiEvent:
       iframe: false

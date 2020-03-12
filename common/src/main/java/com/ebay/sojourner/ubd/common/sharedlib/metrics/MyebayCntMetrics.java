@@ -6,6 +6,7 @@ import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
 import java.util.Map;
 
 public class MyebayCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
   // TODO extract myebay indicator to external config file
   public static final String[] myEbayIndicator = {"MYEBAY", "SM", "SMP"};
   private static Map<Integer, String[]> pageFmlyNameMap;
@@ -26,7 +27,8 @@ public class MyebayCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) throws Exception {}
+  public void end(SessionAccumulator sessionAccumulator) throws Exception {
+  }
 
   protected boolean isMyebayPage(UbiEvent event) {
     Integer pageId = event.getPageId();

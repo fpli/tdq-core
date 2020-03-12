@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class SojSession implements Serializable, Cloneable {
+
   private Long sojDataDt;
   private String guid;
   private String sessionId;

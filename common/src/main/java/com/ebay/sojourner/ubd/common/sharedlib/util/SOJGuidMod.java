@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.util;
 import org.apache.commons.lang3.StringUtils;
 
 public class SOJGuidMod {
+
   public static int sojGUIDMod(String guid, int mod_value) {
     // Null indicator -1 NULL , 0 Not NULL
 

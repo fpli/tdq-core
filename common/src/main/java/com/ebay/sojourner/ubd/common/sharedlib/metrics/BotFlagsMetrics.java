@@ -4,13 +4,16 @@ import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 
 public class BotFlagsMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
   public static final int BOT_FLAGS_DEFAULT = 0;
 
   @Override
-  public void start(SessionAccumulator sessionAccumulator) throws Exception {}
+  public void start(SessionAccumulator sessionAccumulator) throws Exception {
+  }
 
   @Override
-  public void feed(UbiEvent source, SessionAccumulator sessionAccumulator) throws Exception {}
+  public void feed(UbiEvent source, SessionAccumulator sessionAccumulator) throws Exception {
+  }
 
   @Override
   public void end(SessionAccumulator sessionAccumulator) throws Exception {

@@ -22,7 +22,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(UbiSessionHelper.class)
 public class BotRule11Test {
 
-  @Mock UbiBotFilter mockBotFilter;
+  @Mock
+  UbiBotFilter mockBotFilter;
   private BotRule11 botRule11;
   private UbiSession ubiSession;
 
