@@ -53,7 +53,7 @@ public class KafkaConnectorFactoryForRNO {
     //        props.put(ConsumerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
 
     return new FlinkKafkaConsumer<>(
-        TOPIC_PATHFINDER_EVENTS, new RawEventDeserializationSchema(), props);
+        TOPIC_PATHFINDER_EVENTS, new RawEventDeserializationSchemaForRNO(), props);
   }
 
   public static FlinkKafkaProducer<SojEvent> createKafkaProducer() {

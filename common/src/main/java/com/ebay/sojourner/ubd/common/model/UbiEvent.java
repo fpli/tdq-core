@@ -59,8 +59,10 @@ public class UbiEvent implements Serializable {
   private long sessionEndTime;
   private Set<Integer> botFlags = new LinkedHashSet<>();
   private long icfBinary;
+  // collect some metrics for monitor and validation
   private long ingestTime;
   private long generateTime;
+  private String dataCenter;
   @Getter
   private long eventCnt;
   //  private Map<String, Object> counters;

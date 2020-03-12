@@ -41,7 +41,7 @@ public class KafkaConnectorFactoryForLVS {
     props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
 
     return new FlinkKafkaConsumer<>(
-        TOPIC_PATHFINDER_EVENTS, new RawEventDeserializationSchema(), props);
+        TOPIC_PATHFINDER_EVENTS, new RawEventDeserializationSchemaForLVS(), props);
   }
 
   public static FlinkKafkaProducer<SojEvent> createKafkaProducer() {

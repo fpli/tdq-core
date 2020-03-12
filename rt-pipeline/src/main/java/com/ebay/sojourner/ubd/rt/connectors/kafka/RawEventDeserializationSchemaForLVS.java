@@ -20,12 +20,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Slf4j
-public class RawEventDeserializationSchema implements DeserializationSchema<RawEvent> {
+public class RawEventDeserializationSchemaForLVS implements DeserializationSchema<RawEvent> {
 
   protected static final Logger LOGGER = LoggerFactory
-      .getLogger(RawEventDeserializationSchema.class);
+      .getLogger(RawEventDeserializationSchemaForRNO.class);
   private static final String TAG_ITEMIDS = "!itemIds";
   private static final String TAG_TRKP = "trkp";
+  private static final String DC_LVS = "LVS";
   private static String[] tagsToEncode = new String[]{TAG_ITEMIDS, TAG_TRKP};
 
   @Override
@@ -82,7 +83,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
     GenericRecord genericClientData = (GenericRecord) genericRecord.get("clientData");
     ClientData clientData = new ClientData();
     parseClientData(clientData, genericClientData);
-    return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData, ingestTime);
+    return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData, DC_LVS, ingestTime);
   }
 
   private void parseClientData(ClientData clentData, GenericRecord genericRecord) {
