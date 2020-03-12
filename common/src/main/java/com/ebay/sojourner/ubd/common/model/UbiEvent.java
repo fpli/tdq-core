@@ -17,7 +17,8 @@ import lombok.Getter;
 public class UbiEvent implements Serializable {
 
   private String guid;
-  private String sessionId = Constants.NO_SESSION_ID;
+  private String sessionId = Constants.NO_SESSION_ID;// for jetstream
+  private long sessionSkey;
   private int seqNum;
   private Long sessionStartDt;
   private Long sojDataDt;
@@ -72,7 +73,6 @@ public class UbiEvent implements Serializable {
   private long eventCaptureTime;//didn't find logic
   private String requestCorrelationId;
   private String pageFamily; // need to lookup and diff from batch ignore currently
-
   private String remoteIP;
   private String appVersion;
   private String eventFamily;
@@ -105,6 +105,11 @@ public class UbiEvent implements Serializable {
 
     this.sessionId = guid + new String(out, 0, out.length);
   }
+
+  public void updateSessionSkey() {
+    this.sessionSkey=this.eventTimestamp/Constants.SESSION_KEY_DIVISION;
+  }
+
 
   public void eventCountIncrementByOne() {
     eventCnt++;

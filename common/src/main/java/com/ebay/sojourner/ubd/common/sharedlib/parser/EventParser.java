@@ -44,6 +44,9 @@ public class EventParser extends RecordParser<RawEvent, UbiEvent> {
       addFieldParser(new PartialValidPageParser());
       // icf
       addFieldParser(new IcfParser());
+
+      // Jetstream columns
+      addFieldParser(new JSColumnParser());
     }
   }
 }
