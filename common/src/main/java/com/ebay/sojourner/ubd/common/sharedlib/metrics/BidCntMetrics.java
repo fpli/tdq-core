@@ -8,6 +8,7 @@ import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
 public class BidCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
   private static PageIndicator indicator;
 
   @Override
@@ -28,7 +29,8 @@ public class BidCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) {}
+  public void end(SessionAccumulator sessionAccumulator) {
+  }
 
   @Override
   public void init() throws Exception {
@@ -36,6 +38,6 @@ public class BidCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
   }
 
   void setPageIndicator(PageIndicator indicator) {
-    BidCntMetrics.indicator = indicator;
+    this.indicator = indicator;
   }
 }

@@ -1,10 +1,5 @@
 package com.ebay.sojourner.ubd.common.util;
 
-/**
- * The property references for application configuration, mapreduce context, lookup table, etc.
- *
- * @author kofeng
- */
 public class Property {
   // --------------------- UBI Property File -------------------------------------
   // Session properties

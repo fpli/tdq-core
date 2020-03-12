@@ -66,7 +66,7 @@ public class UbiEvent implements Serializable {
   private String sid;
   private long eventCaptureTime;//didn't find logic
   private String requestCorrelationId;
-  private String pageFamily; // need to lookup
+  private String pageFamily; // need to lookup and diff from batch ignore currently
 
   private String remoteIP;
   private String appVersion;
