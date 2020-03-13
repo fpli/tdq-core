@@ -16,7 +16,6 @@ import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSojSessionMapFunc
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
-
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;

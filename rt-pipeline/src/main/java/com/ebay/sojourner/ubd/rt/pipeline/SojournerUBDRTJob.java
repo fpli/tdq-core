@@ -2,14 +2,12 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
-import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForLVS;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForRNO;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSLC;
@@ -30,7 +28,6 @@ import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.DetectableSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
-import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import java.util.Set;
@@ -200,12 +197,6 @@ public class SojournerUBDRTJob {
 
     ubiSessinDataStream.name("Session Operator");
 
-    // UbiSession to SojSession
-    SingleOutputStreamOperator<SojSession> sojSessionStream =
-        ubiSessinDataStream
-            .map(new UbiSessionToSojSessionMapFunction())
-            .name("UbiSession to SojSession");
-
     // 4. Attribute Operator
     // 4.1 Sliding window
     // 4.2 Attribute indicator accumulation
@@ -344,17 +335,17 @@ public class SojournerUBDRTJob {
             .process(new AttributeBroadcastProcessFunctionForDetectable(sessionOutputTag))
             .name("Signature Bot Detector");
 
+    DataStream<UbiSession> signatureBotDetectionForSession = signatureBotDetectionForEvent
+        .getSideOutput(sessionOutputTag);
+
     // 5. Load data to file system for batch processing
     // 5.1 IP Signature
     // 5.2 Sessions (ended)
     // 5.3 Events (with session ID & bot flags)
     // 5.4 Events late
-    latedStream.addSink(HdfsSinkUtil.lateEventSinkWithParquet()).name("Late Event");
+    latedStream.addSink(new DiscardingSink<>()).name("Late Event");
     signatureBotDetectionForEvent.addSink(new EventDiscardingSink()).name("Event");
-    sojSessionStream.addSink(HdfsSinkUtil.sojSessionSinkWithParquet()).name("SojSession")
-        .disableChaining();
-    mappedEventStream.addSink(HdfsSinkUtil.ubiEventSinkWithParquet()).name("UbiEvent")
-        .disableChaining();
+    signatureBotDetectionForSession.addSink(new DiscardingSink<>()).name("Session");
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());

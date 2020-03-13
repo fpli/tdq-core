@@ -26,7 +26,7 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
     if (eventDate != null && sessionAccumulator.getUbiSession().isFirstSessionStartDt()) {
       sessionAccumulator.getUbiSession().setSessionStartDt(eventDate);
 
-      sessionAccumulator.getUbiSession().setFirstSessionStartDt(false);
+      sessionAccumulator.getUbiSession().setIsFirstSessionStartDt(false);
     }
     if (eventDate == null) {
       eventDate = DEFAULTDATE;
@@ -167,7 +167,7 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
       attributeFlags[i] = 0;
     }
     sessionAccumulator.getUbiSession().setSessionStartDt(DEFAULTDATE);
-    sessionAccumulator.getUbiSession().setFirstSessionStartDt(true);
+    sessionAccumulator.getUbiSession().setIsFirstSessionStartDt(true);
   }
 
   @Override

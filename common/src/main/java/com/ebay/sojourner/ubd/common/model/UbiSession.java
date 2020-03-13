@@ -100,6 +100,14 @@ public class UbiSession implements Serializable, Cloneable {
   private int seqNum;
   private IntermediateMetrics intermediateMetrics;
 
+  public void setIsFirstSessionStartDt(boolean firstSessionStartDt) {
+    isFirstSessionStartDt = firstSessionStartDt;
+  }
+
+  public boolean isFirstSessionStartDt() {
+    return isFirstSessionStartDt;
+  }
+
   public UbiSession() {
     //        this.distinctClickIdSet = new HashSet<Integer>();
     //        this.agentSets= new HashSet<String>();
