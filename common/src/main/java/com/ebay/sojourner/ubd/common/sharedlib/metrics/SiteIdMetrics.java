@@ -5,13 +5,8 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 
 public class SiteIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
-  private boolean isFirst = true;
-  private Integer siteId;
-
   @Override
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
-    this.isFirst = true;
-    this.siteId = null;
     sessionAccumulator.getUbiSession().setFirstSiteId(Integer.MIN_VALUE);
   }
 

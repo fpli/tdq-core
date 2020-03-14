@@ -46,6 +46,7 @@ public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
     if (tstamp != null) {
       try {
         abEventTimestamp = Long.valueOf(rawEvent.getClientData().getTStamp());
+        abEventTimestamp = SOJTS2Date.getSojTimestamp(abEventTimestamp);
       } catch (NumberFormatException e) {
         Long origEventTimeStamp = rawEvent.getRheosHeader().getEventCreateTimestamp();
         if (origEventTimeStamp != null) {
@@ -133,5 +134,10 @@ public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
 
   @Override
   public void init() throws Exception {
+  }
+
+  public static void main(String[] args){
+    System.out.println(SOJTS2Date.getSojTimestamp(1584039617189L));
+
   }
 }

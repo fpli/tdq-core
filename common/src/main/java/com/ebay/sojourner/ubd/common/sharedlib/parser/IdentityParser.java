@@ -2,6 +2,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.parser;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.util.Constants;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +40,7 @@ public class IdentityParser implements FieldParser<RawEvent, UbiEvent> {
     ubiEvent.setUrlQueryString(rawEvent.getClientData().getUrlQueryString());
     ubiEvent.setApplicationPayload(applicationPayload);
     ubiEvent.setPageName(rawEvent.getClientData().getTName());
+    ubiEvent.setVersion(Constants.EVENT_VERSION);
     //        ubiEvent.setConfiguration(configuration);
   }
 

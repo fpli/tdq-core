@@ -9,8 +9,6 @@ import java.util.Set;
 
 public class LndgPageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
-  private Integer minSCSeqNum;
-  private Integer lndgPageId;
   private Set<Integer> invalidPageIds;
 
   @Override

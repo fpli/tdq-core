@@ -15,6 +15,29 @@ public class SOJTS2Date {
   public static final long MILSECOFDAY = 86400000000L; // 24 * 3600 * 1000 * 1000
   public static final int MILLI2MICRO = 1000;
   public static final String EBAY_TIMEZONE = "GMT-7";
+  private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
+  private static final String DATE_FORMAT = "yyyy-MM-dd";
+  private static final ThreadLocal<SimpleDateFormat> dateFormatter =
+      new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+          SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+          // Make consistent with getCalender()
+          dateFormat.setTimeZone(TimeZone.getTimeZone(EBAY_TIMEZONE));
+          return dateFormat;
+        }
+      };
+
+  private static final ThreadLocal<SimpleDateFormat> dateFormatterWithMillis =
+      new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+          SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
+          // Make consistent with getCalender()
+          dateFormat.setTimeZone(TimeZone.getTimeZone(EBAY_TIMEZONE));
+          return dateFormat;
+        }
+      };
 
   /**
    * Get Sojourner default Calendar for being used.
@@ -47,6 +70,22 @@ public class SOJTS2Date {
     return getUnixTimestamp(microseconds);
   }
 
+  public static String getDateStrWithMillis(long ts) {
+    try {
+      return dateFormatterWithMillis.get().format(new Date((ts - OFFSET) / MILLI2MICRO));
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
+  public static String getDateStr(long ts) {
+    try {
+      return dateFormatter.get().format(new Date((ts - OFFSET) / MILLI2MICRO));
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
   public static Date getDate(long ts) {
     try {
       return new Date((ts - OFFSET) / MILLI2MICRO);
@@ -66,6 +105,7 @@ public class SOJTS2Date {
   }
 
   public static void main(String[] args) {
+
     long millis = getUnixTimestamp(3584201122910000L);
     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT-7"));
     calendar.setTimeInMillis(millis);

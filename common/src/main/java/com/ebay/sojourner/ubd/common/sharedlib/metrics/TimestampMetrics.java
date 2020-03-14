@@ -13,6 +13,11 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
+    sessionAccumulator.getUbiSession().setAbsStartTimestamp(null);
+    sessionAccumulator.getUbiSession().setAbsEndTimestamp(null);
+    sessionAccumulator.getUbiSession().setStartTimestamp(null);
+    sessionAccumulator.getUbiSession().setEndTimestamp(null);
+
   }
 
   @Override

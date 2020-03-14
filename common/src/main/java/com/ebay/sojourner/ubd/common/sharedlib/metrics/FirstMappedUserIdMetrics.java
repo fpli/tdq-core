@@ -9,8 +9,6 @@ import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
  */
 public class FirstMappedUserIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
-  private static final Integer ONE = 1;
-
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
     sessionAccumulator.getUbiSession().setFirstMappedUserId(null);

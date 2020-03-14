@@ -1,6 +1,7 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
+import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
@@ -11,6 +12,7 @@ import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForRNO;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSLC;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
@@ -176,13 +178,15 @@ public class SojournerRTLoadJob {
 
     DataStream<UbiEvent> ubiEventWithSessionId = ubiSessinDataStream
         .getSideOutput(mappedEventOutputTag);
-
+    DataStream<SojEvent> sojEventWithSessionId = ubiEventWithSessionId
+        .map(new UbiEventToSojEventMapFunction())
+        .name("UbiEvent to SojEvent");
     // This path is for local test. For production, we should use
     // "hdfs://apollo-rno//user/o_ubi/events/"
 
-    sojSessionStream.addSink(HdfsSinkUtil.sojSessionSinkWithParquet()).name("sojSession sink")
+    sojSessionStream.addSink(HdfsSinkUtil.sojSessionSinkWithParquet()).name("SojSession sink")
         .disableChaining();
-    ubiEventWithSessionId.addSink(HdfsSinkUtil.ubiEventSinkWithParquet()).name("ubiEvent sink")
+    sojEventWithSessionId.addSink(HdfsSinkUtil.ubiEventSinkWithParquet()).name("SojEvent sink")
         .disableChaining();
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
