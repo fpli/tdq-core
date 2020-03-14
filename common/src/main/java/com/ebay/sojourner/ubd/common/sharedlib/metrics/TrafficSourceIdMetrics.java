@@ -49,7 +49,6 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
   private static Set<Long> rotSet = new HashSet<Long>();
   private static Set<Integer> socialAgentId22 = new HashSet<Integer>();
   private static Set<Integer> socialAgentId23 = new HashSet<Integer>();
-
   private static StringBuilder stingBuilder = new StringBuilder();
 
   static {

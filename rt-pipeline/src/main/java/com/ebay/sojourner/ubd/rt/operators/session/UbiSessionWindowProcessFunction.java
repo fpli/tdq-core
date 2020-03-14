@@ -3,18 +3,18 @@ package com.ebay.sojourner.ubd.rt.operators.session;
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
-import org.apache.log4j.Logger;
 
+@Slf4j
 public class UbiSessionWindowProcessFunction
     extends ProcessWindowFunction<SessionAccumulator, UbiSession, Tuple, TimeWindow> {
 
-  private static final Logger logger = Logger.getLogger(UbiSessionWindowProcessFunction.class);
   private static SessionMetrics sessionMetrics;
   private OutputTag outputTag = null;
 

@@ -8,7 +8,6 @@ import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
 public class EventCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
-  private static UBIConfig ubiConfig;
   private PageIndicator indicator;
 
   // botrule10 will reuse eventcnt but there is some different between this and botrule10's

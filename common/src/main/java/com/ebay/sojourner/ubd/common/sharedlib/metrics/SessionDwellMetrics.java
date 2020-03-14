@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 public class SessionDwellMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
   private Long[] minMaxEventTimestamp;
-  private Integer seqNum;
 
   @Override
   public void init() throws Exception {

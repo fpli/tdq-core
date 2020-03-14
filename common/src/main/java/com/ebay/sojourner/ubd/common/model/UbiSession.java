@@ -83,7 +83,6 @@ public class UbiSession implements Serializable, Cloneable {
   private int siidCnt;
   private boolean isFirstSessionStartDt;
   private int maxScsSeqNum;
-
   private int firstCobrand;
   private int minSCSeqNum;
   private Long[] minMaxEventTimestamp;
