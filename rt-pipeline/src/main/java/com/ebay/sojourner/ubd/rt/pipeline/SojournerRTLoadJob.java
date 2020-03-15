@@ -177,15 +177,18 @@ public class SojournerRTLoadJob {
 
     DataStream<UbiEvent> ubiEventWithSessionId = ubiSessinDataStream
         .getSideOutput(mappedEventOutputTag);
+
+    // UbiEvent to SojEvent
     DataStream<SojEvent> sojEventWithSessionId = ubiEventWithSessionId
         .map(new UbiEventToSojEventMapFunction())
         .name("UbiEvent to SojEvent");
+
     // This path is for local test. For production, we should use
     // "hdfs://apollo-rno//user/o_ubi/events/"
 
     sojSessionStream.addSink(HdfsSinkUtil.sojSessionSinkWithParquet()).name("SojSession sink")
         .disableChaining();
-    sojEventWithSessionId.addSink(HdfsSinkUtil.ubiEventSinkWithParquet()).name("SojEvent sink")
+    sojEventWithSessionId.addSink(HdfsSinkUtil.sojEventSinkWithParquet()).name("SojEvent sink")
         .disableChaining();
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
