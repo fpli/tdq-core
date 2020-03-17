@@ -23,11 +23,11 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
      * Application_Payload.contain('&Motors20Group='|'&m2g=' )
      */
     Long eventDate = event.getSojDataDt();
-    if (eventDate != null && sessionAccumulator.getUbiSession().isFirstSessionStartDt()) {
-      sessionAccumulator.getUbiSession().setSessionStartDt(eventDate);
-
-      sessionAccumulator.getUbiSession().setFirstSessionStartDt(false);
-    }
+    //  if (eventDate != null && sessionAccumulator.getUbiSession().isFirstSessionStartDt()) {
+    //    sessionAccumulator.getUbiSession().setSessionStartDt(eventDate);
+    //
+    //    sessionAccumulator.getUbiSession().setFirstSessionStartDt(false);
+    //  }
     if (eventDate == null) {
       eventDate = DEFAULTDATE;
     }
@@ -58,7 +58,7 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
 
     // attribute flag 10
     if (sessionAccumulator.getUbiSession().getAttributeFlags()[10] == 0
-        && !eventDate.equals(sessionAccumulator.getUbiSession().getSessionStartDt())) {
+        && !eventDate.equals(sessionAccumulator.getUbiSession().getFirstSessionStartDt())) {
       sessionAccumulator.getUbiSession().getAttributeFlags()[10] = 1;
     }
 
@@ -166,8 +166,6 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
     for (int i = attributeFlags.length - 1; i >= 0; i--) {
       attributeFlags[i] = 0;
     }
-    sessionAccumulator.getUbiSession().setSessionStartDt(DEFAULTDATE);
-    sessionAccumulator.getUbiSession().setFirstSessionStartDt(true);
   }
 
   @Override
