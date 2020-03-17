@@ -1,7 +1,7 @@
 package com.ebay.sojourner.ubd.rt.connectors.filesystem;
 
+import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.common.model.SojSession;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.rt.util.HdfsPathConstants;
 import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.core.fs.Path;
@@ -16,8 +16,8 @@ public class HdfsSinkUtil {
         .build();
   }
 
-  public static StreamingFileSink ubiEventSinkWithParquet() {
-    return HdfsSinkUtil.createWithParquet(HdfsPathConstants.EVENT_PATH, UbiEvent.class);
+  public static StreamingFileSink sojEventSinkWithParquet() {
+    return HdfsSinkUtil.createWithParquet(HdfsPathConstants.EVENT_PATH, SojEvent.class);
   }
 
   public static StreamingFileSink sojSessionSinkWithParquet() {
@@ -29,7 +29,7 @@ public class HdfsSinkUtil {
   }
 
   public static StreamingFileSink lateEventSinkWithParquet() {
-    return HdfsSinkUtil.createWithParquet(HdfsPathConstants.LATE_EVENT_PATH, UbiEvent.class);
+    return HdfsSinkUtil.createWithParquet(HdfsPathConstants.LATE_EVENT_PATH, SojEvent.class);
   }
 
 }

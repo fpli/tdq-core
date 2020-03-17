@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,7 @@ public class RawEventDeserializationSchemaForSLC implements DeserializationSchem
 
   @Override
   public RawEvent deserialize(byte[] message) throws IOException {
-    long ingestTime = System.nanoTime();
+    long ingestTime = new Date().getTime();
     RheosEvent rheosEvent =
         RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
     GenericRecord genericRecord =

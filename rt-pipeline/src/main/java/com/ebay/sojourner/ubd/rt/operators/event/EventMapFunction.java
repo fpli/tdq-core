@@ -17,6 +17,7 @@ import com.ebay.sojourner.ubd.common.sharedlib.parser.IFrameParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.IcfParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.IdentityParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.ItemIdParser;
+import com.ebay.sojourner.ubd.common.sharedlib.parser.JSColumnParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.PageIdParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.PartialValidPageParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.RdtParser;
@@ -89,7 +90,8 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
             StaticPageTypeParser.class.getSimpleName(),
             TimestampParser.class.getSimpleName(),
             UserIdParser.class.getSimpleName(),
-            IcfParser.class.getSimpleName());
+            IcfParser.class.getSimpleName(),
+            JSColumnParser.class.getSimpleName());
 
     for (String className : classNames) {
       AverageAccumulator accumulator = new AverageAccumulator();

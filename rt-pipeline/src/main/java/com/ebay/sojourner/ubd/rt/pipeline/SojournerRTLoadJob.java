@@ -18,7 +18,6 @@ import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSojSessionMapFunc
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
-
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
@@ -178,15 +177,18 @@ public class SojournerRTLoadJob {
 
     DataStream<UbiEvent> ubiEventWithSessionId = ubiSessinDataStream
         .getSideOutput(mappedEventOutputTag);
+
+    // UbiEvent to SojEvent
     DataStream<SojEvent> sojEventWithSessionId = ubiEventWithSessionId
         .map(new UbiEventToSojEventMapFunction())
         .name("UbiEvent to SojEvent");
+
     // This path is for local test. For production, we should use
     // "hdfs://apollo-rno//user/o_ubi/events/"
 
     sojSessionStream.addSink(HdfsSinkUtil.sojSessionSinkWithParquet()).name("SojSession sink")
         .disableChaining();
-    sojEventWithSessionId.addSink(HdfsSinkUtil.ubiEventSinkWithParquet()).name("SojEvent sink")
+    sojEventWithSessionId.addSink(HdfsSinkUtil.sojEventSinkWithParquet()).name("SojEvent sink")
         .disableChaining();
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());

@@ -28,6 +28,7 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
     //
     //    sessionAccumulator.getUbiSession().setFirstSessionStartDt(false);
     //  }
+
     if (eventDate == null) {
       eventDate = DEFAULTDATE;
     }
