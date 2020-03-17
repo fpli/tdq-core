@@ -81,7 +81,7 @@ public class UbiSession implements Serializable, Cloneable {
   private String externalIp2;
   private Integer appId;
   private int siidCnt;
-  private boolean isFirstSessionStartDt;
+  //  private boolean isFirstSessionStartDt;
   private int maxScsSeqNum;
   private int firstCobrand;
   private int minSCSeqNum;
@@ -98,14 +98,7 @@ public class UbiSession implements Serializable, Cloneable {
   };
   private int seqNum;
   private IntermediateMetrics intermediateMetrics;
-
-  public void setIsFirstSessionStartDt(boolean firstSessionStartDt) {
-    isFirstSessionStartDt = firstSessionStartDt;
-  }
-
-  public boolean isFirstSessionStartDt() {
-    return isFirstSessionStartDt;
-  }
+  private Long firstSessionStartDt;
 
   public UbiSession() {
     //        this.distinctClickIdSet = new HashSet<Integer>();

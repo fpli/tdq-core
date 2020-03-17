@@ -94,7 +94,7 @@ public class ClientData {
         clientInfo.append("&");
       }
       String tstamp = toCALDateString(Long.valueOf(tStamp));
-      clientInfo.append("TStamp=").append(tStamp);
+      clientInfo.append("TStamp=").append(tstamp);
     }
     if (tName != null && !tName.equals("")) {
       if (clientInfo.length() > 0) {

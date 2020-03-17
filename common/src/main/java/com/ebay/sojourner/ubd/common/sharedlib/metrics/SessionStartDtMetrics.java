@@ -2,6 +2,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -25,6 +26,7 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
     sessionAccumulator
         .getUbiSession()
         .setSeqNum(sessionAccumulator.getUbiSession().getSeqNum() + 1);
+    sessionAccumulator.getUbiSession().setFirstSessionStartDt(event.getSojDataDt());
     if (!event.isIframe()
         && !event.isRdt()
         && sessionAccumulator.getUbiSession().getSessionStartDt() == 0) {
@@ -37,9 +39,18 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
     } else if (event.isNewSession() && sessionAccumulator.getUbiSession().getSessionId() != null) {
       event.setSessionId(sessionAccumulator.getUbiSession().getSessionId());
       event.setSessionSkey(sessionAccumulator.getUbiSession().getSessionSkey());
+    } else if (event.isNewSession() && sessionAccumulator.getUbiSession().getSessionId() == null) {
+      event.updateSessionId();
+      event.updateSessionSkey();
+      sessionAccumulator.getUbiSession().setSessionId(event.getSessionId());
+      sessionAccumulator.getUbiSession().setSessionSkey(event.getSessionSkey());
+      sessionAccumulator.getUbiSession().setVersion(Constants.SESSION_VERSION);
     }
 
-    event.setSessionStartDt(sessionAccumulator.getUbiSession().getSessionStartDt());
+    event.setSessionStartDt(
+        sessionAccumulator.getUbiSession().getSessionStartDt() == 0L ? sessionAccumulator
+            .getUbiSession().getFirstSessionStartDt()
+            : sessionAccumulator.getUbiSession().getSessionStartDt());
     event.setSeqNum(sessionAccumulator.getUbiSession().getSeqNum());
   }
 

@@ -116,7 +116,7 @@ public class SOJTS2Date {
     System.out.print(" " + calendar.get(Calendar.HOUR_OF_DAY));
     System.out.print(":" + calendar.get(Calendar.MINUTE));
     System.out.print(":" + calendar.get(Calendar.SECOND));
-    System.out.println();
+    System.out.println("test====="+getDateStr(0));
     System.out.println("=================Use GetTime + DateFormat =====================");
     String DATE_PARTITION = "yyyy-MM-dd HH:mm:ss";
     DateFormat DATE_PARTITION_FORMAT = new SimpleDateFormat(DATE_PARTITION);
