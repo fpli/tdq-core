@@ -37,6 +37,10 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
       sessionAccumulator.getUbiSession().setSessionId(event.getSessionId());
       sessionAccumulator.getUbiSession().setSessionSkey(event.getSessionSkey());
     } else if (event.isNewSession() && sessionAccumulator.getUbiSession().getSessionId() != null) {
+      long sessionSkey = event.getEventTimestamp() / Constants.SESSION_KEY_DIVISION;
+      if (sessionSkey < sessionAccumulator.getUbiSession().getSessionSkey()) {
+        sessionAccumulator.getUbiSession().setSessionSkey(sessionSkey);
+      }
       event.setSessionId(sessionAccumulator.getUbiSession().getSessionId());
       event.setSessionSkey(sessionAccumulator.getUbiSession().getSessionSkey());
     } else if (event.isNewSession() && sessionAccumulator.getUbiSession().getSessionId() == null) {
