@@ -8,7 +8,7 @@ import com.ebay.sojourner.ubd.rt.common.broadcast.AttributeBroadcastProcessFunct
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSOJ;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForQA;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAggSliding;
@@ -52,7 +52,7 @@ import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelp
 import org.apache.flink.types.Either;
 import org.apache.flink.util.OutputTag;
 
-public class SojournerUBDRTJobForSOJ {
+public class SojournerUBDRTJobForQA {
 
   public static void main(String[] args) throws Exception {
     // Make sure this is being executed at start up.
@@ -85,7 +85,7 @@ public class SojournerUBDRTJobForSOJ {
                 ? 1
                 : AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
     executionEnvironment.setStateBackend(
-        StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
+        StateBackendFactory.getStateBackend(StateBackendFactory.FS));
     executionEnvironment.setRestartStrategy(
         RestartStrategies.fixedDelayRestart(
             3, // number of restart attempts
@@ -96,11 +96,10 @@ public class SojournerUBDRTJobForSOJ {
     // 1. Rheos Consumer
     // 1.1 Consume RawEvent from Rheos PathFinder topic
     // 1.2 Assign timestamps and emit watermarks.
-
     DataStream<RawEvent> rawEventDataStream =
         executionEnvironment
             .addSource(
-                KafkaConnectorFactoryForSOJ.createKafkaConsumer()
+                KafkaConnectorFactoryForQA.createKafkaConsumer()
                     .setStartFromLatest()
                     .assignTimestampsAndWatermarks(
                         new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
@@ -113,16 +112,11 @@ public class SojournerUBDRTJobForSOJ {
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 30
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer");
+            .name("Rheos Kafka Consumer For Sojourner QA");
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
     // 2.2 Event level bot detection via bot rule
-    //        DataStream<RawEvent> filterRawEventDataStream = rawEventDataStream
-    //                .filter(new RawEventFilterFunction())
-    //                .setParallelism(30)
-    //                .name("filter RawEvents");
-
     DataStream<UbiEvent> ubiEventDataStream =
         rawEventDataStream
             .map(new EventMapFunction())
@@ -168,7 +162,7 @@ public class SojournerUBDRTJobForSOJ {
             .window(TumblingEventTimeWindows.of(Time.minutes(5)))
             .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
             .name("Attribute Operator (Agent+IP Pre-Aggregation)")
-            .setParallelism(72);
+            .setParallelism(20);
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureDataStream =
         ubiSessinDataStream
@@ -177,7 +171,7 @@ public class SojournerUBDRTJobForSOJ {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
             .name("Attribute Operator (GUID)")
-            .setParallelism(72);
+            .setParallelism(20);
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureSplitStream =
         guidSignatureDataStream.split(new SplitFunction());
@@ -185,13 +179,13 @@ public class SojournerUBDRTJobForSOJ {
     guidSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .setParallelism(72)
+        .setParallelism(20)
         .name("GUID Signature Generation");
 
     guidSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .setParallelism(72)
+        .setParallelism(20)
         .name("GUID Signature Expiration");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureDataStream =
@@ -202,7 +196,7 @@ public class SojournerUBDRTJobForSOJ {
             .aggregate(
                 new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
             .name("Attribute Operator (Agent+IP)")
-            .setParallelism(72);
+            .setParallelism(20);
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureSplitStream =
         agentIpSignatureDataStream.split(new SplitFunction());
@@ -210,13 +204,13 @@ public class SojournerUBDRTJobForSOJ {
     agentIpSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .setParallelism(72)
+        .setParallelism(20)
         .name("Agent+IP Signature Generation");
 
     agentIpSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .setParallelism(72)
+        .setParallelism(20)
         .name("Agent+IP Signature Expiration");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureDataStream =
@@ -226,7 +220,7 @@ public class SojournerUBDRTJobForSOJ {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
             .name("Attribute Operator (Agent)")
-            .setParallelism(72);
+            .setParallelism(20);
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureSplitStream =
         agentSignatureDataStream.split(new SplitFunction());
@@ -234,13 +228,13 @@ public class SojournerUBDRTJobForSOJ {
     agentSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .setParallelism(72)
+        .setParallelism(20)
         .name("Agent Signature Generation");
 
     agentSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .setParallelism(72)
+        .setParallelism(20)
         .name("Agent Signature Expiration");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureDataStream =
@@ -250,7 +244,7 @@ public class SojournerUBDRTJobForSOJ {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
             .name("Attribute Operator (IP)")
-            .setParallelism(72);
+            .setParallelism(20);
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureSplitStream =
         ipSignatureDataStream.split(new SplitFunction());
@@ -258,13 +252,13 @@ public class SojournerUBDRTJobForSOJ {
     ipSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .setParallelism(72)
+        .setParallelism(20)
         .name("IP Signature Generation");
 
     ipSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .setParallelism(72)
+        .setParallelism(20)
         .name("IP Signature Expiration");
 
     // union attribute signature for broadcast
