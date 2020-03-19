@@ -129,7 +129,7 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
     event.getBotFlags().addAll(botFlagList);
     if (botFlagList.size() > 0) {
       for (int botRule : botFlagList) {
-        if (String.valueOf(botRule).startsWith("8")) {
+        if (botRule >= 801 && botRule <= 812) {
           icfRuleHitCounter.inc();
           break;
         }
