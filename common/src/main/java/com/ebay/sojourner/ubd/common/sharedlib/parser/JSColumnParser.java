@@ -4,7 +4,7 @@ import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class JSColumnParser implements FieldParser<RawEvent, UbiEvent> {
 
@@ -19,8 +19,9 @@ public class JSColumnParser implements FieldParser<RawEvent, UbiEvent> {
   private static final String APP_VERSION = "mav";
   private static final String EVENT_ACTION = "eactn";
   private static final String EVENT_FAMILY = "efam";
-  private static final String SID="sid";
-  private static final String RQ ="rq";
+  private static final String SID = "sid";
+  private static final String RQ = "rq";
+
   @Override
   public void init() throws Exception {
 

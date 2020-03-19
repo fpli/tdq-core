@@ -8,6 +8,7 @@ import org.apache.flink.formats.parquet.ParquetBuilder;
 import org.apache.flink.formats.parquet.ParquetWriterFactory;
 import org.apache.parquet.avro.AvroParquetWriter;
 import org.apache.parquet.hadoop.ParquetWriter;
+import org.apache.parquet.hadoop.metadata.CompressionCodecName;
 import org.apache.parquet.io.OutputFile;
 
 public class RichParquetAvroWriters {
@@ -24,6 +25,8 @@ public class RichParquetAvroWriters {
 
     final Schema schema = new Schema.Parser().parse(schemaString);
 
-    return AvroParquetWriter.<T>builder(out).withSchema(schema).withDataModel(dataModel).build();
+    return AvroParquetWriter.<T>builder(out).withSchema(schema).withDataModel(dataModel)
+        .withCompressionCodec(
+            CompressionCodecName.SNAPPY).build();
   }
 }

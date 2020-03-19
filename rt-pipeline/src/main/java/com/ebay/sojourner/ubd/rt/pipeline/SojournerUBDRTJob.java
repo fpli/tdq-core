@@ -25,6 +25,7 @@ import com.ebay.sojourner.ubd.rt.operators.attribute.SplitFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.DetectableEventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventDiscardingSink;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.RawEventFilterFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.DetectableSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
@@ -159,11 +160,15 @@ public class SojournerUBDRTJob {
         .union(rawEventDataStreamForLVS)
         .union(rawEventDataStreamForSLC);
 
+    // filter 33% throughput group by guid for reduce kafka consumer lag
+    DataStream<RawEvent> filteredRawEventDataStream = rawEventDataStream
+        .filter(new RawEventFilterFunction()).disableChaining().name("RawEvent Filter Operator");
+
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
     // 2.2 Event level bot detection via bot rule
     DataStream<UbiEvent> ubiEventDataStream =
-        rawEventDataStream
+        filteredRawEventDataStream
             .map(new EventMapFunction())
             .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
             .name("Event Operator");

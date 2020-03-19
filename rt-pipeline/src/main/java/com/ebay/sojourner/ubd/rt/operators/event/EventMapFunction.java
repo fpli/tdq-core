@@ -34,6 +34,7 @@ import com.ebay.sojourner.ubd.common.sharedlib.parser.UserIdParser;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.accumulators.AverageAccumulator;
@@ -46,9 +47,11 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
   private EventParser parser;
   private EventBotDetector eventBotDetector;
-  private AverageAccumulator avgDuration = new AverageAccumulator();
+  private AverageAccumulator avgEventParserDuration = new AverageAccumulator();
   private Map<String, AverageAccumulator> eventParseMap = new ConcurrentHashMap<>();
-  private Counter counter;
+  private Counter eventCounter;
+  private AverageAccumulator avgBotDetectionDuration = new AverageAccumulator();
+  private Counter icfRuleHitCounter;
 
   @Override
   public void open(Configuration conf) throws Exception {
@@ -56,12 +59,23 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
     parser = new EventParser();
     eventBotDetector = EventBotDetector.getInstance();
 
-    getRuntimeContext().addAccumulator("Average Duration of Event Parsing", avgDuration);
-    counter =
+    getRuntimeContext()
+        .addAccumulator("Average Duration of Event Parsing", avgEventParserDuration);
+
+    getRuntimeContext()
+        .addAccumulator("Average Duration of Event BotDetection", avgBotDetectionDuration);
+
+    eventCounter =
         getRuntimeContext()
             .getMetricGroup()
             .addGroup("sojourner-ubd")
             .counter("ubiEvent count");
+
+    icfRuleHitCounter =
+        getRuntimeContext()
+            .getMetricGroup()
+            .addGroup("sojourner-ubd")
+            .counter("icfRule hits count");
 
     List<String> classNames =
         Arrays.asList(
@@ -104,12 +118,23 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
   @Override
   public UbiEvent map(RawEvent rawEvent) throws Exception {
-    counter.inc();
+    eventCounter.inc();
     UbiEvent event = new UbiEvent();
-    long startTime = System.nanoTime();
+    long startTimeForEventParser = System.nanoTime();
     parser.parse(rawEvent, event, eventParseMap);
-    avgDuration.add(System.nanoTime() - startTime);
-    event.getBotFlags().addAll(eventBotDetector.getBotFlagList(event));
+    avgEventParserDuration.add(System.nanoTime() - startTimeForEventParser);
+    long startTimeForEventBotDetection = System.nanoTime();
+    Set<Integer> botFlagList = eventBotDetector.getBotFlagList(event);
+    avgBotDetectionDuration.add(System.nanoTime() - startTimeForEventBotDetection);
+    event.getBotFlags().addAll(botFlagList);
+    if (botFlagList.size() > 0) {
+      for (int botRule : botFlagList) {
+        if (botRule >= 801 && botRule <= 812) {
+          icfRuleHitCounter.inc();
+          break;
+        }
+      }
+    }
     return event;
   }
 }

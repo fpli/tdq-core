@@ -63,7 +63,8 @@ public class UbiEvent implements Serializable {
   // collect some metrics for monitor and validation
   private long ingestTime;
   private long generateTime;
-  @Getter private long eventCnt;
+  @Getter
+  private long eventCnt;
 
   //metric for monitor
   private String dataCenter;
@@ -87,7 +88,6 @@ public class UbiEvent implements Serializable {
   private String enrichedOsVersion;
   private String rlogid;
 
-
   //  private Map<String, Object> counters;
 
   public void updateSessionId() {
@@ -107,7 +107,7 @@ public class UbiEvent implements Serializable {
   }
 
   public void updateSessionSkey() {
-    this.sessionSkey=this.eventTimestamp/Constants.SESSION_KEY_DIVISION;
+    this.sessionSkey = this.eventTimestamp / Constants.SESSION_KEY_DIVISION;
   }
 
 
