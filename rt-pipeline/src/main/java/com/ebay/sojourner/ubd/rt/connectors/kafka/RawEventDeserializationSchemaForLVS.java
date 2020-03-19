@@ -305,6 +305,11 @@ public class RawEventDeserializationSchemaForLVS implements DeserializationSchem
       tpStr.append("&").append("node_id").append("=").append(clientData.getNodeId());
       tpStr.append("&").append("REQUEST_GUID").append("=").append(clientData.getRequestGuid());
       tpStr.append("&").append("logid").append("=").append(clientData.getRlogid());
+
+      String calMod = getTag(decodedTPayload, "cal_mod");
+      if (calMod != null && !calMod.equals("")) {
+        tpStr.append("&").append("cal_mod").append("=").append(calMod);
+      }
       String country = getTag(decodedTPayload, "country");
       if (country != null && !country.equals("")) {
         tpStr.append("&").append("country").append("=").append(country);
