@@ -11,6 +11,7 @@ import lombok.Data;
 
 @Data
 public class RulesTestInputObjects {
+
   @JsonProperty("UbiEvent")
   private UbiEvent ubiEvent;
 

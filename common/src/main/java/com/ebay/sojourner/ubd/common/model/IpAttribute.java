@@ -9,6 +9,7 @@ import lombok.Data;
 
 @Data
 public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
+
   public static final int MAX_CGUID_THRESHOLD = 5;
   public static final int SESSION_COUNT_THRESHOLD = 300;
   public static final Set<Integer> pageSessionSet = new HashSet<>(Arrays.asList(2, 3, 4, 5));
@@ -21,7 +22,8 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
   private Boolean isAllAgentHoper = true;
   private int totalCntForSec1 = 0;
 
-  public IpAttribute() {}
+  public IpAttribute() {
+  }
 
   @Override
   public void feed(AgentIpAttribute agentIpAttribute, int botFlag, boolean isNeeded) {
@@ -29,32 +31,31 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
       totalCnt += agentIpAttribute.getTotalCnt();
     }
     switch (botFlag) {
-      case 7:
-        {
-          if (scsCount < 0) {
-            return;
-          }
+      case 7: {
+        if (scsCount < 0) {
+          return;
+        }
 
-          if (agentIpAttribute.getScsCountForBot7() < 0) {
-            scsCount = -1;
-          } else {
-            scsCount += agentIpAttribute.getScsCountForBot7();
-          }
-          break;
+        if (agentIpAttribute.getScsCountForBot7() < 0) {
+          scsCount = -1;
+        } else {
+          scsCount += agentIpAttribute.getScsCountForBot7();
         }
-      case 210:
-        {
-          if (selectRatio(agentIpAttribute)) {
-            totalCntForSec1 += agentIpAttribute.getTotalCntForSec1();
-          }
-          isAllAgentHoper = isAllAgentHoper && agentIpAttribute.getIsAllAgentHoper();
-          break;
+        break;
+      }
+      case 210: {
+        if (selectRatio(agentIpAttribute)) {
+          totalCntForSec1 += agentIpAttribute.getTotalCntForSec1();
         }
+        isAllAgentHoper = isAllAgentHoper && agentIpAttribute.getIsAllAgentHoper();
+        break;
+      }
     }
   }
 
   @Override
-  public void revert(AgentIpAttribute agentIpAttribute, int botFlag) {}
+  public void revert(AgentIpAttribute agentIpAttribute, int botFlag) {
+  }
 
   @Override
   public void clear() {
@@ -113,17 +114,14 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
 
     if (sessionCnt > 100
         && (((agentIpAttribute.getFamilyViCnt() * 1.0) >= (0.95 * sessionCnt))
-            || ((guidCnt * 1.0) >= (0.98 * sessionCnt)))) {
+        || ((guidCnt * 1.0) >= (0.98 * sessionCnt)))) {
       return true;
     }
 
-    if (sessionCnt > 200
+    return sessionCnt > 200
         && (((cguidCnt < MAX_CGUID_THRESHOLD)
-                || (sessionCnt > 1000 && agentIpAttribute.getMaxValidPageCnt() <= 10))
-            || ((agentIpAttribute.getNewGuidCnt() * 1.0) > (0.97 * sessionCnt)))) {
-      return true;
-    }
+        || (sessionCnt > 1000 && agentIpAttribute.getMaxValidPageCnt() <= 10))
+        || ((agentIpAttribute.getNewGuidCnt() * 1.0) > (0.97 * sessionCnt)));
 
-    return false;
   }
 }

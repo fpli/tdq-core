@@ -1,5 +1,4 @@
--
-  name: case1
+- name: case1
   type: AgentAttribute
   input:
     AgentAttribute:
@@ -12,8 +11,7 @@
       ipCountForSuspect:
   expectResult: 220
 
--
-  name: case2
+- name: case2
   type: AgentAttribute
   input:
     AgentAttribute:

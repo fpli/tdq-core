@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 public class LkpFetcher {
+
   public static final Logger log = Logger.getLogger(LkpFetcher.class);
   public static final String LKP_FILED_DELIMITER = ",";
   public static final String LKP_RECORD_DELIMITER = "\177";
@@ -23,7 +24,7 @@ public class LkpFetcher {
   public static final String TEXT_FIELD_DELIMITER = "\t";
   public static final int PAIR_LENGTH = 2;
 
-  private static Set<String> pageIdSet = new HashSet<String>();
+  private static Set<Integer> pageIdSet = new HashSet<Integer>();
   // private static Set<String> pageIdSet4Bot12 = new HashSet<String>();
   private static Map<Integer, Integer> findingFlagMap = new HashMap<Integer, Integer>();
   private static Map<Integer, Integer[]> vtNewIdsMap = new HashMap<Integer, Integer[]>();
@@ -75,7 +76,12 @@ public class LkpFetcher {
       String pageIds = isTestEnabled ? iframePageIds : FileLoader.loadContent(resourceAsStream);
       if (StringUtils.isNotBlank(pageIds)) {
         for (String pageId : pageIds.split(LKP_RECORD_DELIMITER)) {
-          pageIdSet.add(pageId);
+          try {
+            pageIdSet.add(Integer.valueOf(pageId));
+          } catch (NumberFormatException e) {
+            log.warn("Parsing PageId failed, format incorrect...");
+          }
+
         }
       } else {
         log.warn("Empty content for lookup table of iframe page ids");
@@ -323,7 +329,7 @@ public class LkpFetcher {
     }
   }
 
-  public Set<String> getIframePageIdSet() {
+  public Set<Integer> getIframePageIdSet() {
     return pageIdSet;
   }
 

@@ -7,8 +7,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/** @author weifang. */
+/**
+ * @author weifang.
+ */
 public class UbiBotFilter implements BotFilter {
+
   public static final String COUNTER_FILTERED_APPID = "filteredByAppId";
   public static final String COUNTER_FILTERED_INVALID = "filteredByInvalidSession";
 

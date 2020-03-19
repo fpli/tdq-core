@@ -8,8 +8,7 @@ import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import java.util.Set;
 
 public class LndgPageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
-  private Integer minSCSeqNum;
-  private Integer lndgPageId;
+
   private Set<Integer> invalidPageIds;
 
   @Override
@@ -36,5 +35,6 @@ public class LndgPageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumula
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) throws Exception {}
+  public void end(SessionAccumulator sessionAccumulator) throws Exception {
+  }
 }

@@ -2,13 +2,15 @@ package com.ebay.sojourner.ubd.common.sharedlib.parser;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.util.Constants;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import java.util.HashMap;
 import java.util.Map;
 
 public class IdentityParser implements FieldParser<RawEvent, UbiEvent> {
+
   private static final String G_TAG = "g";
-  //    private Configuration configuration;
+
   @Override
   public void parse(RawEvent rawEvent, UbiEvent ubiEvent) throws Exception {
     Map<String, String> map = new HashMap<>();
@@ -27,7 +29,9 @@ public class IdentityParser implements FieldParser<RawEvent, UbiEvent> {
     }
 
     // else set C record
-    if (applicationPayload == null) applicationPayload = mCRecString;
+    if (applicationPayload == null) {
+      applicationPayload = mCRecString;
+    }
     if (map.containsKey(G_TAG)) {
       ubiEvent.setGuid(map.get(G_TAG));
     }
@@ -36,6 +40,7 @@ public class IdentityParser implements FieldParser<RawEvent, UbiEvent> {
     ubiEvent.setUrlQueryString(rawEvent.getClientData().getUrlQueryString());
     ubiEvent.setApplicationPayload(applicationPayload);
     ubiEvent.setPageName(rawEvent.getClientData().getTName());
+    ubiEvent.setVersion(Constants.EVENT_VERSION);
     //        ubiEvent.setConfiguration(configuration);
   }
 

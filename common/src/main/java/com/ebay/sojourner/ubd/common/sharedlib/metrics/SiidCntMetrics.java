@@ -2,13 +2,8 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.util.UBIConfig;
-import java.util.Set;
 
 public class SiidCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
-
-  private static Set<Integer> cobrandSets;
-  private static UBIConfig ubiConfig;
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
@@ -37,8 +32,10 @@ public class SiidCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) {}
+  public void end(SessionAccumulator sessionAccumulator) {
+  }
 
   @Override
-  public void init() throws Exception {}
+  public void init() throws Exception {
+  }
 }

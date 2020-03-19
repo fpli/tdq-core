@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 public class ValueExtractor {
+
   private static final Logger log = Logger.getLogger(ValueExtractor.class);
 
   public static String extract(String value, String key) {

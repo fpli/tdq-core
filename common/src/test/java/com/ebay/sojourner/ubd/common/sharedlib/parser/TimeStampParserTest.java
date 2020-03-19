@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class TimeStampParserTest {
+
   private static final Logger logger = Logger.getLogger(TimeStampParserTest.class);
 
   private static UbiEvent ubiEvent = null;

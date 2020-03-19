@@ -9,9 +9,11 @@ import lombok.Data;
 
 @Data
 public class UbiSession implements Serializable, Cloneable {
+
   private Long sojDataDt;
   private String guid;
   private String sessionId;
+  private long sessionSkey;
   private Long sessionStartDt;
   private String ip;
   private String userAgent;
@@ -34,7 +36,6 @@ public class UbiSession implements Serializable, Cloneable {
   private int watchCoreCnt;
   private int trafficSrcId;
   private Long absStartTimestamp;
-  private Long absEndTimestamp;
   private int absDuration;
   private int cobrand;
   private int firstSiteId;
@@ -59,9 +60,17 @@ public class UbiSession implements Serializable, Cloneable {
   private int lndgPageId;
   private String exInternalIp;
   private int familyViCnt;
+
+  // new added according to batch
+  private Long absEndTimestamp;
   private int pageCnt;
   private int searchCnt;
   private int viewCnt;
+  private boolean isRefererNull; // for bot207
+  private int siidCnt2; // for bot207
+  private int viCnt; // for bot215
+
+  //interim columns
   private Set<Integer> distinctClickIdSet = new HashSet<>();
   private Set<String> agentSets = new HashSet<>();
   private String agentInfo;
@@ -72,10 +81,8 @@ public class UbiSession implements Serializable, Cloneable {
   private String externalIp2;
   private Integer appId;
   private int siidCnt;
-  private int viCnt; // for bot215
+  //  private boolean isFirstSessionStartDt;
   private int maxScsSeqNum;
-  private boolean isRefererNull; // for bot207
-  private int siidCnt2; // for bot207
   private int firstCobrand;
   private int minSCSeqNum;
   private Long[] minMaxEventTimestamp;
@@ -85,11 +92,13 @@ public class UbiSession implements Serializable, Cloneable {
   private Set<String> userIdSet = new HashSet<>();
   private Attributes attributes = new Attributes();
   private byte[] attributeFlags = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   };
   private int seqNum;
   private IntermediateMetrics intermediateMetrics;
+  private Long firstSessionStartDt;
 
   public UbiSession() {
     //        this.distinctClickIdSet = new HashSet<Integer>();

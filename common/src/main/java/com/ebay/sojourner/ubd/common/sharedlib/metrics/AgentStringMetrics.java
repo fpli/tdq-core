@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class AgentStringMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
   public static final String SHOCKWAVE_FLASH_AGENT = "Shockwave Flash";
   public static final int AGENT_MAX_LENGTH = 2000;
   private static Set<Integer> agentExcludeSet;
@@ -29,6 +30,7 @@ public class AgentStringMetrics implements FieldMetrics<UbiEvent, SessionAccumul
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
     // do clear first as end method may not been invoked.
     sessionAccumulator.getUbiSession().setAgentString(null);
+    sessionAccumulator.getUbiSession().getAgentSets().clear();
   }
 
   @Override

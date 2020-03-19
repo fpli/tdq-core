@@ -13,6 +13,7 @@ import java.util.List;
 import org.junit.jupiter.api.DynamicTest;
 
 public class BaseRulesTest<T> {
+
   private RulesTestInputObjects rulesInput;
   private RulesTestCase rulesTestCase;
   private List<RulesTestCase> rulesTestCaseList;

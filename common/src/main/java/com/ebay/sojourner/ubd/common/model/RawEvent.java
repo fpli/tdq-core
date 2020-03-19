@@ -12,8 +12,10 @@ public class RawEvent implements Serializable {
   private Map<String, String> sojC;
   private ClientData clientData;
   private long ingestTime;
+  private String dataCenter;
 
-  public RawEvent() {}
+  public RawEvent() {
+  }
 
   public RawEvent(
       RheosHeader rheosHeader,
@@ -21,6 +23,7 @@ public class RawEvent implements Serializable {
       Map<String, String> sojK,
       Map<String, String> sojC,
       ClientData clientData,
+      String dataCenter,
       long ingestTime) {
     this.rheosHeader = rheosHeader;
     this.sojA = sojA;
@@ -28,6 +31,15 @@ public class RawEvent implements Serializable {
     this.sojC = sojC;
     this.clientData = clientData;
     this.ingestTime = ingestTime;
+    this.dataCenter = dataCenter;
+  }
+
+  public String getDataCenter() {
+    return dataCenter;
+  }
+
+  public void setDataCenter(String dataCenter) {
+    this.dataCenter = dataCenter;
   }
 
   public long getIngestTime() {

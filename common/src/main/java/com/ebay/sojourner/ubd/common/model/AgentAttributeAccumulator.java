@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class AgentAttributeAccumulator {
+
   private AgentAttribute agentAttribute;
   private HashMap<Integer, Integer> botFlagStatus = new HashMap<>();
 

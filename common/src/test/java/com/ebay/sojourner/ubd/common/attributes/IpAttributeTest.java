@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 public class IpAttributeTest extends BaseAttributesTest<AgentIpAttribute> {
+
   private IpAttribute ipAttribute;
   private Pair<JsonNode, List<AttributesTestCase>> pair;
 

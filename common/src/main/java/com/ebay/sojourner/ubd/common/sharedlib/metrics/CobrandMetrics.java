@@ -8,6 +8,7 @@ import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import java.util.Set;
 
 public class CobrandMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
   private Set<Integer> invalidPageIds;
 
   @Override

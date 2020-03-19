@@ -21,8 +21,10 @@ import org.mockito.Mock;
 
 public class FmlyViCntMetricsTest extends BaseMetricsTest {
 
-  @Mock LkpFetcher lkpFetcher;
-  @Mock List<String> viPGT;
+  @Mock
+  LkpFetcher lkpFetcher;
+  @Mock
+  List<String> viPGT;
   private FmlyViCntMetrics fmlyViCntMetrics;
 
   @BeforeEach
@@ -41,7 +43,7 @@ public class FmlyViCntMetricsTest extends BaseMetricsTest {
   @Test
   void test_getImPGT_VI() throws Exception {
     Map<Integer, String[]> pageFmlyMaps = new HashMap<>();
-    pageFmlyMaps.put(0, new String[] {"0", "VI"});
+    pageFmlyMaps.put(0, new String[]{"0", "VI"});
 
     when(lkpFetcher.getPageFmlyMaps()).thenReturn(pageFmlyMaps);
     when(viPGT.contains("abc")).thenReturn(true);
@@ -66,7 +68,7 @@ public class FmlyViCntMetricsTest extends BaseMetricsTest {
   @Test
   void test_getImPGT_VI_2() throws Exception {
     Map<Integer, String[]> pageFmlyMaps = new HashMap<>();
-    pageFmlyMaps.put(1521826, new String[] {"0", "VI"});
+    pageFmlyMaps.put(1521826, new String[]{"0", "VI"});
 
     when(lkpFetcher.getPageFmlyMaps()).thenReturn(pageFmlyMaps);
 
@@ -90,7 +92,7 @@ public class FmlyViCntMetricsTest extends BaseMetricsTest {
   @Test
   void test_getImPGT_GR() throws Exception {
     Map<Integer, String[]> pageFmlyMaps = new HashMap<>();
-    pageFmlyMaps.put(1521826, new String[] {"0", "VI"});
+    pageFmlyMaps.put(1521826, new String[]{"0", "VI"});
 
     when(lkpFetcher.getPageFmlyMaps()).thenReturn(pageFmlyMaps);
 

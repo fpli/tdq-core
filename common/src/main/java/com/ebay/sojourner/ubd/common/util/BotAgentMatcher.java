@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BotAgentMatcher {
+
   private static final int BOT_MATCH_THRESHOLD = 10000;
   // TODO: Use MinMaxPriorityQueue instead
   // Cache matched agents to reduce comparison.
@@ -14,9 +15,6 @@ public class BotAgentMatcher {
 
   /**
    * Construct matcher wish provided browser agents and bot agents.
-   *
-   * @param browserAgents
-   * @param botAgents
    */
   public BotAgentMatcher(Collection<String> browserAgents, Collection<String> botAgents) {
     this.botAgents = new HashSet<String>();
@@ -26,10 +24,7 @@ public class BotAgentMatcher {
   /**
    * Do bot agent match for specific agent string
    *
-   * @param agentString
    * @return true if it's a bot agent or false.
-   * @throws IOException
-   * @throws InterruptedException
    */
   public boolean match(String agentString) throws IOException, InterruptedException {
     if (botAgents.contains(agentString)) {
@@ -48,9 +43,6 @@ public class BotAgentMatcher {
 
   /**
    * Clean cached agents which are coming from bots and agent string.
-   *
-   * @throws IOException
-   * @throws InterruptedException
    */
   public void cleanup() throws IOException, InterruptedException {
     // release cached string earilier.

@@ -1,5 +1,4 @@
--
-  name: test1
+- name: test1
   inputs:
     UbiEvent:
       staticPageType: 2
@@ -12,8 +11,7 @@
       searchCnt: 1
       viewCnt: 0
 
--
-  name: test2
+- name: test2
   inputs:
     UbiEvent:
       staticPageType: 3

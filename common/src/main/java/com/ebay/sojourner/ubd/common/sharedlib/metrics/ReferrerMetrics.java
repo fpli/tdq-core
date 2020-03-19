@@ -19,7 +19,8 @@ public class ReferrerMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) {}
+  public void end(SessionAccumulator sessionAccumulator) {
+  }
 
   @Override
   public void init() throws Exception {

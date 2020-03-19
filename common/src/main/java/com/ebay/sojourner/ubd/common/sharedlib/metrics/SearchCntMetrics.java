@@ -26,8 +26,10 @@ public class SearchCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) {}
+  public void end(SessionAccumulator sessionAccumulator) {
+  }
 
   @Override
-  public void init() throws Exception {}
+  public void init() throws Exception {
+  }
 }

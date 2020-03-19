@@ -5,12 +5,16 @@ import org.apache.commons.lang3.StringUtils;
 public class SOJBase64ToLong {
 
   public static Long getLong(String b64) {
-    if (StringUtils.isBlank(b64) || (b64.length() % 4) != 0) return null;
+    if (StringUtils.isBlank(b64) || (b64.length() % 4) != 0) {
+      return null;
+    }
 
     try {
       byte[] s = new byte[8];
       byte[] s1 = Base64Ebay.decode(b64, true);
-      for (int i = 0; i < s1.length; i++) s[i] = s1[i];
+      for (int i = 0; i < s1.length; i++) {
+        s[i] = s1[i];
+      }
       return toLong(s);
     } catch (Exception e) {
       return null;

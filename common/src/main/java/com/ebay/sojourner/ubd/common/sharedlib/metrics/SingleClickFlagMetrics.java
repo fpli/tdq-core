@@ -15,7 +15,7 @@ public class SingleClickFlagMetrics implements FieldMetrics<UbiEvent, SessionAcc
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
-
+    sessionAccumulator.getUbiSession().getDistinctClickIdSet().clear();
     //        feed(event, sessionAccumulator);
   }
 
@@ -27,7 +27,6 @@ public class SingleClickFlagMetrics implements FieldMetrics<UbiEvent, SessionAcc
         if (clickId != null) {
           if (sessionAccumulator.getUbiSession().getDistinctClickIdSet() != null
               && sessionAccumulator.getUbiSession().getDistinctClickIdSet().size() < 10) {
-
             sessionAccumulator.getUbiSession().getDistinctClickIdSet().add(clickId);
           }
         }

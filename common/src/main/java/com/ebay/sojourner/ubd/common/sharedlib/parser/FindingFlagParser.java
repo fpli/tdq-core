@@ -5,6 +5,7 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import java.util.Map;
 
 public class FindingFlagParser implements FieldParser<RawEvent, UbiEvent> {
+
   private static LkpFetcher lkpFetcher;
 
   @Override
@@ -17,5 +18,6 @@ public class FindingFlagParser implements FieldParser<RawEvent, UbiEvent> {
   }
 
   @Override
-  public void init() throws Exception {}
+  public void init() throws Exception {
+  }
 }

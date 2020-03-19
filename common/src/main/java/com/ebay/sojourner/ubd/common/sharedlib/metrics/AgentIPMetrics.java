@@ -41,7 +41,8 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
     UbiSession ubiSession = sessionAccumulator.getUbiSession();
 
-    if (!ubiSession.isFindFirst() && event.getClientIP() != null) {
+    if (!ubiSession.isFindFirst() && ubiSession.getClientIp() == null
+        && ubiSession.getAgentInfo() == null) {
       ubiSession.setAgentInfo(event.getAgentInfo());
       ubiSession.setClientIp(event.getClientIP());
     }
@@ -102,8 +103,8 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
         .setExInternalIp(
             (sessionAccumulator.getUbiSession().getExternalIp() == null)
                 ? (sessionAccumulator.getUbiSession().getExternalIp2() == null
-                    ? sessionAccumulator.getUbiSession().getInternalIp()
-                    : sessionAccumulator.getUbiSession().getExternalIp2())
+                ? sessionAccumulator.getUbiSession().getInternalIp()
+                : sessionAccumulator.getUbiSession().getExternalIp2())
                 : sessionAccumulator.getUbiSession().getExternalIp());
   }
 

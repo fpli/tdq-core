@@ -11,5 +11,6 @@ public class IpSignature implements Signature, Serializable {
 
   private Map<String, Set<Integer>> ipBotSignature = new HashMap<>();
 
-  public IpSignature() {}
+  public IpSignature() {
+  }
 }

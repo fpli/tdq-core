@@ -1,5 +1,4 @@
--
-  name: bot5
+- name: bot5
   type: UbiSession
   input:
     UbiSession:
@@ -44,8 +43,7 @@
     isAllAgentHoper: true
     scsCountForBot5: 1
 
--
-  name: bot6
+- name: bot6
   type: UbiSession
   input:
     UbiSession:
@@ -90,8 +88,7 @@
     isAllAgentHoper: true
     scsCountForBot6: 1
 
--
-  name: bot7
+- name: bot7
   type: UbiSession
   input:
     UbiSession:
@@ -136,8 +133,7 @@
     isAllAgentHoper: true
     scsCountForBot7: 1
 
--
-  name: bot8
+- name: bot8
   type: UbiSession
   input:
     UbiSession:

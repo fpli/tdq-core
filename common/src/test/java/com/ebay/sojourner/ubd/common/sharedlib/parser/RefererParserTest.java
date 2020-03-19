@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class RefererParserTest {
+
   private static final Logger logger = Logger.getLogger(RefererParserTest.class);
 
   private static UbiEvent ubiEvent = null;

@@ -7,7 +7,7 @@ import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
 public class EventCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
-  private static UBIConfig ubiConfig;
+
   private PageIndicator indicator;
 
   // botrule10 will reuse eventcnt but there is some different between this and botrule10's
@@ -41,7 +41,8 @@ public class EventCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) {}
+  public void end(SessionAccumulator sessionAccumulator) {
+  }
 
   @Override
   public void init() throws Exception {

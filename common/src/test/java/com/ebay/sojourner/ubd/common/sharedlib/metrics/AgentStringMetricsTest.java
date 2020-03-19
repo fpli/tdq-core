@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 public class AgentStringMetricsTest extends BaseMetricsTest {
+
   private AgentStringMetrics agentStringMetrics;
   private JsonNode yaml;
 

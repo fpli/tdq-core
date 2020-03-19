@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 public class BotHostMatcher {
+
   public static final BotHostMatcher INSTANCE = new BotHostMatcher();
   public static final String LINUX_NS_LOOKUP = "nslookup";
   public static final String DNS_KEY = "name =";
@@ -68,7 +69,7 @@ public class BotHostMatcher {
   public String getHostByIp(String ip, int retryNumber) {
     String host = null;
     try {
-      String[] ips = new String[] {LINUX_NS_LOOKUP, ip};
+      String[] ips = new String[]{LINUX_NS_LOOKUP, ip};
       Process proc = runtime.exec(ips);
       String result = getHostFromStdout(proc);
       printStdError(proc);

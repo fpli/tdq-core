@@ -5,7 +5,6 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJURLDecodeEscape;
-import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,6 +19,7 @@ import org.apache.log4j.Logger;
  * Source code: /dw/etl/home/prod/sql/sg_ubi_freq.soj_event_wt1.ins.sql
  * */
 public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
+
   private static final Logger log = Logger.getLogger(TimestampParser.class);
   private static final long UPPERLIMITMICRO = 1 * 60 * 1000000L; // 2 minutes
   private static final long LOWERLIMITMICRO = -30 * 60 * 1000000L; // 31 minutes
@@ -28,6 +28,11 @@ public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
   private static final String P_TAG = "p";
   private static final TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
 
+  public static void main(String[] args) {
+    System.out.println(SOJTS2Date.getSojTimestamp(1584039617189L));
+
+  }
+
   public void parse(RawEvent rawEvent, UbiEvent ubiEvent) {
     SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     SimpleDateFormat formaterUtc = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -35,41 +40,40 @@ public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
     Long abEventTimestamp = null;
     Long eventTimestamp = null;
     Long interval = null;
-    String applicationPayload = null;
+    String applicationPayload = ubiEvent.getApplicationPayload();
     String mtstsString = null;
     String pageId = null;
     formater.setTimeZone(timeZone);
     formaterUtc.setTimeZone(utcTimeZone);
     // abEventTimestamp = rawEvent.getAbEventTimestamp();
     // for cal2.0 abeventtimestamp format change(from soj timestamp to EPOCH timestamp)
-    Long origEventTimeStamp = rawEvent.getRheosHeader().getEventCreateTimestamp();
-    if (origEventTimeStamp != null) {
-      abEventTimestamp = SOJTS2Date.getSojTimestamp(origEventTimeStamp);
+    String tstamp = rawEvent.getClientData().getTStamp();
+    if (tstamp != null) {
+      try {
+        abEventTimestamp = Long.valueOf(rawEvent.getClientData().getTStamp());
+        abEventTimestamp = SOJTS2Date.getSojTimestamp(abEventTimestamp);
+      } catch (NumberFormatException e) {
+        Long origEventTimeStamp = rawEvent.getRheosHeader().getEventCreateTimestamp();
+        if (origEventTimeStamp != null) {
+          abEventTimestamp = SOJTS2Date.getSojTimestamp(origEventTimeStamp);
+        }
+      }
+    } else {
+      Long origEventTimeStamp = rawEvent.getRheosHeader().getEventCreateTimestamp();
+      if (origEventTimeStamp != null) {
+        abEventTimestamp = SOJTS2Date.getSojTimestamp(origEventTimeStamp);
+      }
     }
     Map<String, String> map = new HashMap<>();
     map.putAll(rawEvent.getSojA());
     map.putAll(rawEvent.getSojK());
     map.putAll(rawEvent.getSojC());
 
-    String mARecString = PropertyUtils.mapToString(rawEvent.getSojA());
-    String mKRecString = PropertyUtils.mapToString(rawEvent.getSojK());
-    String mCRecString = PropertyUtils.mapToString(rawEvent.getSojC());
-    if (mARecString != null) {
-      applicationPayload = mARecString;
-    }
-    if ((applicationPayload != null) && (mKRecString != null)) {
-      applicationPayload = applicationPayload + "&" + mKRecString;
-    }
-
-    // else set C record
-    if (applicationPayload == null) applicationPayload = mCRecString;
-
     if (StringUtils.isNotBlank(map.get(P_TAG))) {
       pageId = map.get(P_TAG);
     }
 
     if (pageId != null && !pageId.equals("5660")) {
-      // applicationPayload = rawEvent.getApplicationPayload();
       if (!StringUtils.isBlank(applicationPayload)) {
         // get mtsts from payload
         mtstsString =
@@ -99,9 +103,15 @@ public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
             log.error("Invalid mtsts: " + mtstsString);
             eventTimestamp = abEventTimestamp;
           }
-        } else eventTimestamp = abEventTimestamp;
-      } else eventTimestamp = abEventTimestamp;
-    } else eventTimestamp = abEventTimestamp;
+        } else {
+          eventTimestamp = abEventTimestamp;
+        }
+      } else {
+        eventTimestamp = abEventTimestamp;
+      }
+    } else {
+      eventTimestamp = abEventTimestamp;
+    }
 
     if (eventTimestamp != null) {
       ubiEvent.setEventTimestamp(eventTimestamp);
@@ -112,6 +122,7 @@ public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
     ubiEvent.setIngestTime(rawEvent.getIngestTime());
     ubiEvent.setGenerateTime(rawEvent.getRheosHeader().getEventCreateTimestamp());
     ubiEvent.setOldSessionSkey(null);
+    ubiEvent.setDataCenter(rawEvent.getDataCenter());
   }
 
   // ignore second during comparing
@@ -127,5 +138,6 @@ public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
   }
 
   @Override
-  public void init() throws Exception {}
+  public void init() throws Exception {
+  }
 }

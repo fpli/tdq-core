@@ -27,7 +27,8 @@ public class CguidMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) throws Exception {}
+  public void end(SessionAccumulator sessionAccumulator) throws Exception {
+  }
 
   @Override
   public void init() throws Exception {

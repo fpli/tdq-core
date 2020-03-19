@@ -1,205 +1,139 @@
 package com.ebay.sojourner.ubd.common.model;
 
+import com.ebay.sojourner.ubd.common.sharedlib.util.CalTimeOfDay;
 import lombok.Data;
 
 @Data
 public class ClientData {
-  private String ForwardFor;
-  private String Script;
-  private String Server;
-  private String TMachine;
-  private Long TStamp;
-  private String TName;
-  private String TPayload;
+
+  private String forwardFor;
+  private String script;
+  private String server;
+  private String tMachine;
+  private String tStamp;
+  private String tName;
+  private String t;
   private String colo;
   private String pool;
   private String agent;
   private String remoteIP;
-  private String TType;
-  private String TStatus;
+  private String tType;
+  private String tPool;
+  private String tStatus;
   private String corrId;
-  private Integer contentLength;
+  private String contentLength;
   private String nodeId;
   private String requestGuid;
   private String urlQueryString;
   private String referrer;
   private String rlogid;
   private String acceptEncoding;
-  private Long TDuration;
+  private String tDuration;
+  private String encoding;
+  private String tPayload;
 
-  //    public String getForwardFor() {
-  //        return ForwardFor;
-  //    }
-  //
-  //    public void setForwardFor(String forwardFor) {
-  //        ForwardFor = forwardFor;
-  //    }
-  //
-  //    public String getScript() {
-  //        return Script;
-  //    }
-  //
-  //    public void setScript(String script) {
-  //        Script = script;
-  //    }
-  //
-  //    public String getServer() {
-  //        return Server;
-  //    }
-  //
-  //    public void setServer(String server) {
-  //        Server = server;
-  //    }
-  //
-  //    public String getTMachine() {
-  //        return TMachine;
-  //    }
-  //
-  //    public void setTMachine(String TMachine) {
-  //        this.TMachine = TMachine;
-  //    }
-  //
-  //    public Long getTStamp() {
-  //        return TStamp;
-  //    }
-  //
-  //    public void setTStamp(Long TStamp) {
-  //        this.TStamp = TStamp;
-  //    }
-  //
-  //    public String getTName() {
-  //        return TName;
-  //    }
-  //
-  //    public void setTName(String TName) {
-  //        this.TName = TName;
-  //    }
-  //
-  //    public String getTPayload() {
-  //        return TPayload;
-  //    }
-  //
-  //    public void setTPayload(String TPayload) {
-  //        this.TPayload = TPayload;
-  //    }
-  //
-  //    public String getColo() {
-  //        return colo;
-  //    }
-  //
-  //    public void setColo(String colo) {
-  //        this.colo = colo;
-  //    }
-  //
-  //    public String getPool() {
-  //        return pool;
-  //    }
-  //
-  //    public void setPool(String pool) {
-  //        this.pool = pool;
-  //    }
-  //
-  //    public String getAgent() {
-  //        return agent;
-  //    }
-  //
-  //    public void setAgent(String agent) {
-  //        this.agent = agent;
-  //    }
-  //
-  //    public String getRemoteIP() {
-  //        return remoteIP;
-  //    }
-  //
-  //    public void setRemoteIP(String remoteIP) {
-  //        this.remoteIP = remoteIP;
-  //    }
-  //
-  //    public String getTType() {
-  //        return TType;
-  //    }
-  //
-  //    public void setTType(String TType) {
-  //        this.TType = TType;
-  //    }
-  //
-  //    public String getTStatus() {
-  //        return TStatus;
-  //    }
-  //
-  //    public void setTStatus(String TStatus) {
-  //        this.TStatus = TStatus;
-  //    }
-  //
-  //    public String getCorrId() {
-  //        return corrId;
-  //    }
-  //
-  //    public void setCorrId(String corrId) {
-  //        this.corrId = corrId;
-  //    }
-  //
-  //    public Integer getContentLength() {
-  //        return contentLength;
-  //    }
-  //
-  //    public void setContentLength(Integer contentLength) {
-  //        this.contentLength = contentLength;
-  //    }
-  //
-  //    public String getNodeId() {
-  //        return nodeId;
-  //    }
-  //
-  //    public void setNodeId(String nodeId) {
-  //        this.nodeId = nodeId;
-  //    }
-  //
-  //    public String getRequestGuid() {
-  //        return requestGuid;
-  //    }
-  //
-  //    public void setRequestGuid(String requestGuid) {
-  //        this.requestGuid = requestGuid;
-  //    }
-  //
-  //    public String getUrlQueryString() {
-  //        return urlQueryString;
-  //    }
-  //
-  //    public void setUrlQueryString(String urlQueryString) {
-  //        this.urlQueryString = urlQueryString;
-  //    }
-  //
-  //    public String getReferrer() {
-  //        return referrer;
-  //    }
-  //
-  //    public void setReferrer(String referrer) {
-  //        this.referrer = referrer;
-  //    }
-  //
-  //    public String getRlogid() {
-  //        return rlogid;
-  //    }
-  //
-  //    public void setRlogid(String rlogid) {
-  //        this.rlogid = rlogid;
-  //    }
-  //
-  //    public String getAcceptEncoding() {
-  //        return acceptEncoding;
-  //    }
-  //
-  //    public void setAcceptEncoding(String acceptEncoding) {
-  //        this.acceptEncoding = acceptEncoding;
-  //    }
-  //
-  //    public Long getTDuration() {
-  //        return TDuration;
-  //    }
-  //
-  //    public void setTDuration(Long TDuration) {
-  //        this.TDuration = TDuration;
-  //    }
+  @Override
+  public String toString() {
+    StringBuilder clientInfo = new StringBuilder();
+
+    clientInfo.append("TPayload=").append(tPayload);
+
+    if (tPool != null && !tPool.equals("")) {
+      clientInfo.append("&TPool=").append(tPool);
+    }
+    if (tDuration != null && !tDuration.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      clientInfo.append("TDuration=").append(tDuration);
+    }
+    if (tStatus != null && !tStatus.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      clientInfo.append("TStatus=").append(tStatus);
+    }
+    if (tType != null && !tType.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      clientInfo.append("TType=").append(tType);
+    }
+    if (contentLength != null && !contentLength.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      clientInfo.append("ContentLength=").append(contentLength);
+    }
+    if (forwardFor != null && !forwardFor.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      clientInfo.append("ForwardedFor=").append(forwardFor);
+    }
+    if (script != null && !script.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      clientInfo.append("Script=").append(script);
+    }
+    if (server != null && !server.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      clientInfo.append("Server=").append(server);
+    }
+    if (tMachine != null && !tMachine.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      clientInfo.append("TMachine=").append(tMachine);
+    }
+    if (tStamp != null && !tStamp.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      String tstamp = toCALDateString(Long.valueOf(tStamp));
+      clientInfo.append("TStamp=").append(tstamp);
+    }
+    if (tName != null && !tName.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      clientInfo.append("TName=").append(tName);
+    }
+    if (agent != null && !agent.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      clientInfo.append("Agent=").append(agent);
+    }
+    if (remoteIP != null && !remoteIP.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      clientInfo.append("RemoteIP=").append(remoteIP);
+    }
+    if (encoding != null && !encoding.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      clientInfo.append("Encoding=").append(encoding);
+    }
+    // Referer must be in the end of clientData since it has nested '&' '='
+    if (referrer != null && !referrer.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      clientInfo.append("Referer=").append(referrer);
+    }
+    return clientInfo.toString();
+  }
+
+  private String toCALDateString(long time) {
+    CalTimeOfDay calTimeOfDay = new CalTimeOfDay(time);
+    return calTimeOfDay.toString();
+  }
+
+
 }

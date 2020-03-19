@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 public class FindingFlagMetricsTest extends BaseMetricsTest {
+
   private FindingFlagMetrics findingFlagMetrics;
   private JsonNode yaml;
 

@@ -39,7 +39,9 @@ public class IsValidIPv4 {
       if ((ip1 < 0 || ip1 > 255)
           || (ip2 < 0 || ip2 > 255)
           || (ip3 < 0 || ip3 > 255)
-          || (ip4 < 0 || ip4 > 255)) return false;
+          || (ip4 < 0 || ip4 > 255)) {
+        return false;
+      }
     } catch (Exception e) {
       return false;
     }

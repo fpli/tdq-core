@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable {
+
   private String agent;
   private int scsCount;
   private int ipCount;
@@ -19,41 +20,41 @@ public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable
   private int ipCountForSuspect = 0;
   private Set<Integer> botFlagList = new LinkedHashSet<>();
 
-  public AgentAttribute() {}
+  public AgentAttribute() {
+  }
 
   @Override
   public void feed(AgentIpAttribute agentIpAttribute, int botFlag, boolean isNeeded) {
     switch (botFlag) {
-      case 6:
-        {
-          ipCount += agentIpAttribute.getIpCount();
-          if (scsCount < 0) {
-            return;
-          }
+      case 6: {
+        ipCount += agentIpAttribute.getIpCount();
+        if (scsCount < 0) {
+          return;
+        }
 
-          if (agentIpAttribute.getScsCountForBot6() < 0) {
-            scsCount = -1;
-          } else {
-            scsCount += agentIpAttribute.getScsCountForBot6();
-          }
-          break;
+        if (agentIpAttribute.getScsCountForBot6() < 0) {
+          scsCount = -1;
+        } else {
+          scsCount += agentIpAttribute.getScsCountForBot6();
         }
-      case 202:
-        {
-          totalSessionCnt += agentIpAttribute.getTotalSessionCnt();
-          nocguidSessionCnt += agentIpAttribute.getNocguidSessionCnt();
-          spsSessionCnt += agentIpAttribute.getSpsSessionCnt();
-          nouidSessionCnt += agentIpAttribute.getNouidSessionCnt();
-          directSessionCnt += agentIpAttribute.getDirectSessionCnt();
-          mktgSessionCnt += agentIpAttribute.getMktgSessionCnt();
-          ipCountForSuspect += agentIpAttribute.getIpCountForSuspect();
-          break;
-        }
+        break;
+      }
+      case 202: {
+        totalSessionCnt += agentIpAttribute.getTotalSessionCnt();
+        nocguidSessionCnt += agentIpAttribute.getNocguidSessionCnt();
+        spsSessionCnt += agentIpAttribute.getSpsSessionCnt();
+        nouidSessionCnt += agentIpAttribute.getNouidSessionCnt();
+        directSessionCnt += agentIpAttribute.getDirectSessionCnt();
+        mktgSessionCnt += agentIpAttribute.getMktgSessionCnt();
+        ipCountForSuspect += agentIpAttribute.getIpCountForSuspect();
+        break;
+      }
     }
   }
 
   @Override
-  public void revert(AgentIpAttribute agentIpAttribute, int botFlag) {}
+  public void revert(AgentIpAttribute agentIpAttribute, int botFlag) {
+  }
 
   @Override
   public void clear() {

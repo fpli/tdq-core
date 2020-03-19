@@ -119,7 +119,7 @@ public class SojournerUBDRTJobForSOJ {
     // 2.1 Parse and transform RawEvent to UbiEvent
     // 2.2 Event level bot detection via bot rule
     //        DataStream<RawEvent> filterRawEventDataStream = rawEventDataStream
-    //                .filter(new EventFilterFunction())
+    //                .filter(new RawEventFilterFunction())
     //                .setParallelism(30)
     //                .name("filter RawEvents");
 

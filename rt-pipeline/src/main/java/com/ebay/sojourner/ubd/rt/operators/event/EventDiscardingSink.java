@@ -40,8 +40,8 @@ public class EventDiscardingSink extends RichSinkFunction<UbiEvent> {
     long siteToSource = value.getIngestTime() - value.getGenerateTime();
     long siteToSink = end - value.getGenerateTime();
     long sourceToSink = (end - value.getIngestTime());
-    siteToSourceWrapper.update(siteToSink);
-    siteToSinkWrapper.update(siteToSource);
+    siteToSourceWrapper.update(siteToSource);
+    siteToSinkWrapper.update(siteToSink);
     sourceToSinkWrapper.update(sourceToSink);
   }
 }

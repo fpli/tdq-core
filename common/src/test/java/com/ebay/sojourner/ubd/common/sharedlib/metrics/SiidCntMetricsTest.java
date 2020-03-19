@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 public class SiidCntMetricsTest extends BaseMetricsTest {
+
   private SiidCntMetrics siidCntMetrics;
   private JsonNode yaml;
 

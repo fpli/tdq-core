@@ -4,10 +4,12 @@ import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJGetPageType;
 import java.util.Map;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StaticPageTypeParser implements FieldParser<RawEvent, UbiEvent> {
-  private static final Logger log = Logger.getLogger(StaticPageTypeParser.class);
+
+  private static final Logger log = LoggerFactory.getLogger(StaticPageTypeParser.class);
   private static LkpFetcher lkpFetcher;
 
   @Override
@@ -42,5 +44,6 @@ public class StaticPageTypeParser implements FieldParser<RawEvent, UbiEvent> {
   }
 
   @Override
-  public void init() throws Exception {}
+  public void init() throws Exception {
+  }
 }

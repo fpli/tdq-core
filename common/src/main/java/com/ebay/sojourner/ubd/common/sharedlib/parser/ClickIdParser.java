@@ -14,7 +14,8 @@ public class ClickIdParser implements FieldParser<RawEvent, UbiEvent> {
   private static final String C_TAG = "c";
 
   @Override
-  public void init() throws Exception {}
+  public void init() throws Exception {
+  }
 
   public void parse(RawEvent rawEvent, UbiEvent ubiEvent) {
     String clickId = null;

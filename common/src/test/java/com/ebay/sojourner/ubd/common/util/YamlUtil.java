@@ -4,6 +4,7 @@ import java.util.HashMap;
 import org.yaml.snakeyaml.Yaml;
 
 public class YamlUtil {
+
   private static Yaml yaml;
 
   static {

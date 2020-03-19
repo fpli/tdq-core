@@ -1,12 +1,14 @@
 package com.ebay.sojourner.ubd.common.sql;
 
 public class SojReflectiveEvent {
+
   public String agentInfo;
   public int staticPageType;
   public int pageId;
   public long icfBinary;
 
   public static class Builder {
+
     private String agentInfo;
     private int staticPageType;
     private int pageId;

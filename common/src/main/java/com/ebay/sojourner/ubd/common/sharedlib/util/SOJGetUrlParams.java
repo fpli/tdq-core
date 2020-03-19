@@ -6,28 +6,36 @@ import java.net.URLDecoder;
 import org.apache.commons.lang3.StringUtils;
 
 public class SOJGetUrlParams {
+
   /**
-   * @param urlString
-   * @return
    * @throws IOException replace with getUrlParams
    */
   @Deprecated
   public static String getUrlParams1(String urlString) throws IOException {
-    if (StringUtils.isBlank(urlString)) return "";
+    if (StringUtils.isBlank(urlString)) {
+      return "";
+    }
 
     URL url = new URL(urlString);
     StringBuilder sb = new StringBuilder();
 
-    if (url.getQuery() != null) sb.append(url.getQuery());
-    else return "";
+    if (url.getQuery() != null) {
+      sb.append(url.getQuery());
+    } else {
+      return "";
+    }
 
-    if (url.getRef() != null) sb.append("#").append(url.getRef());
+    if (url.getRef() != null) {
+      sb.append("#").append(url.getRef());
+    }
 
     return sb.toString();
   }
 
   public static String getUrlParams(String url) {
-    if (StringUtils.isBlank(url)) return "";
+    if (StringUtils.isBlank(url)) {
+      return "";
+    }
 
     // test valid url
     try {

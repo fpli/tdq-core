@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 public class SiidParser implements FieldParser<RawEvent, UbiEvent> {
+
   private static final Logger log = Logger.getLogger(SiidParser.class);
   private static final String SIID_TAG = "siid";
 

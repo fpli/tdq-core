@@ -16,7 +16,8 @@ import org.mockito.Mock;
 public class BotRuleForDeclarativeHostTest {
 
   BotRuleForDeclarativeHost botRuleForDeclarativeHost;
-  @Mock BotHostMatcher botHostMatcher;
+  @Mock
+  BotHostMatcher botHostMatcher;
 
   @BeforeEach
   public void setup() throws Exception {

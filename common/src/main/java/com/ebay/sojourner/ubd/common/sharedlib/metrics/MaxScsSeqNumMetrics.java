@@ -26,7 +26,8 @@ public class MaxScsSeqNumMetrics implements FieldMetrics<UbiEvent, SessionAccumu
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) {}
+  public void end(SessionAccumulator sessionAccumulator) {
+  }
 
   @Override
   public void init() throws Exception {

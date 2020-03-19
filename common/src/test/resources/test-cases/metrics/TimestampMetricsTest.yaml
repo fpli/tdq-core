@@ -1,5 +1,4 @@
--
-  name: test1
+- name: test1
   inputs:
     UbiEvent:
       iframe: false
@@ -19,8 +18,7 @@
       absStartTimestamp: 1579505089
       absEndTimestamp: 1579505089
 
--
-  name: test2
+- name: test2
   inputs:
     UbiEvent:
       iframe: false

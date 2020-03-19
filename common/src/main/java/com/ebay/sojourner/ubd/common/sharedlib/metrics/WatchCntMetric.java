@@ -8,6 +8,7 @@ import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import java.util.Set;
 
 public class WatchCntMetric implements FieldMetrics<UbiEvent, SessionAccumulator> {
+
   private Set<Integer> searchViewPageSet = null;
 
   @Override
@@ -28,7 +29,8 @@ public class WatchCntMetric implements FieldMetrics<UbiEvent, SessionAccumulator
   }
 
   @Override
-  public void end(SessionAccumulator sessionAccumulator) {}
+  public void end(SessionAccumulator sessionAccumulator) {
+  }
 
   @Override
   public void init() throws Exception {

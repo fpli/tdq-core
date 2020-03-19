@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 public class SingleClickFlagMetricsTest extends BaseMetricsTest {
+
   private SingleClickFlagMetrics singleClickFlagMetrics;
   private JsonNode yaml;
 

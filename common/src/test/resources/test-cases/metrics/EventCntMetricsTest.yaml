@@ -1,5 +1,4 @@
--
-  name: test1
+- name: test1
   inputs:
     UbiEvent:
       pageId: 0
@@ -16,8 +15,7 @@
       eventCnt: 0
       nonIframeRdtEventCnt: 0
 
--
-  name: test2
+- name: test2
   inputs:
     UbiEvent:
       pageId: 0
@@ -34,8 +32,7 @@
       eventCnt: 0
       nonIframeRdtEventCnt: 0
 
--
-  name: test3
+- name: test3
   inputs:
     UbiEvent:
       pageId: 4018
@@ -52,8 +49,7 @@
       eventCnt: 1
       nonIframeRdtEventCnt: 0
 
--
-  name: test4
+- name: test4
   inputs:
     UbiEvent:
       pageId: 0

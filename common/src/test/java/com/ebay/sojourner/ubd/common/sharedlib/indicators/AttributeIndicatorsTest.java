@@ -41,7 +41,8 @@ class AttributeIndicatorsTest {
   class TestAttributeIndicators extends AttributeIndicators<String, String> {
 
     @Override
-    public void initIndicators() {}
+    public void initIndicators() {
+    }
   }
 
   class TestAbstractIndicator extends AbstractIndicator<String, String> {
@@ -52,6 +53,7 @@ class AttributeIndicatorsTest {
     }
 
     @Override
-    void feed(String s, String s2, boolean isNeeded) throws Exception {}
+    void feed(String s, String s2, boolean isNeeded) throws Exception {
+    }
   }
 }

@@ -24,8 +24,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
  * Skeleton for a Flink Streaming Job.
  *
  * <p>For a tutorial how to write a Flink streaming application, check the tutorials and examples
- * on
- * the <a href="http://flink.apache.org/docs/stable/">Flink Website</a>.
+ * on the <a href="http://flink.apache.org/docs/stable/">Flink Website</a>.
  *
  * <p>To package your application into a JAR file for execution, run 'mvn clean package' on the
  * command line.

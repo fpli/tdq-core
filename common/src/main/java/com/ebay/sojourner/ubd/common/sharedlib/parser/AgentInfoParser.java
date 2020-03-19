@@ -5,8 +5,10 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import org.apache.commons.lang3.StringUtils;
 
 public class AgentInfoParser implements FieldParser<RawEvent, UbiEvent> {
+
   @Override
-  public void init() throws Exception {}
+  public void init() throws Exception {
+  }
 
   @Override
   public void parse(RawEvent rawEvent, UbiEvent ubiEvent) throws Exception {

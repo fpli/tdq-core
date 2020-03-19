@@ -14,6 +14,7 @@ public class EventParser extends RecordParser<RawEvent, UbiEvent> {
   public void initFieldParsers() {
     if (this.fieldParsers.isEmpty()) {
       // Keep insert order to reuse existed field normalization result
+      addFieldParser(new IdentityParser());
       addFieldParser(new TimestampParser());
       addFieldParser(new CiidParser());
       addFieldParser(new ClickIdParser());
@@ -32,7 +33,6 @@ public class EventParser extends RecordParser<RawEvent, UbiEvent> {
       addFieldParser(new UserIdParser());
       addFieldParser(new AgentInfoParser());
       addFieldParser(new ClientIPParser());
-      addFieldParser(new IdentityParser());
       addFieldParser(new IFrameParser());
       // Finding Flag should after Page Id
       addFieldParser(new FindingFlagParser());
@@ -44,6 +44,9 @@ public class EventParser extends RecordParser<RawEvent, UbiEvent> {
       addFieldParser(new PartialValidPageParser());
       // icf
       addFieldParser(new IcfParser());
+
+      // Jetstream columns
+      addFieldParser(new JSColumnParser());
     }
   }
 }

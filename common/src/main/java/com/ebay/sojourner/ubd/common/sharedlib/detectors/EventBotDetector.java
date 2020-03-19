@@ -3,18 +3,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.rule.BotRule1;
 import com.ebay.sojourner.ubd.common.rule.Rule;
-import com.ebay.sojourner.ubd.common.rule.icf.IcfRule1;
-import com.ebay.sojourner.ubd.common.rule.icf.IcfRule10;
-import com.ebay.sojourner.ubd.common.rule.icf.IcfRule11;
-import com.ebay.sojourner.ubd.common.rule.icf.IcfRule12;
-import com.ebay.sojourner.ubd.common.rule.icf.IcfRule13;
-import com.ebay.sojourner.ubd.common.rule.icf.IcfRule2;
-import com.ebay.sojourner.ubd.common.rule.icf.IcfRule3;
-import com.ebay.sojourner.ubd.common.rule.icf.IcfRule4;
-import com.ebay.sojourner.ubd.common.rule.icf.IcfRule5;
-import com.ebay.sojourner.ubd.common.rule.icf.IcfRule56;
-import com.ebay.sojourner.ubd.common.rule.icf.IcfRule6;
-import com.ebay.sojourner.ubd.common.rule.icf.IcfRule7;
+import com.ebay.sojourner.ubd.common.sql.Rules;
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -57,17 +46,17 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
   @Override
   public void initBotRules() {
     botRules.add(new BotRule1());
-    botRules.add(new IcfRule1());
-    botRules.add(new IcfRule2());
-    botRules.add(new IcfRule3());
-    botRules.add(new IcfRule4());
-    botRules.add(new IcfRule5());
-    botRules.add(new IcfRule6());
-    botRules.add(new IcfRule7());
-    botRules.add(new IcfRule10());
-    botRules.add(new IcfRule11());
-    botRules.add(new IcfRule12());
-    botRules.add(new IcfRule13());
-    botRules.add(new IcfRule56());
+    botRules.add(Rules.ICF_RULE_1_COMPILER);
+    botRules.add(Rules.ICF_RULE_2_COMPILER);
+    botRules.add(Rules.ICF_RULE_3_COMPILER);
+    botRules.add(Rules.ICF_RULE_4_COMPILER);
+    botRules.add(Rules.ICF_RULE_5_COMPILER);
+    botRules.add(Rules.ICF_RULE_6_COMPILER);
+    botRules.add(Rules.ICF_RULE_7_COMPILER);
+    botRules.add(Rules.ICF_RULE_10_COMPILER);
+    botRules.add(Rules.ICF_RULE_11_COMPILER);
+    botRules.add(Rules.ICF_RULE_12_COMPILER);
+    botRules.add(Rules.ICF_RULE_13_COMPILER);
+    botRules.add(Rules.ICF_RULE_56_COMPILER);
   }
 }

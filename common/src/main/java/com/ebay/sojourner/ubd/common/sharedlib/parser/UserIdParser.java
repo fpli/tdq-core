@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 public class UserIdParser implements FieldParser<RawEvent, UbiEvent> {
+
   private static final Logger log = Logger.getLogger(UserIdParser.class);
   private static final String U_TAG = "u";
 
@@ -22,7 +23,6 @@ public class UserIdParser implements FieldParser<RawEvent, UbiEvent> {
     if (StringUtils.isNotBlank(map.get(U_TAG))) {
       userId = map.get(U_TAG);
     }
-
     try {
       if (StringUtils.isNotBlank(userId)) {
         if (IntegerField.getIntVal(userId) == null) {
@@ -31,7 +31,6 @@ public class UserIdParser implements FieldParser<RawEvent, UbiEvent> {
             return;
           }
         }
-
         long result = Long.parseLong(userId.trim());
         if (result >= 1 && result <= 9999999999999999L) {
           ubiEvent.setUserId(String.valueOf(result));
@@ -43,5 +42,6 @@ public class UserIdParser implements FieldParser<RawEvent, UbiEvent> {
   }
 
   @Override
-  public void init() throws Exception {}
+  public void init() throws Exception {
+  }
 }
