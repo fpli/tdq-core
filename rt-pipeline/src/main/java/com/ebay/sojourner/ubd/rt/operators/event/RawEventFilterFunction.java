@@ -7,7 +7,7 @@ import java.util.Map;
 import org.apache.flink.api.common.functions.RichFilterFunction;
 import org.apache.flink.configuration.Configuration;
 
-public class EventFilterFunction extends RichFilterFunction<RawEvent> {
+public class RawEventFilterFunction extends RichFilterFunction<RawEvent> {
 
   @Override
   public void open(Configuration conf) throws Exception {
@@ -38,7 +38,7 @@ public class EventFilterFunction extends RichFilterFunction<RawEvent> {
     }
     if (map.containsKey("g")) {
       String g = map.get("g");
-      return g.hashCode() % 2 == 0;
+      return g.hashCode() % 100 < 16;
     }
     return false;
   }

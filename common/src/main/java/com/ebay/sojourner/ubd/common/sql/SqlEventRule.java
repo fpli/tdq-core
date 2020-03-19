@@ -27,10 +27,9 @@ import org.apache.log4j.Logger;
 public abstract class SqlEventRule implements Rule<UbiEvent> {
 
   protected static final Logger LOGGER = Logger.getLogger(SqlEventRule.class);
-
-  private String sql;
   protected SojReflectiveDataSource dataSource;
   protected SojDataContext dataContext;
+  private String sql;
 
   public SqlEventRule(String sql) {
     this.sql = sql;

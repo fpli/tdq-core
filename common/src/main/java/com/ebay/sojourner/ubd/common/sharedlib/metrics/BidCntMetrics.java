@@ -38,6 +38,6 @@ public class BidCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
   }
 
   void setPageIndicator(PageIndicator indicator) {
-    this.indicator = indicator;
+    BidCntMetrics.indicator = indicator;
   }
 }

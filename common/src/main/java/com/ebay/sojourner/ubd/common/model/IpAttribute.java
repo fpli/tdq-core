@@ -118,13 +118,10 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
       return true;
     }
 
-    if (sessionCnt > 200
+    return sessionCnt > 200
         && (((cguidCnt < MAX_CGUID_THRESHOLD)
         || (sessionCnt > 1000 && agentIpAttribute.getMaxValidPageCnt() <= 10))
-        || ((agentIpAttribute.getNewGuidCnt() * 1.0) > (0.97 * sessionCnt)))) {
-      return true;
-    }
+        || ((agentIpAttribute.getNewGuidCnt() * 1.0) > (0.97 * sessionCnt)));
 
-    return false;
   }
 }

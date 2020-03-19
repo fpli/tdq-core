@@ -12,7 +12,7 @@ public class DateTimeBucketAssignerForEventTime<IN> implements BucketAssigner<IN
 
   private static final long serialVersionUID = 1L;
 
-  private static final String DEFAULT_FORMAT_STRING = "yyyy-MM-dd--HH";
+  private static final String DEFAULT_FORMAT_STRING = "yyyy-MM-dd/HH";
 
   private final String formatString;
 
@@ -42,7 +42,13 @@ public class DateTimeBucketAssignerForEventTime<IN> implements BucketAssigner<IN
     if (dateTimeFormatter == null) {
       dateTimeFormatter = DateTimeFormatter.ofPattern(formatString).withZone(zoneId);
     }
-    return dateTimeFormatter.format(Instant.ofEpochMilli(context.timestamp()));
+    String defaultTsStr = dateTimeFormatter.format(Instant.ofEpochMilli(context.timestamp()));
+    StringBuilder customTsBuilder = new StringBuilder();
+    customTsBuilder
+        .append("dt=").append(defaultTsStr.substring(0, 10))
+        .append("/hr=").append(defaultTsStr.substring(11));
+    return customTsBuilder.toString();
+
   }
 
   @Override
