@@ -60,5 +60,10 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
 
   @Override
   public void end(SessionAccumulator sessionAccumulator) {
+    if (sessionAccumulator.getUbiSession().getSessionStartDt() == 0L
+        && sessionAccumulator.getUbiSession().getSessionStartDt() != 0L) {
+      sessionAccumulator.getUbiSession()
+          .setSessionStartDt(sessionAccumulator.getUbiSession().getFirstSessionStartDt());
+    }
   }
 }
