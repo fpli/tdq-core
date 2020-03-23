@@ -79,6 +79,24 @@ public class UbiSessionWindowProcessFunction
     ubiSession.setStartPageId(sessionAccumulator.getUbiSession().getStartPageId());
     ubiSession.setEndPageId(sessionAccumulator.getUbiSession().getEndPageId());
     ubiSession.setDurationSec(sessionAccumulator.getUbiSession().getDurationSec());
+    ubiSession.setEventCnt(sessionAccumulator.getUbiSession().getEventCnt());
+    ubiSession.setViCoreCnt(sessionAccumulator.getUbiSession().getViCoreCnt());
+    ubiSession.setBidCoreCnt(sessionAccumulator.getUbiSession().getBidCoreCnt());
+    ubiSession.setBinCoreCnt(sessionAccumulator.getUbiSession().getBinCoreCnt());
+    ubiSession.setWatchCoreCnt(sessionAccumulator.getUbiSession().getWatchCoreCnt());
+    ubiSession.setTrafficSrcId(sessionAccumulator.getUbiSession().getTrafficSrcId());
+    ubiSession.setAbsDuration(sessionAccumulator.getUbiSession().getAbsDuration());
+    ubiSession.setCobrand(sessionAccumulator.getUbiSession().getCobrand());
+    ubiSession.setFirstAppId(sessionAccumulator.getUbiSession().getFirstAppId());
+    ubiSession.setFirstSiteId(sessionAccumulator.getUbiSession().getFirstSiteId());
+    ubiSession.setFirstCguid(sessionAccumulator.getUbiSession().getFirstCguid());
+    ubiSession.setFirstMappedUserId(sessionAccumulator.getUbiSession().getFirstMappedUserId());
+    ubiSession.setHomepageCnt(sessionAccumulator.getUbiSession().getHomepageCnt());
+    ubiSession.setGr1Cnt(sessionAccumulator.getUbiSession().getGr1Cnt());
+    ubiSession.setGrCnt(sessionAccumulator.getUbiSession().getGrCnt());
+    ubiSession.setMyebayCnt(sessionAccumulator.getUbiSession().getMyebayCnt());
+    ubiSession.setSigninPageCnt(sessionAccumulator.getUbiSession().getSigninPageCnt());
+
     out.collect(ubiSession);
   }
 

@@ -85,67 +85,7 @@ public class UbiSessionAgg
       sessionBotFlagSet.addAll(sessionBotFlagSetDetect);
       eventBotFlagSet.addAll(sessionBotFlagSetDetect);
     }
-    if (value.getEventTimestamp() != null
-        && (accumulator.getUbiSession().getEndTimestamp() == null
-        || value.getEventTimestamp() > accumulator.getUbiSession().getEndTimestamp())) {
-      accumulator.getUbiSession().setEndTimestamp(value.getEventTimestamp());
-    } else {
-      //            log.error(
-      // value.getGuid()+"||"+(value.getSessionId()==null?"":value.getSessionId())+"||"+
-      // value.getSeqNum(), e);
-    }
-    //        if(attrBotFlagWithAgentIp!=null&&attrBotFlagWithAgentIp.size()>0) {
-    //            sessionBotFlagSet.addAll(attrBotFlagWithAgentIp);
-    //            eventBotFlagSet.addAll(attrBotFlagWithAgentIp);
-    //        }
-    //        boolean isSuspectedAgent=false;
-    //        boolean isDeclarativeAgent=false;
-    //        boolean isDeclarativeHost=false;
-    //        boolean isSuspectedIp=false;
-    //        if(attrBotFlagWithIp!=null&&attrBotFlagWithIp.size()>0){
-    //            if(attrBotFlagWithIp.contains(222))
-    //            {
-    //                isDeclarativeHost=true;
-    //                attrBotFlagWithAgentIp.remove(222);
-    //            }
-    //            if(attrBotFlagWithIp.contains(223))
-    //            {
-    //                isSuspectedIp=true;
-    //                attrBotFlagWithAgentIp.remove(223);
-    //            }
-    //        }
-    //        if(attrBotFlagWithAgent!=null&&attrBotFlagWithAgent.size()>0){
-    //            if(attrBotFlagWithAgent.contains(220))
-    //            {
-    //                isSuspectedAgent=true;
-    //                attrBotFlagWithAgent.remove(220);
-    //            }
-    //            if(attrBotFlagWithAgent.contains(221))
-    //            {
-    //                isDeclarativeAgent=true;
-    //                attrBotFlagWithAgent.remove(221);
-    //            }
-    //        }
-    //        if((isSuspectedIp&&isDeclarativeAgent)||(isSuspectedAgent&&isDeclarativeHost))
-    //        {
-    //            attrBotFlagWithAgent.add(202);
-    //        }
-    //        if((isSuspectedAgent&&isDeclarativeAgent)||(isSuspectedIp&&isDeclarativeHost))
-    //        {
-    //            attrBotFlagWithIp.add(210);
-    //        }
-    //        if(isSuspectedIp)
-    //        {
-    //            attrBotFlagWithIp.add(211);
-    //        }
-    //        if(attrBotFlagWithIp!=null&&attrBotFlagWithIp.size()>0) {
-    //            sessionBotFlagSet.addAll(attrBotFlagWithIp);
-    //            eventBotFlagSet.addAll(attrBotFlagWithIp);
-    //        }
-    //        if(attrBotFlagWithAgent!=null&&attrBotFlagWithAgent.size()>0) {
-    //            sessionBotFlagSet.addAll(attrBotFlagWithAgent);
-    //            eventBotFlagSet.addAll(attrBotFlagWithAgent);
-    //        }
+
     accumulator.getUbiSession().setBotFlagList(sessionBotFlagSet);
     value.setBotFlags(eventBotFlagSet);
     //        accumulator.setUbiEvent(value);
