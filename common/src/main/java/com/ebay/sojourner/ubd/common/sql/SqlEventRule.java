@@ -27,6 +27,10 @@ public abstract class SqlEventRule implements Rule<UbiEvent> {
     prepareSql(sql);
   }
 
+  public static SqlEventRule of(String sql) {
+    return new SqlCompilerEventRule(sql);
+  }
+
   public String getSql() {
     return sql;
   }
