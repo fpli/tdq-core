@@ -31,11 +31,6 @@
       <artifactId>sojourner-ubd-batch-pipeline</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>com.ebay.sojourner</groupId>
-      <artifactId>sojourner-ubd-rule-mgmt</artifactId>
-      <version>${project.version}</version>
-    </dependency>
   </dependencies>
 
   <build>
