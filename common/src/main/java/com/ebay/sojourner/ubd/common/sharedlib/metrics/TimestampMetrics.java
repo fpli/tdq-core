@@ -25,6 +25,10 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     if (!event.isIframe() && (!event.isRdt() || indicator.isCorrespondingPageEvent(event))) {
       if (sessionAccumulator.getUbiSession().getStartTimestamp() == null) {
         sessionAccumulator.getUbiSession().setStartTimestamp(event.getEventTimestamp());
+      } else if (event.getEventTimestamp() != null
+          && sessionAccumulator.getUbiSession().getStartTimestamp() > event.getEventTimestamp()) {
+        sessionAccumulator.getUbiSession().setStartTimestamp(event.getEventTimestamp());
+        EventListenerContainer.onEarlyEventChange(event,sessionAccumulator.getUbiSession());
       }
       if (sessionAccumulator.getUbiSession().getEndTimestamp() == null) {
         sessionAccumulator.getUbiSession().setEndTimestamp(event.getEventTimestamp());
@@ -44,6 +48,7 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     } else if (event.getEventTimestamp() != null
         && sessionAccumulator.getUbiSession().getAbsEndTimestamp() < event.getEventTimestamp()) {
       sessionAccumulator.getUbiSession().setAbsEndTimestamp(event.getEventTimestamp());
+      EventListenerContainer.onLateEventChange(event,sessionAccumulator.getUbiSession());
     }
   }
 
@@ -75,6 +80,7 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
   @Override
   public void init() throws Exception {
     setPageIndicator(new PageIndicator(UBIConfig.getString(Property.SEARCH_VIEW_PAGES)));
+    EventListenerContainer.init();
   }
 
   void setPageIndicator(PageIndicator indicator) {

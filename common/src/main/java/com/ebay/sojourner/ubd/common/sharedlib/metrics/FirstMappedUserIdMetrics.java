@@ -2,12 +2,11 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
 
-/**
- * @author yunjzhang
- */
-public class FirstMappedUserIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+public class FirstMappedUserIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>,
+    EventListener {
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
@@ -47,5 +46,32 @@ public class FirstMappedUserIdMetrics implements FieldMetrics<UbiEvent, SessionA
   @Override
   public void init() throws Exception {
     // nothing to do
+  }
+
+  @Override
+  public void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
+    String bestGuessUserId = null;
+    if (!ubiEvent.isRdt()
+        && !ubiEvent.isIframe()) {
+      bestGuessUserId = SOJNVL.getTagValue(ubiEvent.getApplicationPayload(), "bu");
+      try {
+        bestGuessUserId = bestGuessUserId.trim();
+        if (bestGuessUserId.length() <= 18) {
+          Long validUserId = Long.parseLong(bestGuessUserId);
+          if (validUserId > 0 && validUserId != 3564) {
+            ubiSession.setFirstMappedUserId(validUserId);
+          }
+        }
+      } catch (NumberFormatException e1) {
+        // ignore
+      } catch (NullPointerException e2) {
+        // ignore
+      }
+    }
+  }
+
+  @Override
+  public void onLateEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
+
   }
 }

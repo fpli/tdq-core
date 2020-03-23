@@ -165,9 +165,9 @@ public class RawEventDeserializationSchemaForLVS implements DeserializationSchem
       String decoded;
       int index = tpayload.indexOf("=");
       if (index > 0) {
-        decoded = tpayload;
+        decoded = "&" + tpayload;
       } else {
-        decoded = URLDecoder.decode(tpayload, "UTF-8");
+        decoded = URLDecoder.decode("&" + tpayload, "UTF-8");
       }
       if (decoded == null) {
         return;
