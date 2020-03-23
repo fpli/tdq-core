@@ -47,6 +47,8 @@
     <jackson.version>2.9.8</jackson.version>
     <fastjson.version>1.2.62</fastjson.version>
     <guava.version>28.1-jre</guava.version>
+    <okhttp3.version>4.4.1</okhttp3.version>
+    <curator.version>2.12.0</curator.version>
     <jacoco.version>0.8.5</jacoco.version>
     <CodeCacheSize>512m</CodeCacheSize>
   </properties>
@@ -385,7 +387,16 @@
         <artifactId>calcite-core</artifactId>
         <version>${calcite.version}</version>
       </dependency>
-
+      <dependency>
+        <groupId>com.squareup.okhttp3</groupId>
+        <artifactId>okhttp</artifactId>
+        <version>${okhttp3.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.curator</groupId>
+        <artifactId>curator-recipes</artifactId>
+        <version>${curator.version}</version>
+      </dependency>
 
       <!-- Test Dependencies -->
       <dependency>
