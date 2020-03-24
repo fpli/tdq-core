@@ -16,8 +16,9 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
-    sessionAccumulator.getUbiSession().setSessionStartDt(0L);
+    sessionAccumulator.getUbiSession().setSessionStartDt(null);
     sessionAccumulator.getUbiSession().setSeqNum(0);
+    sessionAccumulator.getUbiSession().setFirstSessionStartDt(null);
   }
 
   @Override
@@ -30,7 +31,7 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
     }
     if (!event.isIframe()
         && !event.isRdt()
-        && sessionAccumulator.getUbiSession().getSessionStartDt() == 0) {
+        && sessionAccumulator.getUbiSession().getSessionStartDt() == null) {
       sessionAccumulator.getUbiSession().setSessionStartDt(event.getSojDataDt());
     }
 
@@ -49,7 +50,7 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
     }
 
     event.setSessionStartDt(
-        sessionAccumulator.getUbiSession().getSessionStartDt() == 0L ? sessionAccumulator
+        sessionAccumulator.getUbiSession().getSessionStartDt() == null ? sessionAccumulator
             .getUbiSession().getFirstSessionStartDt()
             : sessionAccumulator.getUbiSession().getSessionStartDt());
     event.setSeqNum(sessionAccumulator.getUbiSession().getSeqNum());
@@ -57,8 +58,8 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
 
   @Override
   public void end(SessionAccumulator sessionAccumulator) {
-    if (sessionAccumulator.getUbiSession().getSessionStartDt() == 0L
-        && sessionAccumulator.getUbiSession().getSessionStartDt() != 0L) {
+    if (sessionAccumulator.getUbiSession().getSessionStartDt() == null
+        && sessionAccumulator.getUbiSession().getFirstSessionStartDt() != null) {
       sessionAccumulator.getUbiSession()
           .setSessionStartDt(sessionAccumulator.getUbiSession().getFirstSessionStartDt());
     }
