@@ -25,7 +25,7 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
     sessionAccumulator
         .getUbiSession()
         .setSeqNum(sessionAccumulator.getUbiSession().getSeqNum() + 1);
-    if (sessionAccumulator.getUbiSession().getFirstSessionStartDt() != null) {
+    if (sessionAccumulator.getUbiSession().getFirstSessionStartDt() == null) {
       sessionAccumulator.getUbiSession().setFirstSessionStartDt(event.getSojDataDt());
     }
     if (!event.isIframe()
