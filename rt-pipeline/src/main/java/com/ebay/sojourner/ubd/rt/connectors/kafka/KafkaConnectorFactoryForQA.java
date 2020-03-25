@@ -14,7 +14,7 @@ import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 
 public class KafkaConnectorFactoryForQA {
 
-  public static final String GROUP_ID = AppEnv.config().getKafka().getGroupId();
+  public static final String GROUP_ID = AppEnv.config().getKafka().getGroupIdForQA();
   public static final String TOPIC_PATHFINDER_EVENTS = AppEnv.config().getKafka().getTopic();
   public static final String BOOTSTRAP_SERVERS =
       String.join(",", AppEnv.config().getKafka().getBootstrapServersForQA());

@@ -9,12 +9,12 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.RoundRobinAssignor;
+import org.apache.kafka.common.config.SaslConfigs;
 import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 
 public class KafkaConnectorFactoryForLVS {
 
-  public static String CLIENT_ID = "lvs";
-  public static String GROUP_ID = AppEnv.config().getKafka().getGroupId();
+  public static String GROUP_ID = AppEnv.config().getKafka().getGroupIdForLVS();
   public static String TOPIC_PATHFINDER_EVENTS = AppEnv.config().getKafka().getTopic();
   public static String BOOTSTRAP_SERVERS =
       String.join(",", AppEnv.config().getKafka().getBootstrapServersForLVS());
@@ -22,9 +22,20 @@ public class KafkaConnectorFactoryForLVS {
   public static FlinkKafkaConsumer<RawEvent> createKafkaConsumer() {
 
     Properties props = new Properties();
+    props.put("sasl.mechanism", "IAF");
+    props.put("security.protocol", "SASL_PLAINTEXT");
+
+    final String saslJaasConfig =
+        String.format(
+            "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId="
+                + "\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" "
+                + "iafSecret=\"%s\" iafEnv=\"%s\";",
+            AppEnv.config().getRheos().getIaf().getSecret(),
+            AppEnv.config().getRheos().getIaf().getEnv());
+
+    props.put(SaslConfigs.SASL_JAAS_CONFIG, saslJaasConfig);
     props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
     props.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
-    props.put(ConsumerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
 
     props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 3000);
     props.put(ConsumerConfig.RECEIVE_BUFFER_CONFIG, 8 * 1024 * 1024);

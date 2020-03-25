@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 
 public class RuleFetcher {
   protected static final Logger LOGGER = Logger.getLogger(RuleManager.class);
-  public static final String REST_SERVER = "http://localhost:8080";
+  public static final String REST_SERVER = "http://10.169.116.50:9001";
   public static final String API_RULE_LIST_PUBLISHED = "/api/rule/list/published";
 
   private ScheduledExecutorService scheduledExecutorService;

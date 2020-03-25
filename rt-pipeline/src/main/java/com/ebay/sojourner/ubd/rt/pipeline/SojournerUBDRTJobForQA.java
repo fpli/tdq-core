@@ -85,7 +85,7 @@ public class SojournerUBDRTJobForQA {
                 ? 1
                 : AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
     executionEnvironment.setStateBackend(
-        StateBackendFactory.getStateBackend(StateBackendFactory.FS));
+        StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
     executionEnvironment.setRestartStrategy(
         RestartStrategies.fixedDelayRestart(
             3, // number of restart attempts
@@ -162,7 +162,7 @@ public class SojournerUBDRTJobForQA {
             .window(TumblingEventTimeWindows.of(Time.minutes(5)))
             .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
             .name("Attribute Operator (Agent+IP Pre-Aggregation)")
-            .setParallelism(20);
+            .setParallelism(2);
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureDataStream =
         ubiSessinDataStream
@@ -171,7 +171,7 @@ public class SojournerUBDRTJobForQA {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
             .name("Attribute Operator (GUID)")
-            .setParallelism(20);
+            .setParallelism(2);
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureSplitStream =
         guidSignatureDataStream.split(new SplitFunction());
@@ -179,13 +179,13 @@ public class SojournerUBDRTJobForQA {
     guidSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .setParallelism(20)
+        .setParallelism(2)
         .name("GUID Signature Generation");
 
     guidSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .setParallelism(20)
+        .setParallelism(2)
         .name("GUID Signature Expiration");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureDataStream =
@@ -196,7 +196,7 @@ public class SojournerUBDRTJobForQA {
             .aggregate(
                 new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
             .name("Attribute Operator (Agent+IP)")
-            .setParallelism(20);
+            .setParallelism(2);
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureSplitStream =
         agentIpSignatureDataStream.split(new SplitFunction());
@@ -204,13 +204,13 @@ public class SojournerUBDRTJobForQA {
     agentIpSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .setParallelism(20)
+        .setParallelism(2)
         .name("Agent+IP Signature Generation");
 
     agentIpSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .setParallelism(20)
+        .setParallelism(2)
         .name("Agent+IP Signature Expiration");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureDataStream =
@@ -220,7 +220,7 @@ public class SojournerUBDRTJobForQA {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
             .name("Attribute Operator (Agent)")
-            .setParallelism(20);
+            .setParallelism(2);
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureSplitStream =
         agentSignatureDataStream.split(new SplitFunction());
@@ -228,13 +228,13 @@ public class SojournerUBDRTJobForQA {
     agentSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .setParallelism(20)
+        .setParallelism(2)
         .name("Agent Signature Generation");
 
     agentSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .setParallelism(20)
+        .setParallelism(2)
         .name("Agent Signature Expiration");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureDataStream =
@@ -244,7 +244,7 @@ public class SojournerUBDRTJobForQA {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
             .name("Attribute Operator (IP)")
-            .setParallelism(20);
+            .setParallelism(2);
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureSplitStream =
         ipSignatureDataStream.split(new SplitFunction());
@@ -252,13 +252,13 @@ public class SojournerUBDRTJobForQA {
     ipSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .setParallelism(20)
+        .setParallelism(2)
         .name("IP Signature Generation");
 
     ipSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .setParallelism(20)
+        .setParallelism(2)
         .name("IP Signature Expiration");
 
     // union attribute signature for broadcast

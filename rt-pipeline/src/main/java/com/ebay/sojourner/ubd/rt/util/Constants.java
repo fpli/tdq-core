@@ -1,4 +1,4 @@
-package com.ebay.sojourner.ubd.rt.common.constants;
+package com.ebay.sojourner.ubd.rt.util;
 
 /**
  * Created 2019-08-01 10:12
@@ -6,7 +6,7 @@ package com.ebay.sojourner.ubd.rt.common.constants;
  * @author : Unikal Liu
  * @version : 1.0.0
  */
-public class PropertiesConstants {
+public class Constants {
 
   public static final String APPLICATION_PROPERTIES_FILENAME = "application.properties.filename";
   public static final String DEFAULT_APPLICATION_PROPERTIES_FILENAME = "/application.properties";

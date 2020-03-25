@@ -14,7 +14,7 @@ import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 
 public class KafkaConnectorFactoryForRNO {
 
-  public static String GROUP_ID = AppEnv.config().getKafka().getGroupId();
+  public static String GROUP_ID = AppEnv.config().getKafka().getGroupIdForRNO();
   public static String TOPIC_PATHFINDER_EVENTS = AppEnv.config().getKafka().getTopic();
   public static String BOOTSTRAP_SERVERS =
       String.join(",", AppEnv.config().getKafka().getBootstrapServersForRNO());
@@ -50,7 +50,6 @@ public class KafkaConnectorFactoryForRNO {
     props.put(
         ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, RheosEventDeserializer.class.getName());
     props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
-    //        props.put(ConsumerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
 
     return new FlinkKafkaConsumer<>(
         TOPIC_PATHFINDER_EVENTS, new RawEventDeserializationSchemaForRNO(), props);

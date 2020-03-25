@@ -23,7 +23,10 @@ kafka:
     - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-  groupId: sojourner
+  groupIdForLVS: sojourner-pathfinder-lvs
+  groupIdForSLC: sojourner-pathfinder-slc
+  groupIdForRNO: sojourner-pathfinder-rno
+  groupIdForQA: sojourner-pathfinder-qa
   topic: behavior.pathfinder.events.total
 
 rheos:
@@ -35,8 +38,8 @@ rheos:
 flink:
   app:
     name: Unified Bot Detection RT Pipeline
-    source-parallelism: 10
-    event-parallelism: 20
+    source-parallelism: 2
+    event-parallelism: 2
   checkpoint:
     data-dir: /opt/sojourner-ubd/checkpoint
     interval: 5m
