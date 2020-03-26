@@ -28,7 +28,7 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
       } else if (event.getEventTimestamp() != null
           && sessionAccumulator.getUbiSession().getStartTimestamp() > event.getEventTimestamp()) {
         sessionAccumulator.getUbiSession().setStartTimestamp(event.getEventTimestamp());
-        EventListenerContainer.onEarlyEventChange(event,sessionAccumulator.getUbiSession());
+
       }
       if (sessionAccumulator.getUbiSession().getEndTimestamp() == null) {
         sessionAccumulator.getUbiSession().setEndTimestamp(event.getEventTimestamp());
@@ -42,6 +42,7 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     } else if (event.getEventTimestamp() != null
         && sessionAccumulator.getUbiSession().getAbsStartTimestamp() > event.getEventTimestamp()) {
       sessionAccumulator.getUbiSession().setAbsStartTimestamp(event.getEventTimestamp());
+      EventListenerContainer.onEarlyEventChange(event,sessionAccumulator.getUbiSession());
     }
     if (sessionAccumulator.getUbiSession().getAbsEndTimestamp() == null) {
       sessionAccumulator.getUbiSession().setAbsEndTimestamp(event.getEventTimestamp());

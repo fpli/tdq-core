@@ -36,7 +36,7 @@ public class UbiSessionWindowProcessFunction
       throws Exception {
 
     if (sessionMetrics == null) {
-      sessionMetrics = new SessionMetrics();
+      sessionMetrics = SessionMetrics.getInstance();
     }
 
     SessionAccumulator sessionAccumulator = elements.iterator().next();
@@ -65,8 +65,6 @@ public class UbiSessionWindowProcessFunction
     ubiSession.setBotFlagList(sessionAccumulator.getUbiSession().getBotFlagList());
     ubiSession.setNonIframeRdtEventCnt(
         sessionAccumulator.getUbiSession().getNonIframeRdtEventCnt());
-    ubiSession.setSingleClickSessionFlag(
-        sessionAccumulator.getUbiSession().getSingleClickSessionFlag());
     ubiSession.setSessionReferrer(sessionAccumulator.getUbiSession().getSessionReferrer());
     ubiSession.setBotFlag(sessionAccumulator.getUbiSession().getBotFlag());
     ubiSession.setVersion(sessionAccumulator.getUbiSession().getVersion());
