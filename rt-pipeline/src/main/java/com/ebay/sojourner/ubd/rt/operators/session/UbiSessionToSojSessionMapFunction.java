@@ -50,6 +50,7 @@ public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSessio
     sojSession.setGrCnt(ubiSession.getGrCnt());
     sojSession.setMyebayCnt(ubiSession.getMyebayCnt());
     sojSession.setSigninPageCnt(ubiSession.getSigninPageCnt());
+    sojSession.setFirstSessionStartDt(ubiSession.getFirstSessionStartDt());
     return sojSession;
   }
 }
