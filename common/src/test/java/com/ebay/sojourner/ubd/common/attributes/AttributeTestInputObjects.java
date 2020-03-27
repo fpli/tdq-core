@@ -1,6 +1,7 @@
 package com.ebay.sojourner.ubd.common.attributes;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
+import com.ebay.sojourner.ubd.common.model.SessionForGuidEnhancement;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -13,6 +14,9 @@ public class AttributeTestInputObjects {
 
   @JsonProperty("AgentIpAttribute")
   private AgentIpAttribute agentIpAttribute;
+
+  @JsonProperty("SessionForGuidEnhancement")
+  private SessionForGuidEnhancement sessionForGuidEnhancement;
 
   private int botFlag;
 

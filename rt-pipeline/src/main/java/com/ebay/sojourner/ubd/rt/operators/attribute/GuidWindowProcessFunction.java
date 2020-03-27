@@ -32,7 +32,7 @@ public class GuidWindowProcessFunction
         && guidAttribute.getBotFlagList().size() > 0) {
       out.collect(
           new Tuple4<>(
-              "guid" + guidAttribute.getGuid(),
+              "guid" + guidAttribute.getGuid1() + guidAttribute.getGuid2(),
               false,
               guidAttribute.getBotFlagList(),
               context.window().maxTimestamp()));
@@ -49,7 +49,7 @@ public class GuidWindowProcessFunction
       }
       out.collect(
           new Tuple4<>(
-              "guid" + guidAttribute.getGuid(),
+              "guid" + guidAttribute.getGuid1() + guidAttribute.getGuid2(),
               true,
               generationBotFlag,
               context.window().maxTimestamp()));

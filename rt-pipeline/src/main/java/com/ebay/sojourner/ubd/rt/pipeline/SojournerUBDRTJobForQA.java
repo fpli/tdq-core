@@ -2,13 +2,14 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
+import com.ebay.sojourner.ubd.common.model.SessionForGuidEnhancement;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForQA;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForQA;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAggSliding;
@@ -26,6 +27,7 @@ import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.DetectableSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionForGuidEnhancementMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import java.util.Set;
@@ -42,7 +44,6 @@ import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.datastream.SplitStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
-import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.transformations.OneInputTransformation;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
@@ -85,7 +86,7 @@ public class SojournerUBDRTJobForQA {
                 ? 1
                 : AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
     executionEnvironment.setStateBackend(
-        StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
+        StateBackendFactory.getStateBackend(StateBackendFactory.FS));
     executionEnvironment.setRestartStrategy(
         RestartStrategies.fixedDelayRestart(
             3, // number of restart attempts
@@ -98,16 +99,7 @@ public class SojournerUBDRTJobForQA {
     // 1.2 Assign timestamps and emit watermarks.
     DataStream<RawEvent> rawEventDataStream =
         executionEnvironment
-            .addSource(
-                KafkaConnectorFactoryForQA.createKafkaConsumer()
-                    .setStartFromLatest()
-                    .assignTimestampsAndWatermarks(
-                        new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
-                          @Override
-                          public long extractTimestamp(RawEvent element) {
-                            return element.getRheosHeader().getEventCreateTimestamp();
-                          }
-                        }))
+            .addSource(KafkaSourceFunctionForQA.generateWatermark())
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 30
@@ -137,7 +129,7 @@ public class SojournerUBDRTJobForQA {
 
     OutputTag<UbiEvent> mappedEventOutputTag =
         new OutputTag<>("mapped-event-output-tag", TypeInformation.of(UbiEvent.class));
-    SingleOutputStreamOperator<UbiSession> ubiSessinDataStream =
+    SingleOutputStreamOperator<UbiSession> ubiSessionDataStream =
         ubiEventDataStream
             .keyBy("guid")
             .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
@@ -147,9 +139,16 @@ public class SojournerUBDRTJobForQA {
             .name("Session Operator");
 
     WindowOperatorHelper.enrichWindowOperator(
-        (OneInputTransformation) ubiSessinDataStream.getTransformation(),
+        (OneInputTransformation) ubiSessionDataStream.getTransformation(),
         new UbiEventMapWithStateFunction(),
         mappedEventOutputTag);
+
+    // ubiSession to SessionForGuidEnhancement
+    SingleOutputStreamOperator<SessionForGuidEnhancement> sessionForGuidEnhancement =
+        ubiSessionDataStream
+            .map(new UbiSessionForGuidEnhancementMapFunction())
+            .name("ubiSession to SessionForGuidEnhancement")
+            .setParallelism(2);
 
     // 4. Attribute Operator
     // 4.1 Sliding window
@@ -157,7 +156,7 @@ public class SojournerUBDRTJobForQA {
     // 4.3 Attribute level bot detection (via bot rule)
     // 4.4 Store bot signature
     DataStream<AgentIpAttribute> agentIpAttributeDatastream =
-        ubiSessinDataStream
+        ubiSessionDataStream
             .keyBy("userAgent", "clientIp")
             .window(TumblingEventTimeWindows.of(Time.minutes(5)))
             .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
@@ -165,8 +164,8 @@ public class SojournerUBDRTJobForQA {
             .setParallelism(2);
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureDataStream =
-        ubiSessinDataStream
-            .keyBy("guid")
+        sessionForGuidEnhancement
+            .keyBy("guid1","guid2")
             .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
@@ -274,11 +273,11 @@ public class SojournerUBDRTJobForQA {
 
     // transform ubiEvent,ubiSession to same type and union
     DataStream<UbiEvent> mappedEventStream =
-        ubiSessinDataStream.getSideOutput(mappedEventOutputTag);
-    DataStream<UbiEvent> latedStream = ubiSessinDataStream.getSideOutput(lateEventOutputTag);
+        ubiSessionDataStream.getSideOutput(mappedEventOutputTag);
+    DataStream<UbiEvent> latedStream = ubiSessionDataStream.getSideOutput(lateEventOutputTag);
 
     DataStream<Either<UbiEvent, UbiSession>> detectableDataStream =
-        ubiSessinDataStream
+        ubiSessionDataStream
             .map(new DetectableSessionMapFunction())
             .union(mappedEventStream.map(new DetectableEventMapFunction()));
 
@@ -297,7 +296,6 @@ public class SojournerUBDRTJobForQA {
 
     DataStream<UbiSession> signatureBotDetectionForSession =
         signatureBotDetectionForEvent.getSideOutput(sessionOutputTag);
-    //
     signatureBotDetectionForSession.addSink(new DiscardingSink<>()).name("Session");
     latedStream.addSink(new DiscardingSink<>()).name("Late Event");
     signatureBotDetectionForEvent.addSink(new EventDiscardingSink()).name("Event");

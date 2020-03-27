@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Slf4j
-public class RawEventDeserializationSchemaForLVS implements DeserializationSchema<RawEvent> {
+public class RawEventDeserializationSchema implements DeserializationSchema<RawEvent> {
 
   protected static final Logger LOGGER = LoggerFactory
       .getLogger(RawEventDeserializationSchemaForRNO.class);
@@ -304,7 +304,6 @@ public class RawEventDeserializationSchemaForLVS implements DeserializationSchem
       tpStr.append("&").append("node_id").append("=").append(clientData.getNodeId());
       tpStr.append("&").append("REQUEST_GUID").append("=").append(clientData.getRequestGuid());
       tpStr.append("&").append("logid").append("=").append(clientData.getRlogid());
-
       String calMod = getTag(decodedTPayload, "cal_mod");
       if (calMod != null && !calMod.equals("")) {
         tpStr.append("&").append("cal_mod").append("=").append(calMod);
@@ -383,3 +382,4 @@ public class RawEventDeserializationSchemaForLVS implements DeserializationSchem
     return TypeInformation.of(RawEvent.class);
   }
 }
+

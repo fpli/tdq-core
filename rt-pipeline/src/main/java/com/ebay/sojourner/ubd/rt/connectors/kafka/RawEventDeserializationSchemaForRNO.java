@@ -27,7 +27,6 @@ public class RawEventDeserializationSchemaForRNO implements DeserializationSchem
       .getLogger(RawEventDeserializationSchemaForRNO.class);
   private static final String TAG_ITEMIDS = "!itemIds";
   private static final String TAG_TRKP = "trkp";
-  private static final String DC_RNO = "RNO";
   private static String[] tagsToEncode = new String[]{TAG_ITEMIDS, TAG_TRKP};
 
   @Override
@@ -84,7 +83,7 @@ public class RawEventDeserializationSchemaForRNO implements DeserializationSchem
     GenericRecord genericClientData = (GenericRecord) genericRecord.get("clientData");
     ClientData clientData = new ClientData();
     parseClientData(clientData, genericClientData);
-    return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData, DC_RNO, ingestTime);
+    return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData, ingestTime);
   }
 
   private void parseClientData(ClientData clentData, GenericRecord genericRecord) {

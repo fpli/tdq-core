@@ -14,6 +14,29 @@ public class Constants {
   public static final String DEFAULT_KITE2_PROPERTIES_FILENAME = "/kite2.properties";
   public static final String PROD_CONFIG = "prod.config";
 
+  // kafka config
+  public static final String TOPIC_PATHFINDER_EVENTS = AppEnv.config().getKafka().getTopic();
+
+  // rno
+  public static final String GROUP_ID_RNO = AppEnv.config().getKafka().getGroupIdForRNO();
+  public static final String BOOTSTRAP_SERVERS_RNO =
+      String.join(",", AppEnv.config().getKafka().getBootstrapServersForRNO());
+
+  // lvs
+  public static final String GROUP_ID_LVS = AppEnv.config().getKafka().getGroupIdForLVS();
+  public static final String BOOTSTRAP_SERVERS_LVS =
+      String.join(",", AppEnv.config().getKafka().getBootstrapServersForLVS());
+
+  // slc
+  public static final String GROUP_ID_SLC = AppEnv.config().getKafka().getGroupIdForSLC();
+  public static final String BOOTSTRAP_SERVERS_SLC =
+      String.join(",", AppEnv.config().getKafka().getBootstrapServersForSLC());
+
+  // QA --- rno
+  public static final String GROUP_ID_QA = AppEnv.config().getKafka().getGroupIdForQA();
+  public static final String BOOTSTRAP_SERVERS_QA =
+      String.join(",", AppEnv.config().getKafka().getBootstrapServersForQA());
+
   // Flink
   public static final String STREAM_PARALLELISM = "stream.parallelism";
   public static final String STREAM_SINK_PARALLELISM = "stream.sink.parallelism";

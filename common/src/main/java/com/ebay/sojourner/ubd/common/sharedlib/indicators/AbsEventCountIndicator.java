@@ -1,11 +1,11 @@
 package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
 import com.ebay.sojourner.ubd.common.model.GuidAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.ubd.common.model.SessionForGuidEnhancement;
 import com.ebay.sojourner.ubd.common.util.BotRules;
 
 public class AbsEventCountIndicator
-    extends AbstractIndicator<UbiSession, GuidAttributeAccumulator> {
+    extends AbstractIndicator<SessionForGuidEnhancement, GuidAttributeAccumulator> {
 
   @Override
   public void start(GuidAttributeAccumulator guidAttributeAccumulator) throws Exception {
@@ -14,15 +14,17 @@ public class AbsEventCountIndicator
 
   @Override
   public void feed(
-      UbiSession ubiSession, GuidAttributeAccumulator guidAttributeAccumulator, boolean isNeeded)
+      SessionForGuidEnhancement session, GuidAttributeAccumulator guidAttributeAccumulator,
+      boolean isNeeded)
       throws Exception {
     guidAttributeAccumulator
         .getGuidAttribute()
-        .feed(ubiSession, BotRules.MANY_EVENTS_BOT_FLAG, isNeeded);
+        .feed(session, BotRules.MANY_EVENTS_BOT_FLAG, isNeeded);
   }
 
   @Override
-  public boolean filter(UbiSession ubiSession, GuidAttributeAccumulator guidAttributeAccumulator)
+  public boolean filter(SessionForGuidEnhancement session,
+      GuidAttributeAccumulator guidAttributeAccumulator)
       throws Exception {
     return false;
   }
