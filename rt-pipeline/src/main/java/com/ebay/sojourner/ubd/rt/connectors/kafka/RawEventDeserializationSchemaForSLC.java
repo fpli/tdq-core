@@ -299,7 +299,7 @@ public class RawEventDeserializationSchemaForSLC implements DeserializationSchem
 
   private String constuctTPayload(ClientData clientData, String decodedTPayload) {
     try {
-      StringBuilder tpStr = new StringBuilder();
+      StringBuffer tpStr = new StringBuffer();
       tpStr.append("corr_id_").append("=").append(clientData.getCorrId());
       tpStr.append("&").append("node_id").append("=").append(clientData.getNodeId());
       tpStr.append("&").append("REQUEST_GUID").append("=").append(clientData.getRequestGuid());

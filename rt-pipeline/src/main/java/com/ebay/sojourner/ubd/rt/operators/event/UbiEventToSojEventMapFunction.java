@@ -46,6 +46,7 @@ public class UbiEventToSojEventMapFunction extends RichMapFunction<UbiEvent, Soj
     sojEvent.setPageFamily(ubiEvent.getPageFamily());
     sojEvent.setPageId(ubiEvent.getPageId());
     sojEvent.setPageName(ubiEvent.getPageName());
+    sojEvent.setAgentInfo(ubiEvent.getAgentInfo());
     sojEvent.setPartialValidPage(ubiEvent.isPartialValidPage());
     sojEvent.setRdt(ubiEvent.isRdt() ? 1 : 0);
     sojEvent.setRefererHash(ubiEvent.getRefererHash());

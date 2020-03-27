@@ -9,7 +9,7 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
 
   private static volatile SessionMetrics sessionMetrics;
 
-  public SessionMetrics() {
+  private SessionMetrics() {
     initFieldMetrics();
     try {
       init();

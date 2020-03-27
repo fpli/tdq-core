@@ -121,7 +121,7 @@ public class ClientData {
       clientInfo.append("Encoding=").append(encoding);
     }
     // Referer must be in the end of clientData since it has nested '&' '='
-    if (referrer != null && !referrer.equals("")) {
+    if (referrer != null && !referrer.equals("")&&!referrer.equalsIgnoreCase("null")) {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
