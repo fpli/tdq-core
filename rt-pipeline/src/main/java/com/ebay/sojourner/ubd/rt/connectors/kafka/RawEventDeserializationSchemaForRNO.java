@@ -83,6 +83,7 @@ public class RawEventDeserializationSchemaForRNO implements DeserializationSchem
 
     GenericRecord genericClientData = (GenericRecord) genericRecord.get("clientData");
     ClientData clientData = new ClientData();
+    clientData.setOriginalClientData(genericClientData.toString());
     parseClientData(clientData, genericClientData);
     return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData, DC_RNO, ingestTime);
   }
