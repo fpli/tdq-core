@@ -31,6 +31,7 @@ public class ClientData {
   private String tDuration;
   private String encoding;
   private String tPayload;
+  private String originalClientData;
 
   @Override
   public String toString() {
@@ -126,6 +127,12 @@ public class ClientData {
         clientInfo.append("&");
       }
       clientInfo.append("Referer=").append(referrer);
+    }
+    if (originalClientData != null && !originalClientData.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      clientInfo.append("originalClientData=").append(originalClientData);
     }
     return clientInfo.toString();
   }
