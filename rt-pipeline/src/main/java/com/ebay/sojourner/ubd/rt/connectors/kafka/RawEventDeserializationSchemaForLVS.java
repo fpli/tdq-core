@@ -82,7 +82,6 @@ public class RawEventDeserializationSchemaForLVS implements DeserializationSchem
 
     GenericRecord genericClientData = (GenericRecord) genericRecord.get("clientData");
     ClientData clientData = new ClientData();
-    clientData.setOriginalClientData(genericClientData.toString());
     parseClientData(clientData, genericClientData);
     return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData, ingestTime);
   }
@@ -262,7 +261,7 @@ public class RawEventDeserializationSchemaForLVS implements DeserializationSchem
 
   private String getTag(String str, String tagName) {
     int index = str.indexOf("&" + tagName + "=");
-    if (index > 0) {
+    if (index >= 0) {
       int nextIndex = str.indexOf('&', index + 1);
       String tagVal = null;
       if (nextIndex > 0) {
@@ -383,4 +382,5 @@ public class RawEventDeserializationSchemaForLVS implements DeserializationSchem
   public TypeInformation<RawEvent> getProducedType() {
     return TypeInformation.of(RawEvent.class);
   }
+
 }
