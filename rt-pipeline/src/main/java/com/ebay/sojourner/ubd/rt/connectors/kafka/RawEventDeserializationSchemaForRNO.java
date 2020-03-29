@@ -261,7 +261,7 @@ public class RawEventDeserializationSchemaForRNO implements DeserializationSchem
 
   private String getTag(String str, String tagName) {
     int index = str.indexOf("&" + tagName + "=");
-    if (index > 0) {
+    if (index >= 0) {
       int nextIndex = str.indexOf('&', index + 1);
       String tagVal = null;
       if (nextIndex > 0) {
