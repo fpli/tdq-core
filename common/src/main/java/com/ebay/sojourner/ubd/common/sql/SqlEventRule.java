@@ -8,6 +8,8 @@ import org.apache.calcite.adapter.java.ReflectiveSchema;
 import org.apache.calcite.schema.ScalarFunction;
 import org.apache.calcite.schema.SchemaPlus;
 import org.apache.calcite.schema.impl.ScalarFunctionImpl;
+import org.apache.calcite.sql.parser.SqlParser;
+import org.apache.calcite.sql.parser.SqlParser.ConfigBuilder;
 import org.apache.calcite.tools.FrameworkConfig;
 import org.apache.calcite.tools.Frameworks;
 import org.apache.calcite.tools.Planner;
@@ -63,8 +65,10 @@ public abstract class SqlEventRule implements Rule<UbiEvent> {
     rootSchema.add("square", ScalarFunctionImpl.create(UdfManager.SquareFunction.class, "eval"));
 
     // Create planner
+    ConfigBuilder parserConfigBuilder = SqlParser.configBuilder().setCaseSensitive(false);
     final FrameworkConfig config =
         Frameworks.newConfigBuilder()
+            .parserConfig(parserConfigBuilder.build())
             .programs(Programs.standard())
             .defaultSchema(rootSchema)
             .build();

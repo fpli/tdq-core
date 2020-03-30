@@ -6,7 +6,7 @@ import java.util.List;
 public class TestUtils {
 
   private static final String UDF_1_STR =
-      "SELECT \"square\"(2) " + "FROM \"soj\".\"ubiEvents\"";
+      "SELECT square(2) FROM soj.ubiEvents";
 
   public static final SqlEventRule UDF_1_INTERPRETER =
       new SqlInterpreterEventRule(UDF_1_STR);
