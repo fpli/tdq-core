@@ -14,13 +14,12 @@ public class AppIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>,
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-    if (sessionAccumulator.getUbiSession().getFirstAppId() == null && event.getAppId() != null) {
-      sessionAccumulator.getUbiSession().setFirstAppId(event.getAppId());
-    }
     if (sessionAccumulator.getUbiSession().getAppId() == null
+        && sessionAccumulator.getUbiSession().getFirstAppId() == null
         && !event.isIframe()
         && !event.isRdt()
         && event.getAppId() != null) {
+      sessionAccumulator.getUbiSession().setFirstAppId(event.getAppId());
       sessionAccumulator.getUbiSession().setAppId(event.getAppId());
     }
   }
