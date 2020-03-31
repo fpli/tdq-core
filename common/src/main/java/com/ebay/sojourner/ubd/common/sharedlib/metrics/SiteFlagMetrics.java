@@ -25,6 +25,35 @@ public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
   void setSiteFlag(Integer siteId, SessionAccumulator sessionAccumulator) {
     byte[] siteFlagsMid = sessionAccumulator.getUbiSession().getSiteFlagsSet();
     switch (siteId) {
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+      case 20:
+      case 163:
+      case 500:
+      case 970:
+      case 971:
+      case 972:
+      case 973:
+      case 980:
+      case 981:
+      case 982:
+      case 983:
+      case 984:
+      case 985:
+      case 986:
+      case 987:
+      case 989:
+      case 990:
+      case 991:
+      case 992:
+      case 993:
+      case 994:
+      case 995:
+      case 996:
+      case 997:
       case 998:
         siteFlagsMid[0] = 1;
         break;
