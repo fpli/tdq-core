@@ -17,14 +17,10 @@ import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class RawEventDeserializationSchema implements DeserializationSchema<RawEvent> {
 
-  protected static final Logger LOGGER = LoggerFactory
-      .getLogger(RawEventDeserializationSchemaForRNO.class);
   private static final String TAG_ITEMIDS = "!itemIds";
   private static final String TAG_TRKP = "trkp";
   private static String[] tagsToEncode = new String[]{TAG_ITEMIDS, TAG_TRKP};
@@ -255,7 +251,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
       clientData.setTPayload(tPaylload);
 
     } catch (Exception e) {
-      LOGGER.error("Error when parsing TPayload.", tpayload, e);
+      log.error("Error when parsing TPayload.", tpayload, e);
     }
   }
 
@@ -290,7 +286,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
             tags.put(keyToEncode, URLEncoder.encode(value, "UTF-8"));
 
           } catch (UnsupportedEncodingException e) {
-            LOGGER.trace("Fail to encode tags. ", e);
+            log.trace("Fail to encode tags. ", e);
           }
         }
       }

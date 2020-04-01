@@ -15,7 +15,7 @@ public class AvroKeyedSerializationSchema<T> implements KeyedSerializationSchema
 
   private static final long serialVersionUID = 1L;
   private Class<T> avroType;
-  private Field keyField = null;
+  private transient Field keyField = null;
   private transient GenericDatumWriter<T> writer;
   private transient BinaryEncoder encoder;
 
