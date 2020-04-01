@@ -24,7 +24,6 @@ public class AvroKeyedSerializationSchema<T> implements KeyedSerializationSchema
   public AvroKeyedSerializationSchema(Class<T> avroType, String keyField) {
     this.avroType = avroType;
     this.keyFieldStr = keyField;
-
   }
 
   @Override

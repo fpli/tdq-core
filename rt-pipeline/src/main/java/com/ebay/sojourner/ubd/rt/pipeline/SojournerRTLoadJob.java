@@ -7,7 +7,6 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForLVS;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForRNO;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForSLC;
@@ -19,7 +18,6 @@ import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
-import com.ebay.sojourner.ubd.rt.util.Constants;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
@@ -165,10 +163,6 @@ public class SojournerRTLoadJob {
 
     // This path is for local test. For production, we should use
     // "hdfs://apollo-rno//user/o_ubi/events/"
-    sojSessionStream.addSink(KafkaConnectorFactory
-        .createKafkaProducer(Constants.TOPIC_PRODUCER, Constants.BOOTSTRAP_PRODUCER_BROKERS,
-            SojSession.class, Constants.MESSAGE_KEY));
-
     sojSessionStream.addSink(HdfsSinkUtil.sojSessionSinkWithParquet()).name("SojSession sink")
         .disableChaining();
     sojEventWithSessionId.addSink(HdfsSinkUtil.sojEventSinkWithParquet()).name("SojEvent sink")
