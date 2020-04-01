@@ -2,9 +2,11 @@ package com.ebay.sojourner.ubd.rt.connectors.kafka;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
+import java.util.Optional;
 import java.util.Properties;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer.Semantic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.RoundRobinAssignor;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -65,6 +67,8 @@ public class KafkaConnectorFactory {
     props.put(ProducerConfig.BATCH_SIZE_CONFIG, 4 * 1024);
 
     return new FlinkKafkaProducer<>(topic,
-        new AvroKeyedSerializationSchema<>(sinkClass, messageKey), props);
+        new AvroKeyedSerializationSchema<>(sinkClass, messageKey), props,
+        Optional.of(new SojKafkaPartitioner<>()),
+        Semantic.EXACTLY_ONCE,5);
   }
 }
