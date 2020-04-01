@@ -81,7 +81,8 @@ public class SojournerRTLoadForKafkaProducerJob {
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer For RNO");
+            .name("Rheos Kafka Consumer For RNO")
+            .uid("kafkaSourceForRNO");
 
     DataStream<RawEvent> rawEventDataStreamForSLC =
         executionEnvironment
@@ -90,7 +91,8 @@ public class SojournerRTLoadForKafkaProducerJob {
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer For SLC");
+            .name("Rheos Kafka Consumer For SLC")
+            .uid("kafkaSourceForSLC");
 
     DataStream<RawEvent> rawEventDataStreamForLVS =
         executionEnvironment
@@ -99,7 +101,8 @@ public class SojournerRTLoadForKafkaProducerJob {
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer For LVS");
+            .name("Rheos Kafka Consumer For LVS")
+            .uid("kafkaSourceForLVS");
 
     // union three DC data
     DataStream<RawEvent> rawEventDataStream = rawEventDataStreamForRNO
@@ -109,7 +112,8 @@ public class SojournerRTLoadForKafkaProducerJob {
     // filter 33% throughput group by guid for reduce kafka consumer lag
     DataStream<RawEvent> filteredRawEvent = rawEventDataStream
         .filter(new RawEventFilterFunction())
-        .name("RawEvent Filter Operator");
+        .name("RawEvent Filter Operator")
+        .uid("filterSource");
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
@@ -118,7 +122,8 @@ public class SojournerRTLoadForKafkaProducerJob {
         filteredRawEvent
             .map(new EventMapFunction())
             .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
-            .name("Event Operator");
+            .name("Event Operator")
+            .uid("eventLevel");
 
     // 3. Session Operator
     // 3.1 Session window
@@ -146,13 +151,14 @@ public class SojournerRTLoadForKafkaProducerJob {
         new UbiEventMapWithStateFunction(),
         mappedEventOutputTag);
 
-    ubiSessionDataStream.name("Session Operator");
+    ubiSessionDataStream.name("Session Operator").uid("sessionLevel");
 
     // UbiSession to SojSession
     SingleOutputStreamOperator<SojSession> sojSessionStream =
         ubiSessionDataStream
             .map(new UbiSessionToSojSessionMapFunction())
-            .name("UbiSession to SojSession");
+            .name("UbiSession to SojSession")
+            .uid("sessionTransform");
 
     DataStream<UbiEvent> ubiEventWithSessionId = ubiSessionDataStream
         .getSideOutput(mappedEventOutputTag);
@@ -160,14 +166,16 @@ public class SojournerRTLoadForKafkaProducerJob {
     // UbiEvent to SojEvent
     DataStream<SojEvent> sojEventWithSessionId = ubiEventWithSessionId
         .map(new UbiEventToSojEventMapFunction())
-        .name("UbiEvent to SojEvent");
+        .name("UbiEvent to SojEvent")
+        .uid("eventTransform");
 
     // kafka sink
     sojSessionStream.addSink(KafkaConnectorFactory
         .createKafkaProducer(Constants.TOPIC_PRODUCER, Constants.BOOTSTRAP_PRODUCER_BROKERS,
             SojSession.class, Constants.MESSAGE_KEY))
         .setParallelism(50)
-        .name("SojSession Kafka");
+        .name("SojSession Kafka")
+        .uid("kafkaSink");
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());

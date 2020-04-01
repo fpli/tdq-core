@@ -2,7 +2,6 @@ package com.ebay.sojourner.ubd.rt.connectors.kafka;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
-import io.ebay.rheos.schema.avro.RheosEventDeserializer;
 import java.util.Properties;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
@@ -10,7 +9,6 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.RoundRobinAssignor;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.config.SaslConfigs;
-import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 
 public class KafkaConnectorFactory {
 
@@ -42,9 +40,6 @@ public class KafkaConnectorFactory {
 
     props.put(
         ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, RoundRobinAssignor.class.getName());
-    props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ByteArrayDeserializer.class.getName());
-    props.put(
-        ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, RheosEventDeserializer.class.getName());
     props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
 
     return new FlinkKafkaConsumer<>(
@@ -68,11 +63,6 @@ public class KafkaConnectorFactory {
     props.put(SaslConfigs.SASL_JAAS_CONFIG, saslJaasConfig);
     props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
     props.put(ProducerConfig.BATCH_SIZE_CONFIG, 4 * 1024);
-    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-        "com.ebay.sojourner.ubd.rt.connectors.kafka.AvroKeyedSerializationSchema");
-    props.put(
-        ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-        "com.ebay.sojourner.ubd.rt.connectors.kafka.AvroKeyedSerializationSchema");
 
     return new FlinkKafkaProducer<>(topic,
         new AvroKeyedSerializationSchema<>(sinkClass, messageKey), props);

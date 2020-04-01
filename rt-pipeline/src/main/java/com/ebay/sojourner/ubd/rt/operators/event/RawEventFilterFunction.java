@@ -38,7 +38,7 @@ public class RawEventFilterFunction extends RichFilterFunction<RawEvent> {
     }
     if (map.containsKey("g")) {
       String g = map.get("g");
-      return g.hashCode() % 4 == 0;
+      return g.hashCode() % 10 == 0;
     }
     return false;
   }
