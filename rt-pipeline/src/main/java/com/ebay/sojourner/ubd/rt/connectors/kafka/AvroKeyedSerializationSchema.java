@@ -14,27 +14,25 @@ import org.apache.flink.streaming.util.serialization.KeyedSerializationSchema;
 public class AvroKeyedSerializationSchema<T> implements KeyedSerializationSchema<T> {
 
   private static final long serialVersionUID = 1L;
+  private static final String CHAR_SET = "utf-8";
   private Class<T> avroType;
-  private Field keyField = null;
+  private transient Field keyField = null;
+  private String keyFieldStr = null;
   private transient GenericDatumWriter<T> writer;
   private transient BinaryEncoder encoder;
 
   public AvroKeyedSerializationSchema(Class<T> avroType, String keyField) {
     this.avroType = avroType;
+    this.keyFieldStr = keyField;
 
-    try {
-      this.keyField = avroType.getDeclaredField(keyField);
-      this.keyField.setAccessible(true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
   }
 
   @Override
   public byte[] serializeKey(T element) {
+    ensureInitialized();
     byte[] serializedKey = new byte[0];
     try {
-      serializedKey = keyField.get(element).toString().getBytes();
+      serializedKey = keyField.get(element).toString().getBytes(CHAR_SET);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -70,6 +68,14 @@ public class AvroKeyedSerializationSchema<T> implements KeyedSerializationSchema
         writer = new SpecificDatumWriter<>(avroType);
       } else {
         writer = new ReflectDatumWriter<>(avroType, ReflectData.AllowNull.get());
+      }
+    }
+    if (keyField == null) {
+      try {
+        this.keyField = avroType.getDeclaredField(this.keyFieldStr);
+        this.keyField.setAccessible(true);
+      } catch (Exception e) {
+        e.printStackTrace();
       }
     }
   }
