@@ -49,9 +49,9 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
   private EventBotDetector eventBotDetector;
   private AverageAccumulator avgEventParserDuration = new AverageAccumulator();
   private Map<String, AverageAccumulator> eventParseMap = new ConcurrentHashMap<>();
+  private Map<String, Counter> eventStaticRuleHitCounterMap = new ConcurrentHashMap<>();
   private Counter eventCounter;
   private AverageAccumulator avgBotDetectionDuration = new AverageAccumulator();
-  private Counter icfRuleHitCounter;
 
   @Override
   public void open(Configuration conf) throws Exception {
@@ -71,13 +71,12 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
             .addGroup("sojourner-ubd")
             .counter("ubiEvent count");
 
-    icfRuleHitCounter =
-        getRuntimeContext()
-            .getMetricGroup()
-            .addGroup("sojourner-ubd")
-            .counter("icfRule hits count");
+    List<String> ruleStaticNames =
+        Arrays.asList(
+            "rule801", "rule901", "rule1"
+        );
 
-    List<String> classNames =
+    List<String> eventParserNames =
         Arrays.asList(
             AgentInfoParser.class.getSimpleName(),
             AppIdParser.class.getSimpleName(),
@@ -107,7 +106,16 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
             IcfParser.class.getSimpleName(),
             JSColumnParser.class.getSimpleName());
 
-    for (String className : classNames) {
+    for (String ruleName : ruleStaticNames) {
+      Counter ruleHitCounter =
+          getRuntimeContext()
+              .getMetricGroup()
+              .addGroup("sojourner-ubd")
+              .counter(ruleName);
+      eventStaticRuleHitCounterMap.put(ruleName, ruleHitCounter);
+    }
+
+    for (String className : eventParserNames) {
       AverageAccumulator accumulator = new AverageAccumulator();
       eventParseMap.put(className, accumulator);
       log.info("Add accumulator for {}", className);
@@ -124,17 +132,23 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
     parser.parse(rawEvent, event, eventParseMap);
     avgEventParserDuration.add(System.nanoTime() - startTimeForEventParser);
     long startTimeForEventBotDetection = System.nanoTime();
+    eventBotDetector.initDynamicRules();
+
     Set<Integer> botFlagList = eventBotDetector.getBotFlagList(event);
     avgBotDetectionDuration.add(System.nanoTime() - startTimeForEventBotDetection);
     event.getBotFlags().addAll(botFlagList);
     if (botFlagList.size() > 0) {
       for (int botRule : botFlagList) {
-        if (botRule >= 801 && botRule <= 812) {
-          icfRuleHitCounter.inc();
-          break;
-        }
+        ruleHitCount(botRule);
       }
     }
     return event;
+  }
+
+  private void ruleHitCount(int botFlag) {
+    Counter counter = eventStaticRuleHitCounterMap.get("rule" + botFlag);
+    if (botFlag != 0 && counter != null) {
+      counter.inc();
+    }
   }
 }

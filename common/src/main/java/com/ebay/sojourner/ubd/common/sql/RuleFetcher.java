@@ -36,7 +36,7 @@ public class RuleFetcher {
     System.out.println("Fetch rules periodically");
     scheduledExecutorService.scheduleAtFixedRate(() -> {
       fetchRules();
-    }, 0, 60, TimeUnit.SECONDS);
+    }, 0, 10, TimeUnit.SECONDS);
   }
 
   public synchronized void fetchRules() {

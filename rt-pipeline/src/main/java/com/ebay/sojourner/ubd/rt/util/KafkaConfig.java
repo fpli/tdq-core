@@ -10,9 +10,11 @@ public class KafkaConfig {
   private List<String> bootstrapServersForSLC;
   private List<String> bootstrapServersForLVS;
   private List<String> bootstrapServersForQA;
+  private List<String> bootstrapServersForProducer;
   private String groupIdForLVS;
   private String groupIdForSLC;
   private String groupIdForRNO;
   private String groupIdForQA;
+  private String topicForProducer;
   private String topic;
 }

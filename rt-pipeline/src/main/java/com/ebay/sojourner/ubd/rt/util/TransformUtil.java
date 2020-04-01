@@ -23,7 +23,7 @@ public class TransformUtil {
 
   public static Long[] stringToLong(CharSequence cmd) {
     if (cmd == null) {
-      return new Long[]{null, null};
+      return new Long[]{0L, 0L};
     }
     if (StringUtils.isBlank(cmd)) {
       return new Long[]{0L, 0L};
@@ -37,15 +37,15 @@ public class TransformUtil {
     } else {
       secondLen = md.length();
     }
-    Long part1 = getOnelong(md.substring(0, firstLen));
-    Long part2 = null;
+    long part1 = getOnelong(md.substring(0, firstLen));
+    long part2 = 0L;
     if (secondLen > 0) {
       part2 = getOnelong(md.substring(LEN, secondLen));
     }
     return new Long[]{part1, part2};
   }
 
-  public static Long getOnelong(String part) {
+  public static long getOnelong(String part) {
     long res = 0;
     for (int i = 0; i < part.length(); ++i) {
       char c = part.charAt(i);

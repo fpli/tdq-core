@@ -6,7 +6,6 @@ import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
-import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForLVS;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForRNO;
@@ -34,7 +33,7 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
 
-public class SojournerRTLoadJob {
+public class SojournerRTLoadForKafkaProducerJob {
 
   public static void main(String[] args) throws Exception {
 
@@ -163,17 +162,15 @@ public class SojournerRTLoadJob {
         .map(new UbiEventToSojEventMapFunction())
         .name("UbiEvent to SojEvent");
 
-    // This path is for local test. For production, we should use
-    // "hdfs://apollo-rno//user/o_ubi/events/"
+    // kafka sink
     sojSessionStream.addSink(KafkaConnectorFactory
         .createKafkaProducer(Constants.TOPIC_PRODUCER, Constants.BOOTSTRAP_PRODUCER_BROKERS,
-            SojSession.class, Constants.MESSAGE_KEY));
+            SojSession.class, Constants.MESSAGE_KEY))
+        .setParallelism(50)
+        .name("SojSession Kafka");
 
-    sojSessionStream.addSink(HdfsSinkUtil.sojSessionSinkWithParquet()).name("SojSession sink")
-        .disableChaining();
-    sojEventWithSessionId.addSink(HdfsSinkUtil.sojEventSinkWithParquet()).name("SojEvent sink")
-        .disableChaining();
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
   }
 }
+

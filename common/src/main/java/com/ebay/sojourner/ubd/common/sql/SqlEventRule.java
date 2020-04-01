@@ -4,6 +4,8 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.rule.Rule;
 import java.util.Locale;
 import java.util.Map;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.calcite.adapter.java.ReflectiveSchema;
 import org.apache.calcite.schema.ScalarFunction;
 import org.apache.calcite.schema.SchemaPlus;
@@ -16,15 +18,27 @@ import org.apache.calcite.tools.Planner;
 import org.apache.calcite.tools.Programs;
 import org.apache.log4j.Logger;
 
+@Data
+@EqualsAndHashCode(of = {"ruleId","version"}, callSuper = false)
 public abstract class SqlEventRule implements Rule<UbiEvent> {
 
   protected static final Logger LOGGER = Logger.getLogger(SqlEventRule.class);
   protected SojReflectiveDataSource dataSource;
   protected SojDataContext dataContext;
   private String sql;
+  private long ruleId;
+  private int version;
 
   public SqlEventRule(String sql) {
     this.sql = sql;
+    prepareDataContext();
+    prepareSql(sql);
+  }
+
+  public SqlEventRule(String sql, long ruleId, int version) {
+    this.sql = sql;
+    this.ruleId = ruleId;
+    this.version = version;
     prepareDataContext();
     prepareSql(sql);
   }
@@ -33,8 +47,8 @@ public abstract class SqlEventRule implements Rule<UbiEvent> {
     return new SqlCompilerEventRule(sql);
   }
 
-  public String getSql() {
-    return sql;
+  public static SqlEventRule of(String sql,long ruleId,int version){
+    return new SqlCompilerEventRule(sql,ruleId,version);
   }
 
   @Override

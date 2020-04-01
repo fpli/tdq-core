@@ -14,7 +14,7 @@ public class Constants {
   public static final String DEFAULT_KITE2_PROPERTIES_FILENAME = "/kite2.properties";
   public static final String PROD_CONFIG = "prod.config";
 
-  // kafka config
+  // kafka consumer config
   public static final String TOPIC_PATHFINDER_EVENTS = AppEnv.config().getKafka().getTopic();
 
   // rno
@@ -36,6 +36,16 @@ public class Constants {
   public static final String GROUP_ID_QA = AppEnv.config().getKafka().getGroupIdForQA();
   public static final String BOOTSTRAP_SERVERS_QA =
       String.join(",", AppEnv.config().getKafka().getBootstrapServersForQA());
+
+  // kafka producer config
+  public static final String TOPIC_PRODUCER = AppEnv.config().getKafka().getTopicForProducer();
+
+  // producer brokers
+  public static final String BOOTSTRAP_PRODUCER_BROKERS =
+      String.join(",", AppEnv.config().getKafka().getBootstrapServersForProducer());
+
+  // message key
+  public static final String MESSAGE_KEY = "guid";
 
   // Flink
   public static final String STREAM_PARALLELISM = "stream.parallelism";
