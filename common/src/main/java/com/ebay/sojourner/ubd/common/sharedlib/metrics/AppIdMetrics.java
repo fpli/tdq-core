@@ -4,7 +4,7 @@ import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 
-public class AppIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>,EventListener {
+public class AppIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, EventListener {
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
@@ -14,12 +14,13 @@ public class AppIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>,
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
+    if (sessionAccumulator.getUbiSession().getFirstAppId() == null && event.getAppId() != null) {
+      sessionAccumulator.getUbiSession().setFirstAppId(event.getAppId());
+    }
     if (sessionAccumulator.getUbiSession().getAppId() == null
-        && sessionAccumulator.getUbiSession().getFirstAppId() == null
         && !event.isIframe()
         && !event.isRdt()
         && event.getAppId() != null) {
-      sessionAccumulator.getUbiSession().setFirstAppId(event.getAppId());
       sessionAccumulator.getUbiSession().setAppId(event.getAppId());
     }
   }
@@ -40,7 +41,7 @@ public class AppIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>,
 
   @Override
   public void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
-    if (ubiEvent.getAppId()!=null) {
+    if (ubiEvent.getAppId() != null) {
       ubiSession.setFirstAppId(ubiEvent.getAppId());
     }
   }
