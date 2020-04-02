@@ -80,7 +80,8 @@ public class SojournerRTLoadJob {
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer For RNO");
+            .name("Rheos Kafka Consumer For RNO")
+            .uid("kafkaSourceForRNO");
 
     DataStream<RawEvent> rawEventDataStreamForSLC =
         executionEnvironment
@@ -89,7 +90,8 @@ public class SojournerRTLoadJob {
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer For SLC");
+            .name("Rheos Kafka Consumer For SLC")
+            .uid("kafkaSourceForSLC");
 
     DataStream<RawEvent> rawEventDataStreamForLVS =
         executionEnvironment
@@ -98,7 +100,8 @@ public class SojournerRTLoadJob {
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer For LVS");
+            .name("Rheos Kafka Consumer For LVS")
+            .uid("kafkaSourceForLVS");
 
     // union three DC data
     DataStream<RawEvent> rawEventDataStream = rawEventDataStreamForRNO
@@ -108,7 +111,8 @@ public class SojournerRTLoadJob {
     // filter 33% throughput group by guid for reduce kafka consumer lag
     DataStream<RawEvent> filteredRawEvent = rawEventDataStream
         .filter(new RawEventFilterFunction())
-        .name("RawEvent Filter Operator");
+        .name("RawEvent Filter Operator")
+        .uid("filterSource");
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
@@ -117,7 +121,8 @@ public class SojournerRTLoadJob {
         filteredRawEvent
             .map(new EventMapFunction())
             .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
-            .name("Event Operator");
+            .name("Event Operator")
+            .uid("eventLevel");
 
     // 3. Session Operator
     // 3.1 Session window
@@ -145,13 +150,14 @@ public class SojournerRTLoadJob {
         new UbiEventMapWithStateFunction(),
         mappedEventOutputTag);
 
-    ubiSessionDataStream.name("Session Operator");
+    ubiSessionDataStream.name("Session Operator").uid("sessionLevel");
 
     // UbiSession to SojSession
     SingleOutputStreamOperator<SojSession> sojSessionStream =
         ubiSessionDataStream
             .map(new UbiSessionToSojSessionMapFunction())
-            .name("UbiSession to SojSession");
+            .name("UbiSession to SojSession")
+            .uid("sessionTransform");
 
     DataStream<UbiEvent> ubiEventWithSessionId = ubiSessionDataStream
         .getSideOutput(mappedEventOutputTag);
@@ -159,14 +165,23 @@ public class SojournerRTLoadJob {
     // UbiEvent to SojEvent
     DataStream<SojEvent> sojEventWithSessionId = ubiEventWithSessionId
         .map(new UbiEventToSojEventMapFunction())
-        .name("UbiEvent to SojEvent");
+        .name("UbiEvent to SojEvent")
+        .uid("eventTransform");
 
     // This path is for local test. For production, we should use
     // "hdfs://apollo-rno//user/o_ubi/events/"
-    sojSessionStream.addSink(HdfsSinkUtil.sojSessionSinkWithParquet()).name("SojSession sink")
+    sojSessionStream
+        .addSink(HdfsSinkUtil.sojSessionSinkWithParquet())
+        .name("SojSession sink")
+        .uid("sessionHdfsSink")
         .disableChaining();
-    sojEventWithSessionId.addSink(HdfsSinkUtil.sojEventSinkWithParquet()).name("SojEvent sink")
+
+    sojEventWithSessionId
+        .addSink(HdfsSinkUtil.sojEventSinkWithParquet())
+        .name("SojEvent sink")
+        .uid("eventHdfsSink")
         .disableChaining();
+
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
   }
