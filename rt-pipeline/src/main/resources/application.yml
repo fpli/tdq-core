@@ -46,3 +46,6 @@ flink:
     timeout: 15m
     min-pause-between: 2m
     max-concurrent: 1
+
+hdfs
+  nameNode: hdfs://hadoop-qa-5878.lvs02.dev.ebayc3.com:8020/

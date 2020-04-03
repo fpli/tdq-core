@@ -53,3 +53,6 @@ flink:
     timeout: 15m
     min-pause-between: 2m
     max-concurrent: 1
+
+hdfs
+  nameNode: hdfs://apollo-rno/
