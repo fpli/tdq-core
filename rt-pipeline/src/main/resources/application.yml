@@ -48,4 +48,4 @@ flink:
     max-concurrent: 1
 
 hdfs
-  nameNode: hdfs://hadoop-qa-5878.lvs02.dev.ebayc3.com:8020/
+  nameNode: hdfs://hadoop-qa-5878.lvs02.dev.ebayc3.com:8020/tmp/soj/ubd/

@@ -55,4 +55,4 @@ flink:
     max-concurrent: 1
 
 hdfs
-  nameNode: hdfs://apollo-rno/
+  nameNode: hdfs://apollo-rno/sys/soj/ubd/
