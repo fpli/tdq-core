@@ -7,9 +7,41 @@ import java.util.List;
 
 public class EventListenerContainer {
 
-  private static List<EventListener> eventListenerList = new ArrayList<>();
+  private static volatile EventListenerContainer eventListenerContainer;
+  private List<EventListener> eventListenerList = new ArrayList<>();
 
-  public static void init() {
+  private EventListenerContainer() {
+    this.init();
+  }
+
+  public static EventListenerContainer getInstance() {
+    if (eventListenerContainer == null) {
+      synchronized (EventListenerContainer.class) {
+        if (eventListenerContainer == null) {
+          eventListenerContainer = new EventListenerContainer();
+        }
+      }
+    }
+    return eventListenerContainer;
+  }
+
+  private void addListener(EventListener eventListener) {
+    eventListenerList.add(eventListener);
+  }
+
+  public  void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
+    for (EventListener eventListener : eventListenerList) {
+      eventListener.onEarlyEventChange(ubiEvent, ubiSession);
+    }
+  }
+
+  public  void onLateEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
+    for (EventListener eventListener : eventListenerList) {
+      eventListener.onLateEventChange(ubiEvent, ubiSession);
+    }
+  }
+
+  private void init() {
     addListener(new AgentIPMetrics());
     addListener(new SessionStartDtMetrics());
     addListener(new AppIdMetrics());
@@ -21,22 +53,6 @@ public class EventListenerContainer {
     addListener(new PageIdMetrics());
     addListener(new FirstMappedUserIdMetrics());
 
-  }
-
-  private static void addListener(EventListener eventListener) {
-    eventListenerList.add(eventListener);
-  }
-
-  public static void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
-    for (EventListener eventListener : eventListenerList) {
-      eventListener.onEarlyEventChange(ubiEvent, ubiSession);
-    }
-  }
-
-  public static void onLateEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
-    for (EventListener eventListener : eventListenerList) {
-      eventListener.onLateEventChange(ubiEvent, ubiSession);
-    }
   }
 
 }
