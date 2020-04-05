@@ -6,7 +6,7 @@ import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
-import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForQA;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
@@ -15,6 +15,7 @@ import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
+import com.ebay.sojourner.ubd.rt.util.Constants;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
@@ -63,7 +64,7 @@ public class SojournerRTLoadJobForQA {
                 ? 1
                 : AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
     executionEnvironment.setStateBackend(
-        StateBackendFactory.getStateBackend(StateBackendFactory.FS));
+        StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
 
     // for soj nrt output
     // 1. Rheos Consumer
@@ -131,8 +132,17 @@ public class SojournerRTLoadJobForQA {
         .name("UbiEvent to SojEvent")
         .uid("eventTransform");
 
+    sojEventWithSessionId.addSink(KafkaConnectorFactory
+        .createKafkaProducer(Constants.TOPIC_PRODUCER, Constants.BOOTSTRAP_PRODUCER_BROKERS,
+            SojEvent.class, Constants.MESSAGE_KEY))
+        .setParallelism(1)
+        .name("SojEvent Kafka")
+        .uid("kafkaSink");
+
+
     // This path is for local test. For production, we should use
     // "hdfs://apollo-rno//user/o_ubi/events/"
+    /*
     sojSessionStream
         .addSink(HdfsSinkUtil.sojSessionSinkWithParquet())
         .name("SojSession sink")
@@ -144,6 +154,7 @@ public class SojournerRTLoadJobForQA {
         .name("SojEvent sink")
         .uid("eventHdfsSink")
         .disableChaining();
+        */
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
