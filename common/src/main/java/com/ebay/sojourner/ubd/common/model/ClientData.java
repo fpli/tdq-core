@@ -20,13 +20,13 @@ public class ClientData {
   private String tType;
   private String tPool;
   private String tStatus;
-  private String corrId;
+  private String corrId="";
   private String contentLength;
-  private String nodeId;
-  private String requestGuid;
+  private String nodeId="";
+  private String requestGuid="";
   private String urlQueryString;
   private String referrer;
-  private String rlogid;
+  private String rlogid="";
   private String acceptEncoding;
   private String tDuration;
   private String encoding;
