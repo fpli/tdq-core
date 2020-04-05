@@ -54,5 +54,5 @@ flink:
     min-pause-between: 2m
     max-concurrent: 1
 
-hdfs
+hdfs:
   nameNode: hdfs://apollo-rno/sys/soj/ubd/
