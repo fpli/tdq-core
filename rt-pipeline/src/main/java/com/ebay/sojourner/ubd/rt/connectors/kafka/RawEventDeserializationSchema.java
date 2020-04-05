@@ -17,17 +17,12 @@ import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
-public class RawEventDeserializationSchemaForLVS implements DeserializationSchema<RawEvent> {
+public class RawEventDeserializationSchema implements DeserializationSchema<RawEvent> {
 
-  protected static final Logger LOGGER = LoggerFactory
-      .getLogger(RawEventDeserializationSchemaForRNO.class);
   private static final String TAG_ITEMIDS = "!itemIds";
   private static final String TAG_TRKP = "trkp";
-  private static final String DC_LVS = "LVS";
   private static String[] tagsToEncode = new String[]{TAG_ITEMIDS, TAG_TRKP};
 
   @Override
@@ -84,7 +79,7 @@ public class RawEventDeserializationSchemaForLVS implements DeserializationSchem
     GenericRecord genericClientData = (GenericRecord) genericRecord.get("clientData");
     ClientData clientData = new ClientData();
     parseClientData(clientData, genericClientData);
-    return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData, DC_LVS, ingestTime);
+    return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData, ingestTime);
   }
 
   private void parseClientData(ClientData clentData, GenericRecord genericRecord) {
@@ -165,9 +160,9 @@ public class RawEventDeserializationSchemaForLVS implements DeserializationSchem
       String decoded;
       int index = tpayload.indexOf("=");
       if (index > 0) {
-        decoded = tpayload;
+        decoded = "&" + tpayload;
       } else {
-        decoded = URLDecoder.decode(tpayload, "UTF-8");
+        decoded = URLDecoder.decode("&" + tpayload, "UTF-8");
       }
       if (decoded == null) {
         return;
@@ -256,13 +251,13 @@ public class RawEventDeserializationSchemaForLVS implements DeserializationSchem
       clientData.setTPayload(tPaylload);
 
     } catch (Exception e) {
-      LOGGER.error("Error when parsing TPayload.", tpayload, e);
+      log.error("Error when parsing TPayload.", tpayload, e);
     }
   }
 
   private String getTag(String str, String tagName) {
     int index = str.indexOf("&" + tagName + "=");
-    if (index > 0) {
+    if (index >= 0) {
       int nextIndex = str.indexOf('&', index + 1);
       String tagVal = null;
       if (nextIndex > 0) {
@@ -291,7 +286,7 @@ public class RawEventDeserializationSchemaForLVS implements DeserializationSchem
             tags.put(keyToEncode, URLEncoder.encode(value, "UTF-8"));
 
           } catch (UnsupportedEncodingException e) {
-            LOGGER.trace("Fail to encode tags. ", e);
+            log.trace("Fail to encode tags. ", e);
           }
         }
       }
@@ -305,7 +300,6 @@ public class RawEventDeserializationSchemaForLVS implements DeserializationSchem
       tpStr.append("&").append("node_id").append("=").append(clientData.getNodeId());
       tpStr.append("&").append("REQUEST_GUID").append("=").append(clientData.getRequestGuid());
       tpStr.append("&").append("logid").append("=").append(clientData.getRlogid());
-
       String calMod = getTag(decodedTPayload, "cal_mod");
       if (calMod != null && !calMod.equals("")) {
         tpStr.append("&").append("cal_mod").append("=").append(calMod);
@@ -384,3 +378,4 @@ public class RawEventDeserializationSchemaForLVS implements DeserializationSchem
     return TypeInformation.of(RawEvent.class);
   }
 }
+

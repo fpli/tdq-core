@@ -46,44 +46,44 @@ public class JSColumnParser implements FieldParser<RawEvent, UbiEvent> {
     String eventFamily = map.get(EVENT_FAMILY);
     String sid = map.get(SID);
     String rq = map.get(RQ);
-    if (StringUtils.isEmpty(deviceFamily)) {
+    if (StringUtils.isNotEmpty(deviceFamily)) {
       ubiEvent.setDeviceFamily(deviceFamily);
     }
-    if (StringUtils.isEmpty(deviceType)) {
+    if (StringUtils.isNotEmpty(deviceType)) {
       ubiEvent.setDeviceType(deviceType);
     }
-    if (StringUtils.isEmpty(browserFamily)) {
+    if (StringUtils.isNotEmpty(browserFamily)) {
       ubiEvent.setBrowserFamily(browserFamily);
     }
-    if (StringUtils.isEmpty(browserVersion)) {
+    if (StringUtils.isNotEmpty(browserVersion)) {
       ubiEvent.setBrowserVersion(browserVersion);
     }
-    if (StringUtils.isEmpty(osFamily)) {
+    if (StringUtils.isNotEmpty(osFamily)) {
       ubiEvent.setOsFamily(osFamily);
     }
-    if (StringUtils.isEmpty(enrichedOsVersion)) {
+    if (StringUtils.isNotEmpty(enrichedOsVersion)) {
       ubiEvent.setEnrichedOsVersion(enrichedOsVersion);
     }
-    if (StringUtils.isEmpty(osVersion)) {
+    if (StringUtils.isNotEmpty(osVersion)) {
       ubiEvent.setOsVersion(osVersion);
     }
-    if (StringUtils.isEmpty(trafficSource)) {
+    if (StringUtils.isNotEmpty(trafficSource)) {
       ubiEvent.setTrafficSource(trafficSource);
     }
-    if (StringUtils.isEmpty(appVersion)) {
+    if (StringUtils.isNotEmpty(appVersion)) {
       ubiEvent.setAppVersion(appVersion);
     }
-    if (StringUtils.isEmpty(eventAction)) {
+    if (StringUtils.isNotEmpty(eventAction)) {
       ubiEvent.setEventAction(eventAction);
     }
 
-    if (StringUtils.isEmpty(eventFamily)) {
+    if (StringUtils.isNotEmpty(eventFamily)) {
       ubiEvent.setEventFamily(eventFamily);
     }
-    if (StringUtils.isEmpty(sid)) {
+    if (StringUtils.isNotEmpty(sid)) {
       ubiEvent.setSid(sid);
     }
-    if (StringUtils.isEmpty(rq)) {
+    if (StringUtils.isNotEmpty(rq)) {
       ubiEvent.setRequestCorrelationId(rq);
     }
     ubiEvent.setRlogid(rawEvent.getClientData().getRlogid());

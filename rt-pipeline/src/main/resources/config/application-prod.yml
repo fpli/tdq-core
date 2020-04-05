@@ -6,24 +6,34 @@ kafka:
     - rhs-glrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
     - rhs-glrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
   bootstrapServersForSLC:
-    - rhs-pathfinder-kfk-1.stratus.slc.ebay.com:9092
-    - rhs-pathfinder-kfk-2.stratus.slc.ebay.com:9092
-    - rhs-pathfinder-kfk-3.stratus.slc.ebay.com:9092
-    - rhs-pathfinder-kfk-4.stratus.slc.ebay.com:9092
-    - rhs-pathfinder-kfk-5.stratus.slc.ebay.com:9092
+    - rhs-mwsvkiaa-kfk-slc-1.rheos-streaming-prod.svc.45.tess.io:9092
+    - rhs-mwsvkiaa-kfk-slc-2.rheos-streaming-prod.svc.45.tess.io:9092
+    - rhs-mwsvkiaa-kfk-slc-3.rheos-streaming-prod.svc.45.tess.io:9092
+    - rhs-mwsvkiaa-kfk-slc-4.rheos-streaming-prod.svc.45.tess.io:9092
+    - rhs-mwsvkiaa-kfk-slc-5.rheos-streaming-prod.svc.45.tess.io:9092
   bootstrapServersForLVS:
-    - rhs-pathfinder-kfk-2.stratus.lvs.ebay.com:9092
-    - rhs-pathfinder-kfk-3.stratus.lvs.ebay.com:9092
-    - rhs-pathfinder-kfk-4.stratus.lvs.ebay.com:9092
-    - rhs-pathfinder-kfk-5.stratus.lvs.ebay.com:9092
-    - rhs-pathfinder-kfk-6.stratus.lvs.ebay.com:9092
+    - rhs-swsvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
+    - rhs-swsvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
+    - rhs-swsvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
+    - rhs-swsvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
+    - rhs-swsvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
   bootstrapServersForQA:
     - rhs-vvrvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-  groupId: sojourner-pathfinder
+  bootstrapServersForProducer:
+    - rhs-rdrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+  groupIdForLVS: sojourner-pathfinder-lvs
+  groupIdForSLC: sojourner-pathfinder-slc
+  groupIdForRNO: sojourner-pathfinder-rno
+  groupIdForQA: sojourner-pathfinder-qa
+  topicForProducer: behavior.trafficjam.bot
   topic: behavior.pathfinder.events.total
 
 rheos:
@@ -43,3 +53,6 @@ flink:
     timeout: 15m
     min-pause-between: 2m
     max-concurrent: 1
+
+hdfs:
+  nameNode: hdfs://apollo-rno/sys/soj/ubd/

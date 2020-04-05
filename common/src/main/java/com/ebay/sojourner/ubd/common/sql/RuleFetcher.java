@@ -1,20 +1,21 @@
 package com.ebay.sojourner.ubd.common.sql;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import lombok.Data;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.log4j.Logger;
 
 public class RuleFetcher {
+
   protected static final Logger LOGGER = Logger.getLogger(RuleManager.class);
-  public static final String REST_SERVER = "http://localhost:8080";
+  public static final String REST_SERVER = "http://10.169.116.50:9001";
   public static final String API_RULE_LIST_PUBLISHED = "/api/rule/list/published";
 
   private ScheduledExecutorService scheduledExecutorService;
@@ -35,21 +36,20 @@ public class RuleFetcher {
     System.out.println("Fetch rules periodically");
     scheduledExecutorService.scheduleAtFixedRate(() -> {
       fetchRules();
-    }, 0, 60, TimeUnit.SECONDS);
+    }, 0, 10, TimeUnit.SECONDS);
   }
 
   public synchronized void fetchRules() {
     try {
       try (Response response = client.newCall(request).execute()) {
-        String responseBody = response.body().string();
         ObjectMapper objectMapper = new ObjectMapper();
-        ResponseBodyContent responseBodyContent =
-            objectMapper.readValue(responseBody, ResponseBodyContent.class);
-        List<RuleDefinition> ruleDefinitions = responseBodyContent.getData();
+        List<RuleDefinition> responseBodyContent = objectMapper.reader()
+            .forType(new TypeReference<List<RuleDefinition>>() {
+            }).readValue(response.body().bytes());
         System.out.println("Fetch rules at " + new Date());
-        System.out.println("Rules = " + ruleDefinitions);
+        System.out.println("Rules = " + responseBodyContent);
         if (ruleManager != null) {
-          ruleManager.updateRules(ruleDefinitions);
+          ruleManager.updateRules(responseBodyContent);
         }
       }
     } catch (Exception e) {
@@ -57,20 +57,13 @@ public class RuleFetcher {
     }
   }
 
-  @Data
-  public static class ResponseBodyContent {
-    private String code;
-    private String message;
-    private List<RuleDefinition> data;
-  }
-
   public static void example1() throws Exception {
     RuleFetcher fetcher = new RuleFetcher(null);
     Response response = fetcher.client.newCall(fetcher.request).execute();
     ObjectMapper objectMapper = new ObjectMapper();
-    ResponseBodyContent responseBodyContent = objectMapper.readValue(
-        response.body().bytes(),
-        ResponseBodyContent.class);
+    List<RuleDefinition> responseBodyContent = objectMapper.reader()
+        .forType(new TypeReference<List<RuleDefinition>>() {
+        }).readValue(response.body().bytes());
     System.out.println(responseBodyContent.toString());
   }
 

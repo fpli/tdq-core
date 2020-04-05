@@ -20,13 +20,13 @@ public class ClientData {
   private String tType;
   private String tPool;
   private String tStatus;
-  private String corrId;
+  private String corrId="";
   private String contentLength;
-  private String nodeId;
-  private String requestGuid;
+  private String nodeId="";
+  private String requestGuid="";
   private String urlQueryString;
   private String referrer;
-  private String rlogid;
+  private String rlogid="";
   private String acceptEncoding;
   private String tDuration;
   private String encoding;
@@ -121,6 +121,7 @@ public class ClientData {
       clientInfo.append("Encoding=").append(encoding);
     }
     // Referer must be in the end of clientData since it has nested '&' '='
+    // if (referrer != null && !referrer.equals("") && !referrer.equalsIgnoreCase("null")) {
     if (referrer != null && !referrer.equals("")) {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");

@@ -122,7 +122,6 @@ public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
     ubiEvent.setIngestTime(rawEvent.getIngestTime());
     ubiEvent.setGenerateTime(rawEvent.getRheosHeader().getEventCreateTimestamp());
     ubiEvent.setOldSessionSkey(null);
-    ubiEvent.setDataCenter(rawEvent.getDataCenter());
   }
 
   // ignore second during comparing

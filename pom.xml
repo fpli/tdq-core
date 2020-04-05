@@ -14,7 +14,6 @@
     <module>common</module>
     <module>rt-pipeline</module>
     <module>batch-pipeline</module>
-    <module>rule-mgmt</module>
     <module>dist</module>
   </modules>
 

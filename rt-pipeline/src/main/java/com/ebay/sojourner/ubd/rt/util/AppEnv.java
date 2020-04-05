@@ -19,6 +19,7 @@ public class AppEnv {
   private KafkaConfig kafka;
   private RheosConfig rheos;
   private FlinkConfig flink;
+  private HdfsConfig  hdfs;
 
   private AppEnv() {
     // private

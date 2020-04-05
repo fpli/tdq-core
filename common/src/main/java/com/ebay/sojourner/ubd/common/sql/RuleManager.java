@@ -2,13 +2,15 @@ package com.ebay.sojourner.ubd.common.sql;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.apache.log4j.Logger;
+import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 
+@Slf4j
 public class RuleManager {
 
-  protected static final Logger LOGGER = Logger.getLogger(RuleManager.class);
   public static boolean RULE_PULL_ENABLED = true;
-  public static boolean RULE_PUSH_ENABLED = true;
+  public static boolean RULE_PUSH_ENABLED = false;
   private static final RuleManager INSTANCE = new RuleManager();
 
   private RuleFetcher ruleFetcher;
@@ -48,14 +50,16 @@ public class RuleManager {
   protected void updateRules(List<RuleDefinition> ruleDefinitions) {
     // TODO: We should first compare pulled rules and exiting rules.
     //  Also we should respect rule categories e.g. event, session, attribute.
-    for (RuleDefinition ruleDef : ruleDefinitions) {
-      try {
-        sqlEventRuleList.add(SqlEventRule.of(ruleDef.getContent()));
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+
+    if (CollectionUtils.isNotEmpty(ruleDefinitions)) {
+      List<SqlEventRule> sqlNewEventRuleList = ruleDefinitions.stream()
+          .map(rule -> SqlEventRule.of(rule.getContent(), rule.getBizId(), rule.getVersion()))
+          .collect(Collectors.toList());
+
+      sqlEventRuleList = sqlNewEventRuleList;
     }
-    System.out.println("Rules deployed: " + sqlEventRuleList.size());
+
+    log.info("Rules deployed: " + this.sqlEventRuleList.size());
   }
 
   public static void main(String[] args) throws Exception {

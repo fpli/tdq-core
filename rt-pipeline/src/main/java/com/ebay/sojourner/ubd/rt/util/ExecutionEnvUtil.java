@@ -1,6 +1,5 @@
 package com.ebay.sojourner.ubd.rt.util;
 
-import com.ebay.sojourner.ubd.rt.common.constants.PropertiesConstants;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,20 +13,18 @@ import org.apache.flink.api.java.utils.ParameterTool;
  */
 public class ExecutionEnvUtil {
 
-  public static final ParameterTool PARAMETER_TOOL = createParameterTool();
-
   public static ParameterTool createParameterTool(final String[] args) throws Exception {
 
     ParameterTool parameterTool =
         ParameterTool.fromPropertiesFile(
             ExecutionEnvUtil.class.getResourceAsStream(
-                PropertiesConstants.DEFAULT_APPLICATION_PROPERTIES_FILENAME))
+                Constants.DEFAULT_APPLICATION_PROPERTIES_FILENAME))
             .mergeWith(ParameterTool.fromArgs(args))
             .mergeWith(ParameterTool.fromSystemProperties())
             .mergeWith(ParameterTool.fromMap(getenv()));
 
     // Checking input parameters
-    //        final String propertiesFilename = PropertiesConstants.APPLICATION_PROPERTIES_FILENAME;
+    //        final String propertiesFilename = Constants.APPLICATION_PROPERTIES_FILENAME;
     //        if (parameterTool.has(propertiesFilename)) {
     //            parameterTool = ParameterTool
     //                    .fromPropertiesFile(parameterTool.get(propertiesFilename))
@@ -45,7 +42,7 @@ public class ExecutionEnvUtil {
     try {
       return ParameterTool.fromPropertiesFile(
           ExecutionEnvUtil.class.getResourceAsStream(
-              PropertiesConstants.DEFAULT_APPLICATION_PROPERTIES_FILENAME))
+              Constants.DEFAULT_APPLICATION_PROPERTIES_FILENAME))
           .mergeWith(ParameterTool.fromSystemProperties())
           .mergeWith(ParameterTool.fromMap(getenv()));
     } catch (IOException e) {
@@ -57,7 +54,7 @@ public class ExecutionEnvUtil {
   //    public static StreamExecutionEnvironment prepare( ParameterTool parameterTool) throws
   // Exception {
   //        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-  //        env.setParallelism(parameterTool.getInt(PropertiesConstants.STREAM_PARALLELISM, 5));
+  //        env.setParallelism(parameterTool.getInt(Constants.STREAM_PARALLELISM, 5));
   //        env.getConfig().disableSysoutLogging();
   //
   //        env.getConfig().setGlobalJobParameters(parameterTool); // make parameters available in
@@ -68,18 +65,18 @@ public class ExecutionEnvUtil {
   //        /**
   //         * checkpoint
   //         */
-  //        if (parameterTool.getBoolean(PropertiesConstants.STREAM_CHECKPOINT_ENABLE, true)) {
+  //        if (parameterTool.getBoolean(Constants.STREAM_CHECKPOINT_ENABLE, true)) {
   //
-  // env.enableCheckpointing(parameterTool.getInt(PropertiesConstants.STREAM_CHECKPOINT_INTERVAL,
+  // env.enableCheckpointing(parameterTool.getInt(Constants.STREAM_CHECKPOINT_INTERVAL,
   // 60000)); // create a checkpoint every 60 seconds
   //            CheckpointConfig checkpointConf = env.getCheckpointConfig();
   //            checkpointConf.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
   //
   // checkpointConf.setMinPauseBetweenCheckpoints(
-  // parameterTool.getLong(PropertiesConstants.STREAM_CHECKPOINT_MINPAUSE, 30000L));//30s
+  // parameterTool.getLong(Constants.STREAM_CHECKPOINT_MINPAUSE, 30000L));//30s
   //
   // checkpointConf.setCheckpointTimeout(
-  // parameterTool.getLong(PropertiesConstants.STREAM_CHECKPOINT_TIMEOUT, 10000L));//10s
+  // parameterTool.getLong(Constants.STREAM_CHECKPOINT_TIMEOUT, 10000L));//10s
   //
   // checkpointConf.enableExternalizedCheckpoints(
   // CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
@@ -99,11 +96,11 @@ public class ExecutionEnvUtil {
   //
   // RestartStrategies.fixedDelayRestart(
   // parameterTool.getInt(
-  // PropertiesConstants.STREAM_RESTARTSTRATEGIES_ATTEMPTS, 10), // number of restart attempts
+  // Constants.STREAM_RESTARTSTRATEGIES_ATTEMPTS, 10), // number of restart attempts
   //
   // org.apache.flink.api.common.time.Time.of(
   // parameterTool.getInt(
-  // PropertiesConstants.STREAM_RESTARTSTRATEGIES_DELAYINTERVAL, 30), TimeUnit.SECONDS) // delay
+  // Constants.STREAM_RESTARTSTRATEGIES_DELAYINTERVAL, 30), TimeUnit.SECONDS) // delay
   //                ));
   //
   //

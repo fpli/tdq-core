@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, EventListener {
 
   private Set<Integer> badIPPages;
   private Pattern invalidIPPattern;
@@ -137,5 +137,61 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
       return remoteIp;
     }
     return SOJListGetValueByIndex.getValueByIndex(forwardFor, ",", 1);
+  }
+
+  @Override
+  public void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
+    ubiSession.setAgentInfo(ubiEvent.getAgentInfo());
+    ubiSession.setClientIp(ubiEvent.getClientIP());
+    if (!ubiEvent.isIframe() && !ubiEvent.isRdt()) {
+      ubiSession.setAgentInfo(ubiEvent.getAgentInfo());
+      ubiSession.setClientIp(ubiEvent.getClientIP());
+      ubiSession.setFindFirst(true);
+    }
+
+    // to avoid the cut off issue on 2018-02-09
+    if (ubiEvent.isPartialValidPage()) {
+      if (!ubiEvent.isIframe() && !ubiEvent.isRdt()) {
+        String remoteIp =
+            ubiEvent
+                .getClientData()
+                .getRemoteIP();
+        String forwardFor =
+            ubiEvent
+                .getClientData()
+                .getForwardFor();
+        String externalIp = getExternalIP(ubiEvent, remoteIp, forwardFor);
+        if (externalIp != null) {
+          ubiSession.setExternalIp(externalIp);
+          ubiSession.setInternalIp(null);
+        } else {
+          String internalIp = getInternalIP(remoteIp, forwardFor);
+          if (internalIp != null) {
+            ubiSession.setInternalIp(internalIp);
+          }
+        }
+      }
+    }
+
+    if (!ubiEvent.isIframe()) {
+      String remoteIp =
+          ubiEvent
+              .getClientData()
+              .getRemoteIP();
+      String forwardFor =
+          ubiEvent
+              .getClientData()
+              .getForwardFor();
+      String externalIp2 = getExternalIP(ubiEvent, remoteIp, forwardFor);
+      if (externalIp2 != null) {
+        ubiSession.setExternalIp2(externalIp2);
+      }
+
+    }
+  }
+
+  @Override
+  public void onLateEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
+
   }
 }

@@ -10,6 +10,7 @@ import com.ebay.sojourner.ubd.common.util.UBIConfig;
 public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
   private PageIndicator indicator;
+  private EventListenerContainer eventListenerContainer;
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
@@ -25,6 +26,10 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     if (!event.isIframe() && (!event.isRdt() || indicator.isCorrespondingPageEvent(event))) {
       if (sessionAccumulator.getUbiSession().getStartTimestamp() == null) {
         sessionAccumulator.getUbiSession().setStartTimestamp(event.getEventTimestamp());
+      } else if (event.getEventTimestamp() != null
+          && sessionAccumulator.getUbiSession().getStartTimestamp() > event.getEventTimestamp()) {
+        sessionAccumulator.getUbiSession().setStartTimestamp(event.getEventTimestamp());
+
       }
       if (sessionAccumulator.getUbiSession().getEndTimestamp() == null) {
         sessionAccumulator.getUbiSession().setEndTimestamp(event.getEventTimestamp());
@@ -38,12 +43,14 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     } else if (event.getEventTimestamp() != null
         && sessionAccumulator.getUbiSession().getAbsStartTimestamp() > event.getEventTimestamp()) {
       sessionAccumulator.getUbiSession().setAbsStartTimestamp(event.getEventTimestamp());
+      eventListenerContainer.onEarlyEventChange(event,sessionAccumulator.getUbiSession());
     }
     if (sessionAccumulator.getUbiSession().getAbsEndTimestamp() == null) {
       sessionAccumulator.getUbiSession().setAbsEndTimestamp(event.getEventTimestamp());
     } else if (event.getEventTimestamp() != null
         && sessionAccumulator.getUbiSession().getAbsEndTimestamp() < event.getEventTimestamp()) {
       sessionAccumulator.getUbiSession().setAbsEndTimestamp(event.getEventTimestamp());
+      eventListenerContainer.onLateEventChange(event,sessionAccumulator.getUbiSession());
     }
   }
 
@@ -75,6 +82,7 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
   @Override
   public void init() throws Exception {
     setPageIndicator(new PageIndicator(UBIConfig.getString(Property.SEARCH_VIEW_PAGES)));
+    eventListenerContainer=EventListenerContainer.getInstance();
   }
 
   void setPageIndicator(PageIndicator indicator) {

@@ -7,9 +7,9 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForLVS;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForRNO;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactoryForSLC;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForLVS;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForRNO;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForSLC;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.RawEventFilterFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
@@ -26,7 +26,6 @@ import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.transformations.OneInputTransformation;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -76,57 +75,33 @@ public class SojournerRTLoadJob {
     // 1.2 Assign timestamps and emit watermarks.
     DataStream<RawEvent> rawEventDataStreamForRNO =
         executionEnvironment
-            .addSource(
-                KafkaConnectorFactoryForRNO.createKafkaConsumer()
-                    .setStartFromLatest()
-                    .assignTimestampsAndWatermarks(
-                        new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
-                          @Override
-                          public long extractTimestamp(RawEvent element) {
-                            return element.getRheosHeader().getEventCreateTimestamp();
-                          }
-                        }))
+            .addSource(KafkaSourceFunctionForRNO.generateWatermark())
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer For RNO");
+            .name("Rheos Kafka Consumer For RNO")
+            .uid("kafkaSourceForRNO");
 
     DataStream<RawEvent> rawEventDataStreamForSLC =
         executionEnvironment
-            .addSource(
-                KafkaConnectorFactoryForSLC.createKafkaConsumer()
-                    .setStartFromLatest()
-                    .assignTimestampsAndWatermarks(
-                        new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
-                          @Override
-                          public long extractTimestamp(RawEvent element) {
-                            return element.getRheosHeader().getEventCreateTimestamp();
-                          }
-                        }))
+            .addSource(KafkaSourceFunctionForSLC.generateWatermark())
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer For SLC");
+            .name("Rheos Kafka Consumer For SLC")
+            .uid("kafkaSourceForSLC");
 
     DataStream<RawEvent> rawEventDataStreamForLVS =
         executionEnvironment
-            .addSource(
-                KafkaConnectorFactoryForLVS.createKafkaConsumer()
-                    .setStartFromLatest()
-                    .assignTimestampsAndWatermarks(
-                        new BoundedOutOfOrdernessTimestampExtractor<RawEvent>(Time.seconds(10)) {
-                          @Override
-                          public long extractTimestamp(RawEvent element) {
-                            return element.getRheosHeader().getEventCreateTimestamp();
-                          }
-                        }))
+            .addSource(KafkaSourceFunctionForLVS.generateWatermark())
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer For LVS");
+            .name("Rheos Kafka Consumer For LVS")
+            .uid("kafkaSourceForLVS");
 
     // union three DC data
     DataStream<RawEvent> rawEventDataStream = rawEventDataStreamForRNO
@@ -135,7 +110,9 @@ public class SojournerRTLoadJob {
 
     // filter 33% throughput group by guid for reduce kafka consumer lag
     DataStream<RawEvent> filteredRawEvent = rawEventDataStream
-        .filter(new RawEventFilterFunction()).name("RawEvent Filter Operator");
+        .filter(new RawEventFilterFunction())
+        .name("RawEvent Filter Operator")
+        .uid("filterSource");
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
@@ -144,7 +121,8 @@ public class SojournerRTLoadJob {
         filteredRawEvent
             .map(new EventMapFunction())
             .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
-            .name("Event Operator");
+            .name("Event Operator")
+            .uid("eventLevel");
 
     // 3. Session Operator
     // 3.1 Session window
@@ -157,7 +135,7 @@ public class SojournerRTLoadJob {
         new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
     OutputTag<UbiEvent> mappedEventOutputTag =
         new OutputTag<>("mapped-event-output-tag", TypeInformation.of(UbiEvent.class));
-    SingleOutputStreamOperator<UbiSession> ubiSessinDataStream =
+    SingleOutputStreamOperator<UbiSession> ubiSessionDataStream =
         ubiEventDataStream
             .keyBy("guid")
             .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
@@ -168,33 +146,42 @@ public class SojournerRTLoadJob {
     // Hack here to use MapWithStateWindowOperator instead while bypassing DataStream API which
     // cannot be enhanced easily since we do not want to modify Flink framework sourcecode.
     WindowOperatorHelper.enrichWindowOperator(
-        (OneInputTransformation) ubiSessinDataStream.getTransformation(),
+        (OneInputTransformation) ubiSessionDataStream.getTransformation(),
         new UbiEventMapWithStateFunction(),
         mappedEventOutputTag);
 
-    ubiSessinDataStream.name("Session Operator");
+    ubiSessionDataStream.name("Session Operator").uid("sessionLevel");
 
     // UbiSession to SojSession
     SingleOutputStreamOperator<SojSession> sojSessionStream =
-        ubiSessinDataStream
+        ubiSessionDataStream
             .map(new UbiSessionToSojSessionMapFunction())
-            .name("UbiSession to SojSession");
+            .name("UbiSession to SojSession")
+            .uid("sessionTransform");
 
-    DataStream<UbiEvent> ubiEventWithSessionId = ubiSessinDataStream
+    DataStream<UbiEvent> ubiEventWithSessionId = ubiSessionDataStream
         .getSideOutput(mappedEventOutputTag);
 
     // UbiEvent to SojEvent
     DataStream<SojEvent> sojEventWithSessionId = ubiEventWithSessionId
         .map(new UbiEventToSojEventMapFunction())
-        .name("UbiEvent to SojEvent");
+        .name("UbiEvent to SojEvent")
+        .uid("eventTransform");
 
     // This path is for local test. For production, we should use
     // "hdfs://apollo-rno//user/o_ubi/events/"
+    sojSessionStream
+        .addSink(HdfsSinkUtil.sojSessionSinkWithParquet())
+        .name("SojSession sink")
+        .uid("sessionHdfsSink")
+        .disableChaining();
 
-    sojSessionStream.addSink(HdfsSinkUtil.sojSessionSinkWithParquet()).name("SojSession sink")
+    sojEventWithSessionId
+        .addSink(HdfsSinkUtil.sojEventSinkWithParquet())
+        .name("SojEvent sink")
+        .uid("eventHdfsSink")
         .disableChaining();
-    sojEventWithSessionId.addSink(HdfsSinkUtil.sojEventSinkWithParquet()).name("SojEvent sink")
-        .disableChaining();
+
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
   }

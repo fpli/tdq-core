@@ -2,17 +2,17 @@ package com.ebay.sojourner.ubd.common.sql;
 
 public class SojReflectiveDataSource {
 
-  public SojReflectiveEvent[] ubiEvents = {new SojReflectiveEvent.Builder().build()};
+  public SojReflectiveEvent[] idl_event = {new SojReflectiveEvent.Builder().build()};
 
   public SojReflectiveDataSource() {
   }
 
   public void updateData(SojReflectiveEvent newEvent) {
-    ubiEvents[0] = newEvent;
+    idl_event[0] = newEvent;
   }
 
   public void update(SojReflectiveEvent... events) {
-    ubiEvents = new SojReflectiveEvent[events.length];
+    idl_event = new SojReflectiveEvent[events.length];
   }
 
   public String toString() {

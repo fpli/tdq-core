@@ -23,148 +23,177 @@ public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
   };
 
   void setSiteFlag(Integer siteId, SessionAccumulator sessionAccumulator) {
-    siteFlags = sessionAccumulator.getUbiSession().getSiteFlagsSet();
+    byte[] siteFlagsMid = sessionAccumulator.getUbiSession().getSiteFlagsSet();
     switch (siteId) {
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+      case 20:
+      case 163:
+      case 500:
+      case 970:
+      case 971:
+      case 972:
+      case 973:
+      case 980:
+      case 981:
+      case 982:
+      case 983:
+      case 984:
+      case 985:
+      case 986:
+      case 987:
+      case 989:
+      case 990:
+      case 991:
+      case 992:
+      case 993:
+      case 994:
+      case 995:
+      case 996:
+      case 997:
       case 998:
-        siteFlags[0] = 1;
+        siteFlagsMid[0] = 1;
         break;
       case 0:
-        siteFlags[1] = 1;
+        siteFlagsMid[1] = 1;
         break;
       case 1:
-        siteFlags[2] = 1;
+        siteFlagsMid[2] = 1;
         break;
       case 2:
-        siteFlags[3] = 1;
+        siteFlagsMid[3] = 1;
         break;
       case 3:
-        siteFlags[4] = 1;
+        siteFlagsMid[4] = 1;
         break;
       case 15:
-        siteFlags[5] = 1;
+        siteFlagsMid[5] = 1;
         break;
       case 16:
-        siteFlags[6] = 1;
+        siteFlagsMid[6] = 1;
         break;
       case 23:
-        siteFlags[7] = 1;
+        siteFlagsMid[7] = 1;
         break;
       case 37:
-        siteFlags[8] = 1;
+        siteFlagsMid[8] = 1;
         break;
       case 71:
-        siteFlags[9] = 1;
+        siteFlagsMid[9] = 1;
         break;
       case 77:
-        siteFlags[10] = 1;
+        siteFlagsMid[10] = 1;
         break;
       case 100:
-        siteFlags[11] = 1;
+        siteFlagsMid[11] = 1;
         break;
       case 101:
-        siteFlags[12] = 1;
+        siteFlagsMid[12] = 1;
         break;
       case 104:
-        siteFlags[13] = 1;
+        siteFlagsMid[13] = 1;
         break;
       case 123:
-        siteFlags[14] = 1;
+        siteFlagsMid[14] = 1;
         break;
       case 146:
-        siteFlags[15] = 1;
+        siteFlagsMid[15] = 1;
         break;
       case 186:
-        siteFlags[16] = 1;
+        siteFlagsMid[16] = 1;
         break;
       case 193:
-        siteFlags[17] = 1;
+        siteFlagsMid[17] = 1;
         break;
       case 196:
-        siteFlags[18] = 1;
+        siteFlagsMid[18] = 1;
         break;
       case 197:
-        siteFlags[19] = 1;
+        siteFlagsMid[19] = 1;
         break;
       case 198:
-        siteFlags[20] = 1;
+        siteFlagsMid[20] = 1;
         break;
       case 199:
-        siteFlags[21] = 1;
+        siteFlagsMid[21] = 1;
         break;
       case 200:
-        siteFlags[22] = 1;
+        siteFlagsMid[22] = 1;
         break;
       case 201:
-        siteFlags[23] = 1;
+        siteFlagsMid[23] = 1;
         break;
       case 202:
-        siteFlags[24] = 1;
+        siteFlagsMid[24] = 1;
         break;
       case 203:
-        siteFlags[25] = 1;
+        siteFlagsMid[25] = 1;
         break;
       case 204:
-        siteFlags[26] = 1;
+        siteFlagsMid[26] = 1;
         break;
       case 205:
-        siteFlags[27] = 1;
+        siteFlagsMid[27] = 1;
         break;
       case 206:
-        siteFlags[28] = 1;
+        siteFlagsMid[28] = 1;
         break;
       case 207:
-        siteFlags[29] = 1;
+        siteFlagsMid[29] = 1;
         break;
       case 208:
-        siteFlags[30] = 1;
+        siteFlagsMid[30] = 1;
         break;
       case 209:
-        siteFlags[31] = 1;
+        siteFlagsMid[31] = 1;
         break;
       case 210:
-        siteFlags[32] = 1;
+        siteFlagsMid[32] = 1;
         break;
       case 211:
-        siteFlags[33] = 1;
+        siteFlagsMid[33] = 1;
         break;
       case 212:
-        siteFlags[34] = 1;
+        siteFlagsMid[34] = 1;
         break;
       case 213:
-        siteFlags[35] = 1;
+        siteFlagsMid[35] = 1;
         break;
       case 214:
-        siteFlags[36] = 1;
+        siteFlagsMid[36] = 1;
         break;
       case 215:
-        siteFlags[37] = 1;
+        siteFlagsMid[37] = 1;
         break;
       case 216:
-        siteFlags[38] = 1;
+        siteFlagsMid[38] = 1;
         break;
       case 217:
-        siteFlags[39] = 1;
+        siteFlagsMid[39] = 1;
         break;
       case 218:
-        siteFlags[40] = 1;
+        siteFlagsMid[40] = 1;
         break;
       case 219:
-        siteFlags[41] = 1;
+        siteFlagsMid[41] = 1;
         break;
       case 220:
-        siteFlags[42] = 1;
+        siteFlagsMid[42] = 1;
         break;
       case 221:
-        siteFlags[43] = 1;
+        siteFlagsMid[43] = 1;
         break;
       case 223:
-        siteFlags[44] = 1;
+        siteFlagsMid[44] = 1;
         break;
       case 224:
-        siteFlags[45] = 1;
+        siteFlagsMid[45] = 1;
         break;
       case 225:
-        siteFlags[46] = 1;
+        siteFlagsMid[46] = 1;
         break;
     }
   }

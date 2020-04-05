@@ -23,7 +23,17 @@ kafka:
     - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-  groupId: sojourner
+  bootstrapServersForProducer:
+    - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
+  groupIdForLVS: sojourner-pathfinder-lvs
+  groupIdForSLC: sojourner-pathfinder-slc
+  groupIdForRNO: sojourner-pathfinder-rno
+  groupIdForQA: sojourner-pathfinder-qa
+  topicForProducer: behavior.trafficjam.event
   topic: behavior.pathfinder.events.total
 
 rheos:
@@ -35,11 +45,13 @@ rheos:
 flink:
   app:
     name: Unified Bot Detection RT Pipeline
-    source-parallelism: 10
-    event-parallelism: 20
+    source-parallelism: 2
+    event-parallelism: 2
   checkpoint:
     data-dir: /opt/sojourner-ubd/checkpoint
     interval: 5m
     timeout: 15m
     min-pause-between: 2m
     max-concurrent: 1
+hdfs:
+  nameNode: hdfs://hadoop-qa-5878.lvs02.dev.ebayc3.com:8020/tmp/soj/ubd/

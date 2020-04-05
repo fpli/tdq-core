@@ -9,6 +9,7 @@ public class RefererParser implements FieldParser<RawEvent, UbiEvent> {
   @Override
   public void parse(RawEvent rawEvent, UbiEvent ubiEvent) throws Exception {
     String clientData = rawEvent.getClientData().getReferrer();
+    //    if (StringUtils.isNotBlank(clientData)&&!clientData.equalsIgnoreCase("null")) {
     if (StringUtils.isNotBlank(clientData)) {
       ubiEvent.setReferrer(clientData);
     }

@@ -2,8 +2,9 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.model.UbiSession;
 
-public class SiteIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+public class SiteIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, EventListener {
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
@@ -26,5 +27,18 @@ public class SiteIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
   @Override
   public void init() throws Exception {
     // nothing to do
+  }
+
+  @Override
+  public void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
+    if (!ubiEvent.isIframe()
+        && !ubiEvent.isRdt()) {
+      ubiSession.setFirstSiteId(ubiEvent.getSiteId());
+    }
+  }
+
+  @Override
+  public void onLateEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
+
   }
 }

@@ -22,6 +22,10 @@ public class SqlCompilerEventRule extends SqlEventRule {
     super(sql);
   }
 
+  public SqlCompilerEventRule(String sql, long ruleId, int version) {
+    super(sql, ruleId, version);
+  }
+
   @Override
   protected void prepareSql(String sql) {
     try {

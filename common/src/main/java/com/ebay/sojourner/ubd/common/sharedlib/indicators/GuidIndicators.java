@@ -1,11 +1,12 @@
 package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
 import com.ebay.sojourner.ubd.common.model.GuidAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.ubd.common.model.SessionForGuidEnhancement;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class GuidIndicators extends AttributeIndicators<UbiSession, GuidAttributeAccumulator> {
+public class GuidIndicators extends
+    AttributeIndicators<SessionForGuidEnhancement, GuidAttributeAccumulator> {
 
   private static volatile GuidIndicators guidIndicators;
 

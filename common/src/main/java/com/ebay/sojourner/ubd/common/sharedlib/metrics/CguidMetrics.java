@@ -2,9 +2,10 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
 
-public class CguidMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+public class CguidMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, EventListener {
 
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
 
@@ -33,5 +34,21 @@ public class CguidMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
   @Override
   public void init() throws Exception {
     // nothing to do
+  }
+
+  @Override
+  public void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
+    if (!ubiEvent.isIframe() && !ubiEvent.isRdt()) {
+      String cGuidTemp = SOJNVL.getTagValue(ubiEvent.getApplicationPayload(), "n");
+      // checking for NPE
+      if (cGuidTemp != null && cGuidTemp.length() == 32) {
+        ubiSession.setFirstCguid(cGuidTemp);
+      }
+    }
+  }
+
+  @Override
+  public void onLateEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
+
   }
 }

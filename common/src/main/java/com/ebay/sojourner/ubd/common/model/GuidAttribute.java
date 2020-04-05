@@ -7,9 +7,10 @@ import lombok.Data;
 import lombok.Getter;
 
 @Data
-public class GuidAttribute implements Attribute<UbiSession>, Serializable {
+public class GuidAttribute implements Attribute<SessionForGuidEnhancement>, Serializable {
 
-  private String guid;
+  private long guid1;
+  private long guid2;
   private Set<Integer> botFlagList = new LinkedHashSet<>();
   @Getter
   private int absEventCount = 0;
@@ -17,24 +18,26 @@ public class GuidAttribute implements Attribute<UbiSession>, Serializable {
   public GuidAttribute() {
   }
 
-  public void feed(UbiSession ubiSession, int botFlag, boolean isNeeded) {
+  public void feed(SessionForGuidEnhancement session, int botFlag, boolean isNeeded) {
     if (isNeeded) {
-      absEventCount += ubiSession.getAbsEventCnt();
+      absEventCount += session.getAbsEventCnt();
     }
   }
 
   @Override
-  public void revert(UbiSession ubiSession, int botFlag) {
+  public void revert(SessionForGuidEnhancement session, int botFlag) {
   }
 
   public void clear() {
-    guid = null;
+    guid1 = 0;
+    guid2 = 0;
     absEventCount = 0;
   }
 
   @Override
   public void clear(int botFlag) {
-    guid = null;
+    guid1 = 0;
+    guid2 = 0;
     absEventCount = 0;
   }
 }

@@ -2,8 +2,9 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.model.UbiSession;
 
-public class ReferrerMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+public class ReferrerMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>,EventListener {
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
@@ -25,5 +26,17 @@ public class ReferrerMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
   @Override
   public void init() throws Exception {
     // nothing to do
+  }
+
+  @Override
+  public void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
+    if (ubiEvent.getReferrer() != null) {
+      ubiSession.setSessionReferrer(ubiEvent.getReferrer());
+    }
+  }
+
+  @Override
+  public void onLateEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
+
   }
 }

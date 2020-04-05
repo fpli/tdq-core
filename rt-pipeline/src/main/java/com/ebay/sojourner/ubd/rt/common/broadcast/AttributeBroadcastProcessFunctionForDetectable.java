@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.rt.common.broadcast;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
+import com.ebay.sojourner.ubd.rt.util.TransformUtil;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -79,9 +80,10 @@ public class AttributeBroadcastProcessFunctionForDetectable
       }
 
       // guid
-      if (attributeSignature.contains("guid" + ubiEvent.getGuid())) {
+      Long[] guidEnhance = TransformUtil.stringToLong(ubiEvent.getGuid());
+      if (attributeSignature.contains("guid" + guidEnhance[0] + guidEnhance[1])) {
         for (Map.Entry<Integer, Long> guidIpBotFlagMap :
-            attributeSignature.get("guid" + ubiEvent.getGuid()).entrySet()) {
+            attributeSignature.get("guid" + guidEnhance[0] + guidEnhance[1]).entrySet()) {
           ubiEvent.getBotFlags().add(guidIpBotFlagMap.getKey());
         }
       }
@@ -130,9 +132,10 @@ public class AttributeBroadcastProcessFunctionForDetectable
       }
 
       // guid
-      if (attributeSignature.contains("guid" + ubiSession.getGuid())) {
+      Long[] guidEnhance = TransformUtil.stringToLong(ubiSession.getGuid());
+      if (attributeSignature.contains("guid" + guidEnhance[0] + guidEnhance[1])) {
         for (Map.Entry<Integer, Long> guidBotFlagMap :
-            attributeSignature.get("guid" + ubiSession.getGuid()).entrySet()) {
+            attributeSignature.get("guid" + guidEnhance[0] + guidEnhance[1]).entrySet()) {
           ubiSession.getBotFlagList().add(guidBotFlagMap.getKey());
         }
       }

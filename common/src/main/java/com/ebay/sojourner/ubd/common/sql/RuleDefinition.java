@@ -5,7 +5,8 @@ import lombok.Data;
 @Data
 public class RuleDefinition {
   private long id;
-  private long ruleId;
+  private long bizId;
+  private String category;
   private String name;
   private String content;
   private String description;
