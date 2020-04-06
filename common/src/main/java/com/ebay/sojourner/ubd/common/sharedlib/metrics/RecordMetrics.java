@@ -1,10 +1,11 @@
 package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
-import java.util.LinkedHashSet;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public abstract class RecordMetrics<Source, Target> implements Aggregator<Source, Target> {
 
-  protected LinkedHashSet<FieldMetrics<Source, Target>> fieldMetrics = new LinkedHashSet<>();
+  protected CopyOnWriteArraySet<FieldMetrics<Source, Target>> fieldMetrics
+      = new CopyOnWriteArraySet<>();
 
   /**
    * Initialize the field metrics for being used in aggregator operations.

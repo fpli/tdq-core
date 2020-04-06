@@ -9,14 +9,16 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class EventBotDetector implements BotDetector<UbiEvent> {
 
   private static volatile EventBotDetector eventBotDetector;
-  private Set<Rule> botRules = new LinkedHashSet<Rule>();
-  private ArrayList<Long> dynamicRuleIdList = new ArrayList<>();
+  private CopyOnWriteArraySet<Rule> botRules = new CopyOnWriteArraySet<Rule>();
+  private CopyOnWriteArrayList<Long> dynamicRuleIdList = new CopyOnWriteArrayList<>();
 
   private EventBotDetector() {
     initBotRules();
