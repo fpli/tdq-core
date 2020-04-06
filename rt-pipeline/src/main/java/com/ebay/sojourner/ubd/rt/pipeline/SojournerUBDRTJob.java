@@ -75,7 +75,6 @@ public class SojournerUBDRTJob {
         StreamExecutionEnvironment.getExecutionEnvironment();
     executionEnvironment.getConfig().setGlobalJobParameters(parameterTool);
     executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
-
     // checkpoint settings
     executionEnvironment.enableCheckpointing(
         AppEnv.config().getFlink().getCheckpoint().getInterval().getSeconds() * 1000,

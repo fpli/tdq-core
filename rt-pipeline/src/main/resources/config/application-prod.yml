@@ -55,4 +55,22 @@ flink:
     max-concurrent: 1
 
 hdfs:
-  nameNode: hdfs://apollo-rno/sys/soj/ubd/
+  sinkPath: hdfs://apollo-rno/sys/soj/ubd/
+  lkpPath: hdfs://apollo-rno/sys/soj/ubd/lkp/
+  lkpFileName:
+    - appid
+    - botFilterList
+    - browseNodePages
+    - findingFlag
+    - iabAgentRex
+    - iframeBlacklists
+    - iframePageIds
+    - itemSpecificPages
+    - mpx
+    - pageFmly
+    - productPages
+    - searchResultPages
+    - selectedAgents
+    - selectedIps
+    - ubiSkewBotList
+    - vtNewIdSource

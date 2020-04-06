@@ -2,7 +2,6 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
 import com.ebay.sojourner.ubd.common.sharedlib.util.IsValidIPv4;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJCollapseWhiteSpace;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJGetUrlDomain;
@@ -13,6 +12,7 @@ import com.ebay.sojourner.ubd.common.sharedlib.util.SOJListLastElement;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNameValueParser;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJReplaceChar;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJURLDecodeEscape;
+import com.ebay.sojourner.ubd.common.util.LkpManager;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
@@ -696,8 +696,8 @@ public class IntermediateMetrics implements Serializable {
 
   public void initLkp() {
     if (mpxMap == null || mpxMap.size() < 1) {
-      LkpFetcher.getInstance().loadMpxRotetion();
-      mpxMap = LkpFetcher.getInstance().getMpxMap();
+      LkpManager.getInstance().loadMpxRotetion();
+      mpxMap = LkpManager.getInstance().getMpxMap();
     }
   }
 

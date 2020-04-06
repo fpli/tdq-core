@@ -1,7 +1,6 @@
 package com.ebay.sojourner.ubd.common.util;
 
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -19,7 +18,7 @@ public class UbiBotFilter implements BotFilter {
   private final Map<Integer, Set<Integer>> appIdWithBotFlags;
 
   public UbiBotFilter() {
-    appIdWithBotFlags = getAppIdWithBotFlags(LkpFetcher.getInstance().getAppIds());
+    appIdWithBotFlags = getAppIdWithBotFlags(LkpManager.getInstance().getAppIds());
     invalidSessionBotFilter =
         PropertyUtils.getIntegerSet(
             UBIConfig.getString(Property.INVALID_BOT_FILTER), Property.PROPERTY_DELIMITER);

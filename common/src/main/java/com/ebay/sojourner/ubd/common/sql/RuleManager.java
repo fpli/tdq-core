@@ -9,10 +9,9 @@ import org.apache.commons.collections.CollectionUtils;
 @Slf4j
 public class RuleManager {
 
+  private static final RuleManager INSTANCE = new RuleManager();
   public static boolean RULE_PULL_ENABLED = true;
   public static boolean RULE_PUSH_ENABLED = false;
-  private static final RuleManager INSTANCE = new RuleManager();
-
   private RuleFetcher ruleFetcher;
   private RuleNotificationListener ruleNotificationListener;
 
@@ -39,6 +38,11 @@ public class RuleManager {
     return INSTANCE;
   }
 
+  public static void main(String[] args) throws Exception {
+    RuleManager.getInstance();
+    Thread.sleep(10 * 60 * 1000);
+  }
+
   public List<SqlEventRule> sqlEventRules() {
     return this.sqlEventRuleList;
   }
@@ -60,10 +64,5 @@ public class RuleManager {
     }
 
     log.info("Rules deployed: " + this.sqlEventRuleList.size());
-  }
-
-  public static void main(String[] args) throws Exception {
-    RuleManager.getInstance();
-    Thread.sleep(10 * 60 * 1000);
   }
 }

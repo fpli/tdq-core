@@ -2,13 +2,13 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
+import com.ebay.sojourner.ubd.common.util.LkpManager;
 import java.util.Map;
 
 public class ViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
   public static final String VI_PAGE_FMLY = "VI";
-  private static LkpFetcher lkpFetcher;
+  private static LkpManager lkpFetcher;
   private static Map<Integer, String[]> pageFmlyNameMap;
 
   @Override
@@ -36,7 +36,7 @@ public class ViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
 
   @Override
   public void init() throws Exception {
-    lkpFetcher = LkpFetcher.getInstance();
+    lkpFetcher = LkpManager.getInstance();
     lkpFetcher.loadPageFmlys();
     pageFmlyNameMap = lkpFetcher.getPageFmlyMaps();
   }

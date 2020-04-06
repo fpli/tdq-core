@@ -2,7 +2,6 @@ package com.ebay.sojourner.ubd.common.util;
 
 import com.ebay.sojourner.ubd.common.model.AgentAttribute;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
 import com.ebay.sojourner.ubd.common.sharedlib.util.Base64Ebay;
 import com.ebay.sojourner.ubd.common.sharedlib.util.GUID2Date;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
@@ -183,7 +182,7 @@ public class UbiSessionHelper {
 
   protected static boolean checkIabAgent(String agent) {
     if (StringUtils.isNotBlank(agent)) {
-      for (String iabAgentReg : LkpFetcher.getInstance().getIabAgentRegs()) {
+      for (String iabAgentReg : LkpManager.getInstance().getIabAgentRegs()) {
         if (agent.toLowerCase().contains(iabAgentReg)) {
           return true;
         }

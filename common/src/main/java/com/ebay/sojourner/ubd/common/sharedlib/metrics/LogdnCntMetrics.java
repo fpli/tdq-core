@@ -2,19 +2,19 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
+import com.ebay.sojourner.ubd.common.util.LkpManager;
 import java.util.Map;
 
 public class LogdnCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
   private static final String SIGN_IN = "SIGNIN";
   private Map<Integer, String[]> pageFmlyNameMap;
-  private LkpFetcher lkpFetcher;
+  private LkpManager lkpFetcher;
 
   public static void main(String[] args) {
     Map<Integer, String[]> pageFmlyNameMap2;
-    LkpFetcher lkpFetcher2;
-    lkpFetcher2 = LkpFetcher.getInstance();
+    LkpManager lkpFetcher2;
+    lkpFetcher2 = LkpManager.getInstance();
     lkpFetcher2.loadPageFmlys();
     pageFmlyNameMap2 = lkpFetcher2.getPageFmlyMaps();
     if (pageFmlyNameMap2.containsKey(992)) {
@@ -53,7 +53,7 @@ public class LogdnCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
 
   @Override
   public void init() throws Exception {
-    lkpFetcher = LkpFetcher.getInstance();
+    lkpFetcher = LkpManager.getInstance();
     lkpFetcher.loadPageFmlys();
     pageFmlyNameMap = lkpFetcher.getPageFmlyMaps();
   }

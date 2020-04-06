@@ -3,6 +3,8 @@ package com.ebay.sojourner.ubd.common.sharedlib.parser;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJGetPageType;
+import com.ebay.sojourner.ubd.common.util.LkpFetcher;
+import com.ebay.sojourner.ubd.common.util.LkpManager;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +22,7 @@ public class StaticPageTypeParser implements FieldParser<RawEvent, UbiEvent> {
       String flags = ubiEvent.getFlags();
       Integer pageId = ubiEvent.getPageId();
       Integer[] pageInfo = new Integer[2];
-      Map<Integer, Integer[]> vtNewIdsMap = LkpFetcher.getInstance().getVtNewIdsMap();
+      Map<Integer, Integer[]> vtNewIdsMap = LkpManager.getInstance().getVtNewIdsMap();
       if (pageId != null) {
         if (vtNewIdsMap.containsKey(pageId)) {
           pageInfo = vtNewIdsMap.get(pageId);

@@ -1,7 +1,7 @@
 package com.ebay.sojourner.ubd.common.rule;
 
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
+import com.ebay.sojourner.ubd.common.util.LkpManager;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
@@ -12,10 +12,10 @@ public class BotFilter implements ValueFilter<UbiSession, Integer> {
 
   Set<Integer> invalidSessionBotFilter = null;
   Set<String> appIdWithBotFlags = new HashSet<String>();
-  LkpFetcher lkpFetcher;
+  LkpManager lkpFetcher;
 
   public BotFilter(UBIConfig ubiConfig) {
-    lkpFetcher = LkpFetcher.getInstance();
+    lkpFetcher = LkpManager.getInstance();
     lkpFetcher.loadAppIds();
     appIdWithBotFlags.addAll(lkpFetcher.getAppIds());
     invalidSessionBotFilter =
@@ -30,7 +30,7 @@ public class BotFilter implements ValueFilter<UbiSession, Integer> {
       StringBuilder appIdOnBotFlag = new StringBuilder();
       appIdOnBotFlag
           .append(appId.toString().trim())
-          .append(LkpFetcher.LKP_FILED_DELIMITER)
+          .append(LkpManager.LKP_FILED_DELIMITER)
           .append(botFlag.toString().trim());
       System.out.print("###QQQ###" + appIdOnBotFlag.toString());
       System.out.print("###SSS###" + appIdWithBotFlags);

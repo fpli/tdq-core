@@ -1,18 +1,18 @@
 package com.ebay.sojourner.ubd.common.util;
 
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
 import com.google.common.base.Preconditions;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
 public class UBIConfig {
 
-  private static final HashMap<String, Object> confData = new HashMap<>();
+  private static final Map<String, Object> confData = new ConcurrentHashMap<String, Object>();
   private static final String DEFAULT_FILE = "ubi.properties";
   private static Properties ubiProperties;
 
@@ -111,7 +111,6 @@ public class UBIConfig {
       loadLookupTableLocally();
     } else {
       setString(Property.IFRAME_PAGE_IDS, getUBIProperty(Property.IFRAME_PAGE_IDS));
-
       setString(Property.FINDING_FLAGS, getUBIProperty(Property.FINDING_FLAGS));
       setString(Property.VTNEW_IDS, getUBIProperty(Property.VTNEW_IDS));
       setString(Property.IAB_AGENT, getUBIProperty(Property.IAB_AGENT));
@@ -120,16 +119,16 @@ public class UBIConfig {
       setString(Property.LARGE_SESSION_GUID, getUBIProperty(Property.LARGE_SESSION_GUID));
       setString(Property.PAGE_FMLY, getUBIProperty(Property.PAGE_FMLY));
       setString(Property.MPX_ROTATION, getUBIProperty(Property.MPX_ROTATION));
-
       //            conf.setString(Property.IFRAME_PAGE_IDS4Bot12,
       // getUBIProperty(Property.IFRAME_PAGE_IDS4Bot12));
       setString(Property.SELECTED_IPS, getUBIProperty(Property.SELECTED_IPS));
       setString(Property.SELECTED_AGENTS, getUBIProperty(Property.SELECTED_AGENTS));
+      setString(Property.LKP_PATH,getUBIProperty(Property.LKP_PATH));
     }
   }
 
   private static void loadLookupTableLocally() throws Exception {
-    LkpFetcher fetcher = new LkpFetcher();
+    LkpManager fetcher = LkpManager.getInstance();
     fetcher.loadLocally();
     for (String key : fetcher.getResult().keySet()) {
       if (null == getString(key)) {

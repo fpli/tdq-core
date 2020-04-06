@@ -2,6 +2,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.parser;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.util.LkpManager;
 import java.util.Set;
 
 public class IFrameParser implements FieldParser<RawEvent, UbiEvent> {
@@ -11,7 +12,7 @@ public class IFrameParser implements FieldParser<RawEvent, UbiEvent> {
 
     int pageId = ubiEvent.getPageId();
 
-    Set<Integer> pageIdSet = LkpFetcher.getInstance().getIframePageIdSet();
+    Set<Integer> pageIdSet = LkpManager.getInstance().getIframePageIdSet();
 
     if (pageIdSet.contains(pageId)) {
       ubiEvent.setIframe(true);

@@ -5,7 +5,6 @@ import com.ebay.sojourner.ubd.common.rule.Rule;
 import com.ebay.sojourner.ubd.common.sql.RuleManager;
 import com.ebay.sojourner.ubd.common.sql.SqlEventRule;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;

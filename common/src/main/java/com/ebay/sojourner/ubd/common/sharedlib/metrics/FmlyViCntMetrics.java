@@ -2,8 +2,8 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
+import com.ebay.sojourner.ubd.common.util.LkpManager;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
@@ -15,11 +15,11 @@ import org.apache.commons.lang3.StringUtils;
 public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
   private List<String> viPGT;
-  private LkpFetcher lkpFetcher;
+  private LkpManager lkpFetcher;
 
   @Override
   public void init() throws Exception {
-    this.lkpFetcher = LkpFetcher.getInstance();
+    this.lkpFetcher = LkpManager.getInstance();
     lkpFetcher.loadPageFmlys();
     viPGT =
         new ArrayList<>(

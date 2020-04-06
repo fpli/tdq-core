@@ -2,8 +2,8 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
+import com.ebay.sojourner.ubd.common.util.LkpManager;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
@@ -15,7 +15,7 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
 
   private ArrayList<String> viPGT;
   private Map<Integer, String[]> pageFmlyNameMap;
-  private LkpFetcher lkpFetcher;
+  private LkpManager lkpFetcher;
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
@@ -43,7 +43,7 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
 
   @Override
   public void init() throws Exception {
-    lkpFetcher = LkpFetcher.getInstance();
+    lkpFetcher = LkpManager.getInstance();
     lkpFetcher.loadPageFmlys();
     pageFmlyNameMap = lkpFetcher.getPageFmlyMaps();
     viPGT =

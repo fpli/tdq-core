@@ -5,6 +5,7 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.util.MobileEventsIdentifier;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
 import com.ebay.sojourner.ubd.common.util.Constants;
+import com.ebay.sojourner.ubd.common.util.LkpManager;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import java.util.Map;
@@ -59,7 +60,7 @@ public class CobrandParser implements FieldParser<RawEvent, UbiEvent> {
 
   @Override
   public void parse(RawEvent rawEvent, UbiEvent ubiEvent) throws Exception {
-    Map<Integer, String[]> pageFmlyNameMap = LkpFetcher.getInstance().getPageFmlyMaps();
+    Map<Integer, String[]> pageFmlyNameMap = LkpManager.getInstance().getPageFmlyMaps();
     Integer pageId = ubiEvent.getPageId();
     ubiEvent.setCobrand(Constants.DEFAULT_CORE_SITE_COBRAND);
 
