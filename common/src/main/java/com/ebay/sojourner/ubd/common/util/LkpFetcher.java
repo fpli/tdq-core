@@ -33,7 +33,8 @@ public class LkpFetcher extends TimerTask {
   }
 
   public void startDailyRefresh() {
-    calendar.set(calendar.YEAR, calendar.MONTH + 1, calendar.DATE, 5, 0, 0);
+    calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DATE), 5, 0, 0);
     Date date = calendar.getTime();
     timer.scheduleAtFixedRate(this, date, ONE_DAY_MILLIS);
   }
