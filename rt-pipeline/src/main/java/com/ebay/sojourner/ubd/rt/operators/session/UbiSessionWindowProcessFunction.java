@@ -40,7 +40,7 @@ public class UbiSessionWindowProcessFunction
     }
 
     SessionAccumulator sessionAccumulator = elements.iterator().next();
-    System.out.println("context.currentWatermark():========" + context.currentWatermark());
+    //  System.out.println("context.currentWatermark():========" + context.currentWatermark());
     endSessionEvent(sessionAccumulator);
     UbiSession ubiSession = new UbiSession();
     //        BeanUtils.copyProperties(ubiSession, sessionAccumulator.getUbiSession());

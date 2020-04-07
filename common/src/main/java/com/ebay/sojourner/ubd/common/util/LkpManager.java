@@ -1,11 +1,11 @@
 package com.ebay.sojourner.ubd.common.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,23 +19,24 @@ public class LkpManager {
   public static final String TEXT_FIELD_DELIMITER = "\t";
   public static final int PAIR_LENGTH = 2;
 
-  private static Set<Integer> pageIdSet = new HashSet<Integer>();
+  private  Set<Integer> pageIdSet = new CopyOnWriteArraySet<>();
   // private static Set<String> pageIdSet4Bot12 = new HashSet<String>();
-  private static Map<Integer, Integer> findingFlagMap = new HashMap<Integer, Integer>();
-  private static Map<Integer, Integer[]> vtNewIdsMap = new HashMap<Integer, Integer[]>();
-  private static Set<String> appIdWithBotFlags = new HashSet<String>();
-  private static List<String> iabAgentRegs = new ArrayList<String>();
-  private static Set<String> testUserIds = new HashSet<String>();
-  private static Set<String> largeSessionGuidSet = new HashSet<String>();
-  private static Map<Integer, String[]> pageFmlyMap = new HashMap<Integer, String[]>();
-  private static Map<String, String> mpxMap = new HashMap<String, String>();
-  private static Map<String, Boolean> selectedIps = new HashMap<String, Boolean>();
-  private static Set<String> selectedAgents = new HashSet<String>();
+  private  Map<Integer, Integer> findingFlagMap = new ConcurrentHashMap<>();
+  private  Map<Integer, Integer[]> vtNewIdsMap = new ConcurrentHashMap<Integer, Integer[]>();
+  private  Set<String> appIdWithBotFlags = new CopyOnWriteArraySet<String>();
+  private  List<String> iabAgentRegs = new CopyOnWriteArrayList<>();
+  private  Set<String> testUserIds = new CopyOnWriteArraySet<String>();
+  private  Set<String> largeSessionGuidSet = new CopyOnWriteArraySet<String>();
+  private  Map<Integer, String[]> pageFmlyMap = new ConcurrentHashMap<Integer, String[]>();
+  private  Map<String, String> mpxMap = new ConcurrentHashMap<String, String>();
+  private  Map<String, Boolean> selectedIps = new ConcurrentHashMap<String, Boolean>();
+  private  Set<String> selectedAgents = new CopyOnWriteArraySet<String>();
   private static volatile LkpManager lkpManager;
-  private Map<String, String> result = new HashMap<String, String>();
+  private Map<String, String> result = new  ConcurrentHashMap<String, String>();
   private volatile LkpFetcher lkpFetcher;
 
   private LkpManager() {
+    loadResources();
     lkpFetcher = new LkpFetcher(this);
     lkpFetcher.startDailyRefresh();
   }
@@ -137,7 +138,7 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of sets: " + filePathProperty);
     }
-
+    System.out.println("map size:"+maps.size());
   }
 
   public void loadLargeSessionGuid() {
