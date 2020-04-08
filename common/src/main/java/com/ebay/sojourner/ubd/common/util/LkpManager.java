@@ -35,7 +35,7 @@ public class LkpManager {
   private static volatile LkpManager lkpManager;
   private Map<String, String> result = new  ConcurrentHashMap<String, String>();
   private volatile LkpFetcher lkpFetcher;
-  ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+//  private List<>
 
   private LkpManager() {
     loadResources();
