@@ -122,7 +122,7 @@ public class HdfsLoader {
       if (fileSystem.exists(path1)) {
         FileStatus[] fileStatus = fileSystem.listStatus(path1, new FileNameFilter(fileName));
         long lastModifiedTime = fileStatus[0].getModificationTime();
-        long preLastModifiedTime = lkpfileDate.get(fileName);
+        long preLastModifiedTime = lkpfileDate.get(fileName)==null?0:lkpfileDate.get(fileName);
         if (lastModifiedTime > preLastModifiedTime) {
           lkpfileDate.put(fileName, lastModifiedTime);
         }

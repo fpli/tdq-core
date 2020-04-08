@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -34,6 +35,7 @@ public class LkpManager {
   private static volatile LkpManager lkpManager;
   private Map<String, String> result = new  ConcurrentHashMap<String, String>();
   private volatile LkpFetcher lkpFetcher;
+  ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
   private LkpManager() {
     loadResources();
@@ -59,7 +61,6 @@ public class LkpManager {
     loadLargeSessionGuid();
     loadIabAgent();
     loadFindingFlag();
-    loadTestUserIds();
     loadVtNewIds();
     loadAppIds();
     loadPageFmlys();

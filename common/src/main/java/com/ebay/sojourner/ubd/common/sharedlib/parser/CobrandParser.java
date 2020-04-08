@@ -8,6 +8,7 @@ import com.ebay.sojourner.ubd.common.util.Constants;
 import com.ebay.sojourner.ubd.common.util.LkpManager;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
+import java.util.Date;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -98,20 +99,33 @@ public class CobrandParser implements FieldParser<RawEvent, UbiEvent> {
       ubiEvent.setCobrand(Constants.DEFAULT_CORE_SITE_COBRAND);
       return;
     }
+
     if (pageFmlyNameMap.containsKey(pageId)) {
-      if (expressSite.equals(pageFmlyNameMap.get(pageId)[0])) {
-        ubiEvent.setCobrand(Constants.EBAYEXPRESS_SITE_COBRAND);
-        return;
-      }
-      if (halfSite.equals(pageFmlyNameMap.get(pageId)[0])) {
-        if (mobileIdentifier.isMobileEvent(ubiEvent)) {
-          ubiEvent.setCobrand(Constants.MOBILE_HALF_COBRAND);
+      try {
+        if (expressSite.equals(pageFmlyNameMap.get(pageId)[0])) {
+          ubiEvent.setCobrand(Constants.EBAYEXPRESS_SITE_COBRAND);
           return;
         }
-        ubiEvent.setCobrand(Constants.HALF_SITE_COBRAND);
-        return;
+        if (halfSite.equals(pageFmlyNameMap.get(pageId)[0])) {
+          if (mobileIdentifier.isMobileEvent(ubiEvent)) {
+            ubiEvent.setCobrand(Constants.MOBILE_HALF_COBRAND);
+            return;
+          }
+          ubiEvent.setCobrand(Constants.HALF_SITE_COBRAND);
+          return;
+        }
+      } catch (NullPointerException e) {
+        System.out.println(new Date() + "=====cobrandParser nullpoint====");
+        System.out.println(new Date() + "pageId:" + pageId);
+        System.out.println(new Date() + "expressSite:" + expressSite);
+        if (pageFmlyNameMap != null) {
+          System.out.println(new Date() + "pageFmlyNameMap is not null:" + pageFmlyNameMap.size());
+          System.out.println(new Date() + "pageFmlyNameMap contains pageId:" + pageId);
+        }
+
       }
     }
+
     String pn = SOJNVL.getTagValue(ubiEvent.getApplicationPayload(), PARTNER);
     if (StringUtils.isNotBlank(pn) && pn.matches("-?\\d+")) {
       if (pn.equals(expressPartner)) {

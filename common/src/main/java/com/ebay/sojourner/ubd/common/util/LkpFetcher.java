@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LkpFetcher extends TimerTask {
 
   private static final long ONE_DAY_MILLIS = 24 * 60 * 60 * 1000;
-  private static final int UPDATE_COUNTS = 9;
+  private static final int UPDATE_COUNTS = 10;
   private static Calendar calendar;
   private Timer timer;
   private LkpManager lkpManager;
@@ -92,5 +92,6 @@ public class LkpFetcher extends TimerTask {
       }
 
     }
+    System.out.println("daily refresh completed");
   }
 }
