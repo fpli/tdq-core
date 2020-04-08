@@ -22,9 +22,6 @@ public class TransformUtil {
 
 
   public static Long[] stringToLong(CharSequence cmd) {
-    if (cmd == null) {
-      return new Long[]{0L, 0L};
-    }
     if (StringUtils.isBlank(cmd)) {
       return new Long[]{0L, 0L};
     }

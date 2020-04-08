@@ -51,4 +51,13 @@ public class Constants {
   public static final int MOBILE_CORE_SITE_COBRAND = 7;
   public static final int MOBILE_HALF_COBRAND = 8;
   public static final int HASH_STUB = 37;
+
+  // dynamicRules category
+  public static final String EVENT_LEVEL = "Event";
+  public static final String SESSION_LEVEL = "Session";
+  public static final String AGENTIP_LEVEL = "AgentIp";
+  public static final String AGENT_LEVEL = "Agent";
+  public static final String IP_LEVEL = "Ip";
+  public static final String GUID_LEVEL = "Guid";
+
 }

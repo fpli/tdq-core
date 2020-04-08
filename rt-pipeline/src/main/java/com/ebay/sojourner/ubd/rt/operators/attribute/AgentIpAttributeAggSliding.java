@@ -4,6 +4,7 @@ import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.AgentIpSignatureBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.indicators.AgentIpIndicatorsSliding;
+import com.ebay.sojourner.ubd.common.util.Constants;
 import java.io.IOException;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ public class AgentIpAttributeAggSliding
 
   private AgentIpIndicatorsSliding agentIpIndicators;
   private AgentIpSignatureBotDetector agentIpSignatureBotDetector;
+  private static final String AGENTIP = Constants.AGENTIP_LEVEL;
 
   @Override
   public AgentIpAttributeAccumulator createAccumulator() {
@@ -52,6 +54,8 @@ public class AgentIpAttributeAggSliding
     try {
       if (agentIpAttributeAccumulator.getBotFlagStatus().containsValue(0)
           || agentIpAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
+        agentIpSignatureBotDetector.initDynamicRules(agentIpSignatureBotDetector.rules(),
+            agentIpSignatureBotDetector.dynamicRuleIdList(), AGENTIP);
         agentIpBotFlag =
             agentIpSignatureBotDetector.getBotFlagList(
                 agentIpAttributeAccumulator.getAgentIpAttribute());

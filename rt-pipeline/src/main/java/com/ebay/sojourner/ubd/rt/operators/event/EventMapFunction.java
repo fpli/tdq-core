@@ -31,6 +31,7 @@ import com.ebay.sojourner.ubd.common.sharedlib.parser.SqrParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.StaticPageTypeParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.TimestampParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.UserIdParser;
+import com.ebay.sojourner.ubd.common.util.Constants;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -40,17 +41,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.accumulators.AverageAccumulator;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.metrics.Counter;
 
 @Slf4j
 public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
   private EventParser parser;
   private EventBotDetector eventBotDetector;
+  private static final String EVENT = Constants.EVENT_LEVEL;
   private AverageAccumulator avgEventParserDuration = new AverageAccumulator();
   private Map<String, AverageAccumulator> eventParseMap = new ConcurrentHashMap<>();
-  private Map<String, Counter> eventStaticRuleHitCounterMap = new ConcurrentHashMap<>();
-  private Counter eventCounter;
   private AverageAccumulator avgBotDetectionDuration = new AverageAccumulator();
 
   @Override
@@ -64,17 +63,6 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
     getRuntimeContext()
         .addAccumulator("Average Duration of Event BotDetection", avgBotDetectionDuration);
-
-    eventCounter =
-        getRuntimeContext()
-            .getMetricGroup()
-            .addGroup("sojourner-ubd")
-            .counter("ubiEvent count");
-
-    List<String> ruleStaticNames =
-        Arrays.asList(
-            "rule801", "rule901", "rule1"
-        );
 
     List<String> eventParserNames =
         Arrays.asList(
@@ -106,15 +94,6 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
             IcfParser.class.getSimpleName(),
             JSColumnParser.class.getSimpleName());
 
-    for (String ruleName : ruleStaticNames) {
-      Counter ruleHitCounter =
-          getRuntimeContext()
-              .getMetricGroup()
-              .addGroup("sojourner-ubd")
-              .counter(ruleName);
-      eventStaticRuleHitCounterMap.put(ruleName, ruleHitCounter);
-    }
-
     for (String className : eventParserNames) {
       AverageAccumulator accumulator = new AverageAccumulator();
       eventParseMap.put(className, accumulator);
@@ -126,29 +105,16 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
   @Override
   public UbiEvent map(RawEvent rawEvent) throws Exception {
-    eventCounter.inc();
     UbiEvent event = new UbiEvent();
     long startTimeForEventParser = System.nanoTime();
     parser.parse(rawEvent, event, eventParseMap);
     avgEventParserDuration.add(System.nanoTime() - startTimeForEventParser);
     long startTimeForEventBotDetection = System.nanoTime();
-    eventBotDetector.initDynamicRules();
-
+    eventBotDetector
+        .initDynamicRules(eventBotDetector.rules(), eventBotDetector.dynamicRuleIdList(),EVENT);
     Set<Integer> botFlagList = eventBotDetector.getBotFlagList(event);
     avgBotDetectionDuration.add(System.nanoTime() - startTimeForEventBotDetection);
     event.getBotFlags().addAll(botFlagList);
-    if (botFlagList.size() > 0) {
-      for (int botRule : botFlagList) {
-        ruleHitCount(botRule);
-      }
-    }
     return event;
-  }
-
-  private void ruleHitCount(int botFlag) {
-    Counter counter = eventStaticRuleHitCounterMap.get("rule" + botFlag);
-    if (botFlag != 0 && counter != null) {
-      counter.inc();
-    }
   }
 }

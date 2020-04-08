@@ -1,7 +1,6 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
@@ -13,7 +12,6 @@ import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForSLC;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.RawEventFilterFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
-import com.ebay.sojourner.ubd.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
@@ -33,7 +31,7 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
 
-public class SojournerRTLoadForKafkaProducerJob {
+public class SojournerRTLoadForKafkaSinkJob {
 
   public static void main(String[] args) throws Exception {
 
@@ -140,7 +138,7 @@ public class SojournerRTLoadForKafkaProducerJob {
         ubiEventDataStream
             .keyBy("guid")
             .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-            .allowedLateness(Time.hours(1))
+            .allowedLateness(Time.minutes(1))
             .sideOutputLateData(lateEventOutputTag)
             .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction());
 
@@ -164,10 +162,12 @@ public class SojournerRTLoadForKafkaProducerJob {
         .getSideOutput(mappedEventOutputTag);
 
     // UbiEvent to SojEvent
+    /*
     DataStream<SojEvent> sojEventWithSessionId = ubiEventWithSessionId
         .map(new UbiEventToSojEventMapFunction())
         .name("UbiEvent to SojEvent")
         .uid("eventTransform");
+        */
 
     // kafka sink
     sojSessionStream.addSink(KafkaConnectorFactory

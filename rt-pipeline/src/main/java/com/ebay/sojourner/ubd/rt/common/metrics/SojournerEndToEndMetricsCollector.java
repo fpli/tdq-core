@@ -1,4 +1,4 @@
-package com.ebay.sojourner.ubd.rt.operators.event;
+package com.ebay.sojourner.ubd.rt.common.metrics;
 
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.SlidingWindowReservoir;
@@ -8,7 +8,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.dropwizard.metrics.DropwizardHistogramWrapper;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 
-public class EventDiscardingSink extends RichSinkFunction<UbiEvent> {
+public class SojournerEndToEndMetricsCollector extends RichSinkFunction<UbiEvent> {
 
   private transient DropwizardHistogramWrapper siteToSourceWrapper;
   private transient DropwizardHistogramWrapper siteToSinkWrapper;

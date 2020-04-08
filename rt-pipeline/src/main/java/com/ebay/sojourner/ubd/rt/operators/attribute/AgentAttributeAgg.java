@@ -4,6 +4,7 @@ import com.ebay.sojourner.ubd.common.model.AgentAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.AgentSignatureBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.indicators.AgentIndicators;
+import com.ebay.sojourner.ubd.common.util.Constants;
 import java.io.IOException;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ public class AgentAttributeAgg
 
   private AgentIndicators agentIndicators;
   private AgentSignatureBotDetector agentSignatureBotDetector;
+  private static final String AGENT = Constants.AGENT_LEVEL;
 
   @Override
   public AgentAttributeAccumulator createAccumulator() {
@@ -51,6 +53,8 @@ public class AgentAttributeAgg
     try {
       if (agentAttributeAccumulator.getBotFlagStatus().containsValue(0)
           || agentAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
+        agentSignatureBotDetector.initDynamicRules(agentSignatureBotDetector.rules(),
+            agentSignatureBotDetector.dynamicRuleIdList(), AGENT);
         agentBotFlag =
             agentSignatureBotDetector.getBotFlagList(agentAttributeAccumulator.getAgentAttribute());
         if (agentBotFlag.contains(6)) {

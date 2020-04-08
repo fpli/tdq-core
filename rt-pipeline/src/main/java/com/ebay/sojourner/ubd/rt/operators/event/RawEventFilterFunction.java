@@ -12,7 +12,6 @@ public class RawEventFilterFunction extends RichFilterFunction<RawEvent> {
   @Override
   public void open(Configuration conf) throws Exception {
     super.open(conf);
-    //        getRuntimeContext().getExecutionConfig().getGlobalJobParameters().toMap();
   }
 
   @Override
@@ -38,7 +37,7 @@ public class RawEventFilterFunction extends RichFilterFunction<RawEvent> {
     }
     if (map.containsKey("g")) {
       String g = map.get("g");
-      return g.hashCode() % 10 == 0;
+      return Math.abs(g.hashCode() % 10) == 0;
     }
     return false;
   }

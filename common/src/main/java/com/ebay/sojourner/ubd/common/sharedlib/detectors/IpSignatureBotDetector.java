@@ -7,13 +7,16 @@ import com.ebay.sojourner.ubd.common.rule.BotRuleForSuspectIP;
 import com.ebay.sojourner.ubd.common.rule.Rule;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
-public class IpSignatureBotDetector implements BotDetector<IpAttribute> {
+public class IpSignatureBotDetector extends AbstractBotDetector<IpAttribute> {
 
   private static volatile IpSignatureBotDetector singnatureBotDetector;
-  private Set<Rule> botRules = new LinkedHashSet<Rule>();
+  private static List<Long> dynamicRuleIdList = new CopyOnWriteArrayList<>();
+  private Set<Rule> botRules = new CopyOnWriteArraySet<>();
 
   private IpSignatureBotDetector() {
 
@@ -21,6 +24,10 @@ public class IpSignatureBotDetector implements BotDetector<IpAttribute> {
     for (Rule rule : botRules) {
       rule.init();
     }
+  }
+
+  public static List<Long> dynamicRuleIdList() {
+    return dynamicRuleIdList;
   }
 
   public static IpSignatureBotDetector getInstance() {
@@ -35,14 +42,14 @@ public class IpSignatureBotDetector implements BotDetector<IpAttribute> {
   }
 
   @Override
+  public Set<Rule> rules() {
+    return this.botRules;
+  }
+
+  @Override
   public Set<Integer> getBotFlagList(IpAttribute ipAttribute)
       throws IOException, InterruptedException {
-    Set<Integer> signature = null;
     Set<Integer> botflagSet = new HashSet<Integer>();
-    //        if (ubiSession.getClientIp() != null) {
-    //            signature = scanSignature("ip",ubiSession.getClientIp(),"botFlag","botsignature");
-    //
-    //        }
     if (ipAttribute != null) {
       for (Rule rule : botRules) {
         int botFlag = rule.getBotFlag(ipAttribute);
@@ -60,12 +67,5 @@ public class IpSignatureBotDetector implements BotDetector<IpAttribute> {
     botRules.add(new BotRule7());
     botRules.add(new BotRuleForSuspectIP());
     botRules.add(new BotRuleForDeclarativeHost());
-  }
-
-  private Set<Integer> scanSignature(
-      String inColumnName, String inColumnValue, String outColumnName, String bucketName) {
-    //        return CouchBaseManager.getInstance().getSignatureWithColumn(inColumnName,
-    // inColumnValue, outColumnName);
-    return null;
   }
 }

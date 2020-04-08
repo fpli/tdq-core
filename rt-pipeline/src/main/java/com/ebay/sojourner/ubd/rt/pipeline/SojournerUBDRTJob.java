@@ -3,15 +3,15 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.SessionForGuidEnhancement;
-import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
+import com.ebay.sojourner.ubd.rt.common.metrics.EventRulesCounterMetricsCollector;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
-import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForLVS;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForRNO;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForSLC;
@@ -27,17 +27,16 @@ import com.ebay.sojourner.ubd.rt.operators.attribute.IpAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.IpWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.SplitFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.DetectableEventMapFunction;
-import com.ebay.sojourner.ubd.rt.operators.event.EventDiscardingSink;
+import com.ebay.sojourner.ubd.rt.common.metrics.SojournerEndToEndMetricsCollector;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
-import com.ebay.sojourner.ubd.rt.operators.event.RawEventFilterFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
-import com.ebay.sojourner.ubd.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.DetectableSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionForGuidEnhancementMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
+import com.ebay.sojourner.ubd.rt.util.Constants;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
@@ -138,23 +137,16 @@ public class SojournerUBDRTJob {
         .union(rawEventDataStreamForLVS)
         .union(rawEventDataStreamForSLC);
 
-    // filter 33% throughput group by guid for reduce kafka consumer lag
-    DataStream<RawEvent> filteredRawEventDataStream = rawEventDataStream
-        .filter(new RawEventFilterFunction())
-        .disableChaining()
-        .name("RawEvent Filter Operator");
-
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
     // 2.2 Event level bot detection via bot rule
     DataStream<UbiEvent> ubiEventDataStream =
-        filteredRawEventDataStream
+        rawEventDataStream
             .map(new EventMapFunction())
             .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
             .name("Event Operator");
 
-    // refine windowsoperator
-
+    // refine windowsoperatorø
     // 3. Session Operator
     // 3.1 Session window
     // 3.2 Session indicator accumulation
@@ -171,7 +163,7 @@ public class SojournerUBDRTJob {
         ubiEventDataStream
             .keyBy("guid")
             .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-            .allowedLateness(Time.minutes(0))
+            .allowedLateness(Time.minutes(1))
             .sideOutputLateData(lateEventOutputTag)
             .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction());
 
@@ -184,6 +176,9 @@ public class SojournerUBDRTJob {
 
     DataStream<UbiEvent> ubiEventWithSessionId =
         ubiSessionDataStream.getSideOutput(mappedEventOutputTag);
+
+    DataStream<UbiEvent> latedStream =
+        ubiSessionDataStream.getSideOutput(lateEventOutputTag);
 
     // ubiSession to SessionForGuidEnhancement
     SingleOutputStreamOperator<SessionForGuidEnhancement> sessionForGuidEnhancement =
@@ -336,9 +331,11 @@ public class SojournerUBDRTJob {
             .name("UbiSession to SojSession");
 
     // UbiEvent to SojEvent
+    /*
     DataStream<SojEvent> sojEventWithSessionId = signatureBotDetectionForEvent
         .map(new UbiEventToSojEventMapFunction())
         .name("UbiEvent to SojEvent");
+        */
 
     // 5. Load data to file system for batch processing
     // 5.1 IP Signature
@@ -346,12 +343,32 @@ public class SojournerUBDRTJob {
     // 5.3 Events (with session ID & bot flags)
     // 5.4 Events late
     // for data quality
-    sojSessionStream.addSink(HdfsSinkUtil.sojSessionSinkWithParquet()).name("SojSession")
-        .disableChaining();
-    sojEventWithSessionId.addSink(HdfsSinkUtil.sojEventSinkWithParquet()).name("SojEvent")
-        .disableChaining();
     // for monitor
-    signatureBotDetectionForEvent.addSink(new EventDiscardingSink()).name("Event");
+
+    // kafka sink for session
+    sojSessionStream.addSink(KafkaConnectorFactory
+        .createKafkaProducer(Constants.TOPIC_PRODUCER, Constants.BOOTSTRAP_PRODUCER_BROKERS,
+            SojSession.class, Constants.MESSAGE_KEY))
+        .setParallelism(50)
+        .name("SojSession Kafka")
+        .uid("kafkaSink");
+
+    // metrics collector for end to end
+    signatureBotDetectionForEvent
+        .addSink(new SojournerEndToEndMetricsCollector())
+        .name("Pipeline End to End Duration");
+
+    // metrics collector for event rules hit
+    signatureBotDetectionForEvent
+        .addSink(new EventRulesCounterMetricsCollector())
+        .name("Event Metrics Collector")
+        .disableChaining();
+
+    // late event sink
+    latedStream
+        .addSink(new DiscardingSink<>())
+        .name("Late Event");
+
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
   }

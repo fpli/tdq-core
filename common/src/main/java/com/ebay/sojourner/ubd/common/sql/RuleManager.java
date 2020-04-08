@@ -53,7 +53,8 @@ public class RuleManager {
 
     if (CollectionUtils.isNotEmpty(ruleDefinitions)) {
       List<SqlEventRule> sqlNewEventRuleList = ruleDefinitions.stream()
-          .map(rule -> SqlEventRule.of(rule.getContent(), rule.getBizId(), rule.getVersion()))
+          .map(rule -> SqlEventRule
+              .of(rule.getContent(), rule.getBizId(), rule.getVersion(), rule.getCategory()))
           .collect(Collectors.toList());
 
       sqlEventRuleList = sqlNewEventRuleList;

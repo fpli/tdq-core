@@ -16,7 +16,7 @@ public class SojKafkaPartitioner<T> extends FlinkKafkaPartitioner<T> {
         "Partitions of the target topic is empty.");
     try {
       String keyStr = new String(key, CHAR_SET);
-      return partitions[keyStr.hashCode() % partitions.length];
+      return Math.abs(keyStr.hashCode() % partitions.length);
     } catch (UnsupportedEncodingException e) {
       e.printStackTrace();
     }

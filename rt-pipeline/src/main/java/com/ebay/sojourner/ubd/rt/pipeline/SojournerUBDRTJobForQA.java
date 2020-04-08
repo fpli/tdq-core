@@ -22,7 +22,7 @@ import com.ebay.sojourner.ubd.rt.operators.attribute.IpAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.IpWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.SplitFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.DetectableEventMapFunction;
-import com.ebay.sojourner.ubd.rt.operators.event.EventDiscardingSink;
+import com.ebay.sojourner.ubd.rt.common.metrics.SojournerEndToEndMetricsCollector;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.DetectableSessionMapFunction;
@@ -298,7 +298,11 @@ public class SojournerUBDRTJobForQA {
         signatureBotDetectionForEvent.getSideOutput(sessionOutputTag);
     signatureBotDetectionForSession.addSink(new DiscardingSink<>()).name("Session");
     latedStream.addSink(new DiscardingSink<>()).name("Late Event");
-    signatureBotDetectionForEvent.addSink(new EventDiscardingSink()).name("Event");
+
+    signatureBotDetectionForEvent
+        .addSink(new SojournerEndToEndMetricsCollector())
+        .name("Pipeline End to End Duration")
+        .disableChaining();
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());

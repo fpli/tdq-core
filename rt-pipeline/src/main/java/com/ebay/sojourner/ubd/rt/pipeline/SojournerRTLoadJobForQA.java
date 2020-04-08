@@ -64,7 +64,7 @@ public class SojournerRTLoadJobForQA {
                 ? 1
                 : AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
     executionEnvironment.setStateBackend(
-        StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
+          StateBackendFactory.getStateBackend(StateBackendFactory.FS));
 
     // for soj nrt output
     // 1. Rheos Consumer
@@ -75,7 +75,7 @@ public class SojournerRTLoadJobForQA {
             .addSource(KafkaSourceFunctionForQA.generateWatermark())
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
-                    ? 30
+                    ? 2
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
             .name("Rheos Kafka Consumer For Sojourner QA");
     // 2. Event Operator
@@ -103,7 +103,7 @@ public class SojournerRTLoadJobForQA {
         ubiEventDataStream
             .keyBy("guid")
             .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-            .allowedLateness(Time.hours(1))
+            .allowedLateness(Time.minutes(1))
             .sideOutputLateData(lateEventOutputTag)
             .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction());
 
@@ -135,7 +135,7 @@ public class SojournerRTLoadJobForQA {
     sojEventWithSessionId.addSink(KafkaConnectorFactory
         .createKafkaProducer(Constants.TOPIC_PRODUCER, Constants.BOOTSTRAP_PRODUCER_BROKERS,
             SojEvent.class, Constants.MESSAGE_KEY))
-        .setParallelism(1)
+        .setParallelism(2)
         .name("SojEvent Kafka")
         .uid("kafkaSink");
 

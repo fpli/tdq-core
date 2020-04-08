@@ -19,7 +19,6 @@ public class UbiSessionWindowProcessFunction
   private OutputTag outputTag = null;
 
   public UbiSessionWindowProcessFunction() {
-    //        this.outputTag = outputTag;
 
   }
 
@@ -40,10 +39,8 @@ public class UbiSessionWindowProcessFunction
     }
 
     SessionAccumulator sessionAccumulator = elements.iterator().next();
-    System.out.println("context.currentWatermark():========" + context.currentWatermark());
     endSessionEvent(sessionAccumulator);
     UbiSession ubiSession = new UbiSession();
-    //        BeanUtils.copyProperties(ubiSession, sessionAccumulator.getUbiSession());
     ubiSession.setGuid(sessionAccumulator.getUbiSession().getGuid());
     ubiSession.setAgentString(sessionAccumulator.getUbiSession().getAgentString());
     ubiSession.setSessionId(sessionAccumulator.getUbiSession().getSessionId());
@@ -105,10 +102,5 @@ public class UbiSessionWindowProcessFunction
   @Override
   public void open(Configuration conf) throws Exception {
     super.open(conf);
-    System.out.println("ubiSessionwindowfunction thread id:" + Thread.currentThread().getId());
-    //        InputStream configFile =
-    // getRuntimeContext().getDistributedCache().getClass().getResourceAsStream("configFile");
-    //        UBIConfig ubiConfig = UBIConfig.getInstance(configFile);
-
   }
 }
