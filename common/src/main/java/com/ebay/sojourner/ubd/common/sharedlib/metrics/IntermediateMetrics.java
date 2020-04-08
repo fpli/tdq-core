@@ -2,6 +2,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpListener;
 import com.ebay.sojourner.ubd.common.sharedlib.util.IsValidIPv4;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJCollapseWhiteSpace;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJGetUrlDomain;
@@ -12,6 +13,7 @@ import com.ebay.sojourner.ubd.common.sharedlib.util.SOJListLastElement;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNameValueParser;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJReplaceChar;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJURLDecodeEscape;
+import com.ebay.sojourner.ubd.common.util.LkpEnum;
 import com.ebay.sojourner.ubd.common.util.LkpManager;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
@@ -25,7 +27,7 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 // FIXME: refactor this class
-public class IntermediateMetrics implements Serializable {
+public class IntermediateMetrics implements Serializable, LkpListener {
 
   private static final String CHANNEL = "chnl";
   private static final String EUID = "euid";
@@ -89,6 +91,8 @@ public class IntermediateMetrics implements Serializable {
     imgMpxChnlSet6 = stingBuilder.toString();
   }
 
+  private boolean isContinue = true;
+  private volatile LkpManager lkpManager = new LkpManager(this, LkpEnum.mpx);
   private String actualKeyword;
   private String boughtKeyword;
   private Integer channel;
@@ -281,7 +285,7 @@ public class IntermediateMetrics implements Serializable {
     finalMppId = -1;
   }
 
-  public void feed(UbiEvent event) {
+  public void feed(UbiEvent event) throws InterruptedException {
     SOJNameValueParser.getTagValues(event.getApplicationPayload(), tags, kvMap);
 
     // count every rover click
@@ -696,8 +700,7 @@ public class IntermediateMetrics implements Serializable {
 
   public void initLkp() {
     if (mpxMap == null || mpxMap.size() < 1) {
-      LkpManager.getInstance().loadMpxRotetion();
-      mpxMap = LkpManager.getInstance().getMpxMap();
+      mpxMap = lkpManager.getMpxMap();
     }
   }
 
@@ -935,7 +938,7 @@ public class IntermediateMetrics implements Serializable {
     }
   }
 
-  public void setFirstRover3084Metrics(UbiEvent event) {
+  public void setFirstRover3084Metrics(UbiEvent event) throws InterruptedException {
     setFirstRoverEntryTs(event);
     // pls keep the order
     setRoverClickChannel(event);
@@ -1139,7 +1142,10 @@ public class IntermediateMetrics implements Serializable {
   }
 
   // page 3084 only
-  public void setFirstRoverClickMpxChannelId(UbiEvent event) {
+  public void setFirstRoverClickMpxChannelId(UbiEvent event) throws InterruptedException {
+    while (!isContinue) {
+      Thread.sleep(10);
+    }
     Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
     String mpxChannelId = null;
     String[] channelIds = null;
@@ -1360,7 +1366,11 @@ public class IntermediateMetrics implements Serializable {
     }
   }
 
-  public void setFirstScEventImgMpxChannelId(UbiEvent event) {
+  public void setFirstScEventImgMpxChannelId(UbiEvent event) throws InterruptedException {
+
+    while (!isContinue) {
+      Thread.sleep(10);
+    }
     String imgMpxChannelId = "";
     String referrer = getReferrer();
 
@@ -1405,7 +1415,7 @@ public class IntermediateMetrics implements Serializable {
     setLandPageID(event.getPageId());
   }
 
-  public void setFirstScEventMetrics(UbiEvent event) {
+  public void setFirstScEventMetrics(UbiEvent event) throws InterruptedException {
     Long eventTS = event.getEventTimestamp();
     // pls keep the order
     setEventTS(eventTS);
@@ -1652,5 +1662,19 @@ public class IntermediateMetrics implements Serializable {
 
   public void start(UbiEvent event) {
     // null
+  }
+
+  @Override
+  public boolean notifyLkpChange(LkpManager lkpManager) {
+    try {
+
+      this.isContinue = false;
+      mpxMap = lkpManager.getMpxMap();
+      return true;
+    } catch (Throwable e) {
+      return false;
+    } finally {
+      this.isContinue = true;
+    }
   }
 }

@@ -128,14 +128,14 @@ public class UBIConfig {
   }
 
   private static void loadLookupTableLocally() throws Exception {
-    LkpManager fetcher = LkpManager.getInstance();
-    fetcher.loadLocally();
-    for (String key : fetcher.getResult().keySet()) {
-      if (null == getString(key)) {
-        String value = fetcher.getResult().get(key);
-        setString(key, value);
-      }
-    }
+  //    LkpManager fetcher = LkpManager.getInstance();
+  //    fetcher.loadLocally();
+  //    for (String key : fetcher.getResult().keySet()) {
+  //      if (null == getString(key)) {
+  //        String value = fetcher.getResult().get(key);
+  //        setString(key, value);
+  //      }
+  //    }
   }
 
   private static void setConfiguration() throws Exception {

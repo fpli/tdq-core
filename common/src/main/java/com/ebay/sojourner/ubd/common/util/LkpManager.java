@@ -1,12 +1,12 @@
 package com.ebay.sojourner.ubd.common.util;
 
+import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpListener;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,40 +19,42 @@ public class LkpManager {
   public static final String TEXT_RECORD_DELIMITER = "\n";
   public static final String TEXT_FIELD_DELIMITER = "\t";
   public static final int PAIR_LENGTH = 2;
-
-  private  Set<Integer> pageIdSet = new CopyOnWriteArraySet<>();
-  // private static Set<String> pageIdSet4Bot12 = new HashSet<String>();
-  private  Map<Integer, Integer> findingFlagMap = new ConcurrentHashMap<>();
-  private  Map<Integer, Integer[]> vtNewIdsMap = new ConcurrentHashMap<Integer, Integer[]>();
-  private  Set<String> appIdWithBotFlags = new CopyOnWriteArraySet<String>();
-  private  List<String> iabAgentRegs = new CopyOnWriteArrayList<>();
-  private  Set<String> testUserIds = new CopyOnWriteArraySet<String>();
-  private  Set<String> largeSessionGuidSet = new CopyOnWriteArraySet<String>();
-  private  Map<Integer, String[]> pageFmlyMap = new ConcurrentHashMap<Integer, String[]>();
-  private  Map<String, String> mpxMap = new ConcurrentHashMap<String, String>();
-  private  Map<String, Boolean> selectedIps = new ConcurrentHashMap<String, Boolean>();
-  private  Set<String> selectedAgents = new CopyOnWriteArraySet<String>();
   private static volatile LkpManager lkpManager;
-  private Map<String, String> result = new  ConcurrentHashMap<String, String>();
+  private Set<Integer> pageIdSet = new CopyOnWriteArraySet<>();
+  // private static Set<String> pageIdSet4Bot12 = new HashSet<String>();
+  private Map<Integer, Integer> findingFlagMap = new ConcurrentHashMap<>();
+  private Map<Integer, Integer[]> vtNewIdsMap = new ConcurrentHashMap<Integer, Integer[]>();
+  private Set<String> appIdWithBotFlags = new CopyOnWriteArraySet<String>();
+  private List<String> iabAgentRegs = new CopyOnWriteArrayList<>();
+  private Set<String> testUserIds = new CopyOnWriteArraySet<String>();
+  private Set<String> largeSessionGuidSet = new CopyOnWriteArraySet<String>();
+  private Map<Integer, String[]> pageFmlyMap = new ConcurrentHashMap<Integer, String[]>();
+  private Map<String, String> mpxMap = new ConcurrentHashMap<String, String>();
+  private Map<String, Boolean> selectedIps = new ConcurrentHashMap<String, Boolean>();
+  private Set<String> selectedAgents = new CopyOnWriteArraySet<String>();
+  private Map<String, String> result = new ConcurrentHashMap<String, String>();
   private volatile LkpFetcher lkpFetcher;
-//  private List<>
+  private volatile LkpListener lkpListener;
+  private volatile LkpEnum lkpEnum;
 
-  private LkpManager() {
+  public LkpManager(LkpListener lkpListener, LkpEnum lkpEnum) {
     loadResources();
+    this.lkpListener = lkpListener;
     lkpFetcher = new LkpFetcher(this);
     lkpFetcher.startDailyRefresh();
+    this.lkpEnum = lkpEnum;
   }
 
-  public static LkpManager getInstance() {
-    if (lkpManager == null) {
-      synchronized (LkpManager.class) {
-        if (lkpManager == null) {
-          lkpManager = new LkpManager();
-        }
-      }
-    }
-    return lkpManager;
-  }
+  //  public static LkpManager getInstance() {
+  //    if (lkpManager == null) {
+  //      synchronized (LkpManager.class) {
+  //        if (lkpManager == null) {
+  //          lkpManager = new LkpManager();
+  //        }
+  //      }
+  //    }
+  //    return lkpManager;
+  //  }
 
   private void loadResources() {
     loadIframePageIds();
@@ -68,7 +70,7 @@ public class LkpManager {
   }
 
   public void loadIframePageIds() {
-    pageIdSet.clear();
+    pageIdSet = new CopyOnWriteArraySet<>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String iframePageIds = UBIConfig.getString(Property.IFRAME_PAGE_IDS);
     String pageIds = isTestEnabled ? iframePageIds : HdfsLoader.getInstance()
@@ -86,18 +88,32 @@ public class LkpManager {
       log.warn("Empty content for lookup table of iframe page ids");
     }
 
+    if (lkpEnum == LkpEnum.iframePageIds) {
+      lkpListener.notifyLkpChange(this);
+
+    }
+
   }
 
   public void loadSelectedIps() {
+    selectedIps = new ConcurrentHashMap<String, Boolean>();
     parseTextFile(Property.SELECTED_IPS, selectedIps);
+    if (lkpEnum == LkpEnum.selectedIps) {
+      lkpListener.notifyLkpChange(this);
+
+    }
   }
 
   public void loadSelectedAgents() {
+    selectedAgents = new CopyOnWriteArraySet<String>();
     parseTextFile(Property.SELECTED_AGENTS, selectedAgents);
+    if (lkpEnum == LkpEnum.selectedAgents) {
+      lkpListener.notifyLkpChange(this);
+
+    }
   }
 
   private void parseTextFile(String filePathProperty, Set<String> sets) {
-    sets.clear();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String file = UBIConfig.getString(filePathProperty);
     String fileContent = isTestEnabled ? file : HdfsLoader.getInstance()
@@ -118,7 +134,6 @@ public class LkpManager {
   }
 
   private void parseTextFile(String filePathProperty, Map<String, Boolean> maps) {
-    maps.clear();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String file = UBIConfig.getString(filePathProperty);
     String fileContent = isTestEnabled ? file : HdfsLoader.getInstance()
@@ -139,11 +154,11 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of sets: " + filePathProperty);
     }
-    System.out.println("map size:"+maps.size());
+    System.out.println("map size:" + maps.size());
   }
 
   public void loadLargeSessionGuid() {
-    largeSessionGuidSet.clear();
+    largeSessionGuidSet = new CopyOnWriteArraySet<String>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String largeSessionGuidValue = UBIConfig.getString(Property.LARGE_SESSION_GUID);
     String largeSessionGuids =
@@ -159,11 +174,14 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of large session guid");
     }
+    if (lkpEnum == LkpEnum.largeSessionGuid) {
+      lkpListener.notifyLkpChange(this);
 
+    }
   }
 
   public void loadIabAgent() {
-    iabAgentRegs.clear();
+    iabAgentRegs = new CopyOnWriteArrayList<>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String iabAgentReg = UBIConfig.getString(Property.IAB_AGENT);
     String iabAgentRegValue =
@@ -176,11 +194,15 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of iab agent info");
     }
+    if (lkpEnum == LkpEnum.iabAgentRex) {
+      lkpListener.notifyLkpChange(this);
+
+    }
 
   }
 
   public void loadFindingFlag() {
-    findingFlagMap.clear();
+    findingFlagMap = new ConcurrentHashMap<>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String findingFlag = UBIConfig.getString(Property.FINDING_FLAGS);
     String findingFlags = isTestEnabled ? findingFlag : HdfsLoader.getInstance()
@@ -202,6 +224,10 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of finding flag");
     }
+    if (lkpEnum == LkpEnum.findingFlag) {
+      lkpListener.notifyLkpChange(this);
+
+    }
 
   }
 
@@ -210,7 +236,7 @@ public class LkpManager {
   }
 
   public void loadVtNewIds() {
-    vtNewIdsMap.clear();
+    vtNewIdsMap = new ConcurrentHashMap<Integer, Integer[]>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String vtNewIds = UBIConfig.getString(Property.VTNEW_IDS);
     String vtNewIdsValue = isTestEnabled ? vtNewIds : HdfsLoader.getInstance()
@@ -227,11 +253,15 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of vtNewIds");
     }
+    if (lkpEnum == LkpEnum.vtNewIdSource) {
+      lkpListener.notifyLkpChange(this);
+
+    }
 
   }
 
   public void loadAppIds() {
-    appIdWithBotFlags.clear();
+    appIdWithBotFlags = new CopyOnWriteArraySet();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String appIds = UBIConfig.getString(Property.APP_ID);
     String appIdAndFlags = isTestEnabled ? appIds : HdfsLoader.getInstance()
@@ -246,11 +276,14 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of app Ids");
     }
+    if (lkpEnum == LkpEnum.appid) {
+      lkpListener.notifyLkpChange(this);
 
+    }
   }
 
   public void loadPageFmlys() {
-    pageFmlyMap.clear();
+    pageFmlyMap = new ConcurrentHashMap<Integer, String[]>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String pageFmlys = UBIConfig.getString(Property.PAGE_FMLY);
     String pageFmlysValue = isTestEnabled ? pageFmlys : HdfsLoader.getInstance()
@@ -269,7 +302,10 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of page fmlys");
     }
+    if (lkpEnum == LkpEnum.pageFmly) {
+      lkpListener.notifyLkpChange(this);
 
+    }
   }
 
   public void loadLocally() throws Exception {
@@ -289,7 +325,7 @@ public class LkpManager {
   }
 
   public void loadMpxRotetion() {
-    mpxMap.clear();
+    mpxMap = new ConcurrentHashMap<String, String>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String mpxRotation = UBIConfig.getString(Property.MPX_ROTATION);
     String mpxRotations = isTestEnabled ? mpxRotation : HdfsLoader.getInstance()
@@ -311,6 +347,11 @@ public class LkpManager {
       }
     } else {
       log.warn("Empty content for lookup table of mpx rotation.");
+    }
+
+    if (lkpEnum == LkpEnum.mpx) {
+      lkpListener.notifyLkpChange(this);
+
     }
   }
 

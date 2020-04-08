@@ -1,7 +1,19 @@
 package com.ebay.sojourner.ubd.common.sql;
 
-import static com.ebay.sojourner.ubd.common.sql.Rules.*;
-import static com.ebay.sojourner.ubd.common.sql.TestUtils.*;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_10_COMPILER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_11_COMPILER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_12_COMPILER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_13_COMPILER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_1_COMPILER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_2_COMPILER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_3_COMPILER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_4_COMPILER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_56_COMPILER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_5_COMPILER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_6_COMPILER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_7_COMPILER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.RULE_1_COMPILER;
+import static com.ebay.sojourner.ubd.common.sql.TestUtils.UDF_1_COMPILER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -13,10 +25,10 @@ public class SqlCompilerEventRuleTest {
   @Test
   public void testRegex() {
     try {
-//      SqlEventRule rule = RULE_1_COMPILER;
-//      assertEquals(1, rule.getBotFlag(new UbiEventBuilder().agentInfo("googlebot").build()));
-//      assertEquals(1, rule.getBotFlag(new UbiEventBuilder().agentInfo("crawler").build()));
-//      assertEquals(0, rule.getBotFlag(new UbiEventBuilder().agentInfo("chrome").build()));
+      SqlEventRule rule = RULE_1_COMPILER;
+      assertEquals(1, rule.getBotFlag(new UbiEventBuilder().agentInfo("googlebot").build()));
+      assertEquals(1, rule.getBotFlag(new UbiEventBuilder().agentInfo("crawler").build()));
+      assertEquals(0, rule.getBotFlag(new UbiEventBuilder().agentInfo("chrome").build()));
     } catch (Exception e) {
       fail();
     }

@@ -5,6 +5,7 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.util.MobileEventsIdentifier;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
 import com.ebay.sojourner.ubd.common.util.Constants;
+import com.ebay.sojourner.ubd.common.util.LkpEnum;
 import com.ebay.sojourner.ubd.common.util.LkpManager;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
@@ -14,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
-public class CobrandParser implements FieldParser<RawEvent, UbiEvent> {
+public class CobrandParser implements FieldParser<RawEvent, UbiEvent>, LkpListener {
 
   public static final String PARTNER = "pn";
   private PageIndicator halfPageIndicator;
@@ -30,7 +31,9 @@ public class CobrandParser implements FieldParser<RawEvent, UbiEvent> {
   private String shoppingPartner;
   private String artisanPartner;
   private MobileEventsIdentifier mobileIdentifier;
-
+  private Map<Integer, String[]> pageFmlyNameMap;
+  private LkpManager lkpManager;
+  private boolean isContinue ;
   @Override
   public void init() throws Exception {
     setHalfPageIndicator(new PageIndicator(UBIConfig.getString(Property.HALF_PAGES)));
@@ -57,11 +60,16 @@ public class CobrandParser implements FieldParser<RawEvent, UbiEvent> {
         throw new RuntimeException();
       }
     }
+    lkpManager = new LkpManager(this, LkpEnum.pageFmly);
+    pageFmlyNameMap = lkpManager.getPageFmlyMaps();
+    isContinue=true;
   }
 
   @Override
   public void parse(RawEvent rawEvent, UbiEvent ubiEvent) throws Exception {
-    Map<Integer, String[]> pageFmlyNameMap = LkpManager.getInstance().getPageFmlyMaps();
+    while(!isContinue){
+      Thread.sleep(10);
+    }
     Integer pageId = ubiEvent.getPageId();
     ubiEvent.setCobrand(Constants.DEFAULT_CORE_SITE_COBRAND);
 
@@ -181,5 +189,21 @@ public class CobrandParser implements FieldParser<RawEvent, UbiEvent> {
 
   void setMobileEventIdentifier(MobileEventsIdentifier identifier) {
     this.mobileIdentifier = identifier;
+  }
+
+
+  @Override
+  public boolean notifyLkpChange(LkpManager lkpManager) {
+    try {
+
+      this.isContinue=false;
+      pageFmlyNameMap = lkpManager.getPageFmlyMaps();
+      return true;
+    } catch (Throwable e) {
+      return false;
+    }
+    finally {
+      this.isContinue=true;
+    }
   }
 }

@@ -8,5 +8,5 @@ import com.ebay.sojourner.ubd.common.model.UbiSession;
 public interface BotFilter {
 
   // return true means the session should be filtered
-  boolean filter(UbiSession ubiSession, Integer targetFlag);
+  boolean filter(UbiSession ubiSession, Integer targetFlag) throws InterruptedException;
 }

@@ -2,24 +2,26 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpListener;
+import com.ebay.sojourner.ubd.common.util.LkpEnum;
 import com.ebay.sojourner.ubd.common.util.LkpManager;
 import java.util.Map;
 
-public class LogdnCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+public class LogdnCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, LkpListener {
 
   private static final String SIGN_IN = "SIGNIN";
   private Map<Integer, String[]> pageFmlyNameMap;
-  private LkpManager lkpFetcher;
-
+  private volatile LkpManager lkpManager;
+  private boolean isContinue;
   public static void main(String[] args) {
-    Map<Integer, String[]> pageFmlyNameMap2;
-    LkpManager lkpFetcher2;
-    lkpFetcher2 = LkpManager.getInstance();
-    lkpFetcher2.loadPageFmlys();
-    pageFmlyNameMap2 = lkpFetcher2.getPageFmlyMaps();
-    if (pageFmlyNameMap2.containsKey(992)) {
-      System.out.println(pageFmlyNameMap2.get(992)[1]);
-    }
+  //    Map<Integer, String[]> pageFmlyNameMap2;
+  //    LkpManager lkpFetcher2;
+  //    lkpFetcher2 = LkpManager.getInstance();
+  //    lkpFetcher2.loadPageFmlys();
+  //    pageFmlyNameMap2 = lkpFetcher2.getPageFmlyMaps();
+  //    if (pageFmlyNameMap2.containsKey(992)) {
+  //      System.out.println(pageFmlyNameMap2.get(992)[1]);
+  //    }
 
   }
 
@@ -30,6 +32,9 @@ public class LogdnCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
+    while(!isContinue){
+      Thread.sleep(10);
+    }
     Integer pageId = event.getPageId();
 
     if (!event.isRdt()
@@ -53,8 +58,22 @@ public class LogdnCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
 
   @Override
   public void init() throws Exception {
-    lkpFetcher = LkpManager.getInstance();
-    lkpFetcher.loadPageFmlys();
-    pageFmlyNameMap = lkpFetcher.getPageFmlyMaps();
+    lkpManager = new LkpManager(this, LkpEnum.pageFmly);
+    pageFmlyNameMap = lkpManager.getPageFmlyMaps();
+    isContinue=true;
+  }
+
+  @Override
+  public boolean notifyLkpChange(LkpManager lkpManager) {
+    try {
+      this.isContinue=false;
+      pageFmlyNameMap = lkpManager.getPageFmlyMaps();
+      return true;
+    } catch (Throwable e) {
+      return false;
+    }
+    finally {
+      this.isContinue=true;
+    }
   }
 }
