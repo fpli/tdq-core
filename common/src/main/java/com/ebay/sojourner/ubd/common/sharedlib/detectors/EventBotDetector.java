@@ -16,8 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 public class EventBotDetector implements BotDetector<UbiEvent> {
 
   private static volatile EventBotDetector eventBotDetector;
-  private CopyOnWriteArraySet<Rule> botRules = new CopyOnWriteArraySet<Rule>();
-  private CopyOnWriteArrayList<Long> dynamicRuleIdList = new CopyOnWriteArrayList<>();
+  private Set<Rule> botRules = new CopyOnWriteArraySet<Rule>();
+  private List<Long> dynamicRuleIdList = new CopyOnWriteArrayList<>();
 
   private EventBotDetector() {
     initBotRules();

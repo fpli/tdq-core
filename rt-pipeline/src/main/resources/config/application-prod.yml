@@ -33,7 +33,7 @@ kafka:
   groupIdForSLC: sojourner-pathfinder-slc
   groupIdForRNO: sojourner-pathfinder-rno
   groupIdForQA: sojourner-pathfinder-qa
-  topicForProducer: behavior.trafficjam.bot
+  topicForProducer: behavior.trafficjam.session
   topic: behavior.pathfinder.events.total
 
 rheos:
