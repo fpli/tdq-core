@@ -3,7 +3,9 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import java.util.concurrent.CopyOnWriteArrayList;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class EventListenerContainer {
 
   private static volatile EventListenerContainer eventListenerContainer;
@@ -12,6 +14,12 @@ public class EventListenerContainer {
 
   private EventListenerContainer() {
     this.init();
+    try {
+      this.initListener();
+    } catch (Exception e) {
+      log.error("eventListener init error", e.getMessage());
+    }
+
   }
 
   public static EventListenerContainer getInstance() {
@@ -52,7 +60,41 @@ public class EventListenerContainer {
     addListener(new AgentStringMetrics());
     addListener(new PageIdMetrics());
     addListener(new FirstMappedUserIdMetrics());
+  }
 
+  private void initListener() throws Exception {
+    for (EventListener eventListener : eventListenerList) {
+      if (eventListener instanceof AgentIPMetrics) {
+        ((AgentIPMetrics) eventListener).init();
+      }
+      if (eventListener instanceof SessionStartDtMetrics) {
+        ((SessionStartDtMetrics) eventListener).init();
+      }
+      if (eventListener instanceof AppIdMetrics) {
+        ((AppIdMetrics) eventListener).init();
+      }
+      if (eventListener instanceof SiteIdMetrics) {
+        ((SiteIdMetrics) eventListener).init();
+      }
+      if (eventListener instanceof UserIdMetrics) {
+        ((UserIdMetrics) eventListener).init();
+      }
+      if (eventListener instanceof ReferrerMetrics) {
+        ((ReferrerMetrics) eventListener).init();
+      }
+      if (eventListener instanceof CguidMetrics) {
+        ((CguidMetrics) eventListener).init();
+      }
+      if (eventListener instanceof AgentStringMetrics) {
+        ((AgentStringMetrics) eventListener).init();
+      }
+      if (eventListener instanceof PageIdMetrics) {
+        ((PageIdMetrics) eventListener).init();
+      }
+      if (eventListener instanceof FirstMappedUserIdMetrics) {
+        ((FirstMappedUserIdMetrics) eventListener).init();
+      }
+    }
   }
 
 }

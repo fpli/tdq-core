@@ -45,7 +45,7 @@ public class LkpManager {
     lkpFetcher.startDailyRefresh();
     this.lkpEnum = lkpEnum;
     hdfsLoader= new HdfsLoader();
-    loadResources();
+    loadResources(true);
   }
 
   //  public static LkpManager getInstance() {
@@ -59,20 +59,20 @@ public class LkpManager {
   //    return lkpManager;
   //  }
 
-  private void loadResources() {
-    loadIframePageIds();
-    loadSelectedIps();
-    loadSelectedAgents();
-    loadLargeSessionGuid();
-    loadIabAgent();
-    loadFindingFlag();
-    loadVtNewIds();
-    loadAppIds();
-    loadPageFmlys();
-    loadMpxRotetion();
+  private void loadResources(boolean isInit) {
+    loadIframePageIds(isInit);
+    loadSelectedIps(isInit);
+    loadSelectedAgents(isInit);
+    loadLargeSessionGuid(isInit);
+    loadIabAgent(isInit);
+    loadFindingFlag(isInit);
+    loadVtNewIds(isInit);
+    loadAppIds(isInit);
+    loadPageFmlys(isInit);
+    loadMpxRotetion(isInit);
   }
 
-  public void loadIframePageIds() {
+  public void loadIframePageIds(boolean isInit) {
     pageIdSet = new CopyOnWriteArraySet<>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String iframePageIds = UBIConfig.getString(Property.IFRAME_PAGE_IDS);
@@ -90,29 +90,34 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of iframe page ids");
     }
+    if(!isInit) {
+      if (lkpEnum == LkpEnum.iframePageIds) {
+        lkpListener.notifyLkpChange(this);
 
-    if (lkpEnum == LkpEnum.iframePageIds) {
-      lkpListener.notifyLkpChange(this);
-
+      }
     }
 
   }
 
-  public void loadSelectedIps() {
+  public void loadSelectedIps(boolean isInit) {
     selectedIps = new ConcurrentHashMap<String, Boolean>();
     parseTextFile(Property.SELECTED_IPS, selectedIps);
-    if (lkpEnum == LkpEnum.selectedIps) {
-      lkpListener.notifyLkpChange(this);
+    if(!isInit) {
+      if (lkpEnum == LkpEnum.selectedIps) {
+        lkpListener.notifyLkpChange(this);
 
+      }
     }
   }
 
-  public void loadSelectedAgents() {
+  public void loadSelectedAgents(boolean isInit) {
     selectedAgents = new CopyOnWriteArraySet<String>();
     parseTextFile(Property.SELECTED_AGENTS, selectedAgents);
-    if (lkpEnum == LkpEnum.selectedAgents) {
-      lkpListener.notifyLkpChange(this);
+    if(!isInit) {
+      if (lkpEnum == LkpEnum.selectedAgents) {
+        lkpListener.notifyLkpChange(this);
 
+      }
     }
   }
 
@@ -160,7 +165,7 @@ public class LkpManager {
     System.out.println("map size:" + maps.size());
   }
 
-  public void loadLargeSessionGuid() {
+  public void loadLargeSessionGuid(boolean isInit) {
     largeSessionGuidSet = new CopyOnWriteArraySet<String>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String largeSessionGuidValue = UBIConfig.getString(Property.LARGE_SESSION_GUID);
@@ -177,13 +182,15 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of large session guid");
     }
-    if (lkpEnum == LkpEnum.largeSessionGuid) {
-      lkpListener.notifyLkpChange(this);
+    if(!isInit) {
+      if (lkpEnum == LkpEnum.largeSessionGuid) {
+        lkpListener.notifyLkpChange(this);
 
+      }
     }
   }
 
-  public void loadIabAgent() {
+  public void loadIabAgent(boolean isInit) {
     iabAgentRegs = new CopyOnWriteArrayList<>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String iabAgentReg = UBIConfig.getString(Property.IAB_AGENT);
@@ -197,14 +204,16 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of iab agent info");
     }
-    if (lkpEnum == LkpEnum.iabAgentRex) {
-      lkpListener.notifyLkpChange(this);
+    if(!isInit) {
+      if (lkpEnum == LkpEnum.iabAgentRex) {
+        lkpListener.notifyLkpChange(this);
 
+      }
     }
 
   }
 
-  public void loadFindingFlag() {
+  public void loadFindingFlag(boolean isInit) {
     findingFlagMap = new ConcurrentHashMap<>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String findingFlag = UBIConfig.getString(Property.FINDING_FLAGS);
@@ -227,9 +236,11 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of finding flag");
     }
-    if (lkpEnum == LkpEnum.findingFlag) {
-      lkpListener.notifyLkpChange(this);
+    if(!isInit) {
+      if (lkpEnum == LkpEnum.findingFlag) {
+        lkpListener.notifyLkpChange(this);
 
+      }
     }
 
   }
@@ -238,7 +249,7 @@ public class LkpManager {
 
   }
 
-  public void loadVtNewIds() {
+  public void loadVtNewIds(boolean isInit) {
     vtNewIdsMap = new ConcurrentHashMap<Integer, Integer[]>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String vtNewIds = UBIConfig.getString(Property.VTNEW_IDS);
@@ -256,14 +267,16 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of vtNewIds");
     }
-    if (lkpEnum == LkpEnum.vtNewIdSource) {
-      lkpListener.notifyLkpChange(this);
+    if(!isInit) {
+      if (lkpEnum == LkpEnum.vtNewIdSource) {
+        lkpListener.notifyLkpChange(this);
 
+      }
     }
 
   }
 
-  public void loadAppIds() {
+  public void loadAppIds(boolean isInit) {
     appIdWithBotFlags = new CopyOnWriteArraySet();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String appIds = UBIConfig.getString(Property.APP_ID);
@@ -279,13 +292,15 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of app Ids");
     }
-    if (lkpEnum == LkpEnum.appid) {
-      lkpListener.notifyLkpChange(this);
+    if(!isInit) {
+      if (lkpEnum == LkpEnum.appid) {
+        lkpListener.notifyLkpChange(this);
 
+      }
     }
   }
 
-  public void loadPageFmlys() {
+  public void loadPageFmlys(boolean isInit) {
     pageFmlyMap = new ConcurrentHashMap<Integer, String[]>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String pageFmlys = UBIConfig.getString(Property.PAGE_FMLY);
@@ -305,9 +320,11 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of page fmlys");
     }
-    if (lkpEnum == LkpEnum.pageFmly) {
-      lkpListener.notifyLkpChange(this);
+    if(!isInit) {
+      if (lkpEnum == LkpEnum.pageFmly) {
+        lkpListener.notifyLkpChange(this);
 
+      }
     }
   }
 
@@ -327,7 +344,7 @@ public class LkpManager {
     result.put(Property.SELECTED_AGENTS, FileLoader.loadContent(null, Resources.SELECTED_AGENTS));
   }
 
-  public void loadMpxRotetion() {
+  public void loadMpxRotetion(boolean isInit) {
     mpxMap = new ConcurrentHashMap<String, String>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String mpxRotation = UBIConfig.getString(Property.MPX_ROTATION);
@@ -351,10 +368,10 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of mpx rotation.");
     }
-
-    if (lkpEnum == LkpEnum.mpx) {
-      lkpListener.notifyLkpChange(this);
-
+    if(!isInit) {
+      if (lkpEnum == LkpEnum.mpx) {
+        lkpListener.notifyLkpChange(this);
+      }
     }
   }
 

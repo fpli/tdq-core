@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LkpFetcher extends TimerTask {
 
   private static final long ONE_DAY_MILLIS = 24 * 60 * 60 * 1000;
-  private static final int UPDATE_COUNTS = 10;
+  private static final int UPDATE_COUNTS = 9;
   private static Calendar calendar;
   private Timer timer;
   private LkpManager lkpManager;
@@ -37,7 +37,7 @@ public class LkpFetcher extends TimerTask {
     calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
         calendar.get(Calendar.DATE), 5, 0, 0);
     Date date = calendar.getTime();
-    timer.scheduleAtFixedRate(this, date, ONE_DAY_MILLIS);
+  //    timer.scheduleAtFixedRate(this, date, ONE_DAY_MILLIS);
   }
 
 
@@ -48,47 +48,48 @@ public class LkpFetcher extends TimerTask {
     while (currentRoundCount < UPDATE_COUNTS) {
       if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.IFRAME_PAGE_IDS), lkpfileDate)) {
-        lkpManager.loadIframePageIds();
+        lkpManager.loadIframePageIds(false);
         currentRoundCount++;
+        System.out.println("IFRAME_PAGE_IDS:"+currentRoundCount);
       }
       if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.FINDING_FLAGS), lkpfileDate)) {
-        lkpManager.loadFindingFlag();
+        lkpManager.loadFindingFlag(false);
         currentRoundCount++;
       }
       if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.VTNEW_IDS), lkpfileDate)) {
-        lkpManager.loadVtNewIds();
+        lkpManager.loadVtNewIds(false);
         currentRoundCount++;
       }
       if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.IAB_AGENT), lkpfileDate)) {
-        lkpManager.getIabAgentRegs();
+        lkpManager.loadIabAgent(false);
         currentRoundCount++;
       }
       if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.APP_ID), lkpfileDate)) {
-        lkpManager.loadAppIds();
+        lkpManager.loadAppIds(false);
         currentRoundCount++;
       }
       if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.LARGE_SESSION_GUID), lkpfileDate)) {
-        lkpManager.loadLargeSessionGuid();
+        lkpManager.loadLargeSessionGuid(false);
         currentRoundCount++;
       }
       if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.PAGE_FMLY), lkpfileDate)) {
-        lkpManager.loadPageFmlys();
+        lkpManager.loadPageFmlys(false);
         currentRoundCount++;
       }
       if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.MPX_ROTATION), lkpfileDate)) {
-        lkpManager.loadMpxRotetion();
+        lkpManager.loadMpxRotetion(false);
         currentRoundCount++;
       }
       if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.SELECTED_IPS), lkpfileDate)) {
-        lkpManager.loadSelectedIps();
+        lkpManager.loadSelectedIps(false);
         currentRoundCount++;
       }
 

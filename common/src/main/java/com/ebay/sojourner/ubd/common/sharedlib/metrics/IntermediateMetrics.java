@@ -2,7 +2,6 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpListener;
 import com.ebay.sojourner.ubd.common.sharedlib.util.IsValidIPv4;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJCollapseWhiteSpace;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJGetUrlDomain;
@@ -27,7 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 
 // FIXME: refactor this class
 @Data
-public class IntermediateMetrics implements Serializable, LkpListener {
+public class IntermediateMetrics implements Serializable {
 
   private static final String CHANNEL = "chnl";
   private static final String EUID = "euid";
@@ -54,7 +53,6 @@ public class IntermediateMetrics implements Serializable, LkpListener {
   private StringBuilder stingBuilder = new StringBuilder();
   private Collection<String> tags = null;
 
-  private boolean isContinue = true;
   private volatile LkpManager lkpManager;
   private String actualKeyword;
   private String boughtKeyword;
@@ -114,7 +112,8 @@ public class IntermediateMetrics implements Serializable, LkpListener {
   private Integer trackingPartner;
   private String url2Parse;
 
-  public IntermediateMetrics(LkpManager lkpManager) {
+  public IntermediateMetrics(Map<String, String> mpxMap) {
+    this.mpxMap = mpxMap;
     roverPageSet =
         PropertyUtils.getIntegerSet(
             UBIConfig.getString(Property.ROVER_PAGES), Property.PROPERTY_DELIMITER);
@@ -177,7 +176,7 @@ public class IntermediateMetrics implements Serializable, LkpListener {
         .append("5282/53468|")
         .append("){1}/.*");
     imgMpxChnlSet6 = stingBuilder.toString();
-    this.lkpManager = lkpManager;
+
   }
 
   public void end(SessionAccumulator sessionAccumulator) {
@@ -579,9 +578,9 @@ public class IntermediateMetrics implements Serializable, LkpListener {
   }
 
   public void initLkp() {
-    if (mpxMap == null || mpxMap.size() < 1) {
-      mpxMap = lkpManager.getMpxMap();
-    }
+    //    if (mpxMap == null || mpxMap.size() < 1) {
+    //      mpxMap = lkpManager.getMpxMap();
+    //    }
   }
 
   public void initMetrics() {
@@ -948,9 +947,6 @@ public class IntermediateMetrics implements Serializable, LkpListener {
 
   // page 3084 only
   public void setFirstRoverClickMpxChannelId(UbiEvent event) throws InterruptedException {
-    while (!isContinue) {
-      Thread.sleep(10);
-    }
     Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
     String mpxChannelId = null;
     String[] channelIds = null;
@@ -1173,9 +1169,6 @@ public class IntermediateMetrics implements Serializable, LkpListener {
 
   public void setFirstScEventImgMpxChannelId(UbiEvent event) throws InterruptedException {
 
-    while (!isContinue) {
-      Thread.sleep(10);
-    }
     String imgMpxChannelId = "";
     String referrer = getReferrer();
 
@@ -1469,16 +1462,8 @@ public class IntermediateMetrics implements Serializable, LkpListener {
     // null
   }
 
-  @Override
-  public boolean notifyLkpChange(LkpManager lkpManager) {
-    try {
-      this.isContinue = false;
-      mpxMap = lkpManager.getMpxMap();
-      return true;
-    } catch (Throwable e) {
-      return false;
-    } finally {
-      this.isContinue = true;
-    }
+  public void setMpx(Map<String, String> mpxMap) {
+    this.mpxMap = mpxMap;
   }
+
 }

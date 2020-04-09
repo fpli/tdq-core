@@ -43,6 +43,7 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     } else if (event.getEventTimestamp() != null
         && sessionAccumulator.getUbiSession().getAbsStartTimestamp() > event.getEventTimestamp()) {
       sessionAccumulator.getUbiSession().setAbsStartTimestamp(event.getEventTimestamp());
+      System.out.println("event:"+event.getPageId()+" eventtime:"+event.getEventTimestamp());
       eventListenerContainer.onEarlyEventChange(event,sessionAccumulator.getUbiSession());
     }
     if (sessionAccumulator.getUbiSession().getAbsEndTimestamp() == null) {

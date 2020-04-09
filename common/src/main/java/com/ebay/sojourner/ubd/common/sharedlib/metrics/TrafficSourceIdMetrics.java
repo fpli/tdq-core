@@ -10,6 +10,7 @@ import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
@@ -93,6 +94,8 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
     regString4Id23 = stingBuilder.toString();
   }
 
+  private boolean isfirst = true;
+  private volatile Map<String, String> mapxMap;
   private volatile LkpManager lkpManager;
   private volatile IntermediateMetrics intermediateMetrics;
   private boolean isContinue;
@@ -571,13 +574,14 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
     socialAgentId23 = PropertyUtils.getIntegerSet(
         UBIConfig.getString(Property.SOCIAL_AGENT_ID23), Property.PROPERTY_DELIMITER);
     lkpManager = new LkpManager(this, LkpEnum.mpx);
+    mapxMap=lkpManager.getMpxMap();
   }
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
-    intermediateMetrics = new IntermediateMetrics(lkpManager);
-    //    intermediateMetrics.initMetrics();
-    sessionAccumulator.getUbiSession().setIntermediateMetrics(intermediateMetrics);
+      intermediateMetrics = new IntermediateMetrics(mapxMap);
+      sessionAccumulator.getUbiSession().setIntermediateMetrics(intermediateMetrics);
+
   }
 
   @Override
@@ -585,7 +589,8 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
     try {
 
       this.isContinue = false;
-      intermediateMetrics.notifyLkpChange(lkpManager);
+      mapxMap=lkpManager.getMpxMap();
+      intermediateMetrics.setMpx(mapxMap);
       return true;
     } catch (Throwable e) {
       return false;
