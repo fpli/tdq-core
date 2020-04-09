@@ -1,8 +1,10 @@
 package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.rule.BotRule1;
 import com.ebay.sojourner.ubd.common.rule.Rule;
 import com.ebay.sojourner.ubd.common.sql.RuleManager;
+import com.ebay.sojourner.ubd.common.sql.Rules;
 import com.ebay.sojourner.ubd.common.sql.SqlEventRule;
 import java.io.IOException;
 import java.util.LinkedHashSet;
@@ -52,6 +54,19 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
   // static rules
   @Override
   public void initBotRules() {
+    botRules.add(new BotRule1());
+    botRules.add(Rules.ICF_RULE_1_COMPILER);
+    botRules.add(Rules.ICF_RULE_2_COMPILER);
+    botRules.add(Rules.ICF_RULE_3_COMPILER);
+    botRules.add(Rules.ICF_RULE_4_COMPILER);
+    botRules.add(Rules.ICF_RULE_5_COMPILER);
+    botRules.add(Rules.ICF_RULE_6_COMPILER);
+    botRules.add(Rules.ICF_RULE_7_COMPILER);
+    botRules.add(Rules.ICF_RULE_10_COMPILER);
+    botRules.add(Rules.ICF_RULE_11_COMPILER);
+    botRules.add(Rules.ICF_RULE_12_COMPILER);
+    botRules.add(Rules.ICF_RULE_13_COMPILER);
+    botRules.add(Rules.ICF_RULE_56_COMPILER);
   }
 
   //TODO:dynamic rules

@@ -6,8 +6,8 @@ import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForQA;
+import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventToSojEventMapFunction;
@@ -31,6 +31,7 @@ import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelp
 import org.apache.flink.util.OutputTag;
 
 public class SojournerRTLoadJobForQA {
+
   public static void main(String[] args) throws Exception {
 
     // Make sure this is being executed at start up.
@@ -72,7 +73,8 @@ public class SojournerRTLoadJobForQA {
     // 1.2 Assign timestamps and emit watermarks.
     DataStream<RawEvent> rawEventDataStream =
         executionEnvironment
-            .addSource(KafkaSourceFunctionForQA.generateWatermark())
+            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
+                Constants.BOOTSTRAP_SERVERS_QA, Constants.GROUP_ID_QA))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 30
@@ -132,17 +134,8 @@ public class SojournerRTLoadJobForQA {
         .name("UbiEvent to SojEvent")
         .uid("eventTransform");
 
-    sojEventWithSessionId.addSink(KafkaConnectorFactory
-        .createKafkaProducer(Constants.TOPIC_PRODUCER, Constants.BOOTSTRAP_PRODUCER_BROKERS,
-            SojEvent.class, Constants.MESSAGE_KEY))
-        .setParallelism(1)
-        .name("SojEvent Kafka")
-        .uid("kafkaSink");
-
-
     // This path is for local test. For production, we should use
     // "hdfs://apollo-rno//user/o_ubi/events/"
-    /*
     sojSessionStream
         .addSink(HdfsSinkUtil.sojSessionSinkWithParquet())
         .name("SojSession sink")
@@ -154,9 +147,8 @@ public class SojournerRTLoadJobForQA {
         .name("SojEvent sink")
         .uid("eventHdfsSink")
         .disableChaining();
-        */
 
     // Submit this job
-    executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
+    executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForDQPipeline());
   }
 }

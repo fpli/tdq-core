@@ -1,12 +1,13 @@
 package com.ebay.sojourner.ubd.rt.util;
 
-import java.util.List;
 import lombok.Data;
 
 @Data
 public class HdfsConfig {
 
-  private String sinkPath;
-  private String lkpPath;
-  private List<String> lkpFileName;
+  private String sinkParentPath;
+  private String sinkEventPath;
+  private String sinkSessionPath;
+  private String sinkSignaturePath;
+  private String sinkLateEventPath;
 }
