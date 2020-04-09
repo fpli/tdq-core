@@ -17,7 +17,7 @@ import org.apache.hadoop.fs.PathFilter;
 @Slf4j
 public class HdfsLoader {
 
-  private  volatile FileSystem fileSystem = null;
+  private volatile FileSystem fileSystem = null;
   //  private static volatile HdfsLoader hdfsLoader = null;
 
   public HdfsLoader() {

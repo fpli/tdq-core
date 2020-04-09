@@ -39,12 +39,13 @@ public class LkpManager {
   public volatile HdfsLoader hdfsLoader;
 
   public LkpManager(LkpListener lkpListener, LkpEnum lkpEnum) {
-    loadResources();
+
     this.lkpListener = lkpListener;
     lkpFetcher = new LkpFetcher(this);
     lkpFetcher.startDailyRefresh();
     this.lkpEnum = lkpEnum;
     hdfsLoader= new HdfsLoader();
+    loadResources();
   }
 
   //  public static LkpManager getInstance() {
