@@ -13,7 +13,6 @@ import com.ebay.sojourner.ubd.common.sharedlib.util.SOJListLastElement;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNameValueParser;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJReplaceChar;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJURLDecodeEscape;
-import com.ebay.sojourner.ubd.common.util.LkpEnum;
 import com.ebay.sojourner.ubd.common.util.LkpManager;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
@@ -21,12 +20,13 @@ import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
 // FIXME: refactor this class
+@Data
 public class IntermediateMetrics implements Serializable, LkpListener {
 
   private static final String CHANNEL = "chnl";
@@ -55,7 +55,7 @@ public class IntermediateMetrics implements Serializable, LkpListener {
   private Collection<String> tags = null;
 
   private boolean isContinue = true;
-  private volatile LkpManager lkpManager = new LkpManager(this, LkpEnum.mpx);
+  private volatile LkpManager lkpManager;
   private String actualKeyword;
   private String boughtKeyword;
   private Integer channel;
@@ -114,7 +114,7 @@ public class IntermediateMetrics implements Serializable, LkpListener {
   private Integer trackingPartner;
   private String url2Parse;
 
-  public IntermediateMetrics() {
+  public IntermediateMetrics(LkpManager lkpManager) {
     roverPageSet =
         PropertyUtils.getIntegerSet(
             UBIConfig.getString(Property.ROVER_PAGES), Property.PROPERTY_DELIMITER);
@@ -177,92 +177,7 @@ public class IntermediateMetrics implements Serializable, LkpListener {
         .append("5282/53468|")
         .append("){1}/.*");
     imgMpxChnlSet6 = stingBuilder.toString();
-  }
-
-  public Set<Integer> getNotifyViewPageSet() {
-    return notifyViewPageSet;
-  }
-
-  public void setNotifyViewPageSet(HashSet<Integer> notifyViewPageSet) {
-    notifyViewPageSet = notifyViewPageSet;
-  }
-
-  public Set<Integer> getAgentPageSet() {
-    return agentExcludePageSet;
-  }
-
-  public void setAgentPageSet(HashSet<Integer> agentPageSet) {
-    agentExcludePageSet = agentPageSet;
-  }
-
-  // page 2616
-
-  public String getImgMpxChnlSet1() {
-    return imgMpxChnlSet1;
-  }
-
-  public void setImgMpxChnlSet1(String imgMpxChnlSet1) {
-    imgMpxChnlSet1 = imgMpxChnlSet1;
-  }
-
-  public String getImgMpxChnlSet6() {
-    return imgMpxChnlSet6;
-  }
-
-  public void setImgMpxChnlSet6(String imgMpxChnlSet6) {
-    imgMpxChnlSet6 = imgMpxChnlSet6;
-  }
-
-  public Set<Integer> getMobilePageSet() {
-    return mobilePageSet;
-  }
-
-  public void setMobilePageSet(Set<Integer> mobilePageSet) {
-    mobilePageSet = mobilePageSet;
-  }
-
-  public Map<String, String> getMpxMap() {
-    return mpxMap;
-  }
-
-  public void setMpxMap(Map<String, String> mpxMap) {
-    mpxMap = mpxMap;
-  }
-
-  public Set<Integer> getNotifyCLickPageSet() {
-    return notifyCLickPageSet;
-  }
-
-  public void setNotifyCLickPageSet(HashSet<Integer> notifyCLickPageSet) {
-    notifyCLickPageSet = notifyCLickPageSet;
-  }
-
-  public Set<Integer> getRoverPageSet() {
-    return roverPageSet;
-  }
-
-  public void setRoverPageSet(HashSet<Integer> roverPageIds) {
-    roverPageSet = roverPageIds;
-  }
-
-  public Set<Integer> getScPageSet1() {
-    return scPageSet1;
-  }
-
-  public void setScPageSet1(HashSet<Integer> pageIdSet1) {
-    scPageSet1 = pageIdSet1;
-  }
-
-  public Set<Integer> getScPageSet2() {
-    return scPageSet2;
-  }
-
-  public void setScPageSet2(HashSet<Integer> pageIdSet2) {
-    scPageSet2 = pageIdSet2;
-  }
-
-  public void setNotifyViewPagthiseSet(HashSet<Integer> notifyViewPagthiseSet) {
-    notifyViewPageSet = notifyViewPagthiseSet;
+    this.lkpManager = lkpManager;
   }
 
   public void end(SessionAccumulator sessionAccumulator) {
@@ -361,30 +276,6 @@ public class IntermediateMetrics implements Serializable, LkpListener {
     }
   }
 
-  public boolean findRover3084() {
-    return findRover3084;
-  }
-
-  public boolean findRover3085() {
-    return findRover3085;
-  }
-
-  public boolean findRover3962() {
-    return findRover3962;
-  }
-
-  public boolean findRovercClick() {
-    return findRovercClick;
-  }
-
-  public boolean findScEvent() {
-    return findScEvent;
-  }
-
-  public String getActualKeyword() {
-    return actualKeyword;
-  }
-
   public void setActualKeyword(String actualKeyword) {
     if (actualKeyword != null) {
       this.actualKeyword = actualKeyword.toLowerCase();
@@ -468,10 +359,6 @@ public class IntermediateMetrics implements Serializable, LkpListener {
     this.futureAdme = futureAdme;
   }
 
-  public void setFutureAdme(UbiEvent event) {
-    // skip
-  }
-
   public String getImgMpxChannelId() {
     return imgMpxChannelId;
   }
@@ -548,10 +435,6 @@ public class IntermediateMetrics implements Serializable, LkpListener {
 
   public void setPrevAdme(String prevAdme) {
     this.prevAdme = prevAdme;
-  }
-
-  public void setPrevAdme(UbiEvent event) {
-    // skip
   }
 
   public String getRefDomain() {
@@ -763,70 +646,6 @@ public class IntermediateMetrics implements Serializable, LkpListener {
     }
   }
 
-  public boolean isFindAgentString() {
-    return findAgentString;
-  }
-
-  public void setFindAgentString(boolean findAgentString) {
-    this.findAgentString = findAgentString;
-  }
-
-  public boolean isFindNotifyClick() {
-    return findNotifyClick;
-  }
-
-  public void setFindNotifyClick(boolean findNotifyClick) {
-    this.findNotifyClick = findNotifyClick;
-  }
-
-  public boolean isFindNotifyView() {
-    return findNotifyView;
-  }
-
-  public void setFindNotifyView(boolean findNotifyView) {
-    this.findNotifyView = findNotifyView;
-  }
-
-  boolean isFindRover3084() {
-    return findRover3084;
-  }
-
-  public void setFindRover3084(boolean b) {
-    this.findRover3084 = b;
-  }
-
-  boolean isFindRover3085() {
-    return findRover3085;
-  }
-
-  public void setFindRover3085(boolean findRover3085) {
-    this.findRover3085 = findRover3085;
-  }
-
-  boolean isFindRover3962() {
-    return findRover3962;
-  }
-
-  public void setFindRover3962(boolean findRover3962) {
-    this.findRover3962 = findRover3962;
-  }
-
-  boolean isFindRovercClick() {
-    return findRovercClick;
-  }
-
-  public void setFindRovercClick(boolean findRovercClick) {
-    this.findRovercClick = findRovercClick;
-  }
-
-  boolean isFindScEvent() {
-    return findScEvent;
-  }
-
-  public void setFindScEvent(boolean findScEvent) {
-    this.findScEvent = findScEvent;
-  }
-
   public boolean isRover3084Click(UbiEvent event) {
     if (event.getPageId() == Integer.MIN_VALUE) {
       return false;
@@ -847,7 +666,6 @@ public class IntermediateMetrics implements Serializable, LkpListener {
     if (event.getPageId() == Integer.MIN_VALUE) {
       return false;
     }
-
     return event.getPageId() == 3962;
   }
 
@@ -857,17 +675,7 @@ public class IntermediateMetrics implements Serializable, LkpListener {
 
   public boolean isScEvent(UbiEvent event) {
     Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
-    // String urlQueryString = event.getUrlQueryString() == null ? "" :
-    // event.getUrlQueryString();
 
-    /*
-     * FRAME_BASED_PAGE_YN_ID=1 same as iframe=1 LKP_PAGE_ID==null same as iframe!=1
-     * url_query_string LIKE '/roverimp%' OR url_query_string LIKE '%SojPageView%' ) THEN
-     * cs_tracking=1
-     */
-    // skip PartialValidPage check since it will not be introduced in this change, use rdt
-    // instead
-    // ZERO.equals(source.getPartialValidPage()) ||
     return !event.isRdt()
         && !event.isIframe()
         // || urlQueryString.matches("(/roverimp|.*SojPageView).*")
