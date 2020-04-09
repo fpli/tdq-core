@@ -6,7 +6,7 @@ import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
-import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
@@ -30,7 +30,7 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
 
-public class SojournerRTLoadJobForQA {
+public class SojournerKafkaSinkJobForQA {
 
   public static void main(String[] args) throws Exception {
 
@@ -134,21 +134,25 @@ public class SojournerRTLoadJobForQA {
         .name("UbiEvent to SojEvent")
         .uid("eventTransform");
 
-    // This path is for local test. For production, we should use
-    // "hdfs://apollo-rno//user/o_ubi/events/"
-    sojSessionStream
-        .addSink(HdfsSinkUtil.sojSessionSinkWithParquet())
-        .name("SojSession sink")
-        .uid("sessionHdfsSink")
-        .disableChaining();
+    // kafka sink for event
+    sojEventWithSessionId.addSink(KafkaConnectorFactory
+        .createKafkaProducer(Constants.TOPIC_PRODUCER_EVENT, Constants.BOOTSTRAP_SERVERS_EVENT,
+            SojEvent.class, Constants.MESSAGE_KEY))
+        .setParallelism(2)
+        .name("SojEvent Kafka")
+        .uid("kafkaSinkForEvent");
 
-    sojEventWithSessionId
-        .addSink(HdfsSinkUtil.sojEventSinkWithParquet())
-        .name("SojEvent sink")
-        .uid("eventHdfsSink")
-        .disableChaining();
+    // kafka sink for session
+    sojSessionStream.addSink(KafkaConnectorFactory
+        .createKafkaProducer(Constants.TOPIC_PRODUCER_SESSION, Constants.BOOTSTRAP_SERVERS_SESSION,
+            SojSession.class, Constants.MESSAGE_KEY))
+        .setParallelism(2)
+        .name("SojSession Kafka")
+        .uid("kafkaSinkForSession");
 
     // Submit this job
-    executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForDQPipeline());
+    executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForKafkaSinkPipeline());
+
   }
+
 }

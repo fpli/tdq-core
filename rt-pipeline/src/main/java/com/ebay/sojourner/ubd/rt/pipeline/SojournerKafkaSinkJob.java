@@ -176,7 +176,7 @@ public class SojournerKafkaSinkJob {
             SojEvent.class, Constants.MESSAGE_KEY))
         .setParallelism(50)
         .name("SojEvent Kafka")
-        .uid("kafkaSink");
+        .uid("kafkaSinkForEvent");
 
     // kafka sink for session
     sojSessionStream.addSink(KafkaConnectorFactory
@@ -184,7 +184,7 @@ public class SojournerKafkaSinkJob {
             SojSession.class, Constants.MESSAGE_KEY))
         .setParallelism(50)
         .name("SojSession Kafka")
-        .uid("kafkaSink");
+        .uid("kafkaSinkForSession");
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForKafkaSinkPipeline());
