@@ -46,6 +46,13 @@ public class UbiSessionAgg
       //            }
       sessionMetrics.feed(value, accumulator);
     } catch (Exception e) {
+      System.out.println( "start-session metrics collection issue:"
+          + value.getGuid()
+          + "||"
+          + (value.getSessionId() == null ? "" : value.getSessionId())
+          + "||"
+          + value.getSeqNum());
+      e.printStackTrace();
       log.error(
           "start-session metrics collection issue:"
               + value.getGuid()

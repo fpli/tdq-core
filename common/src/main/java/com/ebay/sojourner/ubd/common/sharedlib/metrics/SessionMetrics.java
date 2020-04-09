@@ -37,7 +37,7 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
     addFieldMetrics(new AgentStringMetrics());
     addFieldMetrics(new SessionStartDtMetrics());
     addFieldMetrics(new SessionDwellMetrics());
-    addFieldMetrics(new TimestampMetrics());
+
     // Keep insert order to reuse existed field end metrics
     addFieldMetrics(new ReferrerMetrics());
     addFieldMetrics(new FindingFlagMetrics());
@@ -80,6 +80,7 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
     addFieldMetrics(new SearchCntMetrics());
     addFieldMetrics(new PageCntMetrics());
     addFieldMetrics(new MaxScsSeqNumMetrics());
+    addFieldMetrics(new TimestampMetrics());
     // Put bot flag
     //        addFieldMetrics(new BotFlagMetrics());
   }

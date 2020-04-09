@@ -62,5 +62,16 @@ public class EventBotDetector extends AbstractBotDetector<UbiEvent> {
   public void initBotRules() {
     botRules.add(new BotRule1());
     botRules.add(Rules.ICF_RULE_1_COMPILER);
+    botRules.add(Rules.ICF_RULE_2_COMPILER);
+    botRules.add(Rules.ICF_RULE_3_COMPILER);
+    botRules.add(Rules.ICF_RULE_4_COMPILER);
+    botRules.add(Rules.ICF_RULE_5_COMPILER);
+    botRules.add(Rules.ICF_RULE_6_COMPILER);
+    botRules.add(Rules.ICF_RULE_7_COMPILER);
+    botRules.add(Rules.ICF_RULE_10_COMPILER);
+    botRules.add(Rules.ICF_RULE_11_COMPILER);
+    botRules.add(Rules.ICF_RULE_12_COMPILER);
+    botRules.add(Rules.ICF_RULE_13_COMPILER);
+    botRules.add(Rules.ICF_RULE_56_COMPILER);
   }
 }

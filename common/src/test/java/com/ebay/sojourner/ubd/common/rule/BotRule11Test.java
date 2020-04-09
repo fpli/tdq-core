@@ -3,7 +3,6 @@ package com.ebay.sojourner.ubd.common.rule;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.reflect.Whitebox.setInternalState;
 
@@ -26,20 +25,22 @@ public class BotRule11Test {
   UbiBotFilter mockBotFilter;
   private BotRule11 botRule11;
   private UbiSession ubiSession;
+  private UbiSessionHelper ubiSessionHelper;
 
   @Before
-  public void setup() {
+  public void setup() throws InterruptedException {
     ubiSession = new UbiSession();
     botRule11 = new BotRule11();
+    ubiSessionHelper = new UbiSessionHelper();
     initMocks(this);
-    mockStatic(UbiSessionHelper.class);
+    //    mockStatic(UbiSessionHelper.class);
     setInternalState(botRule11, mockBotFilter);
     when(mockBotFilter.filter(ubiSession, 11)).thenReturn(false);
   }
 
   @Test
-  public void test_getBotFlag_SPECIFIC_SPIDER_IAB() {
-    when(UbiSessionHelper.isIabAgent(ubiSession)).thenReturn(true);
+  public void test_getBotFlag_SPECIFIC_SPIDER_IAB() throws InterruptedException {
+    when(ubiSessionHelper.isIabAgent(ubiSession)).thenReturn(true);
 
     int botFlag = botRule11.getBotFlag(ubiSession);
 
@@ -48,8 +49,8 @@ public class BotRule11Test {
   }
 
   @Test
-  public void test_getBotFlag_NON_BOT_FLAG() {
-    when(UbiSessionHelper.isIabAgent(ubiSession)).thenReturn(false);
+  public void test_getBotFlag_NON_BOT_FLAG() throws InterruptedException {
+    when(ubiSessionHelper.isIabAgent(ubiSession)).thenReturn(false);
 
     int botFlag = botRule11.getBotFlag(ubiSession);
 

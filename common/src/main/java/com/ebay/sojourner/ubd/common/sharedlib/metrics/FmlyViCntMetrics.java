@@ -2,8 +2,10 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
+import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpListener;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
+import com.ebay.sojourner.ubd.common.util.LkpEnum;
+import com.ebay.sojourner.ubd.common.util.LkpManager;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
@@ -12,15 +14,17 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
-public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, LkpListener {
 
   private List<String> viPGT;
-  private LkpFetcher lkpFetcher;
-
+  private volatile LkpManager lkpManager;
+  private boolean isContinue;
+  private  Map<Integer, String[]> pageFmlyNameMap;
   @Override
   public void init() throws Exception {
-    this.lkpFetcher = LkpFetcher.getInstance();
-    lkpFetcher.loadPageFmlys();
+    this.lkpManager = new LkpManager(this, LkpEnum.pageFmly);
+    pageFmlyNameMap= lkpManager.getPageFmlyMaps();
+    isContinue=true;
     viPGT =
         new ArrayList<>(
             PropertyUtils.parseProperty(
@@ -34,8 +38,10 @@ public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
+    while(!isContinue){
+      Thread.sleep(10);
+    }
     if (event.isPartialValidPage() && !event.isRdt() && !event.isIframe()) {
-      Map<Integer, String[]> pageFmlyNameMap = lkpFetcher.getPageFmlyMaps();
       // im_pgt='VI': pageId=1521826 and pgt='future' or 'like'. pageId meaning?
       // or LkpPageFmlyName='VI'
       Integer pageId = event.getPageId();
@@ -74,5 +80,19 @@ public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
       }
     }
     return null;
+  }
+
+  @Override
+  public boolean notifyLkpChange(LkpManager lkpManager) {
+    try {
+      this.isContinue=false;
+      pageFmlyNameMap = lkpManager.getPageFmlyMaps();
+      return true;
+    } catch (Throwable e) {
+      return false;
+    }
+    finally {
+      this.isContinue=true;
+    }
   }
 }

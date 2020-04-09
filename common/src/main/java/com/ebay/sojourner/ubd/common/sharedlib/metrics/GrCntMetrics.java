@@ -2,8 +2,10 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
+import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpListener;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
+import com.ebay.sojourner.ubd.common.util.LkpEnum;
+import com.ebay.sojourner.ubd.common.util.LkpManager;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
@@ -11,11 +13,12 @@ import java.util.ArrayList;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
-public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
+public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, LkpListener {
 
   private ArrayList<String> viPGT;
   private Map<Integer, String[]> pageFmlyNameMap;
-  private LkpFetcher lkpFetcher;
+  private volatile LkpManager lkpManager;
+  private boolean isContinue;
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
@@ -24,6 +27,9 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
+    while(!isContinue){
+      Thread.sleep(10);
+    }
     Integer pageId = event.getPageId();
     if (!event.isRdt()
         && !event.isIframe()
@@ -43,9 +49,9 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
 
   @Override
   public void init() throws Exception {
-    lkpFetcher = LkpFetcher.getInstance();
-    lkpFetcher.loadPageFmlys();
-    pageFmlyNameMap = lkpFetcher.getPageFmlyMaps();
+    lkpManager = new LkpManager(this, LkpEnum.pageFmly);
+    isContinue = true;
+    pageFmlyNameMap = lkpManager.getPageFmlyMaps();
     viPGT =
         new ArrayList<>(
             PropertyUtils.parseProperty(
@@ -68,5 +74,19 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
       return "GR";
     }
     return null;
+  }
+
+  @Override
+  public boolean notifyLkpChange(LkpManager lkpManager) {
+    try {
+      this.isContinue=false;
+      pageFmlyNameMap = lkpManager.getPageFmlyMaps();
+      return true;
+    } catch (Throwable e) {
+      return false;
+    }
+    finally {
+      this.isContinue=true;
+    }
   }
 }

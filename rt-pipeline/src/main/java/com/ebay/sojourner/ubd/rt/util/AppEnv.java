@@ -16,7 +16,8 @@ public class AppEnv {
 
   private static final String CONFIG_FILE_NAME = "application.yml";
   private static volatile AppEnv appEnv;
-  private KafkaConfig kafka;
+  private KafkaConsumerConfig kafkaConsumerConfig;
+  private KafkaProducerConfig kafkaProducerConfig;
   private RheosConfig rheos;
   private FlinkConfig flink;
   private HdfsConfig  hdfs;

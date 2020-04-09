@@ -2,13 +2,13 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EventListenerContainer {
 
   private static volatile EventListenerContainer eventListenerContainer;
-  private List<EventListener> eventListenerList = new ArrayList<>();
+
+  private CopyOnWriteArrayList<EventListener> eventListenerList = new CopyOnWriteArrayList<>();
 
   private EventListenerContainer() {
     this.init();
@@ -29,13 +29,13 @@ public class EventListenerContainer {
     eventListenerList.add(eventListener);
   }
 
-  public  void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
+  public void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
     for (EventListener eventListener : eventListenerList) {
       eventListener.onEarlyEventChange(ubiEvent, ubiSession);
     }
   }
 
-  public  void onLateEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
+  public void onLateEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
     for (EventListener eventListener : eventListenerList) {
       eventListener.onLateEventChange(ubiEvent, ubiSession);
     }

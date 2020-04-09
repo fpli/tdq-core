@@ -161,4 +161,7 @@ public class Property {
   // ---------------------- Enable com.ebay.sojourner.ubd.common.util.Test
   // -----------------------------------------
   public static final String IS_TEST_ENABLE = "enable.test";
+
+  public static final String LKP_PATH = "lkpPath";
+
 }

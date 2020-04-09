@@ -2,20 +2,21 @@ package com.ebay.sojourner.ubd.common.util;
 
 import com.ebay.sojourner.ubd.common.model.AgentAttribute;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
+import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpListener;
 import com.ebay.sojourner.ubd.common.sharedlib.util.Base64Ebay;
 import com.ebay.sojourner.ubd.common.sharedlib.util.GUID2Date;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Xiaoding
  */
-public class UbiSessionHelper {
+public class UbiSessionHelper implements LkpListener {
 
   public static final long MINUS_GUID_MIN_MS =
       180000L; // 417mins - 7hours = -3mins = -180000ms; UNIX.
@@ -33,6 +34,14 @@ public class UbiSessionHelper {
           return size() > IAB_MAX_CAPACITY;
         }
       };
+  private volatile LkpManager lkpManager;
+  private boolean isContinue;
+  private List<String> iabAgentRegs;
+  public UbiSessionHelper() {
+    lkpManager = new LkpManager(this, LkpEnum.iabAgentRex);
+    iabAgentRegs= lkpManager.getIabAgentRegs();
+    isContinue = true;
+  }
 
   public static boolean isSingleClickSession(UbiSession session) {
     return session.getSingleClickSessionFlag() != null && session.getSingleClickSessionFlag();
@@ -160,7 +169,7 @@ public class UbiSessionHelper {
     }
   }
 
-  public static boolean isIabAgent(UbiSession session) {
+  public  boolean isIabAgent(UbiSession session) throws InterruptedException {
     if (session.getNonIframeRdtEventCnt() > 0 && session.getUserAgent() != null) {
       Boolean whether = iabCache.get(session.getUserAgent());
       if (whether == null) {
@@ -181,9 +190,12 @@ public class UbiSessionHelper {
     return false;
   }
 
-  protected static boolean checkIabAgent(String agent) {
+  protected  boolean checkIabAgent(String agent) throws InterruptedException {
+    while(!isContinue){
+      Thread.sleep(10);
+    }
     if (StringUtils.isNotBlank(agent)) {
-      for (String iabAgentReg : LkpFetcher.getInstance().getIabAgentRegs()) {
+      for (String iabAgentReg : iabAgentRegs) {
         if (agent.toLowerCase().contains(iabAgentReg)) {
           return true;
         }
@@ -207,5 +219,20 @@ public class UbiSessionHelper {
       return false;
     }
     return false;
+  }
+
+  @Override
+  public boolean notifyLkpChange(LkpManager lkpManager) {
+    try {
+
+      this.isContinue=false;
+      iabAgentRegs = lkpManager.getIabAgentRegs();
+      return true;
+    } catch (Throwable e) {
+      return false;
+    }
+    finally {
+      this.isContinue=true;
+    }
   }
 }

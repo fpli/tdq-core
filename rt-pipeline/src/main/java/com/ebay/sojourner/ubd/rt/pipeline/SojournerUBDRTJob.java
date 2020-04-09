@@ -12,9 +12,7 @@ import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForLVS;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForRNO;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForSLC;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAggSliding;
@@ -74,7 +72,6 @@ public class SojournerUBDRTJob {
         StreamExecutionEnvironment.getExecutionEnvironment();
     executionEnvironment.getConfig().setGlobalJobParameters(parameterTool);
     executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
-
     // checkpoint settings
     executionEnvironment.enableCheckpointing(
         AppEnv.config().getFlink().getCheckpoint().getInterval().getSeconds() * 1000,
@@ -107,30 +104,36 @@ public class SojournerUBDRTJob {
     // 1.2 Assign timestamps and emit watermarks.
     DataStream<RawEvent> rawEventDataStreamForRNO =
         executionEnvironment
-            .addSource(KafkaSourceFunctionForRNO.generateWatermark())
+            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
+                Constants.BOOTSTRAP_SERVERS_RNO, Constants.GROUP_ID_RNO))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer For RNO");
+            .name("Rheos Kafka Consumer For RNO")
+            .uid("kafkaSourceForRNO");
 
     DataStream<RawEvent> rawEventDataStreamForSLC =
         executionEnvironment
-            .addSource(KafkaSourceFunctionForSLC.generateWatermark())
+            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
+                Constants.BOOTSTRAP_SERVERS_SLC, Constants.GROUP_ID_SLC))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer For SLC");
+            .name("Rheos Kafka Consumer For SLC")
+            .uid("kafkaSourceForSLC");
 
     DataStream<RawEvent> rawEventDataStreamForLVS =
         executionEnvironment
-            .addSource(KafkaSourceFunctionForLVS.generateWatermark())
+            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
+                Constants.BOOTSTRAP_SERVERS_LVS, Constants.GROUP_ID_LVS))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer For LVS");
+            .name("Rheos Kafka Consumer For LVS")
+            .uid("kafkaSourceForLVS");
 
     // union three DC data
     DataStream<RawEvent> rawEventDataStream = rawEventDataStreamForRNO
@@ -343,11 +346,10 @@ public class SojournerUBDRTJob {
     // 5.3 Events (with session ID & bot flags)
     // 5.4 Events late
     // for data quality
-    // for monitor
 
     // kafka sink for session
     sojSessionStream.addSink(KafkaConnectorFactory
-        .createKafkaProducer(Constants.TOPIC_PRODUCER, Constants.BOOTSTRAP_PRODUCER_BROKERS,
+        .createKafkaProducer(Constants.TOPIC_PRODUCER_SESSION, Constants.BOOTSTRAP_SERVERS_SESSION,
             SojSession.class, Constants.MESSAGE_KEY))
         .setParallelism(50)
         .name("SojSession Kafka")
@@ -370,6 +372,6 @@ public class SojournerUBDRTJob {
         .name("Late Event");
 
     // Submit this job
-    executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
+    executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForFullPipeline());
   }
 }

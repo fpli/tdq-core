@@ -10,15 +10,18 @@ public class BotRule11 extends AbstractBotRule<UbiSession> {
 
   private BotFilter botFilter;
 
+  private volatile UbiSessionHelper ubiSessionHelper;
+
   @Override
   public void init() {
     botFilter = new UbiBotFilter();
+    ubiSessionHelper = new UbiSessionHelper();
   }
 
   @Override
-  public int getBotFlag(UbiSession ubiSession) {
+  public int getBotFlag(UbiSession ubiSession) throws InterruptedException {
     if (!filter(ubiSession)) {
-      if (UbiSessionHelper.isIabAgent(ubiSession)) {
+      if (ubiSessionHelper.isIabAgent(ubiSession)) {
         return BotRules.SPECIFIC_SPIDER_IAB;
       } else {
         return BotRules.NON_BOT_FLAG;
@@ -27,7 +30,7 @@ public class BotRule11 extends AbstractBotRule<UbiSession> {
     return BotRules.NON_BOT_FLAG;
   }
 
-  private boolean filter(UbiSession ubiSession) {
+  private boolean filter(UbiSession ubiSession) throws InterruptedException {
     if (botFilter.filter(ubiSession, BotRules.SPECIFIC_SPIDER_IAB)) {
       return true;
     }

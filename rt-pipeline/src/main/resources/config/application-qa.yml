@@ -1,4 +1,4 @@
-kafka:
+kafkaConsumerConfig:
   bootstrapServersForRNO:
     - rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
     - rhs-glrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
@@ -6,35 +6,57 @@ kafka:
     - rhs-glrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
     - rhs-glrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
   bootstrapServersForSLC:
-    - rhs-pathfinder-kfk-1.stratus.slc.ebay.com:9092
-    - rhs-pathfinder-kfk-2.stratus.slc.ebay.com:9092
-    - rhs-pathfinder-kfk-3.stratus.slc.ebay.com:9092
-    - rhs-pathfinder-kfk-4.stratus.slc.ebay.com:9092
-    - rhs-pathfinder-kfk-5.stratus.slc.ebay.com:9092
+    - rhs-mwsvkiaa-kfk-slc-1.rheos-streaming-prod.svc.45.tess.io:9092
+    - rhs-mwsvkiaa-kfk-slc-2.rheos-streaming-prod.svc.45.tess.io:9092
+    - rhs-mwsvkiaa-kfk-slc-3.rheos-streaming-prod.svc.45.tess.io:9092
+    - rhs-mwsvkiaa-kfk-slc-4.rheos-streaming-prod.svc.45.tess.io:9092
+    - rhs-mwsvkiaa-kfk-slc-5.rheos-streaming-prod.svc.45.tess.io:9092
   bootstrapServersForLVS:
-    - rhs-pathfinder-kfk-2.stratus.lvs.ebay.com:9092
-    - rhs-pathfinder-kfk-3.stratus.lvs.ebay.com:9092
-    - rhs-pathfinder-kfk-4.stratus.lvs.ebay.com:9092
-    - rhs-pathfinder-kfk-5.stratus.lvs.ebay.com:9092
-    - rhs-pathfinder-kfk-6.stratus.lvs.ebay.com:9092
+    - rhs-swsvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
+    - rhs-swsvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
+    - rhs-swsvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
+    - rhs-swsvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
+    - rhs-swsvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
   bootstrapServersForQA:
     - rhs-vvrvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-  bootstrapServersForProducer:
+  groupIdForLVS: sojourner-pathfinder-lvs
+  groupIdForSLC: sojourner-pathfinder-slc
+  groupIdForRNO: sojourner-pathfinder-rno
+  groupIdForLVSDQ: sojourner-pathfinder-lvs-dq
+  groupIdForSLCDQ: sojourner-pathfinder-slc-dq
+  groupIdForRNODQ: sojourner-pathfinder-rno-dq
+  groupIdForQA: sojourner-pathfinder-qa
+  groupIdForSession: sojourner-pathfinder-session
+  groupIdForEvent: sojourner-pathfinder-event
+  groupIdForBot: sojourner-pathfinder-bot
+  topic: behavior.pathfinder.events.total
+
+kafkaProducerConfig:
+  bootstrapServersForSession:
     - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-  groupIdForLVS: sojourner-pathfinder-lvs
-  groupIdForSLC: sojourner-pathfinder-slc
-  groupIdForRNO: sojourner-pathfinder-rno
-  groupIdForQA: sojourner-pathfinder-qa
-  topicForProducer: behavior.trafficjam.event
-  topic: behavior.pathfinder.events.total
+  bootstrapServersForEvent:
+    - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
+  bootstrapServersForBot:
+    - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
+  sessionTopic: behavior.trafficjam.session
+  eventTopic: behavior.trafficjam.event
+  botTopic: behavior.trafficjam.bot
 
 rheos:
   serviceUrl: https://rheos-services.qa.ebay.com
@@ -44,14 +66,29 @@ rheos:
 
 flink:
   app:
-    name: Unified Bot Detection RT Pipeline
+    nameForFullPipeline: Unified Bot Detection RT Pipeline
+    nameForRTLoadPipeline: Unified Bot Detection RT Load Pipeline
+    nameForDQPipeline: Unified Bot Detection RT DQ Pipeline
+    nameForHotDeployPipeline: Unified Bot Detection RT Hot Deploy Pipeline
+    nameForKafkaSinkPipeline: Unified Bot Detection RT kafka Sink Pipeline
     source-parallelism: 2
     event-parallelism: 2
+    session-parallelism: 2
+    pre-agentIp-parallelism: 2
+    agentIp-parallelism: 2
+    agent-parallelism: 2
+    ip-parallelism: 2
+    guid-parallelism: 2
   checkpoint:
     data-dir: /opt/sojourner-ubd/checkpoint
     interval: 5m
     timeout: 15m
     min-pause-between: 2m
     max-concurrent: 1
+
 hdfs:
-  nameNode: hdfs://hadoop-qa-5878.lvs02.dev.ebayc3.com:8020/tmp/soj/ubd/
+  sinkParentPath: hdfs://hadoop-qa-5878.lvs02.dev.ebayc3.com:8020/user/o_ubi/soj/ubd
+  sinkEventPath: /events
+  sinkSessionPath: /sessions
+  sinkSignaturePath: /signatures
+  sinkLateEventPath: /late_events

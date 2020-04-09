@@ -7,7 +7,7 @@ import static org.powermock.reflect.Whitebox.setInternalState;
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpFetcher;
+import com.ebay.sojourner.ubd.common.util.LkpManager;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +22,7 @@ import org.mockito.Mock;
 public class FmlyViCntMetricsTest extends BaseMetricsTest {
 
   @Mock
-  LkpFetcher lkpFetcher;
+  LkpManager lkpFetcher;
   @Mock
   List<String> viPGT;
   private FmlyViCntMetrics fmlyViCntMetrics;

@@ -39,6 +39,10 @@ public class UbiSessionWindowProcessFunction
     }
 
     SessionAccumulator sessionAccumulator = elements.iterator().next();
+<<<<<<< HEAD
+=======
+    //  System.out.println("context.currentWatermark():========" + context.currentWatermark());
+>>>>>>> master
     endSessionEvent(sessionAccumulator);
     UbiSession ubiSession = new UbiSession();
     ubiSession.setGuid(sessionAccumulator.getUbiSession().getGuid());
