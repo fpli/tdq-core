@@ -17,23 +17,23 @@ import org.apache.hadoop.fs.PathFilter;
 @Slf4j
 public class HdfsLoader {
 
-  private static volatile FileSystem fileSystem = null;
-  private static volatile HdfsLoader hdfsLoader = null;
+  private  volatile FileSystem fileSystem = null;
+  //  private static volatile HdfsLoader hdfsLoader = null;
 
-  private HdfsLoader() {
+  public HdfsLoader() {
     initFs();
   }
 
-  public static HdfsLoader getInstance() {
-    if (hdfsLoader == null) {
-      synchronized (HdfsLoader.class) {
-        if (hdfsLoader == null) {
-          hdfsLoader = new HdfsLoader();
-        }
-      }
-    }
-    return hdfsLoader;
-  }
+  //  public static HdfsLoader getInstance() {
+  //    if (hdfsLoader == null) {
+  //      synchronized (HdfsLoader.class) {
+  //        if (hdfsLoader == null) {
+  //          hdfsLoader = new HdfsLoader();
+  //        }
+  //      }
+  //    }
+  //    return hdfsLoader;
+  //  }
 
   public String getLkpFileContent(String parentPath, String filename) {
 

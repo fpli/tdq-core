@@ -40,56 +40,19 @@ public class IntermediateMetrics implements Serializable, LkpListener {
   private static final Integer SEVEN = 7;
   private static final String SID = "sid";
   private static final String SWD = "swd";
-  private static Set<Integer> agentExcludePageSet = null;
-  private static String imgMpxChnlSet1 = null;
-  private static String imgMpxChnlSet6 = null;
-  private static Set<Integer> mobilePageSet = null;
+  private Set<Integer> agentExcludePageSet = null;
+  private String imgMpxChnlSet1 = null;
+  private String imgMpxChnlSet6 = null;
+  private Set<Integer> mobilePageSet = null;
   //    private static Map<Long, String> mpxMap; // mpx channel id map
-  private static Map<String, String> mpxMap;
-  private static Set<Integer> notifyCLickPageSet = null;
-  private static Set<Integer> notifyViewPageSet = null;
-  private static Set<Integer> roverPageSet = null;
-  private static Set<Integer> scPageSet1 = null;
-  private static Set<Integer> scPageSet2 = null;
-  private static StringBuilder stingBuilder = new StringBuilder();
-  private static Collection<String> tags = null;
-
-  static {
-    stingBuilder.setLength(0);
-    stingBuilder
-        .append(".*/0/(")
-        .append("4908/89969|")
-        .append("710/(82157|63920|89230)|")
-        .append("711/(87621|88535)|")
-        .append("709/(18254|4989)|")
-        .append("707/(52222|1174)|")
-        .append("706/(83004|87751)|")
-        .append("1185/18912|")
-        .append("5221/29898|")
-        .append("5222/36186")
-        .append("){1}/.*");
-    imgMpxChnlSet1 = stingBuilder.toString();
-
-    stingBuilder.setLength(0);
-    stingBuilder
-        .append(".*/0/(")
-        .append("705/53470|")
-        .append("706/53473|")
-        .append("707/53477|")
-        .append("709/53476|")
-        .append("710/(53481|5232)|")
-        .append("711/(53200|1751)|")
-        .append("724/53478|")
-        .append("1185/53479|")
-        .append("1346/(53482|53482)|")
-        .append("1553/53471|")
-        .append("4686/53472|")
-        .append("5221/53469|")
-        .append("5222/53480|")
-        .append("5282/53468|")
-        .append("){1}/.*");
-    imgMpxChnlSet6 = stingBuilder.toString();
-  }
+  private Map<String, String> mpxMap;
+  private Set<Integer> notifyCLickPageSet = null;
+  private Set<Integer> notifyViewPageSet = null;
+  private Set<Integer> roverPageSet = null;
+  private Set<Integer> scPageSet1 = null;
+  private Set<Integer> scPageSet2 = null;
+  private StringBuilder stingBuilder = new StringBuilder();
+  private Collection<String> tags = null;
 
   private boolean isContinue = true;
   private volatile LkpManager lkpManager = new LkpManager(this, LkpEnum.mpx);
@@ -180,92 +143,126 @@ public class IntermediateMetrics implements Serializable, LkpListener {
             UBIConfig.getString(Property.PRELOAD_PAYLOAD_TAGS), Property.PROPERTY_DELIMITER);
     initLkp();
     initMetrics();
+    stingBuilder.setLength(0);
+    stingBuilder
+        .append(".*/0/(")
+        .append("4908/89969|")
+        .append("710/(82157|63920|89230)|")
+        .append("711/(87621|88535)|")
+        .append("709/(18254|4989)|")
+        .append("707/(52222|1174)|")
+        .append("706/(83004|87751)|")
+        .append("1185/18912|")
+        .append("5221/29898|")
+        .append("5222/36186")
+        .append("){1}/.*");
+    imgMpxChnlSet1 = stingBuilder.toString();
+
+    stingBuilder.setLength(0);
+    stingBuilder
+        .append(".*/0/(")
+        .append("705/53470|")
+        .append("706/53473|")
+        .append("707/53477|")
+        .append("709/53476|")
+        .append("710/(53481|5232)|")
+        .append("711/(53200|1751)|")
+        .append("724/53478|")
+        .append("1185/53479|")
+        .append("1346/(53482|53482)|")
+        .append("1553/53471|")
+        .append("4686/53472|")
+        .append("5221/53469|")
+        .append("5222/53480|")
+        .append("5282/53468|")
+        .append("){1}/.*");
+    imgMpxChnlSet6 = stingBuilder.toString();
   }
 
-  static Set<Integer> getAgentPageSet() {
+  public Set<Integer> getNotifyViewPageSet() {
+    return notifyViewPageSet;
+  }
+
+  public void setNotifyViewPageSet(HashSet<Integer> notifyViewPageSet) {
+    notifyViewPageSet = notifyViewPageSet;
+  }
+
+  public Set<Integer> getAgentPageSet() {
     return agentExcludePageSet;
   }
 
-  static void setAgentPageSet(HashSet<Integer> agentPageSet) {
-    IntermediateMetrics.agentExcludePageSet = agentPageSet;
-  }
-
-  static String getImgMpxChnlSet1() {
-    return imgMpxChnlSet1;
-  }
-
-  static void setImgMpxChnlSet1(String imgMpxChnlSet1) {
-    IntermediateMetrics.imgMpxChnlSet1 = imgMpxChnlSet1;
+  public void setAgentPageSet(HashSet<Integer> agentPageSet) {
+    agentExcludePageSet = agentPageSet;
   }
 
   // page 2616
 
-  static String getImgMpxChnlSet6() {
+  public String getImgMpxChnlSet1() {
+    return imgMpxChnlSet1;
+  }
+
+  public void setImgMpxChnlSet1(String imgMpxChnlSet1) {
+    imgMpxChnlSet1 = imgMpxChnlSet1;
+  }
+
+  public String getImgMpxChnlSet6() {
     return imgMpxChnlSet6;
   }
 
-  static void setImgMpxChnlSet6(String imgMpxChnlSet6) {
-    IntermediateMetrics.imgMpxChnlSet6 = imgMpxChnlSet6;
+  public void setImgMpxChnlSet6(String imgMpxChnlSet6) {
+    imgMpxChnlSet6 = imgMpxChnlSet6;
   }
 
-  public static Set<Integer> getMobilePageSet() {
+  public Set<Integer> getMobilePageSet() {
     return mobilePageSet;
   }
 
-  public static void setMobilePageSet(Set<Integer> mobilePageSet) {
-    IntermediateMetrics.mobilePageSet = mobilePageSet;
+  public void setMobilePageSet(Set<Integer> mobilePageSet) {
+    mobilePageSet = mobilePageSet;
   }
 
-  static Map<String, String> getMpxMap() {
+  public Map<String, String> getMpxMap() {
     return mpxMap;
   }
 
-  static void setMpxMap(Map<String, String> mpxMap) {
-    IntermediateMetrics.mpxMap = mpxMap;
+  public void setMpxMap(Map<String, String> mpxMap) {
+    mpxMap = mpxMap;
   }
 
-  public static Set<Integer> getNotifyCLickPageSet() {
+  public Set<Integer> getNotifyCLickPageSet() {
     return notifyCLickPageSet;
   }
 
-  public static void setNotifyCLickPageSet(HashSet<Integer> notifyCLickPageSet) {
-    IntermediateMetrics.notifyCLickPageSet = notifyCLickPageSet;
+  public void setNotifyCLickPageSet(HashSet<Integer> notifyCLickPageSet) {
+    notifyCLickPageSet = notifyCLickPageSet;
   }
 
-  public static Set<Integer> getNotifyViewPageSet() {
-    return notifyViewPageSet;
-  }
-
-  public static void setNotifyViewPageSet(HashSet<Integer> notifyViewPageSet) {
-    IntermediateMetrics.notifyViewPageSet = notifyViewPageSet;
-  }
-
-  static Set<Integer> getRoverPageSet() {
+  public Set<Integer> getRoverPageSet() {
     return roverPageSet;
   }
 
-  static void setRoverPageSet(HashSet<Integer> roverPageIds) {
-    IntermediateMetrics.roverPageSet = roverPageIds;
+  public void setRoverPageSet(HashSet<Integer> roverPageIds) {
+    roverPageSet = roverPageIds;
   }
 
-  static Set<Integer> getScPageSet1() {
+  public Set<Integer> getScPageSet1() {
     return scPageSet1;
   }
 
-  static void setScPageSet1(HashSet<Integer> pageIdSet1) {
-    IntermediateMetrics.scPageSet1 = pageIdSet1;
+  public void setScPageSet1(HashSet<Integer> pageIdSet1) {
+    scPageSet1 = pageIdSet1;
   }
 
-  static Set<Integer> getScPageSet2() {
+  public Set<Integer> getScPageSet2() {
     return scPageSet2;
   }
 
-  static void setScPageSet2(HashSet<Integer> pageIdSet2) {
-    IntermediateMetrics.scPageSet2 = pageIdSet2;
+  public void setScPageSet2(HashSet<Integer> pageIdSet2) {
+    scPageSet2 = pageIdSet2;
   }
 
-  public static void setNotifyViewPagthiseSet(HashSet<Integer> notifyViewPagthiseSet) {
-    IntermediateMetrics.notifyViewPageSet = notifyViewPagthiseSet;
+  public void setNotifyViewPagthiseSet(HashSet<Integer> notifyViewPagthiseSet) {
+    notifyViewPageSet = notifyViewPagthiseSet;
   }
 
   public void end(SessionAccumulator sessionAccumulator) {
@@ -1667,7 +1664,6 @@ public class IntermediateMetrics implements Serializable, LkpListener {
   @Override
   public boolean notifyLkpChange(LkpManager lkpManager) {
     try {
-
       this.isContinue = false;
       mpxMap = lkpManager.getMpxMap();
       return true;

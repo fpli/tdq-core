@@ -36,6 +36,7 @@ public class LkpManager {
   private volatile LkpFetcher lkpFetcher;
   private volatile LkpListener lkpListener;
   private volatile LkpEnum lkpEnum;
+  public volatile HdfsLoader hdfsLoader;
 
   public LkpManager(LkpListener lkpListener, LkpEnum lkpEnum) {
     loadResources();
@@ -43,6 +44,7 @@ public class LkpManager {
     lkpFetcher = new LkpFetcher(this);
     lkpFetcher.startDailyRefresh();
     this.lkpEnum = lkpEnum;
+    hdfsLoader= new HdfsLoader();
   }
 
   //  public static LkpManager getInstance() {
@@ -73,7 +75,7 @@ public class LkpManager {
     pageIdSet = new CopyOnWriteArraySet<>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String iframePageIds = UBIConfig.getString(Property.IFRAME_PAGE_IDS);
-    String pageIds = isTestEnabled ? iframePageIds : HdfsLoader.getInstance()
+    String pageIds = isTestEnabled ? iframePageIds :hdfsLoader
         .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), iframePageIds);
     if (StringUtils.isNotBlank(pageIds)) {
       for (String pageId : pageIds.split(LKP_RECORD_DELIMITER)) {
@@ -116,7 +118,7 @@ public class LkpManager {
   private void parseTextFile(String filePathProperty, Set<String> sets) {
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String file = UBIConfig.getString(filePathProperty);
-    String fileContent = isTestEnabled ? file : HdfsLoader.getInstance()
+    String fileContent = isTestEnabled ? file :hdfsLoader
         .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), file);
     if (StringUtils.isNotBlank(fileContent)) {
       for (String record : fileContent.split(TEXT_RECORD_DELIMITER)) {
@@ -136,7 +138,7 @@ public class LkpManager {
   private void parseTextFile(String filePathProperty, Map<String, Boolean> maps) {
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String file = UBIConfig.getString(filePathProperty);
-    String fileContent = isTestEnabled ? file : HdfsLoader.getInstance()
+    String fileContent = isTestEnabled ? file :hdfsLoader
         .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), file);
     if (StringUtils.isNotBlank(fileContent)) {
       for (String record : fileContent.split(TEXT_RECORD_DELIMITER)) {
@@ -162,7 +164,7 @@ public class LkpManager {
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String largeSessionGuidValue = UBIConfig.getString(Property.LARGE_SESSION_GUID);
     String largeSessionGuids =
-        isTestEnabled ? largeSessionGuidValue : HdfsLoader.getInstance()
+        isTestEnabled ? largeSessionGuidValue :hdfsLoader
             .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH),
                 largeSessionGuidValue);
     if (StringUtils.isNotBlank(largeSessionGuids)) {
@@ -185,7 +187,7 @@ public class LkpManager {
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String iabAgentReg = UBIConfig.getString(Property.IAB_AGENT);
     String iabAgentRegValue =
-        isTestEnabled ? iabAgentReg : HdfsLoader.getInstance()
+        isTestEnabled ? iabAgentReg :hdfsLoader
             .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), iabAgentReg);
     if (StringUtils.isNotBlank(iabAgentRegValue)) {
       for (String iabAgent : iabAgentRegValue.split(LKP_RECORD_DELIMITER)) {
@@ -205,7 +207,7 @@ public class LkpManager {
     findingFlagMap = new ConcurrentHashMap<>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String findingFlag = UBIConfig.getString(Property.FINDING_FLAGS);
-    String findingFlags = isTestEnabled ? findingFlag : HdfsLoader.getInstance()
+    String findingFlags = isTestEnabled ? findingFlag :hdfsLoader
         .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), findingFlag);
     if (StringUtils.isNotBlank(findingFlags)) {
       for (String pageFlag : findingFlags.split(LKP_RECORD_DELIMITER)) {
@@ -239,7 +241,7 @@ public class LkpManager {
     vtNewIdsMap = new ConcurrentHashMap<Integer, Integer[]>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String vtNewIds = UBIConfig.getString(Property.VTNEW_IDS);
-    String vtNewIdsValue = isTestEnabled ? vtNewIds : HdfsLoader.getInstance()
+    String vtNewIdsValue = isTestEnabled ? vtNewIds :hdfsLoader
         .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), vtNewIds);
     if (StringUtils.isNotBlank(vtNewIdsValue)) {
       for (String vtNewId : vtNewIdsValue.split(LKP_RECORD_DELIMITER)) {
@@ -264,7 +266,7 @@ public class LkpManager {
     appIdWithBotFlags = new CopyOnWriteArraySet();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String appIds = UBIConfig.getString(Property.APP_ID);
-    String appIdAndFlags = isTestEnabled ? appIds : HdfsLoader.getInstance()
+    String appIdAndFlags = isTestEnabled ? appIds :hdfsLoader
         .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), appIds);
     if (StringUtils.isNotBlank(appIdAndFlags)) {
       String[] appIdFlagPair = appIdAndFlags.split(LKP_RECORD_DELIMITER);
@@ -286,7 +288,7 @@ public class LkpManager {
     pageFmlyMap = new ConcurrentHashMap<Integer, String[]>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String pageFmlys = UBIConfig.getString(Property.PAGE_FMLY);
-    String pageFmlysValue = isTestEnabled ? pageFmlys : HdfsLoader.getInstance()
+    String pageFmlysValue = isTestEnabled ? pageFmlys :hdfsLoader
         .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), pageFmlys);
     if (StringUtils.isNotBlank(pageFmlysValue)) {
       for (String pageFmlyPair : pageFmlysValue.split(LKP_RECORD_DELIMITER)) {
@@ -328,7 +330,7 @@ public class LkpManager {
     mpxMap = new ConcurrentHashMap<String, String>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String mpxRotation = UBIConfig.getString(Property.MPX_ROTATION);
-    String mpxRotations = isTestEnabled ? mpxRotation : HdfsLoader.getInstance()
+    String mpxRotations = isTestEnabled ? mpxRotation :hdfsLoader
         .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), mpxRotation);
 
     if (StringUtils.isNotBlank(mpxRotations)) {

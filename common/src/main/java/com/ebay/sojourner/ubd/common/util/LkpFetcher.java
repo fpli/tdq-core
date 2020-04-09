@@ -17,10 +17,11 @@ public class LkpFetcher extends TimerTask {
   private Timer timer;
   private LkpManager lkpManager;
   private Map<String, Long> lkpfileDate = new ConcurrentHashMap<String, Long>();
-
+  private volatile HdfsLoader hdfsLoader;
   public LkpFetcher(LkpManager lkpManager) {
     init();
     this.lkpManager = lkpManager;
+    this.hdfsLoader=lkpManager.hdfsLoader;
   }
 
   private void init() {
@@ -45,47 +46,47 @@ public class LkpFetcher extends TimerTask {
     String lkpPath = UBIConfig.getUBIProperty(Property.LKP_PATH);
     int currentRoundCount = 0;
     while (currentRoundCount < UPDATE_COUNTS) {
-      if (HdfsLoader.getInstance()
+      if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.IFRAME_PAGE_IDS), lkpfileDate)) {
         lkpManager.loadIframePageIds();
         currentRoundCount++;
       }
-      if (HdfsLoader.getInstance()
+      if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.FINDING_FLAGS), lkpfileDate)) {
         lkpManager.loadFindingFlag();
         currentRoundCount++;
       }
-      if (HdfsLoader.getInstance()
+      if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.VTNEW_IDS), lkpfileDate)) {
         lkpManager.loadVtNewIds();
         currentRoundCount++;
       }
-      if (HdfsLoader.getInstance()
+      if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.IAB_AGENT), lkpfileDate)) {
         lkpManager.getIabAgentRegs();
         currentRoundCount++;
       }
-      if (HdfsLoader.getInstance()
+      if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.APP_ID), lkpfileDate)) {
         lkpManager.loadAppIds();
         currentRoundCount++;
       }
-      if (HdfsLoader.getInstance()
+      if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.LARGE_SESSION_GUID), lkpfileDate)) {
         lkpManager.loadLargeSessionGuid();
         currentRoundCount++;
       }
-      if (HdfsLoader.getInstance()
+      if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.PAGE_FMLY), lkpfileDate)) {
         lkpManager.loadPageFmlys();
         currentRoundCount++;
       }
-      if (HdfsLoader.getInstance()
+      if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.MPX_ROTATION), lkpfileDate)) {
         lkpManager.loadMpxRotetion();
         currentRoundCount++;
       }
-      if (HdfsLoader.getInstance()
+      if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.SELECTED_IPS), lkpfileDate)) {
         lkpManager.loadSelectedIps();
         currentRoundCount++;
