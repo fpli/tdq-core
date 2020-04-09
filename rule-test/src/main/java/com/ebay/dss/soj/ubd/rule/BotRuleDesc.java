@@ -17,7 +17,6 @@ public class BotRuleDesc {
   static BotRuleDesc toRuleDesc(String sqlContent) {
     //parse sqlContent to BoltRuleDesc using calcite
     BotRuleDesc botRuleDesc = new BotRuleDesc();
-
     return botRuleDesc;
   }
 

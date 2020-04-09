@@ -11,7 +11,7 @@
 
   <artifactId>sojourner-ubd-rule-test-report</artifactId>
   <packaging>jar</packaging>
-  <name>Sojourner UBD - Bolt Rule Report</name>
+  <name>Sojourner UBD - Bot Rule Report</name>
 
   <dependencies>
     <dependency>

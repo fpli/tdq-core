@@ -1,12 +1,12 @@
 package com.ebay.dss.soj.ubd.rule;
 
+import com.ebay.dss.soj.jdbc.HiveJDBClient;
+import java.sql.ResultSet;
 import java.util.Map;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
@@ -18,18 +18,7 @@ public class RuleReportImpl implements RuleReport {
   @Override
   public void trigger(String sqlContent) {
     long triggerTime = System.nanoTime();
-    BotRuleDesc botRuleDesc = BotRuleDesc.toRuleDesc(sqlContent);
-    Future<RuleReportResult> future = executorService.submit(
-        new RuleReportCallable(botRuleDesc, triggerTime));
-    if (future.isDone()) {
-      try {
-        resultMap.put(botRuleDesc, future.get());
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      } catch (ExecutionException e) {
-        e.printStackTrace();
-      }
-    }
+    executorService.submit(new RuleReportRunnable(sqlContent, triggerTime));
   }
 
   @Override
@@ -40,4 +29,26 @@ public class RuleReportImpl implements RuleReport {
     }
     return resultMap.get(botRuleDesc);
   }
+
+  class RuleReportRunnable implements Runnable {
+
+    private String sqlContent;
+    private long triggerTime;
+    private HiveJDBClient hiveJDBClient = new HiveJDBClient();
+
+    RuleReportRunnable(String sqlContent, long triggerTime) {
+      this.sqlContent = sqlContent;
+      this.triggerTime = triggerTime;
+    }
+
+    @Override
+    public void run() {
+      BotRuleDesc botRuleDesc = BotRuleDesc.toRuleDesc(sqlContent);
+      String sql = BotRuleDesc.generateReportScript(botRuleDesc);
+      ResultSet resultSet = hiveJDBClient.exeSQL(sql);
+      RuleReportResult ruleReportResult = RuleReportResult.toRuleReportResult(resultSet);
+      resultMap.put(botRuleDesc, ruleReportResult);
+    }
+  }
+
 }
