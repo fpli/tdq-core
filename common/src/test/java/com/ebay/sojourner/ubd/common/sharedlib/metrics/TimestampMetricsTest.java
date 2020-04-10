@@ -11,6 +11,7 @@ public class TimestampMetricsTest extends BaseMetricsTest {
   private TimestampMetrics timestampMetrics;
   private JsonNode yaml;
 
+
   @BeforeEach
   public void setup() throws Exception {
     timestampMetrics = new TimestampMetrics();
@@ -21,4 +22,6 @@ public class TimestampMetricsTest extends BaseMetricsTest {
   public Collection<DynamicTest> dynamicTests() throws Exception {
     return generateDynamicTests(yaml, timestampMetrics);
   }
+
+
 }

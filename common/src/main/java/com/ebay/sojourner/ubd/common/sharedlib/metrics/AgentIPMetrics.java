@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, EventListener {
 
-  private Set<Integer> badIPPages;
+  private volatile Set<Integer> badIPPages;
   private Pattern invalidIPPattern;
 
   @Override
@@ -111,8 +111,15 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
   public String getExternalIP(UbiEvent event, String remoteIp, String forwardFor) {
     int pageId = event.getPageId();
     String urlQueryString = event.getUrlQueryString();
-    if (badIPPages.contains(pageId)) {
-      return null;
+    try {
+      if (badIPPages.contains(pageId)) {
+        return null;
+      }
+    } catch (Throwable e) {
+      e.printStackTrace();
+//      System.out.println(
+//          "pageId:" + pageId == null ? ""
+//              : pageId + " badIPPages size:" + badIPPages == null ? 0 : badIPPages.size());
     }
     if (pageId == 3686 && urlQueryString != null && urlQueryString.contains("Portlet")) {
       return null;
@@ -143,6 +150,8 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
   public void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
     ubiSession.setAgentInfo(ubiEvent.getAgentInfo());
     ubiSession.setClientIp(ubiEvent.getClientIP());
+    System.out.println("AgentIPMetrics event:" + ubiEvent.getPageId() + " eventtime:" + ubiEvent
+        .getEventTimestamp());
     if (!ubiEvent.isIframe() && !ubiEvent.isRdt()) {
       ubiSession.setAgentInfo(ubiEvent.getAgentInfo());
       ubiSession.setClientIp(ubiEvent.getClientIP());

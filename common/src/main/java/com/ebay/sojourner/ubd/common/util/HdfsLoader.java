@@ -79,8 +79,8 @@ public class HdfsLoader {
     try {
       if (fileSystem.exists(path)) {
         //                instream = new FileInputStream(path);
-        System.out.println("HDFS file exits:" + path.getName());
-        log.info("HDFS file exits:" + path.getName());
+    //        System.out.println("HDFS file exits:" + path.getName());
+    //        log.info("HDFS file exits:" + path.getName());
         instream = fileSystem.open(path);
       } else {
         log.info("Load resource directly as provided path is empty, resource: " + resource);
