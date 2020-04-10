@@ -52,7 +52,7 @@ public class EventRulesCounterMetricsCollector extends RichSinkFunction<UbiEvent
     List<Long> dynamicRuleIdList = EventBotDetector.dynamicRuleIdList();
     Collection intersection = CollectionUtils
         .intersection(dynamicRuleIdList, eventDynamicRuleCounterNameList);
-    if (!intersection.isEmpty()) {
+    if (CollectionUtils.isNotEmpty(intersection)) {
       for (Object ruleId : intersection) {
         Counter dynamicRuleCounter = getRuntimeContext()
             .getMetricGroup()
