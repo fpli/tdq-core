@@ -320,8 +320,8 @@ public class SojournerUBDRTJobForQA {
         .createKafkaProducer(Constants.TOPIC_PRODUCER, Constants.BOOTSTRAP_PRODUCER_BROKERS,
             SojEvent.class, Constants.MESSAGE_KEY))
         .setParallelism(2)
-        .name("SojSession Kafka")
-        .uid("kafkaSink");
+        .name("SojEvent Kafka")
+        .uid("kafkaSinkForEvent");
 
     // metrics collector for end to end
     signatureBotDetectionForEvent
