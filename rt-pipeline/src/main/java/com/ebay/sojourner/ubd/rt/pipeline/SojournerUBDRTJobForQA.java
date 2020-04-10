@@ -3,12 +3,17 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.SessionForGuidEnhancement;
+import com.ebay.sojourner.ubd.common.model.SojEvent;
+import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
+import com.ebay.sojourner.ubd.rt.common.metrics.EventRulesCounterMetricsCollector;
+import com.ebay.sojourner.ubd.rt.common.metrics.SojournerEndToEndMetricsCollector;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAgg;
@@ -22,12 +27,13 @@ import com.ebay.sojourner.ubd.rt.operators.attribute.IpAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.IpWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.SplitFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.DetectableEventMapFunction;
-import com.ebay.sojourner.ubd.rt.common.metrics.SojournerEndToEndMetricsCollector;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.DetectableSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionForGuidEnhancementMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
@@ -290,21 +296,57 @@ public class SojournerUBDRTJobForQA {
             .process(new AttributeBroadcastProcessFunctionForDetectable(sessionOutputTag))
             .name("Signature Bot Detector");
 
+    DataStream<UbiSession> signatureBotDetectionForSession =
+        signatureBotDetectionForEvent.getSideOutput(sessionOutputTag);
+
+    // UbiSession to SojSession
+    DataStream<SojSession> sojSessionStream =
+        signatureBotDetectionForSession
+            .map(new UbiSessionToSojSessionMapFunction())
+            .name("UbiSession to SojSession");
+
+    // UbiEvent to SojEvent
+    DataStream<SojEvent> sojEventWithSessionId = signatureBotDetectionForEvent
+        .map(new UbiEventToSojEventMapFunction())
+        .name("UbiEvent to SojEvent");
+
     // 5. Load data to file system for batch processing
     // 5.1 IP Signature
     // 5.2 Sessions (ended)
     // 5.3 Events (with session ID & bot flags)
     // 5.4 Events late
 
-    DataStream<UbiSession> signatureBotDetectionForSession =
-        signatureBotDetectionForEvent.getSideOutput(sessionOutputTag);
-    signatureBotDetectionForSession.addSink(new DiscardingSink<>()).name("Session");
-    latedStream.addSink(new DiscardingSink<>()).name("Late Event");
+    // kafka sink for session
+    sojSessionStream.addSink(KafkaConnectorFactory
+        .createKafkaProducer(Constants.TOPIC_PRODUCER_SESSION, Constants.BOOTSTRAP_SERVERS_SESSION,
+            SojSession.class, Constants.MESSAGE_KEY))
+        .setParallelism(2)
+        .name("SojSession Kafka")
+        .uid("kafkaSinkForSession");
 
+    // kafka sink for event
+    sojEventWithSessionId.addSink(KafkaConnectorFactory
+        .createKafkaProducer(Constants.TOPIC_PRODUCER_EVENT, Constants.BOOTSTRAP_SERVERS_EVENT,
+            SojEvent.class, Constants.MESSAGE_KEY))
+        .setParallelism(2)
+        .name("SojEvent Kafka")
+        .uid("kafkaSinkForEvent");
+
+    // metrics collector for end to end
     signatureBotDetectionForEvent
         .addSink(new SojournerEndToEndMetricsCollector())
-        .name("Pipeline End to End Duration")
+        .name("Pipeline End to End Duration");
+
+    // metrics collector for event rules hit
+    signatureBotDetectionForEvent
+        .addSink(new EventRulesCounterMetricsCollector())
+        .name("Event Metrics Collector")
         .disableChaining();
+
+    // late event sink
+    latedStream
+        .addSink(new DiscardingSink<>())
+        .name("Late Event");
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForFullPipeline());
