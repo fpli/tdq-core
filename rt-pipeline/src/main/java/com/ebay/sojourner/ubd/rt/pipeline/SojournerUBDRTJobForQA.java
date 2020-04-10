@@ -13,6 +13,7 @@ import com.ebay.sojourner.ubd.rt.common.metrics.SojournerEndToEndMetricsCollecto
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForQA;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAgg;
@@ -35,6 +36,7 @@ import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionForGuidEnhancementM
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
+import com.ebay.sojourner.ubd.rt.util.Constants;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
@@ -312,7 +314,15 @@ public class SojournerUBDRTJobForQA {
     // 5.2 Sessions (ended)
     // 5.3 Events (with session ID & bot flags)
     // 5.4 Events late
-    
+
+    // kafka sink for session
+    sojEventWithSessionId.addSink(KafkaConnectorFactory
+        .createKafkaProducer(Constants.TOPIC_PRODUCER, Constants.BOOTSTRAP_PRODUCER_BROKERS,
+            SojEvent.class, Constants.MESSAGE_KEY))
+        .setParallelism(2)
+        .name("SojSession Kafka")
+        .uid("kafkaSink");
+
     // metrics collector for end to end
     signatureBotDetectionForEvent
         .addSink(new SojournerEndToEndMetricsCollector())
