@@ -149,7 +149,8 @@ public class SojournerUBDRTJob {
         rawEventDataStream
             .map(new EventMapFunction())
             .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
-            .name("Event Operator");
+            .name("Event Operator")
+            .uid("eventLevel");
 
     // refine windowsoperatorø
     // 3. Session Operator
@@ -177,7 +178,7 @@ public class SojournerUBDRTJob {
         new UbiEventMapWithStateFunction(),
         mappedEventOutputTag);
 
-    ubiSessionDataStream.name("Session Operator");
+    ubiSessionDataStream.name("Session Operator").uid("sessionLevel");
 
     DataStream<UbiEvent> ubiEventWithSessionId =
         ubiSessionDataStream.getSideOutput(mappedEventOutputTag);
@@ -190,7 +191,8 @@ public class SojournerUBDRTJob {
         ubiSessionDataStream
             .map(new UbiSessionForGuidEnhancementMapFunction())
             .name("ubiSession to SessionForGuidEnhancement")
-            .setParallelism(150);
+            .setParallelism(150)
+            .uid("enhanceGuid");
 
     // 4. Attribute Operator
     // 4.1 Sliding window
@@ -203,7 +205,8 @@ public class SojournerUBDRTJob {
             .window(TumblingEventTimeWindows.of(Time.minutes(5)))
             .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
             .name("Attribute Operator (Agent+IP Pre-Aggregation)")
-            .setParallelism(150);
+            .setParallelism(150)
+            .uid("preAgentIpLevel");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureDataStream =
         sessionForGuidEnhancement
@@ -212,7 +215,8 @@ public class SojournerUBDRTJob {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
             .name("Attribute Operator (GUID)")
-            .setParallelism(150);
+            .setParallelism(150)
+            .uid("guidLevel");
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureSplitStream =
         guidSignatureDataStream.split(new SplitFunction());
@@ -221,13 +225,15 @@ public class SojournerUBDRTJob {
         .select("generation")
         .addSink(new DiscardingSink<>())
         .setParallelism(150)
-        .name("GUID Signature Generation");
+        .name("GUID Signature Generation")
+        .uid("generationGuidLevel");
 
     guidSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
         .setParallelism(150)
-        .name("GUID Signature Expiration");
+        .name("GUID Signature Expiration")
+        .uid("expirationGuidLevel");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureDataStream =
         agentIpAttributeDatastream
@@ -237,7 +243,8 @@ public class SojournerUBDRTJob {
             .aggregate(
                 new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
             .name("Attribute Operator (Agent+IP)")
-            .setParallelism(150);
+            .setParallelism(150)
+            .uid("agentIpLevel");
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureSplitStream =
         agentIpSignatureDataStream.split(new SplitFunction());
@@ -246,13 +253,15 @@ public class SojournerUBDRTJob {
         .select("generation")
         .addSink(new DiscardingSink<>())
         .setParallelism(150)
-        .name("Agent+IP Signature Generation");
+        .name("Agent+IP Signature Generation")
+        .uid("generationAgentIpLevel");
 
     agentIpSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
         .setParallelism(150)
-        .name("Agent+IP Signature Expiration");
+        .name("Agent+IP Signature Expiration")
+        .uid("expirationAgentIpLevel");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureDataStream =
         agentIpAttributeDatastream
@@ -261,7 +270,8 @@ public class SojournerUBDRTJob {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
             .name("Attribute Operator (Agent)")
-            .setParallelism(150);
+            .setParallelism(150)
+            .uid("agentLevel");
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureSplitStream =
         agentSignatureDataStream.split(new SplitFunction());
@@ -270,13 +280,15 @@ public class SojournerUBDRTJob {
         .select("generation")
         .addSink(new DiscardingSink<>())
         .setParallelism(150)
-        .name("Agent Signature Generation");
+        .name("Agent Signature Generation")
+        .uid("generationAgentLevel");
 
     agentSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
         .setParallelism(150)
-        .name("Agent Signature Expiration");
+        .name("Agent Signature Expiration")
+        .uid("expirationAgentLevel");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureDataStream =
         agentIpAttributeDatastream
@@ -285,7 +297,8 @@ public class SojournerUBDRTJob {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
             .name("Attribute Operator (IP)")
-            .setParallelism(150);
+            .setParallelism(150)
+            .uid("ipLevel");
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureSplitStream =
         ipSignatureDataStream.split(new SplitFunction());
@@ -294,13 +307,15 @@ public class SojournerUBDRTJob {
         .select("generation")
         .addSink(new DiscardingSink<>())
         .setParallelism(150)
-        .name("IP Signature Generation");
+        .name("IP Signature Generation")
+        .uid("generationIpLevel");
 
     ipSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
         .setParallelism(150)
-        .name("IP Signature Expiration");
+        .name("IP Signature Expiration")
+        .uid("expirationIpLevel");
 
     // union attribute signature for broadcast
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> attributeSignatureDataStream =
@@ -324,7 +339,8 @@ public class SojournerUBDRTJob {
         detectableDataStream
             .connect(attributeSignatureBroadcastStream)
             .process(new AttributeBroadcastProcessFunctionForDetectable(sessionOutputTag))
-            .name("Signature Bot Detector");
+            .name("Signature Bot Detector")
+            .uid("connectLevel");
 
     DataStream<UbiSession> signatureBotDetectionForSession = signatureBotDetectionForEvent
         .getSideOutput(sessionOutputTag);
@@ -358,7 +374,8 @@ public class SojournerUBDRTJob {
     // metrics collector for end to end
     signatureBotDetectionForEvent
         .addSink(new SojournerEndToEndMetricsCollector())
-        .name("Pipeline End to End Duration");
+        .name("Pipeline End to End Duration")
+        .disableChaining();
 
     // metrics collector for event rules hit
     signatureBotDetectionForEvent
@@ -369,7 +386,8 @@ public class SojournerUBDRTJob {
     // late event sink
     latedStream
         .addSink(new DiscardingSink<>())
-        .name("Late Event");
+        .name("Late Event")
+        .disableChaining();
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForFullPipeline());
