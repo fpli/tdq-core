@@ -4,10 +4,10 @@ import com.ebay.sojourner.ubd.common.model.SojSession;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.windowing.time.Time;
 
-public class SojBoundedOutOfOrdernessTimestampExtractorForSessionLoad extends
+public class SojSessionBoundedOutOfOrdernessTimestampExtractor extends
     BoundedOutOfOrdernessTimestampExtractor<SojSession> {
 
-  public SojBoundedOutOfOrdernessTimestampExtractorForSessionLoad(
+  public SojSessionBoundedOutOfOrdernessTimestampExtractor(
       Time maxOutOfOrderness) {
     super(maxOutOfOrderness);
   }

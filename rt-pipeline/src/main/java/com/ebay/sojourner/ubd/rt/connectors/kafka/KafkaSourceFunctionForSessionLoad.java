@@ -12,6 +12,6 @@ public class KafkaSourceFunctionForSessionLoad {
             Constants.GROUP_ID_SESSION, SojSession.class)
         .setStartFromLatest()
         .assignTimestampsAndWatermarks(
-            new SojBoundedOutOfOrdernessTimestampExtractorForSessionLoad(Time.seconds(10)));
+            new SojSessionBoundedOutOfOrdernessTimestampExtractor(Time.seconds(10)));
   }
 }
