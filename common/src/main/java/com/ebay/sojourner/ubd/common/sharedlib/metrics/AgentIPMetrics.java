@@ -117,9 +117,6 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
       }
     } catch (Throwable e) {
       e.printStackTrace();
-//      System.out.println(
-//          "pageId:" + pageId == null ? ""
-//              : pageId + " badIPPages size:" + badIPPages == null ? 0 : badIPPages.size());
     }
     if (pageId == 3686 && urlQueryString != null && urlQueryString.contains("Portlet")) {
       return null;
