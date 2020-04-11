@@ -114,6 +114,7 @@ public class SojournerRTLoadJob {
     DataStream<RawEvent> filteredRawEvent = rawEventDataStream
         .filter(new RawEventFilterFunction())
         .name("RawEvent Filter Operator")
+        .disableChaining()
         .uid("filterSource");
 
     // 2. Event Operator
