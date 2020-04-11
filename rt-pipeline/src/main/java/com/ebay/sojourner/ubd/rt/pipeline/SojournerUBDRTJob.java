@@ -178,7 +178,10 @@ public class SojournerUBDRTJob {
         new UbiEventMapWithStateFunction(),
         mappedEventOutputTag);
 
-    ubiSessionDataStream.name("Session Operator").uid("sessionLevel");
+    ubiSessionDataStream
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .name("Session Operator")
+        .uid("sessionLevel");
 
     DataStream<UbiEvent> ubiEventWithSessionId =
         ubiSessionDataStream.getSideOutput(mappedEventOutputTag);
@@ -191,7 +194,6 @@ public class SojournerUBDRTJob {
         ubiSessionDataStream
             .map(new UbiSessionForGuidEnhancementMapFunction())
             .name("ubiSession to SessionForGuidEnhancement")
-            .setParallelism(150)
             .uid("enhanceGuid");
 
     // 4. Attribute Operator
@@ -205,7 +207,7 @@ public class SojournerUBDRTJob {
             .window(TumblingEventTimeWindows.of(Time.minutes(5)))
             .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
             .name("Attribute Operator (Agent+IP Pre-Aggregation)")
-            .setParallelism(150)
+            .setParallelism(AppEnv.config().getFlink().app.getPreAgentIpParallelism())
             .uid("preAgentIpLevel");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureDataStream =
@@ -215,7 +217,7 @@ public class SojournerUBDRTJob {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
             .name("Attribute Operator (GUID)")
-            .setParallelism(150)
+            .setParallelism(AppEnv.config().getFlink().app.getGuidParallelism())
             .uid("guidLevel");
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureSplitStream =
@@ -224,14 +226,14 @@ public class SojournerUBDRTJob {
     guidSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .setParallelism(150)
+        .setParallelism(AppEnv.config().getFlink().app.getGuidParallelism())
         .name("GUID Signature Generation")
         .uid("generationGuidLevel");
 
     guidSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .setParallelism(150)
+        .setParallelism(AppEnv.config().getFlink().app.getGuidParallelism())
         .name("GUID Signature Expiration")
         .uid("expirationGuidLevel");
 
@@ -243,7 +245,7 @@ public class SojournerUBDRTJob {
             .aggregate(
                 new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
             .name("Attribute Operator (Agent+IP)")
-            .setParallelism(150)
+            .setParallelism(AppEnv.config().getFlink().app.getAgentIpParallelism())
             .uid("agentIpLevel");
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureSplitStream =
@@ -252,14 +254,14 @@ public class SojournerUBDRTJob {
     agentIpSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .setParallelism(150)
+        .setParallelism(AppEnv.config().getFlink().app.getAgentIpParallelism())
         .name("Agent+IP Signature Generation")
         .uid("generationAgentIpLevel");
 
     agentIpSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .setParallelism(150)
+        .setParallelism(AppEnv.config().getFlink().app.getAgentIpParallelism())
         .name("Agent+IP Signature Expiration")
         .uid("expirationAgentIpLevel");
 
@@ -270,7 +272,7 @@ public class SojournerUBDRTJob {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
             .name("Attribute Operator (Agent)")
-            .setParallelism(150)
+            .setParallelism(AppEnv.config().getFlink().app.getAgentParallelism())
             .uid("agentLevel");
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureSplitStream =
@@ -279,14 +281,14 @@ public class SojournerUBDRTJob {
     agentSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .setParallelism(150)
+        .setParallelism(AppEnv.config().getFlink().app.getAgentParallelism())
         .name("Agent Signature Generation")
         .uid("generationAgentLevel");
 
     agentSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .setParallelism(150)
+        .setParallelism(AppEnv.config().getFlink().app.getAgentParallelism())
         .name("Agent Signature Expiration")
         .uid("expirationAgentLevel");
 
@@ -297,7 +299,7 @@ public class SojournerUBDRTJob {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
             .name("Attribute Operator (IP)")
-            .setParallelism(150)
+            .setParallelism(AppEnv.config().getFlink().app.getIpParallelism())
             .uid("ipLevel");
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureSplitStream =
@@ -306,14 +308,14 @@ public class SojournerUBDRTJob {
     ipSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .setParallelism(150)
+        .setParallelism(AppEnv.config().getFlink().app.getIpParallelism())
         .name("IP Signature Generation")
         .uid("generationIpLevel");
 
     ipSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .setParallelism(150)
+        .setParallelism(AppEnv.config().getFlink().app.getIpParallelism())
         .name("IP Signature Expiration")
         .uid("expirationIpLevel");
 

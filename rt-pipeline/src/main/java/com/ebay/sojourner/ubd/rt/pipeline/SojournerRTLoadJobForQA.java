@@ -116,7 +116,10 @@ public class SojournerRTLoadJobForQA {
         new UbiEventMapWithStateFunction(),
         mappedEventOutputTag);
 
-    ubiSessionDataStream.name("Session Operator").uid("sessionLevel");
+    ubiSessionDataStream
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .name("Session Operator")
+        .uid("sessionLevel");
 
     // UbiSession to SojSession
     SingleOutputStreamOperator<SojSession> sojSessionStream =
