@@ -29,13 +29,13 @@ public class EventListenerContainer {
     eventListenerList.add(eventListener);
   }
 
-  public  void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
+  public void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
     for (EventListener eventListener : eventListenerList) {
       eventListener.onEarlyEventChange(ubiEvent, ubiSession);
     }
   }
 
-  public  void onLateEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
+  public void onLateEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
     for (EventListener eventListener : eventListenerList) {
       eventListener.onLateEventChange(ubiEvent, ubiSession);
     }

@@ -15,9 +15,9 @@ public class AgentAttributeAgg
     implements AggregateFunction<
     AgentIpAttribute, AgentAttributeAccumulator, AgentAttributeAccumulator> {
 
+  private static final String AGENT = Constants.AGENT_LEVEL;
   private AgentIndicators agentIndicators;
   private AgentSignatureBotDetector agentSignatureBotDetector;
-  private static final String AGENT = Constants.AGENT_LEVEL;
 
   @Override
   public AgentAttributeAccumulator createAccumulator() {

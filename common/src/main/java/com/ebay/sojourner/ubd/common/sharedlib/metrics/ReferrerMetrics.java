@@ -4,7 +4,7 @@ import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 
-public class ReferrerMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>,EventListener {
+public class ReferrerMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, EventListener {
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {

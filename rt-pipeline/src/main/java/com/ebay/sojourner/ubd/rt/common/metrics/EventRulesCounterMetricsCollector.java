@@ -26,9 +26,7 @@ public class EventRulesCounterMetricsCollector extends RichSinkFunction<UbiEvent
   public void open(Configuration parameters) throws Exception {
     super.open(parameters);
 
-    // static rule
-    eventStaticRuleCounterNameList = Arrays.asList("rule801", "rule1");
-
+    // total event count
     eventTotalCounter =
         getRuntimeContext()
             .getMetricGroup()
@@ -36,6 +34,8 @@ public class EventRulesCounterMetricsCollector extends RichSinkFunction<UbiEvent
             .counter("ubiEvent count");
 
     // static rule
+    eventStaticRuleCounterNameList = Arrays.asList("rule801", "rule1");
+
     for (String ruleName : eventStaticRuleCounterNameList) {
       Counter staticRuleCounter =
           getRuntimeContext()
@@ -52,13 +52,13 @@ public class EventRulesCounterMetricsCollector extends RichSinkFunction<UbiEvent
     List<Long> dynamicRuleIdList = EventBotDetector.dynamicRuleIdList();
     Collection intersection = CollectionUtils
         .intersection(dynamicRuleIdList, eventDynamicRuleCounterNameList);
-    if (!intersection.isEmpty()) {
+    if (CollectionUtils.isNotEmpty(intersection)) {
       for (Object ruleId : intersection) {
         Counter dynamicRuleCounter = getRuntimeContext()
             .getMetricGroup()
             .addGroup("sojourner-ubd")
             .counter("rule" + ruleId);
-        eventRuleCounterNameMap.put("rule" + ruleId,dynamicRuleCounter);
+        eventRuleCounterNameMap.put("rule" + ruleId, dynamicRuleCounter);
         eventDynamicRuleCounterNameList.add((Long) ruleId);
       }
     }

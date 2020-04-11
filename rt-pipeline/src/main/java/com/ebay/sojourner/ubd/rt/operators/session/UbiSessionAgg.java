@@ -14,11 +14,11 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 public class UbiSessionAgg
     implements AggregateFunction<UbiEvent, SessionAccumulator, SessionAccumulator> {
 
+  private static final String SESSION = Constants.SESSION_LEVEL;
   //    private CouchBaseManager couchBaseManager;
   //    private static final String BUCKET_NAME="botsignature";
   private transient SessionMetrics sessionMetrics;
   private transient SessionBotDetector sessionBotDetector;
-  private static final String SESSION = Constants.SESSION_LEVEL;
 
   @Override
   public SessionAccumulator createAccumulator() {
@@ -61,7 +61,7 @@ public class UbiSessionAgg
     Set<Integer> sessionBotFlagSetDetect = null;
     try {
       sessionBotDetector.initDynamicRules(sessionBotDetector.rules(),
-              sessionBotDetector.dynamicRuleIdList(), SESSION);
+          sessionBotDetector.dynamicRuleIdList(), SESSION);
       sessionBotFlagSetDetect = sessionBotDetector.getBotFlagList(accumulator.getUbiSession());
     } catch (IOException | InterruptedException e) {
       log.error("sessionBotDetector getBotFlagList error", e);

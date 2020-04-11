@@ -15,9 +15,9 @@ public class AgentIpAttributeAggSliding
     implements AggregateFunction<
     AgentIpAttribute, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
 
+  private static final String AGENTIP = Constants.AGENTIP_LEVEL;
   private AgentIpIndicatorsSliding agentIpIndicators;
   private AgentIpSignatureBotDetector agentIpSignatureBotDetector;
-  private static final String AGENTIP = Constants.AGENTIP_LEVEL;
 
   @Override
   public AgentIpAttributeAccumulator createAccumulator() {

@@ -15,9 +15,9 @@ public class GuidAttributeAgg implements
     AggregateFunction<SessionForGuidEnhancement,
         GuidAttributeAccumulator, GuidAttributeAccumulator> {
 
+  private static final String GUID = Constants.GUID_LEVEL;
   private GuidIndicators guidIndicators;
   private GuidSignatureBotDetector guidSignatureBotDetector;
-  private static final String GUID = Constants.GUID_LEVEL;
 
   @Override
   public GuidAttributeAccumulator createAccumulator() {

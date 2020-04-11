@@ -5,5 +5,9 @@ import lombok.Data;
 @Data
 public class HdfsConfig {
 
-  private String nameNode;
+  private String sinkParentPath;
+  private String sinkEventPath;
+  private String sinkSessionPath;
+  private String sinkSignaturePath;
+  private String sinkLateEventPath;
 }

@@ -14,9 +14,9 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 public class IpAttributeAgg
     implements AggregateFunction<AgentIpAttribute, IpAttributeAccumulator, IpAttributeAccumulator> {
 
+  private static final String IP = Constants.IP_LEVEL;
   private IpIndicators ipIndicators;
   private IpSignatureBotDetector ipSignatureBotDetector;
-  private static final String IP = Constants.IP_LEVEL;
 
   @Override
   public IpAttributeAccumulator createAccumulator() {

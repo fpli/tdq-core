@@ -1,17 +1,17 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
+import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForLVS;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForRNO;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForSLC;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.RawEventFilterFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
@@ -31,7 +31,7 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.util.OutputTag;
 
-public class SojournerRTLoadForKafkaSinkJob {
+public class SojournerKafkaSinkJob {
 
   public static void main(String[] args) throws Exception {
 
@@ -74,7 +74,8 @@ public class SojournerRTLoadForKafkaSinkJob {
     // 1.2 Assign timestamps and emit watermarks.
     DataStream<RawEvent> rawEventDataStreamForRNO =
         executionEnvironment
-            .addSource(KafkaSourceFunctionForRNO.generateWatermark())
+            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
+                Constants.BOOTSTRAP_SERVERS_RNO, Constants.GROUP_ID_RNO))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
@@ -84,7 +85,8 @@ public class SojournerRTLoadForKafkaSinkJob {
 
     DataStream<RawEvent> rawEventDataStreamForSLC =
         executionEnvironment
-            .addSource(KafkaSourceFunctionForSLC.generateWatermark())
+            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
+                Constants.BOOTSTRAP_SERVERS_SLC, Constants.GROUP_ID_SLC))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
@@ -94,7 +96,8 @@ public class SojournerRTLoadForKafkaSinkJob {
 
     DataStream<RawEvent> rawEventDataStreamForLVS =
         executionEnvironment
-            .addSource(KafkaSourceFunctionForLVS.generateWatermark())
+            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
+                Constants.BOOTSTRAP_SERVERS_LVS, Constants.GROUP_ID_LVS))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
@@ -162,23 +165,29 @@ public class SojournerRTLoadForKafkaSinkJob {
         .getSideOutput(mappedEventOutputTag);
 
     // UbiEvent to SojEvent
-    /*
     DataStream<SojEvent> sojEventWithSessionId = ubiEventWithSessionId
         .map(new UbiEventToSojEventMapFunction())
         .name("UbiEvent to SojEvent")
         .uid("eventTransform");
-        */
 
-    // kafka sink
+    // kafka sink for event
+    sojEventWithSessionId.addSink(KafkaConnectorFactory
+        .createKafkaProducer(Constants.TOPIC_PRODUCER_EVENT, Constants.BOOTSTRAP_SERVERS_EVENT,
+            SojEvent.class, Constants.MESSAGE_KEY))
+        .setParallelism(50)
+        .name("SojEvent Kafka")
+        .uid("kafkaSinkForEvent");
+
+    // kafka sink for session
     sojSessionStream.addSink(KafkaConnectorFactory
-        .createKafkaProducer(Constants.TOPIC_PRODUCER, Constants.BOOTSTRAP_PRODUCER_BROKERS,
+        .createKafkaProducer(Constants.TOPIC_PRODUCER_SESSION, Constants.BOOTSTRAP_SERVERS_SESSION,
             SojSession.class, Constants.MESSAGE_KEY))
         .setParallelism(50)
         .name("SojSession Kafka")
-        .uid("kafkaSink");
+        .uid("kafkaSinkForSession");
 
     // Submit this job
-    executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
+    executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForKafkaSinkPipeline());
   }
 }
 

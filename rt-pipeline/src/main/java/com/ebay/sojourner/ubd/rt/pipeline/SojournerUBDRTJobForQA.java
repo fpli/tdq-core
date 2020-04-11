@@ -14,7 +14,7 @@ import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForQA;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAggSliding;
@@ -106,7 +106,8 @@ public class SojournerUBDRTJobForQA {
     // 1.2 Assign timestamps and emit watermarks.
     DataStream<RawEvent> rawEventDataStream =
         executionEnvironment
-            .addSource(KafkaSourceFunctionForQA.generateWatermark())
+            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
+                Constants.BOOTSTRAP_SERVERS_QA, Constants.GROUP_ID_QA))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 30
@@ -172,7 +173,7 @@ public class SojournerUBDRTJobForQA {
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureDataStream =
         sessionForGuidEnhancement
-            .keyBy("guid1","guid2")
+            .keyBy("guid1", "guid2")
             .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
@@ -299,7 +300,7 @@ public class SojournerUBDRTJobForQA {
         signatureBotDetectionForEvent.getSideOutput(sessionOutputTag);
 
     // UbiSession to SojSession
-    SingleOutputStreamOperator<SojSession> sojSessionStream =
+    DataStream<SojSession> sojSessionStream =
         signatureBotDetectionForSession
             .map(new UbiSessionToSojSessionMapFunction())
             .name("UbiSession to SojSession");
@@ -316,8 +317,16 @@ public class SojournerUBDRTJobForQA {
     // 5.4 Events late
 
     // kafka sink for session
+    sojSessionStream.addSink(KafkaConnectorFactory
+        .createKafkaProducer(Constants.TOPIC_PRODUCER_SESSION, Constants.BOOTSTRAP_SERVERS_SESSION,
+            SojSession.class, Constants.MESSAGE_KEY))
+        .setParallelism(2)
+        .name("SojSession Kafka")
+        .uid("kafkaSinkForSession");
+
+    // kafka sink for event
     sojEventWithSessionId.addSink(KafkaConnectorFactory
-        .createKafkaProducer(Constants.TOPIC_PRODUCER, Constants.BOOTSTRAP_PRODUCER_BROKERS,
+        .createKafkaProducer(Constants.TOPIC_PRODUCER_EVENT, Constants.BOOTSTRAP_SERVERS_EVENT,
             SojEvent.class, Constants.MESSAGE_KEY))
         .setParallelism(2)
         .name("SojEvent Kafka")
@@ -326,8 +335,7 @@ public class SojournerUBDRTJobForQA {
     // metrics collector for end to end
     signatureBotDetectionForEvent
         .addSink(new SojournerEndToEndMetricsCollector())
-        .name("Pipeline End to End Duration")
-        .disableChaining();
+        .name("Pipeline End to End Duration");
 
     // metrics collector for event rules hit
     signatureBotDetectionForEvent
@@ -341,6 +349,6 @@ public class SojournerUBDRTJobForQA {
         .name("Late Event");
 
     // Submit this job
-    executionEnvironment.execute(AppEnv.config().getFlink().getApp().getName());
+    executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForFullPipeline());
   }
 }
