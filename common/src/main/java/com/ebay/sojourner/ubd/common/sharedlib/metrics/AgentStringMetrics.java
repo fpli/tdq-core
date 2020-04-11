@@ -4,6 +4,7 @@ import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.sharedlib.util.IsValidIPv4;
+import com.ebay.sojourner.ubd.common.sharedlib.util.SojEventTimeUtil;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
@@ -39,6 +40,9 @@ public class AgentStringMetrics implements FieldMetrics<UbiEvent, SessionAccumul
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
     // Same logic implemented in IntermediaEventMetrics.java -> Line289
     String agentInfo = event.getAgentInfo();
+    boolean isEarlyEvent = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getAbsStartTimestamp());
     // logger.info("agentExcludeSet.size():"+agentExcludeSet.size());
     if (!event.isRdt()
         && !event.isIframe()
@@ -49,8 +53,14 @@ public class AgentStringMetrics implements FieldMetrics<UbiEvent, SessionAccumul
       if (agentInfo.length() > AGENT_MAX_LENGTH) {
         agentInfo = agentInfo.substring(0, AGENT_MAX_LENGTH);
       }
-
-      if (sessionAccumulator.getUbiSession().getAgentString() == null) {
+      if (!isEarlyEvent) {
+        if (sessionAccumulator.getUbiSession().getAgentString() == null) {
+          sessionAccumulator.getUbiSession().setAgentString(agentInfo);
+        }
+        //        if (sessionAccumulator.getUbiSession().getAgentSets() != null
+        //            && sessionAccumulator.getUbiSession().getAgentSets().size() < 2) {
+        //          sessionAccumulator.getUbiSession().getAgentSets().add(agentInfo);
+      } else {
         sessionAccumulator.getUbiSession().setAgentString(agentInfo);
       }
       if (sessionAccumulator.getUbiSession().getAgentSets() != null
@@ -58,6 +68,7 @@ public class AgentStringMetrics implements FieldMetrics<UbiEvent, SessionAccumul
         sessionAccumulator.getUbiSession().getAgentSets().add(agentInfo);
       }
     }
+
   }
 
   @Override

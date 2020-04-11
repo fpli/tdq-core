@@ -4,6 +4,7 @@ import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
+import com.ebay.sojourner.ubd.common.sharedlib.util.SojEventTimeUtil;
 
 public class FirstMappedUserIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>,
     EventListener {
@@ -18,8 +19,12 @@ public class FirstMappedUserIdMetrics implements FieldMetrics<UbiEvent, SessionA
    */
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
+    boolean isEarlyEvent = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getAbsStartTimestamp());
     String bestGuessUserId = null;
-    if (sessionAccumulator.getUbiSession().getFirstMappedUserId() == null
+    if ((isEarlyEvent ? isEarlyEvent
+        : sessionAccumulator.getUbiSession().getFirstMappedUserId() == null)
         && !event.isRdt()
         && !event.isIframe()) {
       bestGuessUserId = SOJNVL.getTagValue(event.getApplicationPayload(), "bu");
