@@ -18,22 +18,10 @@ import org.apache.hadoop.fs.PathFilter;
 public class HdfsLoader {
 
   private volatile FileSystem fileSystem = null;
-  //  private static volatile HdfsLoader hdfsLoader = null;
 
   public HdfsLoader() {
     initFs();
   }
-
-  //  public static HdfsLoader getInstance() {
-  //    if (hdfsLoader == null) {
-  //      synchronized (HdfsLoader.class) {
-  //        if (hdfsLoader == null) {
-  //          hdfsLoader = new HdfsLoader();
-  //        }
-  //      }
-  //    }
-  //    return hdfsLoader;
-  //  }
 
   public String getLkpFileContent(String parentPath, String filename) {
 
@@ -78,9 +66,6 @@ public class HdfsLoader {
     initFs();
     try {
       if (fileSystem.exists(path)) {
-        //                instream = new FileInputStream(path);
-    //        System.out.println("HDFS file exits:" + path.getName());
-    //        log.info("HDFS file exits:" + path.getName());
         instream = fileSystem.open(path);
       } else {
         log.info("Load resource directly as provided path is empty, resource: " + resource);
