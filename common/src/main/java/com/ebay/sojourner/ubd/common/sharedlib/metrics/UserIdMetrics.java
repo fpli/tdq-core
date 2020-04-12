@@ -17,7 +17,8 @@ public class UserIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
     boolean isEarlyEvent = SojEventTimeUtil
         .isEarlyEvent(event.getEventTimestamp(),
             sessionAccumulator.getUbiSession().getAbsStartTimestamp());
-    if ((isEarlyEvent?isEarlyEvent:sessionAccumulator.getUbiSession().getFirstUserId() == null) && event.getUserId() != null) {
+    if ((isEarlyEvent ? isEarlyEvent : sessionAccumulator.getUbiSession().getFirstUserId() == null)
+        && event.getUserId() != null) {
       sessionAccumulator.getUbiSession().setFirstUserId(event.getUserId());
     }
   }
