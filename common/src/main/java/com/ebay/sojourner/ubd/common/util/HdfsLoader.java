@@ -28,8 +28,9 @@ public class HdfsLoader {
     initFs();
     String content = null;
     Path filePath = new Path(parentPath + filename);
+    InputStream in = null;
     try {
-      InputStream in = loadInStream(filePath, filename);
+      in = loadInStream(filePath, filename);
       StringBuffer resultBuilder = new StringBuffer();
       byte[] bytes = new byte[4096];
       int readBytes = 0;
@@ -43,6 +44,14 @@ public class HdfsLoader {
     } catch (IOException e) {
       e.printStackTrace();
       log.error("open HDFS file {} issue:{}", filePath.getName(), e.getMessage());
+    } finally {
+      if (in != null) {
+        try {
+          in.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
     }
     return content;
   }
@@ -107,7 +116,8 @@ public class HdfsLoader {
       if (fileSystem.exists(path1)) {
         FileStatus[] fileStatus = fileSystem.listStatus(path1, new FileNameFilter(fileName));
         long lastModifiedTime = fileStatus[0].getModificationTime();
-        long preLastModifiedTime = lkpfileDate.get(fileName)==null?0:lkpfileDate.get(fileName);
+        long preLastModifiedTime =
+            lkpfileDate.get(fileName) == null ? 0 : lkpfileDate.get(fileName);
         if (lastModifiedTime > preLastModifiedTime) {
           lkpfileDate.put(fileName, lastModifiedTime);
         }
