@@ -12,16 +12,17 @@ import lombok.extern.slf4j.Slf4j;
 public class LkpFetcher extends TimerTask {
 
   // private static final long ONE_DAY_MILLIS = 24 * 60 * 60 * 1000;
-  private static final int UPDATE_COUNTS = 9;
+  private static final int UPDATE_COUNTS = 8;
   private static Calendar calendar;
   private Timer timer;
   private LkpManager lkpManager;
   private Map<String, Long> lkpfileDate = new ConcurrentHashMap<String, Long>();
   private volatile HdfsLoader hdfsLoader;
+
   public LkpFetcher(LkpManager lkpManager) {
     init();
     this.lkpManager = lkpManager;
-    this.hdfsLoader=lkpManager.hdfsLoader;
+    this.hdfsLoader = lkpManager.hdfsLoader;
   }
 
   private void init() {
@@ -49,7 +50,7 @@ public class LkpFetcher extends TimerTask {
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.IFRAME_PAGE_IDS), lkpfileDate)) {
         lkpManager.loadIframePageIds(false);
         currentRoundCount++;
-        System.out.println("IFRAME_PAGE_IDS:"+currentRoundCount);
+        System.out.println("IFRAME_PAGE_IDS:" + currentRoundCount);
       }
       if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.FINDING_FLAGS), lkpfileDate)) {
@@ -71,11 +72,12 @@ public class LkpFetcher extends TimerTask {
         lkpManager.loadAppIds(false);
         currentRoundCount++;
       }
-      if (hdfsLoader
-          .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.LARGE_SESSION_GUID), lkpfileDate)) {
-        lkpManager.loadLargeSessionGuid(false);
-        currentRoundCount++;
-      }
+      //      if (hdfsLoader
+      //          .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.LARGE_SESSION_GUID),
+      //          lkpfileDate)) {
+      //        lkpManager.loadLargeSessionGuid(false);
+      //        currentRoundCount++;
+      //      }
       if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.PAGE_FMLY), lkpfileDate)) {
         lkpManager.loadPageFmlys(false);
@@ -93,6 +95,7 @@ public class LkpFetcher extends TimerTask {
       }
 
     }
+    hdfsLoader.closeFS();
     System.out.println("daily refresh completed");
   }
 }
