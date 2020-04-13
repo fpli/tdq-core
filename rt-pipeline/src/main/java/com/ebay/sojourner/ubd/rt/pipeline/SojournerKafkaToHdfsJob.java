@@ -52,7 +52,7 @@ public class SojournerKafkaToHdfsJob {
     DataStream<SojSession> sojSessionDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunctionForSessionLoad.generateWatermark())
-            .setParallelism(30)
+            .setParallelism(2)
             .name("Rheos Kafka Consumer For Session")
             .uid("kafkaSourceForSession");
 

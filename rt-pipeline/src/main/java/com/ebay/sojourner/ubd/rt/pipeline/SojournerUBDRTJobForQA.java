@@ -93,7 +93,7 @@ public class SojournerUBDRTJobForQA {
                 ? 1
                 : AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
     executionEnvironment.setStateBackend(
-        StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
+        StateBackendFactory.getStateBackend(StateBackendFactory.FS));
     executionEnvironment.setRestartStrategy(
         RestartStrategies.fixedDelayRestart(
             3, // number of restart attempts

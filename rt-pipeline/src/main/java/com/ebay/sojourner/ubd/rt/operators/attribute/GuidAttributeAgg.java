@@ -4,6 +4,7 @@ import com.ebay.sojourner.ubd.common.model.GuidAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.SessionForGuidEnhancement;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.GuidSignatureBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.indicators.GuidIndicators;
+import com.ebay.sojourner.ubd.common.sql.RuleManager;
 import com.ebay.sojourner.ubd.common.util.Constants;
 import java.io.IOException;
 import java.util.Set;
@@ -18,6 +19,7 @@ public class GuidAttributeAgg implements
   private static final String GUID = Constants.GUID_LEVEL;
   private GuidIndicators guidIndicators;
   private GuidSignatureBotDetector guidSignatureBotDetector;
+  private RuleManager ruleManager;
 
   @Override
   public GuidAttributeAccumulator createAccumulator() {
@@ -25,6 +27,7 @@ public class GuidAttributeAgg implements
     GuidAttributeAccumulator guidAttributeAccumulator = new GuidAttributeAccumulator();
     guidIndicators = GuidIndicators.getInstance();
     guidSignatureBotDetector = GuidSignatureBotDetector.getInstance();
+    ruleManager = RuleManager.getInstance();
 
     try {
       guidIndicators.start(guidAttributeAccumulator);
@@ -53,8 +56,8 @@ public class GuidAttributeAgg implements
     try {
       if (guidAttributeAccumulator.getBotFlagStatus().containsValue(0)
           || guidAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
-        guidSignatureBotDetector.initDynamicRules(guidSignatureBotDetector.rules(),
-            guidSignatureBotDetector.dynamicRuleIdList(), GUID);
+        guidSignatureBotDetector.initDynamicRules(ruleManager, guidSignatureBotDetector.rules(),
+            GuidSignatureBotDetector.dynamicRuleIdList(), GUID);
         guidBotFlag =
             guidSignatureBotDetector.getBotFlagList(guidAttributeAccumulator.getGuidAttribute());
         if (guidBotFlag.contains(15)) {

@@ -11,8 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class AbstractBotDetector<T> implements BotDetector<T> {
 
   @Override
-  public void initDynamicRules(Set<Rule> botRules, List<Long> dynamicRuleIdList, String category) {
-    List<SqlEventRule> dynamicEventRules = RuleManager.getInstance().sqlEventRules();
+  public void initDynamicRules(RuleManager ruleManager, Set<Rule> botRules,
+      List<Long> dynamicRuleIdList, String category) {
+    List<SqlEventRule> dynamicEventRules = ruleManager.sqlEventRules();
     log.info("before hot deploy bot rules:" + botRules.size());
     if (botRules.isEmpty() && !dynamicEventRules.isEmpty()) {
       // add
