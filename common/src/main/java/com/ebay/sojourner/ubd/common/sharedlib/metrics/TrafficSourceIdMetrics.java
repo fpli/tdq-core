@@ -2,20 +2,15 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpListener;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJGetUrlPath;
-import com.ebay.sojourner.ubd.common.util.LkpEnum;
-import com.ebay.sojourner.ubd.common.util.LkpManager;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
-public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>,
-    LkpListener {
+public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
 
   private static final Long INITIALSESSIONDATE = 3542227200000000L;
@@ -94,11 +89,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
     regString4Id23 = stingBuilder.toString();
   }
 
-  private boolean isfirst = true;
-  private volatile Map<String, String> mapxMap;
-  private volatile LkpManager lkpManager;
   private volatile IntermediateMetrics intermediateMetrics;
-  private boolean isContinue;
 
   @Override
   public void end(SessionAccumulator sessionAccumulator) throws Exception {
@@ -573,29 +564,13 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
         UBIConfig.getString(Property.SOCIAL_AGENT_ID22), Property.PROPERTY_DELIMITER);
     socialAgentId23 = PropertyUtils.getIntegerSet(
         UBIConfig.getString(Property.SOCIAL_AGENT_ID23), Property.PROPERTY_DELIMITER);
-    lkpManager = new LkpManager(this, LkpEnum.mpx);
-    mapxMap=lkpManager.getMpxMap();
   }
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
-      intermediateMetrics = new IntermediateMetrics(mapxMap);
-      sessionAccumulator.getUbiSession().setIntermediateMetrics(intermediateMetrics);
+    intermediateMetrics = new IntermediateMetrics();
+    sessionAccumulator.getUbiSession().setIntermediateMetrics(intermediateMetrics);
 
   }
 
-  @Override
-  public boolean notifyLkpChange(LkpManager lkpManager) {
-    try {
-
-      this.isContinue = false;
-      mapxMap=lkpManager.getMpxMap();
-      intermediateMetrics.setMpx(mapxMap);
-      return true;
-    } catch (Throwable e) {
-      return false;
-    } finally {
-      this.isContinue = true;
-    }
-  }
 }

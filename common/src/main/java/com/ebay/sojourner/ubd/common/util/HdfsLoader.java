@@ -49,6 +49,7 @@ public class HdfsLoader {
       if (in != null) {
         try {
           in.close();
+          in=null;
         } catch (IOException e) {
           e.printStackTrace();
         }

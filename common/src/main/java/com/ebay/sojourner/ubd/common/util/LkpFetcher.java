@@ -11,11 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LkpFetcher extends TimerTask {
 
-  // private static final long ONE_DAY_MILLIS = 24 * 60 * 60 * 1000;
+  private static final long ONE_DAY_MILLIS = 24 * 60 * 60 * 1000;
   private static final int UPDATE_COUNTS = 8;
   private static Calendar calendar;
   private Timer timer;
-  private LkpManager lkpManager;
+  private volatile LkpManager lkpManager;
   private Map<String, Long> lkpfileDate = new ConcurrentHashMap<String, Long>();
   private volatile HdfsLoader hdfsLoader;
 
@@ -38,6 +38,7 @@ public class LkpFetcher extends TimerTask {
     calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
         calendar.get(Calendar.DATE), 5, 0, 0);
     Date date = calendar.getTime();
+    //    timer.scheduleAtFixedRate(this, date, ONE_DAY_MILLIS);
   }
 
 

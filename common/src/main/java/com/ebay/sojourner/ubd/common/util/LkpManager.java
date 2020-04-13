@@ -1,6 +1,5 @@
 package com.ebay.sojourner.ubd.common.util;
 
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpListener;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,6 +19,7 @@ public class LkpManager {
   public static final String TEXT_FIELD_DELIMITER = "\t";
   public static final int PAIR_LENGTH = 2;
   private static volatile LkpManager lkpManager;
+  public volatile HdfsLoader hdfsLoader;
   private Set<Integer> pageIdSet = new CopyOnWriteArraySet<>();
   // private static Set<String> pageIdSet4Bot12 = new HashSet<String>();
   private Map<Integer, Integer> findingFlagMap = new ConcurrentHashMap<>();
@@ -34,30 +34,26 @@ public class LkpManager {
   private Set<String> selectedAgents = new CopyOnWriteArraySet<String>();
   private Map<String, String> result = new ConcurrentHashMap<String, String>();
   private volatile LkpFetcher lkpFetcher;
-  private volatile LkpListener lkpListener;
-  private volatile LkpEnum lkpEnum;
-  public volatile HdfsLoader hdfsLoader;
 
-  public LkpManager(LkpListener lkpListener, LkpEnum lkpEnum) {
+  public LkpManager() {
 
-    this.lkpListener = lkpListener;
     lkpFetcher = new LkpFetcher(this);
     lkpFetcher.startDailyRefresh();
-    this.lkpEnum = lkpEnum;
-    hdfsLoader= new HdfsLoader();
+    hdfsLoader = new HdfsLoader();
     loadResources(true);
+    hdfsLoader.closeFS();
   }
 
-  //  public static LkpManager getInstance() {
-  //    if (lkpManager == null) {
-  //      synchronized (LkpManager.class) {
-  //        if (lkpManager == null) {
-  //          lkpManager = new LkpManager();
-  //        }
-  //      }
-  //    }
-  //    return lkpManager;
-  //  }
+  public static LkpManager getInstance() {
+    if (lkpManager == null) {
+      synchronized (LkpManager.class) {
+        if (lkpManager == null) {
+          lkpManager = new LkpManager();
+        }
+      }
+    }
+    return lkpManager;
+  }
 
   private void loadResources(boolean isInit) {
     loadIframePageIds(isInit);
@@ -73,10 +69,10 @@ public class LkpManager {
   }
 
   public void loadIframePageIds(boolean isInit) {
-    pageIdSet = new CopyOnWriteArraySet<>();
+    Set<Integer> pageIdSetMid = new CopyOnWriteArraySet<>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String iframePageIds = UBIConfig.getString(Property.IFRAME_PAGE_IDS);
-    String pageIds = isTestEnabled ? iframePageIds :hdfsLoader
+    String pageIds = isTestEnabled ? iframePageIds : hdfsLoader
         .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), iframePageIds);
     if (StringUtils.isNotBlank(pageIds)) {
       for (String pageId : pageIds.split(LKP_RECORD_DELIMITER)) {
@@ -90,41 +86,26 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of iframe page ids");
     }
-    if(!isInit) {
-      if (lkpEnum == LkpEnum.iframePageIds) {
-        lkpListener.notifyLkpChange(this);
-
-      }
-    }
+    pageIdSet = pageIdSetMid;
 
   }
 
   public void loadSelectedIps(boolean isInit) {
-    selectedIps = new ConcurrentHashMap<String, Boolean>();
+    Map<String, Boolean> selectedIpsMid = new ConcurrentHashMap<String, Boolean>();
     parseTextFile(Property.SELECTED_IPS, selectedIps);
-    if(!isInit) {
-      if (lkpEnum == LkpEnum.selectedIps) {
-        lkpListener.notifyLkpChange(this);
-
-      }
-    }
+    selectedIps = selectedIpsMid;
   }
 
   public void loadSelectedAgents(boolean isInit) {
-    selectedAgents = new CopyOnWriteArraySet<String>();
+    Set<String> selectedAgentsMid = new CopyOnWriteArraySet<String>();
     parseTextFile(Property.SELECTED_AGENTS, selectedAgents);
-    if(!isInit) {
-      if (lkpEnum == LkpEnum.selectedAgents) {
-        lkpListener.notifyLkpChange(this);
-
-      }
-    }
+    selectedAgents = selectedAgentsMid;
   }
 
   private void parseTextFile(String filePathProperty, Set<String> sets) {
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String file = UBIConfig.getString(filePathProperty);
-    String fileContent = isTestEnabled ? file :hdfsLoader
+    String fileContent = isTestEnabled ? file : hdfsLoader
         .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), file);
     if (StringUtils.isNotBlank(fileContent)) {
       for (String record : fileContent.split(TEXT_RECORD_DELIMITER)) {
@@ -144,7 +125,7 @@ public class LkpManager {
   private void parseTextFile(String filePathProperty, Map<String, Boolean> maps) {
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String file = UBIConfig.getString(filePathProperty);
-    String fileContent = isTestEnabled ? file :hdfsLoader
+    String fileContent = isTestEnabled ? file : hdfsLoader
         .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), file);
     if (StringUtils.isNotBlank(fileContent)) {
       for (String record : fileContent.split(TEXT_RECORD_DELIMITER)) {
@@ -166,11 +147,11 @@ public class LkpManager {
   }
 
   public void loadLargeSessionGuid(boolean isInit) {
-    largeSessionGuidSet = new CopyOnWriteArraySet<String>();
+    Set<String> largeSessionGuidSetMid = new CopyOnWriteArraySet<String>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String largeSessionGuidValue = UBIConfig.getString(Property.LARGE_SESSION_GUID);
     String largeSessionGuids =
-        isTestEnabled ? largeSessionGuidValue :hdfsLoader
+        isTestEnabled ? largeSessionGuidValue : hdfsLoader
             .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH),
                 largeSessionGuidValue);
     if (StringUtils.isNotBlank(largeSessionGuids)) {
@@ -182,20 +163,15 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of large session guid");
     }
-    if(!isInit) {
-      if (lkpEnum == LkpEnum.largeSessionGuid) {
-        lkpListener.notifyLkpChange(this);
-
-      }
-    }
+    largeSessionGuidSet = largeSessionGuidSetMid;
   }
 
   public void loadIabAgent(boolean isInit) {
-    iabAgentRegs = new CopyOnWriteArrayList<>();
+    List<String> iabAgentRegsMid = new CopyOnWriteArrayList<>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String iabAgentReg = UBIConfig.getString(Property.IAB_AGENT);
     String iabAgentRegValue =
-        isTestEnabled ? iabAgentReg :hdfsLoader
+        isTestEnabled ? iabAgentReg : hdfsLoader
             .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), iabAgentReg);
     if (StringUtils.isNotBlank(iabAgentRegValue)) {
       for (String iabAgent : iabAgentRegValue.split(LKP_RECORD_DELIMITER)) {
@@ -204,20 +180,15 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of iab agent info");
     }
-    if(!isInit) {
-      if (lkpEnum == LkpEnum.iabAgentRex) {
-        lkpListener.notifyLkpChange(this);
-
-      }
-    }
+    iabAgentRegs = iabAgentRegsMid;
 
   }
 
   public void loadFindingFlag(boolean isInit) {
-    findingFlagMap = new ConcurrentHashMap<>();
+    Map<Integer, Integer> findingFlagMapMid = new ConcurrentHashMap<>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String findingFlag = UBIConfig.getString(Property.FINDING_FLAGS);
-    String findingFlags = isTestEnabled ? findingFlag :hdfsLoader
+    String findingFlags = isTestEnabled ? findingFlag : hdfsLoader
         .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), findingFlag);
     if (StringUtils.isNotBlank(findingFlags)) {
       for (String pageFlag : findingFlags.split(LKP_RECORD_DELIMITER)) {
@@ -236,12 +207,7 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of finding flag");
     }
-    if(!isInit) {
-      if (lkpEnum == LkpEnum.findingFlag) {
-        lkpListener.notifyLkpChange(this);
-
-      }
-    }
+    findingFlagMap = findingFlagMapMid;
 
   }
 
@@ -250,10 +216,10 @@ public class LkpManager {
   }
 
   public void loadVtNewIds(boolean isInit) {
-    vtNewIdsMap = new ConcurrentHashMap<Integer, Integer[]>();
+    Map<Integer, Integer[]> vtNewIdsMapMid = new ConcurrentHashMap<Integer, Integer[]>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String vtNewIds = UBIConfig.getString(Property.VTNEW_IDS);
-    String vtNewIdsValue = isTestEnabled ? vtNewIds :hdfsLoader
+    String vtNewIdsValue = isTestEnabled ? vtNewIds : hdfsLoader
         .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), vtNewIds);
     if (StringUtils.isNotBlank(vtNewIdsValue)) {
       for (String vtNewId : vtNewIdsValue.split(LKP_RECORD_DELIMITER)) {
@@ -267,20 +233,15 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of vtNewIds");
     }
-    if(!isInit) {
-      if (lkpEnum == LkpEnum.vtNewIdSource) {
-        lkpListener.notifyLkpChange(this);
-
-      }
-    }
+    vtNewIdsMap = vtNewIdsMapMid;
 
   }
 
   public void loadAppIds(boolean isInit) {
-    appIdWithBotFlags = new CopyOnWriteArraySet();
+    Set<String> appIdWithBotFlagsMid = new CopyOnWriteArraySet();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String appIds = UBIConfig.getString(Property.APP_ID);
-    String appIdAndFlags = isTestEnabled ? appIds :hdfsLoader
+    String appIdAndFlags = isTestEnabled ? appIds : hdfsLoader
         .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), appIds);
     if (StringUtils.isNotBlank(appIdAndFlags)) {
       String[] appIdFlagPair = appIdAndFlags.split(LKP_RECORD_DELIMITER);
@@ -292,19 +253,15 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of app Ids");
     }
-    if(!isInit) {
-      if (lkpEnum == LkpEnum.appid) {
-        lkpListener.notifyLkpChange(this);
+    appIdWithBotFlags = appIdWithBotFlagsMid;
 
-      }
-    }
   }
 
   public void loadPageFmlys(boolean isInit) {
-    pageFmlyMap = new ConcurrentHashMap<Integer, String[]>();
+    Map<Integer, String[]> pageFmlyMapMid = new ConcurrentHashMap<Integer, String[]>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String pageFmlys = UBIConfig.getString(Property.PAGE_FMLY);
-    String pageFmlysValue = isTestEnabled ? pageFmlys :hdfsLoader
+    String pageFmlysValue = isTestEnabled ? pageFmlys : hdfsLoader
         .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), pageFmlys);
     if (StringUtils.isNotBlank(pageFmlysValue)) {
       for (String pageFmlyPair : pageFmlysValue.split(LKP_RECORD_DELIMITER)) {
@@ -320,12 +277,8 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of page fmlys");
     }
-    if(!isInit) {
-      if (lkpEnum == LkpEnum.pageFmly) {
-        lkpListener.notifyLkpChange(this);
+    pageFmlyMap = pageFmlyMapMid;
 
-      }
-    }
   }
 
   public void loadLocally() throws Exception {
@@ -345,10 +298,10 @@ public class LkpManager {
   }
 
   public void loadMpxRotetion(boolean isInit) {
-    mpxMap = new ConcurrentHashMap<String, String>();
+    Map<String, String> mpxMapMid = new ConcurrentHashMap<String, String>();
     boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
     String mpxRotation = UBIConfig.getString(Property.MPX_ROTATION);
-    String mpxRotations = isTestEnabled ? mpxRotation :hdfsLoader
+    String mpxRotations = isTestEnabled ? mpxRotation : hdfsLoader
         .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), mpxRotation);
 
     if (StringUtils.isNotBlank(mpxRotations)) {
@@ -368,11 +321,7 @@ public class LkpManager {
     } else {
       log.warn("Empty content for lookup table of mpx rotation.");
     }
-    if(!isInit) {
-      if (lkpEnum == LkpEnum.mpx) {
-        lkpListener.notifyLkpChange(this);
-      }
-    }
+    mpxMap = mpxMapMid;
   }
 
   public Set<Integer> getIframePageIdSet() {

@@ -1,7 +1,6 @@
 package com.ebay.sojourner.ubd.common.util;
 
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -10,21 +9,19 @@ import java.util.Set;
 /**
  * @author weifang.
  */
-public class UbiBotFilter implements BotFilter, LkpListener {
+public class UbiBotFilter implements BotFilter {
 
   public static final String COUNTER_FILTERED_APPID = "filteredByAppId";
   public static final String COUNTER_FILTERED_INVALID = "filteredByInvalidSession";
 
   private final Set<Integer> invalidSessionBotFilter;
-  private  Map<Integer, Set<Integer>> appIdWithBotFlags;
-  private volatile LkpManager lkpManager = new LkpManager(this,LkpEnum.appid);
-  private boolean isContinue;
+  private Set<String> appIdWithBotFlags;
+
   public UbiBotFilter() {
-    appIdWithBotFlags = getAppIdWithBotFlags(lkpManager.getAppIds());
+    appIdWithBotFlags = LkpManager.getInstance().getAppIds();
     invalidSessionBotFilter =
         PropertyUtils.getIntegerSet(
             UBIConfig.getString(Property.INVALID_BOT_FILTER), Property.PROPERTY_DELIMITER);
-    isContinue=true;
   }
 
   public static Map<Integer, Set<Integer>> getAppIdWithBotFlags(Set<String> appIds) {
@@ -44,30 +41,21 @@ public class UbiBotFilter implements BotFilter, LkpListener {
 
   @Override
   public boolean filter(UbiSession ubiSession, Integer targetFlag) throws InterruptedException {
-    while(!isContinue){
-      Thread.sleep(10);
-    }
-    if (ubiSession.getAppId() != null) {
-      Set<Integer> botFlags = appIdWithBotFlags.get(ubiSession.getAppId());
-      return botFlags != null && botFlags.contains(targetFlag);
+    appIdWithBotFlags = LkpManager.getInstance().getAppIds();
+    Integer appId = ubiSession.getFirstAppId();
+    if (targetFlag != null && appId != null) {
+      StringBuilder appIdOnBotFlag = new StringBuilder();
+      appIdOnBotFlag
+          .append(appId.toString().trim())
+          .append(LkpManager.LKP_FILED_DELIMITER)
+          .append(targetFlag.toString().trim());
+      if (appIdWithBotFlags.contains(appIdOnBotFlag.toString())) {
+        return true;
+      }
     }
 
     return UbiSessionHelper.isNonIframRdtCountZero(ubiSession)
         && invalidSessionBotFilter.contains(targetFlag);
   }
 
-  @Override
-  public boolean notifyLkpChange(LkpManager lkpManager) {
-    try {
-
-      this.isContinue=false;
-      appIdWithBotFlags = getAppIdWithBotFlags(lkpManager.getAppIds());
-      return true;
-    } catch (Throwable e) {
-      return false;
-    }
-    finally {
-      this.isContinue=true;
-    }
-  }
 }

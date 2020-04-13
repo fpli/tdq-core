@@ -2,7 +2,6 @@ package com.ebay.sojourner.ubd.common.util;
 
 import com.ebay.sojourner.ubd.common.model.AgentAttribute;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpListener;
 import com.ebay.sojourner.ubd.common.sharedlib.util.Base64Ebay;
 import com.ebay.sojourner.ubd.common.sharedlib.util.GUID2Date;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
@@ -16,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Xiaoding
  */
-public class UbiSessionHelper implements LkpListener {
+public class UbiSessionHelper {
 
   public static final long MINUS_GUID_MIN_MS =
       180000L; // 417mins - 7hours = -3mins = -180000ms; UNIX.
@@ -34,13 +33,10 @@ public class UbiSessionHelper implements LkpListener {
           return size() > IAB_MAX_CAPACITY;
         }
       };
-  private volatile LkpManager lkpManager;
-  private boolean isContinue;
   private List<String> iabAgentRegs;
+
   public UbiSessionHelper() {
-    lkpManager = new LkpManager(this, LkpEnum.iabAgentRex);
-    iabAgentRegs= lkpManager.getIabAgentRegs();
-    isContinue = true;
+    iabAgentRegs = LkpManager.getInstance().getIabAgentRegs();
   }
 
   public static boolean isSingleClickSession(UbiSession session) {
@@ -169,38 +165,10 @@ public class UbiSessionHelper implements LkpListener {
     }
   }
 
-  public  boolean isIabAgent(UbiSession session) throws InterruptedException {
-    if (session.getNonIframeRdtEventCnt() > 0 && session.getUserAgent() != null) {
-      Boolean whether = iabCache.get(session.getUserAgent());
-      if (whether == null) {
-        whether = checkIabAgent(session.getUserAgent());
-        iabCache.put(session.getUserAgent(), whether);
-      }
-
-      return whether;
-    }
-
-    return false;
-  }
-
   public static boolean isYesterdaySession(UbiSession session) {
     //        if (session.getFlags() != null) {
     //            return BitUtil.isBitSet(session.getFlags(), SessionFlags.YESTERDAY_SESSION);
     //        }
-    return false;
-  }
-
-  protected  boolean checkIabAgent(String agent) throws InterruptedException {
-    while(!isContinue){
-      Thread.sleep(10);
-    }
-    if (StringUtils.isNotBlank(agent)) {
-      for (String iabAgentReg : iabAgentRegs) {
-        if (agent.toLowerCase().contains(iabAgentReg)) {
-          return true;
-        }
-      }
-    }
     return false;
   }
 
@@ -221,18 +189,30 @@ public class UbiSessionHelper implements LkpListener {
     return false;
   }
 
-  @Override
-  public boolean notifyLkpChange(LkpManager lkpManager) {
-    try {
+  public boolean isIabAgent(UbiSession session) throws InterruptedException {
+    if (session.getNonIframeRdtEventCnt() > 0 && session.getUserAgent() != null) {
+      Boolean whether = iabCache.get(session.getUserAgent());
+      if (whether == null) {
+        whether = checkIabAgent(session.getUserAgent());
+        iabCache.put(session.getUserAgent(), whether);
+      }
 
-      this.isContinue=false;
-      iabAgentRegs = lkpManager.getIabAgentRegs();
-      return true;
-    } catch (Throwable e) {
-      return false;
+      return whether;
     }
-    finally {
-      this.isContinue=true;
-    }
+
+    return false;
   }
+
+  protected boolean checkIabAgent(String agent) {
+    iabAgentRegs = LkpManager.getInstance().getIabAgentRegs();
+    if (StringUtils.isNotBlank(agent)) {
+      for (String iabAgentReg : iabAgentRegs) {
+        if (agent.toLowerCase().contains(iabAgentReg)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
 }
