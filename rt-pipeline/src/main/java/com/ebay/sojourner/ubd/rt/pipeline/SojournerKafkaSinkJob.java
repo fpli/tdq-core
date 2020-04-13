@@ -177,7 +177,7 @@ public class SojournerKafkaSinkJob {
     sojEventWithSessionId.addSink(KafkaConnectorFactory
         .createKafkaProducer(Constants.TOPIC_PRODUCER_EVENT, Constants.BOOTSTRAP_SERVERS_EVENT,
             SojEvent.class, Constants.MESSAGE_KEY))
-        .setParallelism(50)
+        .setParallelism(150)
         .name("SojEvent Kafka")
         .uid("kafkaSinkForEvent");
 
