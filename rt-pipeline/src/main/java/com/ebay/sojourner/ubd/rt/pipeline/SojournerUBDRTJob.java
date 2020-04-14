@@ -144,17 +144,19 @@ public class SojournerUBDRTJob {
         .union(rawEventDataStreamForSLC);
 
     // filter 33% throughput group by guid for reduce kafka consumer lag
+    /*
     DataStream<RawEvent> filteredRawEvent = rawEventDataStream
         .filter(new RawEventFilterFunction())
         .name("RawEvent Filter Operator")
         .disableChaining()
         .uid("filterSource");
+        */
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
     // 2.2 Event level bot detection via bot rule
     DataStream<UbiEvent> ubiEventDataStream =
-        filteredRawEvent
+        rawEventDataStream
             .map(new EventMapFunction())
             .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
             .name("Event Operator")
