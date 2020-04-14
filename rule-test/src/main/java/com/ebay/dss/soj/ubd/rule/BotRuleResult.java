@@ -4,12 +4,12 @@ import java.sql.ResultSet;
 import lombok.Data;
 
 @Data
-public class RuleReportResult {
+public class BotRuleResult {
 
   private BotRuleDesc botRuleDesc;
   private String result;
 
-  static RuleReportResult toRuleReportResult(ResultSet resultSet) {
-    return new RuleReportResult();
+  static BotRuleResult of(ResultSet resultSet) {
+    return new BotRuleResult();
   }
 }
