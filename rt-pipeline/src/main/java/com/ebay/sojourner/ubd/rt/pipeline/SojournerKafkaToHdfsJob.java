@@ -54,7 +54,7 @@ public class SojournerKafkaToHdfsJob {
     DataStream<SojSession> sojSessionDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunctionForLoad
-                .generateWatermarkForSession(Constants.TOPIC_PRODUCER_SESSION,
+                .generateWatermark(Constants.TOPIC_PRODUCER_SESSION,
                     Constants.BOOTSTRAP_SERVERS_SESSION, Constants.GROUP_ID_SESSION,
                     SojSession.class))
             .setParallelism(50)
@@ -66,7 +66,7 @@ public class SojournerKafkaToHdfsJob {
     DataStream<SojEvent> sojEventDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunctionForLoad
-                .generateWatermarkForEvent(Constants.TOPIC_PRODUCER_EVENT,
+                .generateWatermark(Constants.TOPIC_PRODUCER_EVENT,
                     Constants.BOOTSTRAP_SERVERS_EVENT, Constants.GROUP_ID_EVENT,
                     SojEvent.class))
             .setParallelism(150)
