@@ -62,7 +62,11 @@ public class KafkaConnectorFactory {
             AppEnv.config().getRheos().getIaf().getEnv());
 
     props.put(SaslConfigs.SASL_JAAS_CONFIG, saslJaasConfig);
+<<<<<<< HEAD
     props.put(ProducerConfig.BATCH_SIZE_CONFIG,4 * 1024);
+=======
+    props.put(ProducerConfig.BATCH_SIZE_CONFIG, 4 * 1024);
+>>>>>>> sojourner-performance
     props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
 
     return new FlinkKafkaProducer<>(topic,

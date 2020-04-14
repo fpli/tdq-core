@@ -31,6 +31,7 @@ import com.ebay.sojourner.ubd.common.sharedlib.parser.SqrParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.StaticPageTypeParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.TimestampParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.UserIdParser;
+import com.ebay.sojourner.ubd.common.sql.RuleManager;
 import com.ebay.sojourner.ubd.common.util.Constants;
 import java.util.Arrays;
 import java.util.List;
@@ -45,9 +46,10 @@ import org.apache.flink.configuration.Configuration;
 @Slf4j
 public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
+  private static final String EVENT = Constants.EVENT_LEVEL;
   private EventParser parser;
   private EventBotDetector eventBotDetector;
-  private static final String EVENT = Constants.EVENT_LEVEL;
+  private RuleManager ruleManager;
   private AverageAccumulator avgEventParserDuration = new AverageAccumulator();
   private Map<String, AverageAccumulator> eventParseMap = new ConcurrentHashMap<>();
   private AverageAccumulator avgBotDetectionDuration = new AverageAccumulator();
@@ -57,6 +59,7 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
     super.open(conf);
     parser = new EventParser();
     eventBotDetector = EventBotDetector.getInstance();
+    ruleManager = RuleManager.getInstance();
 
     getRuntimeContext()
         .addAccumulator("Average Duration of Event Parsing", avgEventParserDuration);
@@ -111,7 +114,8 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
     avgEventParserDuration.add(System.nanoTime() - startTimeForEventParser);
     long startTimeForEventBotDetection = System.nanoTime();
     eventBotDetector
-        .initDynamicRules(eventBotDetector.rules(), eventBotDetector.dynamicRuleIdList(),EVENT);
+        .initDynamicRules(ruleManager, eventBotDetector.rules(),
+            EventBotDetector.dynamicRuleIdList(), EVENT);
     Set<Integer> botFlagList = eventBotDetector.getBotFlagList(event);
     avgBotDetectionDuration.add(System.nanoTime() - startTimeForEventBotDetection);
     event.getBotFlags().addAll(botFlagList);

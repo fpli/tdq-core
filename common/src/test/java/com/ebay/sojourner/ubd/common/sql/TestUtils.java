@@ -5,16 +5,18 @@ import java.util.List;
 
 public class TestUtils {
 
+  public static final int DEFAULT_ITERATIONS = 1000;
   private static final String UDF_1_STR =
+<<<<<<< HEAD
       "SELECT square(2) FROM soj.idl_event";
 
+=======
+      "SELECT square(2) FROM soj.ubiEvents";
+>>>>>>> sojourner-performance
   public static final SqlEventRule UDF_1_INTERPRETER =
       new SqlInterpreterEventRule(UDF_1_STR);
-
   public static final SqlEventRule UDF_1_COMPILER =
       new SqlCompilerEventRule(UDF_1_STR);
-
-  public static final int DEFAULT_ITERATIONS = 1000;
 
   public static void benchmark(String name, List<SqlEventRule> rules, List<UbiEvent> events,
       int iterations) {

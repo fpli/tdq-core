@@ -4,6 +4,7 @@ import com.ebay.sojourner.ubd.common.model.AgentAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.AgentSignatureBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.indicators.AgentIndicators;
+import com.ebay.sojourner.ubd.common.sql.RuleManager;
 import com.ebay.sojourner.ubd.common.util.Constants;
 import java.io.IOException;
 import java.util.Set;
@@ -15,9 +16,10 @@ public class AgentAttributeAgg
     implements AggregateFunction<
     AgentIpAttribute, AgentAttributeAccumulator, AgentAttributeAccumulator> {
 
+  private static final String AGENT = Constants.AGENT_LEVEL;
   private AgentIndicators agentIndicators;
   private AgentSignatureBotDetector agentSignatureBotDetector;
-  private static final String AGENT = Constants.AGENT_LEVEL;
+  private RuleManager ruleManager;
 
   @Override
   public AgentAttributeAccumulator createAccumulator() {
@@ -25,6 +27,7 @@ public class AgentAttributeAgg
     AgentAttributeAccumulator agentAttributeAccumulator = new AgentAttributeAccumulator();
     agentIndicators = AgentIndicators.getInstance();
     agentSignatureBotDetector = AgentSignatureBotDetector.getInstance();
+    ruleManager = RuleManager.getInstance();
 
     try {
       agentIndicators.start(agentAttributeAccumulator);
@@ -53,8 +56,8 @@ public class AgentAttributeAgg
     try {
       if (agentAttributeAccumulator.getBotFlagStatus().containsValue(0)
           || agentAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
-        agentSignatureBotDetector.initDynamicRules(agentSignatureBotDetector.rules(),
-            agentSignatureBotDetector.dynamicRuleIdList(), AGENT);
+        agentSignatureBotDetector.initDynamicRules(ruleManager, agentSignatureBotDetector.rules(),
+            AgentSignatureBotDetector.dynamicRuleIdList(), AGENT);
         agentBotFlag =
             agentSignatureBotDetector.getBotFlagList(agentAttributeAccumulator.getAgentAttribute());
         if (agentBotFlag.contains(6)) {

@@ -58,7 +58,7 @@ public class EventRulesCounterMetricsCollector extends RichSinkFunction<UbiEvent
             .getMetricGroup()
             .addGroup("sojourner-ubd")
             .counter("rule" + ruleId);
-        eventRuleCounterNameMap.put("rule" + ruleId,dynamicRuleCounter);
+        eventRuleCounterNameMap.put("rule" + ruleId, dynamicRuleCounter);
         eventDynamicRuleCounterNameList.add((Long) ruleId);
       }
     }

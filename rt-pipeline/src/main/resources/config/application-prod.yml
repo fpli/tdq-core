@@ -72,8 +72,13 @@ flink:
     nameForHotDeployPipeline: Unified Bot Detection RT Hot Deploy Pipeline
     nameForKafkaSinkPipeline: Unified Bot Detection RT kafka Sink Pipeline
     source-parallelism: 100
+<<<<<<< HEAD
     event-parallelism: 120
     session-parallelism: 120
+=======
+    event-parallelism: 150
+    session-parallelism: 150
+>>>>>>> sojourner-performance
     pre-agentIp-parallelism: 150
     agentIp-parallelism: 150
     agent-parallelism: 150

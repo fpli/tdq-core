@@ -1,17 +1,27 @@
 package com.ebay.sojourner.ubd.common.sql;
 
-import static com.ebay.sojourner.ubd.common.sql.Rules.*;
-import static com.ebay.sojourner.ubd.common.sql.TestUtils.*;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_10_INTERPRETER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_11_INTERPRETER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_12_INTERPRETER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_13_INTERPRETER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_1_INTERPRETER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_2_INTERPRETER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_3_INTERPRETER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_4_INTERPRETER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_56_INTERPRETER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_5_INTERPRETER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_6_INTERPRETER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.ICF_RULE_7_INTERPRETER;
+import static com.ebay.sojourner.ubd.common.sql.Rules.RULE_1_INTERPRETER;
+import static com.ebay.sojourner.ubd.common.sql.TestUtils.benchmark;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * === Benchmark: Interpreter - REGEXP ===
- * Avg rule exec time: 3445047 ns
- * === Benchmark: Interpreter - UDF ===
- * Avg rule exec time: 2204262 ns
+ * === Benchmark: Interpreter - REGEXP === Avg rule exec time: 3445047 ns === Benchmark: Interpreter
+ * - UDF === Avg rule exec time: 2204262 ns
  */
 public class SqlInterpreterBenchmark {
 

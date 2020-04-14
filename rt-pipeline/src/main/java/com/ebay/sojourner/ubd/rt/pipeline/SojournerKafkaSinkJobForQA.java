@@ -116,7 +116,10 @@ public class SojournerKafkaSinkJobForQA {
         new UbiEventMapWithStateFunction(),
         mappedEventOutputTag);
 
-    ubiSessionDataStream.name("Session Operator").uid("sessionLevel");
+    ubiSessionDataStream
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .name("Session Operator")
+        .uid("sessionLevel");
 
     // UbiSession to SojSession
     SingleOutputStreamOperator<SojSession> sojSessionStream =
@@ -154,5 +157,4 @@ public class SojournerKafkaSinkJobForQA {
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForKafkaSinkPipeline());
 
   }
-
 }
