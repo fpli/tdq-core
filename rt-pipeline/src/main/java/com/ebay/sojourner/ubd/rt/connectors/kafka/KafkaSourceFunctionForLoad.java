@@ -9,8 +9,7 @@ public class KafkaSourceFunctionForLoad {
       String groupId, Class<T> tClass) {
     return KafkaConnectorFactoryForLoad
         .createKafkaConsumer(topic,brokers,groupId, tClass)
-        .setStartFromEarliest()
         .assignTimestampsAndWatermarks(
-            new SojournerBoundedOutOfOrdernessTimestampExtractor(Time.seconds(10)));
+            new SojBoundedOutOfOrdernessTimestampExtractorForLoad(Time.seconds(10)));
   }
 }
