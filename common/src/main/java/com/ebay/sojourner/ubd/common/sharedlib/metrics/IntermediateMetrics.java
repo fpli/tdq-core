@@ -44,7 +44,7 @@ public class IntermediateMetrics implements Serializable {
   private String imgMpxChnlSet6 = null;
   private Set<Integer> mobilePageSet = null;
   //    private static Map<Long, String> mpxMap; // mpx channel id map
-  private Map<String, String> mpxMap;
+  private static Map<String, String> mpxMap;
   private Set<Integer> notifyCLickPageSet = null;
   private Set<Integer> notifyViewPageSet = null;
   private Set<Integer> roverPageSet = null;
@@ -52,8 +52,6 @@ public class IntermediateMetrics implements Serializable {
   private Set<Integer> scPageSet2 = null;
   private StringBuilder stingBuilder = new StringBuilder();
   private Collection<String> tags = null;
-
-  private volatile LkpManager lkpManager;
   private String actualKeyword;
   private String boughtKeyword;
   private Integer channel;
@@ -112,8 +110,7 @@ public class IntermediateMetrics implements Serializable {
   private Integer trackingPartner;
   private String url2Parse;
 
-  public IntermediateMetrics(Map<String, String> mpxMap) {
-    this.mpxMap = mpxMap;
+  public IntermediateMetrics() {
     roverPageSet =
         PropertyUtils.getIntegerSet(
             UBIConfig.getString(Property.ROVER_PAGES), Property.PROPERTY_DELIMITER);
@@ -578,9 +575,9 @@ public class IntermediateMetrics implements Serializable {
   }
 
   public void initLkp() {
-    //    if (mpxMap == null || mpxMap.size() < 1) {
-    //      mpxMap = lkpManager.getMpxMap();
-    //    }
+        if (mpxMap == null || mpxMap.size() < 1) {
+          mpxMap = LkpManager.getInstance().getMpxMap();
+        }
   }
 
   public void initMetrics() {
@@ -948,6 +945,7 @@ public class IntermediateMetrics implements Serializable {
   // page 3084 only
   public void setFirstRoverClickMpxChannelId(UbiEvent event) throws InterruptedException {
     Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
+    mpxMap=LkpManager.getInstance().getMpxMap();
     String mpxChannelId = null;
     String[] channelIds = null;
 
@@ -1168,7 +1166,7 @@ public class IntermediateMetrics implements Serializable {
   }
 
   public void setFirstScEventImgMpxChannelId(UbiEvent event) throws InterruptedException {
-
+    mpxMap=LkpManager.getInstance().getMpxMap();
     String imgMpxChannelId = "";
     String referrer = getReferrer();
 
@@ -1462,8 +1460,5 @@ public class IntermediateMetrics implements Serializable {
     // null
   }
 
-  public void setMpx(Map<String, String> mpxMap) {
-    this.mpxMap = mpxMap;
-  }
 
 }

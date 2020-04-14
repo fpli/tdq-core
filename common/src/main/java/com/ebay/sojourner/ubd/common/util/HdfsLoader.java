@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -28,8 +29,9 @@ public class HdfsLoader {
     initFs();
     String content = null;
     Path filePath = new Path(parentPath + filename);
+    InputStream in = null;
     try {
-      InputStream in = loadInStream(filePath, filename);
+      in = loadInStream(filePath, filename);
       StringBuffer resultBuilder = new StringBuffer();
       byte[] bytes = new byte[4096];
       int readBytes = 0;
@@ -43,6 +45,15 @@ public class HdfsLoader {
     } catch (IOException e) {
       e.printStackTrace();
       log.error("open HDFS file {} issue:{}", filePath.getName(), e.getMessage());
+    } finally {
+      if (in != null) {
+        try {
+          in.close();
+          in=null;
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
     }
     return content;
   }
@@ -70,7 +81,8 @@ public class HdfsLoader {
       } else {
         log.info("Load resource directly as provided path is empty, resource: " + resource);
         System.out
-            .println("Load resource directly as provided path is empty, resource:" + resource);
+            .println(Calendar.getInstance().getTime()
+                + "Load resource directly as provided path is empty, resource:" + resource);
         instream = loadResource(resource);
       }
     } catch (FileNotFoundException e) {
@@ -103,11 +115,13 @@ public class HdfsLoader {
   public boolean isUpdate(String path, String fileName, Map<String, Long> lkpfileDate) {
     initFs();
     Path path1 = new Path(path, fileName);
+    System.out.println(Calendar.getInstance().getTime() + " check isupdate for " + fileName);
     try {
       if (fileSystem.exists(path1)) {
         FileStatus[] fileStatus = fileSystem.listStatus(path1, new FileNameFilter(fileName));
         long lastModifiedTime = fileStatus[0].getModificationTime();
-        long preLastModifiedTime = lkpfileDate.get(fileName)==null?0:lkpfileDate.get(fileName);
+        long preLastModifiedTime =
+            lkpfileDate.get(fileName) == null ? 0 : lkpfileDate.get(fileName);
         if (lastModifiedTime > preLastModifiedTime) {
           lkpfileDate.put(fileName, lastModifiedTime);
         }
@@ -117,6 +131,20 @@ public class HdfsLoader {
       e.printStackTrace();
     }
     return false;
+  }
+
+  public void closeFS() {
+    if (fileSystem != null) {
+      try {
+        fileSystem.close();
+
+      } catch (IOException e) {
+        e.printStackTrace();
+      } finally {
+        System.out.println(Calendar.getInstance().getTime() + " close  filesystem");
+        fileSystem = null;
+      }
+    }
   }
 
   private class FileNameFilter implements PathFilter {

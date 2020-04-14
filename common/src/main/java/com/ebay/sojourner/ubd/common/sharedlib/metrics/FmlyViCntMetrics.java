@@ -2,9 +2,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpListener;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
-import com.ebay.sojourner.ubd.common.util.LkpEnum;
 import com.ebay.sojourner.ubd.common.util.LkpManager;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
@@ -14,17 +12,12 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
-public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, LkpListener {
+public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
   private List<String> viPGT;
-  private volatile LkpManager lkpManager;
-  private boolean isContinue;
-  private  Map<Integer, String[]> pageFmlyNameMap;
+
   @Override
   public void init() throws Exception {
-    this.lkpManager = new LkpManager(this, LkpEnum.pageFmly);
-    pageFmlyNameMap= lkpManager.getPageFmlyMaps();
-    isContinue=true;
     viPGT =
         new ArrayList<>(
             PropertyUtils.parseProperty(
@@ -38,9 +31,7 @@ public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
-    while(!isContinue){
-      Thread.sleep(10);
-    }
+    Map<Integer, String[]> pageFmlyNameMap = LkpManager.getInstance().getPageFmlyMaps();
     if (event.isPartialValidPage() && !event.isRdt() && !event.isIframe()) {
       // im_pgt='VI': pageId=1521826 and pgt='future' or 'like'. pageId meaning?
       // or LkpPageFmlyName='VI'
@@ -82,17 +73,4 @@ public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     return null;
   }
 
-  @Override
-  public boolean notifyLkpChange(LkpManager lkpManager) {
-    try {
-      this.isContinue=false;
-      pageFmlyNameMap = lkpManager.getPageFmlyMaps();
-      return true;
-    } catch (Throwable e) {
-      return false;
-    }
-    finally {
-      this.isContinue=true;
-    }
-  }
 }

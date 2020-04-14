@@ -10,7 +10,7 @@ import com.ebay.sojourner.ubd.common.util.UBIConfig;
 public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
   private PageIndicator indicator;
-  private EventListenerContainer eventListenerContainer;
+  //  private EventListenerContainer eventListenerContainer;
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
@@ -43,15 +43,15 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     } else if (event.getEventTimestamp() != null
         && sessionAccumulator.getUbiSession().getAbsStartTimestamp() > event.getEventTimestamp()) {
       sessionAccumulator.getUbiSession().setAbsStartTimestamp(event.getEventTimestamp());
-      System.out.println("event:"+event.getPageId()+" eventtime:"+event.getEventTimestamp());
-      eventListenerContainer.onEarlyEventChange(event,sessionAccumulator.getUbiSession());
+      System.out.println("event:" + event.getPageId() + " eventtime:" + event.getEventTimestamp());
+      //      eventListenerContainer.onEarlyEventChange(event,sessionAccumulator.getUbiSession());
     }
     if (sessionAccumulator.getUbiSession().getAbsEndTimestamp() == null) {
       sessionAccumulator.getUbiSession().setAbsEndTimestamp(event.getEventTimestamp());
     } else if (event.getEventTimestamp() != null
         && sessionAccumulator.getUbiSession().getAbsEndTimestamp() < event.getEventTimestamp()) {
       sessionAccumulator.getUbiSession().setAbsEndTimestamp(event.getEventTimestamp());
-      eventListenerContainer.onLateEventChange(event,sessionAccumulator.getUbiSession());
+      //      eventListenerContainer.onLateEventChange(event,sessionAccumulator.getUbiSession());
     }
   }
 
@@ -83,7 +83,7 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
   @Override
   public void init() throws Exception {
     setPageIndicator(new PageIndicator(UBIConfig.getString(Property.SEARCH_VIEW_PAGES)));
-    eventListenerContainer=EventListenerContainer.getInstance();
+    //    eventListenerContainer = EventListenerContainer.getInstance();
   }
 
   void setPageIndicator(PageIndicator indicator) {

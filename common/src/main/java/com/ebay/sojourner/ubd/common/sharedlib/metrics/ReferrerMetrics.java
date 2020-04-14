@@ -3,8 +3,9 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.ubd.common.sharedlib.util.SojEventTimeUtil;
 
-public class ReferrerMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>,EventListener {
+public class ReferrerMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, EventListener {
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
@@ -13,7 +14,11 @@ public class ReferrerMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-    if (sessionAccumulator.getUbiSession().getSessionReferrer() == null
+    boolean isEarlyEvent = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getAbsStartTimestamp());
+    if ((isEarlyEvent ? isEarlyEvent
+        : sessionAccumulator.getUbiSession().getSessionReferrer() == null)
         && event.getReferrer() != null) {
       sessionAccumulator.getUbiSession().setSessionReferrer(event.getReferrer());
     }

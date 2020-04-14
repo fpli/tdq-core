@@ -4,6 +4,7 @@ import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
+import com.ebay.sojourner.ubd.common.sharedlib.util.SojEventTimeUtil;
 
 public class CguidMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, EventListener {
 
@@ -16,8 +17,10 @@ public class CguidMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>,
   public void feed(UbiEvent ubiEvent, SessionAccumulator sessionAccumulator) throws Exception {
     // AS per the sql, find first not null cguid from valid event
     // comparing the length of cguid to 32, based on the SQL.
-
-    if (sessionAccumulator.getUbiSession().getFirstCguid() == null
+    boolean isEarlyEvent = SojEventTimeUtil
+        .isEarlyEvent(ubiEvent.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getAbsStartTimestamp());
+    if ((isEarlyEvent ? isEarlyEvent : sessionAccumulator.getUbiSession().getFirstCguid() == null)
         && (!ubiEvent.isIframe() && !ubiEvent.isRdt())) {
       String cGuidTemp = SOJNVL.getTagValue(ubiEvent.getApplicationPayload(), "n");
       // checking for NPE

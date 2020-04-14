@@ -4,6 +4,7 @@ import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.PageIndicator;
+import com.ebay.sojourner.ubd.common.sharedlib.util.SojEventTimeUtil;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 
@@ -19,12 +20,21 @@ public class PageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
+    boolean isEarlyEvent = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getAbsStartTimestamp());
+    boolean isLateEvent=SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getAbsEndTimestamp());
     if (!event.isIframe()) {
       if (!event.isRdt() || indicator.isCorrespondingPageEvent(event)) {
-        if (sessionAccumulator.getUbiSession().getStartPageId() == Integer.MIN_VALUE) {
+        if (sessionAccumulator.getUbiSession().getStartPageId() == Integer.MIN_VALUE
+            || isEarlyEvent) {
           sessionAccumulator.getUbiSession().setStartPageId(event.getPageId());
         }
-        sessionAccumulator.getUbiSession().setEndPageId(event.getPageId());
+        if(isLateEvent) {
+          sessionAccumulator.getUbiSession().setEndPageId(event.getPageId());
+        }
       }
     }
   }

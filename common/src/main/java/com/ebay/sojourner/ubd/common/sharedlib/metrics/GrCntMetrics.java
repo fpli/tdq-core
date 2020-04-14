@@ -2,9 +2,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.parser.LkpListener;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNVL;
-import com.ebay.sojourner.ubd.common.util.LkpEnum;
 import com.ebay.sojourner.ubd.common.util.LkpManager;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
@@ -13,12 +11,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
-public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, LkpListener {
+public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
   private ArrayList<String> viPGT;
-  private Map<Integer, String[]> pageFmlyNameMap;
-  private volatile LkpManager lkpManager;
-  private boolean isContinue;
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
@@ -27,15 +22,14 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>,
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
-    while(!isContinue){
-      Thread.sleep(10);
-    }
+    Map<Integer, String[]> pageFmlyNameMap = LkpManager.getInstance().getPageFmlyMaps();
     Integer pageId = event.getPageId();
     if (!event.isRdt()
         && !event.isIframe()
         && event.isPartialValidPage()
         && pageId != -1
-        && ((pageFmlyNameMap.containsKey(pageId) && "GR".equals(pageFmlyNameMap.get(pageId)[1]))
+        && ((pageFmlyNameMap.containsKey(pageId) && "GR"
+        .equals(pageFmlyNameMap.get(pageId)[1]))
         || (getImPGT(event) != null && "GR".equals(getImPGT(event))))) {
       sessionAccumulator
           .getUbiSession()
@@ -49,9 +43,6 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>,
 
   @Override
   public void init() throws Exception {
-    lkpManager = new LkpManager(this, LkpEnum.pageFmly);
-    isContinue = true;
-    pageFmlyNameMap = lkpManager.getPageFmlyMaps();
     viPGT =
         new ArrayList<>(
             PropertyUtils.parseProperty(
@@ -74,19 +65,5 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>,
       return "GR";
     }
     return null;
-  }
-
-  @Override
-  public boolean notifyLkpChange(LkpManager lkpManager) {
-    try {
-      this.isContinue=false;
-      pageFmlyNameMap = lkpManager.getPageFmlyMaps();
-      return true;
-    } catch (Throwable e) {
-      return false;
-    }
-    finally {
-      this.isContinue=true;
-    }
   }
 }
