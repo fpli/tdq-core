@@ -10,6 +10,7 @@ public class KafkaConsumerConfig {
   private List<String> bootstrapServersForSLC;
   private List<String> bootstrapServersForLVS;
   private List<String> bootstrapServersForQA;
+  private List<String> bootstrapServersForQAFlink;
   private String groupIdForLVS;
   private String groupIdForSLC;
   private String groupIdForRNO;
@@ -18,6 +19,7 @@ public class KafkaConsumerConfig {
   private String groupIdForRNODQ;
   private String groupIdForQA;
   private String groupIdForSession;
+  private String groupIdForSessionQA;
   private String groupIdForEvent;
   private String groupIdForBot;
   private String topic;

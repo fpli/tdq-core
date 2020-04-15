@@ -13,6 +13,7 @@ public class LkpFetcher extends TimerTask {
 
   private static final long ONE_DAY_MILLIS = 24 * 60 * 60 * 1000;
   private static final int UPDATE_COUNTS = 8;
+  private static final int ROUND_THRESHOLD=20;
   private static Calendar calendar;
   private Timer timer;
   private volatile LkpManager lkpManager;
@@ -38,7 +39,7 @@ public class LkpFetcher extends TimerTask {
     calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
         calendar.get(Calendar.DATE), 5, 0, 0);
     Date date = calendar.getTime();
-    //    timer.scheduleAtFixedRate(this, date, ONE_DAY_MILLIS);
+        timer.scheduleAtFixedRate(this, date, ONE_DAY_MILLIS);
   }
 
 
@@ -46,7 +47,8 @@ public class LkpFetcher extends TimerTask {
   public void run() {
     String lkpPath = UBIConfig.getUBIProperty(Property.LKP_PATH);
     int currentRoundCount = 0;
-    while (currentRoundCount < UPDATE_COUNTS) {
+    int totalRoundCount=0;
+    while (currentRoundCount < UPDATE_COUNTS||totalRoundCount<ROUND_THRESHOLD) {
       if (hdfsLoader
           .isUpdate(lkpPath, UBIConfig.getUBIProperty(Property.IFRAME_PAGE_IDS), lkpfileDate)) {
         lkpManager.loadIframePageIds(false);
@@ -94,7 +96,12 @@ public class LkpFetcher extends TimerTask {
         lkpManager.loadSelectedIps(false);
         currentRoundCount++;
       }
-
+      try {
+        Thread.sleep(100000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+        log.error("Lkpfetcher interruptted");
+      }
     }
     hdfsLoader.closeFS();
     System.out.println("daily refresh completed");

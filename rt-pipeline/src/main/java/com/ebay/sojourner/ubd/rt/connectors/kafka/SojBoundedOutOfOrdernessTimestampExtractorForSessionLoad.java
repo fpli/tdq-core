@@ -5,6 +5,7 @@ import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrderness
 import org.apache.flink.streaming.api.windowing.time.Time;
 
 public class SojBoundedOutOfOrdernessTimestampExtractorForSessionLoad extends
+
     BoundedOutOfOrdernessTimestampExtractor<SojSession> {
 
   public SojBoundedOutOfOrdernessTimestampExtractorForSessionLoad(
@@ -15,5 +16,6 @@ public class SojBoundedOutOfOrdernessTimestampExtractorForSessionLoad extends
   @Override
   public long extractTimestamp(SojSession sojSession) {
     return sojSession.getAbsStartTimestamp();
+
   }
 }

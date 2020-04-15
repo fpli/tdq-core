@@ -52,6 +52,10 @@ public class Constants {
   public static final String GROUP_ID_SESSION = AppEnv.config().getKafkaConsumerConfig()
       .getGroupIdForSession();
 
+  // sessoin QA
+  public static final String GROUP_ID_SESSION_QA = AppEnv.config().getKafkaConsumerConfig()
+      .getGroupIdForSessionQA();
+
   // event
   public static final String GROUP_ID_EVENT = AppEnv.config().getKafkaConsumerConfig()
       .getGroupIdForEvent();
@@ -72,6 +76,8 @@ public class Constants {
       .getSessionTopic();
   public static final String BOOTSTRAP_SERVERS_SESSION =
       String.join(",", AppEnv.config().getKafkaProducerConfig().getBootstrapServersForSession());
+  public static final String BOOTSTRAP_SERVERS_SESSION_QA =
+      String.join(",", AppEnv.config().getKafkaConsumerConfig().getBootstrapServersForQAFlink());
 
   // bot
   public static final String TOPIC_PRODUCER_BOT = AppEnv.config().getKafkaProducerConfig()

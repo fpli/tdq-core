@@ -26,7 +26,7 @@ public class AvroKeyedDeserializationSchema<T> implements KeyedDeserializationSc
       long offset) throws IOException {
     ensureInitialized();
     try {
-      decoder = DecoderFactory.get().binaryDecoder(message, decoder);
+      decoder = DecoderFactory.get().binaryDecoder(message, null);
       return reader.read(null, decoder);
     } catch (Exception ex) {
       throw new RuntimeException(ex);

@@ -3,41 +3,60 @@
   "name" : "SojEvent",
   "namespace" : "com.ebay.sojourner.ubd.common.model",
   "doc" : " tags not included but in UbiEvent: current_impr_id, source_impr_id, staticPageType, reservedForFuture, eventAttr, oldSessionSkey, seqNum, sessionStartDt, sojDataDt, version",
-  "fields" : [ {
-    "name" : "rheosHeader",
-    "type" : {
-      "type" : "record",
-      "name" : "RheosHeader",
-      "fields" : [ {
-        "name" : "eventCreateTimestamp",
-        "type" : "long"
-      }, {
-        "name" : "eventSentTimestamp",
-        "type" : "long"
-      }, {
-        "name" : "schemaId",
-        "type" : "int"
-      }, {
-        "name" : "eventId",
-        "type" : [ "null", {
-          "type" : "string",
-          "avro.java.string" : "String"
-        } ]
-      }, {
-        "name" : "producerId",
-        "type" : {
-          "type" : "string",
-          "avro.java.string" : "String"
-        }
-      } ]
-    },
-    "doc" : "Rheos header"
-  }, {
+  "fields" : [{
     "name" : "guid",
     "type" : "string"
   }, {
+        "name" : "sessionId",
+        "type" : [ "null", "string" ],
+        "doc" : "dataClassification=Internal|isEncrypted=false|description=map from tag snid"
+      },
+   {
+       "name" : "sessionSkey",
+       "type" : [ "null", "long" ]
+     },
+     {
+     "name" : "seqNum",
+     "type" : [ "null", "int" ],
+     "doc" : "dataClassification=Internal|isEncrypted=false|description=map from tag snsq"
+     },
+    {
+       "name" : "sessionStartDt",
+       "type" : [ "null", "string" ]
+     },
+     {
+      "name" : "sojDataDt",
+      "type" : [ "null", "string" ]
+
+    },
+    {
+        "name" : "version",
+        "type" : [ "null", "int" ]
+      },
+      {
+              "name" : "staticPageType",
+              "type" : [ "null", "int" ]
+            },
+       {
+                   "name" : "reservedForFuture",
+                   "type" : [ "null", "int" ]
+                 },
+      {
+         "name" : "eventAttr",
+         "type" : [ "null", "string" ]
+       },
+        {
+              "name" : "currentImprId",
+              "type" : [ "null", "long" ]
+            },
+          {
+                       "name" : "sourceImprId",
+                       "type" : [ "null", "long" ]
+                     },
+
+     {
     "name" : "eventTimestamp",
-    "type" : "long",
+    "type" : "string",
     "doc" : "dataClassification=Internal|isEncrypted=false|description=map from timestamp, publish time"
   }, {
     "name" : "eventCaptureTime",
@@ -80,27 +99,60 @@
     "doc" : "dataClassification=Internal|isEncrypted=false|description=map from tag u/bu"
   }, {
     "name" : "clickId",
-    "type" : [ "null", "string" ],
+    "type" : [ "null", "int" ],
     "doc" : "dataClassification=Internal|isEncrypted=false|description=Click Id, map from tag c"
   }, {
     "name" : "siteId",
-    "type" : [ "null", "string" ],
+    "type" : [ "null", "int" ],
     "doc" : "dataClassification=Internal|isEncrypted=false|description=Site ID, map from tag t"
-  }, {
-    "name" : "sessionId",
-    "type" : [ "null", "string" ],
-    "doc" : "dataClassification=Internal|isEncrypted=false|description=map from tag snid"
-  }, {
-    "name" : "seqNum",
-    "type" : [ "null", "string" ],
-    "doc" : "dataClassification=Internal|isEncrypted=false|description=map from tag snsq"
-  }, {
+  },{
     "name" : "ciid",
     "type" : [ "null", "string" ]
   }, {
     "name" : "siid",
     "type" : [ "null", "string" ]
   }, {
+         "name" : "oldSessionSkey",
+         "type" : [ "null", "long" ]
+       },
+   {
+  "name" : "partialValidPage",
+  "type" : [ "null", "boolean" ]
+  },
+  {
+   "name" : "sessionStartTime",
+   "type" : [ "null", "long" ]
+   },
+  {
+    "name" : "sessionEndTime",
+    "type" : [ "null", "long" ]
+  },
+   {
+      "name" : "botFlags",
+      "type": ["null", {"type": "array", "items": "int"}],
+      "default": null
+    },
+{
+    "name" : "icfBinary",
+    "type" : [ "null", "long" ]
+  },
+{
+    "name" : "ingestTime",
+    "type" : [ "null", "long" ]
+  },
+  {
+      "name" : "generateTime",
+      "type" : [ "null", "long" ]
+    },
+    {
+        "name" : "eventCnt",
+        "type" : [ "null", "long" ]
+      },
+   {
+          "name" : "dataCenter",
+          "type" : [ "null", "string" ]
+        },
+  {
     "name" : "rdt",
     "type" : [ "null", "int" ],
     "doc" : "dataClassification=Internal|isEncrypted=false|description=1 indicates that the command redirected to another URL"
@@ -110,11 +162,11 @@
     "doc" : "dataClassification=Internal|isEncrypted=false|description=indicating that this is a registered user, map from tag regU"
   }, {
     "name" : "iframe",
-    "type" : [ "null", "boolean" ],
+    "type" : [ "null", "int" ],
     "doc" : "dataClassification=Internal|isEncrypted=false|description=map from tag _ifrm"
   }, {
     "name" : "refererHash",
-    "type" : [ "null", "string" ],
+    "type" : [ "null", "long" ],
     "doc" : "dataClassification=Internal|isEncrypted=false|description=map from tag r"
   }, {
     "name" : "sqr",
@@ -122,7 +174,7 @@
     "doc" : "dataClassification=Internal|isEncrypted=false|description=search keyword, map from tag sQr"
   }, {
     "name" : "itemId",
-    "type" : [ "null", "string" ],
+    "type" : [ "null", "long" ],
     "doc" : "dataClassification=Internal|isEncrypted=false|description=map from tag itm/item"
   }, {
     "name" : "flags",
@@ -140,7 +192,11 @@
     "name" : "cookies",
     "type" : [ "null", "string" ],
     "doc" : "dataClassification=Internal|isEncrypted=false|description=map from tag ck/C"
-  }, {
+  },{
+        "name" : "referrer",
+        "type" : [ "null", "string" ]
+
+      }, {
     "name" : "bot",
     "type" : [ "null", "int" ],
     "doc" : "dataClassification=Internal|isEncrypted=false|description=map from tag bott"
@@ -155,9 +211,14 @@
     "name" : "agentInfo",
     "type" : [ "null", "string" ],
     "doc" : "dataClassification=Internal|isEncrypted=false|description=map from tag Agent"
-  }, {
+  },
+  {
+      "name" : "forwardedFor",
+      "type" : [ "null", "string" ]
+    },
+  {
     "name" : "appId",
-    "type" : [ "null", "string" ],
+    "type" : [ "null", "int" ],
     "doc" : "dataClassification=Internal|isEncrypted=false|description=application ID, map from tag app"
   }, {
     "name" : "appVersion",
@@ -173,7 +234,7 @@
     "doc" : "dataClassification=Internal|isEncrypted=false|description=map from trffc_src"
   }, {
     "name" : "cobrand",
-    "type" : [ "null", "string" ],
+    "type" : [ "null", "int" ],
     "doc" : "dataClassification=Internal|isEncrypted=false|description=map from cbrnd"
   }, {
     "name" : "deviceFamily",
@@ -201,10 +262,7 @@
     "doc" : "dataClassification=Internal|isEncrypted=false|description=map from dd_osv"
   }, {
     "name" : "applicationPayload",
-    "type" : {
-      "type" : "map",
-      "values" : "string"
-    }
+    "type" : [ "null", "string" ]
   }, {
     "name" : "rlogid",
     "type" : [ "null", "string" ],
@@ -213,10 +271,7 @@
     "avro.java.string" : "String"
   }, {
     "name" : "clientData",
-    "type" : {
-      "type" : "map",
-      "values" : "string"
-    },
+    "type" :  [ "null", "string" ],
     "doc" : "Includes ForwardFor, ContentLength, Script, Server, Encoding, TMachine, TStamp, TName, TStatus, TDuration, TPayload"
   } ]
 }

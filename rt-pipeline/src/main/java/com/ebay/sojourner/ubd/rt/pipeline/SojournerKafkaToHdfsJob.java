@@ -1,9 +1,9 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
-import com.ebay.sojourner.ubd.common.model.SojSession;
+import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForSessionLoad;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionUtil;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
 import org.apache.flink.api.java.utils.ParameterTool;
@@ -49,13 +49,13 @@ public class SojournerKafkaToHdfsJob {
         StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
 
     // kafka source
-    DataStream<SojSession> sojSessionDataStream =
+    DataStream<SojEvent> sojSessionDataStream =
         executionEnvironment
-            .addSource(KafkaSourceFunctionForSessionLoad.generateWatermark())
+            .addSource(KafkaSourceFunctionUtil.generateSojEventWatermark())
             .setParallelism(30)
             .name("Rheos Kafka Consumer For Session")
             .uid("kafkaSourceForSession");
-
+    sojSessionDataStream.print();
     // hdfs sink
     sojSessionDataStream
         .addSink(HdfsSinkUtil.sojSessionSinkWithParquet())

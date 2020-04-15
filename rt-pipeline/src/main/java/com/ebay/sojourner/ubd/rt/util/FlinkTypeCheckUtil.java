@@ -12,5 +12,8 @@ public class FlinkTypeCheckUtil {
     TypeInformation<IntermediateMetrics> intermediateMetricsTypeInformation = TypeExtractor
         .createTypeInfo(IntermediateMetrics.class);
     System.out.println(intermediateMetricsTypeInformation);
+    TypeInformation<IntermediateMetrics> intermediateMetricsTypeInformation1 = TypeInformation
+        .of(IntermediateMetrics.class);
+    System.out.println(intermediateMetricsTypeInformation1);
   }
 }

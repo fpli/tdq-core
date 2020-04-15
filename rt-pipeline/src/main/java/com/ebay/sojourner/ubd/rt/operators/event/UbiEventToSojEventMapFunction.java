@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.rt.operators.event;
 import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
+import java.util.ArrayList;
 import org.apache.flink.api.common.functions.RichMapFunction;
 
 public class UbiEventToSojEventMapFunction extends RichMapFunction<UbiEvent, SojEvent> {
@@ -14,7 +15,7 @@ public class UbiEventToSojEventMapFunction extends RichMapFunction<UbiEvent, Soj
     sojEvent.setAppId(ubiEvent.getAppId());
     sojEvent.setApplicationPayload(ubiEvent.getApplicationPayload());
     sojEvent.setAppVersion(ubiEvent.getAppVersion());
-    sojEvent.setBotFlags(ubiEvent.getBotFlags());
+    sojEvent.setBotFlags(new ArrayList<>(ubiEvent.getBotFlags()));
     sojEvent.setClientData(ubiEvent.getClientData().toString());
     sojEvent.setBrowserFamily(ubiEvent.getBrowserFamily());
     sojEvent.setBrowserVersion(ubiEvent.getBrowserVersion());
