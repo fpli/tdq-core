@@ -15,7 +15,7 @@
     <module>rt-pipeline</module>
     <module>batch-pipeline</module>
     <module>dist</module>
-    <module>rule-test</module>
+    <!--<module>rule-test</module>-->
   </modules>
 
   <properties>

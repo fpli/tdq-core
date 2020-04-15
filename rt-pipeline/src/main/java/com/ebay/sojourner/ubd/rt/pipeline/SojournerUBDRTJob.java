@@ -8,8 +8,8 @@ import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
-import com.ebay.sojourner.ubd.rt.common.metrics.EventRulesCounterMetricsCollector;
-import com.ebay.sojourner.ubd.rt.common.metrics.SojournerEndToEndMetricsCollector;
+import com.ebay.sojourner.ubd.rt.common.metrics.EventMetricsCollectorProcessFunction;
+import com.ebay.sojourner.ubd.rt.common.metrics.PipelineMetricsCollectorProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
@@ -28,7 +28,6 @@ import com.ebay.sojourner.ubd.rt.operators.attribute.IpWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.SplitFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.DetectableEventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
-import com.ebay.sojourner.ubd.rt.operators.event.RawEventFilterFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.DetectableSessionMapFunction;
@@ -379,27 +378,26 @@ public class SojournerUBDRTJob {
     sojSessionStream.addSink(KafkaConnectorFactory
         .createKafkaProducer(Constants.TOPIC_PRODUCER_SESSION, Constants.BOOTSTRAP_SERVERS_SESSION,
             SojSession.class, Constants.MESSAGE_KEY))
-        .setParallelism(50)
+        .setParallelism(150)
         .name("SojSession Kafka")
         .uid("kafkaSink");
 
     // metrics collector for end to end
     signatureBotDetectionForEvent
-        .addSink(new SojournerEndToEndMetricsCollector())
+        .process(new PipelineMetricsCollectorProcessFunction())
         .name("Pipeline End to End Duration")
         .disableChaining();
 
     // metrics collector for event rules hit
     signatureBotDetectionForEvent
-        .addSink(new EventRulesCounterMetricsCollector())
+        .process(new EventMetricsCollectorProcessFunction())
         .name("Event Metrics Collector")
         .disableChaining();
 
     // late event sink
     latedStream
         .addSink(new DiscardingSink<>())
-        .name("Late Event")
-        .disableChaining();
+        .name("Late Event");
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForFullPipeline());

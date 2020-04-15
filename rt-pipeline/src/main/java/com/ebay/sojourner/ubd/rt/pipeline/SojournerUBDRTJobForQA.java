@@ -8,8 +8,8 @@ import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
-import com.ebay.sojourner.ubd.rt.common.metrics.EventRulesCounterMetricsCollector;
-import com.ebay.sojourner.ubd.rt.common.metrics.SojournerEndToEndMetricsCollector;
+import com.ebay.sojourner.ubd.rt.common.metrics.EventMetricsCollectorProcessFunction;
+import com.ebay.sojourner.ubd.rt.common.metrics.PipelineMetricsCollectorProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
@@ -338,12 +338,13 @@ public class SojournerUBDRTJobForQA {
 
     // metrics collector for end to end
     signatureBotDetectionForEvent
-        .addSink(new SojournerEndToEndMetricsCollector())
-        .name("Pipeline End to End Duration");
+        .process(new PipelineMetricsCollectorProcessFunction())
+        .name("Pipeline End to End Duration")
+        .disableChaining();
 
     // metrics collector for event rules hit
     signatureBotDetectionForEvent
-        .addSink(new EventRulesCounterMetricsCollector())
+        .process(new EventMetricsCollectorProcessFunction())
         .name("Event Metrics Collector")
         .disableChaining();
 
