@@ -77,7 +77,7 @@ public class LkpManager {
     if (StringUtils.isNotBlank(pageIds)) {
       for (String pageId : pageIds.split(LKP_RECORD_DELIMITER)) {
         try {
-          pageIdSet.add(Integer.valueOf(pageId));
+          pageIdSetMid.add(Integer.valueOf(pageId));
         } catch (NumberFormatException e) {
           log.warn("Parsing PageId failed, format incorrect...");
         }
@@ -91,14 +91,14 @@ public class LkpManager {
   }
 
   public void loadSelectedIps(boolean isInit) {
-    Map<String, Boolean> selectedIpsMid = new ConcurrentHashMap<String, Boolean>();
-    parseTextFile(Property.SELECTED_IPS, selectedIps);
+    Map<String, Boolean> selectedIpsMid = new ConcurrentHashMap<>();
+    parseTextFile(Property.SELECTED_IPS, selectedIpsMid);
     selectedIps = selectedIpsMid;
   }
 
   public void loadSelectedAgents(boolean isInit) {
-    Set<String> selectedAgentsMid = new CopyOnWriteArraySet<String>();
-    parseTextFile(Property.SELECTED_AGENTS, selectedAgents);
+    Set<String> selectedAgentsMid = new CopyOnWriteArraySet<>();
+    parseTextFile(Property.SELECTED_AGENTS, selectedAgentsMid);
     selectedAgents = selectedAgentsMid;
   }
 
@@ -157,7 +157,7 @@ public class LkpManager {
     if (StringUtils.isNotBlank(largeSessionGuids)) {
       for (String guid : largeSessionGuids.split(LKP_FILED_DELIMITER)) {
         if (StringUtils.isNotBlank(guid)) {
-          largeSessionGuidSet.add(guid.trim());
+          largeSessionGuidSetMid.add(guid.trim());
         }
       }
     } else {
@@ -175,7 +175,7 @@ public class LkpManager {
             .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), iabAgentReg);
     if (StringUtils.isNotBlank(iabAgentRegValue)) {
       for (String iabAgent : iabAgentRegValue.split(LKP_RECORD_DELIMITER)) {
-        iabAgentRegs.add(iabAgent.toLowerCase());
+        iabAgentRegsMid.add(iabAgent.toLowerCase());
       }
     } else {
       log.warn("Empty content for lookup table of iab agent info");
@@ -196,7 +196,7 @@ public class LkpManager {
         // Keep the null judgment also for session metrics first finding flag
         if (values[0] != null && values[1] != null) {
           try {
-            findingFlagMap.put(
+            findingFlagMapMid.put(
                 Integer.valueOf(values[0].trim()), Integer.valueOf(values[1].trim()));
           } catch (NumberFormatException e) {
             log.error(
@@ -228,7 +228,7 @@ public class LkpManager {
         Integer newPageId = StringUtils.isEmpty(ids[0]) ? null : Integer.valueOf(ids[0].trim());
         pageInfo[0] = StringUtils.isEmpty(ids[1]) ? null : Integer.valueOf(ids[1].trim());
         pageInfo[1] = StringUtils.isEmpty(ids[2]) ? null : Integer.valueOf(ids[2].trim());
-        vtNewIdsMap.put(newPageId, pageInfo);
+        vtNewIdsMapMid.put(newPageId, pageInfo);
       }
     } else {
       log.warn("Empty content for lookup table of vtNewIds");
@@ -247,7 +247,7 @@ public class LkpManager {
       String[] appIdFlagPair = appIdAndFlags.split(LKP_RECORD_DELIMITER);
       for (String appIdFlag : appIdFlagPair) {
         if (StringUtils.isNotBlank(appIdFlag)) {
-          appIdWithBotFlags.add(appIdFlag.trim());
+          appIdWithBotFlagsMid.add(appIdFlag.trim());
         }
       }
     } else {
@@ -271,7 +271,7 @@ public class LkpManager {
           Integer pageId = StringUtils.isEmpty(values[0]) ? null : Integer.valueOf(values[0]);
           pageFmlyNames[0] = StringUtils.isEmpty(values[1]) ? null : values[1];
           pageFmlyNames[1] = StringUtils.isEmpty(values[2]) ? null : values[2];
-          pageFmlyMap.put(pageId, pageFmlyNames);
+          pageFmlyMapMid.put(pageId, pageFmlyNames);
         }
       }
     } else {
@@ -312,7 +312,7 @@ public class LkpManager {
           try {
             //                            mpxMap.put(Long.parseLong(values[0].trim()),
             // String.valueOf(values[1].trim()));
-            mpxMap.put(values[0].trim(), values[1].trim());
+            mpxMapMid.put(values[0].trim(), values[1].trim());
           } catch (NumberFormatException e) {
             log.error("Ignore the incorrect format for mpx: " + values[0] + " - " + values[1]);
           }
