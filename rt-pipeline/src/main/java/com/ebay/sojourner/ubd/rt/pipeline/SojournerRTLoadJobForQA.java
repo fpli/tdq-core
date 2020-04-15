@@ -65,7 +65,7 @@ public class SojournerRTLoadJobForQA {
                 ? 1
                 : AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
     executionEnvironment.setStateBackend(
-        StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
+        StateBackendFactory.getStateBackend(StateBackendFactory.FS));
 
     // for soj nrt output
     // 1. Rheos Consumer
@@ -105,7 +105,7 @@ public class SojournerRTLoadJobForQA {
         ubiEventDataStream
             .keyBy("guid")
             .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-            .allowedLateness(Time.hours(1))
+            .allowedLateness(Time.minutes(1))
             .sideOutputLateData(lateEventOutputTag)
             .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction());
 
@@ -116,7 +116,10 @@ public class SojournerRTLoadJobForQA {
         new UbiEventMapWithStateFunction(),
         mappedEventOutputTag);
 
-    ubiSessionDataStream.name("Session Operator").uid("sessionLevel");
+    ubiSessionDataStream
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .name("Session Operator")
+        .uid("sessionLevel");
 
     // UbiSession to SojSession
     SingleOutputStreamOperator<SojSession> sojSessionStream =

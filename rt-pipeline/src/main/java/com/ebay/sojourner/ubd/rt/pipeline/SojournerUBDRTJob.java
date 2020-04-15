@@ -8,6 +8,8 @@ import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
+import com.ebay.sojourner.ubd.rt.common.metrics.EventMetricsCollectorProcessFunction;
+import com.ebay.sojourner.ubd.rt.common.metrics.PipelineMetricsCollectorProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
@@ -25,9 +27,7 @@ import com.ebay.sojourner.ubd.rt.operators.attribute.IpAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.IpWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.SplitFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.DetectableEventMapFunction;
-import com.ebay.sojourner.ubd.rt.operators.event.EventDiscardingSink;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
-import com.ebay.sojourner.ubd.rt.operators.event.RawEventFilterFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.DetectableSessionMapFunction;
@@ -143,22 +143,25 @@ public class SojournerUBDRTJob {
         .union(rawEventDataStreamForSLC);
 
     // filter 33% throughput group by guid for reduce kafka consumer lag
-    DataStream<RawEvent> filteredRawEventDataStream = rawEventDataStream
+    /*
+    DataStream<RawEvent> filteredRawEvent = rawEventDataStream
         .filter(new RawEventFilterFunction())
+        .name("RawEvent Filter Operator")
         .disableChaining()
-        .name("RawEvent Filter Operator");
+        .uid("filterSource");
+        */
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
     // 2.2 Event level bot detection via bot rule
     DataStream<UbiEvent> ubiEventDataStream =
-        filteredRawEventDataStream
+        rawEventDataStream
             .map(new EventMapFunction())
             .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
-            .name("Event Operator");
+            .name("Event Operator")
+            .uid("eventLevel");
 
-    // refine windowsoperator
-
+    // refine windowsoperatorø
     // 3. Session Operator
     // 3.1 Session window
     // 3.2 Session indicator accumulation
@@ -175,7 +178,7 @@ public class SojournerUBDRTJob {
         ubiEventDataStream
             .keyBy("guid")
             .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-            .allowedLateness(Time.minutes(0))
+            .allowedLateness(Time.minutes(1))
             .sideOutputLateData(lateEventOutputTag)
             .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction());
 
@@ -184,17 +187,23 @@ public class SojournerUBDRTJob {
         new UbiEventMapWithStateFunction(),
         mappedEventOutputTag);
 
-    ubiSessionDataStream.name("Session Operator");
+    ubiSessionDataStream
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .name("Session Operator")
+        .uid("sessionLevel");
 
     DataStream<UbiEvent> ubiEventWithSessionId =
         ubiSessionDataStream.getSideOutput(mappedEventOutputTag);
+
+    DataStream<UbiEvent> latedStream =
+        ubiSessionDataStream.getSideOutput(lateEventOutputTag);
 
     // ubiSession to SessionForGuidEnhancement
     SingleOutputStreamOperator<SessionForGuidEnhancement> sessionForGuidEnhancement =
         ubiSessionDataStream
             .map(new UbiSessionForGuidEnhancementMapFunction())
             .name("ubiSession to SessionForGuidEnhancement")
-            .setParallelism(150);
+            .uid("enhanceGuid");
 
     // 4. Attribute Operator
     // 4.1 Sliding window
@@ -207,7 +216,8 @@ public class SojournerUBDRTJob {
             .window(TumblingEventTimeWindows.of(Time.minutes(5)))
             .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
             .name("Attribute Operator (Agent+IP Pre-Aggregation)")
-            .setParallelism(150);
+            .setParallelism(AppEnv.config().getFlink().app.getPreAgentIpParallelism())
+            .uid("preAgentIpLevel");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureDataStream =
         sessionForGuidEnhancement
@@ -216,7 +226,8 @@ public class SojournerUBDRTJob {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
             .name("Attribute Operator (GUID)")
-            .setParallelism(150);
+            .setParallelism(AppEnv.config().getFlink().app.getGuidParallelism())
+            .uid("guidLevel");
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureSplitStream =
         guidSignatureDataStream.split(new SplitFunction());
@@ -224,14 +235,16 @@ public class SojournerUBDRTJob {
     guidSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .setParallelism(150)
-        .name("GUID Signature Generation");
+        .setParallelism(AppEnv.config().getFlink().app.getGuidParallelism())
+        .name("GUID Signature Generation")
+        .uid("generationGuidLevel");
 
     guidSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .setParallelism(150)
-        .name("GUID Signature Expiration");
+        .setParallelism(AppEnv.config().getFlink().app.getGuidParallelism())
+        .name("GUID Signature Expiration")
+        .uid("expirationGuidLevel");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureDataStream =
         agentIpAttributeDatastream
@@ -241,7 +254,8 @@ public class SojournerUBDRTJob {
             .aggregate(
                 new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
             .name("Attribute Operator (Agent+IP)")
-            .setParallelism(150);
+            .setParallelism(AppEnv.config().getFlink().app.getAgentIpParallelism())
+            .uid("agentIpLevel");
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureSplitStream =
         agentIpSignatureDataStream.split(new SplitFunction());
@@ -249,14 +263,16 @@ public class SojournerUBDRTJob {
     agentIpSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .setParallelism(150)
-        .name("Agent+IP Signature Generation");
+        .setParallelism(AppEnv.config().getFlink().app.getAgentIpParallelism())
+        .name("Agent+IP Signature Generation")
+        .uid("generationAgentIpLevel");
 
     agentIpSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .setParallelism(150)
-        .name("Agent+IP Signature Expiration");
+        .setParallelism(AppEnv.config().getFlink().app.getAgentIpParallelism())
+        .name("Agent+IP Signature Expiration")
+        .uid("expirationAgentIpLevel");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureDataStream =
         agentIpAttributeDatastream
@@ -265,7 +281,8 @@ public class SojournerUBDRTJob {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
             .name("Attribute Operator (Agent)")
-            .setParallelism(150);
+            .setParallelism(AppEnv.config().getFlink().app.getAgentParallelism())
+            .uid("agentLevel");
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureSplitStream =
         agentSignatureDataStream.split(new SplitFunction());
@@ -273,14 +290,16 @@ public class SojournerUBDRTJob {
     agentSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .setParallelism(150)
-        .name("Agent Signature Generation");
+        .setParallelism(AppEnv.config().getFlink().app.getAgentParallelism())
+        .name("Agent Signature Generation")
+        .uid("generationAgentLevel");
 
     agentSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .setParallelism(150)
-        .name("Agent Signature Expiration");
+        .setParallelism(AppEnv.config().getFlink().app.getAgentParallelism())
+        .name("Agent Signature Expiration")
+        .uid("expirationAgentLevel");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureDataStream =
         agentIpAttributeDatastream
@@ -289,7 +308,8 @@ public class SojournerUBDRTJob {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
             .name("Attribute Operator (IP)")
-            .setParallelism(150);
+            .setParallelism(AppEnv.config().getFlink().app.getIpParallelism())
+            .uid("ipLevel");
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureSplitStream =
         ipSignatureDataStream.split(new SplitFunction());
@@ -297,14 +317,16 @@ public class SojournerUBDRTJob {
     ipSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .setParallelism(150)
-        .name("IP Signature Generation");
+        .setParallelism(AppEnv.config().getFlink().app.getIpParallelism())
+        .name("IP Signature Generation")
+        .uid("generationIpLevel");
 
     ipSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .setParallelism(150)
-        .name("IP Signature Expiration");
+        .setParallelism(AppEnv.config().getFlink().app.getIpParallelism())
+        .name("IP Signature Expiration")
+        .uid("expirationIpLevel");
 
     // union attribute signature for broadcast
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> attributeSignatureDataStream =
@@ -328,13 +350,14 @@ public class SojournerUBDRTJob {
         detectableDataStream
             .connect(attributeSignatureBroadcastStream)
             .process(new AttributeBroadcastProcessFunctionForDetectable(sessionOutputTag))
-            .name("Signature Bot Detector");
+            .name("Signature Bot Detector")
+            .uid("connectLevel");
 
     DataStream<UbiSession> signatureBotDetectionForSession = signatureBotDetectionForEvent
         .getSideOutput(sessionOutputTag);
 
     // UbiSession to SojSession
-    SingleOutputStreamOperator<SojSession> sojSessionStream =
+    DataStream<SojSession> sojSessionStream =
         signatureBotDetectionForSession
             .map(new UbiSessionToSojSessionMapFunction())
             .name("UbiSession to SojSession");
@@ -349,17 +372,33 @@ public class SojournerUBDRTJob {
     // 5.2 Sessions (ended)
     // 5.3 Events (with session ID & bot flags)
     // 5.4 Events late
+    // for data quality
 
     // kafka sink for session
     sojSessionStream.addSink(KafkaConnectorFactory
         .createKafkaProducer(Constants.TOPIC_PRODUCER_SESSION, Constants.BOOTSTRAP_SERVERS_SESSION,
             SojSession.class, Constants.MESSAGE_KEY))
-        .setParallelism(50)
+        .setParallelism(150)
         .name("SojSession Kafka")
         .uid("kafkaSink");
 
-    // for monitor
-    signatureBotDetectionForEvent.addSink(new EventDiscardingSink()).name("Event");
+    // metrics collector for end to end
+    signatureBotDetectionForEvent
+        .process(new PipelineMetricsCollectorProcessFunction())
+        .name("Pipeline End to End Duration")
+        .disableChaining();
+
+    // metrics collector for event rules hit
+    signatureBotDetectionForEvent
+        .process(new EventMetricsCollectorProcessFunction())
+        .name("Event Metrics Collector")
+        .disableChaining();
+
+    // late event sink
+    latedStream
+        .addSink(new DiscardingSink<>())
+        .name("Late Event");
+
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForFullPipeline());
   }

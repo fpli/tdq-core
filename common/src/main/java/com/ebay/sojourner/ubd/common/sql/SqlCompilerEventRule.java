@@ -22,8 +22,8 @@ public class SqlCompilerEventRule extends SqlEventRule {
     super(sql);
   }
 
-  public SqlCompilerEventRule(String sql, long ruleId, int version) {
-    super(sql, ruleId, version);
+  public SqlCompilerEventRule(String sql, long ruleId, int version, String category) {
+    super(sql, ruleId, version, category);
   }
 
   @Override

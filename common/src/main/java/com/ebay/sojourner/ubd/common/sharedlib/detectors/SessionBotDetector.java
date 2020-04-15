@@ -17,18 +17,26 @@ import com.ebay.sojourner.ubd.common.rule.BotRule9;
 import com.ebay.sojourner.ubd.common.rule.Rule;
 import java.io.IOException;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
-public class SessionBotDetector implements BotDetector<UbiSession> {
+public class SessionBotDetector extends AbstractBotDetector<UbiSession> {
 
   private static volatile SessionBotDetector sessionBotDetector;
-  private Set<Rule> botRules = new LinkedHashSet<Rule>();
+  private static List<Long> dynamicRuleIdList = new CopyOnWriteArrayList<>();
+  private Set<Rule> botRules = new CopyOnWriteArraySet<>();
 
   private SessionBotDetector() {
     initBotRules();
     for (Rule rule : botRules) {
       rule.init();
     }
+  }
+
+  public static List<Long> dynamicRuleIdList() {
+    return dynamicRuleIdList;
   }
 
   public static SessionBotDetector getInstance() {
@@ -40,6 +48,11 @@ public class SessionBotDetector implements BotDetector<UbiSession> {
       }
     }
     return sessionBotDetector;
+  }
+
+  @Override
+  public Set<Rule> rules() {
+    return this.botRules;
   }
 
   @Override

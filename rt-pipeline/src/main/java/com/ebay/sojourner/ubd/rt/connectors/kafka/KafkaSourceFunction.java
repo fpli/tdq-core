@@ -9,7 +9,7 @@ public class KafkaSourceFunction {
   public static FlinkKafkaConsumerBase<RawEvent> generateWatermark(String topic, String brokers,
       String groupId) {
     return KafkaConnectorFactory
-        .createKafkaConsumer(topic,brokers,groupId)
+        .createKafkaConsumer(topic, brokers, groupId)
         .setStartFromLatest()
         .assignTimestampsAndWatermarks(
             new SojBoundedOutOfOrdernessTimestampExtractor(Time.seconds(10)));

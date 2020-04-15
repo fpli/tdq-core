@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 public class RuleFetcher {
 
   protected static final Logger LOGGER = Logger.getLogger(RuleManager.class);
-  public static final String REST_SERVER = "http://10.169.116.50:9001";
+  public static final String REST_SERVER = "https://sojubdportalservice.vip.qa.ebay.com";
   public static final String API_RULE_LIST_PUBLISHED = "/api/rule/list/published";
 
   private ScheduledExecutorService scheduledExecutorService;
@@ -27,6 +27,8 @@ public class RuleFetcher {
     client = new OkHttpClient();
     request = new Request.Builder()
         .url(REST_SERVER + API_RULE_LIST_PUBLISHED)
+        .addHeader("X-Auth-Username", "soj-flink-app")
+        .addHeader("X-Auth-Token", "B65613BAE51443268AEBCAEF26C30ABE")
         .build();
     this.ruleManager = ruleManager;
   }

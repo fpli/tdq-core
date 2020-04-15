@@ -19,7 +19,7 @@ import org.apache.calcite.tools.Programs;
 import org.apache.log4j.Logger;
 
 @Data
-@EqualsAndHashCode(of = {"ruleId","version"}, callSuper = false)
+@EqualsAndHashCode(of = {"ruleId", "version"}, callSuper = false)
 public abstract class SqlEventRule implements Rule<UbiEvent> {
 
   protected static final Logger LOGGER = Logger.getLogger(SqlEventRule.class);
@@ -28,6 +28,7 @@ public abstract class SqlEventRule implements Rule<UbiEvent> {
   private String sql;
   private long ruleId;
   private int version;
+  private String category;
 
   public SqlEventRule(String sql) {
     this.sql = sql;
@@ -35,10 +36,11 @@ public abstract class SqlEventRule implements Rule<UbiEvent> {
     prepareSql(sql);
   }
 
-  public SqlEventRule(String sql, long ruleId, int version) {
+  public SqlEventRule(String sql, long ruleId, int version, String category) {
     this.sql = sql;
     this.ruleId = ruleId;
     this.version = version;
+    this.category = category;
     prepareDataContext();
     prepareSql(sql);
   }
@@ -47,8 +49,8 @@ public abstract class SqlEventRule implements Rule<UbiEvent> {
     return new SqlCompilerEventRule(sql);
   }
 
-  public static SqlEventRule of(String sql,long ruleId,int version){
-    return new SqlCompilerEventRule(sql,ruleId,version);
+  public static SqlEventRule of(String sql, long ruleId, int version, String category) {
+    return new SqlCompilerEventRule(sql, ruleId, version, category);
   }
 
   @Override

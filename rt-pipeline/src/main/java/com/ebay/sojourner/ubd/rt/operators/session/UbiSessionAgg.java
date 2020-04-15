@@ -4,27 +4,30 @@ import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.SessionBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
+import com.ebay.sojourner.ubd.common.sql.RuleManager;
+import com.ebay.sojourner.ubd.common.util.Constants;
 import java.io.IOException;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.functions.AggregateFunction;
-import org.apache.log4j.Logger;
 
 @Slf4j
 public class UbiSessionAgg
     implements AggregateFunction<UbiEvent, SessionAccumulator, SessionAccumulator> {
 
+  private static final String SESSION = Constants.SESSION_LEVEL;
   //    private CouchBaseManager couchBaseManager;
   //    private static final String BUCKET_NAME="botsignature";
-  private static final Logger logger = Logger.getLogger(UbiSessionAgg.class);
   private transient SessionMetrics sessionMetrics;
   private transient SessionBotDetector sessionBotDetector;
+  private RuleManager ruleManager;
 
   @Override
   public SessionAccumulator createAccumulator() {
     SessionAccumulator sessionAccumulator = new SessionAccumulator();
     sessionMetrics = SessionMetrics.getInstance();
     sessionBotDetector = SessionBotDetector.getInstance();
+    ruleManager = RuleManager.getInstance();
     //        couchBaseManager = CouchBaseManager.getInstance();
     try {
       sessionMetrics.start(sessionAccumulator);
@@ -67,6 +70,8 @@ public class UbiSessionAgg
     }
     Set<Integer> sessionBotFlagSetDetect = null;
     try {
+      sessionBotDetector.initDynamicRules(ruleManager, sessionBotDetector.rules(),
+          SessionBotDetector.dynamicRuleIdList(), SESSION);
       sessionBotFlagSetDetect = sessionBotDetector.getBotFlagList(accumulator.getUbiSession());
     } catch (IOException | InterruptedException e) {
       log.error("sessionBotDetector getBotFlagList error", e);

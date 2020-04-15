@@ -1,11 +1,7 @@
 package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.rule.BotRule1;
 import com.ebay.sojourner.ubd.common.rule.Rule;
-import com.ebay.sojourner.ubd.common.sql.RuleManager;
-import com.ebay.sojourner.ubd.common.sql.Rules;
-import com.ebay.sojourner.ubd.common.sql.SqlEventRule;
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -15,17 +11,21 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class EventBotDetector implements BotDetector<UbiEvent> {
+public class EventBotDetector extends AbstractBotDetector<UbiEvent> {
 
   private static volatile EventBotDetector eventBotDetector;
-  private Set<Rule> botRules = new CopyOnWriteArraySet<Rule>();
-  private List<Long> dynamicRuleIdList = new CopyOnWriteArrayList<>();
+  private static List<Long> dynamicRuleIdList = new CopyOnWriteArrayList<>();
+  private Set<Rule> botRules = new CopyOnWriteArraySet<>();
 
   private EventBotDetector() {
     initBotRules();
     for (Rule rule : botRules) {
       rule.init();
     }
+  }
+
+  public static List<Long> dynamicRuleIdList() {
+    return dynamicRuleIdList;
   }
 
   public static EventBotDetector getInstance() {
@@ -37,6 +37,10 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
       }
     }
     return eventBotDetector;
+  }
+
+  public Set<Rule> rules() {
+    return this.botRules;
   }
 
   @Override
@@ -54,6 +58,7 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
   // static rules
   @Override
   public void initBotRules() {
+    /*
     botRules.add(new BotRule1());
     botRules.add(Rules.ICF_RULE_1_COMPILER);
     botRules.add(Rules.ICF_RULE_2_COMPILER);
@@ -67,46 +72,6 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
     botRules.add(Rules.ICF_RULE_12_COMPILER);
     botRules.add(Rules.ICF_RULE_13_COMPILER);
     botRules.add(Rules.ICF_RULE_56_COMPILER);
-  }
-
-  //TODO:dynamic rules
-  public void initDynamicRules() {
-    List<SqlEventRule> dynamicEventRules = RuleManager.getInstance().sqlEventRules();
-    log.info("before hot deploy bot rules:" + botRules.size());
-    if (botRules.isEmpty() && !dynamicEventRules.isEmpty()) {
-      botRules.addAll(dynamicEventRules);
-      for (SqlEventRule sqlEventRule : dynamicEventRules) {
-        dynamicRuleIdList.add(sqlEventRule.getRuleId());
-        sqlEventRule.init();
-      }
-    } else if (!botRules.isEmpty() && !dynamicEventRules.isEmpty()) {
-      // update
-      for (Rule rule : botRules) {
-        if (rule instanceof SqlEventRule) {
-          SqlEventRule dynamicRule = (SqlEventRule) rule;
-          if (dynamicRule.getVersion() != 0 && dynamicRule.getRuleId() != 0) {
-            dynamicRuleIdList.add(dynamicRule.getRuleId());
-            for (SqlEventRule sqlEventRule : dynamicEventRules) {
-              if (sqlEventRule.getRuleId() == dynamicRule.getRuleId()
-                  && sqlEventRule.getVersion() > dynamicRule.getVersion()) {
-                botRules.remove(dynamicRule);
-                botRules.add(sqlEventRule);
-                  sqlEventRule.init();
-              }
-            }
-          }
-        }
-      }
-
-      // add
-      for (SqlEventRule sqlEventRule : dynamicEventRules) {
-        if (!dynamicRuleIdList.contains(sqlEventRule.getRuleId())) {
-          dynamicRuleIdList.add(sqlEventRule.getRuleId());
-          botRules.add(sqlEventRule);
-          sqlEventRule.init();
-        }
-      }
-    }
-    log.info("after hot deploy bot rules:" + botRules.size());
+    */
   }
 }

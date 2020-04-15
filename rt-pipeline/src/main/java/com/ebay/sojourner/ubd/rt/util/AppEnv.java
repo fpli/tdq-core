@@ -20,7 +20,7 @@ public class AppEnv {
   private KafkaProducerConfig kafkaProducerConfig;
   private RheosConfig rheos;
   private FlinkConfig flink;
-  private HdfsConfig  hdfs;
+  private HdfsConfig hdfs;
 
   private AppEnv() {
     // private

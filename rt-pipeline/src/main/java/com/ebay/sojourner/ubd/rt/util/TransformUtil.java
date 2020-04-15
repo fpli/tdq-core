@@ -11,20 +11,17 @@ public class TransformUtil {
   private static final int BIT_OFF = 4;
   private static final int OFFSET = 10;
 
-  static{
-    for(int i=0;i<10;++i){
-      dict.put((char)('0'+i), i);
+  static {
+    for (int i = 0; i < 10; ++i) {
+      dict.put((char) ('0' + i), i);
     }
-    for(int i=0;i<6;++i){
-      dict.put((char)('a'+i), OFFSET+i);
+    for (int i = 0; i < 6; ++i) {
+      dict.put((char) ('a' + i), OFFSET + i);
     }
   }
 
 
   public static Long[] stringToLong(CharSequence cmd) {
-    if (cmd == null) {
-      return new Long[]{0L, 0L};
-    }
     if (StringUtils.isBlank(cmd)) {
       return new Long[]{0L, 0L};
     }

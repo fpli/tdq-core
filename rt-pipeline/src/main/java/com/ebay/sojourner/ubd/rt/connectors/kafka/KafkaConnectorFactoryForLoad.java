@@ -36,7 +36,7 @@ public class KafkaConnectorFactoryForLoad {
 
     props.put(
         ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, RoundRobinAssignor.class.getName());
-    props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+    props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
     return new FlinkKafkaConsumer<>(
         topic, new AvroKeyedDeserializationSchema<>(tClass), props);

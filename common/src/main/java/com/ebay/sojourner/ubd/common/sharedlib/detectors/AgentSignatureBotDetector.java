@@ -7,13 +7,16 @@ import com.ebay.sojourner.ubd.common.rule.BotRuleForSuspectAgent;
 import com.ebay.sojourner.ubd.common.rule.Rule;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
-public class AgentSignatureBotDetector implements BotDetector<AgentAttribute> {
+public class AgentSignatureBotDetector extends AbstractBotDetector<AgentAttribute> {
 
   private static volatile AgentSignatureBotDetector agentIpSignatureBotDetector;
-  private Set<Rule> botRules = new LinkedHashSet<Rule>();
+  private static List<Long> dynamicRuleIdList = new CopyOnWriteArrayList<>();
+  private Set<Rule> botRules = new CopyOnWriteArraySet<>();
 
   private AgentSignatureBotDetector() {
 
@@ -21,6 +24,10 @@ public class AgentSignatureBotDetector implements BotDetector<AgentAttribute> {
     for (Rule rule : botRules) {
       rule.init();
     }
+  }
+
+  public static List<Long> dynamicRuleIdList() {
+    return dynamicRuleIdList;
   }
 
   public static AgentSignatureBotDetector getInstance() {
@@ -35,9 +42,13 @@ public class AgentSignatureBotDetector implements BotDetector<AgentAttribute> {
   }
 
   @Override
+  public Set<Rule> rules() {
+    return this.botRules;
+  }
+
+  @Override
   public Set<Integer> getBotFlagList(AgentAttribute agentAttribute)
       throws IOException, InterruptedException {
-    Set<Integer> signature = null;
     Set<Integer> botflagSet = new HashSet<Integer>();
     if (agentAttribute != null) {
       for (Rule rule : botRules) {
@@ -56,12 +67,5 @@ public class AgentSignatureBotDetector implements BotDetector<AgentAttribute> {
     botRules.add(new BotRule6());
     botRules.add(new BotRuleForSuspectAgent());
     botRules.add(new BotRuleForDeclarativeAgent());
-  }
-
-  private Set<Integer> scanSignature(
-      String inColumnName, String inColumnValue, String outColumnName, String bucketName) {
-    //        return CouchBaseManager.getInstance().getSignatureWithColumn(inColumnName,
-    // inColumnValue, outColumnName);
-    return null;
   }
 }

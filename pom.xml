@@ -15,10 +15,11 @@
     <module>rt-pipeline</module>
     <module>batch-pipeline</module>
     <module>dist</module>
+    <!--<module>rule-test</module>-->
   </modules>
 
   <properties>
-    <global.version>0.9.0-SNAPSHOT</global.version>
+    <global.version>0.8.0-SNAPSHOT</global.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
