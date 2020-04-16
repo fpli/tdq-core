@@ -1,5 +1,5 @@
 - name: bot6_scsCount_lt_0
-  type: UbiSession
+  type: SessionForGuidEnhancement
   input:
     SessionForGuidEnhancement:
       absEventCnt: 1

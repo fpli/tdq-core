@@ -7,10 +7,23 @@ public class KafkaSourceFunction {
 
   public static <T> FlinkKafkaConsumerBase generateWatermark(String topic, String brokers,
       String groupId, Class<T> tClass) {
+
+    FlinkKafkaConsumerBase flinkKafkaConsumerBase
+        = initKafkaConsumer(topic, brokers, groupId, tClass);
+
+    if (tClass.isAssignableFrom(String.class)) {
+      return flinkKafkaConsumerBase;
+    } else {
+      return flinkKafkaConsumerBase
+          .assignTimestampsAndWatermarks(
+              new SobBoundedOutOfOrderlessTimestampExtractor(Time.seconds(10)));
+    }
+  }
+
+  private static <T> FlinkKafkaConsumerBase initKafkaConsumer(String topic, String brokers,
+      String groupId, Class<T> tClass) {
     return KafkaConnectorFactory
         .createKafkaConsumer(topic, brokers, groupId, tClass)
-        .setStartFromLatest()
-        .assignTimestampsAndWatermarks(
-            new SobBoundedOutOfOrderlessTimestampExtractor(Time.seconds(10)));
+        .setStartFromLatest();
   }
 }

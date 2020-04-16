@@ -50,6 +50,9 @@ public class KafkaConnectorFactory {
     if (tClass.isAssignableFrom(RawEvent.class)) {
       return new FlinkKafkaConsumer<>(
           topic, new RawEventDeserializationSchema(), consumerConfig);
+    } else if (tClass.isAssignableFrom(String.class)) {
+      return new FlinkKafkaConsumer<>(
+          topic, new Soj2BinaryDeserializationSchema(), consumerConfig);
     } else {
       return new FlinkKafkaConsumer<>(
           topic, new AvroKeyedDeserializationSchema<>(tClass), consumerConfig);
