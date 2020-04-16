@@ -9,6 +9,7 @@ public class KafkaSourceFunction {
       String groupId, Class<T> tClass) {
     return KafkaConnectorFactory
         .createKafkaConsumer(topic, brokers, groupId, tClass)
+        .setStartFromLatest()
         .assignTimestampsAndWatermarks(
             new SobBoundedOutOfOrderlessTimestampExtractor(Time.seconds(10)));
   }
