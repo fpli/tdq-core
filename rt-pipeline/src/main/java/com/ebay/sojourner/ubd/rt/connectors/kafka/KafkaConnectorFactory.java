@@ -13,9 +13,7 @@ import org.apache.kafka.common.config.SaslConfigs;
 
 public class KafkaConnectorFactory {
 
-  public static FlinkKafkaConsumer<RawEvent> createKafkaConsumer(String topic, String brokers,
-      String groupId) {
-
+  private static Properties initCommonConfig() {
     Properties props = new Properties();
     props.put("sasl.mechanism", "IAF");
     props.put("security.protocol", "SASL_PLAINTEXT");
@@ -29,44 +27,43 @@ public class KafkaConnectorFactory {
             AppEnv.config().getRheos().getIaf().getEnv());
 
     props.put(SaslConfigs.SASL_JAAS_CONFIG, saslJaasConfig);
-    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
-    props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+    return props;
+  }
 
-    props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 3000);
-    props.put(ConsumerConfig.RECEIVE_BUFFER_CONFIG, 8 * 1024 * 1024);
-    props.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 250 * 1024 * 1024);
-    props.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 1000);
+  public static <T> FlinkKafkaConsumer createKafkaConsumer(String topic, String brokers,
+      String groupId, Class<T> tClass) {
+    Properties consumerConfig = initCommonConfig();
+    consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
+    consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 
-    props.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, 8 * 1024 * 1024);
+    consumerConfig.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 3000);
+    consumerConfig.put(ConsumerConfig.RECEIVE_BUFFER_CONFIG, 8 * 1024 * 1024);
+    consumerConfig.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 250 * 1024 * 1024);
+    consumerConfig.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 1000);
 
-    props.put(
+    consumerConfig.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, 8 * 1024 * 1024);
+
+    consumerConfig.put(
         ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, RoundRobinAssignor.class.getName());
-    props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+    consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
 
-    return new FlinkKafkaConsumer<>(
-        topic, new RawEventDeserializationSchema(), props);
+    if (tClass.isAssignableFrom(RawEvent.class)) {
+      return new FlinkKafkaConsumer<>(
+          topic, new RawEventDeserializationSchema(), consumerConfig);
+    } else {
+      return new FlinkKafkaConsumer<>(
+          topic, new AvroKeyedDeserializationSchema<>(tClass), consumerConfig);
+    }
   }
 
   public static <T> FlinkKafkaProducer createKafkaProducer(String topic, String brokers,
       Class<T> sinkClass, String messageKey) {
-    Properties props = new Properties();
-    props.put("sasl.mechanism", "IAF");
-    props.put("security.protocol", "SASL_PLAINTEXT");
-
-    final String saslJaasConfig =
-        String.format(
-            "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId="
-                + "\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" "
-                + "iafSecret=\"%s\" iafEnv=\"%s\";",
-            AppEnv.config().getRheos().getIaf().getSecret(),
-            AppEnv.config().getRheos().getIaf().getEnv());
-
-    props.put(SaslConfigs.SASL_JAAS_CONFIG, saslJaasConfig);
-    props.put(ProducerConfig.BATCH_SIZE_CONFIG, 4 * 1024);
-    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
+    Properties producerConfig = initCommonConfig();
+    producerConfig.put(ProducerConfig.BATCH_SIZE_CONFIG, 4 * 1024);
+    producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
 
     return new FlinkKafkaProducer<>(topic,
-        new AvroKeyedSerializationSchema<>(sinkClass, messageKey), props,
+        new AvroKeyedSerializationSchema<>(sinkClass, messageKey), producerConfig,
         Optional.of(new SojKafkaPartitioner<>()));
   }
 }

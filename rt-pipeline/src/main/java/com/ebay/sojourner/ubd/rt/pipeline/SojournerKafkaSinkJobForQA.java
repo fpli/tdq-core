@@ -65,7 +65,7 @@ public class SojournerKafkaSinkJobForQA {
                 ? 1
                 : AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
     executionEnvironment.setStateBackend(
-        StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
+        StateBackendFactory.getStateBackend(StateBackendFactory.FS));
 
     // for soj nrt output
     // 1. Rheos Consumer
@@ -74,7 +74,7 @@ public class SojournerKafkaSinkJobForQA {
     DataStream<RawEvent> rawEventDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
-                Constants.BOOTSTRAP_SERVERS_QA, Constants.GROUP_ID_QA))
+                Constants.BOOTSTRAP_SERVERS_QA, Constants.GROUP_ID_QA, RawEvent.class))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 2

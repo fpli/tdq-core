@@ -74,7 +74,7 @@ public class SojournerRTLoadJobForQA {
     DataStream<RawEvent> rawEventDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
-                Constants.BOOTSTRAP_SERVERS_QA, Constants.GROUP_ID_QA))
+                Constants.BOOTSTRAP_SERVERS_QA, Constants.GROUP_ID_QA, RawEvent.class))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 2

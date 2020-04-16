@@ -1,11 +1,5 @@
 package com.ebay.sojourner.ubd.rt.util;
 
-/**
- * Created 2019-08-01 10:12
- *
- * @author : Unikal Liu
- * @version : 1.0.0
- */
 public class Constants {
 
   public static final String APPLICATION_PROPERTIES_FILENAME = "application.properties.filename";
@@ -76,8 +70,6 @@ public class Constants {
       .getSessionTopic();
   public static final String BOOTSTRAP_SERVERS_SESSION =
       String.join(",", AppEnv.config().getKafkaProducerConfig().getBootstrapServersForSession());
-  public static final String BOOTSTRAP_SERVERS_SESSION_QA =
-      String.join(",", AppEnv.config().getKafkaConsumerConfig().getBootstrapServersForQAFlink());
 
   // bot
   public static final String TOPIC_PRODUCER_BOT = AppEnv.config().getKafkaProducerConfig()

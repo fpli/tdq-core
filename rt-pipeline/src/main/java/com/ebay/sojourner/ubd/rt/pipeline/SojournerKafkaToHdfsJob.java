@@ -3,7 +3,7 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunctionForLoad;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
@@ -53,7 +53,7 @@ public class SojournerKafkaToHdfsJob {
     /*
     DataStream<SojSession> sojSessionDataStream =
         executionEnvironment
-            .addSource(KafkaSourceFunctionForLoad
+            .addSource(KafkaSourceFunction
                 .generateWatermark(Constants.TOPIC_PRODUCER_SESSION,
                     Constants.BOOTSTRAP_SERVERS_SESSION, Constants.GROUP_ID_SESSION,
                     SojSession.class))
@@ -65,11 +65,11 @@ public class SojournerKafkaToHdfsJob {
     // kafka source for event
     DataStream<SojEvent> sojEventDataStream =
         executionEnvironment
-            .addSource(KafkaSourceFunctionForLoad
+            .addSource(KafkaSourceFunction
                 .generateWatermark(Constants.TOPIC_PRODUCER_EVENT,
                     Constants.BOOTSTRAP_SERVERS_EVENT, Constants.GROUP_ID_EVENT,
                     SojEvent.class))
-            .setParallelism(150)
+            .setParallelism(120)
             .name("Rheos Kafka Consumer For Event")
             .uid("kafkaSourceForEvent");
 

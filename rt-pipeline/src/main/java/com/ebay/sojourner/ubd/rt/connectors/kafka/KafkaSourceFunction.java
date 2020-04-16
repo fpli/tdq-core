@@ -1,17 +1,15 @@
 package com.ebay.sojourner.ubd.rt.connectors.kafka;
 
-import com.ebay.sojourner.ubd.common.model.RawEvent;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumerBase;
 
 public class KafkaSourceFunction {
 
-  public static FlinkKafkaConsumerBase<RawEvent> generateWatermark(String topic, String brokers,
-      String groupId) {
+  public static <T> FlinkKafkaConsumerBase generateWatermark(String topic, String brokers,
+      String groupId, Class<T> tClass) {
     return KafkaConnectorFactory
-        .createKafkaConsumer(topic, brokers, groupId)
-        .setStartFromLatest()
+        .createKafkaConsumer(topic, brokers, groupId, tClass)
         .assignTimestampsAndWatermarks(
-            new SojBoundedOutOfOrdernessTimestampExtractor(Time.seconds(10)));
+            new SobBoundedOutOfOrderlessTimestampExtractor(Time.seconds(10)));
   }
 }

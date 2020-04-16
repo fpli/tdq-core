@@ -23,17 +23,6 @@ kafkaConsumerConfig:
     - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-  bootstrapServersForQAFlink:
-     - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
-     - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
-     - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
-     - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
-     - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-     - rhs-rurvkiaa-kfk-lvs-6.rheos-streaming-qa.svc.32.tess.io:9092
-     - rhs-rurvkiaa-kfk-lvs-7.rheos-streaming-qa.svc.32.tess.io:9092
-     - rhs-rurvkiaa-kfk-lvs-8.rheos-streaming-qa.svc.32.tess.io:9092
-     - rhs-rurvkiaa-kfk-lvs-9.rheos-streaming-qa.svc.32.tess.io:9092
-     - rhs-rurvkiaa-kfk-lvs-10.rheos-streaming-qa.svc.32.tess.io:9092
   groupIdForLVS: sojourner-pathfinder-lvs
   groupIdForSLC: sojourner-pathfinder-slc
   groupIdForRNO: sojourner-pathfinder-rno
