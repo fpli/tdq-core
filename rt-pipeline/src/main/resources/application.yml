@@ -31,8 +31,10 @@ kafkaConsumerConfig:
   groupIdForRNODQ: sojourner-pathfinder-rno-dq
   groupIdForQA: sojourner-pathfinder-qa
   groupIdForSession: sojourner-pathfinder-session
+  groupIdForSessionQA: sojsession.consumer
   groupIdForEvent: sojourner-pathfinder-event
   groupIdForBot: sojourner-pathfinder-bot
+  groupIdForCopy: sojourner-pathfinder-copy
   topic: behavior.pathfinder.events.total
 
 kafkaProducerConfig:
@@ -54,9 +56,16 @@ kafkaProducerConfig:
     - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
+  bootstrapServersForCopy:
+    - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
   sessionTopic: behavior.trafficjam.session
   eventTopic: behavior.trafficjam.event
   botTopic: behavior.trafficjam.bot
+  copyTopic: behavior.trafficjam.pathfinder.cooy
 
 rheos:
   serviceUrl: https://rheos-services.qa.ebay.com

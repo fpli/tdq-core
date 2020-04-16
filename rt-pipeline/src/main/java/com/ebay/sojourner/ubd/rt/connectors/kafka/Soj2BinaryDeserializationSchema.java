@@ -13,7 +13,7 @@ public class Soj2BinaryDeserializationSchema implements KeyedDeserializationSche
     if (Math.abs(messageKey[messageKey.length - 1] % 10) == 0) {
       return new SojBytes(messageKey, message);
     } else {
-      return null;
+      return new SojBytes(new byte[0], new byte[0]);
     }
   }
 

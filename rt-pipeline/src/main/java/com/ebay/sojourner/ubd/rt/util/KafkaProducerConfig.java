@@ -9,7 +9,9 @@ public class KafkaProducerConfig {
   private List<String> bootstrapServersForSession;
   private List<String> bootstrapServersForEvent;
   private List<String> bootstrapServersForBot;
+  private List<String> bootstrapServersForCopy;
   private String sessionTopic;
   private String eventTopic;
   private String botTopic;
+  private String copyTopic;
 }

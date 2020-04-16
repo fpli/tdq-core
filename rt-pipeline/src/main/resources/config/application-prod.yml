@@ -33,6 +33,7 @@ kafkaConsumerConfig:
   groupIdForSession: sojourner-pathfinder-session
   groupIdForEvent: sojourner-pathfinder-event
   groupIdForBot: sojourner-pathfinder-bot
+  groupIdForCopy: sojourner-pathfinder-copy
   topic: behavior.pathfinder.events.total
 
 kafkaProducerConfig:
@@ -54,9 +55,16 @@ kafkaProducerConfig:
     - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
     - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
     - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+  bootstrapServersForCopy:
+    - rhs-rdrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
   sessionTopic: behavior.trafficjam.session
   eventTopic: behavior.trafficjam.event
   botTopic: behavior.trafficjam.bot
+  copyTopic: behavior.trafficjam.pathfinder.copy
 
 rheos:
   serviceUrl: https://rheos-services.stratus.ebay.com

@@ -7,14 +7,22 @@ public class Soj2BinarySerializationSchema<T> implements KeyedSerializationSchem
 
   @Override
   public byte[] serializeKey(T element) {
-    SojBytes kafkaBytes = (SojBytes) element;
-    return kafkaBytes.getMessagekey();
+    if (element != null) {
+      SojBytes kafkaBytes = (SojBytes) element;
+      return kafkaBytes.getMessagekey();
+    } else {
+      return new byte[0];
+    }
   }
 
   @Override
   public byte[] serializeValue(T element) {
-    SojBytes kafkaBytes = (SojBytes) element;
-    return kafkaBytes.getMessage();
+    if (element != null) {
+      SojBytes kafkaBytes = (SojBytes) element;
+      return kafkaBytes.getMessage();
+    } else {
+      return new byte[0];
+    }
   }
 
   @Override

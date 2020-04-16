@@ -70,4 +70,14 @@ public class KafkaConnectorFactory {
         new AvroKeyedSerializationSchema<>(sinkClass, messageKey), producerConfig,
         Optional.of(new SojKafkaPartitioner<>()));
   }
+
+  public static FlinkKafkaProducer createKafkaProducerForCopy(String topic, String brokers) {
+    Properties producerConfig = initCommonConfig();
+    producerConfig.put(ProducerConfig.BATCH_SIZE_CONFIG, 4 * 1024);
+    producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
+
+    return new FlinkKafkaProducer<>(topic,
+        new Soj2BinarySerializationSchema<>(), producerConfig,
+        Optional.of(new SojKafkaPartitioner<>()));
+  }
 }

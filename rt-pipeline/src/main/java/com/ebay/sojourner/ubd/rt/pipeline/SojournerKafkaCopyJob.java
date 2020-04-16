@@ -1,7 +1,8 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
-import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.common.model.SojBytes;
+import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
@@ -104,7 +105,13 @@ public class SojournerKafkaCopyJob {
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
             .name("Rheos Kafka Consumer For Sojourner QA");
 
+    bytesDataStream.print();
 
+    bytesDataStream
+        .addSink(KafkaConnectorFactory.createKafkaProducerForCopy(Constants.TOPIC_PRODUCER_COPY,
+            Constants.BOOTSTRAP_SERVERS_COPY))
+        .setParallelism(2)
+        .name("copy data sink");
 
     // bytesDataStream.print();
     executionEnvironment.execute();

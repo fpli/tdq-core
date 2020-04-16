@@ -58,6 +58,10 @@ public class Constants {
   public static final String GROUP_ID_BOT = AppEnv.config().getKafkaConsumerConfig()
       .getGroupIdForBot();
 
+  // copy
+  public static final String GROUP_ID_COPY = AppEnv.config().getKafkaConsumerConfig()
+      .getGroupIdForCopy();
+
   // kafka producer config
   // event
   public static final String TOPIC_PRODUCER_EVENT = AppEnv.config().getKafkaProducerConfig()
@@ -76,6 +80,12 @@ public class Constants {
       .getBotTopic();
   public static final String BOOTSTRAP_SERVERS_BOT =
       String.join(",", AppEnv.config().getKafkaProducerConfig().getBootstrapServersForBot());
+
+  // copy
+  public static final String TOPIC_PRODUCER_COPY = AppEnv.config().getKafkaProducerConfig()
+      .getCopyTopic();
+  public static final String BOOTSTRAP_SERVERS_COPY =
+      String.join(",", AppEnv.config().getKafkaProducerConfig().getBootstrapServersForCopy());
 
   // message key
   public static final String MESSAGE_KEY = "guid";
