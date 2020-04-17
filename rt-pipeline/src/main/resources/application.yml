@@ -31,7 +31,6 @@ kafkaConsumerConfig:
   groupIdForRNODQ: sojourner-pathfinder-rno-dq
   groupIdForQA: sojourner-pathfinder-qa
   groupIdForSession: sojourner-pathfinder-session
-  groupIdForSessionQA: sojsession.consumer
   groupIdForEvent: sojourner-pathfinder-event
   groupIdForBot: sojourner-pathfinder-bot
   groupIdForCopy: sojourner-pathfinder-copy
@@ -80,6 +79,7 @@ flink:
     nameForDQPipeline: Unified Bot Detection RT DQ Pipeline
     nameForHotDeployPipeline: Unified Bot Detection RT Hot Deploy Pipeline
     nameForKafkaSinkPipeline: Unified Bot Detection RT kafka Sink Pipeline
+    nameForKafkaCopyPipeline: Unified Bot Detection RT kafka Copy Pipeline
     source-parallelism: 2
     event-parallelism: 2
     session-parallelism: 2
@@ -88,6 +88,12 @@ flink:
     agent-parallelism: 2
     ip-parallelism: 2
     guid-parallelism: 2
+    copy-kafka-parallelism: 2
+    event-kafka-parallelism: 2
+    session-kafka-parallelism: 2
+    bot-kafka-parallelism: 2
+    broadcast-parallelism: 2
+    metrics-parallelism: 2
   checkpoint:
     data-dir: /opt/sojourner-ubd/checkpoint
     interval: 5m

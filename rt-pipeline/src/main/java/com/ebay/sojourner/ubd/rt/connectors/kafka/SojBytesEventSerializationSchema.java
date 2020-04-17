@@ -1,14 +1,14 @@
 package com.ebay.sojourner.ubd.rt.connectors.kafka;
 
-import com.ebay.sojourner.ubd.common.model.SojBytes;
+import com.ebay.sojourner.ubd.common.model.SojBytesEvent;
 import org.apache.flink.streaming.util.serialization.KeyedSerializationSchema;
 
-public class Soj2BinarySerializationSchema<T> implements KeyedSerializationSchema<T> {
+public class SojBytesEventSerializationSchema<T> implements KeyedSerializationSchema<T> {
 
   @Override
   public byte[] serializeKey(T element) {
     if (element != null) {
-      SojBytes kafkaBytes = (SojBytes) element;
+      SojBytesEvent kafkaBytes = (SojBytesEvent) element;
       return kafkaBytes.getMessagekey();
     } else {
       return new byte[0];
@@ -18,7 +18,7 @@ public class Soj2BinarySerializationSchema<T> implements KeyedSerializationSchem
   @Override
   public byte[] serializeValue(T element) {
     if (element != null) {
-      SojBytes kafkaBytes = (SojBytes) element;
+      SojBytesEvent kafkaBytes = (SojBytesEvent) element;
       return kafkaBytes.getMessage();
     } else {
       return new byte[0];

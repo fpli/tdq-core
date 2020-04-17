@@ -1,6 +1,6 @@
 package com.ebay.sojourner.ubd.rt.connectors.kafka;
 
-import com.ebay.sojourner.ubd.common.model.SojBytes;
+import com.ebay.sojourner.ubd.common.model.SojBytesEvent;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumerBase;
 
@@ -12,7 +12,7 @@ public class KafkaSourceFunction {
     FlinkKafkaConsumerBase flinkKafkaConsumerBase
         = initKafkaConsumer(topic, brokers, groupId, tClass);
 
-    if (tClass.isAssignableFrom(SojBytes.class)) {
+    if (tClass.isAssignableFrom(SojBytesEvent.class)) {
       return flinkKafkaConsumerBase;
     } else {
       return flinkKafkaConsumerBase

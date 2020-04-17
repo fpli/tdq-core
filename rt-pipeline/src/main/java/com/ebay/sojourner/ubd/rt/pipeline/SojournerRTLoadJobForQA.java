@@ -125,6 +125,7 @@ public class SojournerRTLoadJobForQA {
     SingleOutputStreamOperator<SojSession> sojSessionStream =
         ubiSessionDataStream
             .map(new UbiSessionToSojSessionMapFunction())
+            .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
             .name("UbiSession to SojSession")
             .uid("sessionTransform");
 
@@ -134,6 +135,7 @@ public class SojournerRTLoadJobForQA {
     // UbiEvent to SojEvent
     DataStream<SojEvent> sojEventWithSessionId = ubiEventWithSessionId
         .map(new UbiEventToSojEventMapFunction())
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
         .name("UbiEvent to SojEvent")
         .uid("eventTransform");
 
@@ -141,12 +143,14 @@ public class SojournerRTLoadJobForQA {
     // "hdfs://apollo-rno//user/o_ubi/events/"
     sojSessionStream
         .addSink(HdfsSinkUtil.sojSessionSinkWithParquet())
+        .setParallelism(AppEnv.config().getFlink().app.getSessionKafkaParallelism())
         .name("SojSession sink")
         .uid("sessionHdfsSink")
         .disableChaining();
 
     sojEventWithSessionId
         .addSink(HdfsSinkUtil.sojEventSinkWithParquet())
+        .setParallelism(AppEnv.config().getFlink().app.getEventKafkaParallelism())
         .name("SojEvent sink")
         .uid("eventHdfsSink")
         .disableChaining();

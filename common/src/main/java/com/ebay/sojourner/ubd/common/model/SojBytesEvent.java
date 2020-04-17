@@ -6,7 +6,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class SojBytes implements Serializable {
+public class SojBytesEvent implements Serializable {
   private byte[] messagekey;
   private byte[] message;
 }

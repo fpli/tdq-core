@@ -11,6 +11,7 @@ public class FlinkAppConfig {
   private String nameForDQPipeline;
   private String nameForHotDeployPipeline;
   private String nameForKafkaSinkPipeline;
+  private String nameForKafkaCopyPipeline;
 
   @JsonProperty("source-parallelism")
   private Integer sourceParallelism;
@@ -35,4 +36,22 @@ public class FlinkAppConfig {
 
   @JsonProperty("guid-parallelism")
   private Integer guidParallelism;
+
+  @JsonProperty("copy-kafka-parallelism")
+  private Integer copyKafkaParallelism;
+
+  @JsonProperty("event-kafka-parallelism")
+  private Integer eventKafkaParallelism;
+
+  @JsonProperty("session-kafka-parallelism")
+  private Integer sessionKafkaParallelism;
+
+  @JsonProperty("bot-kafka-parallelism")
+  private Integer botKafkaParallelism;
+
+  @JsonProperty("broadcast-parallelism")
+  private Integer broadcastParallelism;
+
+  @JsonProperty("metrics-parallelism")
+  private Integer metricsParallelism;
 }

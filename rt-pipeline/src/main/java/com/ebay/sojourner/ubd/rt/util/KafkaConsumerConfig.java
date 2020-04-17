@@ -18,7 +18,6 @@ public class KafkaConsumerConfig {
   private String groupIdForRNODQ;
   private String groupIdForQA;
   private String groupIdForSession;
-  private String groupIdForSessionQA;
   private String groupIdForEvent;
   private String groupIdForBot;
   private String groupIdForCopy;

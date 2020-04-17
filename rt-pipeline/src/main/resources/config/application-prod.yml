@@ -79,6 +79,7 @@ flink:
     nameForDQPipeline: Unified Bot Detection RT DQ Pipeline
     nameForHotDeployPipeline: Unified Bot Detection RT Hot Deploy Pipeline
     nameForKafkaSinkPipeline: Unified Bot Detection RT kafka Sink Pipeline
+    nameForKafkaCopyPipeline: Unified Bot Detection RT kafka Copy Pipeline
     source-parallelism: 100
     event-parallelism: 120
     session-parallelism: 120
@@ -87,6 +88,12 @@ flink:
     agent-parallelism: 300
     ip-parallelism: 300
     guid-parallelism: 350
+    copy-kafka-parallelism: 50
+    event-kafka-parallelism: 150
+    session-kafka-parallelism: 50
+    bot-kafka-parallelism: 50
+    broadcast-parallelism: 350
+    metrics-parallelism: 120
   checkpoint:
     data-dir: /opt/sojourner-ubd/checkpoint
     interval: 5m

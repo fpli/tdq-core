@@ -113,6 +113,7 @@ public class SojournerKafkaSinkJob {
     // filter 33% throughput group by guid for reduce kafka consumer lag
     DataStream<RawEvent> filteredRawEvent = rawEventDataStream
         .filter(new RawEventFilterFunction())
+        .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
         .name("RawEvent Filter Operator")
         .uid("filterSource");
 
@@ -161,6 +162,7 @@ public class SojournerKafkaSinkJob {
     SingleOutputStreamOperator<SojSession> sojSessionStream =
         ubiSessionDataStream
             .map(new UbiSessionToSojSessionMapFunction())
+            .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
             .name("UbiSession to SojSession")
             .uid("sessionTransform");
 
@@ -170,6 +172,7 @@ public class SojournerKafkaSinkJob {
     // UbiEvent to SojEvent
     DataStream<SojEvent> sojEventWithSessionId = ubiEventWithSessionId
         .map(new UbiEventToSojEventMapFunction())
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
         .name("UbiEvent to SojEvent")
         .uid("eventTransform");
 
@@ -177,7 +180,7 @@ public class SojournerKafkaSinkJob {
     sojEventWithSessionId.addSink(KafkaConnectorFactory
         .createKafkaProducer(Constants.TOPIC_PRODUCER_EVENT, Constants.BOOTSTRAP_SERVERS_EVENT,
             SojEvent.class, Constants.MESSAGE_KEY))
-        .setParallelism(50)
+        .setParallelism(AppEnv.config().getFlink().app.getEventKafkaParallelism())
         .name("SojEvent Kafka")
         .uid("kafkaSinkForEvent");
 
@@ -185,7 +188,7 @@ public class SojournerKafkaSinkJob {
     sojSessionStream.addSink(KafkaConnectorFactory
         .createKafkaProducer(Constants.TOPIC_PRODUCER_SESSION, Constants.BOOTSTRAP_SERVERS_SESSION,
             SojSession.class, Constants.MESSAGE_KEY))
-        .setParallelism(50)
+        .setParallelism(AppEnv.config().getFlink().app.getSessionKafkaParallelism())
         .name("SojSession Kafka")
         .uid("kafkaSinkForSession");
 

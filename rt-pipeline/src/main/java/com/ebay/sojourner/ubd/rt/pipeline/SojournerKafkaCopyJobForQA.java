@@ -16,7 +16,7 @@ import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
-public class SojournerKafkaCopyJob {
+public class SojournerKafkaCopyJobForQA {
 
   public static void main(String[] args) throws Exception {
     // Make sure this is being executed at start up.
@@ -50,57 +50,26 @@ public class SojournerKafkaCopyJob {
                 ? 1
                 : AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
     executionEnvironment.setStateBackend(
-        StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
+        StateBackendFactory.getStateBackend(StateBackendFactory.FS));
     executionEnvironment.setRestartStrategy(
         RestartStrategies.fixedDelayRestart(
             3, // number of restart attempts
             org.apache.flink.api.common.time.Time.of(10, TimeUnit.SECONDS) // delay
         ));
 
-    // for soj nrt output
-    // 1. Rheos Consumer
-    // 1.1 Consume RawEvent from Rheos PathFinder topic
-    // 1.2 Assign timestamps and emit watermarks.
-    DataStream<SojBytesEvent> bytesDataStreamForRNO =
+    DataStream<SojBytesEvent> bytesDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
-                Constants.BOOTSTRAP_SERVERS_RNO, Constants.GROUP_ID_RNO, SojBytesEvent.class))
+                Constants.BOOTSTRAP_SERVERS_QA, Constants.GROUP_ID_QA, SojBytesEvent.class))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
-                    ? 100
+                    ? 2
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer For RNO")
-            .uid("kafkaSourceForRNO");
+            .name("Rheos Kafka Consumer For Sojourner QA");
 
-    DataStream<SojBytesEvent> bytesDataStreamForSLC =
-        executionEnvironment
-            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
-                Constants.BOOTSTRAP_SERVERS_SLC, Constants.GROUP_ID_SLC, SojBytesEvent.class))
-            .setParallelism(
-                AppEnv.config().getFlink().getApp().getSourceParallelism() == null
-                    ? 100
-                    : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer For SLC")
-            .uid("kafkaSourceForSLC");
-
-    DataStream<SojBytesEvent> bytesDataStreamForLVS =
-        executionEnvironment
-            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
-                Constants.BOOTSTRAP_SERVERS_LVS, Constants.GROUP_ID_LVS, SojBytesEvent.class))
-            .setParallelism(
-                AppEnv.config().getFlink().getApp().getSourceParallelism() == null
-                    ? 100
-                    : AppEnv.config().getFlink().getApp().getSourceParallelism())
-            .name("Rheos Kafka Consumer For LVS")
-            .uid("kafkaSourceForLVS");
-
-    DataStream<SojBytesEvent> sojBytesDataStream = bytesDataStreamForLVS
-        .union(bytesDataStreamForRNO)
-        .union(bytesDataStreamForSLC);
-
-    DataStream<SojBytesEvent> bytesFilterDataStream = sojBytesDataStream
+    DataStream<SojBytesEvent> bytesFilterDataStream = bytesDataStream
         .filter(new SojBytesEventFilterFunction())
-        .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
+        .setParallelism(AppEnv.config().getFlink().getApp().getSourceParallelism())
         .name("Bytes Filter");
 
     // sink for copy

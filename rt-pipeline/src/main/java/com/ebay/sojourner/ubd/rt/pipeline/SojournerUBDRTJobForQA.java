@@ -159,8 +159,9 @@ public class SojournerUBDRTJobForQA {
     SingleOutputStreamOperator<SessionForGuidEnhancement> sessionForGuidEnhancement =
         ubiSessionDataStream
             .map(new UbiSessionForGuidEnhancementMapFunction())
+            .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
             .name("ubiSession to SessionForGuidEnhancement")
-            .setParallelism(2);
+            .uid("enhanceGuid");
 
     // 4. Attribute Operator
     // 4.1 Sliding window
@@ -284,21 +285,26 @@ public class SojournerUBDRTJobForQA {
         attributeSignatureDataStream.broadcast(MapStateDesc.attributeSignatureDesc);
 
     // transform ubiEvent,ubiSession to same type and union
-    DataStream<UbiEvent> mappedEventStream =
+    DataStream<UbiEvent> ubiEventWithSessionId =
         ubiSessionDataStream.getSideOutput(mappedEventOutputTag);
     DataStream<UbiEvent> latedStream = ubiSessionDataStream.getSideOutput(lateEventOutputTag);
 
     DataStream<Either<UbiEvent, UbiSession>> detectableDataStream =
         ubiSessionDataStream
             .map(new DetectableSessionMapFunction())
-            .union(mappedEventStream.map(new DetectableEventMapFunction()));
+            .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+            .union(ubiEventWithSessionId
+                .map(new DetectableEventMapFunction())
+                .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism()));
 
     // connect ubiEvent,ubiSession DataStream and broadcast Stream
     SingleOutputStreamOperator<UbiEvent> signatureBotDetectionForEvent =
         detectableDataStream
             .connect(attributeSignatureBroadcastStream)
             .process(new AttributeBroadcastProcessFunctionForDetectable(sessionOutputTag))
-            .name("Signature Bot Detector");
+            .setParallelism(AppEnv.config().getFlink().app.getBroadcastParallelism())
+            .name("Signature Bot Detector")
+            .uid("connectLevel");
 
     DataStream<UbiSession> signatureBotDetectionForSession =
         signatureBotDetectionForEvent.getSideOutput(sessionOutputTag);
@@ -307,12 +313,17 @@ public class SojournerUBDRTJobForQA {
     DataStream<SojSession> sojSessionStream =
         signatureBotDetectionForSession
             .map(new UbiSessionToSojSessionMapFunction())
-            .name("UbiSession to SojSession");
+            .setParallelism(AppEnv.config().getFlink().app.getBroadcastParallelism())
+            .name("UbiSession to SojSession")
+            .uid("ubiSessionToSojSession");
 
     // UbiEvent to SojEvent
-    DataStream<SojEvent> sojEventWithSessionId = signatureBotDetectionForEvent
-        .map(new UbiEventToSojEventMapFunction())
-        .name("UbiEvent to SojEvent");
+    DataStream<SojEvent> sojEventWithSessionId =
+        signatureBotDetectionForEvent
+            .map(new UbiEventToSojEventMapFunction())
+            .setParallelism(AppEnv.config().getFlink().app.getBroadcastParallelism())
+            .name("UbiEvent to SojEvent")
+            .uid("ubiEventToSojEvent");
 
     // 5. Load data to file system for batch processing
     // 5.1 IP Signature
@@ -324,7 +335,7 @@ public class SojournerUBDRTJobForQA {
     sojSessionStream.addSink(KafkaConnectorFactory
         .createKafkaProducer(Constants.TOPIC_PRODUCER_SESSION, Constants.BOOTSTRAP_SERVERS_SESSION,
             SojSession.class, Constants.MESSAGE_KEY))
-        .setParallelism(2)
+        .setParallelism(AppEnv.config().getFlink().app.getSessionKafkaParallelism())
         .name("SojSession Kafka")
         .uid("kafkaSinkForSession");
 
@@ -332,26 +343,30 @@ public class SojournerUBDRTJobForQA {
     sojEventWithSessionId.addSink(KafkaConnectorFactory
         .createKafkaProducer(Constants.TOPIC_PRODUCER_EVENT, Constants.BOOTSTRAP_SERVERS_EVENT,
             SojEvent.class, Constants.MESSAGE_KEY))
-        .setParallelism(2)
+        .setParallelism(AppEnv.config().getFlink().app.getEventKafkaParallelism())
         .name("SojEvent Kafka")
         .uid("kafkaSinkForEvent");
 
     // metrics collector for end to end
     signatureBotDetectionForEvent
         .process(new PipelineMetricsCollectorProcessFunction())
+        .setParallelism(AppEnv.config().getFlink().app.getMetricsParallelism())
         .name("Pipeline End to End Duration")
-        .disableChaining();
+        .uid("endToEndMetricsCollector");
 
     // metrics collector for event rules hit
     signatureBotDetectionForEvent
         .process(new EventMetricsCollectorProcessFunction())
+        .setParallelism(AppEnv.config().getFlink().app.getMetricsParallelism())
         .name("Event Metrics Collector")
-        .disableChaining();
+        .uid("eventLevelMetricsCollector");
 
     // late event sink
     latedStream
         .addSink(new DiscardingSink<>())
-        .name("Late Event");
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .name("Late Event")
+        .uid("lateEvent");
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForFullPipeline());

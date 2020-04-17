@@ -1,7 +1,7 @@
 package com.ebay.sojourner.ubd.rt.connectors.kafka;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.model.SojBytes;
+import com.ebay.sojourner.ubd.common.model.SojBytesEvent;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import java.util.Optional;
 import java.util.Properties;
@@ -51,9 +51,9 @@ public class KafkaConnectorFactory {
     if (tClass.isAssignableFrom(RawEvent.class)) {
       return new FlinkKafkaConsumer<>(
           topic, new RawEventDeserializationSchema(), consumerConfig);
-    } else if (tClass.isAssignableFrom(SojBytes.class)) {
+    } else if (tClass.isAssignableFrom(SojBytesEvent.class)) {
       return new FlinkKafkaConsumer<>(
-          topic, new Soj2BinaryDeserializationSchema(), consumerConfig);
+          topic, new SojBytesEventDeserializationSchema(), consumerConfig);
     } else {
       return new FlinkKafkaConsumer<>(
           topic, new AvroKeyedDeserializationSchema<>(tClass), consumerConfig);
@@ -77,7 +77,7 @@ public class KafkaConnectorFactory {
     producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
 
     return new FlinkKafkaProducer<>(topic,
-        new Soj2BinarySerializationSchema<>(), producerConfig,
+        new SojBytesEventSerializationSchema<>(), producerConfig,
         Optional.of(new SojKafkaPartitioner<>()));
   }
 }

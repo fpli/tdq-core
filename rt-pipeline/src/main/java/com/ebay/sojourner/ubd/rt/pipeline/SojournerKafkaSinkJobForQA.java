@@ -125,6 +125,7 @@ public class SojournerKafkaSinkJobForQA {
     SingleOutputStreamOperator<SojSession> sojSessionStream =
         ubiSessionDataStream
             .map(new UbiSessionToSojSessionMapFunction())
+            .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
             .name("UbiSession to SojSession")
             .uid("sessionTransform");
 
@@ -134,6 +135,7 @@ public class SojournerKafkaSinkJobForQA {
     // UbiEvent to SojEvent
     DataStream<SojEvent> sojEventWithSessionId = ubiEventWithSessionId
         .map(new UbiEventToSojEventMapFunction())
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
         .name("UbiEvent to SojEvent")
         .uid("eventTransform");
 
@@ -141,7 +143,7 @@ public class SojournerKafkaSinkJobForQA {
     sojEventWithSessionId.addSink(KafkaConnectorFactory
         .createKafkaProducer(Constants.TOPIC_PRODUCER_EVENT, Constants.BOOTSTRAP_SERVERS_EVENT,
             SojEvent.class, Constants.MESSAGE_KEY))
-        .setParallelism(2)
+        .setParallelism(AppEnv.config().getFlink().app.getEventKafkaParallelism())
         .name("SojEvent Kafka")
         .uid("kafkaSinkForEvent");
 
@@ -149,7 +151,7 @@ public class SojournerKafkaSinkJobForQA {
     sojSessionStream.addSink(KafkaConnectorFactory
         .createKafkaProducer(Constants.TOPIC_PRODUCER_SESSION, Constants.BOOTSTRAP_SERVERS_SESSION,
             SojSession.class, Constants.MESSAGE_KEY))
-        .setParallelism(2)
+        .setParallelism(AppEnv.config().getFlink().app.getSessionKafkaParallelism())
         .name("SojSession Kafka")
         .uid("kafkaSinkForSession");
 

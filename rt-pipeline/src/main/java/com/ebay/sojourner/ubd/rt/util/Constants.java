@@ -46,10 +46,6 @@ public class Constants {
   public static final String GROUP_ID_SESSION = AppEnv.config().getKafkaConsumerConfig()
       .getGroupIdForSession();
 
-  // sessoin QA
-  public static final String GROUP_ID_SESSION_QA = AppEnv.config().getKafkaConsumerConfig()
-      .getGroupIdForSessionQA();
-
   // event
   public static final String GROUP_ID_EVENT = AppEnv.config().getKafkaConsumerConfig()
       .getGroupIdForEvent();
