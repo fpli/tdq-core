@@ -5,7 +5,8 @@ import java.io.IOException;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.streaming.util.serialization.KeyedDeserializationSchema;
 
-public class SojBytesEventDeserializationSchema implements KeyedDeserializationSchema<SojBytesEvent> {
+public class SojBytesEventDeserializationSchema implements
+    KeyedDeserializationSchema<SojBytesEvent> {
 
   @Override
   public SojBytesEvent deserialize(byte[] messageKey, byte[] message, String topic, int partition,
@@ -13,7 +14,7 @@ public class SojBytesEventDeserializationSchema implements KeyedDeserializationS
     if (Math.abs(messageKey[messageKey.length - 1] % 10) == 0) {
       return new SojBytesEvent(messageKey, message);
     } else {
-      return new SojBytesEvent(null,null);
+      return new SojBytesEvent(null, null);
     }
   }
 

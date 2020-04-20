@@ -23,9 +23,9 @@ kafkaConsumerConfig:
     - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-  groupIdForLVS: sojourner-pathfinder-lvs
-  groupIdForSLC: sojourner-pathfinder-slc
-  groupIdForRNO: sojourner-pathfinder-rno
+  groupIdForLVS: sojourner-pathfinder-lvs-test
+  groupIdForSLC: sojourner-pathfinder-slc-test
+  groupIdForRNO: sojourner-pathfinder-rno-test
   groupIdForLVSDQ: sojourner-pathfinder-lvs-dq
   groupIdForSLCDQ: sojourner-pathfinder-slc-dq
   groupIdForRNODQ: sojourner-pathfinder-rno-dq
@@ -89,7 +89,7 @@ flink:
     ip-parallelism: 300
     guid-parallelism: 350
     copy-kafka-parallelism: 50
-    event-kafka-parallelism: 150
+    event-kafka-parallelism: 50
     session-kafka-parallelism: 50
     bot-kafka-parallelism: 50
     broadcast-parallelism: 350

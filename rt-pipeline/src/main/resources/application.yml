@@ -64,7 +64,7 @@ kafkaProducerConfig:
   sessionTopic: behavior.trafficjam.session
   eventTopic: behavior.trafficjam.event
   botTopic: behavior.trafficjam.bot
-  copyTopic: behavior.trafficjam.pathfinder.cooy
+  copyTopic: behavior.trafficjam.pathfinder.copy
 
 rheos:
   serviceUrl: https://rheos-services.qa.ebay.com

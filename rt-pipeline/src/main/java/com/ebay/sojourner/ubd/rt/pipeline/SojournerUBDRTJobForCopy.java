@@ -1,17 +1,33 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
+import com.ebay.sojourner.ubd.common.model.SojEvent;
+import com.ebay.sojourner.ubd.common.model.SojSession;
+import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.UbiEventToSojEventMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSojSessionMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
+import org.apache.flink.streaming.api.transformations.OneInputTransformation;
+import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
+import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
+import org.apache.flink.util.OutputTag;
 
 public class SojournerUBDRTJobForCopy {
 
@@ -50,7 +66,7 @@ public class SojournerUBDRTJobForCopy {
         StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
 
     // kafka source for copy
-    DataStream<RawEvent> sojEventDataStream =
+    DataStream<RawEvent> rawEventDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunction
                 .generateWatermark(Constants.TOPIC_PRODUCER_COPY,
@@ -60,9 +76,79 @@ public class SojournerUBDRTJobForCopy {
             .name("Rheos Kafka Consumer For Copy")
             .uid("kafkaSourceForCopy");
 
-    // sink
-    sojEventDataStream.addSink(new DiscardingSink<>()).disableChaining();
+    DataStream<UbiEvent> ubiEventDataStream =
+        rawEventDataStream
+            .map(new EventMapFunction())
+            .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
+            .name("Event Operator")
+            .uid("eventLevel");
 
+    // 3. Session Operator
+    // 3.1 Session window
+    // 3.2 Session indicator accumulation
+    // 3.3 Session Level bot detection (via bot rule & signature)
+    // 3.4 Event level bot detection (via session flag)
+    OutputTag<UbiSession> sessionOutputTag =
+        new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
+    OutputTag<UbiEvent> lateEventOutputTag =
+        new OutputTag<>("late-event-output-tag", TypeInformation.of(UbiEvent.class));
+    OutputTag<UbiEvent> mappedEventOutputTag =
+        new OutputTag<>("mapped-event-output-tag", TypeInformation.of(UbiEvent.class));
+    SingleOutputStreamOperator<UbiSession> ubiSessionDataStream =
+        ubiEventDataStream
+            .keyBy("guid")
+            .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
+            .allowedLateness(Time.minutes(1))
+            .sideOutputLateData(lateEventOutputTag)
+            .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction());
+
+    // Hack here to use MapWithStateWindowOperator instead while bypassing DataStream API which
+    // cannot be enhanced easily since we do not want to modify Flink framework sourcecode.
+    WindowOperatorHelper.enrichWindowOperator(
+        (OneInputTransformation) ubiSessionDataStream.getTransformation(),
+        new UbiEventMapWithStateFunction(),
+        mappedEventOutputTag);
+
+    ubiSessionDataStream
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .name("Session Operator")
+        .uid("sessionLevel");
+
+    // UbiSession to SojSession
+    SingleOutputStreamOperator<SojSession> sojSessionStream =
+        ubiSessionDataStream
+            .map(new UbiSessionToSojSessionMapFunction())
+            .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+            .name("UbiSession to SojSession")
+            .uid("sessionTransform");
+
+    DataStream<UbiEvent> ubiEventWithSessionId = ubiSessionDataStream
+        .getSideOutput(mappedEventOutputTag);
+
+    // UbiEvent to SojEvent
+    DataStream<SojEvent> sojEventWithSessionId = ubiEventWithSessionId
+        .map(new UbiEventToSojEventMapFunction())
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .name("UbiEvent to SojEvent")
+        .uid("eventTransform");
+
+    // This path is for local test. For production, we should use
+    // "hdfs://apollo-rno//user/o_ubi/events/"
+    /*
+    sojSessionStream
+        .addSink(HdfsSinkUtil.sojSessionSinkWithParquet())
+        .setParallelism(AppEnv.config().getFlink().app.getSessionKafkaParallelism())
+        .name("SojSession sink")
+        .uid("sessionHdfsSink")
+        .disableChaining();
+
+    sojEventWithSessionId
+        .addSink(HdfsSinkUtil.sojEventSinkWithParquet())
+        .setParallelism(AppEnv.config().getFlink().app.getEventKafkaParallelism())
+        .name("SojEvent sink")
+        .uid("eventHdfsSink")
+        .disableChaining();
+*/
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForDQPipeline());
   }
