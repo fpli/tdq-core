@@ -6,6 +6,7 @@ import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
+import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
@@ -141,7 +142,7 @@ public class SojournerUBDRTJobForCopy {
 
     // This path is for local test. For production, we should use
     // "hdfs://apollo-rno//user/o_ubi/events/"
-    /*
+
     sojSessionStream
         .addSink(HdfsSinkUtil.sojSessionSinkWithParquet())
         .setParallelism(AppEnv.config().getFlink().app.getSessionKafkaParallelism())
@@ -155,7 +156,7 @@ public class SojournerUBDRTJobForCopy {
         .name("SojEvent sink")
         .uid("eventHdfsSink")
         .disableChaining();
-*/
+
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForDQPipeline());
   }

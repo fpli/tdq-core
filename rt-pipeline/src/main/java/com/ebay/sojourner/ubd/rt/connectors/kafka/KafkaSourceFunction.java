@@ -17,7 +17,7 @@ public class KafkaSourceFunction {
     } else {
       return flinkKafkaConsumerBase
           .assignTimestampsAndWatermarks(
-              new SobBoundedOutOfOrderlessTimestampExtractor(Time.seconds(10)));
+              new SojBoundedOutOfOrderlessTimestampExtractor(Time.seconds(10)));
     }
   }
 
