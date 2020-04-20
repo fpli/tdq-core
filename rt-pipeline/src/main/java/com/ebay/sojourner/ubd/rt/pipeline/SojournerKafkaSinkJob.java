@@ -18,6 +18,8 @@ import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFuncti
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
+import java.util.concurrent.TimeUnit;
+import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
@@ -67,6 +69,11 @@ public class SojournerKafkaSinkJob {
                 : AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
     executionEnvironment.setStateBackend(
         StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
+    executionEnvironment.setRestartStrategy(
+        RestartStrategies.fixedDelayRestart(
+            3, // number of restart attempts
+            org.apache.flink.api.common.time.Time.of(10, TimeUnit.SECONDS) // delay
+        ));
 
     // for soj nrt output
     // 1. Rheos Consumer
