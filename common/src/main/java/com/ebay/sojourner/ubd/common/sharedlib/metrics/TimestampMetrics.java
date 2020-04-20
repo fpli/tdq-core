@@ -43,7 +43,7 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     } else if (event.getEventTimestamp() != null
         && sessionAccumulator.getUbiSession().getAbsStartTimestamp() > event.getEventTimestamp()) {
       sessionAccumulator.getUbiSession().setAbsStartTimestamp(event.getEventTimestamp());
-      System.out.println("event:" + event.getPageId() + " eventtime:" + event.getEventTimestamp());
+
       //      eventListenerContainer.onEarlyEventChange(event,sessionAccumulator.getUbiSession());
     }
     if (sessionAccumulator.getUbiSession().getAbsEndTimestamp() == null) {
@@ -59,7 +59,7 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
   public void end(SessionAccumulator sessionAccumulator) {
     sessionAccumulator
         .getUbiSession()
-        .setSojDataDt(
+        .setSojDataDt(sessionAccumulator.getUbiSession().getAbsEndTimestamp() == null ? null :
             SOJTS2Date.castSojTimestampToDate(
                 sessionAccumulator.getUbiSession().getAbsEndTimestamp()));
     // Fix bug HDMIT-3732 to avoid integer result overflow
@@ -73,7 +73,9 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
                     / 1000000);
     int absDuration =
         (int)
-            ((sessionAccumulator.getUbiSession().getAbsEndTimestamp()
+            (sessionAccumulator.getUbiSession().getAbsEndTimestamp() == null
+                || sessionAccumulator.getUbiSession().getAbsStartTimestamp() == null
+                ? 0 : (sessionAccumulator.getUbiSession().getAbsEndTimestamp()
                 - sessionAccumulator.getUbiSession().getAbsStartTimestamp())
                 / 1000000);
     sessionAccumulator.getUbiSession().setDurationSec(durationSec);
