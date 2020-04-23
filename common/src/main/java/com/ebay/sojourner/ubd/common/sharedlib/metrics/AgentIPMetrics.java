@@ -57,8 +57,10 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
         ubiSession.setFindFirst(true);
       }
     } else {
-      ubiSession.setAgentInfo(event.getAgentInfo());
-      ubiSession.setClientIp(event.getClientIP());
+      if(!ubiSession.isFindFirst()) {
+        ubiSession.setAgentInfo(event.getAgentInfo());
+        ubiSession.setClientIp(event.getClientIP());
+      }
       System.out.println("AgentIPMetrics event:" + event.getPageId() + " eventtime:" + event
           .getEventTimestamp());
       if (!event.isIframe() && !event.isRdt()) {

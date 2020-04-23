@@ -1,6 +1,7 @@
 package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.rule.BotRule1;
 import com.ebay.sojourner.ubd.common.rule.Rule;
 import java.io.IOException;
 import java.util.LinkedHashSet;
@@ -58,6 +59,7 @@ public class EventBotDetector extends AbstractBotDetector<UbiEvent> {
   // static rules
   @Override
   public void initBotRules() {
+    botRules.add(new BotRule1());
     /*
     botRules.add(new BotRule1());
     botRules.add(Rules.ICF_RULE_1_COMPILER);

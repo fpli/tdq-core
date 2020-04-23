@@ -24,7 +24,7 @@ public class PageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
         .isEarlyEvent(event.getEventTimestamp(),
             sessionAccumulator.getUbiSession().getAbsStartTimestamp());
     boolean isLateEvent=SojEventTimeUtil
-        .isEarlyEvent(event.getEventTimestamp(),
+        .isLateEvent(event.getEventTimestamp(),
             sessionAccumulator.getUbiSession().getAbsEndTimestamp());
     if (!event.isIframe()) {
       if (!event.isRdt() || indicator.isCorrespondingPageEvent(event)) {

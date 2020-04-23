@@ -10,7 +10,6 @@ import com.ebay.sojourner.ubd.common.rule.BotRule204;
 import com.ebay.sojourner.ubd.common.rule.BotRule205;
 import com.ebay.sojourner.ubd.common.rule.BotRule206;
 import com.ebay.sojourner.ubd.common.rule.BotRule207;
-import com.ebay.sojourner.ubd.common.rule.BotRule208;
 import com.ebay.sojourner.ubd.common.rule.BotRule212;
 import com.ebay.sojourner.ubd.common.rule.BotRule215;
 import com.ebay.sojourner.ubd.common.rule.BotRule9;
@@ -79,7 +78,7 @@ public class SessionBotDetector extends AbstractBotDetector<UbiSession> {
     botRules.add(new BotRule205());
     botRules.add(new BotRule206());
     botRules.add(new BotRule207());
-    botRules.add(new BotRule208());
+    //    botRules.add(new BotRule208());
     botRules.add(new BotRule212());
     botRules.add(new BotRule215());
     botRules.add(new BotRule11());

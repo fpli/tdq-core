@@ -1,7 +1,9 @@
 package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 
 import java.util.concurrent.CopyOnWriteArraySet;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class RecordMetrics<Source, Target> implements Aggregator<Source, Target> {
 
   protected CopyOnWriteArraySet<FieldMetrics<Source, Target>> fieldMetrics
@@ -26,7 +28,11 @@ public abstract class RecordMetrics<Source, Target> implements Aggregator<Source
 
   public void feed(Source source, Target target) throws Exception {
     for (FieldMetrics<Source, Target> metrics : fieldMetrics) {
-      metrics.feed(source, target);
+      try {
+        metrics.feed(source, target);
+      }catch(Exception e){
+        log.error(" session metric feed issue :"+e.getMessage());
+      }
     }
   }
 

@@ -12,7 +12,8 @@ public class BotRule1 extends AbstractBotRule<UbiEvent> {
 
   private int detectSpiderAgent(UbiEvent event) {
     String agentInfo = event.getAgentInfo();
-    if (agentInfo != null && pattern.matcher(agentInfo).matches()) {
+    if (agentInfo != null && pattern.matcher(agentInfo).matches() && !agentInfo.toUpperCase()
+        .contains("CUBOT")) {
       return BotRules.SPIDER_BOT_FLAG;
     } else {
       return BotRules.NON_BOT_FLAG;

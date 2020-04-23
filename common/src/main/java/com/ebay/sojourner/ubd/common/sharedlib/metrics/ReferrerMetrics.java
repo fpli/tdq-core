@@ -14,6 +14,8 @@ public class ReferrerMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
+
+    // FIXME seems logic is correct, but some result is  incorrect;
     boolean isEarlyEvent = SojEventTimeUtil
         .isEarlyEvent(event.getEventTimestamp(),
             sessionAccumulator.getUbiSession().getAbsStartTimestamp());
