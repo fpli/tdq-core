@@ -29,7 +29,7 @@ public class TimestampMetricsTest2 {
     ubiEvent.setRdt(false);
     ubiEvent.setPageId(2317508);
     ubiEvent.setEventTimestamp(
-        Long.parseLong(SojTimestamp.getDateToSojTimestamp("2020-04-20 03:06:22.764")));
+        Long.parseLong(SojTimestamp.getSojTimestamp("2020-04-20 03:06:22.764")));
     ubiEvent.setRemoteIP("10.175.140.126");
     ubiEvent.setRequestCorrelationId("a7ab98ea61111c32");
     ubiEvent.setSid(null);
@@ -113,7 +113,7 @@ public class TimestampMetricsTest2 {
     ubiEvent.setRdt(false);
     ubiEvent.setPageId(2509164);
     ubiEvent.setEventTimestamp(
-        Long.parseLong(SojTimestamp.getDateToSojTimestamp("2020-04-20 03:06:23.031")));
+        Long.parseLong(SojTimestamp.getSojTimestamp("2020-04-20 03:06:23.031")));
     ubiEvent.setRemoteIP("66.249.90.50");
     ubiEvent.setRequestCorrelationId("a7ab98ea61111c32");
     ubiEvent.setSid(null);
@@ -173,7 +173,7 @@ public class TimestampMetricsTest2 {
     ubiEvent.setRdt(false);
     ubiEvent.setPageId(2344945);
     ubiEvent.setEventTimestamp(
-        Long.parseLong(SojTimestamp.getDateToSojTimestamp("2020-04-20 03:06:22.997")));
+        Long.parseLong(SojTimestamp.getSojTimestamp("2020-04-20 03:06:22.997")));
     ubiEvent.setRemoteIP("66.249.90.50");
     ubiEvent.setRequestCorrelationId("a7ab98ea61111c32");
     ubiEvent.setSid(null);
@@ -235,7 +235,7 @@ public class TimestampMetricsTest2 {
     ubiEvent.setRdt(false);
     ubiEvent.setPageId(2349624);
     ubiEvent.setEventTimestamp(
-        Long.parseLong(SojTimestamp.getDateToSojTimestamp("2020-04-20 03:06:22.860")));
+        Long.parseLong(SojTimestamp.getSojTimestamp("2020-04-20 03:06:22.860")));
     ubiEvent.setRemoteIP("66.249.90.50");
     ubiEvent.setRequestCorrelationId("a7ab98ea61111c32");
     ubiEvent.setSid(null);
@@ -300,7 +300,7 @@ public class TimestampMetricsTest2 {
     ubiEvent.setRdt(false);
     ubiEvent.setPageId(2317508);
     ubiEvent.setEventTimestamp(
-        Long.parseLong(SojTimestamp.getDateToSojTimestamp("2020-04-20 03:06:22.903")));
+        Long.parseLong(SojTimestamp.getSojTimestamp("2020-04-20 03:06:22.903")));
     ubiEvent.setRemoteIP("10.164.103.82");
     ubiEvent.setRequestCorrelationId("a7ab98ea61111c32");
     ubiEvent.setSid(null);
