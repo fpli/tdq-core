@@ -281,7 +281,7 @@ public class LkpManager {
   private InputStream getStreamFromClasspath(String resource) throws FileNotFoundException {
     InputStream instream;
     if (StringUtils.isNotBlank(resource)) {
-      instream = HdfsLoader.class.getResourceAsStream(resource);
+      instream = LkpManager.class.getResourceAsStream(resource);
       if (instream == null) {
         throw new FileNotFoundException("Can't locate resource based on classPath: " + resource);
       }
