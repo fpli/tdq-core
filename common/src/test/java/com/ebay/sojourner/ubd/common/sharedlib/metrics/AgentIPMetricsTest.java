@@ -5,6 +5,7 @@ import com.ebay.sojourner.ubd.common.model.UbiSession;
 import java.util.Collection;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -22,6 +23,7 @@ class AgentIPMetricsTest extends BaseMetricsTest {
     yaml = loadTestCasesYaml("AgentIPMetricsTest.yaml");
   }
 
+  @Disabled
   @TestFactory
   public Collection<DynamicTest> test_feed() throws Exception {
     return generateDynamicTests(yaml, agentIPMetrics);

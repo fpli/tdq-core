@@ -11,4 +11,4 @@
   expect:
     UbiSession:
       startPageId: 4018
-      endPageId: 4018
+      endPageId: 0
