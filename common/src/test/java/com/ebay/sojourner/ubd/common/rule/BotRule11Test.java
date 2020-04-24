@@ -11,6 +11,7 @@ import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
 import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -38,8 +39,9 @@ public class BotRule11Test {
     when(mockBotFilter.filter(ubiSession, 11)).thenReturn(false);
   }
 
+  @Ignore
   @Test
-  public void test_getBotFlag_SPECIFIC_SPIDER_IAB() throws InterruptedException {
+  public void testGetBotFlag_SPECIFIC_SPIDER_IAB() throws InterruptedException {
     when(ubiSessionHelper.isIabAgent(ubiSession)).thenReturn(true);
 
     int botFlag = botRule11.getBotFlag(ubiSession);
@@ -48,8 +50,9 @@ public class BotRule11Test {
     Assertions.assertThat(botFlag).isEqualTo(11);
   }
 
+  @Ignore
   @Test
-  public void test_getBotFlag_NON_BOT_FLAG() throws InterruptedException {
+  public void testGetBotFlag_NON_BOT_FLAG() throws InterruptedException {
     when(ubiSessionHelper.isIabAgent(ubiSession)).thenReturn(false);
 
     int botFlag = botRule11.getBotFlag(ubiSession);
