@@ -3,6 +3,8 @@ package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.rule.BotRule208;
 import com.ebay.sojourner.ubd.common.rule.Rule;
+import com.ebay.sojourner.ubd.common.util.BotFilter;
+import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -15,9 +17,11 @@ public class SessionEndBotDetector extends AbstractBotDetector<UbiSession> {
   private static volatile SessionEndBotDetector sessionEndBotDetector;
   private static List<Long> dynamicRuleIdList = new CopyOnWriteArrayList<>();
   private Set<Rule> botRules = new CopyOnWriteArraySet<>();
+  private BotFilter filter = null;
 
   private SessionEndBotDetector() {
     initBotRules();
+    filter = new UbiBotFilter();
     for (Rule rule : botRules) {
       rule.init();
     }
@@ -49,8 +53,10 @@ public class SessionEndBotDetector extends AbstractBotDetector<UbiSession> {
     Set<Integer> botRuleList = new LinkedHashSet<Integer>(botRules.size());
     for (Rule rule : botRules) {
       Integer botRule = rule.getBotFlag(ubiSession);
-      if (botRule != 0) {
-        botRuleList.add(botRule);
+      if (botRule != null && botRule != 0) {
+        if (!filter.filter(ubiSession, botRule)) {
+          botRuleList.add(botRule);
+        }
       }
     }
     return botRuleList;

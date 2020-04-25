@@ -2,10 +2,12 @@ package com.ebay.sojourner.ubd.rt.connectors.kafka;
 
 import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.common.model.SojSession;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class AvroKeyedSerializationSchemaTest {
 
+  @Ignore
   @Test
   public void testSojEvent() {
     AvroKeyedSerializationSchema serializer = new AvroKeyedSerializationSchema(SojEvent.class,

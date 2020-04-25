@@ -103,7 +103,7 @@ flink:
 
 hdfs:
   sinkParentPath: hdfs://apollo-rno/sys/soj/ubd
-  sinkEventPath: /events_dq
-  sinkSessionPath: /sessions_dq
+  sinkEventPath: /events
+  sinkSessionPath: /sessions
   sinkSignaturePath: /signatures
   sinkLateEventPath: /late_events

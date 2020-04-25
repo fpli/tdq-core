@@ -25,6 +25,7 @@
     <java.version>1.8</java.version>
     <scala.binary.version>2.11</scala.binary.version>
     <scala.complete.version>${scala.binary.version}.8</scala.complete.version>
+    <maven.version>3.6.3</maven.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <commons.lang3.version>3.4</commons.lang3.version>
@@ -494,6 +495,11 @@
         <groupId>org.apache.flink</groupId>
         <artifactId>flink-shaded-hadoop2</artifactId>
         <version>1.7.2</version>
+      </dependency>
+      <dependency>
+        <groupId>joda-time</groupId>
+        <artifactId>joda-time</artifactId>
+        <version>2.10.5</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

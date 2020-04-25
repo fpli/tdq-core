@@ -1,5 +1,13 @@
 package com.ebay.sojourner.ubd.common.util;
 
+import static com.ebay.sojourner.ubd.common.util.UBIConfig.getString;
+import static com.ebay.sojourner.ubd.common.util.UBIConfig.getUBIProperty;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -8,40 +16,44 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.PathFilter;
 
 @Slf4j
 public class LkpManager {
 
   public static final String LKP_FILED_DELIMITER = ",";
-  public static final String LKP_RECORD_DELIMITER = "\177";
-  public static final String LKP_EMPTY_FIELD = "";
-  public static final String TEXT_RECORD_DELIMITER = "\n";
-  public static final String TEXT_FIELD_DELIMITER = "\t";
-  public static final int PAIR_LENGTH = 2;
-  private static volatile LkpManager lkpManager;
-  public volatile HdfsLoader hdfsLoader;
+  private static final String LKP_RECORD_DELIMITER = "\177";
+  private static final String TEXT_RECORD_DELIMITER = "\n";
+  private static final String TEXT_FIELD_DELIMITER = "\t";
+  private static final String LKP_PATH = getUBIProperty(Property.LKP_PATH);
+
   private Set<Integer> pageIdSet = new CopyOnWriteArraySet<>();
-  // private static Set<String> pageIdSet4Bot12 = new HashSet<String>();
   private Map<Integer, Integer> findingFlagMap = new ConcurrentHashMap<>();
-  private Map<Integer, Integer[]> vtNewIdsMap = new ConcurrentHashMap<Integer, Integer[]>();
-  private Set<String> appIdWithBotFlags = new CopyOnWriteArraySet<String>();
+  private Map<Integer, Integer[]> vtNewIdsMap = new ConcurrentHashMap<>();
+  private Set<String> appIdWithBotFlags = new CopyOnWriteArraySet<>();
   private List<String> iabAgentRegs = new CopyOnWriteArrayList<>();
-  private Set<String> testUserIds = new CopyOnWriteArraySet<String>();
-  private Set<String> largeSessionGuidSet = new CopyOnWriteArraySet<String>();
-  private Map<Integer, String[]> pageFmlyMap = new ConcurrentHashMap<Integer, String[]>();
-  private Map<String, String> mpxMap = new ConcurrentHashMap<String, String>();
-  private Map<String, Boolean> selectedIps = new ConcurrentHashMap<String, Boolean>();
-  private Set<String> selectedAgents = new CopyOnWriteArraySet<String>();
-  private Map<String, String> result = new ConcurrentHashMap<String, String>();
-  private volatile LkpFetcher lkpFetcher;
+  private Set<String> largeSessionGuidSet = new CopyOnWriteArraySet<>();
+  private Map<Integer, String[]> pageFmlyMap = new ConcurrentHashMap<>();
+  private Map<String, String> mpxMap = new ConcurrentHashMap<>();
+  private Map<String, Boolean> selectedIps = new ConcurrentHashMap<>();
+  private Set<String> selectedAgents = new CopyOnWriteArraySet<>();
+  private Map<String, Long> lkpFileLastUpdDt = new ConcurrentHashMap<>();
 
-  public LkpManager() {
+  private volatile FileSystem fileSystem = null;
+  private volatile boolean loadLkpFromHDFS = false;
+  private volatile boolean firstRun = true;
+  private static volatile LkpManager lkpManager;
+  private volatile LkpRefreshTimeTask lkpRefreshTimeTask;
 
-    lkpFetcher = new LkpFetcher(this);
-    lkpFetcher.startDailyRefresh();
-    hdfsLoader = new HdfsLoader();
-    loadResources(true);
-    hdfsLoader.closeFS();
+  private LkpManager() {
+    lkpRefreshTimeTask = new LkpRefreshTimeTask(this);
+    refreshLkpFiles();
+    firstRun = false;
   }
 
   public static LkpManager getInstance() {
@@ -55,215 +67,150 @@ public class LkpManager {
     return lkpManager;
   }
 
-  private void loadResources(boolean isInit) {
-    loadIframePageIds(isInit);
-    loadSelectedIps(isInit);
-    loadSelectedAgents(isInit);
-    loadLargeSessionGuid(isInit);
-    loadIabAgent(isInit);
-    loadFindingFlag(isInit);
-    loadVtNewIds(isInit);
-    loadAppIds(isInit);
-    loadPageFmlys(isInit);
-    loadMpxRotetion(isInit);
+  public void refreshLkpFiles() {
+    refreshIframePageIds();
+    refreshSelectedIps();
+    refreshSelectedAgents();
+    refreshLargeSessionGuid();
+    refreshIabAgent();
+    refreshFindingFlag();
+    refreshVtNewIds();
+    refreshAppIds();
+    refreshPageFmlys();
+    refreshMpxRotetion();
   }
 
-  public void loadIframePageIds(boolean isInit) {
-    Set<Integer> pageIdSetMid = new CopyOnWriteArraySet<>();
-    boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
-    String iframePageIds = UBIConfig.getString(Property.IFRAME_PAGE_IDS);
-    String pageIds = isTestEnabled ? iframePageIds : hdfsLoader
-        .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), iframePageIds);
-    if (StringUtils.isNotBlank(pageIds)) {
+  private void refreshIframePageIds() {
+    String property = Property.IFRAME_PAGE_IDS;
+    if (isUpdate(property)) {
+      pageIdSet.clear();
+      String pageIds = getLkpFileContent(property);
       for (String pageId : pageIds.split(LKP_RECORD_DELIMITER)) {
         try {
-          pageIdSetMid.add(Integer.valueOf(pageId));
+          pageIdSet.add(Integer.valueOf(pageId));
         } catch (NumberFormatException e) {
           log.warn("Parsing PageId failed, format incorrect...");
         }
-
       }
-    } else {
-      log.warn("Empty content for lookup table of iframe page ids");
     }
-    pageIdSet = pageIdSetMid;
-
   }
 
-  public void loadSelectedIps(boolean isInit) {
-    Map<String, Boolean> selectedIpsMid = new ConcurrentHashMap<>();
-    parseTextFile(Property.SELECTED_IPS, selectedIpsMid);
-    selectedIps = selectedIpsMid;
+  private void refreshSelectedIps() {
+    String property = Property.SELECTED_IPS;
+    if (isUpdate(property)) {
+      selectedIps.clear();
+      String fileContent = getLkpFileContent(property);
+      for (String record : fileContent.split(TEXT_RECORD_DELIMITER)) {
+        if (StringUtils.isNotBlank(record)) {
+          String[] recordPair = record.split(TEXT_FIELD_DELIMITER);
+          if (recordPair.length == 2) {
+            String recordKey = recordPair[0];
+            String recordValue = recordPair[1];
+            if (StringUtils.isNotBlank(recordKey) && StringUtils.isNotBlank(recordValue)) {
+              selectedIps.put(recordKey.trim(), Boolean.valueOf(recordValue.trim()));
+            }
+          }
+        }
+      }
+    }
   }
 
-  public void loadSelectedAgents(boolean isInit) {
-    Set<String> selectedAgentsMid = new CopyOnWriteArraySet<>();
-    parseTextFile(Property.SELECTED_AGENTS, selectedAgentsMid);
-    selectedAgents = selectedAgentsMid;
-  }
-
-  private void parseTextFile(String filePathProperty, Set<String> sets) {
-    boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
-    String file = UBIConfig.getString(filePathProperty);
-    String fileContent = isTestEnabled ? file : hdfsLoader
-        .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), file);
-    if (StringUtils.isNotBlank(fileContent)) {
+  private void refreshSelectedAgents() {
+    String property = Property.SELECTED_AGENTS;
+    if (isUpdate(property)) {
+      selectedAgents.clear();
+      String fileContent = getLkpFileContent(property);
       for (String record : fileContent.split(TEXT_RECORD_DELIMITER)) {
         if (StringUtils.isNotBlank(record)) {
           String[] recordPair = record.split(TEXT_FIELD_DELIMITER);
           String recordKey = recordPair[0];
           if (StringUtils.isNotBlank(recordKey)) {
-            sets.add(recordKey.trim());
+            selectedAgents.add(recordKey.trim());
           }
         }
       }
-    } else {
-      log.warn("Empty content for lookup table of sets: " + filePathProperty);
     }
   }
 
-  private void parseTextFile(String filePathProperty, Map<String, Boolean> maps) {
-    boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
-    String file = UBIConfig.getString(filePathProperty);
-    String fileContent = isTestEnabled ? file : hdfsLoader
-        .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), file);
-    if (StringUtils.isNotBlank(fileContent)) {
-      for (String record : fileContent.split(TEXT_RECORD_DELIMITER)) {
-        if (StringUtils.isNotBlank(record)) {
-          String[] recordPair = record.split(TEXT_FIELD_DELIMITER);
-          if (recordPair.length == PAIR_LENGTH) {
-            String recordKey = recordPair[0];
-            String recordValue = recordPair[1];
-            if (StringUtils.isNotBlank(recordKey) && StringUtils.isNotBlank(recordValue)) {
-              maps.put(recordKey.trim(), Boolean.valueOf(recordValue.trim()));
-            }
-          }
-        }
-      }
-    } else {
-      log.warn("Empty content for lookup table of sets: " + filePathProperty);
-    }
-    System.out.println("map size:" + maps.size());
-  }
-
-  public void loadLargeSessionGuid(boolean isInit) {
-    Set<String> largeSessionGuidSetMid = new CopyOnWriteArraySet<String>();
-    boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
-    String largeSessionGuidValue = UBIConfig.getString(Property.LARGE_SESSION_GUID);
-    String largeSessionGuids =
-        isTestEnabled ? largeSessionGuidValue : hdfsLoader
-            .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH),
-                largeSessionGuidValue);
-    if (StringUtils.isNotBlank(largeSessionGuids)) {
+  private void refreshLargeSessionGuid() {
+    String property = Property.LARGE_SESSION_GUID;
+    if (isUpdate(property)) {
+      largeSessionGuidSet.clear();
+      String largeSessionGuids = getLkpFileContent(property);
       for (String guid : largeSessionGuids.split(LKP_FILED_DELIMITER)) {
         if (StringUtils.isNotBlank(guid)) {
-          largeSessionGuidSetMid.add(guid.trim());
+          largeSessionGuidSet.add(guid.trim());
         }
       }
-    } else {
-      log.warn("Empty content for lookup table of large session guid");
     }
-    largeSessionGuidSet = largeSessionGuidSetMid;
   }
 
-  public void loadIabAgent(boolean isInit) {
-    List<String> iabAgentRegsMid = new CopyOnWriteArrayList<>();
-    boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
-    String iabAgentReg = UBIConfig.getString(Property.IAB_AGENT);
-    String iabAgentRegValue =
-        isTestEnabled ? iabAgentReg : hdfsLoader
-            .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), iabAgentReg);
-    if (StringUtils.isNotBlank(iabAgentRegValue)) {
+  private void refreshIabAgent() {
+    String property = Property.IAB_AGENT;
+    if (isUpdate(property)) {
+      String iabAgentRegValue = getLkpFileContent(property);
       for (String iabAgent : iabAgentRegValue.split(LKP_RECORD_DELIMITER)) {
-        iabAgentRegsMid.add(iabAgent.toLowerCase());
+        iabAgentRegs.add(iabAgent.toLowerCase());
       }
-    } else {
-      log.warn("Empty content for lookup table of iab agent info");
     }
-    iabAgentRegs = iabAgentRegsMid;
-
   }
 
-  public void loadFindingFlag(boolean isInit) {
-    Map<Integer, Integer> findingFlagMapMid = new ConcurrentHashMap<>();
-    boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
-    String findingFlag = UBIConfig.getString(Property.FINDING_FLAGS);
-    String findingFlags = isTestEnabled ? findingFlag : hdfsLoader
-        .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), findingFlag);
-    if (StringUtils.isNotBlank(findingFlags)) {
+  private void refreshFindingFlag() {
+    String property = Property.FINDING_FLAGS;
+    if (isUpdate(property)) {
+      findingFlagMap.clear();
+      String findingFlags = getLkpFileContent(property);
       for (String pageFlag : findingFlags.split(LKP_RECORD_DELIMITER)) {
         String[] values = pageFlag.split(LKP_FILED_DELIMITER);
         // Keep the null judgment also for session metrics first finding flag
         if (values[0] != null && values[1] != null) {
           try {
-            findingFlagMapMid.put(
-                Integer.valueOf(values[0].trim()), Integer.valueOf(values[1].trim()));
+            findingFlagMap.put(Integer.valueOf(values[0].trim()),
+                Integer.valueOf(values[1].trim()));
           } catch (NumberFormatException e) {
             log.error(
                 "Ignore the incorrect format for findflags: " + values[0] + " - " + values[1]);
           }
         }
       }
-    } else {
-      log.warn("Empty content for lookup table of finding flag");
     }
-    findingFlagMap = findingFlagMapMid;
-
   }
 
-  public void loadTestUserIds() {
-
-  }
-
-  public void loadVtNewIds(boolean isInit) {
-    Map<Integer, Integer[]> vtNewIdsMapMid = new ConcurrentHashMap<Integer, Integer[]>();
-    boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
-    String vtNewIds = UBIConfig.getString(Property.VTNEW_IDS);
-    String vtNewIdsValue = isTestEnabled ? vtNewIds : hdfsLoader
-        .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), vtNewIds);
-    if (StringUtils.isNotBlank(vtNewIdsValue)) {
+  private void refreshVtNewIds() {
+    String property = Property.VTNEW_IDS;
+    if (isUpdate(property)) {
+      vtNewIdsMap.clear();
+      String vtNewIdsValue = getLkpFileContent(property);
       for (String vtNewId : vtNewIdsValue.split(LKP_RECORD_DELIMITER)) {
         Integer[] pageInfo = new Integer[2];
         String[] ids = vtNewId.split(LKP_FILED_DELIMITER, pageInfo.length + 1);
         Integer newPageId = StringUtils.isEmpty(ids[0]) ? null : Integer.valueOf(ids[0].trim());
         pageInfo[0] = StringUtils.isEmpty(ids[1]) ? null : Integer.valueOf(ids[1].trim());
         pageInfo[1] = StringUtils.isEmpty(ids[2]) ? null : Integer.valueOf(ids[2].trim());
-        vtNewIdsMapMid.put(newPageId, pageInfo);
+        vtNewIdsMap.put(newPageId, pageInfo);
       }
-    } else {
-      log.warn("Empty content for lookup table of vtNewIds");
     }
-    vtNewIdsMap = vtNewIdsMapMid;
-
   }
 
-  public void loadAppIds(boolean isInit) {
-    Set<String> appIdWithBotFlagsMid = new CopyOnWriteArraySet();
-    boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
-    String appIds = UBIConfig.getString(Property.APP_ID);
-    String appIdAndFlags = isTestEnabled ? appIds : hdfsLoader
-        .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), appIds);
-    if (StringUtils.isNotBlank(appIdAndFlags)) {
+  private void refreshAppIds() {
+    String property = Property.APP_ID;
+    if (isUpdate(property)) {
+      appIdWithBotFlags.clear();
+      String appIdAndFlags = getLkpFileContent(property);
       String[] appIdFlagPair = appIdAndFlags.split(LKP_RECORD_DELIMITER);
       for (String appIdFlag : appIdFlagPair) {
         if (StringUtils.isNotBlank(appIdFlag)) {
-          appIdWithBotFlagsMid.add(appIdFlag.trim());
+          appIdWithBotFlags.add(appIdFlag.trim());
         }
       }
-    } else {
-      log.warn("Empty content for lookup table of app Ids");
     }
-    appIdWithBotFlags = appIdWithBotFlagsMid;
-
   }
 
-  public void loadPageFmlys(boolean isInit) {
-    Map<Integer, String[]> pageFmlyMapMid = new ConcurrentHashMap<Integer, String[]>();
-    boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
-    String pageFmlys = UBIConfig.getString(Property.PAGE_FMLY);
-    String pageFmlysValue = isTestEnabled ? pageFmlys : hdfsLoader
-        .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), pageFmlys);
-    if (StringUtils.isNotBlank(pageFmlysValue)) {
+  private void refreshPageFmlys() {
+    String property = Property.PAGE_FMLY;
+    if (isUpdate(property)) {
+      pageFmlyMap.clear();
+      String pageFmlysValue = getLkpFileContent(property);
       for (String pageFmlyPair : pageFmlysValue.split(LKP_RECORD_DELIMITER)) {
         String[] pageFmlyNames = new String[2];
         if (StringUtils.isNotBlank(pageFmlyPair)) {
@@ -271,66 +218,128 @@ public class LkpManager {
           Integer pageId = StringUtils.isEmpty(values[0]) ? null : Integer.valueOf(values[0]);
           pageFmlyNames[0] = StringUtils.isEmpty(values[1]) ? null : values[1];
           pageFmlyNames[1] = StringUtils.isEmpty(values[2]) ? null : values[2];
-          pageFmlyMapMid.put(pageId, pageFmlyNames);
+          pageFmlyMap.put(pageId, pageFmlyNames);
         }
       }
-    } else {
-      log.warn("Empty content for lookup table of page fmlys");
     }
-    pageFmlyMap = pageFmlyMapMid;
-
   }
 
-  public void loadLocally() throws Exception {
-    result.put(
-        Property.IFRAME_PAGE_IDS, FileLoader.loadContent(null, Resources.IFRAME_PAGE_SOURCE));
-    result.put(Property.FINDING_FLAGS, FileLoader.loadContent(null, Resources.FINDING_FLAG_SOURCE));
-    result.put(Property.VTNEW_IDS, FileLoader.loadContent(null, Resources.VT_NEWID_SOURCE));
-    result.put(Property.IAB_AGENT, FileLoader.loadContent(null, Resources.IAB_AGENT_SOURCE));
-    result.put(Property.APP_ID, FileLoader.loadContent(null, Resources.APP_ID_SOURCE));
-    result.put(Property.TEST_USER_IDS, FileLoader.loadContent(null, Resources.TEST_USER_SOURCE));
-    result.put(
-        Property.LARGE_SESSION_GUID, FileLoader.loadContent(null, Resources.LARGE_SESSION_SOURCE));
-    result.put(Property.PAGE_FMLY, FileLoader.loadContent(null, Resources.PAGE_FMLY_NAME));
-    result.put(Property.MPX_ROTATION, FileLoader.loadContent(null, Resources.MPX_ROTATION_SOURCE));
-    result.put(Property.SELECTED_IPS, FileLoader.loadContent(null, Resources.SELECTED_IPS));
-    result.put(Property.SELECTED_AGENTS, FileLoader.loadContent(null, Resources.SELECTED_AGENTS));
-  }
-
-  public void loadMpxRotetion(boolean isInit) {
-    Map<String, String> mpxMapMid = new ConcurrentHashMap<String, String>();
-    boolean isTestEnabled = UBIConfig.getBooleanOrDefault(Property.IS_TEST_ENABLE, false);
-    String mpxRotation = UBIConfig.getString(Property.MPX_ROTATION);
-    String mpxRotations = isTestEnabled ? mpxRotation : hdfsLoader
-        .getLkpFileContent(UBIConfig.getUBIProperty(Property.LKP_PATH), mpxRotation);
-
-    if (StringUtils.isNotBlank(mpxRotations)) {
+  private void refreshMpxRotetion() {
+    String property = Property.MPX_ROTATION;
+    if (isUpdate(property)) {
+      mpxMap.clear();
+      String mpxRotations = getLkpFileContent(property);
       for (String mpx : mpxRotations.split(LKP_RECORD_DELIMITER)) {
         String[] values = mpx.split(LKP_FILED_DELIMITER);
         // Keep the null judgment also for session metrics first finding flag
         if (values[0] != null && values[1] != null) {
           try {
-            //                            mpxMap.put(Long.parseLong(values[0].trim()),
-            // String.valueOf(values[1].trim()));
-            mpxMapMid.put(values[0].trim(), values[1].trim());
+            mpxMap.put(values[0].trim(), values[1].trim());
           } catch (NumberFormatException e) {
             log.error("Ignore the incorrect format for mpx: " + values[0] + " - " + values[1]);
           }
         }
       }
-    } else {
-      log.warn("Empty content for lookup table of mpx rotation.");
     }
-    mpxMap = mpxMapMid;
+  }
+
+  private String getLkpFileContent(String lkpType) {
+    String filename = getString(lkpType);
+    Path filePath = new Path(LKP_PATH + filename);
+    StringBuffer resultBuilder = new StringBuffer();
+    try (InputStream in = getInputStream(filePath, filename)) {
+      byte[] bytes = new byte[4096];
+      int readBytes = 0;
+      while ((readBytes = in.read(bytes)) != -1) {
+        resultBuilder.append(new String(Arrays.copyOfRange(bytes, 0, readBytes),
+            StandardCharsets.UTF_8));
+        bytes = new byte[4096];
+      }
+    } catch (IOException e) {
+      log.error("Open HDFS file {} issue:{}", filePath.getName(), ExceptionUtils.getStackTrace(e));
+    }
+    return resultBuilder.toString().trim();
+  }
+
+  private InputStream getInputStream(Path path, String resource) {
+    InputStream instream = null;
+    try {
+      initFs();
+      instream = fileSystem.open(path);
+    } catch (Exception e) {
+      log.warn("Load file failed from [{}], will try to load from classpath: {}", path, resource);
+      loadLkpFromHDFS = false;
+      try {
+        instream = getStreamFromClasspath(resource);
+      } catch (FileNotFoundException ex) {
+        log.error("Cannot find file {} from HDFS and classpath.", resource);
+      }
+    }
+    return instream;
+  }
+
+  private InputStream getStreamFromClasspath(String resource) throws FileNotFoundException {
+    InputStream instream;
+    if (StringUtils.isNotBlank(resource)) {
+      instream = LkpManager.class.getResourceAsStream(resource);
+      if (instream == null) {
+        throw new FileNotFoundException("Can't locate resource based on classPath: " + resource);
+      }
+    } else {
+      throw new RuntimeException("Try to load empty resource.");
+    }
+    return instream;
+  }
+
+  public boolean isUpdate(String fileName) {
+    if (firstRun) {
+      return true;
+    }
+    if (!loadLkpFromHDFS) {
+      return false;
+    }
+    Path path = new Path(LKP_PATH, fileName);
+    try {
+      if (fileSystem.exists(path)) {
+        FileStatus[] fileStatus = fileSystem.listStatus(path, new FileNameFilter(fileName));
+        long lastModifiedTime = fileStatus[0].getModificationTime();
+        long preLastModifiedTime =
+            lkpFileLastUpdDt.get(fileName) == null ? 0 : lkpFileLastUpdDt.get(fileName);
+        if (lastModifiedTime > preLastModifiedTime) {
+          lkpFileLastUpdDt.put(fileName, lastModifiedTime);
+        }
+        return lastModifiedTime > preLastModifiedTime;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
+
+  public void closeFS() {
+    if (fileSystem != null) {
+      try {
+        fileSystem.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      } finally {
+        fileSystem = null;
+      }
+    }
+  }
+
+  private void initFs() throws IOException, IllegalArgumentException {
+    if (fileSystem == null) {
+      Configuration configuration = new Configuration();
+      fileSystem = FileSystem.newInstance(configuration);
+      loadLkpFromHDFS = true;
+    }
   }
 
   public Set<Integer> getIframePageIdSet() {
     return pageIdSet;
   }
 
-  //    public static Set<String> getIframepageIdSet4Bot12() {
-  //        return pageIdSet4Bot12;
-  //    }
   public Map<Integer, Integer> getFindingFlagMap() {
     return findingFlagMap;
   }
@@ -347,10 +356,6 @@ public class LkpManager {
     return appIdWithBotFlags;
   }
 
-  public Set<String> getTestUserIds() {
-    return testUserIds;
-  }
-
   public Map<Integer, String[]> getPageFmlyMaps() {
     return pageFmlyMap;
   }
@@ -363,30 +368,6 @@ public class LkpManager {
     return selectedAgents;
   }
 
-  public Map<String, String> getResult() {
-    return result;
-  }
-
-  public void clearAppId() {
-    appIdWithBotFlags.clear();
-  }
-
-  public void cleanTestUserIds() {
-    testUserIds.clear();
-  }
-
-  public void clearIabAgent() {
-    iabAgentRegs.clear();
-  }
-
-  public void clearPageFmlyName() {
-    pageFmlyMap.clear();
-  }
-
-  public void clearSelectedIps() {
-    selectedIps.clear();
-  }
-
   public Set<String> getLargeSessionGuid() {
     return largeSessionGuidSet;
   }
@@ -395,7 +376,24 @@ public class LkpManager {
     return mpxMap;
   }
 
-  public void clearMpxMap() {
-    mpxMap.clear();
+  public void clearAppId() {
+    appIdWithBotFlags.clear();
+  }
+
+  private class FileNameFilter implements PathFilter {
+
+    private String fileName;
+
+    private FileNameFilter(String fileName) {
+      this.fileName = fileName;
+    }
+
+    @Override
+    public boolean accept(Path path) {
+      if (fileName.contains(path.getName())) {
+        return true;
+      }
+      return false;
+    }
   }
 }

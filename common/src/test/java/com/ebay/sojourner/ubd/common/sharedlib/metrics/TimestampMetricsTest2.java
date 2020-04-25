@@ -5,6 +5,7 @@ import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJParseClientInfo;
+import com.ebay.sojourner.ubd.common.util.SojTimestamp;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
@@ -23,353 +24,78 @@ public class TimestampMetricsTest2 {
   public void setUp() throws Exception {
     ubiEventList = new ArrayList<>();
     UbiEvent ubiEvent = new UbiEvent();
-    ubiEvent.setGuid("4affcde01710ac734f70f1afff5eb980");
-    ubiEvent.setIframe(true);
-    ubiEvent.setRdt(false);
-    ubiEvent.setPageId(2507874);
-    ubiEvent.setEventTimestamp(3795064810698000L);
-    ubiEvent.setRemoteIP("10.199.52.247");
-    ubiEvent.setRequestCorrelationId("0b90ec52e782910d");
-    ubiEvent.setSid(null);
-    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dqkisqn47pse31%28%3F1062%3E"
-        + "-vrubqst-whh-%60dfz%2Behn-1714affce4a-0xd5");
-    ubiEvent.setEventFamily("PRLS");
-    ubiEvent.setEventAction("ALGO");
-    ubiEvent.setPartialValidPage(false);
-    ubiEvent.setClientIP("10.199.52.247");
-    ubiEvent.setAgentInfo("eBayNioHttpClient 1.0");
-    ubiEvent.setCobrand(0);
-    ubiEvent.setCurrentImprId(46779518719L);
-    ubiEvent.setEventAttr(null);
-    ubiEvent.setReservedForFuture(0);
-    ubiEvent.setSqr(null);
-    ubiEvent.setFlags("AA**");
-    ubiEvent.setWebServer("reco.vip");
-    ubiEvent.setApplicationPayload("expl=0&meid=e7fe0beead184b3cba554b29db690978&res=-1x-1&flgs=AA"
-        + "**&efam=PRLS&sv=8&g=4affcde01710ac734f70f1afff5eb980&h=e0&snappy=1&p=2507874&uaid=4affc"
-        + "e0c1710a45e40a19fcafcea94c8S0&t=3&cflgs=AA**&plmt=100623&pl=2QTw6Iq5%2Fq%2BpXAIqU2ltcGx"
-        + "BTUx2NVBhaXJ3aXNlV2ViAAYAApa6nKeJEQACQDRhZmZjZGUwMTcxMGFjNzM0ZjcwZjFhZmZmNWViOTgwAAACCl"
-        + "VTOjo6AjQwLjEyNTc2LjQyODkyLjU3NTE2LjE4MTcwOQACGDIyNTA3NTo5NTM0NwACAgIedHJlZXBsZXgvMC4wL"
-        + "jUxCAKmvNfgiREAhyFhp1h4MD8CAAAAgDHgEMAAAAAgheuxPwQzMQAAAgACAAYABAAAgD7MKww7AAAC6M%2FX4I"
-        + "kRAII8OSaeCSY%2FAgAAAEDieBLAAAAAIIXrETcMAgICBgk3NMWNuzoAAAKO2r2UkgoAEQEBbhCg6mEVwDZuAAg"
-        + "EAgQNNwkpMAKEj6yo%2BAgCjJmPnwEJEwAABTwMILmLFwE8FKCZmZk%2FBAWqCAYCBjI8AAEogEBcj8LvPwEMKE"
-        + "VwaWRDYXNzaW5pUmV0cmlldmVyBDI0AA1VaPA%2FKlRvcmFJdGVtQ292aWV3c0xvb2t1cAQyMRkjABoNQREbADU"
-        + "ZGyQySGlnaElkZk9yDSQZZQgzMQgVZQA6AWUJYQRPZgkIAXMRbQQzMhlSADAZKxhQcm9kdWN0FSYsMwABAAAAAA"
-        + "AA8D8A&eactn=ALGO&algo=PL.SIM.SimplAMLv5PairwiseWeb&rq=0b90ec52e782910d&pooltype=prod&p"
-        + "agename=PromotedListingsMLPipeline&ciid=%2F85G5Ao*");
-    ubiEvent.setClientData(constructClientData(
-        "TPayload=corr_id_%3D0b90ec52e782910d%26node_id%3Df2271993e206ba4a%26REQUEST_GUI"
-            + "D%3D1714affc-e090-a0f0-bc82-c5b2fd4715c1%26logid%3Dt6wwm53vpd77%253C%253Dqkisqn47pse"
-            + "31%2528%253F1062%253E-vrubqst-whh-%2560dfz%252Behn-1714affce4a-0xd5%26cal_mod%3Dfals"
-            + "e&TPool=r1plsim&TDuration=2&TStatus=0&TType=URL&ContentLength=1435&ForwardedFor=null"
-            + "&Script=/trk20svc/TrackingResource/v1&Server=reco.vip&TMachine=10.69.228.10&TStamp=0"
-            + "8:40:10.69&TName=Ginger.CollectionSvc.track&Agent=eBayNioHttpClient 1.0&RemoteIP=10."
-            + "199.52.247&Encoding=null&Referer=null"));
-    ubiEvent.setUrlQueryString(
-        "/rec/plmt/100623?guid=4affcde01710ac734f70f1afff5eb980&itm=293306863243&bWidth=1015&fmt=ht"
-            + "ml&locale=en-GB&srchCtxt=(dmLCat=-1|srCnt=0|mCCatId=0|minPrice=-1.0|maxPrice=-1.0|cr"
-            + "ncyId=826|fShip=0|etrs=0)&usrSi=US&si=3&_qi=t6ulcpjqcj9?jqpsobtlrbn(046700-vrubqst-i"
-            + "pt-`dfz+ehn&_usrip=66.249.79.37");
-    ubiEvent.setPageName("Ginger.CollectionSvc.track");
-    ubiEvent.setVersion(3);
-    ubiEvent.setSiteId(3);
-    ubiEvent.setClickId(0);
-    ubiEvent.setRefererHash(null);
-    ubiEvent.setCookies(null);
-    ubiEvent.setReferrer(null);
-    ubiEvent.setUserId(null);
-    ubiEvent.setItemId(null);
-    ubiEvent.setRegu(0);
-    ubiEvent.setStaticPageType(0);
-    ubiEvent.setSourceImprId(null);
-
-    ubiEventList.add(ubiEvent);
-    ubiEvent = new UbiEvent();
-    ubiEvent.setGuid("4affcde01710ac734f70f1afff5eb980");
-    ubiEvent.setIframe(true);
-    ubiEvent.setRdt(false);
-    ubiEvent.setPageId(2367355);
-    ubiEvent.setEventTimestamp(3795064810731000L);
-    ubiEvent.setRemoteIP("66.249.79.37");
-    ubiEvent.setRequestCorrelationId("f8e7978d9a523089");
-    ubiEvent.setSid(null);
-    ubiEvent.setRlogid("t6pdhc9%3Fuk%60vgig%285226%3E00-1714affce6a-0x103c0");
-    ubiEvent.setEventFamily("SAND");
-    ubiEvent.setEventAction("AUCT");
-    ubiEvent.setPartialValidPage(true);
-    ubiEvent.setClientIP("66.249.79.37");
-    ubiEvent
-        .setAgentInfo("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)");
-    ubiEvent.setCobrand(0);
-    ubiEvent.setCurrentImprId(424856899327L);
-    ubiEvent.setEventAttr(null);
-    ubiEvent.setReservedForFuture(0);
-    ubiEvent.setSqr(null);
-    ubiEvent.setFlags("AA**");
-    ubiEvent.setWebServer("sand.stratus.ebay.com");
-    ubiEvent.setApplicationPayload(
-        "saucxgdpry=true&flgs=AA**&efam=SAND&ac=&saucxgdprct=false&saty=1&sameid=aba1bc1d538a41ffbc"
-            + "6c135ae4110882&g=4affcde01710ac734f70f1afff5eb980&saebaypid=100938&sapcxkw=1pcs+Used"
-            + "+Cermate+10.4-inch+PanelMaster+Touch+Screen+PL104-TST3A-F2R1&h=e0&schemaversion=3&sa"
-            + "lv=5&ciid=%2F85x62I*&p=2367355&sapcxcat=12576%2C42892%2C57516%2C181709&t=3&saiid=120"
-            + "638eb-409e-4c64-9551-0f47e8337aec&cflgs=gA**&samslid=&eactn=AUCT&pn=2&rq=f8e7978d9a5"
-            + "23089&pagename=SandPage&ciid=%2F85x62I*");
-    ubiEvent.setClientData(constructClientData(
-        "TPayload=corr_id_%3Df8e7978d9a523089%26node_id%3D85644d56e7645d3f%26REQUEST_GUI"
-            + "D%3D1714affc-e6a0-a16e-b627-dc42eec06e87%26logid%3Dt6pdhc9%253Fuk%2560vgig%25285226%"
-            + "253E00-1714affce6a-0x103c0&TPool=r1sand&TDuration=6&ContentLength=1113&ForwardedFor="
-            + "10.202.81.132&Script=sand&Server=sand.stratus.ebay.com&TMachine=10.22.235.98&TStamp="
-            + "08:40:10.73&TName=sand.v1&Agent=Mozilla/5.0 (compatible; Googlebot/2.1; +http://www."
-            + "google.com/bot.html)&RemoteIP=66.249.79.37"));
-    ubiEvent.setUrlQueryString("/itm/293306863243?campid=5338358731&customid={gclid}");
-    ubiEvent.setPageName("sand.v1");
-    ubiEvent.setVersion(3);
-    ubiEvent.setSiteId(3);
-    ubiEvent.setClickId(0);
-    ubiEvent.setRefererHash(null);
-    ubiEvent.setCookies(null);
-    ubiEvent.setReferrer(null);
-    ubiEvent.setUserId(null);
-    ubiEvent.setItemId(null);
-    ubiEvent.setRegu(0);
-    ubiEvent.setStaticPageType(0);
-    ubiEvent.setSourceImprId(null);
-
-    ubiEventList.add(ubiEvent);
-    ubiEvent = new UbiEvent();
-    ubiEvent.setGuid("4affcde01710ac734f70f1afff5eb980");
-    ubiEvent.setIframe(true);
-    ubiEvent.setRdt(false);
-    ubiEvent.setPageId(2367355);
-    ubiEvent.setEventTimestamp(3795064810731000L);
-    ubiEvent.setRemoteIP("66.249.79.37");
-    ubiEvent.setRequestCorrelationId("f8e7978d9a523089");
-    ubiEvent.setSid(null);
-    ubiEvent.setRlogid("t6pdhc9%3Fuk%60vgig%285226%3E00-1714affce6a-0x103c0");
-    ubiEvent.setEventFamily("SAND");
-    ubiEvent.setEventAction("AUCT");
-    ubiEvent.setPartialValidPage(true);
-    ubiEvent.setClientIP("66.249.79.37");
-    ubiEvent
-        .setAgentInfo("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)");
-    ubiEvent.setCobrand(0);
-    ubiEvent.setCurrentImprId(424856833791L);
-    ubiEvent.setEventAttr(null);
-    ubiEvent.setReservedForFuture(0);
-    ubiEvent.setSqr(null);
-    ubiEvent.setFlags("AA**");
-    ubiEvent.setWebServer("sand.stratus.ebay.com");
-    ubiEvent.setApplicationPayload(
-        "saucxgdpry=true&flgs=AA**&efam=SAND&ac=&saucxgdprct=false&saty=1&sameid=a1f5bf7abbbe48138"
-            + "5918a227734e91d&g=4affcde01710ac734f70f1afff5eb980&saebaypid=100562&sapcxkw=1pcs+Us"
-            + "ed+Cermate+10.4-inch+PanelMaster+Touch+Screen+PL104-TST3A-F2R1&h=e0&schemaversion=3"
-            + "&salv=5&ciid=%2F85w62I*&p=2367355&sapcxcat=12576%2C42892%2C57516%2C181709&t=3&saiid"
-            + "=0f674689-cab2-45e9-a85d-44ed1d7fa6d1&cflgs=gA**&samslid=&eactn=AUCT&pn=2&rq=f8e797"
-            + "8d9a523089&pagename=SandPage&ciid=%2F85w62I*");
-    ubiEvent.setClientData(constructClientData(
-        "TPayload=corr_id_%3Df8e7978d9a523089%26node_id%3D85644d56e7645d3f%26REQUEST_GUI"
-            + "D%3D1714affc-e6a0-a16e-b627-dc42eec06e87%26logid%3Dt6pdhc9%253Fuk%2560vgig%25285226%"
-            + "253E00-1714affce6a-0x103c0&TPool=r1sand&TDuration=6&ContentLength=1113&ForwardedFor="
-            + "10.202.81.132&Script=sand&Server=sand.stratus.ebay.com&TMachine=10.22.235.98&TStamp="
-            + "08:40:10.73&TName=sand.v1&Agent=Mozilla/5.0 (compatible; Googlebot/2.1; +http://www."
-            + "google.com/bot.html)&RemoteIP=66.249.79.37"));
-    ubiEvent.setUrlQueryString("/itm/293306863243?campid=5338358731&customid={gclid}");
-    ubiEvent.setPageName("sand.v1");
-    ubiEvent.setVersion(3);
-    ubiEvent.setSiteId(3);
-    ubiEvent.setClickId(0);
-    ubiEvent.setRefererHash(null);
-    ubiEvent.setCookies(null);
-    ubiEvent.setReferrer(null);
-    ubiEvent.setUserId(null);
-    ubiEvent.setItemId(null);
-    ubiEvent.setRegu(0);
-    ubiEvent.setStaticPageType(0);
-    ubiEvent.setSourceImprId(null);
-
-    ubiEventList.add(ubiEvent);
-    ubiEvent = new UbiEvent();
-    ubiEvent.setGuid("4affcde01710ac734f70f1afff5eb980");
-    ubiEvent.setIframe(true);
-    ubiEvent.setRdt(false);
-    ubiEvent.setPageId(2367355);
-    ubiEvent.setEventTimestamp(3795064810731000L);
-    ubiEvent.setRemoteIP("66.249.79.37");
-    ubiEvent.setRequestCorrelationId("f8e7978d9a523089");
-    ubiEvent.setSid(null);
-    ubiEvent.setRlogid("t6pdhc9%3Fuk%60vgig%285226%3E00-1714affce6a-0x103c0");
-    ubiEvent.setEventFamily("SAND");
-    ubiEvent.setEventAction("AUCT");
-    ubiEvent.setPartialValidPage(true);
-    ubiEvent.setClientIP("66.249.79.37");
-    ubiEvent
-        .setAgentInfo("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)");
-    ubiEvent.setCobrand(0);
-    ubiEvent.setCurrentImprId(424856637183L);
-    ubiEvent.setEventAttr(null);
-    ubiEvent.setReservedForFuture(0);
-    ubiEvent.setSqr(null);
-    ubiEvent.setFlags("AA**");
-    ubiEvent.setWebServer("sand.stratus.ebay.com");
-    ubiEvent.setApplicationPayload(
-        "saucxgdpry=true&flgs=AA**&efam=SAND&ac=&saucxgdprct=false&saty=1&sameid=e139a5ced4a94bccab"
-            + "e9ce26521aec74&g=4affcde01710ac734f70f1afff5eb980&saebaypid=100939&sapcxkw=1pcs+Used"
-            + "+Cermate+10.4-inch+PanelMaster+Touch+Screen+PL104-TST3A-F2R1&h=e0&schemaversion=3&sa"
-            + "lv=5&ciid=%2F85t62I*&p=2367355&sapcxcat=12576%2C42892%2C57516%2C181709&t=3&saiid=3c5"
-            + "9be9b-5ad9-47d8-99c9-24e6aad184e6&cflgs=gA**&samslid=&eactn=AUCT&pn=2&rq=f8e7978d9a5"
-            + "23089&pagename=SandPage&ciid=%2F85t62I*");
-    ubiEvent.setClientData(constructClientData(
-        "TPayload=corr_id_%3Df8e7978d9a523089%26node_id%3D85644d56e7645d3f%26REQUEST_GUI"
-            + "D%3D1714affc-e6a0-a16e-b627-dc42eec06e87%26logid%3Dt6pdhc9%253Fuk%2560vgig%25285226%"
-            + "253E00-1714affce6a-0x103c0&TPool=r1sand&TDuration=5&ContentLength=1113&ForwardedFor="
-            + "10.202.81.132&Script=sand&Server=sand.stratus.ebay.com&TMachine=10.22.235.98&TStamp="
-            + "08:40:10.73&TName=sand.v1&Agent=Mozilla/5.0 (compatible; Googlebot/2.1; +http://www."
-            + "google.com/bot.html)&RemoteIP=66.249.79.37"));
-    ubiEvent.setUrlQueryString("/itm/293306863243?campid=5338358731&customid={gclid}");
-    ubiEvent.setPageName("sand.v1");
-    ubiEvent.setVersion(3);
-    ubiEvent.setSiteId(3);
-    ubiEvent.setClickId(0);
-    ubiEvent.setRefererHash(null);
-    ubiEvent.setCookies(null);
-    ubiEvent.setReferrer(null);
-    ubiEvent.setUserId(null);
-    ubiEvent.setItemId(null);
-    ubiEvent.setRegu(0);
-    ubiEvent.setStaticPageType(0);
-    ubiEvent.setSourceImprId(null);
-
-    ubiEventList.add(ubiEvent);
-    ubiEvent = new UbiEvent();
-    ubiEvent.setGuid("4affcde01710ac734f70f1afff5eb980");
+    ubiEvent.setGuid("970d97841710a12ceed7b9cbffdbb59d");
     ubiEvent.setIframe(true);
     ubiEvent.setRdt(false);
     ubiEvent.setPageId(2317508);
-    ubiEvent.setEventTimestamp(3795064810744000L);
-    ubiEvent.setRemoteIP("10.173.125.154");
-    ubiEvent.setRequestCorrelationId("57d752ae069e619c");
+    ubiEvent.setEventTimestamp(
+        Long.parseLong(SojTimestamp.getSojTimestamp("2020-04-20 03:06:22.764")));
+    ubiEvent.setRemoteIP("10.175.140.126");
+    ubiEvent.setRequestCorrelationId("a7ab98ea61111c32");
     ubiEvent.setSid(null);
-    ubiEvent.setRlogid("t6qjpbq%3F%3Ctofthu%60t*0207311-1714affce7a-0x199");
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*gvnsh%28rbpv6710-171970d982d-0x113");
     ubiEvent.setEventFamily(null);
     ubiEvent.setEventAction(null);
     ubiEvent.setPartialValidPage(true);
-    ubiEvent.setClientIP("66.249.79.37");
-    ubiEvent.setAgentInfo(
-        "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html),"
-            + "GingerClient/2.9.7-RELEASE");
-    ubiEvent.setCobrand(0);
-    ubiEvent.setCurrentImprId(1046872706815L);
+    ubiEvent.setClientIP("66.249.90.50");
+    ubiEvent
+        .setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.4"
+            + "6 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1 (compatible; AdsBot-Google-M"
+            + "obile; +http://www.google.com/mobile/adsbot.html),GingerClient/2.9.7-RELEASE");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(510282012685L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags(null);
     ubiEvent.setWebServer("internal.rover.vip.ebay.com");
-    ubiEvent.setApplicationPayload(
-        "nqc=AA**&c=1&g=4affcde01710ac734f70f1afff5eb980&h=e0&px=4249&chnl=9&uc=1&es=3&nqt=AAAAAAAA"
-            + "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-            + "AAAAAAAABA**&p=2317508&uaid=4affce791710a99bef31e3f5fc71058cS0&bs=0&t=3&cflgs=wA**&u"
-            + "l=en-US&plmt=py0AAB%252BLCAAAAAAAAADtWllz2zgS%252FisuTtU%252B%252BcBJAH6zPclMtpKNN3L"
-            + "mZWoq1bgsriiSISl5PKn8921Qhw%252FFEztxErvGfpCIbrCB7v76wyF%252FyJrTbJ8RoXIlt7OmyPZ%252"
-            + "F%252F5AVPtunhBhutjNXJD3VRFBGCSWMbGctyrJAuQHpghdghHUObDAusFwyCsEpkW1noUdzf%252BA3LMw"
-            + "urePL%252FP371hE%252Bx07TbL%252BaleV21tWrpybbF4xrHD3iRD6ihXphARXZ%252BNy2OEGcGTYo5xI"
-            + "fe1R8yCCpRw4qD2XSQxo%252Bo0yqHJuCacPwWypJU5tqqojJ0HiR%252FM2Y4ZzkOudMcFQXfTLfuG7rbRf"
-            + "81lFop9CHLUp2xU5RufHWMVShfAVdH9qtk3qGkpFrQ6i2jl9SInZORif8YOc5e0OTsTSzYabO1T5g45fD4yR"
-            + "H%252FzKLD%252FUwGj5Mzu5x2Nnd0lQ0aZokzcu5dvlYNbCc2qlvWpxUu2w25bQfArdACkrApZSEP3t8np%"
-            + "252Bl2ItkQaaPPH0oksJ92k5v1M3PiFwqU9Zjis88tOcv67M0QOmutH2JlrJyeB6nbF%252FSzYv66rv%252"
-            + "Bqt63p1faMfkVoexC9hGdGwDVFX%252BF9D0OxekYXzeI%252FbPC9%252BNsXzGN3arQn9Xt5EUKA9dCDeO"
-            + "8rYp%252BkAQL57uzye68aPagj%252B986CZ93aTYzWxZdOOT8wbtM7QDzaSojq9JuwWU%252Fz0a5rJsdL%"
-            + "252BFtivqKiF2l%252B6m%252FM3aElt7e0W7m4bseugLt%252Bvq6Z5r9%252BZ7ju51bm%252B0MrYzvLY"
-            + "7Lard%252F3XJ1%252BRlN5TXTX5%252BUmMUSZXZhtiGbvxzKOE82%252BcE%252F9bCo1SRSCtF9%252BI"
-            + "AnejbWUiNl%252FAXBh0wREO8UVT9VoSzN4uXLvr9Mho9q8CWwa9koZqjp01b%252B5nrUxCw9As3SQC%252"
-            + "BDdA7DMHBkJ%252B%252FzU5X9CElkH9MDkLiKyklGVgD5iuSmqKc4tef2T56XLuhBd3QgnpodX7IXIDWjf8"
-            + "7Q6ihpRTxOqaCS8ZdP3R02JGkOK%252BZV19nXmKoXDIvWKDWUS%252B5BkFjtC53lEsIglKiNXti3gfBvHd"
-            + "I09cwr74f5kVKuiDeSzR80XOQU%252FJEz0%252F0%252FAX0fItqeDT0rFi%252BpmdFGM2R6QjJl%252FR"
-            + "MJFI1pbnxjIloc3CUCZmrQLT11NlvRc%252BugxU3E87X3DwO4EN7VJd1m0r3tIXzdwtZquElWjKY9XXinNn"
-            + "UhvZ1PPAJcgY7lEWV4MdxyLrqn8O0KFOcDtpioPokHCFCT4q%252BxLKg%252FEL0c%252BhcWzQDEPYpu6S"
-            + "op1BUL4tqspC7NLfBwEKW%252FZRgenSULVWX%252Byed1oSsdCeJ9JZvDNKqHiy9rdDBNPc1ivskPqzLNVq"
-            + "RXBCdUI4acEWFdJMW2PTKr0M1XZl%252BOvVcUl2aUNIMMznwo9BAC32Kc3Y2RpQmQPZ9W9hZsrIc5zAkRkQ"
-            + "YrdeeNaFhBo%252FhNLweBu2GhdUnwQBaJKWE%252Bt%252BHytiZTXawMnYITUl8vwTvvaxeW7%252B%252"
-            + "BerH1r63XDepeVNg9gguL17sFUYcuzTuxP7o%252Bhgo12J7G0C9WoHFqhlT9fh2oA1vPryJikYQFcx2hu32"
-            + "LXcMF65wmK7NJNgR%252BcgLt6cAj72wJVZK2dVmiTYz7IbjJaVvPKr9EefbTs8Pn6lk6k7hZ19fTg4ssLAE"
-            + "zanDIusVQpdklx%252FowbUpYUAuGu%252BvPy%252BEZqynXRuVapppqkN7rCkqEsR%252BKZJgtZnAahiX"
-            + "5FsW%252FDNliHcmG%252FH7HxeTHc6fa4E7BV9yZG8mJZ0aQQAUVYHEHLy1uDD1ECpb%252FWO4civqJPJ%"
-            + "252FI84k8vwl53qL6%252F9nkKXO5Jk9cZTjBMPE1eTKnA%252Fc5MqwWgjurg7AYNkttUEE7da%252FkeXv"
-            + "3ye3c%252F1u3xYbbTKzcDpFFQXMfLdEieg4MPY4qB2AeUPl0HfIgrkPukKYvvw5BpHzddcgnLj8e4E0HHjf"
-            + "Xuw8809%252FpquPo1fHbh3%252FHcd3DL7vKuOMN8ucReuMVxTKqD2GJUBtcKdnq6lgR3HK7wHWMuaDWQgh"
-            + "Wcqejid4bbb4VV%252FrY%252FAchgbuYomtS%252FhasOdzKP3HmjZx5h3R9DWeqK5x5I%252BtweVGSSt6"
-            + "JdN6cvHqXG%252FMJ3vlhDHPNmz9uzRcPocbzjRoX6cf6xf2jotGrqCxCREiOoLGKaqWC5EZ7Hx7tNtAwdul"
-            + "XMdwBUiG0pCu3g3fgIsfdLhfGgwWn85w5o7XXOj7e3a9hfMNtQ%252FXSbWFzr6WmVEUr0GHQUXAwVkdHARx"
-            + "5xG6TDbcVXy1kQTktpVeUiyDwdGOsyVmMkDOBn%252BR%252BF7Lv6zbdBDkVq2wHmXOwiGiqBckjKMMMODw"
-            + "hezwSQXy0bsucbVAaXf%252BkAjRK3InhWdYGjAbXEgsAGFMK02%252BofzriPYjtyh3S9DXbFfb5I94%252"
-            + "F9nT3dLi76ffnz2PzxsPdQznbDav%252BtbUhF2xJkuiUByPAayCoIbgnCDQQ6RgNgUb3aNcGQ83mTmC9NsT"
-            + "AJGcePfRcKGHABsVyoLkzTFpyv%252F%252BHWjTt%252Bl2S%252FTgc5BsBEVKtFkvGDaUszz1KgRmjWOT"
-            + "eBWEssYbe733o98WB2oQ%252FWf0%252FssMtfzQaAjgqNOFYByxqL4UOLHgGj8xtbNvFvkBnH%252F8Pq3e"
-            + "P5actAAA%253D&ec=1&pn=2&rq=57d752ae069e619c&pagename=cos__mfe&po=%5B%28pg%3A2047675+"
-            + "pid%3A100939%29%28pg%3A2047675+pid%3A100938%29%28pg%3A2047675+pid%3A100726%29%28pg%3"
-            + "A2047675+pid%3A100727%29%28pg%3A2047675+pid%3A100565%29%28pg%3A2047675+pid%3A100564%"
-            + "29%28pg%3A2047675+pid%3A100567%29%28pg%3A2047675+pid%3A100566%29%28pg%3A2047675+pid%"
-            + "3A100922%29%28pg%3A2047675+pid%3A100923%29%28pg%3A2047675+pid%3A100920%29%28pg%3A204"
-            + "7675+pid%3A100921%29%28pg%3A2047675+pid%3A100562%29%28pg%3A2047675+pid%3A100918%29%2"
-            + "8pg%3A2047675+pid%3A100919%29%28pg%3A2047675+pid%3A100916%29%28pg%3A2047675+pid%3A10"
-            + "0917%29%5D&ciid=%2F855vvM*");
+    ubiEvent
+        .setApplicationPayload("nqc=AA**&c=1&g=970d97841710a12ceed7b9cbffdbb59d&h=84&px=4249&chn"
+            + "l=9&uc=1&nqt=AA**&p=2317508&uaid=970d982d1710aaecf7673113d22a29d2S0&bs=0&t=2&cflgs=wA**&u"
+            + "l=en-US&plmt=HQQAAB%252BLCAAAAAAAAAC1U8uu0zAQ%252FRevQ%252BJX0jRrEIIFEiqXDWLhOE5jyMOynT6o"
+            + "%252Bu%252FMpE3vZXGRWLDyPI%252FnnLEvxO1JxYXgcksT4iypvl2IbUjFKN1wmRANIU7ZhnJWMM5zATEPMVKyL"
+            + "eVUtjJXudQl3ypT8I2o20ZvVVO0JCEmAtx3ONUNFtrGue8TohAgz3PKCihThzU%252BQJzBcSIVTDPpxVNh8dS0eA"
+            + "Fmu5BglNfd59n4MyCRKxS3eNcVbtNxKdRQSK%252FJg00h6YNNQWFUJjmTxZ1N0QgmcwoEylq2lClat9uN4Ju2LH"
+            + "Iqyr%252BxmW4BBzBN6z6paA%252FmrQ2uV2doAxKEI83ocHKFZTutxkb1mFV31BlYEiYgNEW0wHAeWylYJ7da48"
+            + "Oa%252F21q67ATG63W%252Fm7uG%252Befglld1w8R1SI3uXA1Gsc3p4gSu4VAsL8Mnp2x%252Bw7AeQ66Hm0TO1"
+            + "IJCoqT0cTj5H9%252BQCRRSqSimqfRxiVianVOtUoP1mXD0dR471z3NnRfzg6QOez4Js%252FH3XLf3QlfjQ92Gp"
+            + "F%252FylLGUQPfg5tl1qcIGyJor1M9DZn22SHTLNutUG9uTelgx%252FRHQDpIJCybe5XKc%252Bplhv%252BRAa"
+            + "1eS%252FHyRUoU%252BDhteL%252FbvRtV3RsQI%252FrZwIpG%252BACw7amZdUSGOFs0qBa%252FYtN%252F%2"
+            + "52Fy75%252Bl3Ar%252B3y%252Fkpy%252FQ0IRoUeHQQAAA%253D%253D&pn=2&rq=a7ab98ea61111c32&page"
+            + "name=cos__mfe&po=%5B%28pg%3A2332490+pid%3A100724%29%28pg%3A2332490+pid%3A100640%29%5D&ci"
+            + "id=DZgtz3Y*");
     ubiEvent.setClientData(constructClientData(
-        "TPayload=corr_id_%3D57d752ae069e619c%26node_id%3Ddeb34b6cb870b3e1%26REQUEST_GUI"
-            + "D%3D1714affc-e780-a99b-ef34-993dfe21c3ef%26logid%3Dt6qjpbq%253F%253Ctofthu%2560t%2A0"
-            + "207311-1714affce7a-0x199%26cal_mod%3Dfalse&TPool=r1rover&TDuration=3&TStatus=0&TType"
-            + "=URL&ContentLength=-1&ForwardedFor=66.249.79.37&Script=/roverimp/0/2047675/9&Server="
-            + "internal.rover.vip.ebay.com&TMachine=10.153.190.243&TStamp=08:40:10.74&TName=roverim"
-            + "p&Agent=Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html),Gin"
-            + "gerClient/2.9.7-RELEASE&RemoteIP=10.173.125.154"));
+        "nqc=AA**&c=1&g=970d97841710a12ceed7b9cbffdbb59d&h=84&px=4249&chnl=9&uc=1&nqt=AA*"
+            + "*&p=2317508&uaid=970d982d1710aaecf7673113d22a29d2S0&bs=0&t=2&cflgs=wA**&ul=en-US&plm"
+            + "t=HQQAAB%252BLCAAAAAAAAAC1U8uu0zAQ%252FRevQ%252BJX0jRrEIIFEiqXDWLhOE5jyMOynT6o%252Bu"
+            + "%252FMpE3vZXGRWLDyPI%252FnnLEvxO1JxYXgcksT4iypvl2IbUjFKN1wmRANIU7ZhnJWMM5zATEPMVKyLe"
+            + "VUtjJXudQl3ypT8I2o20ZvVVO0JCEmAtx3ONUNFtrGue8TohAgz3PKCihThzU%252BQJzBcSIVTDPpxVNh8d"
+            + "S0eAFmu5BglNfd59n4MyCRKxS3eNcVbtNxKdRQSK%252FJg00h6YNNQWFUJjmTxZ1N0QgmcwoEylq2lClat9"
+            + "uN4Ju2LHIqyr%252BxmW4BBzBN6z6paA%252FmrQ2uV2doAxKEI83ocHKFZTutxkb1mFV31BlYEiYgNEW0wH"
+            + "AeWylYJ7da48Oa%252F21q67ATG63W%252Fm7uG%252Befglld1w8R1SI3uXA1Gsc3p4gSu4VAsL8Mnp2x%2"
+            + "52Bw7AeQ66Hm0TO1IJCoqT0cTj5H9%252BQCRRSqSimqfRxiVianVOtUoP1mXD0dR471z3NnRfzg6QOez4J"
+            + "s%252FH3XLf3QlfjQ92GpF%252FylLGUQPfg5tl1qcIGyJor1M9DZn22SHTLNutUG9uTelgx%252FRHQDpI"
+            + "JCybe5XKc%252Bplhv%252BRAa1eS%252FHyRUoU%252BDhteL%252FbvRtV3RsQI%252FrZwIpG%252BAC"
+            + "w7amZdUSGOFs0qBa%252FYtN%252F%252Fy75%252Bl3Ar%252B3y%252Fkpy%252FQ0IRoUeHQQAAA%253"
+            + "D%253D&pn=2&rq=a7ab98ea61111c32&pagename=cos__mfe&po=%5B%28pg%3A2332490+pid%3A10072"
+            + "4%29%28pg%3A2332490+pid%3A100640%29%5D&ciid=DZgtz3Y*"));
     ubiEvent.setUrlQueryString(
-        "/roverimp/0/2047675/9?site=3&trknvp=plmt%3Dpy0AAB%252BLCAAAAAAAAADtWllz2zgS%252FisuTtU%252"
-            + "B%252BcBJAH6zPclMtpKNN3LmZWoq1bgsriiSISl5PKn8921Qhw%252FFEztxErvGfpCIbrCB7v76wyF%252"
-            + "FyJrTbJ8RoXIlt7OmyPZ%252F%252F5AVPtunhBhutjNXJD3VRFBGCSWMbGctyrJAuQHpghdghHUObDAusFw"
-            + "yCsEpkW1noUdzf%252BA3LMwurePL%252FP371hE%252Bx07TbL%252BaleV21tWrpybbF4xrHD3iRD6ihXp"
-            + "hARXZ%252BNy2OEGcGTYo5xIfe1R8yCCpRw4qD2XSQxo%252Bo0yqHJuCacPwWypJU5tqqojJ0HiR%252FM2"
-            + "Y4ZzkOudMcFQXfTLfuG7rbRf81lFop9CHLUp2xU5RufHWMVShfAVdH9qtk3qGkpFrQ6i2jl9SInZORif8YOc"
-            + "5e0OTsTSzYabO1T5g45fD4yRH%252FzKLD%252FUwGj5Mzu5x2Nnd0lQ0aZokzcu5dvlYNbCc2qlvWpxUu2w"
-            + "25bQfArdACkrApZSEP3t8np%252Bl2ItkQaaPPH0oksJ92k5v1M3PiFwqU9Zjis88tOcv67M0QOmutH2JlrJ"
-            + "yeB6nbF%252FSzYv66rv%252Bqt63p1faMfkVoexC9hGdGwDVFX%252BF9D0OxekYXzeI%252FbPC9%252BN"
-            + "sXzGN3arQn9Xt5EUKA9dCDeO8rYp%252BkAQL57uzye68aPagj%252B986CZ93aTYzWxZdOOT8wbtM7QDzaS"
-            + "ojq9JuwWU%252Fz0a5rJsdL%252BFtivqKiF2l%252B6m%252FM3aElt7e0W7m4bseugLt%252Bvq6Z5r9%2"
-            + "52BZ7ju51bm%252B0MrYzvLY7Lard%252F3XJ1%252BRlN5TXTX5%252BUmMUSZXZhtiGbvxzKOE82%252Bc"
-            + "E%252F9bCo1SRSCtF9%252BIAnejbWUiNl%252FAXBh0wREO8UVT9VoSzN4uXLvr9Mho9q8CWwa9koZqjp01"
-            + "b%252B5nrUxCw9As3SQC%252BDdA7DMHBkJ%252B%252FzU5X9CElkH9MDkLiKyklGVgD5iuSmqKc4tef2T5"
-            + "6XLuhBd3QgnpodX7IXIDWjf87Q6ihpRTxOqaCS8ZdP3R02JGkOK%252BZV19nXmKoXDIvWKDWUS%252B5BkF"
-            + "jtC53lEsIglKiNXti3gfBvHdI09cwr74f5kVKuiDeSzR80XOQU%252FJEz0%252F0%252FAX0fItqeDT0rFi"
-            + "%252BpmdFGM2R6QjJl%252FRMJFI1pbnxjIloc3CUCZmrQLT11NlvRc%252BugxU3E87X3DwO4EN7VJd1m0r"
-            + "3tIXzdwtZquElWjKY9XXinNnUhvZ1PPAJcgY7lEWV4MdxyLrqn8O0KFOcDtpioPokHCFCT4q%252BxLKg%25"
-            + "2FEL0c%252BhcWzQDEPYpu6Sop1BUL4tqspC7NLfBwEKW%252FZRgenSULVWX%252Byed1oSsdCeJ9JZvDNK"
-            + "qHiy9rdDBNPc1ivskPqzLNVqRXBCdUI4acEWFdJMW2PTKr0M1XZl%252BOvVcUl2aUNIMMznwo9BAC32Kc3Y"
-            + "2RpQmQPZ9W9hZsrIc5zAkRkQYrdeeNaFhBo%252FhNLweBu2GhdUnwQBaJKWE%252Bt%252BHytiZTXawMnY"
-            + "ITUl8vwTvvaxeW7%252B%252BerH1r63XDepeVNg9gguL17sFUYcuzTuxP7o%252Bhgo12J7G0C9WoHFqhlT"
-            + "9fh2oA1vPryJikYQFcx2hu32LXcMF65wmK7NJNgR%252BcgLt6cAj72wJVZK2dVmiTYz7IbjJaVvPKr9Eefb"
-            + "Ts8Pn6lk6k7hZ19fTg4ssLAEzanDIusVQpdklx%252FowbUpYUAuGu%252BvPy%252BEZqynXRuVapppqkN7"
-            + "rCkqEsR%252BKZJgtZnAahiX5FsW%252FDNliHcmG%252FH7HxeTHc6fa4E7BV9yZG8mJZ0aQQAUVYHEHLy1"
-            + "uDD1ECpb%252FWO4civqJPJ%252FI84k8vwl53qL6%252F9nkKXO5Jk9cZTjBMPE1eTKnA%252Fc5MqwWgju"
-            + "rg7AYNkttUEE7da%252FkeXv3ye3c%252F1u3xYbbTKzcDpFFQXMfLdEieg4MPY4qB2AeUPl0HfIgrkPukKY"
-            + "vvw5BpHzddcgnLj8e4E0HHjfXuw8809%252FpquPo1fHbh3%252FHcd3DL7vKuOMN8ucReuMVxTKqD2GJUBt"
-            + "cKdnq6lgR3HK7wHWMuaDWQghWcqejid4bbb4VV%252FrY%252FAchgbuYomtS%252FhasOdzKP3HmjZx5h3R"
-            + "9DWeqK5x5I%252BtweVGSSt6JdN6cvHqXG%252FMJ3vlhDHPNmz9uzRcPocbzjRoX6cf6xf2jotGrqCxCREi"
-            + "OoLGKaqWC5EZ7Hx7tNtAwdulXMdwBUiG0pCu3g3fgIsfdLhfGgwWn85w5o7XXOj7e3a9hfMNtQ%252FXSbWF"
-            + "zr6WmVEUr0GHQUXAwVkdHARx5xG6TDbcVXy1kQTktpVeUiyDwdGOsyVmMkDOBn%252BR%252BF7Lv6zbdBDk"
-            + "Vq2wHmXOwiGiqBckjKMMMODwhezwSQXy0bsucbVAaXf%252BkAjRK3InhWdYGjAbXEgsAGFMK02%252Bofzr"
-            + "iPYjtyh3S9DXbFfb5I94%252F9nT3dLi76ffnz2PzxsPdQznbDav%252BtbUhF2xJkuiUByPAayCoIbgnCDQ"
-            + "Q6RgNgUb3aNcGQ83mTmC9NsTAJGcePfRcKGHABsVyoLkzTFpyv%252F%252BHWjTt%252Bl2S%252FTgc5Bs"
-            + "BEVKtFkvGDaUszz1KgRmjWOTeBWEssYbe733o98WB2oQ%252FWf0%252FssMtfzQaAjgqNOFYByxqL4UOLHg"
-            + "Gj8xtbNvFvkBnH%252F8Pq3eP5actAAA%253D%26po%3D%5B%28pg%3A2047675+pid%3A100939%29%28pg"
-            + "%3A2047675+pid%3A100938%29%28pg%3A2047675+pid%3A100726%29%28pg%3A2047675+pid%3A10072"
-            + "7%29%28pg%3A2047675+pid%3A100565%29%28pg%3A2047675+pid%3A100564%29%28pg%3A2047675+pi"
-            + "d%3A100567%29%28pg%3A2047675+pid%3A100566%29%28pg%3A2047675+pid%3A100922%29%28pg%3A2"
-            + "047675+pid%3A100923%29%28pg%3A2047675+pid%3A100920%29%28pg%3A2047675+pid%3A100921%29"
-            + "%28pg%3A2047675+pid%3A100562%29%28pg%3A2047675+pid%3A100918%29%28pg%3A2047675+pid%3A"
-            + "100919%29%28pg%3A2047675+pid%3A100916%29%28pg%3A2047675+pid%3A100917%29%5D&trknvpsvc"
-            + "=%3Ca%3Enqc%3DAA**%26nqt%3DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-            + "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA**%26es%3D3%26ec%3D1%3C%2Fa%3E&tguid=4a"
-            + "ffcde01710ac734f70f1afff5eb980&imp=2317508");
+        "/roverimp/0/2332490/9?site=2&trknvp=plmt%3DHQQAAB%252BLCAAAAAAAAAC1U8uu0zAQ%252FRevQ%252BJ"
+            + "X0jRrEIIFEiqXDWLhOE5jyMOynT6o%252Bu%252FMpE3vZXGRWLDyPI%252FnnLEvxO1JxYXgcksT4iypvl2"
+            + "IbUjFKN1wmRANIU7ZhnJWMM5zATEPMVKyLeVUtjJXudQl3ypT8I2o20ZvVVO0JCEmAtx3ONUNFtrGue8TohA"
+            + "gz3PKCihThzU%252BQJzBcSIVTDPpxVNh8dS0eAFmu5BglNfd59n4MyCRKxS3eNcVbtNxKdRQSK%252FJg0"
+            + "0h6YNNQWFUJjmTxZ1N0QgmcwoEylq2lClat9uN4Ju2LHIqyr%252BxmW4BBzBN6z6paA%252FmrQ2uV2doAx"
+            + "KEI83ocHKFZTutxkb1mFV31BlYEiYgNEW0wHAeWylYJ7da48Oa%252F21q67ATG63W%252Fm7uG%252Befg"
+            + "lld1w8R1SI3uXA1Gsc3p4gSu4VAsL8Mnp2x%252Bw7AeQ66Hm0TO1IJCoqT0cTj5H9%252BQCRRSqSimqfRx"
+            + "iVianVOtUoP1mXD0dR471z3NnRfzg6QOez4Js%252FH3XLf3QlfjQ92GpF%252FylLGUQPfg5tl1qcIGyJor"
+            + "1M9DZn22SHTLNutUG9uTelgx%252FRHQDpIJCybe5XKc%252Bplhv%252BRAa1eS%252FHyRUoU%252BDhte"
+            + "L%252FbvRtV3RsQI%252FrZwIpG%252BACw7amZdUSGOFs0qBa%252FYtN%252F%252Fy75%252Bl3Ar%252"
+            + "B3y%252Fkpy%252FQ0IRoUeHQQAAA%253D%253D%26po%3D%5B%28pg%3A2332490+pid%3A100724%29%28"
+            + "pg%3A2332490+pid%3A100640%29%5D&trknvpsvc=%3Ca%3Enqc%3DAA**%26nqt%3DAA**%3C%2Fa%3E&t"
+            + "guid=970d97841710a12ceed7b9cbffdbb59d&imp=2317508");
     ubiEvent.setPageName("roverimp");
     ubiEvent.setVersion(3);
-    ubiEvent.setSiteId(3);
+    ubiEvent.setSiteId(2);
     ubiEvent.setClickId(1);
     ubiEvent.setRefererHash(null);
     ubiEvent.setCookies(null);
@@ -381,6 +107,260 @@ public class TimestampMetricsTest2 {
     ubiEvent.setSourceImprId(null);
 
     ubiEventList.add(ubiEvent);
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("970d97841710a12ceed7b9cbffdbb59d");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2509164);
+    ubiEvent.setEventTimestamp(
+        Long.parseLong(SojTimestamp.getSojTimestamp("2020-04-20 03:06:23.031")));
+    ubiEvent.setRemoteIP("66.249.90.50");
+    ubiEvent.setRequestCorrelationId("a7ab98ea61111c32");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dosusqn47pse31%28507426%3A%2Busqdrrp%2Bjqp"
+        + "%2Bceb%7C%28dlh-171970d9938-0x1e2");
+    ubiEvent.setEventFamily("SEOERR");
+    ubiEvent.setEventAction("EXPC");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("66.249.90.50");
+    ubiEvent
+        .setAgentInfo(
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (K"
+                + "HTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1 (compatible; AdsBot-Google-M"
+                + "obile; +http://www.google.com/mobile/adsbot.html)");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(391926618125L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("www.ebay.ca");
+    ubiEvent.setApplicationPayload(
+        "nqc=AA**&flgs=AA**&uc=1&nqt=AA**&mos=iOS&bs=0&osv=4&!_mid=5277&ul=en-CA&callingpagename=seo"
+            + "errorexpsvc__error_recovery_v1_error_page_GET&ec=2&pagename=seoerrorexpsvc__error_rec"
+            + "overy_v1_error_page_GET&app=3564&res=480x320&efam=SEOERR&c=1&g=970d97841710a12ceed7b9"
+            + "cbffdbb59d&h=84&mobile=true&cp=2509164&es=2&p=2509164&t=2&cflgs=QA**&eactn=EXPC&rq=a7"
+            + "ab98ea61111c32&ciid=DZilQFs*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D553b6482d17b84b9%26node_id%3Dbadf2129aa168142%26REQUEST_GUID"
+            + "%3D171970d9-9330-acc4-05b3-ec92d20781b8%26logid%3Dt6wwm53vpd77%253C%253Dosusqn47pse3"
+            + "1%2528507426%253A%252Busqdrrp%252Bjqp%252Bceb%257C%2528dlh-171970d9938-0x1e2%26cal_mo"
+            + "d%3Dfalse&TPool=r1seoerrorexpsvc&TDuration=1&TStatus=0&TType=URL&ContentLength=980&Fo"
+            + "rwardedFor=2.22.225.102;66.249.90.50&Script=/trk20svc/TrackingResource/v1&Server=www."
+            + "ebay.ca&TMachine=10.204.64.91&TStamp=03:06:23.03&TName=Ginger.CollectionSvc.track&Age"
+            + "nt=Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML,"
+            + " like Gecko) Version/9.0 Mobile/13B143 Safari/601.1 (compatible; AdsBot-Google-Mobile"
+            + "; +http://www.google.com/mobile/adsbot.html)&RemoteIP=66.249.90.50&Encoding=gzip"));
+    ubiEvent.setUrlQueryString("/itm/Royal-Doulton-Howzat-Bunnykins-DB490-Australian-exclusive-ltd"
+        + "-edn-box-cert-/264587672892?oid=254421769276");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(2);
+    ubiEvent.setClickId(1);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+
+    ubiEventList.add(ubiEvent);
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("970d97841710a12ceed7b9cbffdbb59d");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2344945);
+    ubiEvent.setEventTimestamp(
+        Long.parseLong(SojTimestamp.getSojTimestamp("2020-04-20 03:06:22.997")));
+    ubiEvent.setRemoteIP("66.249.90.50");
+    ubiEvent.setRequestCorrelationId("a7ab98ea61111c32");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dosusqn47pse31%285044203%2Busqdrrp%2Bjqp%2Bceb%7C%28dl"
+        + "h-171970d9916-0xeb");
+    ubiEvent.setEventFamily("DEAL");
+    ubiEvent.setEventAction("EXPM");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("66.249.90.50");
+    ubiEvent
+        .setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 ("
+            + "KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1 (compatible; AdsBot-Google"
+            + "-Mobile; +http://www.google.com/mobile/adsbot.html)");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(4242413246477L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("www.ebay.ca");
+    ubiEvent.setApplicationPayload(
+        "!pgi=2344945%3A0&nqc=AA**&flgs=AA**&uc=1&dt=SMALL&nqt=AA**&mos=iOS&bs=0&osv=4&ul=en-CA&call"
+            + "ingpagename=seoerrorexpsvc__error_recovery_v1_error_page_GET&pagename=rppces__module_"
+            + "provider&app=3564&rpp_cat_name=Featured&res=480x320&efam=DEAL&epec=7%2C6%2C7%2C6&g=97"
+            + "0d97841710a12ceed7b9cbffdbb59d&h=84&mobile=true&cp=2509164&p=2344945&t=2&cflgs=AA**&"
+            + "pagedtl=page%253AFeatured%257Crpp_cat_id%253A0&!mi=4323|3872%3A1GBGUPPP%252C2US8H2IF"
+            + "%252C3D22AC5K%252C2GRIYG3W%252C3DFAAD5D|1573%3A1&eactn=EXPM&rq=a7ab98ea61111c32&ciid"
+            + "=DZj0cDg*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D8facb360d247c432%26node_id%3D647a9795b3796bd6%26REQUEST_GUI"
+            + "D%3D171970d9-9120-acc7-0380-fcfff472bb34%26logid%3Dt6wwm53vpd77%253C%253Dosusqn47pse"
+            + "31%25285044203%252Busqdrrp%252Bjqp%252Bceb%257C%2528dlh-171970d9916-0xeb%26cal_mod%"
+            + "3Dfalse&TPool=r1rppces&TDuration=1&TStatus=0&TType=URL&ContentLength=1131&Forwarded"
+            + "For=2.22.225.102;66.249.90.50&Script=/trk20svc/TrackingResource/v1&Server=www.ebay.c"
+            + "a&TMachine=10.204.112.56&TStamp=03:06:22.99&TName=Ginger.CollectionSvc.track&Agent=M"
+            + "ozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, li"
+            + "ke Gecko) Version/9.0 Mobile/13B143 Safari/601.1 (compatible; AdsBot-Google-Mobile; "
+            + "+http://www.google.com/mobile/adsbot.html)&RemoteIP=66.249.90.50&Encoding=gzip"));
+    ubiEvent
+        .setUrlQueryString("/itm/Royal-Doulton-Howzat-Bunnykins-DB490-Australian-exclusive-ltd-e"
+            + "dn-box-cert-/264587672892?oid=254421769276");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(2);
+    ubiEvent.setClickId(0);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+
+    ubiEventList.add(ubiEvent);
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("970d97841710a12ceed7b9cbffdbb59d");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2349624);
+    ubiEvent.setEventTimestamp(
+        Long.parseLong(SojTimestamp.getSojTimestamp("2020-04-20 03:06:22.860")));
+    ubiEvent.setRemoteIP("66.249.90.50");
+    ubiEvent.setRequestCorrelationId("a7ab98ea61111c32");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dqkisqn47pse31%287323464%2Busqdrrp%2Btil%2Bceb%7"
+        + "C%28dlh-171970d988d-0x12d");
+    ubiEvent.setEventFamily("ITM");
+    ubiEvent.setEventAction("EXPC");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("66.249.90.50");
+    ubiEvent
+        .setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46"
+            + " (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1 (compatible; AdsBot-Goog"
+            + "le-Mobile; +http://www.google.com/mobile/adsbot.html)");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(392383600397L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA*");
+    ubiEvent.setWebServer("www.ebay.ca");
+    ubiEvent.setApplicationPayload(
+        "nqc=AA**&flgs=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA*&obfs_listing_is_elig"
+            + "ible=true&viStreamId=970d97841710a12ceed7b9cbffdbb59d&!_OBFS_LINK_COUNT=0&!_OBFS_BUYE"
+            + "R_VIEWING_SITEID=2&obfs_sid_uid_same=false&OBFS_NON_OBFUSCATION_REASON=NO_CONTACT_INF"
+            + "O_DETECTED&uc=1&nqt=AA**&mos=iOS&bs=0&OBFS_ITEMID=264587672892&osv=4&obfs_desc_has_co"
+            + "ntactInfo=false&ul=en-CA&callingpagename=viexpsvc__VIEWLISTING&viSignedInFlag=0&sdecn"
+            + "=SALE_NOT_FOUND&!_epec=7,6,7,6&ec=2&pagename=viexpsvc__VIEWLISTING&app=3564&res=480x3"
+            + "20&efam=ITM&c=1&!_OBFS_SELLERID=2638457&epec=7%2C6%2C7%2C6&g=970d97841710a12ceed7b9cb"
+            + "ffdbb59d&h=84&mobile=true&!_OBFS_BUYERID=0&cp=2349624&OBFS_EP_STATE=NOT_IN_EXPERIMENT"
+            + "&es=2&!_OBFS_PHONE_COUNT=0&p=2349624&!_callingpageid=2332490&t=2&cflgs=QA**&OBFS_STAT"
+            + "US=NOT_REQUIRED&viPageType=0&eactn=EXPC&!_OBFS_EMAIL_COUNT=0&rq=a7ab98ea61111c32&cii"
+            + "d=DZfiW1s*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Df24022c3f44574f8%26node_id%3Dea9a6254c1161b14%26REQUEST_GUID"
+            + "%3D171970d9-8870-a6e5-b5b6-3ff3fdb741ce%26logid%3Dt6wwm53vpd77%253C%253Dqkisqn47pse31"
+            + "%25287323464%252Busqdrrp%252Btil%252Bceb%257C%2528dlh-171970d988d-0x12d%26cal_mod%3Df"
+            + "alse&TPool=r1viexpsvc&TDuration=2&TStatus=0&TType=URL&ContentLength=1652&ForwardedFor"
+            + "=2.22.225.102;66.249.90.50&Script=/trk20svc/TrackingResource/v1&Server=www.ebay.ca&TM"
+            + "achine=10.110.91.91&TStamp=03:06:22.86&TName=Ginger.CollectionSvc.track&Agent=Mozilla"
+            + "/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Geck"
+            + "o) Version/9.0 Mobile/13B143 Safari/601.1 (compatible; AdsBot-Google-Mobile; +http://"
+            + "www.google.com/mobile/adsbot.html)&RemoteIP=66.249.90.50&Encoding=gzip"));
+    ubiEvent.setUrlQueryString("/itm/Royal-Doulton-Howzat-Bunnykins-DB490-Australian-exclusive-ltd"
+        + "-edn-box-cert-/264587672892?oid=254421769276");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(2);
+    ubiEvent.setClickId(1);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+
+    ubiEventList.add(ubiEvent);
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("970d97841710a12ceed7b9cbffdbb59d");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2317508);
+    ubiEvent.setEventTimestamp(
+        Long.parseLong(SojTimestamp.getSojTimestamp("2020-04-20 03:06:22.903")));
+    ubiEvent.setRemoteIP("10.164.103.82");
+    ubiEvent.setRequestCorrelationId("a7ab98ea61111c32");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ckuvthu%60t*02506%3D1%29pqtfwpu%29osu%29fgg%7E-fi"
+        + "j-171970d98b9-0x118");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("66.249.90.50");
+    ubiEvent.setAgentInfo(
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gec"
+            + "ko) Version/9.0 Mobile/13B143 Safari/601.1 (compatible; AdsBot-Google-Mobile; +http:/"
+            + "/www.google.com/mobile/adsbot.html),GingerClient/2.9.7-RELEASE");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(167918475277L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("internal.rover.vip.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "nqc=AA**&c=1&g=970d97841710a12ceed7b9cbffdbb59d&h=84&px=4249&chnl=9&uc=1&nqt=AA**&p=2317508"
+            + "&uaid=970d98b81710a8618270c45ad448d9d9S0&bs=0&t=2&cflgs=wA**&ul=en-US&plmt=5gAAAB%25"
+            + "2BLCAAAAAAAAAA1js0OgjAQhN9lzj1suy1peQvPxkMpRUlQCD9GQ3h3F4inyX6ZnZkVwx2lYTY2kMLQoryua"
+            + "GuUmiiQVUiCDGlPmhwF551XGIWBq9AIYQpFYx0XIZuqDjZ5x9kyZSjkWeJuovGMlbfX0nUKcQ%252FQWjq02"
+            + "OL7z5%252FCWeSDUtb06ZA4ndLLKIVJtq2YchzT47Lk8StJ2DZpSfNhSGKg%252Fa7aeW%252Fx2H5kwkh45"
+            + "gAAAA%253D%253D&pn=2&rq=a7ab98ea61111c32&pagename=cos__mfe&po=%5B%28pg%3A2332490+pid"
+            + "%3A100904%29%5D&ciid=DZi4GCc*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Da7ab98ea61111c32%26node_id%3D8b448219cc17421e%26REQUEST_GUID"
+            + "%3D171970d9-8b70-a861-8271-d5cde8edafff%26logid%3Dt6qjpbq%253F%253Ckuvthu%2560t%2A025"
+            + "06%253D1%2529pqtfwpu%2529osu%2529fgg%257E-fij-171970d98b9-0x118%26cal_mod%3Dfalse&TPo"
+            + "ol=r1rover&TDuration=2&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=66.249.90.50"
+            + "&Script=/roverimp/0/2332490/9&Server=internal.rover.vip.ebay.com&TMachine=10.134.24.3"
+            + "9&TStamp=03:06:22.90&TName=roverimp&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like"
+            + " Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/"
+            + "601.1 (compatible; AdsBot-Google-Mobile; +http://www.google.com/mobile/adsbot.html),"
+            + "GingerClient/2.9.7-RELEASE&RemoteIP=10.164.103.82"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/2332490/9?site=2&trknvp=plmt%3D5gAAAB%252BLCAAAAAAAAAA1js0OgjAQhN9lzj1suy1peQvP"
+            + "xkMpRUlQCD9GQ3h3F4inyX6ZnZkVwx2lYTY2kMLQoryuaGuUmiiQVUiCDGlPmhwF551XGIWBq9AIYQpFYx0XI"
+            + "ZuqDjZ5x9kyZSjkWeJuovGMlbfX0nUKcQ%252FQWjq02OL7z5%252FCWeSDUtb06ZA4ndLLKIVJtq2YchzT47"
+            + "Lk8StJ2DZpSfNhSGKg%252Fa7aeW%252Fx2H5kwkh45gAAAA%253D%253D%26po%3D%5B%28pg%3A2332490+"
+            + "pid%3A100904%29%5D&trknvpsvc=%3Ca%3Enqc%3DAA**%26nqt%3DAA**%3C%2Fa%3E&tguid=970d97841"
+            + "710a12ceed7b9cbffdbb59d&imp=2317508");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(2);
+    ubiEvent.setClickId(1);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+
+    ubiEventList.add(ubiEvent);
+    /*
     ubiEvent = new UbiEvent();
     ubiEvent.setGuid("4affcde01710ac734f70f1afff5eb980");
     ubiEvent.setIframe(true);
@@ -686,6 +666,7 @@ public class TimestampMetricsTest2 {
 
     ubiEventList.add(ubiEvent);
     timestampMetrics = new TimestampMetrics();
+    */
     ubiSession = new UbiSession();
     ubiSession.setStartTimestamp(3795064810583000L);
     ubiSession.setEndTimestamp(3795064810583000L);
