@@ -21,5 +21,6 @@ public class KafkaConsumerConfig {
   private String groupIdForEvent;
   private String groupIdForBot;
   private String groupIdForCopy;
+  private String groupIdForCrossSession;
   private String topic;
 }

@@ -1,10 +1,16 @@
 package com.ebay.sojourner.ubd.common.util;
 
 import java.util.Set;
+import org.apache.commons.collections.CollectionUtils;
 
 public class RulePriorityUtils {
 
   public static int getHighPriorityBotFlag(Set<Integer> botFlags) {
+
+    if (CollectionUtils.isEmpty(botFlags)) {
+      return BotRules.NON_BOT_FLAG;
+    }
+
     if (botFlags.contains(BotRules.MANY_EVENTS_BOT_FLAG)) {
       return BotRules.MANY_EVENTS_BOT_FLAG;
     } else if (botFlags.contains(BotRules.SPIDER_BOT_FLAG)) {

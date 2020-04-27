@@ -4,7 +4,6 @@ import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.IpSignatureBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.indicators.IpIndicators;
-import com.ebay.sojourner.ubd.common.sql.RuleManager;
 import com.ebay.sojourner.ubd.common.util.Constants;
 import java.io.IOException;
 import java.util.Set;
@@ -18,7 +17,7 @@ public class IpAttributeAgg
   private static final String IP = Constants.IP_LEVEL;
   private IpIndicators ipIndicators;
   private IpSignatureBotDetector ipSignatureBotDetector;
-  private RuleManager ruleManager;
+  // private RuleManager ruleManager;
 
   @Override
   public IpAttributeAccumulator createAccumulator() {
@@ -26,7 +25,7 @@ public class IpAttributeAgg
     IpAttributeAccumulator ipAttributeAccumulator = new IpAttributeAccumulator();
     ipIndicators = IpIndicators.getInstance();
     ipSignatureBotDetector = IpSignatureBotDetector.getInstance();
-    ruleManager = RuleManager.getInstance();
+    // ruleManager = RuleManager.getInstance();
 
     try {
       ipIndicators.start(ipAttributeAccumulator);
@@ -54,8 +53,10 @@ public class IpAttributeAgg
     try {
       if (ipAttributeAccumulator.getBotFlagStatus().containsValue(0)
           || ipAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
+        /*
         ipSignatureBotDetector.initDynamicRules(ruleManager, ipSignatureBotDetector.rules(),
             IpSignatureBotDetector.dynamicRuleIdList(), IP);
+            */
         ipBotFlag = ipSignatureBotDetector.getBotFlagList(ipAttributeAccumulator.getIpAttribute());
         if (ipBotFlag.contains(7)) {
           switch (ipAttributeAccumulator.getBotFlagStatus().get(7)) {

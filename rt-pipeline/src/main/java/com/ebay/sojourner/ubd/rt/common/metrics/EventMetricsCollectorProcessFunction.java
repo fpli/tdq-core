@@ -50,16 +50,18 @@ public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEve
       throws Exception {
     eventTotalCounter.inc();
     List<Long> dynamicRuleIdList = EventBotDetector.dynamicRuleIdList();
-    Collection intersection = CollectionUtils
-        .intersection(dynamicRuleIdList, eventDynamicRuleCounterNameList);
-    if (CollectionUtils.isNotEmpty(intersection)) {
-      for (Object ruleId : intersection) {
-        Counter dynamicRuleCounter = getRuntimeContext()
-            .getMetricGroup()
-            .addGroup("sojourner-ubd")
-            .counter("rule" + ruleId);
-        eventRuleCounterNameMap.put("rule" + ruleId, dynamicRuleCounter);
-        eventDynamicRuleCounterNameList.add((Long) ruleId);
+    if (CollectionUtils.isNotEmpty(dynamicRuleIdList)) {
+      Collection intersection = CollectionUtils
+          .intersection(dynamicRuleIdList, eventDynamicRuleCounterNameList);
+      if (CollectionUtils.isNotEmpty(intersection)) {
+        for (Object ruleId : intersection) {
+          Counter dynamicRuleCounter = getRuntimeContext()
+              .getMetricGroup()
+              .addGroup("sojourner-ubd")
+              .counter("rule" + ruleId);
+          eventRuleCounterNameMap.put("rule" + ruleId, dynamicRuleCounter);
+          eventDynamicRuleCounterNameList.add((Long) ruleId);
+        }
       }
     }
     ruleHitCount(ubiEvent.getBotFlags());

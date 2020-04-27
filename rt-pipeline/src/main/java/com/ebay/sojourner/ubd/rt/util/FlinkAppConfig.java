@@ -54,4 +54,7 @@ public class FlinkAppConfig {
 
   @JsonProperty("metrics-parallelism")
   private Integer metricsParallelism;
+
+  @JsonProperty("cross-session-kafka-parallelism")
+  private Integer crossSessionParallelism;
 }

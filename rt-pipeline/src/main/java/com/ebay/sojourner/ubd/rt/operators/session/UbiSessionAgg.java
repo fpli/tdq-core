@@ -4,7 +4,6 @@ import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.SessionBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
-import com.ebay.sojourner.ubd.common.sql.RuleManager;
 import com.ebay.sojourner.ubd.common.util.Constants;
 import java.io.IOException;
 import java.util.Set;
@@ -20,14 +19,14 @@ public class UbiSessionAgg
   //    private static final String BUCKET_NAME="botsignature";
   private transient SessionMetrics sessionMetrics;
   private transient SessionBotDetector sessionBotDetector;
-  private RuleManager ruleManager;
+  // private RuleManager ruleManager;
 
   @Override
   public SessionAccumulator createAccumulator() {
     SessionAccumulator sessionAccumulator = new SessionAccumulator();
     sessionMetrics = SessionMetrics.getInstance();
     sessionBotDetector = SessionBotDetector.getInstance();
-    ruleManager = RuleManager.getInstance();
+    // ruleManager = RuleManager.getInstance();
     //        couchBaseManager = CouchBaseManager.getInstance();
     try {
       sessionMetrics.start(sessionAccumulator);
@@ -70,8 +69,10 @@ public class UbiSessionAgg
     }
     Set<Integer> sessionBotFlagSetDetect = null;
     try {
+      /*
       sessionBotDetector.initDynamicRules(ruleManager, sessionBotDetector.rules(),
           SessionBotDetector.dynamicRuleIdList(), SESSION);
+          */
       sessionBotFlagSetDetect = sessionBotDetector.getBotFlagList(accumulator.getUbiSession());
     } catch (IOException | InterruptedException e) {
       log.error("sessionBotDetector getBotFlagList error", e);

@@ -19,7 +19,7 @@
   </modules>
 
   <properties>
-    <global.version>0.8.0-SNAPSHOT</global.version>
+    <global.version>0.8.6-SNAPSHOT</global.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
@@ -96,6 +96,13 @@
       </snapshots>
     </repository>
   </repositories>
+  
+  <pluginRepositories>
+    <pluginRepository>
+      <id>ebaycentral-corp-snapshots</id>
+      <url>http://ebaycentral.corp.ebay.com/content/repositories/snapshots/</url>
+    </pluginRepository>
+  </pluginRepositories>
 
   <dependencies>
     <dependency>

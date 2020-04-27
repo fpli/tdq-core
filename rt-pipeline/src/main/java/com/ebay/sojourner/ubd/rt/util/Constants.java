@@ -58,6 +58,10 @@ public class Constants {
   public static final String GROUP_ID_COPY = AppEnv.config().getKafkaConsumerConfig()
       .getGroupIdForCopy();
 
+  // cross session dq
+  public static final String GROUP_ID_CROSS_SESSION_DQ = AppEnv.config().getKafkaConsumerConfig()
+      .getGroupIdForCrossSession();
+
   // kafka producer config
   // event
   public static final String TOPIC_PRODUCER_EVENT = AppEnv.config().getKafkaProducerConfig()
@@ -82,6 +86,13 @@ public class Constants {
       .getCopyTopic();
   public static final String BOOTSTRAP_SERVERS_COPY =
       String.join(",", AppEnv.config().getKafkaProducerConfig().getBootstrapServersForCopy());
+
+  // cross session dq
+  public static final String TOPIC_PRODUCER_CROSS_SESSION_DQ = AppEnv.config()
+      .getKafkaProducerConfig().getCrossSessionDQTopic();
+  public static final String BOOTSTRAP_SERVERS_CROSS_SESSION_DQ =
+      String.join(",",
+          AppEnv.config().getKafkaProducerConfig().getBootstrapServersForCrossSessionDQ());
 
   // message key
   public static final String MESSAGE_KEY = "guid";
