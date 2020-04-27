@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-public class IpSignatureBotDetector extends AbstractBotDetector<IpAttribute> {
+public class IpSignatureBotDetector implements BotDetector<IpAttribute> {
 
   private static volatile IpSignatureBotDetector singnatureBotDetector;
   private static List<Long> dynamicRuleIdList = new CopyOnWriteArrayList<>();
@@ -41,7 +41,6 @@ public class IpSignatureBotDetector extends AbstractBotDetector<IpAttribute> {
     return singnatureBotDetector;
   }
 
-  @Override
   public Set<Rule> rules() {
     return this.botRules;
   }

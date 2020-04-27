@@ -96,7 +96,7 @@ flink:
     agent-parallelism: 580
     ip-parallelism: 580
     guid-parallelism: 580
-    copy-kafka-parallelism: 580
+    copy-kafka-parallelism: 50
     event-kafka-parallelism: 50
     session-kafka-parallelism: 50
     cross-session-kafka-parallelism: 580

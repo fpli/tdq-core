@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-public class SessionEndBotDetector extends AbstractBotDetector<UbiSession> {
+public class SessionEndBotDetector implements BotDetector<UbiSession> {
 
   private static volatile SessionEndBotDetector sessionEndBotDetector;
   private static List<Long> dynamicRuleIdList = new CopyOnWriteArrayList<>();
@@ -38,7 +38,6 @@ public class SessionEndBotDetector extends AbstractBotDetector<UbiSession> {
     return sessionEndBotDetector;
   }
 
-  @Override
   public Set<Rule> rules() {
     return this.botRules;
   }
