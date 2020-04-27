@@ -13,7 +13,7 @@
   expect:
     UbiSession:
       seqNum: 1
-      sessionStartDt: 20200124
+      sessionStartDt: 0
       sessionId: 123
 
 - name: test2
@@ -31,5 +31,5 @@
   expect:
     UbiSession:
       seqNum: 1
-      sessionStartDt: 20200124
+      sessionStartDt: 0
       sessionId: 123

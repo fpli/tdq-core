@@ -196,6 +196,7 @@ public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
         siteFlagsMid[46] = 1;
         break;
     }
+    sessionAccumulator.getUbiSession().setSiteFlagsSet(siteFlagsMid);
   }
 
   @Override
