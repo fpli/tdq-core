@@ -44,31 +44,50 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
     boolean isEarlyEvent = SojEventTimeUtil
         .isEarlyEvent(event.getEventTimestamp(),
             sessionAccumulator.getUbiSession().getAbsStartTimestamp());
-    if (!isEarlyEvent) {
-      if (!ubiSession.isFindFirst() && ubiSession.getClientIp() == null
-          && ubiSession.getAgentInfo() == null) {
+    boolean isEarlyValidEvent = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getStartTimestamp());
+    boolean isEarlyNoIframeEvent = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getStartTimestampNOIFRAME());
+    if (isEarlyEvent) {
+      if (!ubiSession.isFindFirst()) {
         ubiSession.setAgentInfo(event.getAgentInfo());
         ubiSession.setClientIp(event.getClientIP());
       }
-
-      if (!event.isIframe() && !event.isRdt() && !ubiSession.isFindFirst()) {
-        ubiSession.setAgentInfo(event.getAgentInfo());
-        ubiSession.setClientIp(event.getClientIP());
-        ubiSession.setFindFirst(true);
-      }
-    } else {
-      if(!ubiSession.isFindFirst()) {
-        ubiSession.setAgentInfo(event.getAgentInfo());
-        ubiSession.setClientIp(event.getClientIP());
-      }
-      System.out.println("AgentIPMetrics event:" + event.getPageId() + " eventtime:" + event
-          .getEventTimestamp());
+    }
+    if (isEarlyValidEvent) {
       if (!event.isIframe() && !event.isRdt()) {
         ubiSession.setAgentInfo(event.getAgentInfo());
         ubiSession.setClientIp(event.getClientIP());
         ubiSession.setFindFirst(true);
       }
     }
+    //    if (!isEarlyEvent) {
+    //      if (!ubiSession.isFindFirst() && ubiSession.getClientIp() == null
+    //          && ubiSession.getAgentInfo() == null) {
+    //        ubiSession.setAgentInfo(event.getAgentInfo());
+    //        ubiSession.setClientIp(event.getClientIP());
+    //      }
+    //
+    //      if (!event.isIframe() && !event.isRdt() && !ubiSession.isFindFirst()) {
+    //        ubiSession.setAgentInfo(event.getAgentInfo());
+    //        ubiSession.setClientIp(event.getClientIP());
+    //        ubiSession.setFindFirst(true);
+    //      }
+    //    } else {
+    //      if (!ubiSession.isFindFirst()) {
+    //        ubiSession.setAgentInfo(event.getAgentInfo());
+    //        ubiSession.setClientIp(event.getClientIP());
+    //      }
+    //      System.out.println("AgentIPMetrics event:" + event.getPageId() + " eventtime:" + event
+    //          .getEventTimestamp());
+    //      if (!event.isIframe() && !event.isRdt()) {
+    //        ubiSession.setAgentInfo(event.getAgentInfo());
+    //        ubiSession.setClientIp(event.getClientIP());
+    //        ubiSession.setFindFirst(true);
+    //      }
+    //    }
     // to avoid the cut off issue on 2018-02-09
     if (event.isPartialValidPage()) {
       if (!event.isIframe() && !event.isRdt()) {
@@ -88,7 +107,7 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
           if (ubiSession.getExternalIp() == null && ubiSession.getInternalIp() == null) {
             ubiSession.setInternalIp(getInternalIP(remoteIp, forwardFor));
           }
-        } else if (isEarlyEvent) {
+        } else if (isEarlyValidEvent) {
           String externalIp = getExternalIP(event, remoteIp, forwardFor);
           if (externalIp != null) {
             ubiSession.setExternalIp(externalIp);
@@ -115,7 +134,7 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
               .getForwardFor(); // SOJParseClientInfo.getClientInfo(event.getClientData(),
       if (ubiSession.getExternalIp2() == null) {
         ubiSession.setExternalIp2(getExternalIP(event, remoteIp, forwardFor));
-      } else if (isEarlyEvent) {
+      } else if (isEarlyNoIframeEvent) {
         String externalIp2 = getExternalIP(event, remoteIp, forwardFor);
         if (externalIp2 != null) {
           ubiSession.setExternalIp2(externalIp2);

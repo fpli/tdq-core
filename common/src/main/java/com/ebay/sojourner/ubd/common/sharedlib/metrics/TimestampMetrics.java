@@ -3,14 +3,19 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.PageIndicator;
+import com.ebay.sojourner.ubd.common.sharedlib.util.IsValidIPv4;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
 import com.ebay.sojourner.ubd.common.util.Property;
+import com.ebay.sojourner.ubd.common.util.PropertyUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
+import java.util.Set;
 
 public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
+  public static final String SHOCKWAVE_FLASH_AGENT = "Shockwave Flash";
   private PageIndicator indicator;
   //  private EventListenerContainer eventListenerContainer;
+  private Set<Integer> agentExcludeSet;
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
@@ -23,20 +28,64 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-    if (!event.isIframe() && (!event.isRdt() || indicator.isCorrespondingPageEvent(event))) {
-      if (sessionAccumulator.getUbiSession().getStartTimestamp() == null) {
-        sessionAccumulator.getUbiSession().setStartTimestamp(event.getEventTimestamp());
+    if (!event.isIframe()) {
+      if (!event.isRdt() || indicator.isCorrespondingPageEvent(event)) {
+        if (sessionAccumulator.getUbiSession().getStartTimestamp() == null) {
+          sessionAccumulator.getUbiSession().setStartTimestamp(event.getEventTimestamp());
+        } else if (event.getEventTimestamp() != null
+            && sessionAccumulator.getUbiSession().getStartTimestamp() > event.getEventTimestamp()) {
+          sessionAccumulator.getUbiSession().setStartTimestamp(event.getEventTimestamp());
+
+        }
+        if (sessionAccumulator.getUbiSession().getEndTimestamp() == null) {
+          sessionAccumulator.getUbiSession().setEndTimestamp(event.getEventTimestamp());
+        } else if (event.getEventTimestamp() != null
+            && sessionAccumulator.getUbiSession().getEndTimestamp() < event.getEventTimestamp()) {
+          sessionAccumulator.getUbiSession().setEndTimestamp(event.getEventTimestamp());
+        }
+      }
+      if (!event.isRdt()) {
+        if (sessionAccumulator.getUbiSession().getStartTimestampNOIFRAMERDT() == null) {
+          sessionAccumulator.getUbiSession()
+              .setStartTimestampNOIFRAMERDT(event.getEventTimestamp());
+        } else if (event.getEventTimestamp() != null
+            && sessionAccumulator.getUbiSession().getStartTimestampNOIFRAMERDT() > event
+            .getEventTimestamp()) {
+          sessionAccumulator.getUbiSession()
+              .setStartTimestampNOIFRAMERDT(event.getEventTimestamp());
+
+        }
+        if (sessionAccumulator.getUbiSession().getEndTimestampNOIFRAMERDT() == null) {
+          sessionAccumulator.getUbiSession().setEndTimestampNOIFRAMERDT(event.getEventTimestamp());
+        } else if (event.getEventTimestamp() != null
+            && sessionAccumulator.getUbiSession().getEndTimestampNOIFRAMERDT() < event
+            .getEventTimestamp()) {
+          sessionAccumulator.getUbiSession().setEndTimestampNOIFRAMERDT(event.getEventTimestamp());
+        }
+        String agentInfo = event.getAgentInfo();
+        if (!agentExcludeSet.contains(event.getPageId()) && agentInfo != null
+            && !agentInfo.equals(SHOCKWAVE_FLASH_AGENT) && !IsValidIPv4.isValidIP(agentInfo)) {
+          if (sessionAccumulator.getUbiSession().getStartTimestampForAgentString() == null) {
+            sessionAccumulator.getUbiSession()
+                .setStartTimestampForAgentString(event.getEventTimestamp());
+          } else if (event.getEventTimestamp() != null
+              && sessionAccumulator.getUbiSession().getStartTimestampForAgentString() > event
+              .getEventTimestamp()) {
+            sessionAccumulator.getUbiSession()
+                .setStartTimestampForAgentString(event.getEventTimestamp());
+
+          }
+        }
+      }
+      if (sessionAccumulator.getUbiSession().getStartTimestampNOIFRAME() == null) {
+        sessionAccumulator.getUbiSession().setStartTimestampNOIFRAME(event.getEventTimestamp());
       } else if (event.getEventTimestamp() != null
-          && sessionAccumulator.getUbiSession().getStartTimestamp() > event.getEventTimestamp()) {
-        sessionAccumulator.getUbiSession().setStartTimestamp(event.getEventTimestamp());
+          && sessionAccumulator.getUbiSession().getStartTimestampNOIFRAME() > event
+          .getEventTimestamp()) {
+        sessionAccumulator.getUbiSession().setStartTimestampNOIFRAME(event.getEventTimestamp());
 
       }
-      if (sessionAccumulator.getUbiSession().getEndTimestamp() == null) {
-        sessionAccumulator.getUbiSession().setEndTimestamp(event.getEventTimestamp());
-      } else if (event.getEventTimestamp() != null
-          && sessionAccumulator.getUbiSession().getEndTimestamp() < event.getEventTimestamp()) {
-        sessionAccumulator.getUbiSession().setEndTimestamp(event.getEventTimestamp());
-      }
+
     }
     if (sessionAccumulator.getUbiSession().getAbsStartTimestamp() == null) {
       sessionAccumulator.getUbiSession().setAbsStartTimestamp(event.getEventTimestamp());
@@ -44,7 +93,7 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
         && sessionAccumulator.getUbiSession().getAbsStartTimestamp() > event.getEventTimestamp()) {
       sessionAccumulator.getUbiSession().setAbsStartTimestamp(event.getEventTimestamp());
 
-      //      eventListenerContainer.onEarlyEventChange(event,sessionAccumulator.getUbiSession());
+      //      e.onEarlyEventChange(event,sessionAccumulator.getUbiSession());
     }
     if (sessionAccumulator.getUbiSession().getAbsEndTimestamp() == null) {
       sessionAccumulator.getUbiSession().setAbsEndTimestamp(event.getEventTimestamp());
@@ -85,6 +134,9 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
   @Override
   public void init() throws Exception {
     setPageIndicator(new PageIndicator(UBIConfig.getString(Property.SEARCH_VIEW_PAGES)));
+    agentExcludeSet =
+        PropertyUtils.getIntegerSet(
+            UBIConfig.getString(Property.AGENT_EXCLUDE_PAGES), Property.PROPERTY_DELIMITER);
     //    eventListenerContainer = EventListenerContainer.getInstance();
   }
 

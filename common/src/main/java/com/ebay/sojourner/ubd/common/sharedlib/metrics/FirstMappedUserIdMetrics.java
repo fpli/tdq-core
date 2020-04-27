@@ -19,11 +19,11 @@ public class FirstMappedUserIdMetrics implements FieldMetrics<UbiEvent, SessionA
    */
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-    boolean isEarlyEvent = SojEventTimeUtil
+    boolean isEarlyValidEvent = SojEventTimeUtil
         .isEarlyEvent(event.getEventTimestamp(),
-            sessionAccumulator.getUbiSession().getAbsStartTimestamp());
+            sessionAccumulator.getUbiSession().getStartTimestampNOIFRAMERDT());
     String bestGuessUserId = null;
-    if ((isEarlyEvent ? isEarlyEvent
+    if ((isEarlyValidEvent ? isEarlyValidEvent
         : sessionAccumulator.getUbiSession().getFirstMappedUserId() == null)
         && !event.isRdt()
         && !event.isIframe()) {

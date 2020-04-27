@@ -23,8 +23,14 @@ public class KafkaSourceFunction {
 
   private static <T> FlinkKafkaConsumerBase initKafkaConsumer(String topic, String brokers,
       String groupId, Class<T> tClass) {
-    return KafkaConnectorFactory
-        .createKafkaConsumer(topic, brokers, groupId, tClass)
-        .setStartFromLatest();
+    if(topic.equals("behavior.trafficjam.pathfinder.copy")) {
+      return KafkaConnectorFactory
+          .createKafkaConsumer(topic, brokers, groupId, tClass)
+          .setStartFromEarliest();
+    }else{
+      return KafkaConnectorFactory
+          .createKafkaConsumer(topic, brokers, groupId, tClass)
+          .setStartFromLatest();
+    }
   }
 }

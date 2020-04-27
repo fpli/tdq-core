@@ -31,7 +31,7 @@ public class LkpManager {
   private static final String TEXT_RECORD_DELIMITER = "\n";
   private static final String TEXT_FIELD_DELIMITER = "\t";
   private static final String LKP_PATH = getUBIProperty(Property.LKP_PATH);
-
+  private static volatile LkpManager lkpManager;
   private Set<Integer> pageIdSet = new CopyOnWriteArraySet<>();
   private Map<Integer, Integer> findingFlagMap = new ConcurrentHashMap<>();
   private Map<Integer, Integer[]> vtNewIdsMap = new ConcurrentHashMap<>();
@@ -43,11 +43,9 @@ public class LkpManager {
   private Map<String, Boolean> selectedIps = new ConcurrentHashMap<>();
   private Set<String> selectedAgents = new CopyOnWriteArraySet<>();
   private Map<String, Long> lkpFileLastUpdDt = new ConcurrentHashMap<>();
-
   private volatile FileSystem fileSystem = null;
   private volatile boolean loadLkpFromHDFS = false;
   private volatile boolean firstRun = true;
-  private static volatile LkpManager lkpManager;
   private volatile LkpRefreshTimeTask lkpRefreshTimeTask;
 
   private LkpManager() {
@@ -83,22 +81,25 @@ public class LkpManager {
   private void refreshIframePageIds() {
     String property = Property.IFRAME_PAGE_IDS;
     if (isUpdate(property)) {
-      pageIdSet.clear();
+      Set<Integer> pageIdSetMid = new CopyOnWriteArraySet<>();
+
       String pageIds = getLkpFileContent(property);
       for (String pageId : pageIds.split(LKP_RECORD_DELIMITER)) {
         try {
-          pageIdSet.add(Integer.valueOf(pageId));
+          pageIdSetMid.add(Integer.valueOf(pageId));
         } catch (NumberFormatException e) {
           log.warn("Parsing PageId failed, format incorrect...");
         }
       }
+      pageIdSet = pageIdSetMid;
     }
   }
 
   private void refreshSelectedIps() {
     String property = Property.SELECTED_IPS;
     if (isUpdate(property)) {
-      selectedIps.clear();
+      Map<String, Boolean> selectedIpsMid = new ConcurrentHashMap<>();
+
       String fileContent = getLkpFileContent(property);
       for (String record : fileContent.split(TEXT_RECORD_DELIMITER)) {
         if (StringUtils.isNotBlank(record)) {
@@ -107,65 +108,70 @@ public class LkpManager {
             String recordKey = recordPair[0];
             String recordValue = recordPair[1];
             if (StringUtils.isNotBlank(recordKey) && StringUtils.isNotBlank(recordValue)) {
-              selectedIps.put(recordKey.trim(), Boolean.valueOf(recordValue.trim()));
+              selectedIpsMid.put(recordKey.trim(), Boolean.valueOf(recordValue.trim()));
             }
           }
         }
       }
+      selectedIps = selectedIpsMid;
     }
   }
 
   private void refreshSelectedAgents() {
     String property = Property.SELECTED_AGENTS;
     if (isUpdate(property)) {
-      selectedAgents.clear();
+      Set<String> selectedAgentsMid = new CopyOnWriteArraySet<>();
       String fileContent = getLkpFileContent(property);
       for (String record : fileContent.split(TEXT_RECORD_DELIMITER)) {
         if (StringUtils.isNotBlank(record)) {
           String[] recordPair = record.split(TEXT_FIELD_DELIMITER);
           String recordKey = recordPair[0];
           if (StringUtils.isNotBlank(recordKey)) {
-            selectedAgents.add(recordKey.trim());
+            selectedAgentsMid.add(recordKey.trim());
           }
         }
       }
+      selectedAgents = selectedAgentsMid;
     }
   }
 
   private void refreshLargeSessionGuid() {
     String property = Property.LARGE_SESSION_GUID;
     if (isUpdate(property)) {
-      largeSessionGuidSet.clear();
+      Set<String> largeSessionGuidSetMid = new CopyOnWriteArraySet<>();
       String largeSessionGuids = getLkpFileContent(property);
       for (String guid : largeSessionGuids.split(LKP_FILED_DELIMITER)) {
         if (StringUtils.isNotBlank(guid)) {
-          largeSessionGuidSet.add(guid.trim());
+          largeSessionGuidSetMid.add(guid.trim());
         }
       }
+      largeSessionGuidSet = largeSessionGuidSetMid;
     }
   }
 
   private void refreshIabAgent() {
     String property = Property.IAB_AGENT;
     if (isUpdate(property)) {
+      List<String> iabAgentRegsMid = new CopyOnWriteArrayList<>();
       String iabAgentRegValue = getLkpFileContent(property);
       for (String iabAgent : iabAgentRegValue.split(LKP_RECORD_DELIMITER)) {
-        iabAgentRegs.add(iabAgent.toLowerCase());
+        iabAgentRegsMid.add(iabAgent.toLowerCase());
       }
+      iabAgentRegs = iabAgentRegsMid;
     }
   }
 
   private void refreshFindingFlag() {
     String property = Property.FINDING_FLAGS;
     if (isUpdate(property)) {
-      findingFlagMap.clear();
+      Map<Integer, Integer> findingFlagMapMid = new ConcurrentHashMap<>();
       String findingFlags = getLkpFileContent(property);
       for (String pageFlag : findingFlags.split(LKP_RECORD_DELIMITER)) {
         String[] values = pageFlag.split(LKP_FILED_DELIMITER);
         // Keep the null judgment also for session metrics first finding flag
         if (values[0] != null && values[1] != null) {
           try {
-            findingFlagMap.put(Integer.valueOf(values[0].trim()),
+            findingFlagMapMid.put(Integer.valueOf(values[0].trim()),
                 Integer.valueOf(values[1].trim()));
           } catch (NumberFormatException e) {
             log.error(
@@ -173,13 +179,14 @@ public class LkpManager {
           }
         }
       }
+      findingFlagMap = findingFlagMapMid;
     }
   }
 
   private void refreshVtNewIds() {
     String property = Property.VTNEW_IDS;
     if (isUpdate(property)) {
-      vtNewIdsMap.clear();
+      Map<Integer, Integer[]> vtNewIdsMapMid = new ConcurrentHashMap<>();
       String vtNewIdsValue = getLkpFileContent(property);
       for (String vtNewId : vtNewIdsValue.split(LKP_RECORD_DELIMITER)) {
         Integer[] pageInfo = new Integer[2];
@@ -187,29 +194,31 @@ public class LkpManager {
         Integer newPageId = StringUtils.isEmpty(ids[0]) ? null : Integer.valueOf(ids[0].trim());
         pageInfo[0] = StringUtils.isEmpty(ids[1]) ? null : Integer.valueOf(ids[1].trim());
         pageInfo[1] = StringUtils.isEmpty(ids[2]) ? null : Integer.valueOf(ids[2].trim());
-        vtNewIdsMap.put(newPageId, pageInfo);
+        vtNewIdsMapMid.put(newPageId, pageInfo);
       }
+      vtNewIdsMap = vtNewIdsMapMid;
     }
   }
 
   private void refreshAppIds() {
     String property = Property.APP_ID;
     if (isUpdate(property)) {
-      appIdWithBotFlags.clear();
+      Set<String> appIdWithBotFlagsMid = new CopyOnWriteArraySet<>();
       String appIdAndFlags = getLkpFileContent(property);
       String[] appIdFlagPair = appIdAndFlags.split(LKP_RECORD_DELIMITER);
       for (String appIdFlag : appIdFlagPair) {
         if (StringUtils.isNotBlank(appIdFlag)) {
-          appIdWithBotFlags.add(appIdFlag.trim());
+          appIdWithBotFlagsMid.add(appIdFlag.trim());
         }
       }
+      appIdWithBotFlags = appIdWithBotFlagsMid;
     }
   }
 
   private void refreshPageFmlys() {
     String property = Property.PAGE_FMLY;
     if (isUpdate(property)) {
-      pageFmlyMap.clear();
+      Map<Integer, String[]> pageFmlyMapMid = new ConcurrentHashMap<>();
       String pageFmlysValue = getLkpFileContent(property);
       for (String pageFmlyPair : pageFmlysValue.split(LKP_RECORD_DELIMITER)) {
         String[] pageFmlyNames = new String[2];
@@ -218,28 +227,30 @@ public class LkpManager {
           Integer pageId = StringUtils.isEmpty(values[0]) ? null : Integer.valueOf(values[0]);
           pageFmlyNames[0] = StringUtils.isEmpty(values[1]) ? null : values[1];
           pageFmlyNames[1] = StringUtils.isEmpty(values[2]) ? null : values[2];
-          pageFmlyMap.put(pageId, pageFmlyNames);
+          pageFmlyMapMid.put(pageId, pageFmlyNames);
         }
       }
+      pageFmlyMap = pageFmlyMapMid;
     }
   }
 
   private void refreshMpxRotetion() {
     String property = Property.MPX_ROTATION;
     if (isUpdate(property)) {
-      mpxMap.clear();
+      Map<String, String> mpxMapMid = new ConcurrentHashMap<>();
       String mpxRotations = getLkpFileContent(property);
       for (String mpx : mpxRotations.split(LKP_RECORD_DELIMITER)) {
         String[] values = mpx.split(LKP_FILED_DELIMITER);
         // Keep the null judgment also for session metrics first finding flag
         if (values[0] != null && values[1] != null) {
           try {
-            mpxMap.put(values[0].trim(), values[1].trim());
+            mpxMapMid.put(values[0].trim(), values[1].trim());
           } catch (NumberFormatException e) {
             log.error("Ignore the incorrect format for mpx: " + values[0] + " - " + values[1]);
           }
         }
       }
+      mpxMap=mpxMapMid;
     }
   }
 

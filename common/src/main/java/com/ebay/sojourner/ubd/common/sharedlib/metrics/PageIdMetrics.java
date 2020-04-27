@@ -20,19 +20,19 @@ public class PageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-    boolean isEarlyEvent = SojEventTimeUtil
+    boolean isEarlyValidEvent = SojEventTimeUtil
         .isEarlyEvent(event.getEventTimestamp(),
-            sessionAccumulator.getUbiSession().getAbsStartTimestamp());
-    boolean isLateEvent=SojEventTimeUtil
+            sessionAccumulator.getUbiSession().getStartTimestamp());
+    boolean isLateValidEvent = SojEventTimeUtil
         .isLateEvent(event.getEventTimestamp(),
-            sessionAccumulator.getUbiSession().getAbsEndTimestamp());
+            sessionAccumulator.getUbiSession().getEndTimestamp());
     if (!event.isIframe()) {
       if (!event.isRdt() || indicator.isCorrespondingPageEvent(event)) {
         if (sessionAccumulator.getUbiSession().getStartPageId() == Integer.MIN_VALUE
-            || isEarlyEvent) {
+            || isEarlyValidEvent) {
           sessionAccumulator.getUbiSession().setStartPageId(event.getPageId());
         }
-        if(isLateEvent) {
+        if (isLateValidEvent) {
           sessionAccumulator.getUbiSession().setEndPageId(event.getPageId());
         }
       }

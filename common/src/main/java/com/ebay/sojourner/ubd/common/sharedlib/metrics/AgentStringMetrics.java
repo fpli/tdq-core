@@ -40,9 +40,9 @@ public class AgentStringMetrics implements FieldMetrics<UbiEvent, SessionAccumul
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
     // Same logic implemented in IntermediaEventMetrics.java -> Line289
     String agentInfo = event.getAgentInfo();
-    boolean isEarlyEvent = SojEventTimeUtil
+    boolean isEarlyValidEvent = SojEventTimeUtil
         .isEarlyEvent(event.getEventTimestamp(),
-            sessionAccumulator.getUbiSession().getAbsStartTimestamp());
+            sessionAccumulator.getUbiSession().getStartTimestampForAgentString());
     // logger.info("agentExcludeSet.size():"+agentExcludeSet.size());
     if (!event.isRdt()
         && !event.isIframe()
@@ -53,7 +53,7 @@ public class AgentStringMetrics implements FieldMetrics<UbiEvent, SessionAccumul
       if (agentInfo.length() > AGENT_MAX_LENGTH) {
         agentInfo = agentInfo.substring(0, AGENT_MAX_LENGTH);
       }
-      if (!isEarlyEvent) {
+      if (!isEarlyValidEvent) {
         if (sessionAccumulator.getUbiSession().getAgentString() == null) {
           sessionAccumulator.getUbiSession().setAgentString(agentInfo);
         }

@@ -27,6 +27,10 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
     boolean isEarlyEvent = SojEventTimeUtil
         .isEarlyEvent(event.getEventTimestamp(),
             sessionAccumulator.getUbiSession().getAbsStartTimestamp());
+    boolean isEarlyValidEvent = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getStartTimestampNOIFRAMERDT());
+
     sessionAccumulator
         .getUbiSession()
         .setSeqNum(sessionAccumulator.getUbiSession().getSeqNum() + 1);
@@ -36,7 +40,7 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
     }
     if (!event.isIframe()
         && !event.isRdt()
-        && (isEarlyEvent ? isEarlyEvent
+        && (isEarlyValidEvent ? isEarlyValidEvent
         : sessionAccumulator.getUbiSession().getSessionStartDt() == null)) {
       sessionAccumulator.getUbiSession().setSessionStartDt(event.getSojDataDt());
     }

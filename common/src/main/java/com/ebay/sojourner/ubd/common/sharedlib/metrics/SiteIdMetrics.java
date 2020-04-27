@@ -14,10 +14,10 @@ public class SiteIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
-    boolean isEarlyEvent = SojEventTimeUtil
+    boolean isEarlyValidEvent = SojEventTimeUtil
         .isEarlyEvent(event.getEventTimestamp(),
-            sessionAccumulator.getUbiSession().getAbsStartTimestamp());
-    if ((isEarlyEvent ? isEarlyEvent
+            sessionAccumulator.getUbiSession().getStartTimestampNOIFRAMERDT());
+    if ((isEarlyValidEvent ? isEarlyValidEvent
         : sessionAccumulator.getUbiSession().getFirstSiteId() == Integer.MIN_VALUE)
         && !event.isIframe()
         && !event.isRdt()) {

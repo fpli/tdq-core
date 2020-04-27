@@ -18,11 +18,15 @@ public class AppIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>,
     boolean isEarlyEvent = SojEventTimeUtil
         .isEarlyEvent(event.getEventTimestamp(),
             sessionAccumulator.getUbiSession().getAbsStartTimestamp());
+    boolean isEarlyValidEvent = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getStartTimestampNOIFRAMERDT());
     if ((isEarlyEvent ? isEarlyEvent : sessionAccumulator.getUbiSession().getFirstAppId() == null)
         && event.getAppId() != null) {
       sessionAccumulator.getUbiSession().setFirstAppId(event.getAppId());
     }
-    if ((isEarlyEvent ? isEarlyEvent : sessionAccumulator.getUbiSession().getAppId() == null)
+    if ((isEarlyValidEvent ? isEarlyValidEvent
+        : sessionAccumulator.getUbiSession().getAppId() == null)
         && !event.isIframe()
         && !event.isRdt()
         && event.getAppId() != null) {

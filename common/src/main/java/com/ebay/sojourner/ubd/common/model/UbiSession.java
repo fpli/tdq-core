@@ -28,6 +28,10 @@ public class UbiSession implements Serializable, Cloneable {
   private int startPageId;
   private int endPageId;
   private Long startTimestamp;
+  private Long startTimestampNOIFRAMERDT;
+  private Long endTimestampNOIFRAMERDT;
+  private Long startTimestampNOIFRAME;
+  private Long startTimestampForAgentString;
   private int durationSec;
   private int eventCnt;
   private int viCoreCnt;

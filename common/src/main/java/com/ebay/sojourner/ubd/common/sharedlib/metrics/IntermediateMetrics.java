@@ -12,15 +12,11 @@ import com.ebay.sojourner.ubd.common.sharedlib.util.SOJListLastElement;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNameValueParser;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJReplaceChar;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJURLDecodeEscape;
+import com.ebay.sojourner.ubd.common.util.IntermediateLkp;
 import com.ebay.sojourner.ubd.common.util.LkpManager;
-import com.ebay.sojourner.ubd.common.util.Property;
-import com.ebay.sojourner.ubd.common.util.PropertyUtils;
-import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -39,19 +35,20 @@ public class IntermediateMetrics implements Serializable {
   private static final Integer SEVEN = 7;
   private static final String SID = "sid";
   private static final String SWD = "swd";
-  private Set<Integer> agentExcludePageSet = null;
-  private String imgMpxChnlSet1 = null;
-  private String imgMpxChnlSet6 = null;
-  private Set<Integer> mobilePageSet = null;
   //    private static Map<Long, String> mpxMap; // mpx channel id map
   private static Map<String, String> mpxMap;
-  private Set<Integer> notifyCLickPageSet = null;
-  private Set<Integer> notifyViewPageSet = null;
-  private Set<Integer> roverPageSet = null;
-  private Set<Integer> scPageSet1 = null;
-  private Set<Integer> scPageSet2 = null;
+  private String imgMpxChnlSet1 = null;
+  private String imgMpxChnlSet6 = null;
+  //remove the defination instead of the singlton class
+  //  private Set<Integer> mobilePageSet = null;
+  //  private Set<Integer> agentExcludePageSet = null;
+  //  private Set<Integer> notifyCLickPageSet = null;
+  //  private Set<Integer> notifyViewPageSet = null;
+  //  private Set<Integer> roverPageSet = null;
+  //  private Set<Integer> scPageSet1 = null;
+  //  private Set<Integer> scPageSet2 = null;
+  //  private Collection<String> tags = null;
   private StringBuilder stingBuilder = new StringBuilder();
-  private Collection<String> tags = null;
   private String actualKeyword;
   private String boughtKeyword;
   private Integer channel;
@@ -111,32 +108,30 @@ public class IntermediateMetrics implements Serializable {
   private String url2Parse;
 
   public IntermediateMetrics() {
-    roverPageSet =
-        PropertyUtils.getIntegerSet(
-            UBIConfig.getString(Property.ROVER_PAGES), Property.PROPERTY_DELIMITER);
-    scPageSet1 =
-        PropertyUtils.getIntegerSet(
-            UBIConfig.getString(Property.SCEVENT_EXCLUDE_PAGES1), Property.PROPERTY_DELIMITER);
-    scPageSet2 =
-        PropertyUtils.getIntegerSet(
-            UBIConfig.getString(Property.SCEVENT_EXCLUDE_PAGES2), Property.PROPERTY_DELIMITER);
-    agentExcludePageSet =
-        PropertyUtils.getIntegerSet(
-            UBIConfig.getString(Property.AGENT_EXCLUDE_PAGES), Property.PROPERTY_DELIMITER);
-    notifyCLickPageSet =
-        PropertyUtils.getIntegerSet(
-            UBIConfig.getString(Property.NOTIFY_CLICK_PAGES), Property.PROPERTY_DELIMITER);
-    notifyViewPageSet =
-        PropertyUtils.getIntegerSet(
-            UBIConfig.getString(Property.NOTIFY_VIEW_PAGES), Property.PROPERTY_DELIMITER);
-    mobilePageSet =
-        PropertyUtils.getIntegerSet(
-            UBIConfig.getString(Property.MOBILE_PAGES), Property.PROPERTY_DELIMITER);
-    PropertyUtils.getIntegerSet(
-        UBIConfig.getString(Property.NOTIFY_VIEW_PAGES), Property.PROPERTY_DELIMITER);
-    tags =
-        PropertyUtils.parseProperty(
-            UBIConfig.getString(Property.PRELOAD_PAYLOAD_TAGS), Property.PROPERTY_DELIMITER);
+    //    roverPageSet =
+    //        PropertyUtils.getIntegerSet(
+    //            UBIConfig.getString(Property.ROVER_PAGES), Property.PROPERTY_DELIMITER);
+    //    scPageSet1 =
+    //        PropertyUtils.getIntegerSet(
+    //            UBIConfig.getString(Property.SCEVENT_EXCLUDE_PAGES1), Property.PROPERTY_DELIMITER);
+    //    scPageSet2 =
+    //        PropertyUtils.getIntegerSet(
+    //            UBIConfig.getString(Property.SCEVENT_EXCLUDE_PAGES2), Property.PROPERTY_DELIMITER);
+    //    agentExcludePageSet =
+    //        PropertyUtils.getIntegerSet(
+    //            UBIConfig.getString(Property.AGENT_EXCLUDE_PAGES), Property.PROPERTY_DELIMITER);
+    //    notifyCLickPageSet =
+    //        PropertyUtils.getIntegerSet(
+    //            UBIConfig.getString(Property.NOTIFY_CLICK_PAGES), Property.PROPERTY_DELIMITER);
+    //    notifyViewPageSet =
+    //        PropertyUtils.getIntegerSet(
+    //            UBIConfig.getString(Property.NOTIFY_VIEW_PAGES), Property.PROPERTY_DELIMITER);
+    //    mobilePageSet =
+    //        PropertyUtils.getIntegerSet(
+    //            UBIConfig.getString(Property.MOBILE_PAGES), Property.PROPERTY_DELIMITER);
+    //    tags =
+    //        PropertyUtils.parseProperty(
+    //            UBIConfig.getString(Property.PRELOAD_PAYLOAD_TAGS), Property.PROPERTY_DELIMITER);
     initLkp();
     initMetrics();
     stingBuilder.setLength(0);
@@ -194,7 +189,9 @@ public class IntermediateMetrics implements Serializable {
   }
 
   public void feed(UbiEvent event) throws InterruptedException {
-    SOJNameValueParser.getTagValues(event.getApplicationPayload(), tags, kvMap);
+    SOJNameValueParser
+        .getTagValues(event.getApplicationPayload(), IntermediateLkp.getInstance().getTags(),
+            kvMap);
 
     // count every rover click
     if (isRoverClick(event)) {
@@ -242,13 +239,15 @@ public class IntermediateMetrics implements Serializable {
     }
 
     // check first notify click
-    if (!findNotifyClick && notifyCLickPageSet.contains(event.getPageId())) {
+    if (!findNotifyClick && IntermediateLkp.getInstance().getNotifyCLickPageSet()
+        .contains(event.getPageId())) {
       setFindNotifyClick(true);
       this.setNotifyClickTS(event);
     }
 
     // check first notify view
-    if (!findNotifyView && notifyViewPageSet.contains(event.getPageId())) {
+    if (!findNotifyView && IntermediateLkp.getInstance().getNotifyViewPageSet()
+        .contains(event.getPageId())) {
       setFindNotifyView(true);
       this.setNotifyViewTS(event);
     }
@@ -257,7 +256,7 @@ public class IntermediateMetrics implements Serializable {
     if (!findAgentString
         && !event.isRdt()
         && !event.isIframe()
-        && !agentExcludePageSet.contains(event.getPageId())
+        && !IntermediateLkp.getInstance().getAgentExcludePageSet().contains(event.getPageId())
         && event.getAgentInfo() != null
         && !event.getAgentInfo().equals("Shockwave Flash")
         && !IsValidIPv4.isValidIP(event.getAgentInfo())) {
@@ -267,7 +266,8 @@ public class IntermediateMetrics implements Serializable {
     }
 
     // get the mppid from mobile event
-    if (mobilePageSet.contains(event.getPageId()) && event.getCobrand() == 6) {
+    if (IntermediateLkp.getInstance().getMobilePageSet().contains(event.getPageId())
+        && event.getCobrand() == 6) {
       setMinMppIds(event);
     }
   }
@@ -575,9 +575,9 @@ public class IntermediateMetrics implements Serializable {
   }
 
   public void initLkp() {
-        if (mpxMap == null || mpxMap.size() < 1) {
-          mpxMap = LkpManager.getInstance().getMpxMap();
-        }
+    if (mpxMap == null || mpxMap.size() < 1) {
+      mpxMap = LkpManager.getInstance().getMpxMap();
+    }
   }
 
   public void initMetrics() {
@@ -666,17 +666,16 @@ public class IntermediateMetrics implements Serializable {
   }
 
   public boolean isRoverClick(UbiEvent event) {
-    return roverPageSet.contains(event.getPageId());
+    return IntermediateLkp.getInstance().getRoverPageSet().contains(event.getPageId());
   }
 
   public boolean isScEvent(UbiEvent event) {
     Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
-
     return !event.isRdt()
         && !event.isIframe()
         // || urlQueryString.matches("(/roverimp|.*SojPageView).*")
-        && !scPageSet1.contains(pageId)
-        && !scPageSet2.contains(pageId);
+        && !IntermediateLkp.getInstance().getScPageSet1().contains(pageId)
+        && !IntermediateLkp.getInstance().getScPageSet2().contains(pageId);
   }
 
   public Integer parseChannelFromEvent(UbiEvent event) {
@@ -693,7 +692,7 @@ public class IntermediateMetrics implements Serializable {
     }
 
     // if not in app_payload.chnl, then check rover urlstring
-    if (roverPageSet.contains(pageId)) {
+    if (IntermediateLkp.getInstance().getRoverPageSet().contains(pageId)) {
       try {
         channel =
             Integer.parseInt(
@@ -945,7 +944,7 @@ public class IntermediateMetrics implements Serializable {
   // page 3084 only
   public void setFirstRoverClickMpxChannelId(UbiEvent event) throws InterruptedException {
     Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
-    mpxMap=LkpManager.getInstance().getMpxMap();
+    mpxMap = LkpManager.getInstance().getMpxMap();
     String mpxChannelId = null;
     String[] channelIds = null;
 
@@ -1166,7 +1165,7 @@ public class IntermediateMetrics implements Serializable {
   }
 
   public void setFirstScEventImgMpxChannelId(UbiEvent event) throws InterruptedException {
-    mpxMap=LkpManager.getInstance().getMpxMap();
+    mpxMap = LkpManager.getInstance().getMpxMap();
     String imgMpxChannelId = "";
     String referrer = getReferrer();
 
