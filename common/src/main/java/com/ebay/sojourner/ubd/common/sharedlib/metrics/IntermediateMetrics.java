@@ -108,30 +108,6 @@ public class IntermediateMetrics implements Serializable {
   private String url2Parse;
 
   public IntermediateMetrics() {
-    //    roverPageSet =
-    //        PropertyUtils.getIntegerSet(
-    //            UBIConfig.getString(Property.ROVER_PAGES), Property.PROPERTY_DELIMITER);
-    //    scPageSet1 =
-    //        PropertyUtils.getIntegerSet(
-    //            UBIConfig.getString(Property.SCEVENT_EXCLUDE_PAGES1), Property.PROPERTY_DELIMITER);
-    //    scPageSet2 =
-    //        PropertyUtils.getIntegerSet(
-    //            UBIConfig.getString(Property.SCEVENT_EXCLUDE_PAGES2), Property.PROPERTY_DELIMITER);
-    //    agentExcludePageSet =
-    //        PropertyUtils.getIntegerSet(
-    //            UBIConfig.getString(Property.AGENT_EXCLUDE_PAGES), Property.PROPERTY_DELIMITER);
-    //    notifyCLickPageSet =
-    //        PropertyUtils.getIntegerSet(
-    //            UBIConfig.getString(Property.NOTIFY_CLICK_PAGES), Property.PROPERTY_DELIMITER);
-    //    notifyViewPageSet =
-    //        PropertyUtils.getIntegerSet(
-    //            UBIConfig.getString(Property.NOTIFY_VIEW_PAGES), Property.PROPERTY_DELIMITER);
-    //    mobilePageSet =
-    //        PropertyUtils.getIntegerSet(
-    //            UBIConfig.getString(Property.MOBILE_PAGES), Property.PROPERTY_DELIMITER);
-    //    tags =
-    //        PropertyUtils.parseProperty(
-    //            UBIConfig.getString(Property.PRELOAD_PAYLOAD_TAGS), Property.PROPERTY_DELIMITER);
     initLkp();
     initMetrics();
     stingBuilder.setLength(0);

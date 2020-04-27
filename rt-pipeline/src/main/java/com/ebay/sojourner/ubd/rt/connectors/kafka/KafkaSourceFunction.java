@@ -24,23 +24,12 @@ public class KafkaSourceFunction {
 
   private static <T> FlinkKafkaConsumerBase initKafkaConsumer(String topic, String brokers,
       String groupId, Class<T> tClass) {
-<<<<<<< HEAD
-    if(topic.equals("behavior.trafficjam.pathfinder.copy")) {
-      return KafkaConnectorFactory
-          .createKafkaConsumer(topic, brokers, groupId, tClass)
-          .setStartFromEarliest();
-    }else{
-      return KafkaConnectorFactory
-          .createKafkaConsumer(topic, brokers, groupId, tClass)
-          .setStartFromLatest();
-=======
     FlinkKafkaConsumer kafkaConsumer = KafkaConnectorFactory
         .createKafkaConsumer(topic, brokers, groupId, tClass);
     if (groupId.contains("copy")) {
       return kafkaConsumer.setStartFromEarliest();
     } else {
       return kafkaConsumer.setStartFromLatest();
->>>>>>> 3a09488a63dd22d0273555f1104afd6f4ae272e6
     }
   }
 }
