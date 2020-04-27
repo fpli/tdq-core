@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.rt.connectors.kafka;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.common.model.SojSession;
+import com.ebay.sojourner.ubd.common.model.UbiSessionForDQ;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.windowing.time.Time;
 
@@ -27,6 +28,9 @@ public class SojBoundedOutOfOrderlessTimestampExtractor<T> extends
     } else if (t instanceof SojEvent) {
       SojEvent sojEvent = (SojEvent) t;
       return sojEvent.getGenerateTime();
+    } else if (t instanceof UbiSessionForDQ) {
+      UbiSessionForDQ ubiSessionForDQ = (UbiSessionForDQ) t;
+      return ubiSessionForDQ.getAbsStartTimestamp();
     } else {
       return 0;
     }
