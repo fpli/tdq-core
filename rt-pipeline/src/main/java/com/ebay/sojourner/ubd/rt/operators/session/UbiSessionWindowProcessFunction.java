@@ -2,7 +2,9 @@ package com.ebay.sojourner.ubd.rt.operators.session;
 
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.ubd.common.sharedlib.detectors.SessionEndBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
@@ -17,6 +19,7 @@ public class UbiSessionWindowProcessFunction
 
   private static SessionMetrics sessionMetrics;
   private OutputTag outputTag = null;
+  private SessionEndBotDetector sessionEndBotDetector;
 
   public UbiSessionWindowProcessFunction() {
 
@@ -40,6 +43,9 @@ public class UbiSessionWindowProcessFunction
 
     SessionAccumulator sessionAccumulator = elements.iterator().next();
     endSessionEvent(sessionAccumulator);
+    Set<Integer> botFlagList = sessionEndBotDetector
+        .getBotFlagList(sessionAccumulator.getUbiSession());
+    sessionAccumulator.getUbiSession().getBotFlagList().addAll(botFlagList);
     UbiSession ubiSession = new UbiSession();
     ubiSession.setGuid(sessionAccumulator.getUbiSession().getGuid());
     ubiSession.setAgentString(sessionAccumulator.getUbiSession().getAgentString());
@@ -102,5 +108,7 @@ public class UbiSessionWindowProcessFunction
   @Override
   public void open(Configuration conf) throws Exception {
     super.open(conf);
+    sessionEndBotDetector = SessionEndBotDetector.getInstance();
+
   }
 }

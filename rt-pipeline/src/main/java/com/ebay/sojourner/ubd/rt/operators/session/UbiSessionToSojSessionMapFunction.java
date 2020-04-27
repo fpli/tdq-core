@@ -2,6 +2,7 @@ package com.ebay.sojourner.ubd.rt.operators.session;
 
 import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.ubd.common.util.RulePriorityUtils;
 import org.apache.flink.api.common.functions.RichMapFunction;
 
 public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSession, SojSession> {
@@ -23,7 +24,7 @@ public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSessio
     sojSession.setBotFlagList(ubiSession.getBotFlagList());
     sojSession.setNonIframeRdtEventCnt(ubiSession.getNonIframeRdtEventCnt());
     sojSession.setSessionReferrer(ubiSession.getSessionReferrer());
-    sojSession.setBotFlag(ubiSession.getBotFlag());
+    sojSession.setBotFlag(RulePriorityUtils.getHighPriorityBotFlag(ubiSession.getBotFlagList()));
     sojSession.setVersion(ubiSession.getVersion());
     sojSession.setFirstUserId(ubiSession.getFirstUserId());
     sojSession.setSiteFlags(ubiSession.getSiteFlags());

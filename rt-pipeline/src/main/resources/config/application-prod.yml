@@ -34,6 +34,7 @@ kafkaConsumerConfig:
   groupIdForEvent: sojourner-pathfinder-event
   groupIdForBot: sojourner-pathfinder-bot
   groupIdForCopy: sojourner-pathfinder-copy
+  groupIdForCrossSession: sojourner-pathfinder-cross-session-dq
   topic: behavior.pathfinder.events.total
 
 kafkaProducerConfig:
@@ -61,10 +62,17 @@ kafkaProducerConfig:
     - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
     - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
     - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+  bootstrapServersForCrossSessionDQ:
+    - rhs-rdrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
   sessionTopic: behavior.trafficjam.session
   eventTopic: behavior.trafficjam.event
   botTopic: behavior.trafficjam.bot
   copyTopic: behavior.trafficjam.pathfinder.copy
+  crossSessionDQTopic: behavior.trafficjam.session.dq
 
 rheos:
   serviceUrl: https://rheos-services.stratus.ebay.com
@@ -81,19 +89,20 @@ flink:
     nameForKafkaSinkPipeline: Unified Bot Detection RT kafka Sink Pipeline
     nameForKafkaCopyPipeline: Unified Bot Detection RT kafka Copy Pipeline
     source-parallelism: 100
-    event-parallelism: 120
-    session-parallelism: 120
-    pre-agentIp-parallelism: 350
-    agentIp-parallelism: 300
-    agent-parallelism: 300
-    ip-parallelism: 300
-    guid-parallelism: 350
-    copy-kafka-parallelism: 50
+    event-parallelism: 580
+    session-parallelism: 580
+    pre-agentIp-parallelism: 580
+    agentIp-parallelism: 580
+    agent-parallelism: 580
+    ip-parallelism: 580
+    guid-parallelism: 580
+    copy-kafka-parallelism: 580
     event-kafka-parallelism: 50
     session-kafka-parallelism: 50
+    cross-session-kafka-parallelism: 580
     bot-kafka-parallelism: 50
-    broadcast-parallelism: 350
-    metrics-parallelism: 120
+    broadcast-parallelism: 580
+    metrics-parallelism: 580
   checkpoint:
     data-dir: /opt/sojourner-ubd/checkpoint
     interval: 5m
