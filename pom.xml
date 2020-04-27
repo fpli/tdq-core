@@ -96,6 +96,13 @@
       </snapshots>
     </repository>
   </repositories>
+  
+  <pluginRepositories>
+    <pluginRepository>
+      <id>ebaycentral-corp-snapshots</id>
+      <url>http://ebaycentral.corp.ebay.com/content/repositories/snapshots/</url>
+    </pluginRepository>
+  </pluginRepositories>
 
   <dependencies>
     <dependency>
