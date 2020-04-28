@@ -1,62 +1,21 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
-import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.model.SessionForGuidEnhancement;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.model.UbiSessionForDQ;
-import com.ebay.sojourner.ubd.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
 import com.ebay.sojourner.ubd.rt.common.metrics.EventMetricsCollectorProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.metrics.PipelineMetricsCollectorProcessFunction;
-import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
-import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
-import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
-import com.ebay.sojourner.ubd.rt.operators.attribute.AgentAttributeAgg;
-import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAgg;
-import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAggSliding;
-import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpSignatureWindowProcessFunction;
-import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpWindowProcessFunction;
-import com.ebay.sojourner.ubd.rt.operators.attribute.AgentWindowProcessFunction;
-import com.ebay.sojourner.ubd.rt.operators.attribute.GuidAttributeAgg;
-import com.ebay.sojourner.ubd.rt.operators.attribute.GuidWindowProcessFunction;
-import com.ebay.sojourner.ubd.rt.operators.attribute.IpAttributeAgg;
-import com.ebay.sojourner.ubd.rt.operators.attribute.IpWindowProcessFunction;
-import com.ebay.sojourner.ubd.rt.operators.attribute.SplitFunction;
-import com.ebay.sojourner.ubd.rt.operators.event.DetectableEventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
-import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
-import com.ebay.sojourner.ubd.rt.operators.session.DetectableSessionMapFunction;
-import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
-import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionForGuidEnhancementMapFunction;
-import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToUbiSessionForDQMapFunction;
-import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
-import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
-import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
-import org.apache.flink.streaming.api.datastream.SplitStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
-import org.apache.flink.streaming.api.transformations.OneInputTransformation;
-import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
-import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
-import org.apache.flink.types.Either;
-import org.apache.flink.util.OutputTag;
 
 public class SojournerUBDRTJob {
 
@@ -165,6 +124,7 @@ public class SojournerUBDRTJob {
     // 3.2 Session indicator accumulation
     // 3.3 Session Level bot detection (via bot rule & signature)
     // 3.4 Event level bot detection (via session flag)
+    /*
     OutputTag<UbiSession> sessionOutputTag =
         new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
     OutputTag<UbiEvent> lateEventOutputTag =
@@ -364,6 +324,7 @@ public class SojournerUBDRTJob {
 
     DataStream<UbiSession> signatureBotDetectionForSession = signatureBotDetectionForEvent
         .getSideOutput(sessionOutputTag);
+        */
 
     /*
     // UbiSession to SojSession
@@ -401,25 +362,27 @@ public class SojournerUBDRTJob {
         */
 
     // metrics collector for end to end
-    signatureBotDetectionForEvent
+    ubiEventDataStream
         .process(new PipelineMetricsCollectorProcessFunction())
         .setParallelism(AppEnv.config().getFlink().app.getMetricsParallelism())
         .name("Pipeline End to End Duration")
         .uid("endToEndMetricsCollector");
 
     // metrics collector for event rules hit
-    signatureBotDetectionForEvent
+    ubiEventDataStream
         .process(new EventMetricsCollectorProcessFunction())
         .setParallelism(AppEnv.config().getFlink().app.getMetricsParallelism())
         .name("Event Metrics Collector")
         .uid("eventLevelMetricsCollector");
 
     // late event sink
+    /*
     latedStream
         .addSink(new DiscardingSink<>())
         .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
         .name("Late Event")
         .uid("lateEvent");
+
 
     crossSessionForDQSreaming
         .addSink(KafkaConnectorFactory
@@ -429,6 +392,7 @@ public class SojournerUBDRTJob {
         .setParallelism(AppEnv.config().getFlink().app.getCrossSessionParallelism())
         .name("SojSession Kafka")
         .uid("kafkaSinkForSession");
+        */
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForFullPipeline());

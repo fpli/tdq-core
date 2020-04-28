@@ -60,4 +60,21 @@ public class Constants {
   public static final String IP_LEVEL = "Ip";
   public static final String GUID_LEVEL = "Guid";
 
+  // zookeeper
+  public static final String ZOOKEEPER_CONNECTION_STRING =
+      "zk-0.sojzk-ns.svc.32.tess.io:2181,"
+          + "zk-1.sojzk-ns.svc.32.tess.io:2181,"
+          + "zk-2.sojzk-ns.svc.32.tess.io:2181";
+  public static final int ZK_CONNECTION_TIME_OUT = 18000;
+  public static final int ZK_SESSION_TIME_OUT = 18000;
+  public static final int ZK_RETRY_TIMES = 3;
+  public static final int ZK_BASE_SLEEP_TIME = 1000;
+  public static final String ZK_NAMESPACE = "sojourner";
+  public static final String ZK_NODE_PATH = "/rule/publish/notification";
+
+  // rule management restful api
+  public static final String REST_SERVER = "https://sojubdportalservice.vip.qa.ebay.com";
+  public static final String API_RULE_LIST_PUBLISHED = "/api/rule/list/published";
+  public static final String API_SPECIFIED_RULE_PREFIX = "/api/rule/";
+
 }
