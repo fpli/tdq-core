@@ -34,6 +34,7 @@ kafkaConsumerConfig:
   groupIdForEvent: sojourner-pathfinder-event
   groupIdForBot: sojourner-pathfinder-bot
   groupIdForCopy: sojourner-pathfinder-copy
+  groupIdForCrossSession: sojourner-pathfinder-cross-session-dq
   topic: behavior.pathfinder.events.total
 
 kafkaProducerConfig:
@@ -61,10 +62,17 @@ kafkaProducerConfig:
     - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
+  bootstrapServersForCrossSessionDQ:
+    - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
+    - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
   sessionTopic: behavior.trafficjam.session
   eventTopic: behavior.trafficjam.event
   botTopic: behavior.trafficjam.bot
   copyTopic: behavior.trafficjam.pathfinder.copy
+  crossSessionDQTopic: behavior.trafficjam.session.dq
 
 rheos:
   serviceUrl: https://rheos-services.qa.ebay.com
@@ -91,6 +99,7 @@ flink:
     copy-kafka-parallelism: 2
     event-kafka-parallelism: 2
     session-kafka-parallelism: 2
+    cross-session-kafka-parallelism: 2
     bot-kafka-parallelism: 2
     broadcast-parallelism: 2
     metrics-parallelism: 2
