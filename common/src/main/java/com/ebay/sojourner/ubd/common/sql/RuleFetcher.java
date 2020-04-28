@@ -30,7 +30,7 @@ public class RuleFetcher {
     scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     log.info("Fetch rules periodically");
     scheduledExecutorService
-        .scheduleAtFixedRate(this::fetchRules, 0, 10, TimeUnit.SECONDS);
+        .scheduleAtFixedRate(this::fetchRules, 5, 60, TimeUnit.MINUTES);
   }
 
   protected synchronized void fetchRules() {
