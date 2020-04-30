@@ -6,9 +6,7 @@ import com.ebay.sojourner.ubd.common.rule.Rule;
 import com.ebay.sojourner.ubd.common.sql.Rules;
 import java.io.IOException;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,8 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 public class EventBotDetector implements BotDetector<UbiEvent> {
 
   private static volatile EventBotDetector eventBotDetector;
-  private static List<Long> dynamicRuleIdList = new CopyOnWriteArrayList<>();
+  private static Set<Long> dynamicRuleIdSet = new CopyOnWriteArraySet<>();
   private Set<Rule> botRules = new CopyOnWriteArraySet<>();
+  // private RuleManager ruleManager = RuleManager.getInstance();
 
   private EventBotDetector() {
     initBotRules();
@@ -26,9 +25,16 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
     }
   }
 
-  public static List<Long> dynamicRuleIdList() {
-    return dynamicRuleIdList;
+  public static Set<Long> dynamicRuleIdSet() {
+    return dynamicRuleIdSet;
   }
+
+  /*
+  public RuleManager ruleManager() {
+    return ruleManager;
+  }
+  */
+
 
   public static EventBotDetector getInstance() {
     if (eventBotDetector == null) {
@@ -41,15 +47,14 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
     return eventBotDetector;
   }
 
-  public Set<Rule> rules() {
-    return this.botRules;
-  }
-
   @Override
   public Set<Integer> getBotFlagList(UbiEvent ubiEvent) throws IOException, InterruptedException {
-    Set<Integer> botRuleList = new LinkedHashSet<Integer>(botRules.size());
+    Set<Integer> botRuleList = new LinkedHashSet<>(botRules.size());
+    // botRules.addAll(ruleManager.sqlEventRules());
+    // dynamicRuleIdSet.addAll(ruleManager.ruleIdSet());
     for (Rule rule : botRules) {
-      Integer botRule = rule.getBotFlag(ubiEvent);
+      // rule.init();
+      int botRule = rule.getBotFlag(ubiEvent);
       if (botRule != 0) {
         botRuleList.add(botRule);
       }

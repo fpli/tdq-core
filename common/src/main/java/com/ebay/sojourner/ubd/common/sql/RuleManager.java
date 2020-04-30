@@ -1,7 +1,8 @@
 package com.ebay.sojourner.ubd.common.sql;
 
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -13,14 +14,18 @@ public class RuleManager {
   private RuleFetcher ruleFetcher;
   private RuleNotificationListener ruleNotificationListener;
 
-  private List<SqlEventRule> sqlEventRuleList = new CopyOnWriteArrayList<>();
+  private Set<SqlEventRule> sqlEventRuleSet = new CopyOnWriteArraySet<>();
+  private Set<Long> eventRuleIdSet = new CopyOnWriteArraySet<>();
 
   private RuleManager() {
+
     ruleFetcher = new RuleFetcher(this);
 
     ruleFetcher.fetchRules();
 
-    ruleNotificationListener = new RuleNotificationListener(ruleFetcher);
+    // ruleNotificationListener = new RuleNotificationListener(ruleFetcher);
+
+    /*
     new Thread(
         () -> {
           ruleNotificationListener.listen();
@@ -28,6 +33,7 @@ public class RuleManager {
         .start();
 
     ruleFetcher.fetchRulesPeriodically();
+    */
 
   }
 
@@ -35,44 +41,66 @@ public class RuleManager {
     return INSTANCE;
   }
 
-  public static void main(String[] args) throws Exception {
-    RuleManager.getInstance();
-    Thread.sleep(10 * 60 * 1000);
+  public Set<SqlEventRule> sqlEventRules() {
+    return this.sqlEventRuleSet;
   }
 
-  public List<SqlEventRule> sqlEventRules() {
-    return this.sqlEventRuleList;
+  public Set<Long> ruleIdSet() {
+    return this.eventRuleIdSet;
+  }
+
+  public void close() {
+    ruleNotificationListener.close();
   }
 
   public void updateRules(List<RuleDefinition> ruleDefinitions) {
 
     if (CollectionUtils.isNotEmpty(ruleDefinitions)) {
-      List<SqlEventRule> sqlNewEventRuleList = ruleDefinitions.stream()
-          .filter(rule -> rule.getStatus().equals("4"))
+
+      sqlEventRuleSet = ruleDefinitions
+          .stream()
+          .filter(rule -> rule.getIsActive())
           .map(rule -> SqlEventRule
               .of(rule.getContent(), rule.getBizId(), rule.getVersion(), rule.getCategory()))
-          .collect(Collectors.toList());
-
-      sqlEventRuleList = sqlNewEventRuleList;
+          .collect(Collectors.toSet());
     }
 
-    log.info("Rules deployed: " + this.sqlEventRuleList.size());
+    log.info("Rules deployed: " + this.sqlEventRuleSet.size());
   }
 
   public void updateRulesById(RuleDefinition ruleDefinition, Long ruleId) {
 
-    List<Long> ruleIdList = sqlEventRuleList.stream().map(rule -> rule.getRuleId())
-        .collect(Collectors.toList());
-    SqlEventRule sqlEventRule = SqlEventRule
-        .of(ruleDefinition.getContent(), ruleDefinition.getBizId(), ruleDefinition.getVersion(),
-            ruleDefinition.getCategory());
-    if (!ruleIdList.contains(ruleId)) {
-      sqlEventRuleList.add(sqlEventRule);
-    } else if (!ruleDefinition.getStatus().equals("4")) {
-      sqlEventRuleList.removeIf(rule -> rule.getRuleId() == ruleId);
+    eventRuleIdSet = sqlEventRuleSet
+        .stream()
+        .map(SqlEventRule::getRuleId)
+        .collect(Collectors.toSet());
+
+    if (ruleDefinition.getIsActive()) {
+
+      SqlEventRule sqlEventRule = SqlEventRule
+          .of(ruleDefinition.getContent(), ruleDefinition.getBizId(), ruleDefinition.getVersion(),
+              ruleDefinition.getCategory());
+      if (!eventRuleIdSet.contains(ruleId)) {
+        sqlEventRuleSet.add(sqlEventRule);
+      } else {
+        sqlEventRuleSet.removeIf(rule -> rule.getRuleId() == ruleId);
+        sqlEventRuleSet.add(sqlEventRule);
+      }
     } else {
-      sqlEventRuleList.removeIf(rule -> rule.getRuleId() == ruleId);
-      sqlEventRuleList.add(sqlEventRule);
+      if (eventRuleIdSet.contains(ruleId)) {
+        sqlEventRuleSet.removeIf(rule -> rule.getRuleId() == ruleId);
+      }
     }
+
+    eventRuleIdSet = sqlEventRuleSet
+        .stream()
+        .map(SqlEventRule::getRuleId)
+        .collect(Collectors.toSet());
   }
+
+  public static void main(String[] args) throws Exception {
+    RuleManager.getInstance();
+    Thread.sleep(10 * 60 * 1000);
+  }
+
 }

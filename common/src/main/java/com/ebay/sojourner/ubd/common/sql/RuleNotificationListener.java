@@ -24,6 +24,10 @@ public class RuleNotificationListener {
 
   }
 
+  public void close() {
+    zkClient.stop();
+  }
+
   public static void example1() {
     new RuleNotificationListener(null).listen();
   }

@@ -76,5 +76,9 @@ public class Constants {
   public static final String REST_SERVER = "https://sojubdportalservice.vip.qa.ebay.com";
   public static final String API_RULE_LIST_PUBLISHED = "/api/rule/list/published";
   public static final String API_SPECIFIED_RULE_PREFIX = "/api/rule/";
+  public static final String AUTH_USERNAME_KEY = "X-Auth-Username";
+  public static final String AUTH_USERNAME_VALUE = "soj-flink-app";
+  public static final String AUTH_TOKEN_KEY = "X-Auth-Token";
+  public static final String AUTH_TOKEN_VALUE = "B65613BAE51443268AEBCAEF26C30ABE";
 
 }

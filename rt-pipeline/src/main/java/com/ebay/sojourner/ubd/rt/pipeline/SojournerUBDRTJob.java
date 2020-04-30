@@ -2,20 +2,35 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.ubd.common.model.UbiSessionForDQ;
 import com.ebay.sojourner.ubd.rt.common.metrics.EventMetricsCollectorProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.metrics.PipelineMetricsCollectorProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToUbiSessionForDQMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
 import java.util.concurrent.TimeUnit;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
+import org.apache.flink.streaming.api.transformations.OneInputTransformation;
+import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
+import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
+import org.apache.flink.util.OutputTag;
 
 public class SojournerUBDRTJob {
 
@@ -70,6 +85,7 @@ public class SojournerUBDRTJob {
                     ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
             .name("Rheos Kafka Consumer For RNO")
+            .slotSharingGroup("RNO")
             .uid("kafkaSourceForRNO");
 
     DataStream<RawEvent> rawEventDataStreamForSLC =
@@ -81,6 +97,7 @@ public class SojournerUBDRTJob {
                     ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
             .name("Rheos Kafka Consumer For SLC")
+            .slotSharingGroup("SLC")
             .uid("kafkaSourceForSLC");
 
     DataStream<RawEvent> rawEventDataStreamForLVS =
@@ -91,13 +108,9 @@ public class SojournerUBDRTJob {
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
                     ? 100
                     : AppEnv.config().getFlink().getApp().getSourceParallelism())
+            .slotSharingGroup("LVS")
             .name("Rheos Kafka Consumer For LVS")
             .uid("kafkaSourceForLVS");
-
-    // union three DC data
-    DataStream<RawEvent> rawEventDataStream = rawEventDataStreamForRNO
-        .union(rawEventDataStreamForLVS)
-        .union(rawEventDataStreamForSLC);
 
     // filter 33% throughput group by guid for reduce kafka consumer lag
     /*
@@ -111,12 +124,31 @@ public class SojournerUBDRTJob {
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
     // 2.2 Event level bot detection via bot rule
-    DataStream<UbiEvent> ubiEventDataStream =
-        rawEventDataStream
-            .map(new EventMapFunction())
-            .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
-            .name("Event Operator")
-            .uid("eventLevel");
+    DataStream<UbiEvent> ubiEventDataStreamForRNO = rawEventDataStreamForRNO
+        .map(new EventMapFunction())
+        .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
+        .name("Event Operator For RNO")
+        .slotSharingGroup("RNO")
+        .uid("eventLevelForRNO");
+
+    DataStream<UbiEvent> ubiEventDataStreamForLVS = rawEventDataStreamForLVS
+        .map(new EventMapFunction())
+        .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
+        .name("Event Operator For LVS")
+        .slotSharingGroup("LVS")
+        .uid("eventLevelForLVS");
+
+    DataStream<UbiEvent> ubiEventDataStreamForSLC = rawEventDataStreamForSLC
+        .map(new EventMapFunction())
+        .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
+        .name("Event Operator For SLC")
+        .slotSharingGroup("SLC")
+        .uid("eventLevelForSLC");
+
+    // union ubiEvent from SLC/RNO/LVS
+    DataStream<UbiEvent> ubiEventDataStream = ubiEventDataStreamForLVS
+        .union(ubiEventDataStreamForSLC)
+        .union(ubiEventDataStreamForRNO);
 
     // refine windowsoperatorø
     // 3. Session Operator
@@ -124,7 +156,6 @@ public class SojournerUBDRTJob {
     // 3.2 Session indicator accumulation
     // 3.3 Session Level bot detection (via bot rule & signature)
     // 3.4 Event level bot detection (via session flag)
-    /*
     OutputTag<UbiSession> sessionOutputTag =
         new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));
     OutputTag<UbiEvent> lateEventOutputTag =
@@ -148,6 +179,7 @@ public class SojournerUBDRTJob {
     ubiSessionDataStream
         .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
         .name("Session Operator")
+        .slotSharingGroup("SESSION")
         .uid("sessionLevel");
 
     DataStream<UbiEvent> ubiEventWithSessionId =
@@ -156,25 +188,30 @@ public class SojournerUBDRTJob {
     DataStream<UbiEvent> latedStream =
         ubiSessionDataStream.getSideOutput(lateEventOutputTag);
 
+
     DataStream<UbiSessionForDQ> crossSessionForDQSreaming = ubiSessionDataStream
         .map(new UbiSessionToUbiSessionForDQMapFunction())
         .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
         .name("UbiSession for cross session dq")
+        .slotSharingGroup("SESSION")
         .uid("CrossLevel");
 
     // ubiSession to SessionForGuidEnhancement
+    /*
     SingleOutputStreamOperator<SessionForGuidEnhancement> sessionForGuidEnhancement =
         ubiSessionDataStream
             .map(new UbiSessionForGuidEnhancementMapFunction())
             .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
             .name("ubiSession to SessionForGuidEnhancement")
             .uid("enhanceGuid");
+            */
 
     // 4. Attribute Operator
     // 4.1 Sliding window
     // 4.2 Attribute indicator accumulation
     // 4.3 Attribute level bot detection (via bot rule)
     // 4.4 Store bot signature
+    /*
     DataStream<AgentIpAttribute> agentIpAttributeDatastream =
         ubiSessionDataStream
             .keyBy("userAgent", "clientIp")
@@ -362,28 +399,30 @@ public class SojournerUBDRTJob {
         */
 
     // metrics collector for end to end
-    ubiEventDataStream
+    ubiEventWithSessionId
         .process(new PipelineMetricsCollectorProcessFunction())
         .setParallelism(AppEnv.config().getFlink().app.getMetricsParallelism())
         .name("Pipeline End to End Duration")
+        .slotSharingGroup("SESSION")
         .uid("endToEndMetricsCollector");
 
     // metrics collector for event rules hit
-    ubiEventDataStream
+    ubiEventWithSessionId
         .process(new EventMetricsCollectorProcessFunction())
         .setParallelism(AppEnv.config().getFlink().app.getMetricsParallelism())
         .name("Event Metrics Collector")
+        .slotSharingGroup("SESSION")
         .uid("eventLevelMetricsCollector");
 
     // late event sink
-    /*
     latedStream
         .addSink(new DiscardingSink<>())
         .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
         .name("Late Event")
+        .slotSharingGroup("SESSION")
         .uid("lateEvent");
 
-
+    // sink kafka for cross session DQ
     crossSessionForDQSreaming
         .addSink(KafkaConnectorFactory
             .createKafkaProducer(Constants.TOPIC_PRODUCER_CROSS_SESSION_DQ,
@@ -391,8 +430,8 @@ public class SojournerUBDRTJob {
                 UbiSessionForDQ.class, Constants.MESSAGE_KEY))
         .setParallelism(AppEnv.config().getFlink().app.getCrossSessionParallelism())
         .name("SojSession Kafka")
+        .slotSharingGroup("SESSION")
         .uid("kafkaSinkForSession");
-        */
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForFullPipeline());

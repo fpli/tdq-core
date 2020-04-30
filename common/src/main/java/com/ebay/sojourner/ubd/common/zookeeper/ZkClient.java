@@ -40,10 +40,14 @@ public class ZkClient {
     // add listener
     cache.getListenable().addListener((client, event) -> {
       log.info("ZooKeeper Event: {}", event.getType());
-      if (event.getData() != null && StringUtils.isNotBlank(event.getData().getPath())) {
+      if (event.getData() != null && StringUtils.isNotBlank(event.getData().getPath())
+          && event.getData().getData() != null) {
+        String data = new String(event.getData().getData());
+        String[] datas = data.split(":");
         ruleFetcher.fetchRulesById(Long.parseLong(
             event.getData().getPath()
-                .substring(Constants.ZK_NAMESPACE.length() + Constants.ZK_NODE_PATH.length())));
+                .substring(Constants.ZK_NAMESPACE.length() +
+                    Constants.ZK_NODE_PATH.length())), datas[0]);
         log.info("ZooKeeper Node Data: {} = {}",
             event.getData().getPath(), new String(event.getData().getData()));
       }

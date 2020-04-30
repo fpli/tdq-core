@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.metrics.Counter;
@@ -17,7 +17,7 @@ import org.apache.flink.util.Collector;
 
 public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEvent,UbiEvent> {
 
-  private List<Long> eventDynamicRuleCounterNameList = new CopyOnWriteArrayList<>();
+  private Set<Long> eventDynamicRuleCounterNameSet = new CopyOnWriteArraySet<>();
   private List<String> eventStaticRuleCounterNameList;
   private Map<String, Counter> eventRuleCounterNameMap = new ConcurrentHashMap<>();
   private Counter eventTotalCounter;
@@ -49,10 +49,10 @@ public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEve
   public void processElement(UbiEvent ubiEvent, Context ctx, Collector<UbiEvent> out)
       throws Exception {
     eventTotalCounter.inc();
-    List<Long> dynamicRuleIdList = EventBotDetector.dynamicRuleIdList();
-    if (CollectionUtils.isNotEmpty(dynamicRuleIdList)) {
+    Set<Long> dynamicRuleIdSet = EventBotDetector.dynamicRuleIdSet();
+    if (CollectionUtils.isNotEmpty(dynamicRuleIdSet)) {
       Collection intersection = CollectionUtils
-          .intersection(dynamicRuleIdList, eventDynamicRuleCounterNameList);
+          .intersection(dynamicRuleIdSet, eventDynamicRuleCounterNameSet);
       if (CollectionUtils.isNotEmpty(intersection)) {
         for (Object ruleId : intersection) {
           Counter dynamicRuleCounter = getRuntimeContext()
@@ -60,7 +60,7 @@ public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEve
               .addGroup("sojourner-ubd")
               .counter("rule" + ruleId);
           eventRuleCounterNameMap.put("rule" + ruleId, dynamicRuleCounter);
-          eventDynamicRuleCounterNameList.add((Long) ruleId);
+          eventDynamicRuleCounterNameSet.add((Long) ruleId);
         }
       }
     }
