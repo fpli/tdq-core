@@ -2,7 +2,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.rule.Rule;
-import com.ebay.sojourner.ubd.common.sql.RuleManager;
+import com.ebay.sojourner.ubd.common.sql.Rules;
 import com.ebay.sojourner.ubd.common.sql.SqlEventRule;
 import java.io.IOException;
 import java.util.LinkedHashSet;
@@ -16,7 +16,7 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
   private static volatile EventBotDetector eventBotDetector;
   private static Set<Long> dynamicRuleIdSet = new CopyOnWriteArraySet<>();
   private Set<SqlEventRule> botRules = new CopyOnWriteArraySet<>();
-  private RuleManager ruleManager = RuleManager.getInstance();
+  // private RuleManager ruleManager = RuleManager.getInstance();
 
   private EventBotDetector() {
     initBotRules();
@@ -29,9 +29,11 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
     return dynamicRuleIdSet;
   }
 
+  /*
   public RuleManager ruleManager() {
     return ruleManager;
   }
+  */
 
   public static EventBotDetector getInstance() {
     if (eventBotDetector == null) {
@@ -47,28 +49,28 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
   @Override
   public Set<Integer> getBotFlagList(UbiEvent ubiEvent) throws IOException, InterruptedException {
     Set<Integer> botRuleList = new LinkedHashSet<>(botRules.size());
-    log.info("before dynamic rules:" + botRules.size());
-    log.info("before dynamic ruleIds:" + dynamicRuleIdSet.size());
-    this.botRules = ruleManager.sqlEventRules();
-    this.dynamicRuleIdSet = ruleManager.ruleIdSet();
-    log.info("after dynamic rules:" + botRules.size());
-    log.info("before dynamic ruleIds:" + dynamicRuleIdSet.size());
+//    log.info("before dynamic rules:" + botRules.size());
+//    log.info("before dynamic ruleIds:" + dynamicRuleIdSet.size());
+//    this.botRules = ruleManager.sqlEventRules();
+//    this.dynamicRuleIdSet = ruleManager.ruleIdSet();
+//    log.info("after dynamic rules:" + botRules.size());
+//    log.info("before dynamic ruleIds:" + dynamicRuleIdSet.size());
     for (Rule rule : botRules) {
-      rule.init();
+//      rule.init();
       int botRule = rule.getBotFlag(ubiEvent);
       if (botRule != 0) {
         botRuleList.add(botRule);
       }
     }
-    log.info("botFlagList size is:" + botRuleList.size());
+//    log.info("botFlagList size is:" + botRuleList.size());
     return botRuleList;
   }
 
   // static rules
   @Override
   public void initBotRules() {
+    botRules.add(Rules.RULE_1_COMPILER);
     /*
-    botRules.add(new BotRule1());
     botRules.add(Rules.ICF_RULE_1_COMPILER);
     botRules.add(Rules.ICF_RULE_2_COMPILER);
     botRules.add(Rules.ICF_RULE_3_COMPILER);

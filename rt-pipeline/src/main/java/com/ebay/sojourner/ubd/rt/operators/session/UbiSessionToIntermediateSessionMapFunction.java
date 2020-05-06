@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.rt.operators.session;
 import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.util.TransformUtil;
+import java.util.ArrayList;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.configuration.Configuration;
 
@@ -42,6 +43,7 @@ public class UbiSessionToIntermediateSessionMapFunction extends
     intermediateSession.setUserAgent(ubiSession.getUserAgent());
     intermediateSession.setStartTimestamp(ubiSession.getStartTimestamp());
     intermediateSession.setFamilyViCnt(ubiSession.getFamilyViCnt());
+    intermediateSession.setBotFlagList(new ArrayList<>(ubiSession.getBotFlagList()));
     return intermediateSession;
   }
 }
