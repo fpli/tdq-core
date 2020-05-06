@@ -12,7 +12,7 @@ import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.util.Collector;
 
-public class CrossSesionDQBroadcastProcessFunction extends BroadcastProcessFunction<
+public class CrossSessionDQBroadcastProcessFunction extends BroadcastProcessFunction<
     IntermediateSession, Tuple4<String, Boolean, Set<Integer>, Long>, IntermediateSession> {
 
   @Override

@@ -49,20 +49,20 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
   @Override
   public Set<Integer> getBotFlagList(UbiEvent ubiEvent) throws IOException, InterruptedException {
     Set<Integer> botRuleList = new LinkedHashSet<>(botRules.size());
-//    log.info("before dynamic rules:" + botRules.size());
-//    log.info("before dynamic ruleIds:" + dynamicRuleIdSet.size());
-//    this.botRules = ruleManager.sqlEventRules();
-//    this.dynamicRuleIdSet = ruleManager.ruleIdSet();
-//    log.info("after dynamic rules:" + botRules.size());
-//    log.info("before dynamic ruleIds:" + dynamicRuleIdSet.size());
+    // log.info("before dynamic rules:" + botRules.size());
+    // log.info("before dynamic ruleIds:" + dynamicRuleIdSet.size());
+    // this.botRules = ruleManager.sqlEventRules();
+    // this.dynamicRuleIdSet = ruleManager.ruleIdSet();
+    // log.info("after dynamic rules:" + botRules.size());
+    // log.info("before dynamic ruleIds:" + dynamicRuleIdSet.size());
     for (Rule rule : botRules) {
-//      rule.init();
+      // rule.init();
       int botRule = rule.getBotFlag(ubiEvent);
       if (botRule != 0) {
         botRuleList.add(botRule);
       }
     }
-//    log.info("botFlagList size is:" + botRuleList.size());
+    // log.info("botFlagList size is:" + botRuleList.size());
     return botRuleList;
   }
 

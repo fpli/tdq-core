@@ -2,10 +2,11 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.IntermediateSession;
-import com.ebay.sojourner.ubd.rt.common.broadcast.CrossSesionDQBroadcastProcessFunction;
+import com.ebay.sojourner.ubd.rt.common.broadcast.CrossSessionDQBroadcastProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
+import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAgg;
@@ -17,7 +18,6 @@ import com.ebay.sojourner.ubd.rt.operators.attribute.GuidAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.GuidWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.IpAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.IpWindowProcessFunction;
-import com.ebay.sojourner.ubd.rt.operators.attribute.SplitFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
@@ -31,9 +31,7 @@ import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
-import org.apache.flink.streaming.api.datastream.SplitStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -152,10 +150,17 @@ public class SojournerUBDRTJobForCrossSession {
     SingleOutputStreamOperator<IntermediateSession> intermediateSessionWithSignature =
         intermediateSessionDataStream
             .connect(attributeSignatureBroadcastStream)
-            .process(new CrossSesionDQBroadcastProcessFunction())
+            .process(new CrossSessionDQBroadcastProcessFunction())
             .setParallelism(AppEnv.config().getFlink().app.getBroadcastParallelism())
             .name("Signature Bot Detector")
             .uid("connectLevel");
+
+    intermediateSessionDataStream
+        .addSink(HdfsSinkUtil.signatureSinkWithParquet())
+        .setParallelism(AppEnv.config().getFlink().app.getCrossSessionParallelism())
+        .name("SojEvent sink")
+        .uid("eventHdfsSink")
+        .disableChaining();
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForDQPipeline());
