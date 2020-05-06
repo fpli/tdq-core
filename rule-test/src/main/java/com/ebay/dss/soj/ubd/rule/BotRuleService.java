@@ -38,17 +38,12 @@ public class BotRuleService {
     }
     BotRuleDesc botRuleDesc = BotRuleDesc.of(sql);
 
-    String beforeScript = BotRuleDesc.genBeforeCheckScript(botRuleDesc);
-    String afterScript = BotRuleDesc.genAfterCheckScript(botRuleDesc);
-    ListenableScheduledFuture<BotRuleResult> beforeFuture = executorService
-        .schedule(new BotRuleResultCallable(beforeScript), 1, TimeUnit.NANOSECONDS);
+    String checkScript = BotRuleDesc.genCheckScript(botRuleDesc);
     //According to the duration trigger another check after hot deploy
     ListenableScheduledFuture<BotRuleResult> afterFuture = executorService
-        .schedule(new BotRuleResultCallable(afterScript), botRuleDesc.getDuration().getSeconds(),
+        .schedule(new BotRuleResultCallable(checkScript), botRuleDesc.getDuration().getSeconds(),
             TimeUnit.SECONDS);
-    Futures.addCallback(beforeFuture, new BotRuleCallbackProxy(true, botRuleResultCallback),
-        executorService);
-    Futures.addCallback(afterFuture, new BotRuleCallbackProxy(false, botRuleResultCallback),
+    Futures.addCallback(afterFuture, new BotRuleCallbackProxy(botRuleResultCallback),
         executorService);
   }
 
