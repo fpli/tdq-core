@@ -23,9 +23,9 @@ kafkaConsumerConfig:
     - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-  groupIdForLVS: sojourner-pathfinder-lvs-test
-  groupIdForSLC: sojourner-pathfinder-slc-test
-  groupIdForRNO: sojourner-pathfinder-rno-test
+  groupIdForLVS: sojourner-pathfinder-lvs
+  groupIdForSLC: sojourner-pathfinder-slc
+  groupIdForRNO: sojourner-pathfinder-rno
   groupIdForLVSDQ: sojourner-pathfinder-lvs-dq
   groupIdForSLCDQ: sojourner-pathfinder-slc-dq
   groupIdForRNODQ: sojourner-pathfinder-rno-dq
@@ -88,21 +88,21 @@ flink:
     nameForHotDeployPipeline: Unified Bot Detection RT Hot Deploy Pipeline
     nameForKafkaSinkPipeline: Unified Bot Detection RT kafka Sink Pipeline
     nameForKafkaCopyPipeline: Unified Bot Detection RT kafka Copy Pipeline
-    source-parallelism: 100
-    event-parallelism: 100
-    session-parallelism: 280
+    source-parallelism: 75
+    event-parallelism: 75
+    session-parallelism: 75
     pre-agentIp-parallelism: 580
     agentIp-parallelism: 580
     agent-parallelism: 580
     ip-parallelism: 580
     guid-parallelism: 580
     copy-kafka-parallelism: 50
-    event-kafka-parallelism: 50
+    event-kafka-parallelism: 75
     session-kafka-parallelism: 50
-    cross-session-kafka-parallelism: 280
+    cross-session-kafka-parallelism: 480
     bot-kafka-parallelism: 50
     broadcast-parallelism: 580
-    metrics-parallelism: 280
+    metrics-parallelism: 480
   checkpoint:
     data-dir: /opt/sojourner-ubd/checkpoint
     interval: 5m
@@ -112,7 +112,7 @@ flink:
 
 hdfs:
   sinkParentPath: hdfs://apollo-rno/sys/soj/ubd
-  sinkEventPath: /events
-  sinkSessionPath: /sessions
+  sinkEventPath: /events_dq
+  sinkSessionPath: /sessions_dq
   sinkSignaturePath: /signatures
   sinkLateEventPath: /late_events

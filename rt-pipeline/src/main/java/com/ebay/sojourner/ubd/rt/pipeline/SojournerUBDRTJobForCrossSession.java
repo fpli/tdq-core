@@ -1,6 +1,6 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
-import com.ebay.sojourner.ubd.common.model.UbiSessionForDQ;
+import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
@@ -56,13 +56,13 @@ public class SojournerUBDRTJobForCrossSession {
         ));
 
     // kafka source for copy
-    DataStream<UbiSessionForDQ> ubiSessionForDQDataStream =
+    DataStream<IntermediateSession> ubiSessionForDQDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunction
                 .generateWatermark(Constants.TOPIC_PRODUCER_CROSS_SESSION_DQ,
                     Constants.BOOTSTRAP_SERVERS_CROSS_SESSION_DQ,
                     Constants.GROUP_ID_CROSS_SESSION_DQ,
-                    UbiSessionForDQ.class))
+                    IntermediateSession.class))
             .setParallelism(AppEnv.config().getFlink().app.getCrossSessionParallelism())
             .name("Rheos Kafka Consumer For Cross Session DQ")
             .uid("kafkaSourceForCrossSessionDQ");

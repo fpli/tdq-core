@@ -75,6 +75,7 @@ public class KafkaConnectorFactory {
     Properties producerConfig = initCommonConfig();
     producerConfig.put(ProducerConfig.BATCH_SIZE_CONFIG, 4 * 1024);
     producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
+    producerConfig.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, 60000);
 
     return new FlinkKafkaProducer<>(topic,
         new SojBytesEventSerializationSchema<>(), producerConfig,

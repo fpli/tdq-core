@@ -1,8 +1,8 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
+import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.model.SessionForGuidEnhancement;
 import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
@@ -32,7 +32,7 @@ import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.DetectableSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
-import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionForGuidEnhancementMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToIntermediateSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
@@ -155,6 +155,15 @@ public class SojournerUBDRTJobForQA {
         .name("Session Operator")
         .uid("sessionLevel");
 
+    // ubiSession to intermediateSession
+    DataStream<IntermediateSession> intermediateSessionDataStream = ubiSessionDataStream
+        .map(new UbiSessionToIntermediateSessionMapFunction())
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .name("UbiSession To IntermediateSession")
+        .slotSharingGroup("SESSION")
+        .uid("CrossSessionLevel");
+
+    /*
     // ubiSession to SessionForGuidEnhancement
     SingleOutputStreamOperator<SessionForGuidEnhancement> sessionForGuidEnhancement =
         ubiSessionDataStream
@@ -162,14 +171,14 @@ public class SojournerUBDRTJobForQA {
             .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
             .name("ubiSession to SessionForGuidEnhancement")
             .uid("enhanceGuid");
-
+*/
     // 4. Attribute Operator
     // 4.1 Sliding window
     // 4.2 Attribute indicator accumulation
     // 4.3 Attribute level bot detection (via bot rule)
     // 4.4 Store bot signature
     DataStream<AgentIpAttribute> agentIpAttributeDatastream =
-        ubiSessionDataStream
+        intermediateSessionDataStream
             .keyBy("userAgent", "clientIp")
             .window(TumblingEventTimeWindows.of(Time.minutes(5)))
             .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
@@ -177,7 +186,7 @@ public class SojournerUBDRTJobForQA {
             .setParallelism(AppEnv.config().getFlink().app.getPreAgentIpParallelism());
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureDataStream =
-        sessionForGuidEnhancement
+        intermediateSessionDataStream
             .keyBy("guid1", "guid2")
             .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
             .trigger(OnElementEarlyFiringTrigger.create())

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.AgentIpSignature;
+import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
@@ -13,7 +14,9 @@ import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpWindowProcessFunctio
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToIntermediateSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
+import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.RawEventGenerator;
 import com.ebay.sojourner.ubd.rt.util.ResultGenerator;
 import java.util.ArrayList;
@@ -117,6 +120,15 @@ public class IntegrationTest {
 
     DataStream<UbiEvent> mappedEventStream =
         ubiSessinDataStream.getSideOutput(mappedEventOutputTag);
+
+    // ubiSession to intermediateSession
+    DataStream<IntermediateSession> intermediateSessionDataStream = ubiSessinDataStream
+        .map(new UbiSessionToIntermediateSessionMapFunction())
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .name("UbiSession To IntermediateSession")
+        .slotSharingGroup("SESSION")
+        .uid("CrossSessionLevel");
+
     //        ubiEventStreamWithSessionId.print();
     // 4. Attribute Operator
     // 4.1 Sliding window
@@ -124,7 +136,7 @@ public class IntegrationTest {
     // 4.3 Attribute level bot detection (via bot rule)
     // 4.4 Store bot signature
     DataStream<AgentIpAttribute> agentIpAttributeDataStream =
-        ubiSessinDataStream
+        intermediateSessionDataStream
             .keyBy("userAgent", "clientIp")
             .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(1)))
             //                .trigger(OnElementEarlyFiringTrigger.create())

@@ -1,16 +1,16 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
+import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.model.UbiSessionForDQ;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
-import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToUbiSessionForDQMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToIntermediateSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
@@ -155,17 +155,17 @@ public class SojournerKafkaJobForCrossSession {
         .name("Session Operator")
         .uid("sessionLevel");
 
-    DataStream<UbiSessionForDQ> crossSessionForDQSreaming = ubiSessionDataStream
-        .map(new UbiSessionToUbiSessionForDQMapFunction())
+    DataStream<IntermediateSession> intermediateSessionDataStream = ubiSessionDataStream
+        .map(new UbiSessionToIntermediateSessionMapFunction())
         .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
         .name("UbiSession for cross session dq")
         .uid("CrossLevel");
 
-    crossSessionForDQSreaming
+    intermediateSessionDataStream
         .addSink(KafkaConnectorFactory
             .createKafkaProducer(Constants.TOPIC_PRODUCER_CROSS_SESSION_DQ,
                 Constants.BOOTSTRAP_SERVERS_CROSS_SESSION_DQ,
-                UbiSessionForDQ.class, Constants.MESSAGE_KEY))
+                IntermediateSession.class, Constants.MESSAGE_KEY))
         .setParallelism(AppEnv.config().getFlink().app.getCrossSessionParallelism())
         .name("SojSession Kafka")
         .uid("kafkaSinkForSession");

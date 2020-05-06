@@ -54,7 +54,6 @@ public class UbiSessionToUbiSessionForDQMapFunction extends
     ubiSessionForDQ.setGrCnt(ubiSession.getGrCnt());
     ubiSessionForDQ.setGr1Cnt(ubiSession.getGr1Cnt());
     ubiSessionForDQ.setMyebayCnt(ubiSession.getMyebayCnt());
-    ubiSessionForDQ.setSigninPageCnt(ubiSession.getMyebayCnt());
     ubiSessionForDQ.setSigninPageCnt(ubiSession.getSigninPageCnt());
     ubiSessionForDQ.setNonIframeRdtEventCnt(ubiSession.getNonIframeRdtEventCnt());
     ubiSessionForDQ.setFirstSessionStartDt(ubiSession.getFirstSessionStartDt());

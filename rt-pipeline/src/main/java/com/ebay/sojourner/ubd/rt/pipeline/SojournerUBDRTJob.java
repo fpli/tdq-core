@@ -1,9 +1,9 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
+import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.model.UbiSessionForDQ;
 import com.ebay.sojourner.ubd.rt.common.metrics.EventMetricsCollectorProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.metrics.PipelineMetricsCollectorProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
@@ -12,7 +12,7 @@ import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
-import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToUbiSessionForDQMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToIntermediateSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
@@ -188,7 +188,15 @@ public class SojournerUBDRTJob {
     DataStream<UbiEvent> latedStream =
         ubiSessionDataStream.getSideOutput(lateEventOutputTag);
 
+    // ubiSession to intermediateSession
+    DataStream<IntermediateSession> intermediateSessionDataStream = ubiSessionDataStream
+        .map(new UbiSessionToIntermediateSessionMapFunction())
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .name("UbiSession To IntermediateSession")
+        .slotSharingGroup("SESSION")
+        .uid("CrossSessionLevel");
 
+    /*
     DataStream<UbiSessionForDQ> crossSessionForDQSreaming = ubiSessionDataStream
         .map(new UbiSessionToUbiSessionForDQMapFunction())
         .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
@@ -197,7 +205,6 @@ public class SojournerUBDRTJob {
         .uid("CrossLevel");
 
     // ubiSession to SessionForGuidEnhancement
-    /*
     SingleOutputStreamOperator<SessionForGuidEnhancement> sessionForGuidEnhancement =
         ubiSessionDataStream
             .map(new UbiSessionForGuidEnhancementMapFunction())
@@ -213,7 +220,7 @@ public class SojournerUBDRTJob {
     // 4.4 Store bot signature
     /*
     DataStream<AgentIpAttribute> agentIpAttributeDatastream =
-        ubiSessionDataStream
+        intermediateSessionDataStream
             .keyBy("userAgent", "clientIp")
             .window(TumblingEventTimeWindows.of(Time.minutes(5)))
             .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
@@ -222,7 +229,7 @@ public class SojournerUBDRTJob {
             .uid("preAgentIpLevel");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureDataStream =
-        sessionForGuidEnhancement
+        intermediateSessionDataStream
             .keyBy("guid1", "guid2")
             .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
             .trigger(OnElementEarlyFiringTrigger.create())
@@ -423,16 +430,15 @@ public class SojournerUBDRTJob {
         .uid("lateEvent");
 
     // sink kafka for cross session DQ
-    crossSessionForDQSreaming
+    intermediateSessionDataStream
         .addSink(KafkaConnectorFactory
             .createKafkaProducer(Constants.TOPIC_PRODUCER_CROSS_SESSION_DQ,
                 Constants.BOOTSTRAP_SERVERS_CROSS_SESSION_DQ,
-                UbiSessionForDQ.class, Constants.MESSAGE_KEY))
+                IntermediateSession.class, Constants.MESSAGE_KEY))
         .setParallelism(AppEnv.config().getFlink().app.getCrossSessionParallelism())
-        .name("SojSession Kafka")
+        .name("IntermediateSession Kafka")
         .slotSharingGroup("SESSION")
         .uid("kafkaSinkForSession");
-
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForFullPipeline());
   }

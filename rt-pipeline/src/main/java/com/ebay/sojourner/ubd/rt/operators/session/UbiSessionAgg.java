@@ -17,19 +17,19 @@ public class UbiSessionAgg
   private static final String SESSION = Constants.SESSION_LEVEL;
   //    private CouchBaseManager couchBaseManager;
   //    private static final String BUCKET_NAME="botsignature";
-  private transient SessionMetrics sessionMetrics;
-  private transient SessionBotDetector sessionBotDetector;
+  // private transient SessionMetrics sessionMetrics;
+  // private transient SessionBotDetector sessionBotDetector;
   // private RuleManager ruleManager;
 
   @Override
   public SessionAccumulator createAccumulator() {
     SessionAccumulator sessionAccumulator = new SessionAccumulator();
-    sessionMetrics = SessionMetrics.getInstance();
-    sessionBotDetector = SessionBotDetector.getInstance();
+    // sessionMetrics = SessionMetrics.getInstance();
+    // sessionBotDetector = SessionBotDetector.getInstance();
     // ruleManager = RuleManager.getInstance();
     //        couchBaseManager = CouchBaseManager.getInstance();
     try {
-      sessionMetrics.start(sessionAccumulator);
+      SessionMetrics.getInstance().start(sessionAccumulator);
     } catch (Exception e) {
       log.error("session metrics start fail", e);
     }
@@ -46,9 +46,9 @@ public class UbiSessionAgg
       // {
       //                value.updateSessionId();
       //            }
-      sessionMetrics.feed(value, accumulator);
+      SessionMetrics.getInstance().feed(value, accumulator);
     } catch (Exception e) {
-      System.out.println( "start-session metrics collection issue:"
+      System.out.println("start-session metrics collection issue:"
           + value.getGuid()
           + "||"
           + (value.getSessionId() == null ? "" : value.getSessionId())
@@ -73,7 +73,8 @@ public class UbiSessionAgg
       sessionBotDetector.initDynamicRules(ruleManager, sessionBotDetector.rules(),
           SessionBotDetector.dynamicRuleIdList(), SESSION);
           */
-      sessionBotFlagSetDetect = sessionBotDetector.getBotFlagList(accumulator.getUbiSession());
+      sessionBotFlagSetDetect = SessionBotDetector.getInstance()
+          .getBotFlagList(accumulator.getUbiSession());
     } catch (IOException | InterruptedException e) {
       log.error("sessionBotDetector getBotFlagList error", e);
     }
