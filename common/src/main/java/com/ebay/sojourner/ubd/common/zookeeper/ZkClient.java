@@ -42,12 +42,13 @@ public class ZkClient {
       log.info("ZooKeeper Event: {}", event.getType());
       if (event.getData() != null && StringUtils.isNotBlank(event.getData().getPath())
           && event.getData().getData() != null) {
+        log.info("node path is:" + event.getData().getPath());
         String data = new String(event.getData().getData());
+        log.info("node data is:" + data);
         String[] datas = data.split(":");
         ruleFetcher.fetchRulesById(Long.parseLong(
             event.getData().getPath()
-                .substring(Constants.ZK_NAMESPACE.length() +
-                    Constants.ZK_NODE_PATH.length())), datas[0]);
+                .substring(Constants.ZK_NODE_PATH.length() + 1)), datas[1]);
         log.info("ZooKeeper Node Data: {} = {}",
             event.getData().getPath(), new String(event.getData().getData()));
       }

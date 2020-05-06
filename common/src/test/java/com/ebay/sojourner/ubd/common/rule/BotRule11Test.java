@@ -46,7 +46,8 @@ public class BotRule11Test {
 
     int botFlag = botRule11.getBotFlag(ubiSession);
 
-    verify(mockBotFilter, times(1)).filter(ubiSession, 11);
+    verify(mockBotFilter,
+        times(1)).filter(ubiSession, 11);
     Assertions.assertThat(botFlag).isEqualTo(11);
   }
 
@@ -57,7 +58,8 @@ public class BotRule11Test {
 
     int botFlag = botRule11.getBotFlag(ubiSession);
 
-    verify(mockBotFilter, times(1)).filter(ubiSession, 11);
+    verify(mockBotFilter,
+        times(1)).filter(ubiSession, 11);
     Assertions.assertThat(botFlag).isEqualTo(0);
   }
 }

@@ -35,7 +35,7 @@ public class RuleFetcher {
         .scheduleAtFixedRate(this::fetchRules, 5, 60, TimeUnit.MINUTES);
   }
 
-  protected synchronized void fetchRules() {
+  public synchronized void fetchRules() {
     try {
       request = RestApiUtils
           .buildRequest(Constants.REST_SERVER + Constants.API_RULE_LIST_PUBLISHED);

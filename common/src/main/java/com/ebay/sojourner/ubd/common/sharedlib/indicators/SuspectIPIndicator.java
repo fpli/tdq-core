@@ -2,8 +2,8 @@ package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
+import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
 import com.ebay.sojourner.ubd.common.util.BotRules;
 
@@ -27,13 +27,13 @@ public class SuspectIPIndicator<Source, Target> extends AbstractIndicator<Source
 
   @Override
   public void feed(Source source, Target target, boolean isNeeded) throws Exception {
-    if (source instanceof UbiSession) {
-      UbiSession ubiSession = (UbiSession) source;
+    if (source instanceof IntermediateSession) {
+      IntermediateSession intermediateSession = (IntermediateSession) source;
       AgentIpAttributeAccumulator agentIpAttributeAccumulator =
           (AgentIpAttributeAccumulator) target;
       agentIpAttributeAccumulator
           .getAgentIpAttribute()
-          .feed(ubiSession, BotRules.SUSPECTED_IP_ON_AGENT, isNeeded);
+          .feed(intermediateSession, BotRules.SUSPECTED_IP_ON_AGENT, isNeeded);
     } else if (source instanceof AgentIpAttribute) {
       AgentIpAttribute agentIpAttribute = (AgentIpAttribute) source;
       IpAttributeAccumulator ipAttributeAccumulator = (IpAttributeAccumulator) target;
@@ -45,13 +45,13 @@ public class SuspectIPIndicator<Source, Target> extends AbstractIndicator<Source
 
   @Override
   public boolean filter(Source source, Target target) throws Exception {
-    if (source instanceof UbiSession) {
-      UbiSession ubiSession = (UbiSession) source;
+    if (source instanceof IntermediateSession) {
+      IntermediateSession intermediateSession = (IntermediateSession) source;
       int targetFlag = BotRules.DECLARED_AGENT;
-      if (botFilter.filter(ubiSession, targetFlag)) {
+      if (botFilter.filter(intermediateSession, targetFlag)) {
         return true;
       }
-      return ubiSession.getClientIp() == null;
+      return intermediateSession.getClientIp() == null;
     }
     return false;
   }

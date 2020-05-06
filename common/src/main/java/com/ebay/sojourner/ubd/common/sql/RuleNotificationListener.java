@@ -17,9 +17,10 @@ public class RuleNotificationListener {
 
   public void listen() {
     try {
+      log.info("start init zk client");
       zkClient.init(ruleFetcher);
     } catch (Exception e) {
-      log.error("rule fetch failed",e);
+      log.warn("rule fetch failed",e);
     }
 
   }

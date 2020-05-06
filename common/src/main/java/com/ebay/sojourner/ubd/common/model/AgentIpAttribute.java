@@ -8,7 +8,7 @@ import java.util.Set;
 import lombok.Data;
 
 @Data
-public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
+public class AgentIpAttribute implements Attribute<IntermediateSession>, Serializable {
 
   private String clientIp;
   private String agent;
@@ -52,79 +52,79 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
   }
 
   @Override
-  public void feed(UbiSession ubiSession, int botFlag, boolean isNeeded) {
+  public void feed(IntermediateSession intermediateSession, int botFlag, boolean isNeeded) {
     if (isNeeded) {
       totalSessionCnt += 1;
-      if (ubiSession.getFirstCguid() == null) {
+      if (intermediateSession.getFirstCguid() == null) {
         nocguidSessionCnt += 1;
       }
 
-      if (UbiSessionHelper.isSps(ubiSession)) {
+      if (UbiSessionHelper.isSps(intermediateSession)) {
         spsSessionCnt += 1;
       }
 
-      if (UbiSessionHelper.isNoUid(ubiSession)) {
+      if (UbiSessionHelper.isNoUid(intermediateSession)) {
         nouidSessionCnt += 1;
       }
 
-      if (UbiSessionHelper.isDirect(ubiSession)) {
+      if (UbiSessionHelper.isDirect(intermediateSession)) {
         directSessionCnt += 1;
       }
-      if (UbiSessionHelper.isMktg(ubiSession)) {
+      if (UbiSessionHelper.isMktg(intermediateSession)) {
         mktgSessionCnt += 1;
       }
 
-      if (UbiSessionHelper.getExInternalIp(ubiSession) != null) {
+      if (UbiSessionHelper.getExInternalIp(intermediateSession) != null) {
         ipCountForSuspect = 1;
       }
 
-      if (UbiSessionHelper.getExInternalIp(ubiSession) != null) {
+      if (UbiSessionHelper.getExInternalIp(intermediateSession) != null) {
         ipCount = 1;
       }
       totalCnt += 1;
       consistent =
           consistent
-              && (validPageCnt == ubiSession.getValidPageCnt()
+              && (validPageCnt == intermediateSession.getValidPageCnt()
               || validPageCnt < 0
-              || ubiSession.getValidPageCnt() < 0);
+              || intermediateSession.getValidPageCnt() < 0);
 
-      if (ubiSession.getValidPageCnt() >= 0) {
-        validPageCnt = ubiSession.getValidPageCnt();
+      if (intermediateSession.getValidPageCnt() >= 0) {
+        validPageCnt = intermediateSession.getValidPageCnt();
       }
-      maxValidPageCnt = Math.max(maxValidPageCnt, ubiSession.getValidPageCnt());
+      maxValidPageCnt = Math.max(maxValidPageCnt, intermediateSession.getValidPageCnt());
 
-      if (UbiSessionHelper.isHomePage(ubiSession)) {
+      if (UbiSessionHelper.isHomePage(intermediateSession)) {
         homePageCnt += 1;
       }
-      if (UbiSessionHelper.isFamilyVi(ubiSession)) {
+      if (UbiSessionHelper.isFamilyVi(intermediateSession)) {
         familyViCnt += 1;
       }
-      if (UbiSessionHelper.isSignIn(ubiSession)) {
+      if (UbiSessionHelper.isSignIn(intermediateSession)) {
         signinCnt += 1;
       }
-      if (UbiSessionHelper.isNoUid(ubiSession)) {
+      if (UbiSessionHelper.isNoUid(intermediateSession)) {
         noUidCnt += 1;
       }
-      if (UbiSessionHelper.isDirect(ubiSession)) {
+      if (UbiSessionHelper.isDirect(intermediateSession)) {
         directCnt += 1;
       }
-      if (UbiSessionHelper.isMktg(ubiSession)) {
+      if (UbiSessionHelper.isMktg(intermediateSession)) {
         mktgCnt += 1;
       }
-      if (UbiSessionHelper.isSite(ubiSession)) {
+      if (UbiSessionHelper.isSite(intermediateSession)) {
         siteCnt += 1;
       }
-      if (UbiSessionHelper.isNewGuid(ubiSession)) {
+      if (UbiSessionHelper.isNewGuid(intermediateSession)) {
         newGuidCnt += 1;
       }
-      if (ubiSession.getGuid() != null) {
-        guidSet.add(ubiSession.getGuid());
+      if (intermediateSession.getGuid() != null) {
+        guidSet.add(intermediateSession.getGuid());
       }
 
-      if (ubiSession.getFirstCguid() != null) {
-        cguidSet.add(ubiSession.getFirstCguid());
+      if (intermediateSession.getFirstCguid() != null) {
+        cguidSet.add(intermediateSession.getFirstCguid());
       }
-      isAllAgentHoper = isAllAgentHoper && UbiSessionHelper.isAgentHoper(ubiSession);
+      isAllAgentHoper = isAllAgentHoper && UbiSessionHelper.isAgentHoper(intermediateSession);
     }
     switch (botFlag) {
       case 5:
@@ -159,7 +159,7 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
   }
 
   @Override
-  public void revert(UbiSession ubiSession, int botFlag) {
+  public void revert(IntermediateSession intermediateSession, int botFlag) {
     switch (botFlag) {
       case 5:
         scsCountForBot5 = -1;

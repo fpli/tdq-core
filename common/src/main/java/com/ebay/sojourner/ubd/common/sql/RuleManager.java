@@ -21,20 +21,16 @@ public class RuleManager {
 
     ruleFetcher = new RuleFetcher(this);
 
-    ruleFetcher.fetchRules();
+    // ruleFetcher.fetchRules();
 
-    // ruleNotificationListener = new RuleNotificationListener(ruleFetcher);
-
-    /*
+    ruleNotificationListener = new RuleNotificationListener(ruleFetcher);
     new Thread(
         () -> {
           ruleNotificationListener.listen();
         }, "Sojourner RuleNotificationListener Thread")
         .start();
 
-    ruleFetcher.fetchRulesPeriodically();
-    */
-
+    // ruleFetcher.fetchRulesPeriodically();
   }
 
   public static RuleManager getInstance() {
@@ -89,6 +85,7 @@ public class RuleManager {
     } else {
       if (eventRuleIdSet.contains(ruleId)) {
         sqlEventRuleSet.removeIf(rule -> rule.getRuleId() == ruleId);
+        eventRuleIdSet.remove(ruleId);
       }
     }
 

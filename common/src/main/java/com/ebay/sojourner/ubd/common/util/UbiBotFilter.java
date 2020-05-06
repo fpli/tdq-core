@@ -1,5 +1,6 @@
 package com.ebay.sojourner.ubd.common.util;
 
+import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +17,7 @@ public class UbiBotFilter implements BotFilter {
 
   private final Set<Integer> invalidSessionBotFilter;
   private Set<String> appIdWithBotFlags;
+  private Integer appId;
 
   public UbiBotFilter() {
     appIdWithBotFlags = LkpManager.getInstance().getAppIds();
@@ -40,9 +42,21 @@ public class UbiBotFilter implements BotFilter {
   }
 
   @Override
-  public boolean filter(UbiSession ubiSession, Integer targetFlag) throws InterruptedException {
-    appIdWithBotFlags = LkpManager.getInstance().getAppIds();
-    Integer appId = ubiSession.getFirstAppId();
+  public boolean filter(Object session, Integer targetFlag) {
+
+    if (session instanceof IntermediateSession) {
+      IntermediateSession intermediateSession = (IntermediateSession) session;
+      appId = intermediateSession.getFirstAppId();
+      return this.isFilter(appId, targetFlag, session);
+    } else {
+      UbiSession ubiSession = (UbiSession) session;
+      appId = ubiSession.getFirstAppId();
+      return this.isFilter(appId, targetFlag, session);
+    }
+  }
+
+  private boolean isFilter(Integer appId, Integer targetFlag, Object session) {
+
     if (targetFlag != null && appId != null) {
       StringBuilder appIdOnBotFlag = new StringBuilder();
       appIdOnBotFlag
@@ -54,8 +68,7 @@ public class UbiBotFilter implements BotFilter {
       }
     }
 
-    return UbiSessionHelper.isNonIframRdtCountZero(ubiSession)
+    return UbiSessionHelper.isNonIframRdtCountZero(session)
         && invalidSessionBotFilter.contains(targetFlag);
   }
-
 }

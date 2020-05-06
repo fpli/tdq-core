@@ -1,14 +1,14 @@
 package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
 import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class AgentIpIndicators
-    extends AttributeIndicators<UbiSession, AgentIpAttributeAccumulator> {
+    extends AttributeIndicators<IntermediateSession, AgentIpAttributeAccumulator> {
 
   private static volatile AgentIpIndicators agentIpIndicators;
   private BotFilter botFilter;

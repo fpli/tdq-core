@@ -1,7 +1,7 @@
 - name: bot5
-  type: UbiSession
+  type: IntermediateSession
   input:
-    UbiSession:
+    IntermediateSession:
       firstCguid:
       validPageCnt: 1
       firstUserId:
@@ -44,9 +44,9 @@
     scsCountForBot5: 1
 
 - name: bot6
-  type: UbiSession
+  type: IntermediateSession
   input:
-    UbiSession:
+    IntermediateSession:
       firstCguid:
       validPageCnt: 1
       firstUserId:
@@ -89,9 +89,9 @@
     scsCountForBot6: 1
 
 - name: bot7
-  type: UbiSession
+  type: IntermediateSession
   input:
-    UbiSession:
+    IntermediateSession:
       firstCguid:
       validPageCnt: 1
       firstUserId:
@@ -134,9 +134,9 @@
     scsCountForBot7: 1
 
 - name: bot8
-  type: UbiSession
+  type: IntermediateSession
   input:
-    UbiSession:
+    IntermediateSession:
       firstCguid:
       validPageCnt: 1
       firstUserId:
