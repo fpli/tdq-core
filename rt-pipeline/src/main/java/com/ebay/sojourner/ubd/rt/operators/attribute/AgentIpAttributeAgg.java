@@ -11,16 +11,16 @@ public class AgentIpAttributeAgg
     implements AggregateFunction<
     IntermediateSession, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
 
-  private AgentIpIndicators agentIpIndicators;
+  // private AgentIpIndicators agentIpIndicators;
 
   @Override
   public AgentIpAttributeAccumulator createAccumulator() {
 
     AgentIpAttributeAccumulator agentIpAttributeAccumulator = new AgentIpAttributeAccumulator();
-    agentIpIndicators = AgentIpIndicators.getInstance();
+    // agentIpIndicators = AgentIpIndicators.getInstance();
 
     try {
-      agentIpIndicators.start(agentIpAttributeAccumulator);
+      AgentIpIndicators.getInstance().start(agentIpAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
       log.error(e.getMessage());
@@ -41,7 +41,7 @@ public class AgentIpAttributeAgg
     }
     try {
 
-      agentIpIndicators.feed(intermediateSession, agentIpAttributeAccumulator, true);
+      AgentIpIndicators.getInstance().feed(intermediateSession, agentIpAttributeAccumulator, true);
     } catch (Exception e) {
       e.printStackTrace();
     }

@@ -16,20 +16,20 @@ public class GuidAttributeAgg implements
         GuidAttributeAccumulator, GuidAttributeAccumulator> {
 
   private static final String GUID = Constants.GUID_LEVEL;
-  private GuidIndicators guidIndicators;
-  private GuidSignatureBotDetector guidSignatureBotDetector;
+  // private GuidIndicators guidIndicators;
+  // private GuidSignatureBotDetector guidSignatureBotDetector;
   // private RuleManager ruleManager;
 
   @Override
   public GuidAttributeAccumulator createAccumulator() {
 
     GuidAttributeAccumulator guidAttributeAccumulator = new GuidAttributeAccumulator();
-    guidIndicators = GuidIndicators.getInstance();
-    guidSignatureBotDetector = GuidSignatureBotDetector.getInstance();
+    // guidIndicators = GuidIndicators.getInstance();
+    // guidSignatureBotDetector = GuidSignatureBotDetector.getInstance();
     // ruleManager = RuleManager.getInstance();
 
     try {
-      guidIndicators.start(guidAttributeAccumulator);
+      GuidIndicators.getInstance().start(guidAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
       log.error(e.getMessage());
@@ -46,7 +46,7 @@ public class GuidAttributeAgg implements
       guidAttributeAccumulator.getGuidAttribute().setGuid2(session.getGuid2());
     }
     try {
-      guidIndicators.feed(session, guidAttributeAccumulator, true);
+      GuidIndicators.getInstance().feed(session, guidAttributeAccumulator, true);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -60,7 +60,8 @@ public class GuidAttributeAgg implements
             GuidSignatureBotDetector.dynamicRuleIdList(), GUID);
             */
         guidBotFlag =
-            guidSignatureBotDetector.getBotFlagList(guidAttributeAccumulator.getGuidAttribute());
+            GuidSignatureBotDetector.getInstance()
+                .getBotFlagList(guidAttributeAccumulator.getGuidAttribute());
         if (guidBotFlag.contains(15)) {
           switch (guidAttributeAccumulator.getBotFlagStatus().get(15)) {
             case 0:

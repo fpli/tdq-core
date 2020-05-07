@@ -73,7 +73,7 @@ public class Constants {
   public static final String ZK_NODE_PATH = "/rule/publish/notification";
 
   // rule management restful api
-  public static final String REST_SERVER = "https://sojubdportalservice.vip.qa.ebay.com";
+  public static final String REST_SERVER = "https://sojubdportalservice.vip.ebay.com";
   public static final String API_RULE_LIST_PUBLISHED = "/api/rule/list/published";
   public static final String API_SPECIFIED_RULE_PREFIX = "/api/rule/";
   public static final String AUTH_USERNAME_KEY = "X-Auth-Username";
