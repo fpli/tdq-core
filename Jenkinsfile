@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'mvn clean package -DskipTests -Pprod'
+        sh 'mvn clean install'
       }
     }
   }
