@@ -1,21 +1,24 @@
 package com.ebay.sojourner.ubd.common.zookeeper;
 
-import com.ebay.sojourner.ubd.common.sql.RuleFetcher;
 import com.ebay.sojourner.ubd.common.util.Constants;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.framework.recipes.cache.PathChildrenCache;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 
 @Slf4j
+@Getter
 public class ZkClient {
 
   private CuratorFramework client;
 
-  public void init(RuleFetcher ruleFetcher) throws Exception {
+  public ZkClient() {
+    init();
+  }
+
+  private void init() {
     // create client
     RetryPolicy retryPolicy = new ExponentialBackoffRetry(Constants.ZK_BASE_SLEEP_TIME,
         Constants.ZK_RETRY_TIMES);
@@ -28,32 +31,6 @@ public class ZkClient {
         .build();
     // start client
     client.start();
-
-    // create node if not exist
-    if (client.checkExists().forPath(Constants.ZK_NODE_PATH) == null) {
-      client.create()
-          .creatingParentContainersIfNeeded()
-          .forPath(Constants.ZK_NODE_PATH);
-    }
-
-    PathChildrenCache cache = new PathChildrenCache(client, Constants.ZK_NODE_PATH, true);
-    // add listener
-    cache.getListenable().addListener((client, event) -> {
-      log.info("ZooKeeper Event: {}", event.getType());
-      if (event.getData() != null && StringUtils.isNotBlank(event.getData().getPath())
-          && event.getData().getData() != null) {
-        log.info("node path is:" + event.getData().getPath());
-        String data = new String(event.getData().getData());
-        log.info("node data is:" + data);
-        String[] datas = data.split(":");
-        ruleFetcher.fetchRulesById(Long.parseLong(
-            event.getData().getPath()
-                .substring(Constants.ZK_NODE_PATH.length() + 1)), datas[1]);
-        log.info("ZooKeeper Node Data: {} = {}",
-            event.getData().getPath(), new String(event.getData().getData()));
-      }
-    });
-    cache.start();
   }
 
   public void stop() {

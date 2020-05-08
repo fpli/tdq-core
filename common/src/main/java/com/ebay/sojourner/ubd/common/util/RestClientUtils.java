@@ -5,7 +5,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 @Slf4j
-public class RestApiUtils {
+public class RestClientUtils {
 
   public static OkHttpClient getRestClient() {
     return new OkHttpClient();
