@@ -32,6 +32,7 @@ import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -90,6 +91,7 @@ public class SojournerUBDRTJobForCrossSession {
             .uid("kafkaSourceForCrossSessionDQ");
 
     // cross session
+    /*
     DataStream<AgentIpAttribute> agentIpAttributeDatastream =
         intermediateSessionDataStream
             .keyBy("userAgent", "clientIp")
@@ -166,6 +168,8 @@ public class SojournerUBDRTJobForCrossSession {
         .name("SojEvent sink")
         .uid("eventHdfsSink")
         .disableChaining();
+        */
+    intermediateSessionDataStream.addSink(new DiscardingSink<>()).name("intermediateSession sink").disableChaining();
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForDQPipeline());

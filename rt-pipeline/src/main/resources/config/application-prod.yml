@@ -99,7 +99,7 @@ flink:
     copy-kafka-parallelism: 50
     event-kafka-parallelism: 75
     session-kafka-parallelism: 50
-    cross-session-kafka-parallelism: 480
+    cross-session-kafka-parallelism: 50
     bot-kafka-parallelism: 50
     broadcast-parallelism: 580
     metrics-parallelism: 480
