@@ -383,9 +383,9 @@ public class TimestampMetricsTest2 {
     ubiEvent.setRegu(0);
     ubiEvent.setStaticPageType(0);
     ubiEvent.setSourceImprId(null);
+    ubiEventList.add(ubiEvent);
 
     /*
-    ubiEventList.add(ubiEvent);
     ubiEvent = new UbiEvent();
     ubiEvent.setGuid("4affcde01710ac734f70f1afff5eb980");
     ubiEvent.setIframe(false);
