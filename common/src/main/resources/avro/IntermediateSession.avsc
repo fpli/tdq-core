@@ -115,5 +115,29 @@
     "name" : "botFlagList",
     "type": ["null", {"type": "array", "items": "int"}],
     "default": null
+  }, {
+    "name" : "absEndTimestamp",
+    "type" : [ "null", "long" ],
+    "doc": "from ubisession absEndTimestamp"
+  }, {
+    "name" : "endTimestamp",
+    "type" : [ "null", "long" ],
+    "doc": "from ubisession endTimestamp"
+  }, {
+    "name" : "sojDataDt",
+    "type" : [ "null", "long" ],
+    "doc": "from ubisession sojDataDt"
+  }, {
+    "name" : "sessionId",
+    "type" : [ "null", "string" ],
+    "doc": "from ubisession sessionId"
+  }, {
+    "name" : "sessionSkey",
+    "type" : [ "null", "long" ],
+    "doc": "from ubisession sessionSkey"
+  }, {
+    "name" : "sessionStartDt",
+    "type" : [ "null", "long" ],
+    "doc": "from ubisession sessionStartDt"
   } ]
 }

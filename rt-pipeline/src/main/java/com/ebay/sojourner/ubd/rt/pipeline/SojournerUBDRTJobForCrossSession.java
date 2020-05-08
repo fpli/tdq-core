@@ -2,10 +2,11 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.IntermediateSession;
-import com.ebay.sojourner.ubd.rt.common.broadcast.CrossSesionDQBroadcastProcessFunction;
+import com.ebay.sojourner.ubd.rt.common.broadcast.CrossSessionDQBroadcastProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
+import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAgg;
@@ -95,7 +96,8 @@ public class SojournerUBDRTJobForCrossSession {
             .window(TumblingEventTimeWindows.of(Time.minutes(5)))
             .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
             .name("Attribute Operator (Agent+IP Pre-Aggregation)")
-            .setParallelism(AppEnv.config().getFlink().app.getPreAgentIpParallelism());
+            .setParallelism(AppEnv.config().getFlink().app.getPreAgentIpParallelism())
+            .uid("pre-agentIpLevel");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureDataStream =
         intermediateSessionDataStream
@@ -104,7 +106,8 @@ public class SojournerUBDRTJobForCrossSession {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
             .name("Attribute Operator (GUID)")
-            .setParallelism(AppEnv.config().getFlink().app.getGuidParallelism());
+            .setParallelism(AppEnv.config().getFlink().app.getGuidParallelism())
+            .uid("guidLevel");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureDataStream =
         agentIpAttributeDatastream
@@ -114,7 +117,8 @@ public class SojournerUBDRTJobForCrossSession {
             .aggregate(
                 new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
             .name("Attribute Operator (Agent+IP)")
-            .setParallelism(AppEnv.config().getFlink().app.getAgentIpParallelism());
+            .setParallelism(AppEnv.config().getFlink().app.getAgentIpParallelism())
+            .uid("agentIpLevel");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureDataStream =
         agentIpAttributeDatastream
@@ -123,7 +127,8 @@ public class SojournerUBDRTJobForCrossSession {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
             .name("Attribute Operator (Agent)")
-            .setParallelism(AppEnv.config().getFlink().app.getAgentParallelism());
+            .setParallelism(AppEnv.config().getFlink().app.getAgentParallelism())
+            .uid("agentLevel");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureDataStream =
         agentIpAttributeDatastream
@@ -132,7 +137,8 @@ public class SojournerUBDRTJobForCrossSession {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
             .name("Attribute Operator (IP)")
-            .setParallelism(AppEnv.config().getFlink().app.getIpParallelism());
+            .setParallelism(AppEnv.config().getFlink().app.getIpParallelism())
+            .uid("ipLevel");
 
     // union attribute signature for broadcast
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> attributeSignatureDataStream =
@@ -149,10 +155,17 @@ public class SojournerUBDRTJobForCrossSession {
     SingleOutputStreamOperator<IntermediateSession> intermediateSessionWithSignature =
         intermediateSessionDataStream
             .connect(attributeSignatureBroadcastStream)
-            .process(new CrossSesionDQBroadcastProcessFunction())
+            .process(new CrossSessionDQBroadcastProcessFunction())
             .setParallelism(AppEnv.config().getFlink().app.getBroadcastParallelism())
             .name("Signature Bot Detector")
             .uid("connectLevel");
+
+    intermediateSessionWithSignature
+        .addSink(HdfsSinkUtil.signatureSinkWithParquet())
+        .setParallelism(AppEnv.config().getFlink().app.getCrossSessionParallelism())
+        .name("SojEvent sink")
+        .uid("eventHdfsSink")
+        .disableChaining();
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForDQPipeline());

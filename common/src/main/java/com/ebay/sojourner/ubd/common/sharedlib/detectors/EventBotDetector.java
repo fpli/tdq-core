@@ -55,13 +55,15 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
     //    log.info("after dynamic rules:" + botRules.size());
     //    log.info("before dynamic ruleIds:" + dynamicRuleIdSet.size());
     for (Rule rule : botRules) {
-      //      rule.init();
+
       int botRule = rule.getBotFlag(ubiEvent);
       if (botRule != 0) {
         botRuleList.add(botRule);
       }
     }
+
     //    log.info("botFlagList size is:" + botRuleList.size());
+
     return botRuleList;
   }
 
