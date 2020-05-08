@@ -65,4 +65,6 @@ under the License.
     files="src/main/java/org/apache/flink/streaming/runtime/operators/windowing/MapWithStateWindowOperator.java"/>
   <suppress checks=".*"
     files="src/test/java/com/ebay/sojourner/ubd/common/sharedlib/metrics/TimestampMetricsTest2.java"/>
+
+  <suppress checks="NewlineAtEndOfFile" files=".java" />
 </suppressions>
