@@ -30,7 +30,7 @@ public class KafkaSourceFunction {
     if (groupId.contains("copy")) {
       return kafkaConsumer.setStartFromEarliest();
     } else if (groupId.contains("cross")) {
-      // 1588759200 -- 20200507 10:00:00
+      // 1588842000000L -- 20200507 17:00:00
       return kafkaConsumer.setStartFromTimestamp(1588842000000L);
     }else {
       return kafkaConsumer.setStartFromLatest();

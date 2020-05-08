@@ -91,7 +91,6 @@ public class SojournerUBDRTJobForCrossSession {
             .uid("kafkaSourceForCrossSessionDQ");
 
     // cross session
-    /*
     DataStream<AgentIpAttribute> agentIpAttributeDatastream =
         intermediateSessionDataStream
             .keyBy("userAgent", "clientIp")
@@ -168,8 +167,10 @@ public class SojournerUBDRTJobForCrossSession {
         .name("SojEvent sink")
         .uid("eventHdfsSink")
         .disableChaining();
-        */
-    intermediateSessionDataStream.addSink(new DiscardingSink<>()).name("intermediateSession sink").disableChaining();
+
+    // for test read kafka data
+    intermediateSessionDataStream.addSink(new DiscardingSink<>()).name("intermediateSession sink")
+        .disableChaining();
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForDQPipeline());
