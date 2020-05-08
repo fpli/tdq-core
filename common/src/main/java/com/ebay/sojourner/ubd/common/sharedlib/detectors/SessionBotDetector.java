@@ -1,6 +1,7 @@
 package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.ubd.common.rule.BotRule1;
 import com.ebay.sojourner.ubd.common.rule.BotRule10;
 import com.ebay.sojourner.ubd.common.rule.BotRule11;
 import com.ebay.sojourner.ubd.common.rule.BotRule12;
@@ -75,6 +76,7 @@ public class SessionBotDetector implements BotDetector<UbiSession> {
 
   @Override
   public void initBotRules() {
+    botRules.add(new BotRule1());
     botRules.add(new BotRule15());
     botRules.add(new BotRule9());
     botRules.add(new BotRule10());

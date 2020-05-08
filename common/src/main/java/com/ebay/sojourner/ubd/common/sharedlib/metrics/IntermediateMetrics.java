@@ -12,11 +12,13 @@ import com.ebay.sojourner.ubd.common.sharedlib.util.SOJListLastElement;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJNameValueParser;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJReplaceChar;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJURLDecodeEscape;
+import com.ebay.sojourner.ubd.common.sharedlib.util.SojEventTimeUtil;
 import com.ebay.sojourner.ubd.common.util.IntermediateLkp;
 import com.ebay.sojourner.ubd.common.util.LkpManager;
+import com.ebay.sojourner.ubd.common.util.SojUtils;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,9 +38,7 @@ public class IntermediateMetrics implements Serializable {
   private static final String SID = "sid";
   private static final String SWD = "swd";
   //    private static Map<Long, String> mpxMap; // mpx channel id map
-  private static Map<String, String> mpxMap;
-  private String imgMpxChnlSet1 = null;
-  private String imgMpxChnlSet6 = null;
+
   //remove the defination instead of the singlton class
   //  private Set<Integer> mobilePageSet = null;
   //  private Set<Integer> agentExcludePageSet = null;
@@ -48,7 +48,8 @@ public class IntermediateMetrics implements Serializable {
   //  private Set<Integer> scPageSet1 = null;
   //  private Set<Integer> scPageSet2 = null;
   //  private Collection<String> tags = null;
-  private StringBuilder stingBuilder = new StringBuilder();
+  //  private String imgMpxChnlSet1 = null;
+  //  private String imgMpxChnlSet6 = null;
   private String actualKeyword;
   private String boughtKeyword;
   private Integer channel;
@@ -108,128 +109,145 @@ public class IntermediateMetrics implements Serializable {
   private String url2Parse;
 
   public IntermediateMetrics() {
-    initLkp();
+    //      initLkp();
     initMetrics();
-    stingBuilder.setLength(0);
-    stingBuilder
-        .append(".*/0/(")
-        .append("4908/89969|")
-        .append("710/(82157|63920|89230)|")
-        .append("711/(87621|88535)|")
-        .append("709/(18254|4989)|")
-        .append("707/(52222|1174)|")
-        .append("706/(83004|87751)|")
-        .append("1185/18912|")
-        .append("5221/29898|")
-        .append("5222/36186")
-        .append("){1}/.*");
-    imgMpxChnlSet1 = stingBuilder.toString();
-
-    stingBuilder.setLength(0);
-    stingBuilder
-        .append(".*/0/(")
-        .append("705/53470|")
-        .append("706/53473|")
-        .append("707/53477|")
-        .append("709/53476|")
-        .append("710/(53481|5232)|")
-        .append("711/(53200|1751)|")
-        .append("724/53478|")
-        .append("1185/53479|")
-        .append("1346/(53482|53482)|")
-        .append("1553/53471|")
-        .append("4686/53472|")
-        .append("5221/53469|")
-        .append("5222/53480|")
-        .append("5282/53468|")
-        .append("){1}/.*");
-    imgMpxChnlSet6 = stingBuilder.toString();
-
   }
 
   public void end(SessionAccumulator sessionAccumulator) {
-    Integer mppIdFromMobile =
-        this.mppIdsFromMobileEvent.get(sessionAccumulator.getUbiSession().getFirstAppId());
-    if (mppIdFromMobile != null) {
-      finalMppId = mppIdFromMobile;
-      return;
+    if (sessionAccumulator.getUbiSession().getFirstAppId() != null) {
+      Integer mppIdFromMobile =
+          this.mppIdsFromMobileEvent.get(sessionAccumulator.getUbiSession().getFirstAppId());
+      if (mppIdFromMobile != null) {
+        finalMppId = mppIdFromMobile;
+        return;
+      }
+    } else {
+      Integer mppIdFromMobile =
+          this.mppIdsFromMobileEvent.get("");
+      if (mppIdFromMobile != null) {
+        finalMppId = mppIdFromMobile;
+        return;
+      }
     }
 
-    Integer mppIdFromRover =
-        this.mppIdsFromRoverEvent.get(sessionAccumulator.getUbiSession().getFirstAppId());
-    if (mppIdFromRover != null) {
-      finalMppId = mppIdFromRover;
-      return;
+    if (sessionAccumulator.getUbiSession().getFirstAppId() != null) {
+      Integer mppIdFromRover =
+          this.mppIdsFromRoverEvent.get(sessionAccumulator.getUbiSession().getFirstAppId());
+      if (mppIdFromRover != null) {
+        finalMppId = mppIdFromRover;
+        return;
+      }
+    } else {
+      Integer mppIdFromRover =
+          this.mppIdsFromRoverEvent.get("");
+      if (mppIdFromRover != null) {
+        finalMppId = mppIdFromRover;
+        return;
+      }
     }
     finalMppId = -1;
   }
 
-  public void feed(UbiEvent event) throws InterruptedException {
+  public void feed(UbiEvent event, SessionAccumulator sessionAccumulator)
+      throws InterruptedException {
+    boolean isEarlyRoverClickEvent = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getAbsStartTimestampForRoverClick());
+    boolean isEarlyScEvent = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getStartTimestampForScEvent());
+    boolean isEarlyRover3084Event = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getAbsStartTimestampForRover3084());
+    boolean isEarlyRover3085Event = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getAbsStartTimestampForRover3085());
+    boolean isEarlyRover3962Event = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getAbsStartTimestampForRover3962());
+
+    boolean isEarlyNotifyClickEvent = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getAbsStartTimestampForNotifyClick());
+    boolean isEarlyNotifyViewEvent = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getAbsStartTimestampForNotifyView());
+
+    boolean isEarlyAgentStringEvent = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getStartTimestampForAgentString());
+
     SOJNameValueParser
         .getTagValues(event.getApplicationPayload(), IntermediateLkp.getInstance().getTags(),
             kvMap);
-
     // count every rover click
-    if (isRoverClick(event)) {
+    if (SojUtils.isRoverClick(event)) {
       setMaxMppIds(event);
-      if (!findRover3084 || !findRover3085 || !findRover3962) {
+
+      // for out of order
+      if (!findRover3084 || !findRover3085 || !findRover3962 || (isEarlyRover3084Event && !SojUtils
+          .isRover3084Click(event)) || (isEarlyRover3085Event && !SojUtils.isRover3085Click(event))
+          || (isEarlyRover3962Event && !SojUtils.isRover3962Click(event))) {
         setChannelSequence(parseChannelFromEvent(event));
         setRoverClickUrl2Parse(event);
       }
     }
 
     // check first sc click
-    if (!findScEvent && isScEvent(event)) {
+    if ((!findScEvent || isEarlyScEvent) && SojUtils.isScEvent(event)) {
       setFindScEvent(true);
       setFirstScEventMetrics(event);
     }
 
     // check first rover click
-    if (!findRovercClick && isRoverClick(event)) {
+    if ((!findRovercClick || isEarlyRoverClickEvent) && SojUtils.isRoverClick(event)) {
       setFindRovercClick(true);
       setFirstRoverClickMetrics(event);
     }
 
     // check first 3084/3085 click
-    if ((isRover3084Click(event) || isRover3085Click(event)) && !findRover3084 && !findRover3085) {
+    if ((SojUtils.isRover3084Click(event) || SojUtils.isRover3085Click(event)) && ((!findRover3084
+        && !findRover3085) || (isEarlyRover3084Event && isEarlyRover3085Event))) {
       setFirstRoverClickRotId(event);
     }
 
     // check first 3084 click only
-    if (!findRover3084 && isRover3084Click(event)) {
+    if ((!findRover3084 || isEarlyRover3084Event) && SojUtils.isRover3084Click(event)) {
       setFindRover3084(true);
       setFirstRover3084Metrics(event);
       setFirstMppIdFromEvent(event);
     }
 
     // check first 3085 click only
-    if (!findRover3085 && isRover3085Click(event)) {
+    if ((!findRover3085 || isEarlyRover3085Event) && SojUtils.isRover3085Click(event)) {
       setFindRover3085(true);
       setFirstRover3085Metrics(event);
     }
 
     // check first 3962 click only
-    if (!findRover3962 && isRover3962Click(event)) {
+    if ((!findRover3962 || isEarlyRover3962Event) && SojUtils.isRover3962Click(event)) {
       setFindRover3962(true);
       setFirstRover3962Metrics(event);
     }
 
     // check first notify click
-    if (!findNotifyClick && IntermediateLkp.getInstance().getNotifyCLickPageSet()
+    if ((!findNotifyClick || isEarlyNotifyClickEvent) && IntermediateLkp.getInstance()
+        .getNotifyCLickPageSet()
         .contains(event.getPageId())) {
       setFindNotifyClick(true);
       this.setNotifyClickTS(event);
     }
 
     // check first notify view
-    if (!findNotifyView && IntermediateLkp.getInstance().getNotifyViewPageSet()
+    if ((!findNotifyView || isEarlyNotifyViewEvent) && IntermediateLkp.getInstance()
+        .getNotifyViewPageSet()
         .contains(event.getPageId())) {
       setFindNotifyView(true);
       this.setNotifyViewTS(event);
     }
 
     // check first not null agent_info from valid click
-    if (!findAgentString
+    if ((!findAgentString || isEarlyAgentStringEvent)
         && !event.isRdt()
         && !event.isIframe()
         && !IntermediateLkp.getInstance().getAgentExcludePageSet().contains(event.getPageId())
@@ -256,63 +274,11 @@ public class IntermediateMetrics implements Serializable {
     }
   }
 
-  public String getBoughtKeyword() {
-    return boughtKeyword;
-  }
-
-  public void setBoughtKeyword(String boughtKeyword) {
-    this.boughtKeyword = boughtKeyword;
-  }
-
-  public Integer getChannel() {
-    return channel;
-  }
-
-  public void setChannel(Integer channel) {
-    this.channel = channel;
-  }
-
-  public Integer getChannelSequence() {
-    return channelSequence;
-  }
-
-  public void setChannelSequence(Integer channelSequence) {
-    this.channelSequence = channelSequence;
-  }
-
-  public String getCurAdme() {
-    return curAdme;
-  }
-
   public void setCurAdme(String curAdme) {
     if (curAdme == null) {
       curAdme = "";
     }
     this.curAdme = curAdme;
-  }
-
-  public Long getEventTS() {
-    return eventTS;
-  }
-
-  public void setEventTS(Long scEventTS) {
-    this.eventTS = scEventTS;
-  }
-
-  public Integer getFinalMppId() {
-    return finalMppId;
-  }
-
-  public void setFinalMppId(Integer finalMppId) {
-    this.finalMppId = finalMppId;
-  }
-
-  public Integer getFirstMppId() {
-    return firstMppId;
-  }
-
-  public void setFirstMppId(Integer firstMppId) {
-    this.firstMppId = firstMppId;
   }
 
   public Long getFirstNotifyTs() {
@@ -323,34 +289,10 @@ public class IntermediateMetrics implements Serializable {
     }
   }
 
-  public String getFutureAdme() {
-    return futureAdme;
-  }
-
-  public void setFutureAdme(String futureAdme) {
-    this.futureAdme = futureAdme;
-  }
-
-  public String getImgMpxChannelId() {
-    return imgMpxChannelId;
-  }
-
   public void setImgMpxChannelId(String imgMpxChannelId) {
     if (imgMpxChannelId != null) {
       this.imgMpxChannelId = imgMpxChannelId.toLowerCase();
     }
-  }
-
-  public Map<String, String> getKvMap() {
-    return kvMap;
-  }
-
-  public void setKvMap(Map<String, String> kvMap) {
-    this.kvMap = kvMap;
-  }
-
-  public Integer getLandPageID() {
-    return landPageID;
   }
 
   public void setLandPageID(Integer landPageID) {
@@ -359,58 +301,10 @@ public class IntermediateMetrics implements Serializable {
     }
   }
 
-  public Map<String, Integer> getMppIdsFromMobileEvent() {
-    return mppIdsFromMobileEvent;
-  }
-
-  public void setMppIdsFromMobileEvent(Map<String, Integer> mppIdsFromMobileEvent) {
-    this.mppIdsFromMobileEvent = mppIdsFromMobileEvent;
-  }
-
-  public Map<String, Integer> getMppIdsFromRoverEvent() {
-    return mppIdsFromRoverEvent;
-  }
-
-  public void setMppIdsFromRoverEvent(Map<String, Integer> mppIdsFromRoverEvent) {
-    this.mppIdsFromRoverEvent = mppIdsFromRoverEvent;
-  }
-
-  public String getMpxChannelId() {
-    return mpxChannelId;
-  }
-
   public void setMpxChannelId(String mpxChannelId) {
     if (mpxChannelId != null) {
       this.mpxChannelId = mpxChannelId.toLowerCase();
     }
-  }
-
-  public Long getNotifyClickTs() {
-    return notifyClickTs;
-  }
-
-  public void setNotifyClickTs(Long notifyClickTs) {
-    this.notifyClickTs = notifyClickTs;
-  }
-
-  public Long getNotifyViewTs() {
-    return notifyViewTs;
-  }
-
-  public void setNotifyViewTs(Long notifyViewTs) {
-    this.notifyViewTs = notifyViewTs;
-  }
-
-  public String getPrevAdme() {
-    return prevAdme;
-  }
-
-  public void setPrevAdme(String prevAdme) {
-    this.prevAdme = prevAdme;
-  }
-
-  public String getRefDomain() {
-    return refDomain;
   }
 
   public void setRefDomain(String refDomain) {
@@ -419,16 +313,8 @@ public class IntermediateMetrics implements Serializable {
     }
   }
 
-  public String getReferrer() {
-    return referrer;
-  }
-
   public void setReferrer(String firstReferrer) {
     this.referrer = firstReferrer == null ? "" : firstReferrer;
-  }
-
-  public String getRefKeyword() {
-    return refKeyword;
   }
 
   public void setRefKeyword(String refKeyword) {
@@ -437,26 +323,10 @@ public class IntermediateMetrics implements Serializable {
     }
   }
 
-  public Long getRotId() {
-    return rotId;
-  }
-
-  public void setRotId(Long rot) {
-    this.rotId = rot;
-  }
-
-  public String getRoverClickE() {
-    return roverClickE;
-  }
-
   public void setRoverClickE(String e) {
     if (e != null) {
       this.roverClickE = e.toLowerCase();
     }
-  }
-
-  public String getRoverEntryEuid() {
-    return roverEntryEuid;
   }
 
   public void setRoverEntryEuid(String euid) {
@@ -465,94 +335,16 @@ public class IntermediateMetrics implements Serializable {
     }
   }
 
-  public Long getRoverEntryTs() {
-    return roverEntryTs;
-  }
-
-  public void setRoverEntryTs(Long roverTs) {
-    this.roverEntryTs = roverTs;
-  }
-
-  public Long getRoverNsTs() {
-    return roverNsTs;
-  }
-
-  public void setRoverNsTs(Long roverNsTs) {
-    this.roverNsTs = roverNsTs;
-  }
-
-  public String getRoverOpenEuid() {
-    return roverOpenEuid;
-  }
-
   public void setRoverOpenEuid(String euid) {
     if (euid != null) {
       this.roverOpenEuid = euid.toLowerCase();
     }
   }
 
-  public Long getRoverOpenTs() {
-    return roverOpenTs;
-  }
-
-  public void setRoverOpenTs(Long roverOpenTs) {
-    this.roverOpenTs = roverOpenTs;
-  }
-
-  public String getScEventE() {
-    return scEventE;
-  }
-
-  public void setScEventE(String scEventE) {
-    this.scEventE = scEventE;
-  }
-
-  public Integer getSearchAgentTypeId() {
-    return searchAgentTypeId;
-  }
-
-  public void setSearchAgentTypeId(Integer searchAgentTypeId) {
-    this.searchAgentTypeId = searchAgentTypeId;
-  }
-
-  public Integer getSocialAgentTypeId() {
-    return socialAgentTypeId;
-  }
-
-  public void setSocialAgentTypeId(Integer socialAgentTypeId) {
-    this.socialAgentTypeId = socialAgentTypeId;
-  }
-
-  public Integer getSwd() {
-    return swd;
-  }
-
-  public void setSwd(Integer swd) {
-    this.swd = swd;
-  }
-
-  public Integer getTrackingPartner() {
-    return trackingPartner;
-  }
-
-  public void setTrackingPartner(Integer trackingPartner) {
-    this.trackingPartner = trackingPartner;
-  }
-
-  public String getUrl2Parse() {
-    return url2Parse;
-  }
-
   public void setUrl2Parse(String url2Parse) {
     if (url2Parse != null) {
       // this.url2Parse = url2Parse.toLowerCase();
       this.url2Parse = url2Parse;
-    }
-  }
-
-  public void initLkp() {
-    if (mpxMap == null || mpxMap.size() < 1) {
-      mpxMap = LkpManager.getInstance().getMpxMap();
     }
   }
 
@@ -595,7 +387,7 @@ public class IntermediateMetrics implements Serializable {
     this.notifyViewTs = null;
 
     if (kvMap == null) {
-      kvMap = new HashMap<String, String>();
+      kvMap = new ConcurrentHashMap<>();
     } else if (kvMap.size() > 1) {
       kvMap.clear();
     }
@@ -606,53 +398,18 @@ public class IntermediateMetrics implements Serializable {
     this.channelSequence = null;
 
     if (this.mppIdsFromRoverEvent == null) {
-      this.mppIdsFromRoverEvent = new HashMap<String, Integer>();
+      this.mppIdsFromRoverEvent = new ConcurrentHashMap<>();
     } else {
       this.mppIdsFromRoverEvent.clear();
     }
 
     if (this.mppIdsFromMobileEvent == null) {
-      this.mppIdsFromMobileEvent = new HashMap<String, Integer>();
+      this.mppIdsFromMobileEvent = new ConcurrentHashMap<>();
     } else {
       this.mppIdsFromMobileEvent.clear();
     }
   }
 
-  public boolean isRover3084Click(UbiEvent event) {
-    if (event.getPageId() == Integer.MIN_VALUE) {
-      return false;
-    }
-
-    return 3084 == event.getPageId();
-  }
-
-  public boolean isRover3085Click(UbiEvent event) {
-    if (event.getPageId() == Integer.MIN_VALUE) {
-      return false;
-    }
-
-    return event.getPageId() == 3085;
-  }
-
-  public boolean isRover3962Click(UbiEvent event) {
-    if (event.getPageId() == Integer.MIN_VALUE) {
-      return false;
-    }
-    return event.getPageId() == 3962;
-  }
-
-  public boolean isRoverClick(UbiEvent event) {
-    return IntermediateLkp.getInstance().getRoverPageSet().contains(event.getPageId());
-  }
-
-  public boolean isScEvent(UbiEvent event) {
-    Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
-    return !event.isRdt()
-        && !event.isIframe()
-        // || urlQueryString.matches("(/roverimp|.*SojPageView).*")
-        && !IntermediateLkp.getInstance().getScPageSet1().contains(pageId)
-        && !IntermediateLkp.getInstance().getScPageSet2().contains(pageId);
-  }
 
   public Integer parseChannelFromEvent(UbiEvent event) {
     Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
@@ -920,7 +677,6 @@ public class IntermediateMetrics implements Serializable {
   // page 3084 only
   public void setFirstRoverClickMpxChannelId(UbiEvent event) throws InterruptedException {
     Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
-    mpxMap = LkpManager.getInstance().getMpxMap();
     String mpxChannelId = null;
     String[] channelIds = null;
 
@@ -938,7 +694,7 @@ public class IntermediateMetrics implements Serializable {
 
       try {
         Long rotationId = Long.parseLong(rotationString.replace("-", ""));
-        channelIds = mpxMap.get(rotationId).split(":", 2);
+        channelIds = LkpManager.getInstance().getMpxMap().get(rotationId).split(":", 2);
         if ("137245".equals(channelIds[0])) {
           mpxChannelId = "97";
         } else {
@@ -1141,7 +897,6 @@ public class IntermediateMetrics implements Serializable {
   }
 
   public void setFirstScEventImgMpxChannelId(UbiEvent event) throws InterruptedException {
-    mpxMap = LkpManager.getInstance().getMpxMap();
     String imgMpxChannelId = "";
     String referrer = getReferrer();
 
@@ -1151,9 +906,11 @@ public class IntermediateMetrics implements Serializable {
     }
 
     if (referrer.matches(".*img.*\\.mediaplex\\.com/.*")) {
-      if (SOJGetUrlPath.getUrlPath(referrer).matches(imgMpxChnlSet1)) {
+      if (SOJGetUrlPath.getUrlPath(referrer)
+          .matches(IntermediateLkp.getInstance().getImgMpxChnlSet1())) {
         imgMpxChannelId = "1";
-      } else if (SOJGetUrlPath.getUrlPath(referrer).matches(imgMpxChnlSet6)) {
+      } else if (SOJGetUrlPath.getUrlPath(referrer)
+          .matches(IntermediateLkp.getInstance().getImgMpxChnlSet6())) {
         imgMpxChannelId = "6";
       }
     }
@@ -1170,7 +927,8 @@ public class IntermediateMetrics implements Serializable {
       if (tmp != null && tmp.matches(".*-.*-.*-.*")) {
         try {
           imgRotationId = Long.parseLong(tmp.replace("-", ""));
-          imgMpxChannelId = mpxMap.get(imgRotationId).split(":", 2)[1];
+          imgMpxChannelId = LkpManager.getInstance().getMpxMap().get(imgRotationId)
+              .split(":", 2)[1];
         } catch (NullPointerException e) {
           // e.printStackTrace();
         } catch (NumberFormatException e) {
@@ -1382,9 +1140,16 @@ public class IntermediateMetrics implements Serializable {
         return;
       }
     }
-    Integer oldmppId = mppIdsFromRoverEvent.get(event.getAppId().toString());
-    if (oldmppId == null || (mppId != null && mppId.compareTo(oldmppId) > 0)) {
-      mppIdsFromRoverEvent.put(event.getAppId().toString(), mppId);
+    if (event.getAppId() == null) {
+      Integer oldmppId = mppIdsFromRoverEvent.get("");
+      if (oldmppId == null || (mppId != null && mppId.compareTo(oldmppId) > 0)) {
+        mppIdsFromRoverEvent.put("", mppId);
+      }
+    } else {
+      Integer oldmppId = mppIdsFromRoverEvent.get(event.getAppId().toString());
+      if (oldmppId == null || (mppId != null && mppId.compareTo(oldmppId) > 0)) {
+        mppIdsFromRoverEvent.put(event.getAppId().toString(), mppId);
+      }
     }
   }
 
@@ -1396,9 +1161,16 @@ public class IntermediateMetrics implements Serializable {
     } catch (NumberFormatException e) {
       return;
     }
-    Integer oldmppId = mppIdsFromMobileEvent.get(event.getAppId().toString());
-    if (oldmppId == null || (mppId != null && mppId.compareTo(oldmppId) < 0)) {
-      mppIdsFromMobileEvent.put(event.getAppId().toString(), mppId);
+    if (event.getAppId() == null) {
+      Integer oldmppId = mppIdsFromMobileEvent.get("");
+      if (oldmppId == null || (mppId != null && mppId.compareTo(oldmppId) < 0)) {
+        mppIdsFromMobileEvent.put("", mppId);
+      }
+    } else {
+      Integer oldmppId = mppIdsFromMobileEvent.get(event.getAppId().toString());
+      if (oldmppId == null || (mppId != null && mppId.compareTo(oldmppId) < 0)) {
+        mppIdsFromMobileEvent.put(event.getAppId().toString(), mppId);
+      }
     }
   }
 
@@ -1419,7 +1191,6 @@ public class IntermediateMetrics implements Serializable {
     Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
     String url2Parse = "";
     String urlQueryString = event.getUrlQueryString();
-
     if (pageId.equals(3084)) {
       url2Parse = event.getReferrer();
     } else if (pageId.equals(3085) && urlQueryString != null) {
@@ -1427,7 +1198,6 @@ public class IntermediateMetrics implements Serializable {
         url2Parse = urlQueryString.substring(urlQueryString.indexOf("&mpvl=") + 6);
       }
     }
-
     this.setUrl2Parse(url2Parse);
   }
 

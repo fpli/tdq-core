@@ -21,7 +21,7 @@ public class UbiSession implements Serializable, Cloneable {
   private int botFlag;
   private int version;
   private String firstUserId;
-  private Long siteFlags;
+  private long siteFlags;
   private int attrFlags;
   private int botFlags;
   private Long findingFlags;
@@ -32,6 +32,14 @@ public class UbiSession implements Serializable, Cloneable {
   private Long endTimestampNOIFRAMERDT;
   private Long startTimestampNOIFRAME;
   private Long startTimestampForAgentString;
+  private Long startTimestampForReferrer;
+  private Long startTimestampForScEvent;
+  private Long absStartTimestampForRoverClick;
+  private Long absStartTimestampForRover3084;
+  private Long absStartTimestampForRover3085;
+  private Long absStartTimestampForRover3962;
+  private Long absStartTimestampForNotifyClick;
+  private Long absStartTimestampForNotifyView;
   private int durationSec;
   private int eventCnt;
   private int viCoreCnt;
@@ -91,7 +99,6 @@ public class UbiSession implements Serializable, Cloneable {
   private int minSCSeqNum;
   private Long[] minMaxEventTimestamp;
   private Set<Long> oldSessionSkeySet;
-  private byte[] siteFlagsSet;
   private Set<Integer> botFlagList = new LinkedHashSet<>();
   private Set<String> userIdSet = new HashSet<>();
   private Attributes attributes = new Attributes();

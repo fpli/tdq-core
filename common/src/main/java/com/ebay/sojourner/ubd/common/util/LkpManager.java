@@ -39,7 +39,7 @@ public class LkpManager {
   private List<String> iabAgentRegs = new CopyOnWriteArrayList<>();
   private Set<String> largeSessionGuidSet = new CopyOnWriteArraySet<>();
   private Map<Integer, String[]> pageFmlyMap = new ConcurrentHashMap<>();
-  private Map<String, String> mpxMap = new ConcurrentHashMap<>();
+  private Map<Long, String> mpxMap = new ConcurrentHashMap<>();
   private Map<String, Boolean> selectedIps = new ConcurrentHashMap<>();
   private Set<String> selectedAgents = new CopyOnWriteArraySet<>();
   private Map<String, Long> lkpFileLastUpdDt = new ConcurrentHashMap<>();
@@ -237,14 +237,14 @@ public class LkpManager {
   private void refreshMpxRotetion() {
     String property = Property.MPX_ROTATION;
     if (isUpdate(property)) {
-      Map<String, String> mpxMapMid = new ConcurrentHashMap<>();
+      Map<Long, String> mpxMapMid = new ConcurrentHashMap<>();
       String mpxRotations = getLkpFileContent(property);
       for (String mpx : mpxRotations.split(LKP_RECORD_DELIMITER)) {
         String[] values = mpx.split(LKP_FILED_DELIMITER);
         // Keep the null judgment also for session metrics first finding flag
         if (values[0] != null && values[1] != null) {
           try {
-            mpxMapMid.put(values[0].trim(), values[1].trim());
+            mpxMapMid.put(Long.parseLong(values[0].trim()), values[1].trim());
           } catch (NumberFormatException e) {
             log.error("Ignore the incorrect format for mpx: " + values[0] + " - " + values[1]);
           }
@@ -383,7 +383,7 @@ public class LkpManager {
     return largeSessionGuidSet;
   }
 
-  public Map<String, String> getMpxMap() {
+  public Map<Long, String> getMpxMap() {
     return mpxMap;
   }
 

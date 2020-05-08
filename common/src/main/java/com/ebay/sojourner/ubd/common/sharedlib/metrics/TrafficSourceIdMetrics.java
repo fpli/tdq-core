@@ -99,7 +99,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
 
   @Override
   public void feed(UbiEvent ubiEvent, SessionAccumulator sessionAccumulator) throws Exception {
-    sessionAccumulator.getUbiSession().getIntermediateMetrics().feed(ubiEvent);
+    sessionAccumulator.getUbiSession().getIntermediateMetrics().feed(ubiEvent,sessionAccumulator);
   }
 
   private int getTrafficSourceId(SessionAccumulator sessionAccumulator) {
@@ -569,6 +569,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
   @Override
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
     intermediateMetrics = new IntermediateMetrics();
+    intermediateMetrics.initMetrics();
     sessionAccumulator.getUbiSession().setIntermediateMetrics(intermediateMetrics);
 
   }

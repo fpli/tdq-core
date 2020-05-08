@@ -15,89 +15,63 @@ import org.apache.avro.specific.SpecificData;
 public class IntermediateSession extends org.apache.avro.specific.SpecificRecordBase implements
     org.apache.avro.specific.SpecificRecord {
 
-  private static final long serialVersionUID = -5973569741254393667L;
   public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
-      "{\"type\":\"record\",\"name\":\"IntermediateSession\","
-          + "\"namespace\":\"com.ebay.sojourner.ubd.common.model\",\"fields\":[{\"name\":\"guid\","
-          + "\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\""
-          + "from ubisession guid\"},{\"name\":\"guid1\",\"type\":[\"null\",\"long\"],\"doc\":\"f"
-          + "rom ubisession guid1\"},{\"name\":\"guid2\",\"type\":[\"null\",\"long\"],\"doc\":\"f"
-          + "rom ubisession guid2\"},{\"name\":\"absEventCnt\",\"type\":[\"null\",\"int\"],\"doc\""
-          + ":\"from ubisession absEventCnt\"},{\"name\":\"nonIframeRdtEventCnt\",\"type\":[\"null"
-          + "\",\"int\"],\"doc\":\"from ubisession nonIframeRdtEventCnt\"},{\"name\":\"ip\",\"type"
-          + "\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ub"
-          + "isession ip\"},{\"name\":\"userAgent\",\"type\":[\"null\",{\"type\":\"string\",\"avro"
-          + ".java.string\":\"String\"}],\"doc\":\"from ubisession userAgent\"},{\"name\":\"single"
-          + "ClickSessionFlag\",\"type\":[\"null\",\"boolean\"],\"doc\":\"from ubisession singleCl"
-          + "ickSessionFlag\"},{\"name\":\"botFlag\",\"type\":[\"null\",\"int\"],\"doc\":\"from ub"
-          + "isession botFlag\"},{\"name\":\"firstCguid\",\"type\":[\"null\",{\"type\":\"string\","
-          + "\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession firstCguid\"},{\"name\":\""
-          + "firstUserId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\""
-          + "}],\"doc\":\"from ubisession firstUserId\"},{\"name\":\"validPageCnt\",\"type\":[\"nu"
-          + "ll\",\"int\"],\"doc\":\"from ubisession validPageCnt\"},{\"name\":\"trafficSrcId\",\""
-          + "type\":[\"null\",\"int\"],\"doc\":\"from ubisession trafficSrcId\"},{\"name\":\"exInt"
-          + "ernalIp\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\""
-          + "doc\":\"from ubisession exInternalIp\"},{\"name\":\"homepageCnt\",\"type\":[\"null\""
-          + ",\"int\"],\"doc\":\"from ubisession homepageCnt\"},{\"name\":\"signinPageCnt\",\"type"
-          + "\":[\"null\",\"int\"],\"doc\":\"fron ubisession signinPageCnt\"},{\"name\":\"cobrand"
-          + "\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession cobrand\"},{\"name\":\"start"
-          + "Timestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession startTimestamp\"},"
-          + "{\"name\":\"agentCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession agentCnt"
-          + "\"},{\"name\":\"firstAppId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession fi"
-          + "rstAppId\"},{\"name\":\"bidBinConfirmFlag\",\"type\":[\"null\",\"boolean\"],\"doc\":\""
-          + "from ubisession bidBinConfirmFlag\"},{\"name\":\"clientIp\",\"type\":[\"null\",{\"type"
-          + "\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession clientIp\"},"
-          + "{\"name\":\"absStartTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession"
-          + " absStartTimestamp\"},{\"name\":\"familyViCnt\",\"type\":[\"null\",\"int\"],\"doc\":\""
-          + "from ubisession familyViCnt\"},{\"name\":\"agentString\",\"type\":[\"null\",{\"type\":"
-          + "\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession agentString\"},"
-          + "{\"name\":\"botFlagList\",\"type\":[\"null\",{\"type\":\"array\",\"items\":\"int\"}],"
-          + "\"default\":null}]}");
-
-  public static org.apache.avro.Schema getClassSchema() {
-    return SCHEMA$;
-  }
-
+      "{\"type\":\"record\",\"name\":\"IntermediateSession\",\"namespace\":\"com.ebay.sojourner"
+          + ".ubd.common.model\",\"fields\":[{\"name\":\"guid\",\"type\":[\"null\","
+          + "{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession "
+          + "guid\"},{\"name\":\"guid1\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession "
+          + "guid1\"},{\"name\":\"guid2\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession "
+          + "guid2\"},{\"name\":\"absEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from "
+          + "ubisession absEventCnt\"},{\"name\":\"nonIframeRdtEventCnt\",\"type\":[\"null\","
+          + "\"int\"],\"doc\":\"from ubisession nonIframeRdtEventCnt\"},{\"name\":\"ip\","
+          + "\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],"
+          + "\"doc\":\"from ubisession ip\"},{\"name\":\"userAgent\",\"type\":[\"null\","
+          + "{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession "
+          + "userAgent\"},{\"name\":\"singleClickSessionFlag\",\"type\":[\"null\",\"boolean\"],"
+          + "\"doc\":\"from ubisession singleClickSessionFlag\"},{\"name\":\"botFlag\","
+          + "\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession botFlag\"},"
+          + "{\"name\":\"firstCguid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java"
+          + ".string\":\"String\"}],\"doc\":\"from ubisession firstCguid\"},"
+          + "{\"name\":\"firstUserId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java"
+          + ".string\":\"String\"}],\"doc\":\"from ubisession firstUserId\"},"
+          + "{\"name\":\"validPageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession "
+          + "validPageCnt\"},{\"name\":\"trafficSrcId\",\"type\":[\"null\",\"int\"],"
+          + "\"doc\":\"from ubisession trafficSrcId\"},{\"name\":\"exInternalIp\","
+          + "\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],"
+          + "\"doc\":\"from ubisession exInternalIp\"},{\"name\":\"homepageCnt\","
+          + "\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession homepageCnt\"},"
+          + "{\"name\":\"signinPageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"fron ubisession "
+          + "signinPageCnt\"},{\"name\":\"cobrand\",\"type\":[\"null\",\"int\"],\"doc\":\"from "
+          + "ubisession cobrand\"},{\"name\":\"startTimestamp\",\"type\":[\"null\",\"long\"],"
+          + "\"doc\":\"from ubisession startTimestamp\"},{\"name\":\"endTimestamp\","
+          + "\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession endTimestamp\"},"
+          + "{\"name\":\"agentCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession "
+          + "agentCnt\"},{\"name\":\"firstAppId\",\"type\":[\"null\",\"int\"],\"doc\":\"from "
+          + "ubisession firstAppId\"},{\"name\":\"bidBinConfirmFlag\",\"type\":[\"null\","
+          + "\"boolean\"],\"doc\":\"from ubisession bidBinConfirmFlag\"},{\"name\":\"clientIp\","
+          + "\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],"
+          + "\"doc\":\"from ubisession clientIp\"},{\"name\":\"absStartTimestamp\","
+          + "\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession absStartTimestamp\"},"
+          + "{\"name\":\"absEndTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession"
+          + " absEndTimestamp\"},{\"name\":\"familyViCnt\",\"type\":[\"null\",\"int\"],"
+          + "\"doc\":\"from ubisession familyViCnt\"},{\"name\":\"agentString\","
+          + "\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],"
+          + "\"doc\":\"from ubisession agentString\"},{\"name\":\"botFlagList\","
+          + "\"type\":[\"null\",{\"type\":\"array\",\"items\":\"int\"}],\"default\":null}]}");
+  private static final long serialVersionUID = -2351548218430267511L;
   private static SpecificData MODEL$ = new SpecificData();
-
   private static final BinaryMessageEncoder<IntermediateSession> ENCODER =
       new BinaryMessageEncoder<IntermediateSession>(MODEL$, SCHEMA$);
-
   private static final BinaryMessageDecoder<IntermediateSession> DECODER =
       new BinaryMessageDecoder<IntermediateSession>(MODEL$, SCHEMA$);
-
-  /**
-   * Return the BinaryMessageDecoder instance used by this class.
-   */
-  public static BinaryMessageDecoder<IntermediateSession> getDecoder() {
-    return DECODER;
-  }
-
-  /**
-   * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link
-   * SchemaStore}.
-   *
-   * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
-   */
-  public static BinaryMessageDecoder<IntermediateSession> createDecoder(SchemaStore resolver) {
-    return new BinaryMessageDecoder<IntermediateSession>(MODEL$, SCHEMA$, resolver);
-  }
-
-  /**
-   * Serializes this IntermediateSession to a ByteBuffer.
-   */
-  public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
-    return ENCODER.encode(this);
-  }
-
-  /**
-   * Deserializes a IntermediateSession from a ByteBuffer.
-   */
-  public static IntermediateSession fromByteBuffer(
-      java.nio.ByteBuffer b) throws java.io.IOException {
-    return DECODER.decode(b);
-  }
-
+  @SuppressWarnings("unchecked")
+  private static final org.apache.avro.io.DatumWriter<IntermediateSession>
+      WRITER$ = (org.apache.avro.io.DatumWriter<IntermediateSession>) MODEL$
+      .createDatumWriter(SCHEMA$);
+  @SuppressWarnings("unchecked")
+  private static final org.apache.avro.io.DatumReader<IntermediateSession>
+      READER$ = (org.apache.avro.io.DatumReader<IntermediateSession>) MODEL$
+      .createDatumReader(SCHEMA$);
   /**
    * from ubisession guid
    */
@@ -189,6 +163,11 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
   @Deprecated
   public java.lang.Long startTimestamp;
   /**
+   * from ubisession endTimestamp
+   */
+  @Deprecated
+  public java.lang.Long endTimestamp;
+  /**
    * from ubisession agentCnt
    */
   @Deprecated
@@ -213,6 +192,11 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
    */
   @Deprecated
   public java.lang.Long absStartTimestamp;
+  /**
+   * from ubisession absEndTimestamp
+   */
+  @Deprecated
+  public java.lang.Long absEndTimestamp;
   /**
    * from ubisession familyViCnt
    */
@@ -254,11 +238,13 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
    * @param signinPageCnt fron ubisession signinPageCnt
    * @param cobrand from ubisession cobrand
    * @param startTimestamp from ubisession startTimestamp
+   * @param endTimestamp from ubisession endTimestamp
    * @param agentCnt from ubisession agentCnt
    * @param firstAppId from ubisession firstAppId
    * @param bidBinConfirmFlag from ubisession bidBinConfirmFlag
    * @param clientIp from ubisession clientIp
    * @param absStartTimestamp from ubisession absStartTimestamp
+   * @param absEndTimestamp from ubisession absEndTimestamp
    * @param familyViCnt from ubisession familyViCnt
    * @param agentString from ubisession agentString
    * @param botFlagList The new value for botFlagList
@@ -269,9 +255,10 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
       java.lang.Integer botFlag, java.lang.String firstCguid, java.lang.String firstUserId,
       java.lang.Integer validPageCnt, java.lang.Integer trafficSrcId, java.lang.String exInternalIp,
       java.lang.Integer homepageCnt, java.lang.Integer signinPageCnt, java.lang.Integer cobrand,
-      java.lang.Long startTimestamp, java.lang.Integer agentCnt, java.lang.Integer firstAppId,
-      java.lang.Boolean bidBinConfirmFlag, java.lang.String clientIp,
-      java.lang.Long absStartTimestamp, java.lang.Integer familyViCnt, java.lang.String agentString,
+      java.lang.Long startTimestamp, java.lang.Long endTimestamp, java.lang.Integer agentCnt,
+      java.lang.Integer firstAppId, java.lang.Boolean bidBinConfirmFlag, java.lang.String clientIp,
+      java.lang.Long absStartTimestamp, java.lang.Long absEndTimestamp,
+      java.lang.Integer familyViCnt, java.lang.String agentString,
       java.util.List<java.lang.Integer> botFlagList) {
     this.guid = guid;
     this.guid1 = guid1;
@@ -291,14 +278,84 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
     this.signinPageCnt = signinPageCnt;
     this.cobrand = cobrand;
     this.startTimestamp = startTimestamp;
+    this.endTimestamp = endTimestamp;
     this.agentCnt = agentCnt;
     this.firstAppId = firstAppId;
     this.bidBinConfirmFlag = bidBinConfirmFlag;
     this.clientIp = clientIp;
     this.absStartTimestamp = absStartTimestamp;
+    this.absEndTimestamp = absEndTimestamp;
     this.familyViCnt = familyViCnt;
     this.agentString = agentString;
     this.botFlagList = botFlagList;
+  }
+
+  public static org.apache.avro.Schema getClassSchema() {
+    return SCHEMA$;
+  }
+
+  /**
+   * Return the BinaryMessageDecoder instance used by this class.
+   */
+  public static BinaryMessageDecoder<IntermediateSession> getDecoder() {
+    return DECODER;
+  }
+
+  /**
+   * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link
+   * SchemaStore}.
+   *
+   * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
+   */
+  public static BinaryMessageDecoder<IntermediateSession> createDecoder(SchemaStore resolver) {
+    return new BinaryMessageDecoder<IntermediateSession>(MODEL$, SCHEMA$, resolver);
+  }
+
+  /**
+   * Deserializes a IntermediateSession from a ByteBuffer.
+   */
+  public static IntermediateSession fromByteBuffer(
+      java.nio.ByteBuffer b) throws java.io.IOException {
+    return DECODER.decode(b);
+  }
+
+  /**
+   * Creates a new IntermediateSession RecordBuilder.
+   *
+   * @return A new IntermediateSession RecordBuilder
+   */
+  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder() {
+    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder();
+  }
+
+  /**
+   * Creates a new IntermediateSession RecordBuilder by copying an existing Builder.
+   *
+   * @param other The existing builder to copy.
+   * @return A new IntermediateSession RecordBuilder
+   */
+  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder(
+      com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder other) {
+    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder(other);
+  }
+
+  /**
+   * Creates a new IntermediateSession RecordBuilder by copying an existing IntermediateSession
+   * instance.
+   *
+   * @param other The existing instance to copy.
+   * @return A new IntermediateSession RecordBuilder
+   */
+  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder(
+      com.ebay.sojourner.ubd.common.model.IntermediateSession other) {
+    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder(other);
+  }
+
+  /**
+   * Serializes this IntermediateSession to a ByteBuffer.
+   */
+  public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
+    return ENCODER.encode(this);
   }
 
   public org.apache.avro.Schema getSchema() {
@@ -345,20 +402,24 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
       case 17:
         return startTimestamp;
       case 18:
-        return agentCnt;
+        return endTimestamp;
       case 19:
-        return firstAppId;
+        return agentCnt;
       case 20:
-        return bidBinConfirmFlag;
+        return firstAppId;
       case 21:
-        return clientIp;
+        return bidBinConfirmFlag;
       case 22:
-        return absStartTimestamp;
+        return clientIp;
       case 23:
-        return familyViCnt;
+        return absStartTimestamp;
       case 24:
-        return agentString;
+        return absEndTimestamp;
       case 25:
+        return familyViCnt;
+      case 26:
+        return agentString;
+      case 27:
         return botFlagList;
       default:
         throw new org.apache.avro.AvroRuntimeException("Bad index");
@@ -424,27 +485,33 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
         startTimestamp = (java.lang.Long) value$;
         break;
       case 18:
-        agentCnt = (java.lang.Integer) value$;
+        endTimestamp = (java.lang.Long) value$;
         break;
       case 19:
-        firstAppId = (java.lang.Integer) value$;
+        agentCnt = (java.lang.Integer) value$;
         break;
       case 20:
-        bidBinConfirmFlag = (java.lang.Boolean) value$;
+        firstAppId = (java.lang.Integer) value$;
         break;
       case 21:
-        clientIp = (java.lang.String) value$;
+        bidBinConfirmFlag = (java.lang.Boolean) value$;
         break;
       case 22:
-        absStartTimestamp = (java.lang.Long) value$;
+        clientIp = (java.lang.String) value$;
         break;
       case 23:
-        familyViCnt = (java.lang.Integer) value$;
+        absStartTimestamp = (java.lang.Long) value$;
         break;
       case 24:
-        agentString = (java.lang.String) value$;
+        absEndTimestamp = (java.lang.Long) value$;
         break;
       case 25:
+        familyViCnt = (java.lang.Integer) value$;
+        break;
+      case 26:
+        agentString = (java.lang.String) value$;
+        break;
+      case 27:
         botFlagList = (java.util.List<java.lang.Integer>) value$;
         break;
       default:
@@ -777,6 +844,24 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
   }
 
   /**
+   * Gets the value of the 'endTimestamp' field.
+   *
+   * @return from ubisession endTimestamp
+   */
+  public java.lang.Long getEndTimestamp() {
+    return endTimestamp;
+  }
+
+  /**
+   * Sets the value of the 'endTimestamp' field. from ubisession endTimestamp
+   *
+   * @param value the value to set.
+   */
+  public void setEndTimestamp(java.lang.Long value) {
+    this.endTimestamp = value;
+  }
+
+  /**
    * Gets the value of the 'agentCnt' field.
    *
    * @return from ubisession agentCnt
@@ -867,6 +952,24 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
   }
 
   /**
+   * Gets the value of the 'absEndTimestamp' field.
+   *
+   * @return from ubisession absEndTimestamp
+   */
+  public java.lang.Long getAbsEndTimestamp() {
+    return absEndTimestamp;
+  }
+
+  /**
+   * Sets the value of the 'absEndTimestamp' field. from ubisession absEndTimestamp
+   *
+   * @param value the value to set.
+   */
+  public void setAbsEndTimestamp(java.lang.Long value) {
+    this.absEndTimestamp = value;
+  }
+
+  /**
    * Gets the value of the 'familyViCnt' field.
    *
    * @return from ubisession familyViCnt
@@ -920,36 +1023,16 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
     this.botFlagList = value;
   }
 
-  /**
-   * Creates a new IntermediateSession RecordBuilder.
-   *
-   * @return A new IntermediateSession RecordBuilder
-   */
-  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder() {
-    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder();
+  @Override
+  public void writeExternal(java.io.ObjectOutput out)
+      throws java.io.IOException {
+    WRITER$.write(this, SpecificData.getEncoder(out));
   }
 
-  /**
-   * Creates a new IntermediateSession RecordBuilder by copying an existing Builder.
-   *
-   * @param other The existing builder to copy.
-   * @return A new IntermediateSession RecordBuilder
-   */
-  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder(
-      com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder other) {
-    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder(other);
-  }
-
-  /**
-   * Creates a new IntermediateSession RecordBuilder by copying an existing IntermediateSession
-   * instance.
-   *
-   * @param other The existing instance to copy.
-   * @return A new IntermediateSession RecordBuilder
-   */
-  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder(
-      com.ebay.sojourner.ubd.common.model.IntermediateSession other) {
-    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder(other);
+  @Override
+  public void readExternal(java.io.ObjectInput in)
+      throws java.io.IOException {
+    READER$.read(this, SpecificData.getDecoder(in));
   }
 
   /**
@@ -1032,6 +1115,10 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      */
     private java.lang.Long startTimestamp;
     /**
+     * from ubisession endTimestamp
+     */
+    private java.lang.Long endTimestamp;
+    /**
      * from ubisession agentCnt
      */
     private java.lang.Integer agentCnt;
@@ -1051,6 +1138,10 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      * from ubisession absStartTimestamp
      */
     private java.lang.Long absStartTimestamp;
+    /**
+     * from ubisession absEndTimestamp
+     */
+    private java.lang.Long absEndTimestamp;
     /**
      * from ubisession familyViCnt
      */
@@ -1149,37 +1240,45 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
         this.startTimestamp = data().deepCopy(fields()[17].schema(), other.startTimestamp);
         fieldSetFlags()[17] = true;
       }
-      if (isValidValue(fields()[18], other.agentCnt)) {
-        this.agentCnt = data().deepCopy(fields()[18].schema(), other.agentCnt);
+      if (isValidValue(fields()[18], other.endTimestamp)) {
+        this.endTimestamp = data().deepCopy(fields()[18].schema(), other.endTimestamp);
         fieldSetFlags()[18] = true;
       }
-      if (isValidValue(fields()[19], other.firstAppId)) {
-        this.firstAppId = data().deepCopy(fields()[19].schema(), other.firstAppId);
+      if (isValidValue(fields()[19], other.agentCnt)) {
+        this.agentCnt = data().deepCopy(fields()[19].schema(), other.agentCnt);
         fieldSetFlags()[19] = true;
       }
-      if (isValidValue(fields()[20], other.bidBinConfirmFlag)) {
-        this.bidBinConfirmFlag = data().deepCopy(fields()[20].schema(), other.bidBinConfirmFlag);
+      if (isValidValue(fields()[20], other.firstAppId)) {
+        this.firstAppId = data().deepCopy(fields()[20].schema(), other.firstAppId);
         fieldSetFlags()[20] = true;
       }
-      if (isValidValue(fields()[21], other.clientIp)) {
-        this.clientIp = data().deepCopy(fields()[21].schema(), other.clientIp);
+      if (isValidValue(fields()[21], other.bidBinConfirmFlag)) {
+        this.bidBinConfirmFlag = data().deepCopy(fields()[21].schema(), other.bidBinConfirmFlag);
         fieldSetFlags()[21] = true;
       }
-      if (isValidValue(fields()[22], other.absStartTimestamp)) {
-        this.absStartTimestamp = data().deepCopy(fields()[22].schema(), other.absStartTimestamp);
+      if (isValidValue(fields()[22], other.clientIp)) {
+        this.clientIp = data().deepCopy(fields()[22].schema(), other.clientIp);
         fieldSetFlags()[22] = true;
       }
-      if (isValidValue(fields()[23], other.familyViCnt)) {
-        this.familyViCnt = data().deepCopy(fields()[23].schema(), other.familyViCnt);
+      if (isValidValue(fields()[23], other.absStartTimestamp)) {
+        this.absStartTimestamp = data().deepCopy(fields()[23].schema(), other.absStartTimestamp);
         fieldSetFlags()[23] = true;
       }
-      if (isValidValue(fields()[24], other.agentString)) {
-        this.agentString = data().deepCopy(fields()[24].schema(), other.agentString);
+      if (isValidValue(fields()[24], other.absEndTimestamp)) {
+        this.absEndTimestamp = data().deepCopy(fields()[24].schema(), other.absEndTimestamp);
         fieldSetFlags()[24] = true;
       }
-      if (isValidValue(fields()[25], other.botFlagList)) {
-        this.botFlagList = data().deepCopy(fields()[25].schema(), other.botFlagList);
+      if (isValidValue(fields()[25], other.familyViCnt)) {
+        this.familyViCnt = data().deepCopy(fields()[25].schema(), other.familyViCnt);
         fieldSetFlags()[25] = true;
+      }
+      if (isValidValue(fields()[26], other.agentString)) {
+        this.agentString = data().deepCopy(fields()[26].schema(), other.agentString);
+        fieldSetFlags()[26] = true;
+      }
+      if (isValidValue(fields()[27], other.botFlagList)) {
+        this.botFlagList = data().deepCopy(fields()[27].schema(), other.botFlagList);
+        fieldSetFlags()[27] = true;
       }
     }
 
@@ -1264,37 +1363,45 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
         this.startTimestamp = data().deepCopy(fields()[17].schema(), other.startTimestamp);
         fieldSetFlags()[17] = true;
       }
-      if (isValidValue(fields()[18], other.agentCnt)) {
-        this.agentCnt = data().deepCopy(fields()[18].schema(), other.agentCnt);
+      if (isValidValue(fields()[18], other.endTimestamp)) {
+        this.endTimestamp = data().deepCopy(fields()[18].schema(), other.endTimestamp);
         fieldSetFlags()[18] = true;
       }
-      if (isValidValue(fields()[19], other.firstAppId)) {
-        this.firstAppId = data().deepCopy(fields()[19].schema(), other.firstAppId);
+      if (isValidValue(fields()[19], other.agentCnt)) {
+        this.agentCnt = data().deepCopy(fields()[19].schema(), other.agentCnt);
         fieldSetFlags()[19] = true;
       }
-      if (isValidValue(fields()[20], other.bidBinConfirmFlag)) {
-        this.bidBinConfirmFlag = data().deepCopy(fields()[20].schema(), other.bidBinConfirmFlag);
+      if (isValidValue(fields()[20], other.firstAppId)) {
+        this.firstAppId = data().deepCopy(fields()[20].schema(), other.firstAppId);
         fieldSetFlags()[20] = true;
       }
-      if (isValidValue(fields()[21], other.clientIp)) {
-        this.clientIp = data().deepCopy(fields()[21].schema(), other.clientIp);
+      if (isValidValue(fields()[21], other.bidBinConfirmFlag)) {
+        this.bidBinConfirmFlag = data().deepCopy(fields()[21].schema(), other.bidBinConfirmFlag);
         fieldSetFlags()[21] = true;
       }
-      if (isValidValue(fields()[22], other.absStartTimestamp)) {
-        this.absStartTimestamp = data().deepCopy(fields()[22].schema(), other.absStartTimestamp);
+      if (isValidValue(fields()[22], other.clientIp)) {
+        this.clientIp = data().deepCopy(fields()[22].schema(), other.clientIp);
         fieldSetFlags()[22] = true;
       }
-      if (isValidValue(fields()[23], other.familyViCnt)) {
-        this.familyViCnt = data().deepCopy(fields()[23].schema(), other.familyViCnt);
+      if (isValidValue(fields()[23], other.absStartTimestamp)) {
+        this.absStartTimestamp = data().deepCopy(fields()[23].schema(), other.absStartTimestamp);
         fieldSetFlags()[23] = true;
       }
-      if (isValidValue(fields()[24], other.agentString)) {
-        this.agentString = data().deepCopy(fields()[24].schema(), other.agentString);
+      if (isValidValue(fields()[24], other.absEndTimestamp)) {
+        this.absEndTimestamp = data().deepCopy(fields()[24].schema(), other.absEndTimestamp);
         fieldSetFlags()[24] = true;
       }
-      if (isValidValue(fields()[25], other.botFlagList)) {
-        this.botFlagList = data().deepCopy(fields()[25].schema(), other.botFlagList);
+      if (isValidValue(fields()[25], other.familyViCnt)) {
+        this.familyViCnt = data().deepCopy(fields()[25].schema(), other.familyViCnt);
         fieldSetFlags()[25] = true;
+      }
+      if (isValidValue(fields()[26], other.agentString)) {
+        this.agentString = data().deepCopy(fields()[26].schema(), other.agentString);
+        fieldSetFlags()[26] = true;
+      }
+      if (isValidValue(fields()[27], other.botFlagList)) {
+        this.botFlagList = data().deepCopy(fields()[27].schema(), other.botFlagList);
+        fieldSetFlags()[27] = true;
       }
     }
 
@@ -2097,6 +2204,50 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
     }
 
     /**
+     * Gets the value of the 'endTimestamp' field. from ubisession endTimestamp
+     *
+     * @return The value.
+     */
+    public java.lang.Long getEndTimestamp() {
+      return endTimestamp;
+    }
+
+    /**
+     * Sets the value of the 'endTimestamp' field. from ubisession endTimestamp
+     *
+     * @param value The value of 'endTimestamp'.
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setEndTimestamp(
+        java.lang.Long value) {
+      validate(fields()[18], value);
+      this.endTimestamp = value;
+      fieldSetFlags()[18] = true;
+      return this;
+    }
+
+    /**
+     * Checks whether the 'endTimestamp' field has been set. from ubisession endTimestamp
+     *
+     * @return True if the 'endTimestamp' field has been set, false otherwise.
+     */
+    public boolean hasEndTimestamp() {
+      return fieldSetFlags()[18];
+    }
+
+
+    /**
+     * Clears the value of the 'endTimestamp' field. from ubisession endTimestamp
+     *
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder clearEndTimestamp() {
+      endTimestamp = null;
+      fieldSetFlags()[18] = false;
+      return this;
+    }
+
+    /**
      * Gets the value of the 'agentCnt' field. from ubisession agentCnt
      *
      * @return The value.
@@ -2113,9 +2264,9 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      */
     public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setAgentCnt(
         java.lang.Integer value) {
-      validate(fields()[18], value);
+      validate(fields()[19], value);
       this.agentCnt = value;
-      fieldSetFlags()[18] = true;
+      fieldSetFlags()[19] = true;
       return this;
     }
 
@@ -2125,7 +2276,7 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      * @return True if the 'agentCnt' field has been set, false otherwise.
      */
     public boolean hasAgentCnt() {
-      return fieldSetFlags()[18];
+      return fieldSetFlags()[19];
     }
 
 
@@ -2136,7 +2287,7 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      */
     public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder clearAgentCnt() {
       agentCnt = null;
-      fieldSetFlags()[18] = false;
+      fieldSetFlags()[19] = false;
       return this;
     }
 
@@ -2157,9 +2308,9 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      */
     public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setFirstAppId(
         java.lang.Integer value) {
-      validate(fields()[19], value);
+      validate(fields()[20], value);
       this.firstAppId = value;
-      fieldSetFlags()[19] = true;
+      fieldSetFlags()[20] = true;
       return this;
     }
 
@@ -2169,7 +2320,7 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      * @return True if the 'firstAppId' field has been set, false otherwise.
      */
     public boolean hasFirstAppId() {
-      return fieldSetFlags()[19];
+      return fieldSetFlags()[20];
     }
 
 
@@ -2180,7 +2331,7 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      */
     public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder clearFirstAppId() {
       firstAppId = null;
-      fieldSetFlags()[19] = false;
+      fieldSetFlags()[20] = false;
       return this;
     }
 
@@ -2201,9 +2352,9 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      */
     public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setBidBinConfirmFlag(
         java.lang.Boolean value) {
-      validate(fields()[20], value);
+      validate(fields()[21], value);
       this.bidBinConfirmFlag = value;
-      fieldSetFlags()[20] = true;
+      fieldSetFlags()[21] = true;
       return this;
     }
 
@@ -2213,7 +2364,7 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      * @return True if the 'bidBinConfirmFlag' field has been set, false otherwise.
      */
     public boolean hasBidBinConfirmFlag() {
-      return fieldSetFlags()[20];
+      return fieldSetFlags()[21];
     }
 
 
@@ -2225,7 +2376,7 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
     public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder
     clearBidBinConfirmFlag() {
       bidBinConfirmFlag = null;
-      fieldSetFlags()[20] = false;
+      fieldSetFlags()[21] = false;
       return this;
     }
 
@@ -2246,9 +2397,9 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      */
     public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setClientIp(
         java.lang.String value) {
-      validate(fields()[21], value);
+      validate(fields()[22], value);
       this.clientIp = value;
-      fieldSetFlags()[21] = true;
+      fieldSetFlags()[22] = true;
       return this;
     }
 
@@ -2258,7 +2409,7 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      * @return True if the 'clientIp' field has been set, false otherwise.
      */
     public boolean hasClientIp() {
-      return fieldSetFlags()[21];
+      return fieldSetFlags()[22];
     }
 
 
@@ -2269,7 +2420,7 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      */
     public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder clearClientIp() {
       clientIp = null;
-      fieldSetFlags()[21] = false;
+      fieldSetFlags()[22] = false;
       return this;
     }
 
@@ -2290,9 +2441,9 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      */
     public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setAbsStartTimestamp(
         java.lang.Long value) {
-      validate(fields()[22], value);
+      validate(fields()[23], value);
       this.absStartTimestamp = value;
-      fieldSetFlags()[22] = true;
+      fieldSetFlags()[23] = true;
       return this;
     }
 
@@ -2302,7 +2453,7 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      * @return True if the 'absStartTimestamp' field has been set, false otherwise.
      */
     public boolean hasAbsStartTimestamp() {
-      return fieldSetFlags()[22];
+      return fieldSetFlags()[23];
     }
 
 
@@ -2314,7 +2465,51 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
     public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder
     clearAbsStartTimestamp() {
       absStartTimestamp = null;
-      fieldSetFlags()[22] = false;
+      fieldSetFlags()[23] = false;
+      return this;
+    }
+
+    /**
+     * Gets the value of the 'absEndTimestamp' field. from ubisession absEndTimestamp
+     *
+     * @return The value.
+     */
+    public java.lang.Long getAbsEndTimestamp() {
+      return absEndTimestamp;
+    }
+
+    /**
+     * Sets the value of the 'absEndTimestamp' field. from ubisession absEndTimestamp
+     *
+     * @param value The value of 'absEndTimestamp'.
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setAbsEndTimestamp(
+        java.lang.Long value) {
+      validate(fields()[24], value);
+      this.absEndTimestamp = value;
+      fieldSetFlags()[24] = true;
+      return this;
+    }
+
+    /**
+     * Checks whether the 'absEndTimestamp' field has been set. from ubisession absEndTimestamp
+     *
+     * @return True if the 'absEndTimestamp' field has been set, false otherwise.
+     */
+    public boolean hasAbsEndTimestamp() {
+      return fieldSetFlags()[24];
+    }
+
+
+    /**
+     * Clears the value of the 'absEndTimestamp' field. from ubisession absEndTimestamp
+     *
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder clearAbsEndTimestamp() {
+      absEndTimestamp = null;
+      fieldSetFlags()[24] = false;
       return this;
     }
 
@@ -2335,9 +2530,9 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      */
     public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setFamilyViCnt(
         java.lang.Integer value) {
-      validate(fields()[23], value);
+      validate(fields()[25], value);
       this.familyViCnt = value;
-      fieldSetFlags()[23] = true;
+      fieldSetFlags()[25] = true;
       return this;
     }
 
@@ -2347,7 +2542,7 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      * @return True if the 'familyViCnt' field has been set, false otherwise.
      */
     public boolean hasFamilyViCnt() {
-      return fieldSetFlags()[23];
+      return fieldSetFlags()[25];
     }
 
 
@@ -2358,7 +2553,7 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      */
     public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder clearFamilyViCnt() {
       familyViCnt = null;
-      fieldSetFlags()[23] = false;
+      fieldSetFlags()[25] = false;
       return this;
     }
 
@@ -2379,9 +2574,9 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      */
     public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setAgentString(
         java.lang.String value) {
-      validate(fields()[24], value);
+      validate(fields()[26], value);
       this.agentString = value;
-      fieldSetFlags()[24] = true;
+      fieldSetFlags()[26] = true;
       return this;
     }
 
@@ -2391,7 +2586,7 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      * @return True if the 'agentString' field has been set, false otherwise.
      */
     public boolean hasAgentString() {
-      return fieldSetFlags()[24];
+      return fieldSetFlags()[26];
     }
 
 
@@ -2402,7 +2597,7 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      */
     public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder clearAgentString() {
       agentString = null;
-      fieldSetFlags()[24] = false;
+      fieldSetFlags()[26] = false;
       return this;
     }
 
@@ -2423,9 +2618,9 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      */
     public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setBotFlagList(
         java.util.List<java.lang.Integer> value) {
-      validate(fields()[25], value);
+      validate(fields()[27], value);
       this.botFlagList = value;
-      fieldSetFlags()[25] = true;
+      fieldSetFlags()[27] = true;
       return this;
     }
 
@@ -2435,7 +2630,7 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      * @return True if the 'botFlagList' field has been set, false otherwise.
      */
     public boolean hasBotFlagList() {
-      return fieldSetFlags()[25];
+      return fieldSetFlags()[27];
     }
 
 
@@ -2446,7 +2641,7 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      */
     public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder clearBotFlagList() {
       botFlagList = null;
-      fieldSetFlags()[25] = false;
+      fieldSetFlags()[27] = false;
       return this;
     }
 
@@ -2487,49 +2682,31 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
             fieldSetFlags()[16] ? this.cobrand : (java.lang.Integer) defaultValue(fields()[16]);
         record.startTimestamp =
             fieldSetFlags()[17] ? this.startTimestamp : (java.lang.Long) defaultValue(fields()[17]);
+        record.endTimestamp =
+            fieldSetFlags()[18] ? this.endTimestamp : (java.lang.Long) defaultValue(fields()[18]);
         record.agentCnt =
-            fieldSetFlags()[18] ? this.agentCnt : (java.lang.Integer) defaultValue(fields()[18]);
+            fieldSetFlags()[19] ? this.agentCnt : (java.lang.Integer) defaultValue(fields()[19]);
         record.firstAppId =
-            fieldSetFlags()[19] ? this.firstAppId : (java.lang.Integer) defaultValue(fields()[19]);
-        record.bidBinConfirmFlag = fieldSetFlags()[20] ? this.bidBinConfirmFlag
-            : (java.lang.Boolean) defaultValue(fields()[20]);
+            fieldSetFlags()[20] ? this.firstAppId : (java.lang.Integer) defaultValue(fields()[20]);
+        record.bidBinConfirmFlag = fieldSetFlags()[21] ? this.bidBinConfirmFlag
+            : (java.lang.Boolean) defaultValue(fields()[21]);
         record.clientIp =
-            fieldSetFlags()[21] ? this.clientIp : (java.lang.String) defaultValue(fields()[21]);
-        record.absStartTimestamp = fieldSetFlags()[22] ? this.absStartTimestamp
-            : (java.lang.Long) defaultValue(fields()[22]);
+            fieldSetFlags()[22] ? this.clientIp : (java.lang.String) defaultValue(fields()[22]);
+        record.absStartTimestamp = fieldSetFlags()[23] ? this.absStartTimestamp
+            : (java.lang.Long) defaultValue(fields()[23]);
+        record.absEndTimestamp = fieldSetFlags()[24] ? this.absEndTimestamp
+            : (java.lang.Long) defaultValue(fields()[24]);
         record.familyViCnt =
-            fieldSetFlags()[23] ? this.familyViCnt : (java.lang.Integer) defaultValue(fields()[23]);
+            fieldSetFlags()[25] ? this.familyViCnt : (java.lang.Integer) defaultValue(fields()[25]);
         record.agentString =
-            fieldSetFlags()[24] ? this.agentString : (java.lang.String) defaultValue(fields()[24]);
-        record.botFlagList = fieldSetFlags()[25] ? this.botFlagList
-            : (java.util.List<java.lang.Integer>) defaultValue(fields()[25]);
+            fieldSetFlags()[26] ? this.agentString : (java.lang.String) defaultValue(fields()[26]);
+        record.botFlagList = fieldSetFlags()[27] ? this.botFlagList
+            : (java.util.List<java.lang.Integer>) defaultValue(fields()[27]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
       }
     }
-  }
-
-  @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumWriter<IntermediateSession>
-      WRITER$ = (org.apache.avro.io.DatumWriter<IntermediateSession>) MODEL$
-      .createDatumWriter(SCHEMA$);
-
-  @Override
-  public void writeExternal(java.io.ObjectOutput out)
-      throws java.io.IOException {
-    WRITER$.write(this, SpecificData.getEncoder(out));
-  }
-
-  @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumReader<IntermediateSession>
-      READER$ = (org.apache.avro.io.DatumReader<IntermediateSession>) MODEL$
-      .createDatumReader(SCHEMA$);
-
-  @Override
-  public void readExternal(java.io.ObjectInput in)
-      throws java.io.IOException {
-    READER$.read(this, SpecificData.getDecoder(in));
   }
 
 }
