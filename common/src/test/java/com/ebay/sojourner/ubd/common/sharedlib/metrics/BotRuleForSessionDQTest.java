@@ -21,7 +21,7 @@ public class BotRuleForSessionDQTest {
   private SessionBotDetector sessionBotDetector;
 
   @BeforeEach
-  public void setUp() throws Exception {
+  public void setUp() {
 
     sessionAccumulator = new SessionAccumulator();
     sessionMetrics = SessionMetrics.getInstance();
