@@ -24,11 +24,15 @@ public class KafkaSourceFunction {
 
   private static <T> FlinkKafkaConsumerBase initKafkaConsumer(String topic, String brokers,
       String groupId, Class<T> tClass) {
+
     FlinkKafkaConsumer kafkaConsumer = KafkaConnectorFactory
         .createKafkaConsumer(topic, brokers, groupId, tClass);
     if (groupId.contains("copy")) {
       return kafkaConsumer.setStartFromEarliest();
-    } else {
+    } else if (groupId.contains("cross")) {
+      // 1588842000000L -- 20200507 17:00:00
+      return kafkaConsumer.setStartFromTimestamp(1588842000000L);
+    }else {
       return kafkaConsumer.setStartFromLatest();
     }
   }

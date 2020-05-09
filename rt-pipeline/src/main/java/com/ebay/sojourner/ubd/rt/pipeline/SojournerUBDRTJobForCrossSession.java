@@ -32,6 +32,7 @@ import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -165,6 +166,10 @@ public class SojournerUBDRTJobForCrossSession {
         .setParallelism(AppEnv.config().getFlink().app.getCrossSessionParallelism())
         .name("SojEvent sink")
         .uid("eventHdfsSink")
+        .disableChaining();
+
+    // for test read kafka data
+    intermediateSessionDataStream.addSink(new DiscardingSink<>()).name("intermediateSession sink")
         .disableChaining();
 
     // Submit this job

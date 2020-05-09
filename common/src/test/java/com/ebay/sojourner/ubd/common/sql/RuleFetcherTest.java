@@ -1,7 +1,7 @@
 package com.ebay.sojourner.ubd.common.sql;
 
 import com.ebay.sojourner.ubd.common.util.Constants;
-import com.ebay.sojourner.ubd.common.util.RestApiUtils;
+import com.ebay.sojourner.ubd.common.util.RestClientUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -26,7 +26,7 @@ public class RuleFetcherTest {
 
   @Test
   public void test_fetchRules() throws Exception {
-    request = RestApiUtils.buildRequest(
+    request = RestClientUtils.buildRequest(
         Constants.REST_SERVER + Constants.API_RULE_LIST_PUBLISHED);
     response = client.newCall(request).execute();
     objectMapper = new ObjectMapper();
@@ -41,7 +41,7 @@ public class RuleFetcherTest {
 
   @Test
   public void test_fetchRuleById() throws Exception {
-    request = RestApiUtils.buildRequest(
+    request = RestClientUtils.buildRequest(
         Constants.REST_SERVER + Constants.API_SPECIFIED_RULE_PREFIX + 1000);
     response = client.newCall(request).execute();
     objectMapper = new ObjectMapper();

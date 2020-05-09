@@ -74,12 +74,7 @@
     "name" : "startTimestamp",
     "type" : [ "null", "long" ],
     "doc" : "from ubisession startTimestamp"
-  },  {
-         "name" : "endTimestamp",
-         "type" : [ "null", "long" ],
-         "doc" : "from ubisession endTimestamp"
-       },
-       {
+  }, {
     "name" : "agentCnt",
     "type" : [ "null", "int" ],
     "doc" : "from ubisession agentCnt"
@@ -100,10 +95,6 @@
     "type" : [ "null", "long" ],
     "doc" : "from ubisession absStartTimestamp"
   }, {
-         "name" : "absEndTimestamp",
-         "type" : [ "null", "long" ],
-         "doc" : "from ubisession absEndTimestamp"
-       },{
     "name" : "familyViCnt",
     "type" : [ "null", "int" ],
     "doc" : "from ubisession familyViCnt"
