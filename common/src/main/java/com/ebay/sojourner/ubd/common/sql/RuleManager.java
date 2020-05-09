@@ -35,11 +35,11 @@ public class RuleManager {
     zkExecutor = Executors.newSingleThreadExecutor();
 
     // 1. fetch all rules at startup
-    initRules();
+    // initRules();
     // 2. init zk listener
-    initZkListener();
+    // initZkListener();
     // 3. init scheduling
-    initScheduling();
+    // initScheduling();
 
   }
 
@@ -102,12 +102,25 @@ public class RuleManager {
   }
 
   private void updateRule(RuleDefinition ruleDefinition) {
+
     if (ruleDefinition != null && ruleDefinition.getIsActive()) {
       SqlEventRule sqlEventRule = SqlEventRule
           .of(ruleDefinition.getContent(), ruleDefinition.getBizId(), ruleDefinition.getVersion(),
               ruleDefinition.getCategory());
       sqlEventRuleSet.add(sqlEventRule);
+    } else if (ruleDefinition != null && !ruleDefinition.getIsActive()) {
+      if (getRuleIdSet(sqlEventRuleSet).contains(ruleDefinition.getBizId())) {
+        sqlEventRuleSet.removeIf(rule -> rule.getRuleId() == ruleDefinition.getBizId());
+      }
     }
+  }
+
+  private Set<Long> getRuleIdSet(Set<SqlEventRule> sqlEventRules) {
+
+    return sqlEventRules
+        .stream()
+        .map(rule -> rule.getRuleId())
+        .collect(Collectors.toSet());
   }
 
   public void close() {
