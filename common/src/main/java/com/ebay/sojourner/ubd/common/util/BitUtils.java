@@ -17,10 +17,10 @@ public class BitUtils {
   }
 
   public static long setBit(long source, int pos) {
-    return source |= 1 << pos;
+    return source |= (long)1 << pos;
   }
 
   public static boolean isBitSet(long source, int pos) {
-    return (source & 1 << pos) != 0;
+    return (source & (long)1 << pos) != 0;
   }
 }

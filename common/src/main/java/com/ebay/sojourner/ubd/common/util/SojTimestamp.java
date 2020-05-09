@@ -41,4 +41,9 @@ public class SojTimestamp {
     res = String.valueOf(sojTimestamp);
     return res;
   }
+
+  public static void main(String[] args) {
+
+
+  }
 }

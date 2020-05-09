@@ -27,20 +27,20 @@ public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
     UbiEvent ubiEvent = new UbiEvent();
     ubiEvent.setSiteId(0);
     SessionAccumulator sessionAccumulator = new SessionAccumulator();
+  //    siteFlagMetrics.start(sessionAccumulator);
+  //    siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
+  //    ubiEvent.setSiteId(77);
+  //    siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
+  //    ubiEvent.setSiteId(101);
+  //    siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
+  //    ubiEvent.setSiteId(102);
+  //    siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
+  //    ubiEvent.setSiteId(103);
+  //    siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
+  //    siteFlagMetrics.end(sessionAccumulator);
+  //    System.out.println(sessionAccumulator.getUbiSession().getSiteFlags());
     siteFlagMetrics.start(sessionAccumulator);
-    siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
-    ubiEvent.setSiteId(77);
-    siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
-    ubiEvent.setSiteId(101);
-    siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
-    ubiEvent.setSiteId(102);
-    siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
-    ubiEvent.setSiteId(103);
-    siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
-    siteFlagMetrics.end(sessionAccumulator);
-    System.out.println(sessionAccumulator.getUbiSession().getSiteFlags());
-    siteFlagMetrics.start(sessionAccumulator);
-    ubiEvent.setSiteId(0);
+    ubiEvent.setSiteId(216);
     siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
     siteFlagMetrics.end(sessionAccumulator);
     System.out.println(sessionAccumulator.getUbiSession().getSiteFlags());
@@ -49,6 +49,7 @@ public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
 
   void setSiteFlag(Integer siteId, SessionAccumulator sessionAccumulator) {
     long siteFlagsMid = sessionAccumulator.getUbiSession().getSiteFlags();
+    System.out.println(Long.MAX_VALUE);
     switch (siteId) {
       case 4:
       case 5:
