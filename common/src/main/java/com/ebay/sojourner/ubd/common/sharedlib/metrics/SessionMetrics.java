@@ -45,6 +45,8 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
     addFieldMetrics(new AttributeFlagMetrics());
     addFieldMetrics(new BidCntMetrics());
     addFieldMetrics(new BinCntMetrics());
+    addFieldMetrics(new SiidCntMetrics());
+
     // Set abEventCnt and eventCnt both
     addFieldMetrics(new EventCntMetrics());
     addFieldMetrics(new OldSessionSkeyMetrics());

@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.junit.Assert;
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class BotRuleForSessionDQTest {
 
@@ -177,7 +177,6 @@ public class BotRuleForSessionDQTest {
     ubiEvent.setSourceImprId(null);
 
     ubiEventList.add(ubiEvent);
-
 
     ubiEvent = new UbiEvent();
     ubiEvent.setGuid("bb9007991710a860aec14a80ffb5be52");
@@ -649,7 +648,7 @@ public class BotRuleForSessionDQTest {
     for (UbiEvent event : ubiEventList) {
       sessionMetrics.feed(event, sessionAccumulator);
     }
-    sessionMetrics.end(sessionAccumulator);
+//    sessionMetrics.end(sessionAccumulator);
     Set<Integer> botFlagList
         = sessionBotDetector.getBotFlagList(sessionAccumulator.getUbiSession());
     Assert.assertEquals(true, botFlagList.contains(11));
@@ -658,7 +657,6 @@ public class BotRuleForSessionDQTest {
 
   @Test
   public void test207() throws Exception {
-
     UbiEvent ubiEvent = new UbiEvent();
     ubiEvent.setGuid("abc3813b1700a99b5a25bcfdfe3a6892");
     ubiEvent.setIframe(false);
@@ -686,9 +684,18 @@ public class BotRuleForSessionDQTest {
     ubiEvent.setWebServer("www.ebay.com");
     ubiEvent
         .setApplicationPayload(
-            "uit=1583687446043&nqc=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhBAAAgACAAACAAAAAAAgAgA**&c=1&g=abc3813b1700a99b5a25bcfdfe3a6892&h=3b&n=3b34e9251710a6e5729575b3fc598670&uc=1&es=0&nqt=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhFAAAgACAAACAAAAAAAgAgA**&p=2545226&uaid=bb91cbac1710ac3cdeb40407ff9c5c91S0&bs=0&bu=2131348157&t=0&cflgs=EA**&ul=en-US&ec=1&pn=2&rq=8d527adceac5bd5e&pagename=myworldconsumer__Social_MyWorldProfile&ciid=kcuszes*");
+            "uit=1583687446043&nqc"
+                +
+                "=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhBAAAgACAAACAAAAAAAgAgA**&c=1&g=abc3813b1700a99b5a25bcfdfe3a6892&h=3b&n=3b34e9251710a6e5729575b3fc598670&uc=1&es=0&nqt=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhFAAAgACAAACAAAAAAAgAgA**&p=2545226&uaid=bb91cbac1710ac3cdeb40407ff9c5c91S0&bs=0&bu=2131348157&t=0&cflgs=EA**&ul=en-US&ec=1&pn=2&rq=8d527adceac5bd5e&pagename=myworldconsumer__Social_MyWorldProfile&ciid=kcuszes*");
     ubiEvent.setClientData(constructClientData(
-        "TPayload=corr_id_%3D8d527adceac5bd5e%26node_id%3D22fe16435eee2f44%26REQUEST_GUID%3D171bb91c-baa0-ac3c-deb6-bd4affc5549b%26logid%3Dt6n%257Cqhqib%253D9vjdn%257Cqhqib%2A0250373-171bb91cbcc-0x1c4&TPool=r1myworld&TDuration=423&TStatus=0&TType=URL&ContentLength=0&ForwardedFor=102.98.8.204, 2.17.37.124,2.22.116.213&Script=/usr/og_479&Server=www.ebay.com&TMachine=10.195.205.235&TStamp=05:17:06.47&TName=Social_MyWorldProfile&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36&RemoteIP=102.98.8.204&Encoding=gzip"));
+        "TPayload=corr_id_%3D8d527adceac5bd5e%26node_id%3D22fe16435eee2f44%26REQUEST_GUID"
+            + "%3D171bb91c-baa0-ac3c-deb6-bd4affc5549b%26logid%3Dt6n%257Cqhqib%253D9vjdn"
+            + "%257Cqhqib%2A0250373-171bb91cbcc-0x1c4&TPool=r1myworld&TDuration=423&TStatus=0"
+            + "&TType=URL&ContentLength=0&ForwardedFor=102.98.8.204, 2.17.37.124,2.22.116"
+            + ".213&Script=/usr/og_479&Server=www.ebay.com&TMachine=10.195.205"
+            + ".235&TStamp=05:17:06.47&TName=Social_MyWorldProfile&Agent=Mozilla/5.0 "
+            + "(Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0"
+            + ".4044.122 Safari/537.36&RemoteIP=102.98.8.204&Encoding=gzip"));
     ubiEvent.setUrlQueryString(
         "/usr/og_479");
     ubiEvent.setPageName("Social_MyWorldProfile");
@@ -732,9 +739,19 @@ public class BotRuleForSessionDQTest {
     ubiEvent.setFlags(null);
     ubiEvent.setWebServer("www.ebay.com");
     ubiEvent.setApplicationPayload(
-        "uit=1583687446043&nqc=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhBAAAgACAAACAAAAAAAgAgA**&c=4&g=abc3813b1700a99b5a25bcfdfe3a6892&h=3b&js=1&n=3b34e9251710a6e5729575b3fc598670&uc=1&es=0&nqt=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhFAAAgACAAACAAAAAAAgAgA**&p=2545226&uaid=bb924e4e1710ada6205638d9ff91fa16S0&bs=0&bu=2131348157&t=0&ul=en-US&ec=1&pn=2&rq=2ae16650e36a54e3&pagename=myworldconsumer__Social_MyWorldProfile&ciid=kk5OYgU*");
+        "uit=1583687446043&nqc"
+            +
+            "=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhBAAAgACAAACAAAAAAAgAgA**&c=4&g=abc3813b1700a99b5a25bcfdfe3a6892&h=3b&js=1&n=3b34e9251710a6e5729575b3fc598670&uc=1&es=0&nqt=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhFAAAgACAAACAAAAAAAgAgA**&p=2545226&uaid=bb924e4e1710ada6205638d9ff91fa16S0&bs=0&bu=2131348157&t=0&ul=en-US&ec=1&pn=2&rq=2ae16650e36a54e3&pagename=myworldconsumer__Social_MyWorldProfile&ciid=kk5OYgU*");
     ubiEvent.setClientData(constructClientData(
-        "TPayload=corr_id_%3D2ae16650e36a54e3%26node_id%3Db4f0f22a0330bb27%26REQUEST_GUID%3D171bb924-e4d0-ada6-2052-acb7ffbf435c%26logid%3Dt6n%257Cqhqib%253D9vjdn%257Cqhqib%2A01%253F6367%2529pqtfwpu%2529pie%2529fgg%257E-fij-171bb924e76-0x1f3&TPool=r1myworld&TDuration=429&TStatus=0&TType=URL&ContentLength=0&ForwardedFor=102.98.8.204, 2.17.37.124,23.53.42.204&Script=/usr/joschwei21&Server=www.ebay.com&TMachine=10.218.98.5&TStamp=05:17:39.91&TName=Social_MyWorldProfile&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36&RemoteIP=102.98.8.204&Encoding=gzip"));
+        "TPayload=corr_id_%3D2ae16650e36a54e3%26node_id%3Db4f0f22a0330bb27%26REQUEST_GUID"
+            + "%3D171bb924-e4d0-ada6-2052-acb7ffbf435c%26logid%3Dt6n%257Cqhqib%253D9vjdn"
+            + "%257Cqhqib%2A01%253F6367%2529pqtfwpu%2529pie%2529fgg%257E-fij-171bb924e76-0x1f3"
+            + "&TPool=r1myworld&TDuration=429&TStatus=0&TType=URL&ContentLength=0&ForwardedFor"
+            + "=102.98.8.204, 2.17.37.124,23.53.42.204&Script=/usr/joschwei21&Server=www.ebay"
+            + ".com&TMachine=10.218.98.5&TStamp=05:17:39"
+            + ".91&TName=Social_MyWorldProfile&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+            + " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537"
+            + ".36&RemoteIP=102.98.8.204&Encoding=gzip"));
     ubiEvent.setUrlQueryString(
         "/usr/joschwei21");
     ubiEvent.setPageName("Social_MyWorldProfile");
@@ -778,9 +795,18 @@ public class BotRuleForSessionDQTest {
     ubiEvent.setFlags(null);
     ubiEvent.setWebServer("www.ebay.com");
     ubiEvent.setApplicationPayload(
-        "uit=1583687446043&nqc=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhBAAAgACAAACAAAAAAAgAgA**&c=7&g=abc3813b1700a99b5a25bcfdfe3a6892&h=3b&js=1&n=3b34e9251710a6e5729575b3fc598670&uc=1&es=0&nqt=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhFAAAgACAAACAAAAAAAgAgA**&p=2545226&uaid=bb936f1b1710a9c16fb09de0ff9913a0S0&bs=0&bu=2131348157&t=0&ul=en-US&ec=1&pn=2&rq=1e1241c3f8a844bf&pagename=myworldconsumer__Social_MyWorldProfile&ciid=k28bFvs*");
+        "uit=1583687446043&nqc"
+            +
+            "=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhBAAAgACAAACAAAAAAAgAgA**&c=7&g=abc3813b1700a99b5a25bcfdfe3a6892&h=3b&js=1&n=3b34e9251710a6e5729575b3fc598670&uc=1&es=0&nqt=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhFAAAgACAAACAAAAAAAgAgA**&p=2545226&uaid=bb936f1b1710a9c16fb09de0ff9913a0S0&bs=0&bu=2131348157&t=0&ul=en-US&ec=1&pn=2&rq=1e1241c3f8a844bf&pagename=myworldconsumer__Social_MyWorldProfile&ciid=k28bFvs*");
     ubiEvent.setClientData(constructClientData(
-        "TPayload=corr_id_%3D1e1241c3f8a844bf%26node_id%3Dea613676502c3d34%26REQUEST_GUID%3D171bb936-f190-a9c1-6fb3-8ec1ffc3723d%26logid%3Dt6n%257Cqhqib%253D9vjdn%257Cqhqib%2A01%253E%253E356%2529pqtfwpu%2529pie%2529fgg%257E-fij-171bb936f36-0xff&TPool=r1myworld&TDuration=450&TStatus=0&TType=URL&ContentLength=0&ForwardedFor=102.98.8.204,2.17.37.124&Script=/usr/tillman_1990&Server=www.ebay.com&TMachine=10.156.22.251&TStamp=05:18:53.84&TName=Social_MyWorldProfile&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36&RemoteIP=102.98.8.204&Encoding=gzip"));
+        "TPayload=corr_id_%3D1e1241c3f8a844bf%26node_id%3Dea613676502c3d34%26REQUEST_GUID"
+            + "%3D171bb936-f190-a9c1-6fb3-8ec1ffc3723d%26logid%3Dt6n%257Cqhqib%253D9vjdn"
+            + "%257Cqhqib%2A01%253E%253E356%2529pqtfwpu%2529pie%2529fgg%257E-fij-171bb936f36-0xff"
+            + "&TPool=r1myworld&TDuration=450&TStatus=0&TType=URL&ContentLength=0&ForwardedFor"
+            + "=102.98.8.204,2.17.37.124&Script=/usr/tillman_1990&Server=www.ebay.com&TMachine=10"
+            + ".156.22.251&TStamp=05:18:53.84&TName=Social_MyWorldProfile&Agent=Mozilla/5.0 "
+            + "(Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0"
+            + ".4044.122 Safari/537.36&RemoteIP=102.98.8.204&Encoding=gzip"));
     ubiEvent.setUrlQueryString(
         "/usr/tillman_1990");
     ubiEvent.setPageName("Social_MyWorldProfile");
@@ -824,9 +850,19 @@ public class BotRuleForSessionDQTest {
     ubiEvent.setFlags(null);
     ubiEvent.setWebServer("www.ebay.com");
     ubiEvent.setApplicationPayload(
-        "uit=1583687446043&nqc=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhBAAAgACAAACAAAAAAAgAgA**&c=9&g=abc3813b1700a99b5a25bcfdfe3a6892&h=3b&js=1&n=3b34e9251710a6e5729575b3fc598670&uc=1&es=0&nqt=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhFAAAgACAAACAAAAAAAgAgA**&p=2545226&uaid=bb93d0cb1710aa4816906d6efe504287S0&bs=0&bu=2131348157&t=0&ul=en-US&ec=1&pn=2&rq=2238f5ebe6eecc4a&pagename=myworldconsumer__Social_MyWorldProfile&ciid=k9DLgWk*");
+        "uit=1583687446043&nqc"
+            +
+            "=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhBAAAgACAAACAAAAAAAgAgA**&c=9&g=abc3813b1700a99b5a25bcfdfe3a6892&h=3b&js=1&n=3b34e9251710a6e5729575b3fc598670&uc=1&es=0&nqt=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhFAAAgACAAACAAAAAAAgAgA**&p=2545226&uaid=bb93d0cb1710aa4816906d6efe504287S0&bs=0&bu=2131348157&t=0&ul=en-US&ec=1&pn=2&rq=2238f5ebe6eecc4a&pagename=myworldconsumer__Social_MyWorldProfile&ciid=k9DLgWk*");
     ubiEvent.setClientData(constructClientData(
-        "TPayload=corr_id_%3D2238f5ebe6eecc4a%26node_id%3Dce61b4f87d4a193e%26REQUEST_GUID%3D171bb93d-0c90-aa48-1691-2d4dff0688cd%26logid%3Dt6n%257Cqhqib%253D9iptn%257Cqhqib%2A04%253E61%253C0%2529pqtfwpu%2529osu%2529fgg%257E-fij-171bb93d0f4-0xeb&TPool=r1myworld&TDuration=400&TStatus=0&TType=URL&ContentLength=0&ForwardedFor=102.98.8.204, 2.17.37.124,95.101.137.4&Script=/usr/wil-k_26&Server=www.ebay.com&TMachine=10.164.129.105&TStamp=05:19:18.85&TName=Social_MyWorldProfile&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36&RemoteIP=102.98.8.204&Encoding=gzip"));
+        "TPayload=corr_id_%3D2238f5ebe6eecc4a%26node_id%3Dce61b4f87d4a193e%26REQUEST_GUID"
+            + "%3D171bb93d-0c90-aa48-1691-2d4dff0688cd%26logid%3Dt6n%257Cqhqib%253D9iptn"
+            + "%257Cqhqib%2A04%253E61%253C0%2529pqtfwpu%2529osu%2529fgg%257E-fij-171bb93d0f4-0xeb"
+            + "&TPool=r1myworld&TDuration=400&TStatus=0&TType=URL&ContentLength=0&ForwardedFor"
+            + "=102.98.8.204, 2.17.37.124,95.101.137.4&Script=/usr/wil-k_26&Server=www.ebay"
+            + ".com&TMachine=10.164.129.105&TStamp=05:19:18"
+            + ".85&TName=Social_MyWorldProfile&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+            + " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537"
+            + ".36&RemoteIP=102.98.8.204&Encoding=gzip"));
     ubiEvent.setUrlQueryString(
         "/usr/wil-k_26");
     ubiEvent.setPageName("Social_MyWorldProfile");
@@ -869,9 +905,18 @@ public class BotRuleForSessionDQTest {
     ubiEvent.setFlags(null);
     ubiEvent.setWebServer("www.ebay.com");
     ubiEvent.setApplicationPayload(
-        "uit=1583687446043&nqc=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhBAAAgACAAACAAAAAAAgAgA**&c=15&g=abc3813b1700a99b5a25bcfdfe3a6892&h=3b&js=1&n=3b34e9251710a6e5729575b3fc598670&uc=1&es=0&nqt=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhFAAAgACAAACAAAAAAAgAgA**&p=2545226&uaid=bb97cb341710acc402804eedff5c83a0S0&bs=0&bu=2131348157&t=0&ul=en-US&ec=1&pn=2&rq=533cdb80f88f2f98&pagename=myworldconsumer__Social_MyWorldProfile&ciid=l8s0QCg*");
+        "uit=1583687446043&nqc"
+            +
+            "=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhBAAAgACAAACAAAAAAAgAgA**&c=15&g=abc3813b1700a99b5a25bcfdfe3a6892&h=3b&js=1&n=3b34e9251710a6e5729575b3fc598670&uc=1&es=0&nqt=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhFAAAgACAAACAAAAAAAgAgA**&p=2545226&uaid=bb97cb341710acc402804eedff5c83a0S0&bs=0&bu=2131348157&t=0&ul=en-US&ec=1&pn=2&rq=533cdb80f88f2f98&pagename=myworldconsumer__Social_MyWorldProfile&ciid=l8s0QCg*");
     ubiEvent.setClientData(constructClientData(
-        "TPayload=corr_id_%3D533cdb80f88f2f98%26node_id%3D89056c3a931c6e54%26REQUEST_GUID%3D171bb97c-b320-acc4-0280-5b7affa04353%26logid%3Dt6n%257Cqhqib%253D9iptn%257Cqhqib%2A0%253D%253F1726-171bb97cb57-0x119&TPool=r1myworld&TDuration=458&TStatus=0&TType=URL&ContentLength=0&ForwardedFor=102.98.8.204, 2.17.211.174,23.15.177.143&Script=/usr/jubert-1236&Server=www.ebay.com&TMachine=10.204.64.40&TStamp=05:23:39.57&TName=Social_MyWorldProfile&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36&RemoteIP=102.98.8.204&Encoding=gzip"));
+        "TPayload=corr_id_%3D533cdb80f88f2f98%26node_id%3D89056c3a931c6e54%26REQUEST_GUID"
+            + "%3D171bb97c-b320-acc4-0280-5b7affa04353%26logid%3Dt6n%257Cqhqib%253D9iptn"
+            + "%257Cqhqib%2A0%253D%253F1726-171bb97cb57-0x119&TPool=r1myworld&TDuration=458"
+            + "&TStatus=0&TType=URL&ContentLength=0&ForwardedFor=102.98.8.204, 2.17.211.174,23.15"
+            + ".177.143&Script=/usr/jubert-1236&Server=www.ebay.com&TMachine=10.204.64"
+            + ".40&TStamp=05:23:39.57&TName=Social_MyWorldProfile&Agent=Mozilla/5.0 "
+            + "(Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0"
+            + ".4044.122 Safari/537.36&RemoteIP=102.98.8.204&Encoding=gzip"));
     ubiEvent.setUrlQueryString(
         "/usr/jubert-1236");
     ubiEvent.setPageName("Social_MyWorldProfile");
@@ -915,9 +960,19 @@ public class BotRuleForSessionDQTest {
     ubiEvent.setFlags(null);
     ubiEvent.setWebServer("www.ebay.com");
     ubiEvent.setApplicationPayload(
-        "uit=1583687446043&nqc=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhBAAAgACAAACAAAAAAAgAgA**&c=17&g=abc3813b1700a99b5a25bcfdfe3a6892&h=3b&js=1&n=3b34e9251710a6e5729575b3fc598670&uc=1&es=0&nqt=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhFAAAgACAAACAAAAAAAgAgA**&p=2545226&uaid=bb97ff801710ad4ed3e182a8fe4bce73S0&bs=0&bu=2131348157&t=0&ul=en-US&ec=1&pn=2&rq=aa2d84faa9970002&pagename=myworldconsumer__Social_MyWorldProfile&ciid=l%2F%2BA7T4*");
+        "uit=1583687446043&nqc"
+            +
+            "=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhBAAAgACAAACAAAAAAAgAgA**&c=17&g=abc3813b1700a99b5a25bcfdfe3a6892&h=3b&js=1&n=3b34e9251710a6e5729575b3fc598670&uc=1&es=0&nqt=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhFAAAgACAAACAAAAAAAgAgA**&p=2545226&uaid=bb97ff801710ad4ed3e182a8fe4bce73S0&bs=0&bu=2131348157&t=0&ul=en-US&ec=1&pn=2&rq=aa2d84faa9970002&pagename=myworldconsumer__Social_MyWorldProfile&ciid=l%2F%2BA7T4*");
     ubiEvent.setClientData(constructClientData(
-        "TPayload=corr_id_%3Daa2d84faa9970002%26node_id%3D86fd5f0f8ba05e7e%26REQUEST_GUID%3D171bb97f-f7f0-ad4e-d3e7-2ca2ff03e72f%26logid%3Dt6n%257Cqhqib%253D9iptn%257Cqhqib%2A04%253E5024%2529pqtfwpu%2529osu%2529fgg%257E-fij-171bb97ff9e-0xfb&TPool=r1myworld&TDuration=457&TStatus=0&TType=URL&ContentLength=0&ForwardedFor=102.98.8.204, 2.17.211.174,23.15.177.143&Script=/usr/pehein_9605&Server=www.ebay.com&TMachine=10.212.237.62&TStamp=05:23:52.95&TName=Social_MyWorldProfile&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36&RemoteIP=102.98.8.204&Encoding=gzip"));
+        "TPayload=corr_id_%3Daa2d84faa9970002%26node_id%3D86fd5f0f8ba05e7e%26REQUEST_GUID"
+            + "%3D171bb97f-f7f0-ad4e-d3e7-2ca2ff03e72f%26logid%3Dt6n%257Cqhqib%253D9iptn"
+            + "%257Cqhqib%2A04%253E5024%2529pqtfwpu%2529osu%2529fgg%257E-fij-171bb97ff9e-0xfb"
+            + "&TPool=r1myworld&TDuration=457&TStatus=0&TType=URL&ContentLength=0&ForwardedFor"
+            + "=102.98.8.204, 2.17.211.174,23.15.177.143&Script=/usr/pehein_9605&Server=www.ebay"
+            + ".com&TMachine=10.212.237.62&TStamp=05:23:52"
+            + ".95&TName=Social_MyWorldProfile&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+            + " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537"
+            + ".36&RemoteIP=102.98.8.204&Encoding=gzip"));
     ubiEvent.setUrlQueryString(
         "/usr/pehein_9605");
     ubiEvent.setPageName("Social_MyWorldProfile");
@@ -960,9 +1015,18 @@ public class BotRuleForSessionDQTest {
     ubiEvent.setFlags(null);
     ubiEvent.setWebServer("www.ebay.com");
     ubiEvent.setApplicationPayload(
-        "uit=1583687446043&nqc=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhBAAAgACAAACAAAAAAAgAgA**&c=19&g=abc3813b1700a99b5a25bcfdfe3a6892&h=3b&js=1&n=3b34e9251710a6e5729575b3fc598670&uc=1&es=0&nqt=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhFAAAgACAAACAAAAAAAgAgA**&p=2545226&uaid=bb9836a41710aadced9465bcfeb96871S0&bs=0&bu=2131348157&t=0&ul=en-US&ec=1&pn=2&rq=2eb01d8c6b719ae9&pagename=myworldconsumer__Social_MyWorldProfile&ciid=mDakztk*");
+        "uit=1583687446043&nqc"
+            +
+            "=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhBAAAgACAAACAAAAAAAgAgA**&c=19&g=abc3813b1700a99b5a25bcfdfe3a6892&h=3b&js=1&n=3b34e9251710a6e5729575b3fc598670&uc=1&es=0&nqt=QAAAAAAAAAAAAAAAIAAAAAgAAAAABAAAAAACAAAAAQCAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACAhFAAAgACAAACAAAAAAAgAgA**&p=2545226&uaid=bb9836a41710aadced9465bcfeb96871S0&bs=0&bu=2131348157&t=0&ul=en-US&ec=1&pn=2&rq=2eb01d8c6b719ae9&pagename=myworldconsumer__Social_MyWorldProfile&ciid=mDakztk*");
     ubiEvent.setClientData(constructClientData(
-        "TPayload=corr_id_%3D2eb01d8c6b719ae9%26node_id%3D0cfeb56dac6d183a%26REQUEST_GUID%3D171bb983-6a20-aadc-ed90-4721ff41802e%26logid%3Dt6n%257Cqhqib%253D9iptn%257Cqhqib%2A0%253C05635-171bb9836c0-0x215&TPool=r1myworld&TDuration=384&TStatus=0&TType=URL&ContentLength=0&ForwardedFor=102.98.8.204,2.17.211.174&Script=/usr/palss-70&Server=www.ebay.com&TMachine=10.173.206.217&TStamp=05:24:07.07&TName=Social_MyWorldProfile&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36&RemoteIP=102.98.8.204&Encoding=gzip"));
+        "TPayload=corr_id_%3D2eb01d8c6b719ae9%26node_id%3D0cfeb56dac6d183a%26REQUEST_GUID"
+            + "%3D171bb983-6a20-aadc-ed90-4721ff41802e%26logid%3Dt6n%257Cqhqib%253D9iptn"
+            + "%257Cqhqib%2A0%253C05635-171bb9836c0-0x215&TPool=r1myworld&TDuration=384&TStatus=0"
+            + "&TType=URL&ContentLength=0&ForwardedFor=102.98.8.204,2.17.211"
+            + ".174&Script=/usr/palss-70&Server=www.ebay.com&TMachine=10.173.206"
+            + ".217&TStamp=05:24:07.07&TName=Social_MyWorldProfile&Agent=Mozilla/5.0 "
+            + "(Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0"
+            + ".4044.122 Safari/537.36&RemoteIP=102.98.8.204&Encoding=gzip"));
     ubiEvent.setUrlQueryString(
         "/usr/palss-70");
     ubiEvent.setPageName("Social_MyWorldProfile");
@@ -978,7 +1042,6 @@ public class BotRuleForSessionDQTest {
     ubiEvent.setStaticPageType(0);
     ubiEvent.setSourceImprId(null);
     ubiEventList.add(ubiEvent);
-
 
     sessionMetrics.init();
     sessionMetrics.start(sessionAccumulator);

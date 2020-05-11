@@ -29,7 +29,7 @@ public class UbiSessionHelper {
   private static final int SINGLE_PAGE_SESSION = 1;
 
   private static Map<String, Boolean> iabCache =
-      new ConcurrentHashMap<>(IAB_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR) ;
+      new ConcurrentHashMap<>(IAB_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
 
   private List<String> iabAgentRegs;
 
@@ -205,15 +205,17 @@ public class UbiSessionHelper {
   }
 
   public boolean isIabAgent(UbiSession session) throws InterruptedException {
-    if (session.getNonIframeRdtEventCnt() > 0 && session.getUserAgent() != null) {
-      Boolean whether = iabCache.get(session.getUserAgent());
+    if (session.getNonIframeRdtEventCnt() > 0 && (session.getUserAgent() != null
+        || session.getAgentInfo() != null)) {
+      String userAgent =
+          session.getUserAgent() == null ? session.getAgentInfo() : session.getUserAgent();
+      Boolean whether = iabCache.get(userAgent);
       if (whether == null) {
-        whether = checkIabAgent(session.getUserAgent());
-        if(iabCache.size()<IAB_MAX_CAPACITY) {
-          iabCache.put(session.getUserAgent(), whether);
+        whether = checkIabAgent(userAgent);
+        if (iabCache.size() < IAB_MAX_CAPACITY) {
+          iabCache.put(userAgent, whether);
         }
       }
-
       return whether;
     }
 

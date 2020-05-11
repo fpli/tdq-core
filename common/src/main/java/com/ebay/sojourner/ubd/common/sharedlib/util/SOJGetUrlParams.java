@@ -69,5 +69,8 @@ public class SOJGetUrlParams {
     System.out.println("ref = " + aURL.getRef());
     System.out.println("filename = " + aURL.getFile());
     System.out.println("params = " + getUrlParams(aURL.toString()));
+    String url2="http://rover.ebay.com"+"/experience/myebay_buying/v1/watching_activity"
+        + "?items_per_page=300";
+    System.out.println(getUrlParams(url2));
   }
 }

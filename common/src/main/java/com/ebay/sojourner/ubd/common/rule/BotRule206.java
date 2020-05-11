@@ -20,6 +20,7 @@ public class BotRule206 extends AbstractBotRule<UbiSession> {
 
   @Override
   public int getBotFlag(UbiSession session) {
+
     if (session.getAgentString() == null
         && session.getMaxScsSeqNum() <= 5
         && lndgPageIds.contains(session.getLndgPageId())) {

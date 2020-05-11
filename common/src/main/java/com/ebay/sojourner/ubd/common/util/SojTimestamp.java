@@ -42,7 +42,18 @@ public class SojTimestamp {
     return res;
   }
 
+  public static String getUnixTimestamp(String s) {
+    String res;
+    //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    //        sdf.setTimeZone(TimeZone.getTimeZone("GMT-7"));
+    Date date = formatter.parseDateTime(s.substring(0, 23)).toDate();
+    long ts = date.getTime();
+    res = String.valueOf(ts);
+    return res;
+  }
+
   public static void main(String[] args) {
+    System.out.println(getUnixTimestamp("2020-05-10 12:01:01.000"));
 
 
   }

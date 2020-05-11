@@ -3,13 +3,14 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 import com.ebay.sojourner.ubd.common.model.ClientData;
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.sharedlib.util.IsValidIPv4;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJParseClientInfo;
 import com.ebay.sojourner.ubd.common.util.SojTimestamp;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class MetricsForSessionDQTest {
 
@@ -23,6 +24,7 @@ public class MetricsForSessionDQTest {
     sessionAccumulator = new SessionAccumulator();
     sessionMetrics = SessionMetrics.getInstance();
     ubiEventList = new ArrayList<>();
+    System.out.println(IsValidIPv4.isValidIP("ebayUserAgent/eBayAndroid;6.0.1;Android;9;HUAWEI;HWPAR;T-Mobile CZ;1080x2130;2.5"));
 
   }
 
@@ -48,6 +50,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(449944858978L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags(null);
@@ -91,6 +94,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(939441238370L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags("AEQ*");
@@ -133,6 +137,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(521017078370L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags("AA**");
@@ -176,6 +181,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(826334163298L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags("AA**");
@@ -219,6 +225,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(790458577506L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags(null);
@@ -262,6 +269,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(989088362850L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags(null);
@@ -305,6 +313,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(521020813922L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags("AA**");
@@ -348,6 +357,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(521032544354L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags("AA**");
@@ -391,6 +401,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(521019437410L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags("AA**");
@@ -434,6 +445,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(696102203490L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags(null);
@@ -477,6 +489,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(521017078370L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags("AA**");
@@ -520,6 +533,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(581866336610L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags(null);
@@ -563,6 +577,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(474312784994L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags(null);
@@ -606,6 +621,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(521020682850L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags("AA**");
@@ -649,6 +665,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(628504376162L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags(null);
@@ -692,6 +709,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(418519563618L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags("AA**");
@@ -735,6 +753,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setCobrand(6);
     ubiEvent.setCurrentImprId(521020551778L);
     ubiEvent.setEventAttr(null);
+    ubiEvent.setAppId(2571);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags("AA**");

@@ -257,6 +257,8 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
     if (intermediateMetrics.getRoverEntryTs() != null
         && intermediateMetrics.getRoverEntryTs() <= startTSOnCurrentCobrandSite + SESCOND1
         && "15".equals(intermediateMetrics.getMpxChannelId())) {
+
+      System.out.println("this is for 257 14");
       return 14;
     }
     if (intermediateMetrics.getRoverEntryTs() != null
@@ -365,6 +367,8 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
       return 13;
     }
     if ("15".equals(intermediateMetrics.getImgMpxChannelId())) {
+
+      System.out.println("this is for 367 14");
       return 14;
     }
     if ("16".equals(intermediateMetrics.getImgMpxChannelId())) {
@@ -512,10 +516,14 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
         && intermediateMetrics.getRoverEntryTs() >= startTSOnCurrentCobrandSite - SECOND30
         && intermediateMetrics.getFirstMppId() != null
         && intermediateMetrics.getFirstMppId() > 0) {
+
+      System.out.println("this is for 510 14");
       return 14;
     }
     if (intermediateMetrics.getFinalMppId() != null
         && intermediateMetrics.getFinalMppId() > 0) {
+
+      System.out.println("this is for 523 14");
       return 14;
     }
     if (StringUtils.isBlank(intermediateMetrics.getRefDomain())) {
@@ -569,7 +577,6 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
   @Override
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
     intermediateMetrics = new IntermediateMetrics();
-    intermediateMetrics.initMetrics();
     sessionAccumulator.getUbiSession().setIntermediateMetrics(intermediateMetrics);
 
   }

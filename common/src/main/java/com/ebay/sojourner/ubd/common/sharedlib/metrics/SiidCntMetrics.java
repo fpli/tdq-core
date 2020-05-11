@@ -26,6 +26,7 @@ public class SiidCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
             .setSiidCnt2(sessionAccumulator.getUbiSession().getSiidCnt2() + 1);
       }
       if (event.getReferrer() != null) {
+        System.out.println("event referrer is not null!!");
         sessionAccumulator.getUbiSession().setIsRefererNull(false);
       }
     }

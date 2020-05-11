@@ -15,97 +15,69 @@ import org.apache.avro.specific.SpecificData;
 public class IntermediateSession extends org.apache.avro.specific.SpecificRecordBase implements
     org.apache.avro.specific.SpecificRecord {
 
-  private static final long serialVersionUID = -2981782155953805541L;
   public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
-      "{\"type\":\"record\",\"name\":\"IntermediateSession\","
-          + "\"namespace\":\"com.ebay.sojourner.ubd.common.model\",\"fields\":[{\"name\":\"guid\","
+      "{\"type\":\"record\",\"name\":\"IntermediateSession\",\"namespace\":\"com.ebay.sojourner"
+          + ".ubd.common.model\",\"fields\":[{\"name\":\"guid\",\"type\":[\"null\","
+          + "{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession "
+          + "guid\"},{\"name\":\"guid1\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession "
+          + "guid1\"},{\"name\":\"guid2\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession "
+          + "guid2\"},{\"name\":\"absEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from "
+          + "ubisession absEventCnt\"},{\"name\":\"nonIframeRdtEventCnt\",\"type\":[\"null\","
+          + "\"int\"],\"doc\":\"from ubisession nonIframeRdtEventCnt\"},{\"name\":\"ip\","
           + "\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],"
-          + "\"doc\":\"from ubisession guid\"},{\"name\":\"guid1\",\"type\":[\"null\","
-          + "\"long\"],\"doc\":\"from ubisession guid1\"},{\"name\":\"guid2\",\"type\":[\"null\","
-          + "\"long\"],\"doc\":\"from ubisession guid2\"},{\"name\":\"absEventCnt\","
-          + "\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession absEventCnt\"},"
-          + "{\"name\":\"nonIframeRdtEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\""
-          + "from ubisession nonIframeRdtEventCnt\"},{\"name\":\"ip\",\"type\":[\"null\","
-          + "{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":"
-          + "\"from ubisession ip\"},{\"name\":\"userAgent\",\"type\":[\"null\",{\"type\":"
-          + "\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession userAgent\"},"
-          + "{\"name\":\"singleClickSessionFlag\",\"type\":[\"null\",\"boolean\"],\"doc\":\"from "
-          + "ubisession singleClickSessionFlag\"},{\"name\":\"botFlag\",\"type\":[\"null\",\"int\""
-          + "],\"doc\":\"from ubisession botFlag\"},{\"name\":\"firstCguid\",\"type\":[\"null\",{\""
-          + "type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession firstCg"
-          + "uid\"},{\"name\":\"firstUserId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java."
-          + "string\":\"String\"}],\"doc\":\"from ubisession firstUserId\"},{\"name\":\"validPage"
-          + "Cnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession validPageCnt\"},{\"name\""
-          + ":\"trafficSrcId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession trafficSrcId"
-          + "\"},{\"name\":\"exInternalIp\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.st"
-          + "ring\":\"String\"}],\"doc\":\"from ubisession exInternalIp\"},{\"name\":\"homepageCn"
-          + "t\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession homepageCnt\"},{\"name\":\""
-          + "signinPageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"fron ubisession signinPageCnt\""
-          + "},{\"name\":\"cobrand\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession cobrand"
-          + "\"},{\"name\":\"startTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisessi"
-          + "on startTimestamp\"},{\"name\":\"agentCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"fro"
-          + "m ubisession agentCnt\"},{\"name\":\"firstAppId\",\"type\":[\"null\",\"int\"],\"doc\""
-          + ":\"from ubisession firstAppId\"},{\"name\":\"bidBinConfirmFlag\",\"type\":[\"null\",\""
-          + "boolean\"],\"doc\":\"from ubisession bidBinConfirmFlag\"},{\"name\":\"clientIp\",\"ty"
-          + "pe\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from "
-          + "ubisession clientIp\"},{\"name\":\"absStartTimestamp\",\"type\":[\"null\",\"long\"],\""
-          + "doc\":\"from ubisession absStartTimestamp\"},{\"name\":\"familyViCnt\",\"type\":[\"nu"
-          + "ll\",\"int\"],\"doc\":\"from ubisession familyViCnt\"},{\"name\":\"agentString\",\"ty"
-          + "pe\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from "
-          + "ubisession agentString\"},{\"name\":\"botFlagList\",\"type\":[\"null\",{\"type\":\"ar"
-          + "ray\",\"items\":\"int\"}],\"default\":null},{\"name\":\"absEndTimestamp\",\"type\":[\""
-          + "null\",\"long\"],\"doc\":\"from ubisession absEndTimestamp\"},{\"name\":\"endTimestam"
-          + "p\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession endTimestamp\"},{\"name\":"
-          + "\"sojDataDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sojDataDt\"},{\""
-          + "name\":\"sessionId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"S"
-          + "tring\"}],\"doc\":\"from ubisession sessionId\"},{\"name\":\"sessionSkey\",\"type\":["
-          + "\"null\",\"long\"],\"doc\":\"from ubisession sessionSkey\"},{\"name\":\"sessionStartD"
-          + "t\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sessionStartDt\"}]}");
-
-  public static org.apache.avro.Schema getClassSchema() {
-    return SCHEMA$;
-  }
-
+          + "\"doc\":\"from ubisession ip\"},{\"name\":\"userAgent\",\"type\":[\"null\","
+          + "{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession "
+          + "userAgent\"},{\"name\":\"singleClickSessionFlag\",\"type\":[\"null\",\"boolean\"],"
+          + "\"doc\":\"from ubisession singleClickSessionFlag\"},{\"name\":\"botFlag\","
+          + "\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession botFlag\"},"
+          + "{\"name\":\"firstCguid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java"
+          + ".string\":\"String\"}],\"doc\":\"from ubisession firstCguid\"},"
+          + "{\"name\":\"firstUserId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java"
+          + ".string\":\"String\"}],\"doc\":\"from ubisession firstUserId\"},"
+          + "{\"name\":\"validPageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession "
+          + "validPageCnt\"},{\"name\":\"trafficSrcId\",\"type\":[\"null\",\"int\"],"
+          + "\"doc\":\"from ubisession trafficSrcId\"},{\"name\":\"exInternalIp\","
+          + "\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],"
+          + "\"doc\":\"from ubisession exInternalIp\"},{\"name\":\"homepageCnt\","
+          + "\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession homepageCnt\"},"
+          + "{\"name\":\"signinPageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"fron ubisession "
+          + "signinPageCnt\"},{\"name\":\"cobrand\",\"type\":[\"null\",\"int\"],\"doc\":\"from "
+          + "ubisession cobrand\"},{\"name\":\"startTimestamp\",\"type\":[\"null\",\"long\"],"
+          + "\"doc\":\"from ubisession startTimestamp\"},{\"name\":\"agentCnt\","
+          + "\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession agentCnt\"},"
+          + "{\"name\":\"firstAppId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession "
+          + "firstAppId\"},{\"name\":\"bidBinConfirmFlag\",\"type\":[\"null\",\"boolean\"],"
+          + "\"doc\":\"from ubisession bidBinConfirmFlag\"},{\"name\":\"clientIp\","
+          + "\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],"
+          + "\"doc\":\"from ubisession clientIp\"},{\"name\":\"absStartTimestamp\","
+          + "\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession absStartTimestamp\"},"
+          + "{\"name\":\"familyViCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession "
+          + "familyViCnt\"},{\"name\":\"agentString\",\"type\":[\"null\",{\"type\":\"string\","
+          + "\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession agentString\"},"
+          + "{\"name\":\"botFlagList\",\"type\":[\"null\",{\"type\":\"array\","
+          + "\"items\":\"int\"}],\"default\":null},{\"name\":\"absEndTimestamp\","
+          + "\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession absEndTimestamp\"},"
+          + "{\"name\":\"endTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession "
+          + "endTimestamp\"},{\"name\":\"sojDataDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from "
+          + "ubisession sojDataDt\"},{\"name\":\"sessionId\",\"type\":[\"null\","
+          + "{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession "
+          + "sessionId\"},{\"name\":\"sessionSkey\",\"type\":[\"null\",\"long\"],\"doc\":\"from "
+          + "ubisession sessionSkey\"},{\"name\":\"sessionStartDt\",\"type\":[\"null\",\"long\"],"
+          + "\"doc\":\"from ubisession sessionStartDt\"}]}");
+  private static final long serialVersionUID = -2981782155953805541L;
   private static SpecificData MODEL$ = new SpecificData();
-
   private static final BinaryMessageEncoder<IntermediateSession> ENCODER =
       new BinaryMessageEncoder<IntermediateSession>(MODEL$, SCHEMA$);
-
   private static final BinaryMessageDecoder<IntermediateSession> DECODER =
       new BinaryMessageDecoder<IntermediateSession>(MODEL$, SCHEMA$);
-
-  /**
-   * Return the BinaryMessageDecoder instance used by this class.
-   */
-  public static BinaryMessageDecoder<IntermediateSession> getDecoder() {
-    return DECODER;
-  }
-
-  /**
-   * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link
-   * SchemaStore}.
-   *
-   * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
-   */
-  public static BinaryMessageDecoder<IntermediateSession> createDecoder(SchemaStore resolver) {
-    return new BinaryMessageDecoder<IntermediateSession>(MODEL$, SCHEMA$, resolver);
-  }
-
-  /**
-   * Serializes this IntermediateSession to a ByteBuffer.
-   */
-  public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
-    return ENCODER.encode(this);
-  }
-
-  /**
-   * Deserializes a IntermediateSession from a ByteBuffer.
-   */
-  public static IntermediateSession fromByteBuffer(
-      java.nio.ByteBuffer b) throws java.io.IOException {
-    return DECODER.decode(b);
-  }
-
+  @SuppressWarnings("unchecked")
+  private static final org.apache.avro.io.DatumWriter<IntermediateSession>
+      WRITER$ = (org.apache.avro.io.DatumWriter<IntermediateSession>) MODEL$
+      .createDatumWriter(SCHEMA$);
+  @SuppressWarnings("unchecked")
+  private static final org.apache.avro.io.DatumReader<IntermediateSession>
+      READER$ = (org.apache.avro.io.DatumReader<IntermediateSession>) MODEL$
+      .createDatumReader(SCHEMA$);
   /**
    * from ubisession guid
    */
@@ -263,14 +235,12 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
    */
   @Deprecated
   public java.lang.Long sessionStartDt;
-
   /**
    * Default constructor.  Note that this does not initialize fields to their default values from
    * the schema.  If that is desired then one should use <code>newBuilder()</code>.
    */
   public IntermediateSession() {
   }
-
   /**
    * All-args constructor.
    *
@@ -351,6 +321,74 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
     this.sessionId = sessionId;
     this.sessionSkey = sessionSkey;
     this.sessionStartDt = sessionStartDt;
+  }
+
+  public static org.apache.avro.Schema getClassSchema() {
+    return SCHEMA$;
+  }
+
+  /**
+   * Return the BinaryMessageDecoder instance used by this class.
+   */
+  public static BinaryMessageDecoder<IntermediateSession> getDecoder() {
+    return DECODER;
+  }
+
+  /**
+   * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link
+   * SchemaStore}.
+   *
+   * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
+   */
+  public static BinaryMessageDecoder<IntermediateSession> createDecoder(SchemaStore resolver) {
+    return new BinaryMessageDecoder<IntermediateSession>(MODEL$, SCHEMA$, resolver);
+  }
+
+  /**
+   * Deserializes a IntermediateSession from a ByteBuffer.
+   */
+  public static IntermediateSession fromByteBuffer(
+      java.nio.ByteBuffer b) throws java.io.IOException {
+    return DECODER.decode(b);
+  }
+
+  /**
+   * Creates a new IntermediateSession RecordBuilder.
+   *
+   * @return A new IntermediateSession RecordBuilder
+   */
+  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder() {
+    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder();
+  }
+
+  /**
+   * Creates a new IntermediateSession RecordBuilder by copying an existing Builder.
+   *
+   * @param other The existing builder to copy.
+   * @return A new IntermediateSession RecordBuilder
+   */
+  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder(
+      com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder other) {
+    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder(other);
+  }
+
+  /**
+   * Creates a new IntermediateSession RecordBuilder by copying an existing IntermediateSession
+   * instance.
+   *
+   * @param other The existing instance to copy.
+   * @return A new IntermediateSession RecordBuilder
+   */
+  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder(
+      com.ebay.sojourner.ubd.common.model.IntermediateSession other) {
+    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder(other);
+  }
+
+  /**
+   * Serializes this IntermediateSession to a ByteBuffer.
+   */
+  public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
+    return ENCODER.encode(this);
   }
 
   public org.apache.avro.Schema getSchema() {
@@ -1110,36 +1148,16 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
     this.sessionStartDt = value;
   }
 
-  /**
-   * Creates a new IntermediateSession RecordBuilder.
-   *
-   * @return A new IntermediateSession RecordBuilder
-   */
-  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder() {
-    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder();
+  @Override
+  public void writeExternal(java.io.ObjectOutput out)
+      throws java.io.IOException {
+    WRITER$.write(this, SpecificData.getEncoder(out));
   }
 
-  /**
-   * Creates a new IntermediateSession RecordBuilder by copying an existing Builder.
-   *
-   * @param other The existing builder to copy.
-   * @return A new IntermediateSession RecordBuilder
-   */
-  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder(
-      com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder other) {
-    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder(other);
-  }
-
-  /**
-   * Creates a new IntermediateSession RecordBuilder by copying an existing IntermediateSession
-   * instance.
-   *
-   * @param other The existing instance to copy.
-   * @return A new IntermediateSession RecordBuilder
-   */
-  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder(
-      com.ebay.sojourner.ubd.common.model.IntermediateSession other) {
-    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder(other);
+  @Override
+  public void readExternal(java.io.ObjectInput in)
+      throws java.io.IOException {
+    READER$.read(this, SpecificData.getDecoder(in));
   }
 
   /**
@@ -3046,28 +3064,6 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
         throw new org.apache.avro.AvroRuntimeException(e);
       }
     }
-  }
-
-  @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumWriter<IntermediateSession>
-      WRITER$ = (org.apache.avro.io.DatumWriter<IntermediateSession>) MODEL$
-      .createDatumWriter(SCHEMA$);
-
-  @Override
-  public void writeExternal(java.io.ObjectOutput out)
-      throws java.io.IOException {
-    WRITER$.write(this, SpecificData.getEncoder(out));
-  }
-
-  @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumReader<IntermediateSession>
-      READER$ = (org.apache.avro.io.DatumReader<IntermediateSession>) MODEL$
-      .createDatumReader(SCHEMA$);
-
-  @Override
-  public void readExternal(java.io.ObjectInput in)
-      throws java.io.IOException {
-    READER$.read(this, SpecificData.getDecoder(in));
   }
 
 }

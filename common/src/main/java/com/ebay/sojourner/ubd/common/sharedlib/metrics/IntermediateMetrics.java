@@ -77,8 +77,8 @@ public class IntermediateMetrics implements Serializable {
    * 2052310,2054060,2053277,2058946,2054180,2050494,2050495,
    * 2058483,2050605,2050606,1673581,1698105,2034596,2041594,1677709
    */
-  private Map<String, Integer> mppIdsFromMobileEvent;
-  private Map<String, Integer> mppIdsFromRoverEvent;
+  private Map<Integer, Integer> mppIdsFromMobileEvent;
+  private Map<Integer, Integer> mppIdsFromRoverEvent;
   private String mpxChannelId;
   // Notify click
   private Long notifyClickTs;
@@ -123,7 +123,7 @@ public class IntermediateMetrics implements Serializable {
       }
     } else {
       Integer mppIdFromMobile =
-          this.mppIdsFromMobileEvent.get("");
+          this.mppIdsFromMobileEvent.get(Integer.MAX_VALUE);
       if (mppIdFromMobile != null) {
         finalMppId = mppIdFromMobile;
         return;
@@ -139,7 +139,7 @@ public class IntermediateMetrics implements Serializable {
       }
     } else {
       Integer mppIdFromRover =
-          this.mppIdsFromRoverEvent.get("");
+          this.mppIdsFromRoverEvent.get(Integer.MAX_VALUE);
       if (mppIdFromRover != null) {
         finalMppId = mppIdFromRover;
         return;
@@ -1141,14 +1141,14 @@ public class IntermediateMetrics implements Serializable {
       }
     }
     if (event.getAppId() == null) {
-      Integer oldmppId = mppIdsFromRoverEvent.get("");
+      Integer oldmppId = mppIdsFromRoverEvent.get(Integer.MAX_VALUE);
       if (oldmppId == null || (mppId != null && mppId.compareTo(oldmppId) > 0)) {
-        mppIdsFromRoverEvent.put("", mppId);
+        mppIdsFromRoverEvent.put(Integer.MAX_VALUE, mppId);
       }
     } else {
-      Integer oldmppId = mppIdsFromRoverEvent.get(event.getAppId().toString());
+      Integer oldmppId = mppIdsFromRoverEvent.get(event.getAppId());
       if (oldmppId == null || (mppId != null && mppId.compareTo(oldmppId) > 0)) {
-        mppIdsFromRoverEvent.put(event.getAppId().toString(), mppId);
+        mppIdsFromRoverEvent.put(event.getAppId(), mppId);
       }
     }
   }
@@ -1162,14 +1162,14 @@ public class IntermediateMetrics implements Serializable {
       return;
     }
     if (event.getAppId() == null) {
-      Integer oldmppId = mppIdsFromMobileEvent.get("");
+      Integer oldmppId = mppIdsFromMobileEvent.get(Integer.MAX_VALUE);
       if (oldmppId == null || (mppId != null && mppId.compareTo(oldmppId) < 0)) {
-        mppIdsFromMobileEvent.put("", mppId);
+        mppIdsFromMobileEvent.put(Integer.MAX_VALUE, mppId);
       }
     } else {
-      Integer oldmppId = mppIdsFromMobileEvent.get(event.getAppId().toString());
+      Integer oldmppId = mppIdsFromMobileEvent.get(event.getAppId());
       if (oldmppId == null || (mppId != null && mppId.compareTo(oldmppId) < 0)) {
-        mppIdsFromMobileEvent.put(event.getAppId().toString(), mppId);
+        mppIdsFromMobileEvent.put(event.getAppId(), mppId);
       }
     }
   }
@@ -1204,6 +1204,11 @@ public class IntermediateMetrics implements Serializable {
   public void start(UbiEvent event) {
     // null
   }
-
+  public void setNotifyClickTs(Long notifyClickTs) {
+    this.notifyClickTs = notifyClickTs;
+  }
+  public void setNotifyViewTs(Long notifyViewTs) {
+    this.notifyViewTs = notifyViewTs;
+  }
 
 }

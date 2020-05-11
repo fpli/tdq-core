@@ -3,7 +3,6 @@ package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.rule.Rule;
 import com.ebay.sojourner.ubd.common.sql.RuleManager;
-import com.ebay.sojourner.ubd.common.sql.Rules;
 import com.ebay.sojourner.ubd.common.sql.SqlEventRule;
 import java.io.IOException;
 import java.util.LinkedHashSet;
@@ -16,10 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 public class EventBotDetector implements BotDetector<UbiEvent> {
 
   private static volatile EventBotDetector eventBotDetector;
-  private Set<SqlEventRule> botRules = new CopyOnWriteArraySet<>();
-
   @Getter
   private static RuleManager ruleManager = RuleManager.getInstance();
+  private Set<SqlEventRule> botRules = new CopyOnWriteArraySet<>();
 
   private EventBotDetector() {
     initBotRules();
@@ -61,7 +59,7 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
   // static rules
   @Override
   public void initBotRules() {
-    botRules.add(Rules.RULE_1_COMPILER);
+    //    botRules.add(Rules.RULE_1_COMPILER);
     /*
     botRules.add(Rules.ICF_RULE_1_COMPILER);
     botRules.add(Rules.ICF_RULE_2_COMPILER);
