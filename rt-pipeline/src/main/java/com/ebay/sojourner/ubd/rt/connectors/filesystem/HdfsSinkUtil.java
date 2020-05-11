@@ -1,9 +1,9 @@
 package com.ebay.sojourner.ubd.rt.connectors.filesystem;
 
+import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.rt.util.HdfsPathConstants;
-import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 
@@ -25,7 +25,8 @@ public class HdfsSinkUtil {
   }
 
   public static StreamingFileSink signatureSinkWithParquet() {
-    return HdfsSinkUtil.createWithParquet(HdfsPathConstants.SIGNATURE_PATH, Tuple4.class);
+    return HdfsSinkUtil
+        .createWithParquet(HdfsPathConstants.SIGNATURE_PATH, IntermediateSession.class);
   }
 
   public static StreamingFileSink lateEventSinkWithParquet() {

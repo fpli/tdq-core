@@ -22,8 +22,6 @@ import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
@@ -32,7 +30,6 @@ import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -72,11 +69,6 @@ public class SojournerUBDRTJobForCrossSession {
                 : AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
     executionEnvironment.setStateBackend(
         StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
-    executionEnvironment.setRestartStrategy(
-        RestartStrategies.fixedDelayRestart(
-            3, // number of restart attempts
-            org.apache.flink.api.common.time.Time.of(10, TimeUnit.SECONDS) // delay
-        ));
 
     // kafka source for copy
     DataStream<IntermediateSession> intermediateSessionDataStream =
@@ -166,10 +158,6 @@ public class SojournerUBDRTJobForCrossSession {
         .setParallelism(AppEnv.config().getFlink().app.getCrossSessionParallelism())
         .name("SojEvent sink")
         .uid("eventHdfsSink")
-        .disableChaining();
-
-    // for test read kafka data
-    intermediateSessionDataStream.addSink(new DiscardingSink<>()).name("intermediateSession sink")
         .disableChaining();
 
     // Submit this job
