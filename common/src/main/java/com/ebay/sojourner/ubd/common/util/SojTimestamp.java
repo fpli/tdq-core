@@ -52,8 +52,15 @@ public class SojTimestamp {
     return res;
   }
 
+  public static Long getSojTimestampToUnixTimestamp(Long s) {
+    long ts = (s - OFFSET) / MILLI2MICRO;
+    return ts;
+  }
+
   public static void main(String[] args) {
-    System.out.println(getUnixTimestamp("2020-05-10 12:01:01.000"));
+    System.out
+        .println(getSojTimestampToUnixTimestamp(Long.valueOf(getSojTimestamp("2020-05-10 12:01:01"
+            + ".000"))));
 
 
   }
