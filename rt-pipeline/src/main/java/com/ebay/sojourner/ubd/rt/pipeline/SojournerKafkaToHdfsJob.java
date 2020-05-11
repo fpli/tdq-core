@@ -61,7 +61,7 @@ public class SojournerKafkaToHdfsJob {
     DataStream<SojSession> sojSessionDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunction
-                .generateWatermark(Constants.TOPIC_PRODUCER_SESSION,
+                .buildSource(Constants.TOPIC_PRODUCER_SESSION,
                     Constants.BOOTSTRAP_SERVERS_SESSION, Constants.GROUP_ID_SESSION,
                     SojSession.class))
             .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
@@ -73,7 +73,7 @@ public class SojournerKafkaToHdfsJob {
     DataStream<SojEvent> sojEventDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunction
-                .generateWatermark(Constants.TOPIC_PRODUCER_EVENT,
+                .buildSource(Constants.TOPIC_PRODUCER_EVENT,
                     Constants.BOOTSTRAP_SERVERS_EVENT, Constants.GROUP_ID_EVENT,
                     SojEvent.class))
             .setParallelism(AppEnv.config().getFlink().app.getEventKafkaParallelism())

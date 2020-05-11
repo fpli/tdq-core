@@ -63,7 +63,7 @@ public class SojournerKafkaCopyJob {
     // 1.2 Assign timestamps and emit watermarks.
     DataStream<SojBytesEvent> bytesDataStreamForRNO =
         executionEnvironment
-            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
+            .addSource(KafkaSourceFunction.buildSource(Constants.TOPIC_PATHFINDER_EVENTS,
                 Constants.BOOTSTRAP_SERVERS_RNO, Constants.GROUP_ID_RNO, SojBytesEvent.class))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
@@ -74,7 +74,7 @@ public class SojournerKafkaCopyJob {
 
     DataStream<SojBytesEvent> bytesDataStreamForSLC =
         executionEnvironment
-            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
+            .addSource(KafkaSourceFunction.buildSource(Constants.TOPIC_PATHFINDER_EVENTS,
                 Constants.BOOTSTRAP_SERVERS_SLC, Constants.GROUP_ID_SLC, SojBytesEvent.class))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
@@ -85,7 +85,7 @@ public class SojournerKafkaCopyJob {
 
     DataStream<SojBytesEvent> bytesDataStreamForLVS =
         executionEnvironment
-            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
+            .addSource(KafkaSourceFunction.buildSource(Constants.TOPIC_PATHFINDER_EVENTS,
                 Constants.BOOTSTRAP_SERVERS_LVS, Constants.GROUP_ID_LVS, SojBytesEvent.class))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null

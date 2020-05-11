@@ -59,7 +59,7 @@ public class SojournerKafkaCopyJobForQA {
 
     DataStream<SojBytesEvent> bytesDataStream =
         executionEnvironment
-            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
+            .addSource(KafkaSourceFunction.buildSource(Constants.TOPIC_PATHFINDER_EVENTS,
                 Constants.BOOTSTRAP_SERVERS_QA, Constants.GROUP_ID_QA, SojBytesEvent.class))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null

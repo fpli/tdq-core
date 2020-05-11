@@ -77,7 +77,7 @@ public class SojournerUBDRTJobForCopy {
     DataStream<RawEvent> rawEventDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunction
-                .generateWatermark(Constants.TOPIC_PRODUCER_COPY,
+                .buildSource(Constants.TOPIC_PRODUCER_COPY,
                     Constants.BOOTSTRAP_SERVERS_COPY, Constants.GROUP_ID_COPY,
                     RawEvent.class))
             .setParallelism(AppEnv.config().getFlink().app.getCopyKafkaParallelism())

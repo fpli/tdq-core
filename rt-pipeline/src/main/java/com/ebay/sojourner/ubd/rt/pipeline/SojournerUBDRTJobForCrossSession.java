@@ -4,7 +4,6 @@ import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.rt.common.broadcast.CrossSessionDQBroadcastProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
-import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
@@ -24,8 +23,6 @@ import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
 import java.util.Set;
 import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.api.java.utils.ParameterTool;
-import org.apache.flink.streaming.api.CheckpointingMode;
-import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -45,36 +42,13 @@ public class SojournerUBDRTJobForCrossSession {
     // 0.1 UBI configuration
     // 0.2 Flink configuration
     final StreamExecutionEnvironment executionEnvironment =
-        StreamExecutionEnvironment.getExecutionEnvironment();
-    executionEnvironment.getConfig().setGlobalJobParameters(parameterTool);
-    executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
-
-    // checkpoint settings
-    executionEnvironment.enableCheckpointing(
-        AppEnv.config().getFlink().getCheckpoint().getInterval().getSeconds() * 1000,
-        CheckpointingMode.EXACTLY_ONCE);
-    executionEnvironment
-        .getCheckpointConfig()
-        .setCheckpointTimeout(
-            AppEnv.config().getFlink().getCheckpoint().getTimeout().getSeconds() * 1000);
-    executionEnvironment
-        .getCheckpointConfig()
-        .setMinPauseBetweenCheckpoints(
-            AppEnv.config().getFlink().getCheckpoint().getMinPauseBetween().getSeconds() * 1000);
-    executionEnvironment
-        .getCheckpointConfig()
-        .setMaxConcurrentCheckpoints(
-            AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent() == null
-                ? 1
-                : AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
-    executionEnvironment.setStateBackend(
-        StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
+        ExecutionEnvUtil.prepare(parameterTool);
 
     // kafka source for copy
     DataStream<IntermediateSession> intermediateSessionDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunction
-                .generateWatermark(Constants.TOPIC_PRODUCER_CROSS_SESSION_DQ,
+                .buildSource(Constants.TOPIC_PRODUCER_CROSS_SESSION_DQ,
                     Constants.BOOTSTRAP_SERVERS_CROSS_SESSION_DQ,
                     Constants.GROUP_ID_CROSS_SESSION_DQ,
                     IntermediateSession.class))
@@ -155,10 +129,9 @@ public class SojournerUBDRTJobForCrossSession {
 
     intermediateSessionWithSignature
         .addSink(HdfsSinkUtil.signatureSinkWithParquet())
-        .setParallelism(AppEnv.config().getFlink().app.getCrossSessionParallelism())
-        .name("SojEvent sink")
-        .uid("eventHdfsSink")
-        .disableChaining();
+        .setParallelism(580)
+        .name("IntermediateSession sink")
+        .uid("intermediateSessionHdfsSink");
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForDQPipeline());

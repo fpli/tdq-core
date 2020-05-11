@@ -7,7 +7,7 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumerBase;
 
 public class KafkaSourceFunction {
 
-  public static <T> FlinkKafkaConsumerBase generateWatermark(String topic, String brokers,
+  public static <T> FlinkKafkaConsumerBase buildSource(String topic, String brokers,
       String groupId, Class<T> tClass) {
 
     FlinkKafkaConsumerBase<T> flinkKafkaConsumerBase
