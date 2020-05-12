@@ -119,7 +119,7 @@ public class AgentIpAttribute implements Attribute<IntermediateSession>, Seriali
         newGuidCnt += 1;
       }
       if (intermediateSession.getGuid() != null) {
-        Long[] long4Cguid = TransformUtil.mD522Long(intermediateSession.getGuid());
+        Long[] long4Cguid = TransformUtil.md522Long(intermediateSession.getGuid());
         Guid guid = new Guid();
         guid.setGuid1(long4Cguid[0]);
         guid.setGuid2(long4Cguid[1]);
