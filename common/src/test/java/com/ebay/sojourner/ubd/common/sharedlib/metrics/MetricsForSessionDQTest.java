@@ -1912,6 +1912,918 @@ public class MetricsForSessionDQTest {
     Assert.assertEquals(1, sessionAccumulator.getUbiSession().getTrafficSrcId());
   }
 
+  @Test
+  public void test_TrafficSourceMetric6() throws Exception {
+
+    // 1
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("4e18a3f31710a9b12631ac8df426f4a2");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(1605052);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 22:43:42.721")));
+    ubiEvent.setRemoteIP("46.87.160.134");
+    ubiEvent.setRequestCorrelationId("99f0a402ef032878");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*qm%3Fir%28rbpv6710-171e882dd84-0x171");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("46.87.160.134");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Safari/605.1.15");
+    ubiEvent.setCobrand(5);
+    ubiEvent.setCurrentImprId(293593210242L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.de");
+    ubiEvent.setApplicationPayload(
+        "c=1&g=4e18a3f31710a9b12631ac8df426f4a2&rurl=https%25253A%25252F%25252Fwww.google.de%25252F&h=f3&px=4249&chnl=9&n=6f49edae1710abd98a677b9ade357cfc&uc=77&p=1605052&uaid=e882dd821710a6e5b443bcb1f08c3f9aS0&bs=77&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2F&r=715462550&t=77&cflgs=EA**&ul=de-DE&pn=2&rq=99f0a402ef032878&pagename=http://kleinanzeigen.ebay.de/anzeigen/s-suchen.html&ciid=gt2EW0Q*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D99f0a402ef032878%26node_id%3D98e9c9967aa6d39e%26REQUEST_GUID%3D171e882d-d810-a6e5-b445-389ff7e4b7bb%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2Aqm%253Fir%2528rbpv6710-171e882dd84-0x171%26cal_mod%3Dfalse&TPool=r1rover&TDuration=3&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=46.87.160.134&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.110.91.68&TStamp=22:43:42.72&TName=roverimp_INTL&Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Safari/605.1.15&RemoteIP=46.87.160.134&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=rurl%3Dhttps%25253A%25252F%25252Fwww.google.de%25252F&mpt=1588743822528&imp=1605052");
+    ubiEvent.setPageName("roverimp_INTL");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(77);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(715462550L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay-kleinanzeigen.de/");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 2
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("4e18a3f31710a9b12631ac8df426f4a2");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(1605053);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 22:44:50.669")));
+    ubiEvent.setRemoteIP("46.87.160.134");
+    ubiEvent.setRequestCorrelationId("e08b97a4f9ed9d3c");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ctofthu%60t*00%3F30%3D2-171e883e6f4-0x113");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("46.87.160.134");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Safari/605.1.15");
+    ubiEvent.setCobrand(5);
+    ubiEvent.setCurrentImprId(480549070467L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.de");
+    ubiEvent.setApplicationPayload(
+        "cadid=1395751086&c=1&g=4e18a3f31710a9b12631ac8df426f4a2&rurl=https%25253A%25252F%25252Fwww.ebay-kleinanzeigen.de%25252Fs-schallplatten%25252Fk0&h=f3&px=4249&chnl=9&n=6f49edae1710abd98a677b9ade357cfc&uc=77&p=1605053&uaid=e883e6ee1710ac3e26f04aa0c2b539e3S0&bs=77&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2F&r=715462550&t=77®=Bayern%2520-%2520Aschau%2520im%2520Chiemgau&cflgs=EA**&ul=de-DE&pn=2&rq=e08b97a4f9ed9d3c&pagename=http://kleinanzeigen.ebay.de/anzeigen/s-anzeige/dalmatinerwelpe-ohne-papiere-in-liebevolle-hnde/1098221&ciid=g%2Bb04m8*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De08b97a4f9ed9d3c%26node_id%3Da15b8d9b4ed6fc3d%26REQUEST_GUID%3D171e883e-6ed0-ac3e-26f4-b630e00e11ef%26logid%3Dt6qjpbq%253F%253Ctofthu%2560t%2A00%253F30%253D2-171e883e6f4-0x113%26cal_mod%3Dfalse&TPool=r1rover&TDuration=8&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=46.87.160.134&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.195.226.111&TStamp=22:44:50.66&TName=roverimp_INTL&Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Safari/605.1.15&RemoteIP=46.87.160.134&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=cadid%3D1395751086%26reg%3DBayern%2520-%2520Aschau%2520im%2520Chiemgau%26rurl%3Dhttps%25253A%25252F%25252Fwww.ebay-kleinanzeigen.de%25252Fs-schallplatten%25252Fk0&mpt=1588743890482&imp=1605053");
+    ubiEvent.setPageName("roverimp_INTL");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(77);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(715462550L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay-kleinanzeigen.de/");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 3
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("4e18a3f31710a9b12631ac8df426f4a2");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(1605052);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 22:45:25.360")));
+    ubiEvent.setRemoteIP("46.87.160.134");
+    ubiEvent.setRequestCorrelationId("ec3cb698d178516b");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*4unpu%28rbpv6710-171e8846e74-0x15e");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("46.87.160.134");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Safari/605.1.15");
+    ubiEvent.setCobrand(5);
+    ubiEvent.setCurrentImprId(437272211076L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.de");
+    ubiEvent.setApplicationPayload(
+        "c=1&g=4e18a3f31710a9b12631ac8df426f4a2&rurl=https%25253A%25252F%25252Fwww.google.de%25252F&h=f3&px=4249&chnl=9&n=6f49edae1710abd98a677b9ade357cfc&uc=77&p=1605052&uaid=e8846e711710aaecf655725ef0927a0eS0&bs=77&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2F&r=715462550&t=77&cflgs=EA**&ul=de-DE&pn=2&rq=ec3cb698d178516b&pagename=http://kleinanzeigen.ebay.de/anzeigen/s-suchen.html&ciid=hG50z2U*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Dec3cb698d178516b%26node_id%3D902374d7a9c4f82b%26REQUEST_GUID%3D171e8846-e700-aaec-f656-1e28f7e7744f%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A4unpu%2528rbpv6710-171e8846e74-0x15e%26cal_mod%3Dfalse&TPool=r1rover&TDuration=5&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=46.87.160.134&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.174.207.101&TStamp=22:45:25.36&TName=roverimp_INTL&Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Safari/605.1.15&RemoteIP=46.87.160.134&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=rurl%3Dhttps%25253A%25252F%25252Fwww.google.de%25252F&mpt=1588743925256&imp=1605052");
+    ubiEvent.setPageName("roverimp_INTL");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(77);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(715462550L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay-kleinanzeigen.de/");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 4
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("4e18a3f31710a9b12631ac8df426f4a2");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(1605053);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 22:46:04.650")));
+    ubiEvent.setRemoteIP("46.87.160.134");
+    ubiEvent.setRequestCorrelationId("49bd2dd0c30f94ca");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*ikeq1%28rbpv6710-171e88507f0-0x173");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("46.87.160.134");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gec Version/13.0.5 Safari/605.1.15");
+    ubiEvent.setCobrand(5);
+    ubiEvent.setCurrentImprId(536064493445L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.de");
+    ubiEvent.setApplicationPayload(
+        "cadid=1395731657&c=1&g=4e18a3f31710a9b12631ac8df426f4a2&rurl=https%25253A%25252F%25252Fwww.ebay-kleinanzeigen.de%25252Fs-schallplatten%25252Fk0&h=f3&px=4249&chnl=9&n=6f49edae1710abd98a677b9ade357cfc&uc=77&p=1605053&uaid=e88507eb1710aaecf7c49657f08f6becS0&bs=77&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2F&r=715462550&t=77®=Bayern%2520-%2520Memmingen&cflgs=EA**&ul=de-DE&pn=2&rq=49bd2dd0c30f94ca&pagename=http://kleinanzeigen.ebay.de/anzeigen/s-anzeige/dalmatinerwelpe-ohne-papiere-in-liebevolle-hnde/1098221&ciid=hQfvz3w*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D49bd2dd0c30f94ca%26node_id%3D1950fc003431d09c%26REQUEST_GUID%3D171e8850-7ea0-aaec-f7c6-a078f7e5dec7%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2Aikeq1%2528rbpv6710-171e88507f0-0x173%26cal_mod%3Dfalse&TPool=r1rover&TDuration=6&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=46.87.160.134&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.174.207.124&TStamp=22:46:04.65&TName=roverimp_INTL&Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Safari/605.1.15&RemoteIP=46.87.160.134&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=cadid%3D1395731657%26reg%3DBayern%2520-%2520Memmingen%26rurl%3Dhttps%25253A%25252F%25252Fwww.ebay-kleinanzeigen.de%25252Fs-schallplatten%25252Fk0&mpt=1588743964550&imp=1605053");
+    ubiEvent.setPageName("roverimp_INTL");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(77);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(715462550L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay-kleinanzeigen.de/");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 5
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("4e18a3f31710a9b12631ac8df426f4a2");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(1605052);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 22:46:59.102")));
+    ubiEvent.setRemoteIP("46.87.160.134");
+    ubiEvent.setRequestCorrelationId("26575aecf2f6b117");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ckuvthu%60t*0%3D6465%3F%29pqtfwpu%29osu%29fgg%7E-fij-171e885dca4-0x11d");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("46.87.160.134");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gec Version/13.0.5 Safari/605.1.15");
+    ubiEvent.setCobrand(5);
+    ubiEvent.setCurrentImprId(115001777285L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.de");
+    ubiEvent.setApplicationPayload(
+        "c=1&g=4e18a3f31710a9b12631ac8df426f4a2&rurl=https%25253A%25252F%25252Fwww.google.de%25252F&h=f3&px=4249&chnl=9&n=6f49edae1710abd98a677b9ade357cfc&uc=77&p=1605052&uaid=e885dc9e1710aadc61a2d178c06b85e1S0&bs=77&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2F&r=715462550&t=77&cflgs=EA**&ul=de-DE&pn=2&rq=26575aecf2f6b117&pagename=http://kleinanzeigen.ebay.de/anzeigen/s-suchen.html&ciid=hdyjxho*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D26575aecf2f6b117%26node_id%3D9516dba2d8240f8f%26REQUEST_GUID%3D171e885d-c9e0-aadc-61a1-b519de1e68b2%26logid%3Dt6qjpbq%253F%253Ckuvthu%2560t%2A0%253D6465%253F%2529pqtfwpu%2529osu%2529fgg%257E-fij-171e885dca4-0x11d%26cal_mod%3Dfalse&TPool=r1rover&TDuration=7&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=46.87.160.134, 23.214.197.143&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.173.198.26&TStamp=22:46:59.10&TName=roverimp_INTL&Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Safari/605.1.15&RemoteIP=46.87.160.134&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=rurl%3Dhttps%25253A%25252F%25252Fwww.google.de%25252F&mpt=1588744018998&imp=1605052");
+    ubiEvent.setPageName("roverimp_INTL");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(77);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(715462550L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay-kleinanzeigen.de/");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 6
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("4e18a3f31710a9b12631ac8df426f4a2");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(1605053);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 22:47:16.890")));
+    ubiEvent.setRemoteIP("46.87.160.134");
+    ubiEvent.setRequestCorrelationId("fc2703369781d246");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ckuvthu%60t*023%3E%3B24%29pqtfwpu%29osu%29fgg%7E-fij-171e8862221-0x11a");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("46.87.160.134");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gec Version/13.0.5 Safari/605.1.15");
+    ubiEvent.setCobrand(5);
+    ubiEvent.setCurrentImprId(672734978694L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.de");
+    ubiEvent.setApplicationPayload(
+        "cadid=1281018235&c=1&g=4e18a3f31710a9b12631ac8df426f4a2&rurl=https%25253A%25252F%25252Fwww.ebay-kleinanzeigen.de%25252Fs-schallplatten%25252Fk0&h=f3&px=4249&chnl=9&n=6f49edae1710abd98a677b9ade357cfc&uc=77&p=1605053&uaid=e886221b1710aa6a29c1d1d7c0be1800S0&bs=77&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2F&r=715462550&t=77®=Hessen%2520-%2520Schl%25C3%25BCchtern&cflgs=EA**&ul=de-DE&pn=2&rq=fc2703369781d246&pagename=http://kleinanzeigen.ebay.de/anzeigen/s-anzeige/dalmatinerwelpe-ohne-papiere-in-liebevolle-hnde/1098221&ciid=hiIhopw*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Dfc2703369781d246%26node_id%3D1d063420dd035df3%26REQUEST_GUID%3D171e8862-21a0-aa6a-29c2-d433de4754ff%26logid%3Dt6qjpbq%253F%253Ckuvthu%2560t%2A023%253E%253B24%2529pqtfwpu%2529osu%2529fgg%257E-fij-171e8862221-0x11a%26cal_mod%3Dfalse&TPool=r1rover&TDuration=9&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=46.87.160.134, 23.214.197.143&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.166.162.156&TStamp=22:47:16.89&TName=roverimp_INTL&Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Safari/605.1.15&RemoteIP=46.87.160.134&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=cadid%3D1281018235%26reg%3DHessen%2520-%2520Schl%25C3%25BCchtern%26rurl%3Dhttps%25253A%25252F%25252Fwww.ebay-kleinanzeigen.de%25252Fs-schallplatten%25252Fk0&mpt=1588744036784&imp=1605053");
+    ubiEvent.setPageName("roverimp_INTL");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(77);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(715462550L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay-kleinanzeigen.de/");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    sessionMetrics.init();
+    sessionMetrics.start(sessionAccumulator);
+    for (UbiEvent event : ubiEventList) {
+      sessionMetrics.feed(event, sessionAccumulator);
+    }
+    sessionMetrics.end(sessionAccumulator);
+    Assert.assertEquals(21, sessionAccumulator.getUbiSession().getTrafficSrcId());
+  }
+
+  @Test
+  public void test_TrafficSourceMetric7() throws Exception {
+
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("e88156fc1710a99bd6d26fe0c3108742");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(1605052);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 22:56:52.230")));
+    ubiEvent.setRemoteIP("217.245.34.41");
+    ubiEvent.setRequestCorrelationId("7c5cd78b631cda54");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ctofthu%60t*0114%3B16%29pqtfwpu%29pie%29fgg%7E-fij-171e8815704-0x10f");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("217.245.34.41");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0");
+    ubiEvent.setCobrand(5);
+    ubiEvent.setCurrentImprId(471322613633L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.de");
+    ubiEvent.setApplicationPayload(
+        "c=1&g=e88156fc1710a99bd6d26fe0c3108742&rurl=https%25253A%25252F%25252Fwww.google.com%25252F&h=fc&px=4249&chnl=9&uc=77&p=1605052&uaid=e88156fc1710a99bd6d26fe0c3108741S0&bs=77&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2Fs-hille-coaster-530%2Fk0&r=-459252443&t=77&cflgs=QA**&ul=de-DE&pn=2&rq=7c5cd78b631cda54&pagename=http://kleinanzeigen.ebay.de/anzeigen/s-suchen.html&ciid=gVcEvW0*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D7c5cd78b631cda54%26node_id%3D2ef4267965ddc09b%26REQUEST_GUID%3D171e8815-6f30-a99b-d6d1-802fe03c1802%26logid%3Dt6qjpbq%253F%253Ctofthu%2560t%2A0114%253B16%2529pqtfwpu%2529pie%2529fgg%257E-fij-171e8815704-0x10f%26cal_mod%3Dfalse&TPool=r1rover&TDuration=19&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=217.245.34.41&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.153.189.109&TStamp=22:42:02.73&TName=roverimp_INTL&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0&RemoteIP=217.245.34.41&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/s-hille-coaster-530/k0"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=rurl%3Dhttps%25253A%25252F%25252Fwww.google.com%25252F&mpt=1588743722724&imp=1605052");
+    ubiEvent.setPageName("roverimp_INTL");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(77);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(-459252443L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay-kleinanzeigen.de/s-hille-coaster-530/k0");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    sessionMetrics.init();
+    sessionMetrics.start(sessionAccumulator);
+    for (UbiEvent event : ubiEventList) {
+      sessionMetrics.feed(event, sessionAccumulator);
+    }
+    sessionMetrics.end(sessionAccumulator);
+    Assert.assertEquals(21, sessionAccumulator.getUbiSession().getTrafficSrcId());
+  }
+
+  @Test
+  public void test_TrafficSourceMetric8() throws Exception {
+
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("e8808f1a1710aa413900deafc0dd728d");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(1605051);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 22:41:11.572")));
+    ubiEvent.setRemoteIP("168.149.159.11");
+    ubiEvent.setRequestCorrelationId("f596fbab499bd4e8");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ckuvthu%60t*020117%3E%29pqtfwpu%29osu%29fgg%7E-fij-171e8808f20-0x1b2");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("168.149.159.11");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko");
+    ubiEvent.setCobrand(5);
+    ubiEvent.setCurrentImprId(618796191616L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.de");
+    ubiEvent.setApplicationPayload(
+        "c=1&g=e8808f1a1710aa413900deafc0dd728d&rurl=https%25253A%25252F%25252Flogin.gs.schaeffler.com%25252Fnidp%25252Fsaml2%25252Fsso%25253Fsid%25253D0&h=1a&px=4249&chnl=9&uc=77&p=1605051&uaid=e8808f1a1710aa413900deafc0dd728cS0&bs=77&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2F&r=715462550&t=77&cflgs=QA**&ul=de-DE&pn=2&rq=f596fbab499bd4e8&pagename=http://kleinanzeigen.ebay.de/anzeigen/&ciid=gI8gE5A*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Df596fbab499bd4e8%26node_id%3D7b70dfb5a542a800%26REQUEST_GUID%3D171e8808-f140-aa41-3900-28c6de5b2b7b%26logid%3Dt6qjpbq%253F%253Ckuvthu%2560t%2A020117%253E%2529pqtfwpu%2529osu%2529fgg%257E-fij-171e8808f20-0x1b2%26cal_mod%3Dfalse&TPool=r1rover&TDuration=13&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=10.177.7.23, 168.149.159.11, 72.247.179.140&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.164.19.144&TStamp=22:41:11.57&TName=roverimp_INTL&Agent=Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko&RemoteIP=168.149.159.11&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=rurl%3Dhttps%25253A%25252F%25252Flogin.gs.schaeffler.com%25252Fnidp%25252Fsaml2%25252Fsso%25253Fsid%25253D0&mpt=1588743653772&imp=1605051");
+    ubiEvent.setPageName("roverimp_INTL");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(77);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(715462550L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay-kleinanzeigen.de/");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    sessionMetrics.init();
+    sessionMetrics.start(sessionAccumulator);
+    for (UbiEvent event : ubiEventList) {
+      sessionMetrics.feed(event, sessionAccumulator);
+    }
+    sessionMetrics.end(sessionAccumulator);
+    Assert.assertEquals(24, sessionAccumulator.getUbiSession().getTrafficSrcId());
+  }
+
+  @Test
+  public void test_TrafficSourceMetric9() throws Exception {
+
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("df842c331710a9e1e1c2f4f8c53e1b82");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(1605053);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 22:09:52.838")));
+    ubiEvent.setRemoteIP("157.25.20.226");
+    ubiEvent.setRequestCorrelationId("9e861ad45c0bbb8d");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ctofthu%60t*00%3F30%3D6-171e863e450-0x12b");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("157.25.20.226");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36");
+    ubiEvent.setCobrand(5);
+    ubiEvent.setCurrentImprId(798248395875L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.de");
+    ubiEvent.setApplicationPayload(
+        "cadid=1394369253&c=1&g=df842c331710a9e1e1c2f4f8c53e1b82&rurl=https%25253A%25252F%25252Fkleinanzeige.focus.de%25252Fboote%25252Fboot-defekt.html%25253Futm_campaign%25253D12simplifiedalert%252526utm_medium%25253Demail%252526utm_source%25253Decosa-pl%252526utm_emailab%25253DmaxAdNo_A%252526subscriptionid%25253DY2DISft0Dr7tDhCqf7OBrA%25253D%25253D%252526utm_content%25253Dbuttonviewlinkseconda%252526s%25253Ddesc%252526landingpageindex%25253D1161597082&h=33&px=4249&chnl=9&n=ca864df11710a9b13a7707eefdcf1bc7&uc=163&p=1605053&uaid=e863e4481710ac3dbb944fa8c2e88bcaS0&bs=212&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2Fs-anzeige%2Fjohnson-evinrude-50-ps-2-takt-aussenborder-startet-nicht-defekt%2F1394369253-211-18314%3Futm_source%3Dfocus.de%26utm_medium%3Dcpc%26utm_campaign%3Dcoop-focus.de&r=2065185079&t=77®=Harburg%2520-%2520Hamburg%2520Marmstorf&cflgs=EA**&ul=de-DE&pn=2&rq=9e861ad45c0bbb8d&pagename=http://kleinanzeigen.ebay.de/anzeigen/s-anzeige/dalmatinerwelpe-ohne-papiere-in-liebevolle-hnde/1098221&ciid=Y%2BRP27k*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D9e861ad45c0bbb8d%26node_id%3Dd57a41054146f034%26REQUEST_GUID%3D171e863e-4460-ac3d-bb95-85e3e029a690%26logid%3Dt6qjpbq%253F%253Ctofthu%2560t%2A00%253F30%253D6-171e863e450-0x12b%26cal_mod%3Dfalse&TPool=r1rover&TDuration=11&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=157.25.20.226, 2.18.215.207&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.195.219.185&TStamp=22:09:52.83&TName=roverimp_INTL&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36&RemoteIP=157.25.20.226&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/s-anzeige/johnson-evinrude-50-ps-2-takt-aussenborder-startet-nicht-defekt/1394369253-211-18314?utm_source=focus.de&utm_medium=cpc&utm_campaign=coop-focus.de"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=cadid%3D1394369253%26reg%3DHarburg%2520-%2520Hamburg%2520Marmstorf%26rurl%3Dhttps%25253A%25252F%25252Fkleinanzeige.focus.de%25252Fboote%25252Fboot-defekt.html%25253Futm_campaign%25253D12simplifiedalert%252526utm_medium%25253Demail%252526utm_source%25253Decosa-pl%252526utm_emailab%25253DmaxAdNo_A%252526subscriptionid%25253DY2DISft0Dr7tDhCqf7OBrA%25253D%25253D%252526utm_content%25253Dbuttonviewlinkseconda%252526s%25253Ddesc%252526landingpageindex%25253D1161597082&mpt=1588741781586&imp=1605053");
+    ubiEvent.setPageName("roverimp_INTL");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(77);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(2065185079L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay-kleinanzeigen.de/s-anzeige/johnson-evinrude-50-ps-2-takt-aussenborder-startet-nicht-defekt/1394369253-211-18314?utm_source=focus.de&utm_medium=cpc&utm_campaign=coop-focus.de");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("df842c331710a9e1e1c2f4f8c53e1b82");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(1605053);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 22:12:28.604")));
+    ubiEvent.setRemoteIP("157.25.20.226");
+    ubiEvent.setRequestCorrelationId("91d145e8bdfe7bf2");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ctofthu%60t*036743%3F-171e86644c4-0x110");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("157.25.20.226");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36");
+    ubiEvent.setCobrand(5);
+    ubiEvent.setCurrentImprId(466503287910L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.de");
+    ubiEvent.setApplicationPayload(
+        "cadid=1376051830&c=1&g=df842c331710a9e1e1c2f4f8c53e1b82&rurl=https%25253A%25252F%25252Fkleinanzeige.focus.de%25252Fboote%25252Fboot-defekt.html%25253Futm_campaign%25253D12simplifiedalert%252526utm_medium%25253Demail%252526utm_source%25253Decosa-pl%252526utm_emailab%25253DmaxAdNo_A%252526subscriptionid%25253DY2DISft0Dr7tDhCqf7OBrA%25253D%25253D%252526utm_content%25253Dbuttonviewlinkseconda%252526s%25253Ddesc%252526landingpageindex%25253D1161597082&h=33&px=4249&chnl=9&n=ca864df11710a9b13a7707eefdcf1bc7&uc=163&p=1605053&uaid=e86644bd1710a9c9d6c06ee8c2d7e905S0&bs=212&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2Fs-anzeige%2Fjohnson-4-0-deluxe-bootsmotor-defekt-an-bastler%2F1376051830-211-3405%3Futm_source%3Dfocus.de%26utm_medium%3Dcpc%26utm_campaign%3Dcoop-focus.de&r=-759454744&t=77®=Berlin%2520-%2520Tempelhof&cflgs=EA**&ul=de-DE&pn=2&rq=91d145e8bdfe7bf2&pagename=http://kleinanzeigen.ebay.de/anzeigen/s-anzeige/dalmatinerwelpe-ohne-papiere-in-liebevolle-hnde/1098221&ciid=ZkTDnWw*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D91d145e8bdfe7bf2%26node_id%3D6961676765ada90d%26REQUEST_GUID%3D171e8664-4bc0-a9c9-d6c2-d30ae01fc18b%26logid%3Dt6qjpbq%253F%253Ctofthu%2560t%2A036743%253F-171e86644c4-0x110%26cal_mod%3Dfalse&TPool=r1rover&TDuration=10&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=157.25.20.226, 2.18.215.207&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.156.157.108&TStamp=22:12:28.60&TName=roverimp_INTL&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36&RemoteIP=157.25.20.226&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/s-anzeige/johnson-4-0-deluxe-bootsmotor-defekt-an-bastler/1376051830-211-3405?utm_source=focus.de&utm_medium=cpc&utm_campaign=coop-focus.de"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=cadid%3D1376051830%26reg%3DBerlin%2520-%2520Tempelhof%26rurl%3Dhttps%25253A%25252F%25252Fkleinanzeige.focus.de%25252Fboote%25252Fboot-defekt.html%25253Futm_campaign%25253D12simplifiedalert%252526utm_medium%25253Demail%252526utm_source%25253Decosa-pl%252526utm_emailab%25253DmaxAdNo_A%252526subscriptionid%25253DY2DISft0Dr7tDhCqf7OBrA%25253D%25253D%252526utm_content%25253Dbuttonviewlinkseconda%252526s%25253Ddesc%252526landingpageindex%25253D1161597082&mpt=1588741937463&imp=1605053");
+    ubiEvent.setPageName("roverimp_INTL");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(77);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(-759454744L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay-kleinanzeigen.de/s-anzeige/johnson-4-0-deluxe-bootsmotor-defekt-an-bastler/1376051830-211-3405?utm_source=focus.de&utm_medium=cpc&utm_campaign=coop-focus.de");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    sessionMetrics.init();
+    sessionMetrics.start(sessionAccumulator);
+    for (UbiEvent event : ubiEventList) {
+      sessionMetrics.feed(event, sessionAccumulator);
+    }
+    sessionMetrics.end(sessionAccumulator);
+    Assert.assertEquals(24, sessionAccumulator.getUbiSession().getTrafficSrcId());
+  }
+
+  @Test
+  public void test_TrafficSourceMetric10() throws Exception {
+
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("9d5bf12216f0ad4d9333d413f9ceb862");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(1605051);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 20:59:55.862")));
+    ubiEvent.setRemoteIP("46.87.40.174");
+    ubiEvent.setRequestCorrelationId("3b3261b24926bc27");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ckuvthu%60t*0%3C05073-171e823d9e1-0x10b");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("46.87.40.174");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0");
+    ubiEvent.setCobrand(5);
+    ubiEvent.setCurrentImprId(879644170531L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.de");
+    ubiEvent.setApplicationPayload(
+        "c=1&g=9d5bf12216f0ad4d9333d413f9ceb862&rurl=https%25253A%25252F%25252Fwww.google.de%25252F&h=22&px=4249&chnl=9&n=9d5bf07916f0a9caf7f23b22fa191961&uc=77&p=1605051&uaid=e823d9d81710aadcecc04e2fc78e64f1S0&bs=77&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2F&r=715462550&t=77&cflgs=EA**&ul=de-DE&pn=2&rq=3b3261b24926bc27&pagename=http://kleinanzeigen.ebay.de/anzeigen/&ciid=I9ngzsw*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D3b3261b24926bc27%26node_id%3D7c81b77457206ecb%26REQUEST_GUID%3D171e823d-9d60-aadc-ecc0-3c7ae1e1454c%26logid%3Dt6qjpbq%253F%253Ckuvthu%2560t%2A0%253C05073-171e823d9e1-0x10b%26cal_mod%3Dfalse&TPool=r1rover&TDuration=12&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=46.87.40.174&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.173.206.204&TStamp=20:59:55.86&TName=roverimp_INTL&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0&RemoteIP=46.87.40.174&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=rurl%3Dhttps%25253A%25252F%25252Fwww.google.de%25252F&mpt=1588737594409&imp=1605051");
+    ubiEvent.setPageName("roverimp_INTL");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(77);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(715462550L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay-kleinanzeigen.de/");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("9d5bf12216f0ad4d9333d413f9ceb862");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(1605052);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 21:00:05.046")));
+    ubiEvent.setRemoteIP("46.87.40.174");
+    ubiEvent.setRequestCorrelationId("e723de5d78a6be4e");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ctofthu%60t*0103566%29pqtfwpu%29pie%29fgg%7E-fij-171e823fdbe-0x172");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("46.87.40.174");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0");
+    ubiEvent.setCobrand(5);
+    ubiEvent.setCurrentImprId(238802566435L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.de");
+    ubiEvent.setApplicationPayload(
+        "c=1&g=9d5bf12216f0ad4d9333d413f9ceb862&rurl=https%25253A%25252F%25252Fwww.ebay-kleinanzeigen.de%25252F&h=22&px=4249&chnl=9&n=9d5bf07916f0a9caf7f23b22fa191961&uc=77&p=1605052&uaid=e823fdb81710a9c99377d999c4fdbee0S0&bs=77&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2Fs-77960%2Fhebeb%25C3%25BChne%2Fk0l8037r100&r=1348758891&t=77®=77960%2520Seelbach&cflgs=EA**&ul=de-DE&pn=2&rq=e723de5d78a6be4e&pagename=http://kleinanzeigen.ebay.de/anzeigen/s-suchen.html&ciid=I%2F29mTc*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De723de5d78a6be4e%26node_id%3Da4429d46da7bb780%26REQUEST_GUID%3D171e823f-db60-a9c9-9377-07f0e1474a02%26logid%3Dt6qjpbq%253F%253Ctofthu%2560t%2A0103566%2529pqtfwpu%2529pie%2529fgg%257E-fij-171e823fdbe-0x172%26cal_mod%3Dfalse&TPool=r1rover&TDuration=9&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=46.87.40.174, 84.53.140.22&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.156.153.55&TStamp=21:00:05.04&TName=roverimp_INTL&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0&RemoteIP=46.87.40.174&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/s-77960/hebeb%C3%BChne/k0l8037r100"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=reg%3D77960%2520Seelbach%26rurl%3Dhttps%25253A%25252F%25252Fwww.ebay-kleinanzeigen.de%25252F&mpt=1588737603571&imp=1605052");
+    ubiEvent.setPageName("roverimp_INTL");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(77);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(1348758891L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay-kleinanzeigen.de/s-77960/hebeb%C3%BChne/k0l8037r100");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    sessionMetrics.init();
+    sessionMetrics.start(sessionAccumulator);
+    for (UbiEvent event : ubiEventList) {
+      sessionMetrics.feed(event, sessionAccumulator);
+    }
+    sessionMetrics.end(sessionAccumulator);
+    Assert.assertEquals(8, sessionAccumulator.getUbiSession().getTrafficSrcId());
+  }
+
+  @Test
+  public void test_TrafficSourceMetric11() throws Exception {
+
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("e82f3ecd1710ad4a92b40e31c0a09b72");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(1605051);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 21:12:22.599")));
+    ubiEvent.setRemoteIP("77.2.118.43");
+    ubiEvent.setRequestCorrelationId("1369cbce82212b3f");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ckuvthu%60t*023271%3E%29pqtfwpu%29osu%29fgg%7E-fij-171e82f3ed4-0x1aa");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("77.2.118.43");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36");
+    ubiEvent.setCobrand(5);
+    ubiEvent.setCurrentImprId(187532787247L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.de");
+    ubiEvent.setApplicationPayload(
+        "c=1&g=e82f3ecd1710ad4a92b40e31c0a09b72&rurl=https%25253A%25252F%25252Fwww.google.com%25252F&h=cd&px=4249&chnl=9&uc=77&p=1605051&uaid=e82f3ecd1710ad4a92b40e31c0a09b71S0&bs=77&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2F&r=715462550&t=77&cflgs=QA**&ul=de-DE&pn=2&rq=1369cbce82212b3f&pagename=http://kleinanzeigen.ebay.de/anzeigen/&ciid=Lz7TqSs*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D1369cbce82212b3f%26node_id%3Dbbae358a054a173c%26REQUEST_GUID%3D171e82f3-ec70-ad4a-92b7-46fede3c0324%26logid%3Dt6qjpbq%253F%253Ckuvthu%2560t%2A023271%253E%2529pqtfwpu%2529osu%2529fgg%257E-fij-171e82f3ed4-0x1aa%26cal_mod%3Dfalse&TPool=r1rover&TDuration=14&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=77.2.118.43, 92.123.212.78&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.212.169.43&TStamp=21:12:22.59&TName=roverimp_INTL&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36&RemoteIP=77.2.118.43&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=rurl%3Dhttps%25253A%25252F%25252Fwww.google.com%25252F&mpt=1588738344585&imp=1605051");
+    ubiEvent.setPageName("roverimp_INTL");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(77);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(715462550L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay-kleinanzeigen.de/");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    sessionMetrics.init();
+    sessionMetrics.start(sessionAccumulator);
+    for (UbiEvent event : ubiEventList) {
+      sessionMetrics.feed(event, sessionAccumulator);
+    }
+    sessionMetrics.end(sessionAccumulator);
+    Assert.assertEquals(24, sessionAccumulator.getUbiSession().getTrafficSrcId());
+  }
+
+  @Test
+  public void test_TrafficSourceMetric12() throws Exception {
+
+    // 1
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(true);
+    ubiEvent.setPageId(3084);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:49:55.939")));
+    ubiEvent.setRemoteIP("206.126.218.39");
+    ubiEvent.setRequestCorrelationId("5e27b9069663d175");
+    ubiEvent.setSid("e11050.m44.l3478");
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ctofthu%60t*0114002%29pqtfwpu%29pie%29fgg%7E-fij-171e7acd566-0x150");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(false);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(970870609324L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "rdt=1&segname=11050&osub=-1%7E1&nid=&uc=1&url_mpre=http%3A%2F%2Fmesgmy.ebay.com%2Fws%2FeBayISAPI.dll%3FViewMyMessageDetails%26View%3DMyMessageDetails%26CurrentPage%3DMyeBayMyMessageDetails%26SubmitAction.Show%3Dx%26emailUniqueId%3Ddb64bcce16c24d7eba2d9bb82cf38396%26sourceImagePreview%3DImagePreview&bs=0&uaid=e7acd5651710aad0ce20fe9fc5255643S0&bu=43103000438&crd=20200505181620&ul=en-US&hrc=301&pagename=EntryTracking&c=1&ch=osgood&g=ae70db601680aca524931354fe0d8632&h=60&cguidsrc=cookie&n=ae70db601680aca524931354fe0d8630&url=http%3A%2F%2Fmesgmy.ebay.com%2Fws%2FeBayISAPI.dll%3FViewMyMessageDetails%26View%3DMyMessageDetails%26CurrentPage%3DMyeBayMyMessageDetails%26SubmitAction.Show%3Dx%26emailUniqueId%3Ddb64bcce16c24d7eba2d9bb82cf38396%26sourceImagePreview%3DImagePreview&p=3084&t=0&u=119173659&pcguid=ae70db601680aca524931354fe0d8630&pn=2&rq=5e27b9069663d175&euid=db64bcce16c24d7eba2d9bb82cf38396&chnl=7&ciid=rNVlDOI*&sid=e11050.m44.l3478");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D5e27b9069663d175%26node_id%3D6e473995ee27c98c%26REQUEST_GUID%3D171e7acd-5630-aad0-ce26-e92ee15c895e%26logid%3Dt6qjpbq%253F%253Ctofthu%2560t%2A0114002%2529pqtfwpu%2529pie%2529fgg%257E-fij-171e7acd566-0x150%26cal_mod%3Dfalse&TPool=r1rover&TDuration=5&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=206.126.218.39&Script=/rover/0/e11050.m44.l3478/7&Server=rover.ebay.com&TMachine=10.173.12.226&TStamp=18:49:55.93&TName=rover&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39&Encoding=gzip, deflate, br"));
+    ubiEvent.setUrlQueryString(
+        "/rover/0/e11050.m44.l3478/7?osub=-1%7E1&crd=20200505181620&ul_ref=https%253A%252F%252Frover.ebay.com%252Frover%252F0%252F0%252F99%253Floc%253Dhttps%25253A%25252F%25252Frover.ebay.com%25252Frover%25252F0%25252Fe11050.m44.l3478%25252F7%25253Feuid%25253Ddb64bcce16c24d7eba2d9bb82cf38396%252526bu%25253D43103000438%252526segname%25253D11050%252526crd%25253D20200505181620%252526osub%25253D-1%25257E1%252526ch%25253Dosgood%252526loc%25253Dhttp%2525253A%2525252F%2525252Fmesgmy.ebay.com%2525252Fws%2525252FeBayISAPI.dll%2525253FViewMyMessageDetails%25252526View%2525253DMyMessageDetails%25252526CurrentPage%2525253DMyeBayMyMessageDetails%25252526SubmitAction.Show%2525253Dx%25252526emailUniqueId%2525253Ddb64bcce16c24d7eba2d9bb82cf38396%25252526sourceImagePreview%2525253DImagePreview%252526sojTags%25253Dbu%25253Dbu%25252Cch%25253Dch%25252Csegname%25253Dsegname%25252Ccrd%25253Dcrd%25252Curl%25253Dloc%25252Cosub%25253Dosub%2526rvr_id%253D0%2526rvr_ts%253De7acd5071710aad93553cf8dff935ec5&loc=http%3A%2F%2Fmesgmy.ebay.com%2Fws%2FeBayISAPI.dll%3FViewMyMessageDetails%26View%3DMyMessageDetails%26CurrentPage%3DMyeBayMyMessageDetails%26SubmitAction.Show%3Dx%26emailUniqueId%3Ddb64bcce16c24d7eba2d9bb82cf38396%26sourceImagePreview%3DImagePreview&sojTags=bu%3Dbu%2Cch%3Dch%2Csegname%3Dsegname%2Ccrd%3Dcrd%2Curl%3Dloc%2Cosub%3Dosub&ch=osgood&segname=11050&bu=43103000438&euid=db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setPageName("rover");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("119173659");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 2
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2367355);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:49:57.275")));
+    ubiEvent.setRemoteIP("206.126.218.39");
+    ubiEvent.setRequestCorrelationId("a5b36147201efe9e");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6pdhc9%3Fjqpvgig%285%3E%3A%3C%3F1%3B-171e7acda99-0x300a");
+    ubiEvent.setEventFamily("SAND");
+    ubiEvent.setEventAction("AUCT");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(1049678502572L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("sand.stratus.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "flgs=AA**&sameid=a5bd37b39b964a7c924136392f266fc8&sapcxkw=&schemaversion=3&pagename=SandPage&saucxgdpry=false&efam=SAND&ac=119173659&saucxgdprct=false&saty=1&g=ae70db601680aca524931354fe0d8632&saebaypid=100603&h=60&salv=5&n=ae70db601680aca524931354fe0d8630&ciid=rNq2ZfQ*&p=2367355&sapcxcat=&t=0&saiid=ea65e87c-094d-4775-9037-b71557cb9908&u=119173659&cflgs=AA**&samslid=2940%2C8150%2C8165%2C7460%2C8085%2C8080%2C7425%2C7690%2C8075%2C4422%2C4428%2C9240%2C4302%2C216%2C9225%2C3438%2C8065%2C8170%2C3450%2C4434%2C6565%2C6940%2C5270%2C8105%2C2868%2C3126%2C8090%2C4416%2C3660%2C8095%2C8110%2C6585%2C8120%2C7470%2C4296%2C7450%2C5435%2C8160%2C7420%2C6170%2C8725%2C7475%2C8060%2C9220%2C5420%2C7655%2C7530%2C7520%2C8115%2C8070%2C6595%2C6155%2C4242%2C2436%2C8130&eactn=AUCT&pn=2&rq=a5b36147201efe9e&ciid=rNq2ZfQ*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Da5b36147201efe9e%26node_id%3D76b9d2c791b5c4c2%26REQUEST_GUID%3D171e7acd-a9a0-aa46-5f46-da68fde2f93c%26logid%3Dt6pdhc9%253Fjqpvgig%25285%253E%253A%253C%253F1%253B-171e7acda99-0x300a&TPool=r1sand&TDuration=28&ContentLength=522&ForwardedFor=10.164.102.228&Script=sand&Server=sand.stratus.ebay.com&TMachine=10.164.101.244&TStamp=18:49:57.27&TName=sand.v1&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39"));
+    ubiEvent.setUrlQueryString(
+        "/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setPageName("sand.v1");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("119173659");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 3
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(3962);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:49:57.673")));
+    ubiEvent.setRemoteIP("206.126.218.39");
+    ubiEvent.setRequestCorrelationId("0864598f25bbb0d4");
+    ubiEvent.setSid("e11050");
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ctofthu%60t*0310322-171e7acdc2c-0x10b");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(866596412588L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "c=3&euid=db64bcce16c24d7eba2d9bb82cf38396&segname=11050&osub=-1%7E1&ch=osgood&g=ae70db601680aca524931354fe0d8632&h=60&chnl=7&n=ae70db601680aca524931354fe0d8630&uc=1&sid=e11050&p=3962&uaid=e7acdc2b1710a9cc5c93b752c2edc589S0&bs=0&bu=43103000438&crd=20200505181620&t=0&u=119173659&ul=en-US&pn=2&rq=0864598f25bbb0d4&pagename=roveropen&ciid=rNwrxck*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D0864598f25bbb0d4%26node_id%3D23cb4714aef571ea%26REQUEST_GUID%3D171e7acd-c290-a9cc-5c93-b895e02b843f%26logid%3Dt6qjpbq%253F%253Ctofthu%2560t%2A0310322-171e7acdc2c-0x10b%26cal_mod%3Dfalse&TPool=r1rover&TDuration=3&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=206.126.218.39&Script=/roveropen/0/e11050/7&Server=rover.ebay.com&TMachine=10.156.197.201&TStamp=18:49:57.67&TName=roveropen&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39&Encoding=gzip, deflate, br"));
+    ubiEvent.setUrlQueryString(
+        "/roveropen/0/e11050/7?osub=-1%7E1&crd=20200505181620&sojTags=bu%3Dbu%2Cch%3Dch%2Csegname%3Dsegname%2Ccrd%3Dcrd%2Cosub%3Dosub&ch=osgood&segname=11050&bu=43103000438&euid=db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setPageName("roveropen");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(3);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("119173659");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 4
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(true);
+    ubiEvent.setPageId(5038);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:49:56.158")));
+    ubiEvent.setRemoteIP("10.21.240.19");
+    ubiEvent.setRequestCorrelationId(null);
+    ubiEvent.setSid("p2065413");
+    ubiEvent.setRlogid(null);
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(false);
+    ubiEvent.setClientIP("10.21.240.19");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(86409860780L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("mesgmy.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "c=3&euid=db64bcce16c24d7eba2d9bb82cf38396&segname=11050&osub=-1%7E1&ch=osgood&g=ae70db601680aca524931354fe0d8632&h=60&chnl=7&n=ae70db601680aca524931354fe0d8630&uc=1&sid=e11050&p=3962&uaid=e7acdc2b1710a9cc5c93b752c2edc589S0&bs=0&bu=43103000438&crd=20200505181620&t=0&u=119173659&ul=en-US&pn=2&rq=0864598f25bbb0d4&pagename=roveropen&ciid=rNwrxck*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D0864598f25bbb0d4%26node_id%3D23cb4714aef571ea%26REQUEST_GUID%3D171e7acd-c290-a9cc-5c93-b895e02b843f%26logid%3Dt6qjpbq%253F%253Ctofthu%2560t%2A0310322-171e7acdc2c-0x10b%26cal_mod%3Dfalse&TPool=r1rover&TDuration=3&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=206.126.218.39&Script=/roveropen/0/e11050/7&Server=rover.ebay.com&TMachine=10.156.197.201&TStamp=18:49:57.67&TName=roveropen&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39&Encoding=gzip, deflate, br"));
+    ubiEvent.setUrlQueryString(
+        "/roveropen/0/e11050/7?osub=-1%7E1&crd=20200505181620&sojTags=bu%3Dbu%2Cch%3Dch%2Csegname%3Dsegname%2Ccrd%3Dcrd%2Cosub%3Dosub&ch=osgood&segname=11050&bu=43103000438&euid=db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setPageName("ViewMyMessageDetailsMyeBayMyMessageDetails");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("119173659");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 5
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2512161);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:49:58.390")));
+    ubiEvent.setRemoteIP("206.126.218.39");
+    ubiEvent.setRequestCorrelationId(null);
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6diiebinbbacuewiiw%60hc9%3Fuk%60bjhadjofdbbqcthmqcig(5561504-171e7acde86-0x2504");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(1010568715948L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("www.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "uit=1576674616225&nqc=UAAAAAAAgAQAAAAAAAAAAAAAAAAgBAAAAIAAAAAAAQAAACAAEAAAIAAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAhBCA*&c=3&g=ae70db601680aca524931354fe0d8632&h=60&n=ae70db601680aca524931354fe0d8630&uc=1&es=0&nqt=UAAAAAAAgAQAAAAAAAAAAAAAAAAgBAAAAIAAAAAAAQAAACAAEAAAIAAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAhBCA*&p=2512161&bs=0&r=-1552470496&bu=119173659&t=0&ul=en-US&ec=2&pn=0&pagename=globalheaderfrontend__GHUserAcquisition&ciid=rN6WSus*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De7acde8a1710a9c96c91178fff151ff8%26node_id%3D%26REQUEST_GUID%3Dae70db601680aca524931354fe0d8632%26logid%3Dt6diiebinbbacuewiiw%2560hc9%253Fuk%2560bjhadjofdbbqcthmqcig%285561504-171e7acde86-0x2504%26statusCode%3D200&TPool=r1globalheaderfrontend&TStatus=0&TType=URL&ContentLength=0&ForwardedFor=206.126.218.39, 96.17.11.86,209.211.216.172&Script=/gh/useracquisition&Server=www.ebay.com&TMachine=10.156.150.201&TStamp=18:49:58.39&TName=GHUserAcquisition&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39&Encoding=gzip&Referer=https://mesg.ebay.com/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396"));
+    ubiEvent.setUrlQueryString(
+        "/gh/useracquisition?correlation=operationId=2065413&modules_groups=UserAcquisitionModules&multi_account_login=0&acting_on_diff_acct=0");
+    ubiEvent.setPageName("GHUserAcquisition");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(3);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(-1552470496L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://mesg.ebay.com/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 6
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2512161);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:49:58.390")));
+    ubiEvent.setRemoteIP("206.126.218.39");
+    ubiEvent.setRequestCorrelationId(null);
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6diiebinbbacuewiiw%60hc9%3Fuk%60bjhadjofdbbqcthmqcig(5561504-171e7acde86-0x2504");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(1010568715948L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("www.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "uit=1576674616225&nqc=UAAAAAAAgAQAAAAAAAAAAAAAAAAgBAAAAIAAAAAAAQAAACAAEAAAIAAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAhBCA*&c=3&g=ae70db601680aca524931354fe0d8632&h=60&n=ae70db601680aca524931354fe0d8630&uc=1&es=0&nqt=UAAAAAAAgAQAAAAAAAAAAAAAAAAgBAAAAIAAAAAAAQAAACAAEAAAIAAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAhBCA*&p=2512161&bs=0&r=-1552470496&bu=119173659&t=0&ul=en-US&ec=2&pn=0&pagename=globalheaderfrontend__GHUserAcquisition&ciid=rN6WSus*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De7acde8a1710a9c96c91178fff151ff8%26node_id%3D%26REQUEST_GUID%3Dae70db601680aca524931354fe0d8632%26logid%3Dt6diiebinbbacuewiiw%2560hc9%253Fuk%2560bjhadjofdbbqcthmqcig%285561504-171e7acde86-0x2504%26statusCode%3D200&TPool=r1globalheaderfrontend&TStatus=0&TType=URL&ContentLength=0&ForwardedFor=206.126.218.39, 96.17.11.86,209.211.216.172&Script=/gh/useracquisition&Server=www.ebay.com&TMachine=10.156.150.201&TStamp=18:49:58.39&TName=GHUserAcquisition&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39&Encoding=gzip&Referer=https://mesg.ebay.com/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396"));
+    ubiEvent.setUrlQueryString(
+        "/gh/useracquisition?correlation=operationId=2065413&modules_groups=UserAcquisitionModules&multi_account_login=0&acting_on_diff_acct=0");
+    ubiEvent.setPageName("GHUserAcquisition");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(3);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(-1552470496L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://mesg.ebay.com/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    sessionMetrics.init();
+    sessionMetrics.start(sessionAccumulator);
+    for (UbiEvent event : ubiEventList) {
+      sessionMetrics.feed(event, sessionAccumulator);
+    }
+    sessionMetrics.end(sessionAccumulator);
+    Assert.assertEquals(4, sessionAccumulator.getUbiSession().getTrafficSrcId());
+  }
 
   private ClientData constructClientData(String clientDatastr) {
     ClientData clientData = new ClientData();

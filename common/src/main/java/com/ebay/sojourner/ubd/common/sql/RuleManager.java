@@ -125,6 +125,7 @@ public class RuleManager {
 
   public void close() {
     zkClient.stop();
+
   }
 
   public static void main(String[] args) throws Exception {
