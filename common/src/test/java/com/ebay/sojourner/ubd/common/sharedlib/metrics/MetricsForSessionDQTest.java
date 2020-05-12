@@ -840,7 +840,7 @@ public class MetricsForSessionDQTest {
       sessionMetrics.feed(event, sessionAccumulator);
     }
     sessionMetrics.end(sessionAccumulator);
-    Assert.assertEquals(1, sessionAccumulator.getUbiSession().getTrafficSrcId());
+    Assert.assertEquals(2, sessionAccumulator.getUbiSession().getTrafficSrcId());
   }
 
   @Test
@@ -863,6 +863,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("173.173.220.37");
     ubiEvent.setAgentInfo("eBayAndroid/6.0.1.15");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(670333629693L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -906,6 +907,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("173.173.220.37");
     ubiEvent.setAgentInfo("ebayUserAgent/eBayAndroid;6.0.1;Android;8.0.0;samsung;heroqltevzw;Verizon;1080x1920;3.0");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(543647298045L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -949,6 +951,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("173.173.220.37");
     ubiEvent.setAgentInfo("ebayUserAgent/eBayAndroid;6.0.1;Android;8.0.0;samsung;heroqltevzw;Verizon;1080x1920;3.0");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(166125662717L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -992,6 +995,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("173.173.220.37");
     ubiEvent.setAgentInfo("ebayUserAgent/eBayAndroid;6.0.1;Android;8.0.0;samsung;heroqltevzw;Verizon;1080x1920;3.0");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(347827959293L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1035,6 +1039,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("173.173.220.37");
     ubiEvent.setAgentInfo("ebayUserAgent/eBayAndroid;6.0.1;Android;8.0.0;samsung;heroqltevzw;Verizon;1080x1920;3.0");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(775994373373L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1090,6 +1095,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("80.0.153.110");
     ubiEvent.setAgentInfo("ebayUserAgent/eBayAndroid;6.0.1;Android;9;HUAWEI;HWLYA;O2 - UK;1080x2145;3.0");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(984733511291L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1133,6 +1139,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("80.0.153.110");
     ubiEvent.setAgentInfo("ebayUserAgent/eBayAndroid;6.0.1;Android;9;HUAWEI;HWLYA;O2 - UK;1080x2145;3.0");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(204098687831L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1176,6 +1183,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("80.0.153.110");
     ubiEvent.setAgentInfo("eBayAndroid/6.0.1.15");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(431380484951L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1219,6 +1227,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("80.0.153.110");
     ubiEvent.setAgentInfo("ebayUserAgent/eBayAndroid;6.0.1;Android;9;HUAWEI;HWLYA;O2 - UK;1080x2145;3.0");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(273787040088L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1262,6 +1271,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("80.0.153.110");
     ubiEvent.setAgentInfo("ebayUserAgent/eBayAndroid;6.0.1;Android;9;HUAWEI;HWLYA;O2 - UK;1080x2145;3.0");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(1026794922841L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1305,6 +1315,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("80.0.153.110");
     ubiEvent.setAgentInfo("ebayUserAgent/eBayAndroid;6.0.1;Android;9;HUAWEI;HWLYA;O2 - UK;1080x2145;3.0");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(780264895101L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1348,6 +1359,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("80.0.153.110");
     ubiEvent.setAgentInfo("ebayUserAgent/eBayAndroid;6.0.1;Android;9;HUAWEI;HWLYA;O2 - UK;1080x2145;3.0");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(54205146238L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1391,6 +1403,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("80.0.153.110");
     ubiEvent.setAgentInfo("eBayAndroid/6.0.1.15");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(734756552320L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1434,6 +1447,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("80.0.153.110");
     ubiEvent.setAgentInfo("eBayAndroid/6.0.1.15");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(734756355712L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1477,6 +1491,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("80.0.153.110");
     ubiEvent.setAgentInfo("eBayAndroid/6.0.1.15");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(734757011072L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1520,6 +1535,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("80.0.153.110");
     ubiEvent.setAgentInfo("eBayAndroid/6.0.1.15");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(734755765888L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1576,6 +1592,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("174.221.5.135");
     ubiEvent.setAgentInfo("ebayUserAgent/eBayAndroid;6.0.1;Android;10;samsung;z3q;Verizon;1080x2164;3.4");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(421370827569L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1619,6 +1636,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("174.221.5.135");
     ubiEvent.setAgentInfo("ebayUserAgent/eBayAndroid;6.0.1;Android;10;samsung;z3q;Verizon;1080x2164;3.4");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(276172382014L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1662,6 +1680,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("174.221.5.135");
     ubiEvent.setAgentInfo("eBayAndroid/6.0.1.15");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(948012326718L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1705,6 +1724,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("174.221.5.135");
     ubiEvent.setAgentInfo("Mozilla/5.0 (Linux; Android 10; SM-G988U Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/78.0.3904.96 Mobile Safari/537.36");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(504798136382L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1748,6 +1768,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("174.221.5.135");
     ubiEvent.setAgentInfo("Mozilla/5.0 (Linux; Android 10; SM-G988U Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/78.0.3904.96 Mobile Safari/537.36");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(487198044991L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1791,6 +1812,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("174.221.5.135");
     ubiEvent.setAgentInfo("eBayAndroid/6.0.1.15");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(351448118847L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1834,6 +1856,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("174.221.5.135");
     ubiEvent.setAgentInfo("ebayUserAgent/eBayAndroid;6.0.1;Android;10;samsung;z3q;Verizon;1080x2164;3.4");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(1027667244095L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1877,6 +1900,7 @@ public class MetricsForSessionDQTest {
     ubiEvent.setClientIP("174.221.5.135");
     ubiEvent.setAgentInfo("eBayAndroid/6.0.1.15");
     ubiEvent.setCobrand(6);
+    ubiEvent.setAppId(2571);
     ubiEvent.setCurrentImprId(351447725631L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
@@ -1909,10 +1933,63 @@ public class MetricsForSessionDQTest {
       sessionMetrics.feed(event, sessionAccumulator);
     }
     sessionMetrics.end(sessionAccumulator);
-    Assert.assertEquals(1, sessionAccumulator.getUbiSession().getTrafficSrcId());
+    Assert.assertEquals(14, sessionAccumulator.getUbiSession().getTrafficSrcId());
   }
 
+  @Test
+  public void test_TrafficSourceMetricFor1and2() throws Exception {
 
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("e88156fc1710a99bd6d26fe0c3108742");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(1605052);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 22:42:02"
+        + ".739")));
+    ubiEvent.setRemoteIP("217.245.34.41");
+    ubiEvent.setRequestCorrelationId("f596fbab499bd4e8");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ckuvthu%60t*020117%3E%29pqtfwpu%29osu%29fgg%7E-fij-171e8808f20-0x1b2");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("217.245.34.41");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0");
+    ubiEvent.setCobrand(5);
+    ubiEvent.setCurrentImprId(471322613633L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.de");
+    ubiEvent.setApplicationPayload(
+        "c=1&g=e88156fc1710a99bd6d26fe0c3108742&rurl=https%25253A%25252F%25252Fwww.google.com%25252F&h=fc&px=4249&chnl=9&uc=77&p=1605052&uaid=e88156fc1710a99bd6d26fe0c3108741S0&bs=77&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2Fs-hille-coaster-530%2Fk0&r=-459252443&t=77&cflgs=QA**&ul=de-DE&pn=2&rq=7c5cd78b631cda54&pagename=http://kleinanzeigen.ebay.de/anzeigen/s-suchen.html&ciid=gVcEvW0*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D7c5cd78b631cda54%26node_id%3D2ef4267965ddc09b%26REQUEST_GUID%3D171e8815-6f30-a99b-d6d1-802fe03c1802%26logid%3Dt6qjpbq%253F%253Ctofthu%2560t%2A0114%253B16%2529pqtfwpu%2529pie%2529fgg%257E-fij-171e8815704-0x10f%26cal_mod%3Dfalse&TPool=r1rover&TDuration=19&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=217.245.34.41&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.153.189.109&TStamp=22:42:02.73&TName=roverimp_INTL&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0&RemoteIP=217.245.34.41&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/s-hille-coaster-530/k0"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=rurl%3Dhttps%25253A%25252F%25252Fwww.google.com%25252F&mpt=1588743722724&imp=1605052");
+    ubiEvent.setPageName("roverimp_INTL");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(77);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(-459252443L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay-kleinanzeigen.de/s-hille-coaster-530/k0");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEventList.add(ubiEvent);
+
+    sessionMetrics.init();
+    sessionMetrics.start(sessionAccumulator);
+    for (UbiEvent event : ubiEventList) {
+      sessionMetrics.feed(event, sessionAccumulator);
+    }
+    sessionMetrics.end(sessionAccumulator);
+    Assert.assertEquals(21, sessionAccumulator.getUbiSession().getTrafficSrcId());
+  }
   private ClientData constructClientData(String clientDatastr) {
     ClientData clientData = new ClientData();
     clientData.getClass().getDeclaredFields();

@@ -387,9 +387,11 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
       return 25;
     }
     if (intermediateMetrics.getRefDomain().startsWith("itemlistings.ebay.")) {
+      System.out.println("this is for 390");
       return 21;
     }
     if (intermediateMetrics.getRefDomain().matches(regString4Id21)) {
+      System.out.println("this is for 394");
       return 21;
     }
     if (intermediateMetrics.getRefDomain().contains(".craigslist.")) {
@@ -400,6 +402,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
       return 8;
     }
     if (intermediateMetrics.getRefDomain().matches(".*toolbar.*\\.google\\..*")) {
+      System.out.println("this is for 405");
       return 21;
     }
     if (intermediateMetrics.getRefDomain().matches(regString4Id22)) {
@@ -452,12 +455,14 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
       if (landPageSet1.contains(intermediateMetrics.getLandPageID())) {
         return 8;
       }
+      System.out.println("this is for 458");
       return 21;
     }
     if (intermediateMetrics.getRefDomain().matches(regString4Id21_1)) {
       if (landPageSet1.contains(intermediateMetrics.getLandPageID())) {
         return 8;
       }
+      System.out.println("this is for 465");
       return 21;
     }
     if (StringUtils.isBlank(intermediateMetrics.getRefDomain())
@@ -504,6 +509,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
       return 8;
     }
     if (intermediateMetrics.getSearchAgentTypeId() != null) {
+      System.out.println("this is for 512");
       return 21;
     }
     if (intermediateMetrics.getFirstNotifyTs() != null
