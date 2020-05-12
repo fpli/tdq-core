@@ -4,13 +4,13 @@ import com.ebay.sojourner.ubd.common.util.Constants;
 import com.ebay.sojourner.ubd.common.util.RestClientUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.apache.commons.compress.utils.Lists;
 
 @Slf4j
 public class RuleFetcher {

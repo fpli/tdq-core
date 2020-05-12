@@ -8,15 +8,14 @@ import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class EventBotDetector implements BotDetector<UbiEvent> {
 
   private static volatile EventBotDetector eventBotDetector;
-  @Getter
-  private static RuleManager ruleManager = RuleManager.getInstance();
+
+  private RuleManager ruleManager = RuleManager.getInstance();
   private Set<SqlEventRule> botRules = new CopyOnWriteArraySet<>();
 
   private EventBotDetector() {
@@ -74,5 +73,10 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
     botRules.add(Rules.ICF_RULE_13_COMPILER);
     botRules.add(Rules.ICF_RULE_56_COMPILER);
     */
+  }
+
+  public void close() {
+    // close zk and executor pool
+    ruleManager.close();
   }
 }

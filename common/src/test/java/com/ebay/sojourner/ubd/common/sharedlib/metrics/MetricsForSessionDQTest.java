@@ -2777,31 +2777,75 @@ public class MetricsForSessionDQTest {
     ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
     ubiEvent.setIframe(true);
     ubiEvent.setRdt(false);
-    ubiEvent.setPageId(2512161);
-    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:49:58.390")));
+    ubiEvent.setPageId(2367355);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:49:57.275")));
     ubiEvent.setRemoteIP("206.126.218.39");
-    ubiEvent.setRequestCorrelationId(null);
+    ubiEvent.setRequestCorrelationId("a5b36147201efe9e");
     ubiEvent.setSid(null);
-    ubiEvent.setRlogid("t6diiebinbbacuewiiw%60hc9%3Fuk%60bjhadjofdbbqcthmqcig(5561504-171e7acde86-0x2504");
+    ubiEvent.setRlogid("t6pdhc9%3Fjqpvgig%285%3E%3A%3C%3F1%3B-171e7acda99-0x300a");
+    ubiEvent.setEventFamily("SAND");
+    ubiEvent.setEventAction("AUCT");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(1049678502572L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("sand.stratus.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "flgs=AA**&sameid=308b537ae8024bae92e4e88b43e6a27d&sapcxkw=&schemaversion=3&pagename=SandPage&saucxgdpry=false&efam=SAND&ac=119173659&saucxgdprct=false&saty=1&g=ae70db601680aca524931354fe0d8632&saebaypid=100602&h=60&salv=5&n=ae70db601680aca524931354fe0d8630&ciid=rNq2ZfQ*&p=2367355&sapcxcat=&t=0&saiid=6389a697-8861-4473-b290-c10c506cc707&u=119173659&cflgs=AA**&samslid=2940%2C8150%2C8165%2C7460%2C8085%2C8080%2C7425%2C7690%2C8075%2C4422%2C4428%2C9240%2C4302%2C216%2C9225%2C3438%2C8065%2C8170%2C3450%2C4434%2C6565%2C6940%2C5270%2C8105%2C2868%2C3126%2C8090%2C4416%2C3660%2C8095%2C8110%2C6585%2C8120%2C7470%2C4296%2C7450%2C5435%2C8160%2C7420%2C6170%2C8725%2C7475%2C8060%2C9220%2C5420%2C7655%2C7530%2C7520%2C8115%2C8070%2C6595%2C6155%2C4242%2C2436%2C8130&eactn=AUCT&pn=2&rq=a5b36147201efe9e&ciid=rNq2ZfQ*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Da5b36147201efe9e%26node_id%3D76b9d2c791b5c4c2%26REQUEST_GUID%3D171e7acd-a9a0-aa46-5f46-da68fde2f93c%26logid%3Dt6pdhc9%253Fjqpvgig%25285%253E%253A%253C%253F1%253B-171e7acda99-0x300a&TPool=r1sand&TDuration=28&ContentLength=522&ForwardedFor=10.164.102.228&Script=sand&Server=sand.stratus.ebay.com&TMachine=10.164.101.244&TStamp=18:49:57.27&TName=sand.v1&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39"));
+    ubiEvent.setUrlQueryString(
+        "/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setPageName("sand.v1");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("119173659");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 7
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2046301);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:49:57.836")));
+    ubiEvent.setRemoteIP("206.126.218.39");
+    ubiEvent.setRequestCorrelationId("e871c850b060d17b");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ctofthu%60t*0111407%29pqtfwpu%29pie%29fgg%7E-fij-171e7acdcd4-0x196");
     ubiEvent.setEventFamily(null);
     ubiEvent.setEventAction(null);
     ubiEvent.setPartialValidPage(true);
     ubiEvent.setClientIP("206.126.218.39");
     ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
     ubiEvent.setCobrand(7);
-    ubiEvent.setCurrentImprId(1010568715948L);
+    ubiEvent.setCurrentImprId(503649131692L);
     ubiEvent.setEventAttr(null);
     ubiEvent.setReservedForFuture(0);
     ubiEvent.setSqr(null);
     ubiEvent.setFlags(null);
-    ubiEvent.setWebServer("www.ebay.com");
+    ubiEvent.setWebServer("rover.ebay.com");
     ubiEvent.setApplicationPayload(
-        "uit=1576674616225&nqc=UAAAAAAAgAQAAAAAAAAAAAAAAAAgBAAAAIAAAAAAAQAAACAAEAAAIAAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAhBCA*&c=3&g=ae70db601680aca524931354fe0d8632&h=60&n=ae70db601680aca524931354fe0d8630&uc=1&es=0&nqt=UAAAAAAAgAQAAAAAAAAAAAAAAAAgBAAAAIAAAAAAAQAAACAAEAAAIAAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAhBCA*&p=2512161&bs=0&r=-1552470496&bu=119173659&t=0&ul=en-US&ec=2&pn=0&pagename=globalheaderfrontend__GHUserAcquisition&ciid=rN6WSus*");
+        "c=3&g=ae70db601680aca524931354fe0d8632&h=60&px=4249&ghi=98&chnl=9&cp=2065413&n=ae70db601680aca524931354fe0d8630&uc=1&p=2046301&uaid=e7acdccd1710a9943751c131c2753d17S0&bs=0&ref=https%3A%2F%2Fmesg.ebay.com%2Fmesgweb%2FViewMessageDetail%2Femail%2F0%2Fdb64bcce16c24d7eba2d9bb82cf38396&r=-1552470496&t=0&u=119173659&ul=en-US&callingpagename=mesg__ViewMessageDetail&pn=2&rq=e871c850b060d17b&pagename=GH_impressions&ciid=rNzTQ3U*");
     ubiEvent.setClientData(constructClientData(
-        "TPayload=corr_id_%3De7acde8a1710a9c96c91178fff151ff8%26node_id%3D%26REQUEST_GUID%3Dae70db601680aca524931354fe0d8632%26logid%3Dt6diiebinbbacuewiiw%2560hc9%253Fuk%2560bjhadjofdbbqcthmqcig%285561504-171e7acde86-0x2504%26statusCode%3D200&TPool=r1globalheaderfrontend&TStatus=0&TType=URL&ContentLength=0&ForwardedFor=206.126.218.39, 96.17.11.86,209.211.216.172&Script=/gh/useracquisition&Server=www.ebay.com&TMachine=10.156.150.201&TStamp=18:49:58.39&TName=GHUserAcquisition&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39&Encoding=gzip&Referer=https://mesg.ebay.com/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396"));
+        "TPayload=corr_id_%3De871c850b060d17b%26node_id%3D6c48812d45e29837%26REQUEST_GUID%3D171e7acd-ccc0-a994-3755-9548dfeae7e6%26logid%3Dt6qjpbq%253F%253Ctofthu%2560t%2A0111407%2529pqtfwpu%2529pie%2529fgg%257E-fij-171e7acdcd4-0x196%26cal_mod%3Dfalse&TPool=r1rover&TDuration=8&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=206.126.218.39&Script=/roverimp/0/0/9&Server=rover.ebay.com&TMachine=10.153.67.117&TStamp=18:49:57.83&TName=roverimp&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39&Encoding=gzip, deflate, br&Referer=https://mesg.ebay.com/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396"));
     ubiEvent.setUrlQueryString(
-        "/gh/useracquisition?correlation=operationId=2065413&modules_groups=UserAcquisitionModules&multi_account_login=0&acting_on_diff_acct=0");
-    ubiEvent.setPageName("GHUserAcquisition");
+        "/roverimp/0/0/9?trknvp=cp%3D2065413%26ghi%3D98&imp=2046301&1588729797673=");
+    ubiEvent.setPageName("roverimp");
     ubiEvent.setVersion(3);
     ubiEvent.setSiteId(0);
     ubiEvent.setClickId(3);
@@ -2809,7 +2853,491 @@ public class MetricsForSessionDQTest {
     ubiEvent.setRefererHash(-1552470496L);
     ubiEvent.setCookies(null);
     ubiEvent.setReferrer("https://mesg.ebay.com/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setUserId("119173659");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 8
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(true);
+    ubiEvent.setPageId(3084);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:49:55.844")));
+    ubiEvent.setRemoteIP("206.126.218.39");
+    ubiEvent.setRequestCorrelationId("bcd1386038d2c62d");
+    ubiEvent.setSid("p2065413");
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ctofthu%60t*01166%3D3%29pqtfwpu%29pie%29fgg%7E-fij-171e7acd507-0x19a");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(false);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(367538918828L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "rdt=1&c=1&g=ae70db601680aca524931354fe0d8632&h=60&cguidsrc=cookie&n=ae70db601680aca524931354fe0d8630&uc=1&url_mpre=https%3A%2F%2Frover.ebay.com%2Frover%2F0%2Fe11050.m44.l3478%2F7%3Feuid%3Ddb64bcce16c24d7eba2d9bb82cf38396%26bu%3D43103000438%26segname%3D11050%26crd%3D20200505181620%26osub%3D-1%7E1%26ch%3Dosgood%26loc%3Dhttp%253A%252F%252Fmesgmy.ebay.com%252Fws%252FeBayISAPI.dll%253FViewMyMessageDetails%2526View%253DMyMessageDetails%2526CurrentPage%253DMyeBayMyMessageDetails%2526SubmitAction.Show%253Dx%2526emailUniqueId%253Ddb64bcce16c24d7eba2d9bb82cf38396%2526sourceImagePreview%253DImagePreview%26sojTags%3Dbu%3Dbu%2Cch%3Dch%2Csegname%3Dsegname%2Ccrd%3Dcrd%2Curl%3Dloc%2Cosub%3Dosub&p=3084&uaid=e7acd5061710aad93557c810c30b4e9bS0&bs=0&t=0&u=119173659&ul=en-US&hrc=301&pn=2&pcguid=ae70db601680aca524931354fe0d8630&rq=bcd1386038d2c62d&pagename=EntryTracking&ciid=rNUGk1U*&sid=p2065413");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Dbcd1386038d2c62d%26node_id%3D683aaf3a7c18cd89%26REQUEST_GUID%3D171e7acd-5040-aad9-3557-9dbce03a3e75%26logid%3Dt6qjpbq%253F%253Ctofthu%2560t%2A01166%253D3%2529pqtfwpu%2529pie%2529fgg%257E-fij-171e7acd507-0x19a%26cal_mod%3Dfalse&TPool=r1rover&TDuration=4&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=206.126.218.39&Script=/rover/0/0/99&Server=rover.ebay.com&TMachine=10.173.147.85&TStamp=18:49:55.84&TName=rover&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39&Encoding=gzip, deflate, br"));
+    ubiEvent.setUrlQueryString(
+        "/rover/0/0/99?loc=https%3A%2F%2Frover.ebay.com%2Frover%2F0%2Fe11050.m44.l3478%2F7%3Feuid%3Ddb64bcce16c24d7eba2d9bb82cf38396%26bu%3D43103000438%26segname%3D11050%26crd%3D20200505181620%26osub%3D-1%7E1%26ch%3Dosgood%26loc%3Dhttp%253A%252F%252Fmesgmy.ebay.com%252Fws%252FeBayISAPI.dll%253FViewMyMessageDetails%2526View%253DMyMessageDetails%2526CurrentPage%253DMyeBayMyMessageDetails%2526SubmitAction.Show%253Dx%2526emailUniqueId%253Ddb64bcce16c24d7eba2d9bb82cf38396%2526sourceImagePreview%253DImagePreview%26sojTags%3Dbu%3Dbu%2Cch%3Dch%2Csegname%3Dsegname%2Ccrd%3Dcrd%2Curl%3Dloc%2Cosub%3Dosub");
+    ubiEvent.setPageName("rover");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("119173659");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 9
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2367355);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:49:57.270")));
+    ubiEvent.setRemoteIP("206.126.218.39");
+    ubiEvent.setRequestCorrelationId("a5b36147201efe9e");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6pdhc9%3Fuk%60vgig%280%3Fesr*w%60ut3522-171e7acda96-0x3dbe");
+    ubiEvent.setEventFamily("SAND");
+    ubiEvent.setEventAction("AUCT");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(289300470700L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("sand.stratus.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "flgs=AA**&sagooglssa=false&saaoluc=UPfdb71cdb-f91b-11e9-b40d-0eb5e2a831ee&saaoluco=1&saidpubid=183403&saidxuc=XbY5v9HM6GYAACkpBH8AAAB9ACoAAAIB&saanxuco=1&sarbcuc=K29P8DLS-4-9W20&sagoogltagid=21663075830&sapbmsid=165303&saopxpubid=537121625&efam=SAND&ac=119173659&sarbcuco=1&saucxgdprct=false&ciid=rNumW0M*&sapbmuc=B1CAD7C7-8803-4545-9782-DC085A2AA780&sapcxcat=&saopxuc=a61e2ec0-60cd-8cf1-9e03-e86ae044ec9f&saiid=68e43cd8-287a-4417-9349-df29c7620c0b&sarbctid=650078&cflgs=AA**&sapbmpubid=156009&samslid=2940%2C8150%2C8165%2C7460%2C8085%2C8080%2C7425%2C7690%2C8075%2C4422%2C4428%2C9240%2C4302%2C216%2C9225%2C3438%2C8065%2C8170%2C3450%2C4434%2C6565%2C6940%2C5270%2C8105%2C2868%2C3126%2C8090%2C4416%2C3660%2C8095%2C8110%2C6585%2C8120%2C7470%2C4296%2C7450%2C5435%2C8160%2C7420%2C6170%2C8725%2C7475%2C8060%2C9220%2C5420%2C7655%2C7530%2C7520%2C8115%2C8070%2C6595%2C6155%2C4242%2C2436%2C8130&eactn=AUCT&saanxpid=9794063&rq=a5b36147201efe9e&sagoogluc=CAESEE3x9R7nk1V93EFwDmV44_o&sameid=2d781559989d4b129f0c635b4cc7cd04&sapcxkw=&schemaversion=3&sapbmuco=1&sagooglsid=21663075830009&saflps=Config&saaolpubid=12005&saanxuc=2846386642456817880&sapbmtid=851352&!sbids=sbid%3A1%2Csbe%3A0.12%2Csbbid%3A%2Csbaid%3Asling.com%2Csbdid%3A1037%2Csbsid%3AAol%2Csbadid%3A%2Csbdlid%3A%2Csbcid%3A1037-2979-9x5ca3gn%2Csbt%3A1%2Csbadbts%3A342%2Csbfa%3Asling.com%2Csbrp%3A%2Csbs%3A1037%2Csblurl%3A&saidxuco=1&saflp=0.8&pagename=SandPage&saucxgdpry=false&salr=100&sagoogluco=1&saanxmid=7208&saaolsid=345487&saty=1&saebaypid=100858&g=ae70db601680aca524931354fe0d8632&h=60&saopxuco=1&salv=5&n=ae70db601680aca524931354fe0d8630&saidtid=29011&p=2367355&t=0&u=119173659&sarbcpubid=11440&sarbcsid=138876&saopxtid=538587091&pn=2&ciid=rNumW0M*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Da5b36147201efe9e%26node_id%3D9e9d95592343ee03%26REQUEST_GUID%3D171e7acd-a960-a1b5-b434-34d2fcc03cac%26logid%3Dt6pdhc9%253Fuk%2560vgig%25280%253Fesr%2Aw%2560ut3522-171e7acda96-0x3dbe&TPool=r1sand&TDuration=272&ContentLength=519&ForwardedFor=10.164.102.228&Script=sand&Server=sand.stratus.ebay.com&TMachine=10.27.91.67&TStamp=18:49:57.27&TName=sand.v1&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39"));
+    ubiEvent.setUrlQueryString(
+        "/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setPageName("sand.v1");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("119173659");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 10
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2367355);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:49:57.270")));
+    ubiEvent.setRemoteIP("206.126.218.39");
+    ubiEvent.setRequestCorrelationId("a5b36147201efe9e");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6pdhc9%3Fuk%60vgig%280%3Fesr*w%60ut3522-171e7acda96-0x3dbe");
+    ubiEvent.setEventFamily("SAND");
+    ubiEvent.setEventAction("AUCT");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(289300470700L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("sand.stratus.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "flgs=AA**&sagooglssa=false&saaoluc=UPfdb71cdb-f91b-11e9-b40d-0eb5e2a831ee&saaoluco=1&saidpubid=190136&saidxuc=XbY5v9HM6GYAACkpBH8AAAB9ACoAAAIB&saanxuco=1&sarbcuc=K29P8DLS-4-9W20&sacriteotagid=300x250_Footer_1_BTF_PB&sagoogltagid=21663075830&sapbmsid=165303&saopxpubid=537121625&efam=SAND&ac=119173659&sarbcuco=1&saucxgdprct=false&sacriteouc=31238024-5ccb-4531-bb99-f648dd6b8398&ciid=rNumW0M*&sapbmuc=B1CAD7C7-8803-4545-9782-DC085A2AA780&sapcxcat=&saopxuc=a61e2ec0-60cd-8cf1-9e03-e86ae044ec9f&saiid=74a63b81-82dc-4b15-ad0f-7de691c3ff61&sarbctid=650068&cflgs=AA**&sapbmpubid=156009&samslid=2940%2C8150%2C8165%2C7460%2C8085%2C8080%2C7425%2C7690%2C8075%2C4422%2C4428%2C9240%2C4302%2C216%2C9225%2C3438%2C8065%2C8170%2C3450%2C4434%2C6565%2C6940%2C5270%2C8105%2C2868%2C3126%2C8090%2C4416%2C3660%2C8095%2C8110%2C6585%2C8120%2C7470%2C4296%2C7450%2C5435%2C8160%2C7420%2C6170%2C8725%2C7475%2C8060%2C9220%2C5420%2C7655%2C7530%2C7520%2C8115%2C8070%2C6595%2C6155%2C4242%2C2436%2C8130&eactn=AUCT&saanxpid=10492943&rq=a5b36147201efe9e&sagoogluc=CAESEE3x9R7nk1V93EFwDmV44_o&sameid=0ee1e76410a44207af948f6559bd68ed&sapcxkw=&schemaversion=3&sacriteopubid=186706&sapbmuco=1&sagooglsid=21663075830031&saflps=Config&saaolpubid=12005&saanxuc=2846386642456817880&sapbmtid=851353&!sbids=sbid%3A5eb217c552cb87897654246adb6e8000%2Csbe%3A0.03%2Csbbid%3A%2Csbaid%3A%2Csbdid%3A%2Csbsid%3ACriteo%2Csbadid%3A52484%2Csbdlid%3A%2Csbcid%3A10722378%2Csbt%3A1%2Csbadbts%3A716%2Csbfa%3Apandora.com%2Csbrp%3A%2Csbs%3Acriteo-global%2Csblurl%3A&saidxuco=1&saflp=0.8&pagename=SandPage&saucxgdpry=false&salr=100&sagoogluco=1&saanxmid=7208&saaolsid=346780&saty=1&saebaypid=100859&g=ae70db601680aca524931354fe0d8632&h=60&saopxuco=1&salv=5&n=ae70db601680aca524931354fe0d8630&saidtid=30387&p=2367355&t=0&u=119173659&sarbcpubid=11440&sarbcsid=138868&saopxtid=538715644&sacriteouco=1&pn=2&ciid=rNumW0M*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Da5b36147201efe9e%26node_id%3D9e9d95592343ee03%26REQUEST_GUID%3D171e7acd-a960-a1b5-b434-34d2fcc03cac%26logid%3Dt6pdhc9%253Fuk%2560vgig%25280%253Fesr%2Aw%2560ut3522-171e7acda96-0x3dbe&TPool=r1sand&TDuration=272&ContentLength=519&ForwardedFor=10.164.102.228&Script=sand&Server=sand.stratus.ebay.com&TMachine=10.27.91.67&TStamp=18:49:57.27&TName=sand.v1&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39"));
+    ubiEvent.setUrlQueryString(
+        "/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setPageName("sand.v1");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("119173659");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 11
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2367355);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:49:57.270")));
+    ubiEvent.setRemoteIP("206.126.218.39");
+    ubiEvent.setRequestCorrelationId("a5b36147201efe9e");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6pdhc9%3Fuk%60vgig%280%3Fesr*w%60ut3522-171e7acda96-0x3dbe");
+    ubiEvent.setEventFamily("SAND");
+    ubiEvent.setEventAction("AUCT");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(289300470700L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("sand.stratus.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "flgs=AA**&saaoluc=UPfdb71cdb-f91b-11e9-b40d-0eb5e2a831ee&saaoluco=1&saidpubid=190137&saidxuc=XbY5v9HM6GYAACkpBH8AAAB9ACoAAAIB&saanxuco=1&sarbcuc=K29P8DLS-4-9W20&sacriteotagid=300x250_Footer_2_BTF_PB&sapbmsid=197531&saopxpubid=537121625&efam=SAND&ac=119173659&sarbcuco=1&saucxgdprct=false&sacriteouc=31238024-5ccb-4531-bb99-f648dd6b8398&ciid=rNumW0M*&sapbmuc=B1CAD7C7-8803-4545-9782-DC085A2AA780&sapcxcat=&saopxuc=a61e2ec0-60cd-8cf1-9e03-e86ae044ec9f&saiid=0bf163fa-fc5b-486c-8618-da6d2fcf565e&sarbctid=650070&cflgs=AA**&sapbmpubid=156009&samslid=2940%2C8150%2C8165%2C7460%2C8085%2C8080%2C7425%2C7690%2C8075%2C4422%2C4428%2C9240%2C4302%2C216%2C9225%2C3438%2C8065%2C8170%2C3450%2C4434%2C6565%2C6940%2C5270%2C8105%2C2868%2C3126%2C8090%2C4416%2C3660%2C8095%2C8110%2C6585%2C8120%2C7470%2C4296%2C7450%2C5435%2C8160%2C7420%2C6170%2C8725%2C7475%2C8060%2C9220%2C5420%2C7655%2C7530%2C7520%2C8115%2C8070%2C6595%2C6155%2C4242%2C2436%2C8130&eactn=AUCT&saanxpid=10492944&rq=a5b36147201efe9e&sameid=539a0e1bada245549c34498c760866e8&sapcxkw=&schemaversion=3&sacriteopubid=186706&sapbmuco=1&saflps=Config&saaolpubid=12005&saanxuc=2846386642456817880&sapbmtid=1087103&!sbids=sbid%3A5eb217c50efe3b498b6442d6b330ed00%2Csbe%3A0.03%2Csbbid%3A%2Csbaid%3A%2Csbdid%3A%2Csbsid%3ACriteo%2Csbadid%3A52484%2Csbdlid%3A%2Csbcid%3A10722378%2Csbt%3A1%2Csbadbts%3A727%2Csbfa%3Apandora.com%2Csbrp%3A%2Csbs%3Acriteo-global%2Csblurl%3A&saidxuco=1&saflp=0.85&pagename=SandPage&saucxgdpry=false&salr=100&saanxmid=7208&saaolsid=346781&saty=1&saebaypid=100860&g=ae70db601680aca524931354fe0d8632&h=60&saopxuco=1&salv=5&n=ae70db601680aca524931354fe0d8630&saidtid=30388&p=2367355&t=0&u=119173659&sarbcpubid=11440&sarbcsid=138870&saopxtid=538715645&sacriteouco=1&pn=2&ciid=rNumW0M*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Da5b36147201efe9e%26node_id%3D9e9d95592343ee03%26REQUEST_GUID%3D171e7acd-a960-a1b5-b434-34d2fcc03cac%26logid%3Dt6pdhc9%253Fuk%2560vgig%25280%253Fesr%2Aw%2560ut3522-171e7acda96-0x3dbe&TPool=r1sand&TDuration=272&ContentLength=519&ForwardedFor=10.164.102.228&Script=sand&Server=sand.stratus.ebay.com&TMachine=10.27.91.67&TStamp=18:49:57.27&TName=sand.v1&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39"));
+    ubiEvent.setUrlQueryString(
+        "/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setPageName("sand.v1");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("119173659");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 12
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2367355);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:49:57.270")));
+    ubiEvent.setRemoteIP("206.126.218.39");
+    ubiEvent.setRequestCorrelationId("a5b36147201efe9e");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6pdhc9%3Fuk%60vgig%280%3Fesr*w%60ut3522-171e7acda96-0x3dbe");
+    ubiEvent.setEventFamily("SAND");
+    ubiEvent.setEventAction("AUCT");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(289300405164L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("sand.stratus.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "flgs=AA**&saaoluc=UPfdb71cdb-f91b-11e9-b40d-0eb5e2a831ee&saaoluco=1&saidpubid=190138&saidxuc=XbY5v9HM6GYAACkpBH8AAAB9ACoAAAIB&saanxuco=1&sarbcuc=K29P8DLS-4-9W20&sacriteotagid=300x250_Footer_3_BTF_PB&sapbmsid=197532&saopxpubid=537121625&efam=SAND&ac=119173659&sarbcuco=1&saucxgdprct=false&sacriteouc=31238024-5ccb-4531-bb99-f648dd6b8398&ciid=rNulW0M*&sapbmuc=B1CAD7C7-8803-4545-9782-DC085A2AA780&sapcxcat=&saopxuc=a61e2ec0-60cd-8cf1-9e03-e86ae044ec9f&saiid=97c50509-4367-4083-aaa6-ff6d9189bc1e&sarbctid=650072&cflgs=AA**&sapbmpubid=156009&samslid=2940%2C8150%2C8165%2C7460%2C8085%2C8080%2C7425%2C7690%2C8075%2C4422%2C4428%2C9240%2C4302%2C216%2C9225%2C3438%2C8065%2C8170%2C3450%2C4434%2C6565%2C6940%2C5270%2C8105%2C2868%2C3126%2C8090%2C4416%2C3660%2C8095%2C8110%2C6585%2C8120%2C7470%2C4296%2C7450%2C5435%2C8160%2C7420%2C6170%2C8725%2C7475%2C8060%2C9220%2C5420%2C7655%2C7530%2C7520%2C8115%2C8070%2C6595%2C6155%2C4242%2C2436%2C8130&eactn=AUCT&saanxpid=10492947&rq=a5b36147201efe9e&sameid=179e10216d334bbeaf02c9365ef4cad3&sapcxkw=&schemaversion=3&sacriteopubid=186706&sapbmuco=1&saflps=Config&saaolpubid=12005&saanxuc=2846386642456817880&sapbmtid=1087104&!sbids=sbid%3A5eb217c47ff1e168b6284976c1ec9300%2Csbe%3A0.03%2Csbbid%3A%2Csbaid%3A%2Csbdid%3A%2Csbsid%3ACriteo%2Csbadid%3A52484%2Csbdlid%3A%2Csbcid%3A10722378%2Csbt%3A1%2Csbadbts%3A716%2Csbfa%3Apandora.com%2Csbrp%3A%2Csbs%3Acriteo-global%2Csblurl%3A&saidxuco=1&saflp=0.85&pagename=SandPage&saucxgdpry=false&salr=100&saanxmid=7208&saaolsid=346782&saty=1&saebaypid=100861&g=ae70db601680aca524931354fe0d8632&h=60&saopxuco=1&salv=5&n=ae70db601680aca524931354fe0d8630&saidtid=30389&p=2367355&t=0&u=119173659&sarbcpubid=11440&sarbcsid=138872&saopxtid=538715646&sacriteouco=1&pn=2&ciid=rNulW0M*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Da5b36147201efe9e%26node_id%3D9e9d95592343ee03%26REQUEST_GUID%3D171e7acd-a960-a1b5-b434-34d2fcc03cac%26logid%3Dt6pdhc9%253Fuk%2560vgig%25280%253Fesr%2Aw%2560ut3522-171e7acda96-0x3dbe&TPool=r1sand&TDuration=272&ContentLength=519&ForwardedFor=10.164.102.228&Script=sand&Server=sand.stratus.ebay.com&TMachine=10.27.91.67&TStamp=18:49:57.27&TName=sand.v1&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39"));
+    ubiEvent.setUrlQueryString(
+        "/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setPageName("sand.v1");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("119173659");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 13
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2317508);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:49:57.290")));
+    ubiEvent.setRemoteIP("10.77.72.223");
+    ubiEvent.setRequestCorrelationId("e912b72ccbf0de15");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*0631%3B%3D%28twwgsvv%28umj%28bad%7F%29%60jk-171e7acdaab-0x196");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1,GingerClient/2.9.7-RELEASE");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(856706177708L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("internal.rover.vip.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "nqc=UAAAAAAAgAQAAAAAAAAAAAAAAAAgBAAAAIAAAAAAAQAAACAAEAAAIAAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAhBCA*&c=1&g=ae70db601680aca524931354fe0d8632&h=60&px=4249&chnl=9&n=ae70db601680aca524931354fe0d8630&uc=1&es=0&nqt=UAAAAAAAgAQAAAAAAAAAAAAAAAAgBAAAAIAAAAAAAQAAACAAEAAAIAAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAhBCA*&p=2317508&uaid=e7acdaaa1710a4b77c750fdbd0fd75f3S0&bs=0&t=0&u=119173659&cflgs=QA**&ul=en-US&plmt=Xj4AAB%252BLCAAAAAAAAADtmW1v3LgRgP%252BKoc%252Byl%252B8v%252BRa3uSJBgSbnyxXXQ3CgJMqrs1ZSJa3XTpD%252F3hlS66zjGlVeCsS2bIAaksPhcEQOH6w%252BJN158owRJQXladJVybPfPyRVkTyjhBhF0ySvsJ9qYpglmmpU66Etodp6ShhVBeciy7wrCcstV9KXIncFT9LEj2DuHTxdNAvDmm1dp0kbGzowM7im2FX5GtRztMoYSCP0fEgc9p%252FloOBq7HaTuRxcTpzXpMgUocoQlzvJhOWUS1F6UhjFCQzYFLiQRBDolEwRqRiznEvOwO%252FnN3%252BguR3C1ChtQLIovAdBciIMVNoR%252B0EoL8PSIRw4wRBrhHBc7RhqQmmDhsod1pjiVqLmLo4zHM2NocapljiuzG5phho1xEp0Y8ymCbUKqu0t1fa2anuoOvgDT8uhPfQ71vZ%252Bx5qCoECtvthBLXPj%252BggCf5S1xfXRru0vhqO%252BbTdHQ9e766POd53vfXE0bH3h8d2ESGOENhjKt0N1Kn%252FK3D9Of1uf%252FnmpX%252Fd9s8FAN%252Fmk1qLw2z%252FVi5b%252BK3v95tV5d%252FrTy5G%252Ff49aPRpjhAhCCa6s3OxfzxDEY4utVT69qq4P6iBddXupuZG28%252FZqncVJqT0m6jiGYjhsohqasgxaMLxF6Aou4d443Q5V44cB612IQHPRtLsGQ8PyG5e3NezgxFIbdhVlmhs0ZjTsSHhaQ5XADiIkjwIxMghcCI2CJZTKONYYDCRVBAKFPYqIYEyZOJbDecBpjISmYIwqhl5Yq8OTUmZDiCyJGlBGxzizJmpIacJ0RNGgCgIPSzFaqvAUJuwiq2ARWLcqhMUoYuOsyobdai2LszIlFIuCDsaNYSG4lHBlp8VJSvYuByuCMEnCtDQcL2utCKpcMR59lpCfYvDg%252FAcrhIeIUKmttlHZ6hhXaaiZAhzsGS3MZEZqNGO1iU4J%252BLdTGHUMVgw8pJXgm7GSTKHZu29pjIWWYTrUoGGopLGdcRZNxFBYLYPv4IvgYS6hSAyqmCID6S159ymlVh1ucBKOQd5P4nnR9W8Hv6929WaM5zLkcmhxOe5FfzXiCSxLkC99f%252F33dod9dX6rXtR41OogrzH1HvRdVu3tscXt%252FqI%252Fv1Uv0aXS1QPmigEn%252Bh0OYwqLhQJ2XcqsICmHHZFywU3KlSKpYIJBYVUqOGHQIaFNwDAhGHQILlAyqWSapFIwLLhMFexZKKBNSQUSbGAoLBQ4h0Y9KCQUEiWFhQ4FtEnshayfagVWtLIkNUSFQkKhUdIomVBgNaiAeQNvEwpKsECJocSxkFigFfQKJOjV4AEcCIIFSoK8%252BwhvLNx7Q%252FXe43Ptq%252FM1BBZ2fprsqmJcJ884IaDX%252BBFz8kt8uYqFg%252BCKt001hhafuesTLLbDSdm2o%252B9Xm97nf4zrCjIrzjL3Xuy2WV0N61%252BuO3CI39T%252F6mt3HRABXHHdRdW8PlRk8I7jrf3qLKxnqgy%252F%252Bn6o2gYz5wk9objTtz2kxGS1qvrg8TC6scpP8nazyvvV5SqnqyFfne2tHcdxx%252BJkUzUnfw4JxAKjNQScuC9eeFyGv52dvWhcVntY%252BthvPRyl5hKm7vq22OYjugVXYZVf%252BHHehYHg8jwEfUbIh2r0%252BG7AsSoE%252F8WbV%252F%252BWx%252BPVzzWe%252F%252FPQNgNpzqs5miz5iIt2iA5SQu7BLOgu9%252FS1gXYgu81V8AdvYqi5IdRcG2p488GL867P12%252B2cI7BEga7LTH9oPF8DIo5LupjesCM5A4zKiEnZpTcOuJp5goHW08Km8O9Zk2uFQxUHrPpwowLM%252F4QzDhjry7MuDBj8piZEVsWZnzKzDj4vG0WaJwFjTNujFnQeBPzJ0ONivAbagT%252FCBwETKoTNTqZFVxn3GZWCadz2PmQlbllJVOqzOdS4%252Fo66ysMa%252BAJLjCrLtC4QOP3hMYZW3WBxgUak8cLjZDKkwUaHyY0KvKJgcDMF0Hj1cmm7ld%252FFL502xpf%252B1cCI%252Fsh6fDzyMDB6H3Z%252BxusBWRElanxL0gUFLFtePn8bM%252BOVfNr5Xc%252FR5Wbxi%252BEzBk3zL2QeecdPSHAZHcAE5LCBJicmExy7bwhTGTOW%252BaFNyYT3CvHNDLjApgLYP4IgDljqy6AuQBm8pgBE%252BdZAPMhAqb9RFGamS%252Fiy801Cqv42ECCcucek9SjwsyD%252BFgd%252BOW%252ByP33Hy4%252FG3TYZchXUuvgNv4MPP2cW78HzM64ze6F2fs2xJNhWiPtnU%252FtkqiJaYn31GslKHGQW4h2JVzVJeQCmxXK%252BLlMu3xqX6D2%252Fw61M%252FbqArUL1CaPF2pNSBEL1D5EqP1en9rLqh%252B%252B4YfTp%252FSlfcaFMetL%252Bz7kT4gZzR1mFMJMzMgKyKoQRLhdCpFBnixJrrjMRJ7rvAjX2FcxY8i%252FCzQu0Pg9oXHGZl2gcYHG5DFDI7q6QONDhMZv%252BCV0Aphv%252FtL%252BYIDx%252Ft8%252BP%252Fu9dM7vm%252BzLaXPGTfO%252FaPPJfHKHehaCAOnz438AA%252FoaAV4%252BAAA%253D&ec=2&pn=2&rq=e912b72ccbf0de15&pagename=cos__mfe&po=%5B%28pg%3A2065413+pid%3A100861%29%28pg%3A2065413+pid%3A100860%29%28pg%3A2065413+pid%3A100603%29%28pg%3A2065413+pid%3A100602%29%28pg%3A2065413+pid%3A100859%29%28pg%3A2065413+pid%3A100858%29%5D&ciid=rNqqd8c*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De912b72ccbf0de15%26node_id%3D68cc804a3f7bdc5b%26REQUEST_GUID%3D171e7acd-aaa0-a4b7-7c76-fbcee84acd5f%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A0631%253B%253D%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7acdaab-0x196%26cal_mod%3Dfalse&TPool=r1rover&TDuration=2&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=206.126.218.39&Script=/roverimp/0/2065413/9&Server=internal.rover.vip.ebay.com&TMachine=10.75.119.199&TStamp=18:49:57.29&TName=roverimp&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1,GingerClient/2.9.7-RELEASE&RemoteIP=10.77.72.223"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/2065413/9?site=0&trknvp=n%3Dae70db601680aca524931354fe0d8630%26u%3D119173659%26plmt%3DXj4AAB%252BLCAAAAAAAAADtmW1v3LgRgP%252BKoc%252Byl%252B8v%252BRa3uSJBgSbnyxXXQ3CgJMqrs1ZSJa3XTpD%252F3hlS66zjGlVeCsS2bIAaksPhcEQOH6w%252BJN158owRJQXladJVybPfPyRVkTyjhBhF0ySvsJ9qYpglmmpU66Etodp6ShhVBeciy7wrCcstV9KXIncFT9LEj2DuHTxdNAvDmm1dp0kbGzowM7im2FX5GtRztMoYSCP0fEgc9p%252FloOBq7HaTuRxcTpzXpMgUocoQlzvJhOWUS1F6UhjFCQzYFLiQRBDolEwRqRiznEvOwO%252FnN3%252BguR3C1ChtQLIovAdBciIMVNoR%252B0EoL8PSIRw4wRBrhHBc7RhqQmmDhsod1pjiVqLmLo4zHM2NocapljiuzG5phho1xEp0Y8ymCbUKqu0t1fa2anuoOvgDT8uhPfQ71vZ%252Bx5qCoECtvthBLXPj%252BggCf5S1xfXRru0vhqO%252BbTdHQ9e766POd53vfXE0bH3h8d2ESGOENhjKt0N1Kn%252FK3D9Of1uf%252FnmpX%252Fd9s8FAN%252Fmk1qLw2z%252FVi5b%252BK3v95tV5d%252FrTy5G%252Ff49aPRpjhAhCCa6s3OxfzxDEY4utVT69qq4P6iBddXupuZG28%252FZqncVJqT0m6jiGYjhsohqasgxaMLxF6Aou4d443Q5V44cB612IQHPRtLsGQ8PyG5e3NezgxFIbdhVlmhs0ZjTsSHhaQ5XADiIkjwIxMghcCI2CJZTKONYYDCRVBAKFPYqIYEyZOJbDecBpjISmYIwqhl5Yq8OTUmZDiCyJGlBGxzizJmpIacJ0RNGgCgIPSzFaqvAUJuwiq2ARWLcqhMUoYuOsyobdai2LszIlFIuCDsaNYSG4lHBlp8VJSvYuByuCMEnCtDQcL2utCKpcMR59lpCfYvDg%252FAcrhIeIUKmttlHZ6hhXaaiZAhzsGS3MZEZqNGO1iU4J%252BLdTGHUMVgw8pJXgm7GSTKHZu29pjIWWYTrUoGGopLGdcRZNxFBYLYPv4IvgYS6hSAyqmCID6S159ymlVh1ucBKOQd5P4nnR9W8Hv6929WaM5zLkcmhxOe5FfzXiCSxLkC99f%252F33dod9dX6rXtR41OogrzH1HvRdVu3tscXt%252FqI%252Fv1Uv0aXS1QPmigEn%252Bh0OYwqLhQJ2XcqsICmHHZFywU3KlSKpYIJBYVUqOGHQIaFNwDAhGHQILlAyqWSapFIwLLhMFexZKKBNSQUSbGAoLBQ4h0Y9KCQUEiWFhQ4FtEnshayfagVWtLIkNUSFQkKhUdIomVBgNaiAeQNvEwpKsECJocSxkFigFfQKJOjV4AEcCIIFSoK8%252BwhvLNx7Q%252FXe43Ptq%252FM1BBZ2fprsqmJcJ884IaDX%252BBFz8kt8uYqFg%252BCKt001hhafuesTLLbDSdm2o%252B9Xm97nf4zrCjIrzjL3Xuy2WV0N61%252BuO3CI39T%252F6mt3HRABXHHdRdW8PlRk8I7jrf3qLKxnqgy%252F%252Bn6o2gYz5wk9objTtz2kxGS1qvrg8TC6scpP8nazyvvV5SqnqyFfne2tHcdxx%252BJkUzUnfw4JxAKjNQScuC9eeFyGv52dvWhcVntY%252BthvPRyl5hKm7vq22OYjugVXYZVf%252BHHehYHg8jwEfUbIh2r0%252BG7AsSoE%252F8WbV%252F%252BWx%252BPVzzWe%252F%252FPQNgNpzqs5miz5iIt2iA5SQu7BLOgu9%252FS1gXYgu81V8AdvYqi5IdRcG2p488GL867P12%252B2cI7BEga7LTH9oPF8DIo5LupjesCM5A4zKiEnZpTcOuJp5goHW08Km8O9Zk2uFQxUHrPpwowLM%252F4QzDhjry7MuDBj8piZEVsWZnzKzDj4vG0WaJwFjTNujFnQeBPzJ0ONivAbagT%252FCBwETKoTNTqZFVxn3GZWCadz2PmQlbllJVOqzOdS4%252Fo66ysMa%252BAJLjCrLtC4QOP3hMYZW3WBxgUak8cLjZDKkwUaHyY0KvKJgcDMF0Hj1cmm7ld%252FFL502xpf%252B1cCI%252Fsh6fDzyMDB6H3Z%252BxusBWRElanxL0gUFLFtePn8bM%252BOVfNr5Xc%252FR5Wbxi%252BEzBk3zL2QeecdPSHAZHcAE5LCBJicmExy7bwhTGTOW%252BaFNyYT3CvHNDLjApgLYP4IgDljqy6AuQBm8pgBE%252BdZAPMhAqb9RFGamS%252Fiy801Cqv42ECCcucek9SjwsyD%252BFgd%252BOW%252ByP33Hy4%252FG3TYZchXUuvgNv4MPP2cW78HzM64ze6F2fs2xJNhWiPtnU%252FtkqiJaYn31GslKHGQW4h2JVzVJeQCmxXK%252BLlMu3xqX6D2%252Fw61M%252FbqArUL1CaPF2pNSBEL1D5EqP1en9rLqh%252B%252B4YfTp%252FSlfcaFMetL%252Bz7kT4gZzR1mFMJMzMgKyKoQRLhdCpFBnixJrrjMRJ7rvAjX2FcxY8i%252FCzQu0Pg9oXHGZl2gcYHG5DFDI7q6QONDhMZv%252BCV0Aphv%252FtL%252BYIDx%252Ft8%252BP%252Fu9dM7vm%252BzLaXPGTfO%252FaPPJfHKHehaCAOnz438AA%252FoaAV4%252BAAA%253D%26po%3D%5B%28pg%3A2065413+pid%3A100861%29%28pg%3A2065413+pid%3A100860%29%28pg%3A2065413+pid%3A100603%29%28pg%3A2065413+pid%3A100602%29%28pg%3A2065413+pid%3A100859%29%28pg%3A2065413+pid%3A100858%29%5D&trknvpsvc=%3Ca%3Enqc%3DUAAAAAAAgAQAAAAAAAAAAAAAAAAgBAAAAIAAAAAAAQAAACAAEAAAIAAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAhBCA*%26nqt%3DUAAAAAAAgAQAAAAAAAAAAAAAAAAgBAAAAIAAAAAAAQAAACAAEAAAIAAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAhBCA*%26es%3D0%26ec%3D2%3C%2Fa%3E&tguid=ae70db601680aca524931354fe0d8632&imp=2317508");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("119173659");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 14
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2065413);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:49:56.863")));
+    ubiEvent.setRemoteIP("206.126.218.39");
+    ubiEvent.setRequestCorrelationId("e912b72ccbf0de15");
+    ubiEvent.setSid("p2065413");
+    ubiEvent.setRlogid("t6n%60u%609%3Fjqphctd%285157%3F26%2Busqdrrp%2Bjqp%2Bceb%7C%28dlh-171e7acd917-0x117");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(580659567020L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("mesg.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "uit=1576674616225&nqc=UAAAAAAAgAQAAAAAAAAAAAAAAAAgBAAAAIAAAAAAAQAAACAAEAAAIAAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAhBCA*&c=2&!ampid=3P_IMP&g=ae70db601680aca524931354fe0d8632&h=60&rpg=2065413&n=ae70db601680aca524931354fe0d8630&uc=1&es=0&nqt=UAAAAAAAgAQAAAAAAAAAAAAAAAAgBAAAAIAAAAAAAQAAACAAEAAAIAAAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAhBCA*&p=2065413&uaid=e7acd9011710aaa328708a10ff5fe4ccS0&bs=0&t=0&u=119173659&ul=en-US&ec=2&pn=2&rq=e912b72ccbf0de15&pagename=mesg__ViewMessageDetail&ciid=rNkBMoc*&sid=p2065413");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De912b72ccbf0de15%26node_id%3D4594d4cd7198c339%26REQUEST_GUID%3D171e7acd-8ff0-aaa3-2871-35d2ff6aaf0f%26logid%3Dt6n%2560u%25609%253Fjqphctd%25285157%253F26%252Busqdrrp%252Bjqp%252Bceb%257C%2528dlh-171e7acd917-0x117&TPool=r1mesg&TDuration=594&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=206.126.218.39&Script=/mesgweb&Server=mesg.ebay.com&TMachine=10.170.50.135&TStamp=18:49:56.86&TName=ViewMessageDetail&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39&Encoding=gzip, deflate, br"));
+    ubiEvent.setUrlQueryString(
+        "/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setPageName("ViewMessageDetail");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(2);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("119173659");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 15
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2317508);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:50:28.581")));
+    ubiEvent.setRemoteIP("10.164.51.73");
+    ubiEvent.setRequestCorrelationId("52967bd5d890d921");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ckuvthu%60t*0%3C176%3C2-171e7ad54e7-0x11d");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(291234010285L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("internal.rover.vip.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "nqc=AQAAAAAAAAQAAAIAAAAAAAAAAAAABAAAAQAEAAAAAQCAAQABAAAAIAAAAAAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAIAACABAAIAAABAAAAAAAAAAAgAQA**&c=1&g=ae70db601680aca524931354fe0d8632&h=60&px=4249&chnl=9&n=ae70db601680aca524931354fe0d8630&uc=1&es=0&nqt=AQAAAAAAAAQAAAIAAAAAAAAAAAAABAAAAQAEAAAAAQCAAQABAAAAIAAAAAAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAIAACABAIIAAABAAAAAAAAAAAgAQA**&p=2317508&uaid=e7ad54e61710ad4ce430fe2dc9f14298S0&bs=0&t=0&cflgs=QA**&ul=en-US&plmt=2AUAAB%252BLCAAAAAAAAACNVE1v2zAM%252FSuFzm6ib8m9DdswbKcNWXcpelBkOdHq2IZk92NF%252FvtIJQ522LBenh8p%252BomkRL2ScUduONXcKlORMZKbu1cSG3LDKLXKVsRHXGeGWl5Tw6QEXwIfUWYrXWi3ojFassBrLnmwTWtZrY3VLalImEDuHr7uJAu%252F9XPXVWQ4OUaQya5vnqLfQ7gHk3FKgU6w9EocBmw8RLgO191Zz0POxAVDm62mTFvqvFNc1oIJJdtAG6sFqswZFQWyAzB0DRO6gLQ5IDOwnwWze3gqmimGq11spivvUoN7Yi%252FKn70%252Fk4QeKLJmXBSlRTtfWFxixwSEI3seF9Zf2Py2Nm63Z7VmycXzZYOlxXEcL3v7dKa7Zky3OSzm2B2mUs7pbMHjPOqE5wmz74DfcaYrLgWA1bbitaSVYFxXQgpbCa1pJSFBMBWyWldSUF5JCb9JyS2AkMh4pbihlZIcQahKM4UAPq00MGURagDcw2AcgAJQyDSCKQA%252BhatKAGhQMbqmlaW6gAIwyAwyWwDNEgLyljEEWhj44IIBCASFgCqYFTAIMZBBzSEEAJmk90doXLmNOf4K%252BN2HuNtD22EH8gRXZU9uDLcQ1ofpaUgPn7HFmkuFDW5u%252BzgVT9i6lxXCnFftMEwhrZvQurnD5o%252Fztot5%252F%252F1lhC3Exf4QOvdSZhHU3fgQ%252B69%252FBnI4tdN0fNmUDM9G%252FhFSjkOP92zFVqcJSB2Y63VMJYk8uSn6lR8Oa5%252FWj2vP1tmvN4va9em%252Fa7k6xH71MxMoD%252BvPZW7%252F1YG%252FrtSGHuGCptCmcKlIUIo1nZ3vcdChmJg%252FbTYfe7ftAnRsSnOAC94%252FQt5jGprZT1gTPA7RP%252BC9f8vs4PPyrhzC%252F44gxyngQUFauzIlb3hgdvEtkZwcsQOuvJpKQRjejMflMTyAn8Hnuew9%252BGK5XCw3FCs35XiDS37%252FbQ4JOkjwSIYWpx%252FF%252FVQCPRZwvD%252F%252BBmtlAdDYBQAA&ec=1&pn=2&rq=52967bd5d890d921&pagename=cos__mfe&po=%5B%28pg%3A2062857+pid%3A100858%29%5D&ciid=rVTmzkM*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D52967bd5d890d921%26node_id%3D677a4ffc5ae2fcc6%26REQUEST_GUID%3D171e7ad5-4e50-ad4c-e433-06e2e31dceea%26logid%3Dt6qjpbq%253F%253Ckuvthu%2560t%2A0%253C176%253C2-171e7ad54e7-0x11d%26cal_mod%3Dfalse&TPool=r1rover&TDuration=2&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=206.126.218.39&Script=/roverimp/0/2062857/9&Server=internal.rover.vip.ebay.com&TMachine=10.212.206.67&TStamp=18:50:28.58&TName=roverimp&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1,GingerClient/2.9.7-RELEASE&RemoteIP=10.164.51.73"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/2062857/9?site=0&trknvp=n%3Dae70db601680aca524931354fe0d8630%26plmt%3D2AUAAB%252BLCAAAAAAAAACNVE1v2zAM%252FSuFzm6ib8m9DdswbKcNWXcpelBkOdHq2IZk92NF%252FvtIJQ522LBenh8p%252BomkRL2ScUduONXcKlORMZKbu1cSG3LDKLXKVsRHXGeGWl5Tw6QEXwIfUWYrXWi3ojFassBrLnmwTWtZrY3VLalImEDuHr7uJAu%252F9XPXVWQ4OUaQya5vnqLfQ7gHk3FKgU6w9EocBmw8RLgO191Zz0POxAVDm62mTFvqvFNc1oIJJdtAG6sFqswZFQWyAzB0DRO6gLQ5IDOwnwWze3gqmimGq11spivvUoN7Yi%252FKn70%252Fk4QeKLJmXBSlRTtfWFxixwSEI3seF9Zf2Py2Nm63Z7VmycXzZYOlxXEcL3v7dKa7Zky3OSzm2B2mUs7pbMHjPOqE5wmz74DfcaYrLgWA1bbitaSVYFxXQgpbCa1pJSFBMBWyWldSUF5JCb9JyS2AkMh4pbihlZIcQahKM4UAPq00MGURagDcw2AcgAJQyDSCKQA%252BhatKAGhQMbqmlaW6gAIwyAwyWwDNEgLyljEEWhj44IIBCASFgCqYFTAIMZBBzSEEAJmk90doXLmNOf4K%252BN2HuNtD22EH8gRXZU9uDLcQ1ofpaUgPn7HFmkuFDW5u%252BzgVT9i6lxXCnFftMEwhrZvQurnD5o%252Fztot5%252F%252F1lhC3Exf4QOvdSZhHU3fgQ%252B69%252FBnI4tdN0fNmUDM9G%252FhFSjkOP92zFVqcJSB2Y63VMJYk8uSn6lR8Oa5%252FWj2vP1tmvN4va9em%252Fa7k6xH71MxMoD%252BvPZW7%252F1YG%252FrtSGHuGCptCmcKlIUIo1nZ3vcdChmJg%252FbTYfe7ftAnRsSnOAC94%252FQt5jGprZT1gTPA7RP%252BC9f8vs4PPyrhzC%252F44gxyngQUFauzIlb3hgdvEtkZwcsQOuvJpKQRjejMflMTyAn8Hnuew9%252BGK5XCw3FCs35XiDS37%252FbQ4JOkjwSIYWpx%252FF%252FVQCPRZwvD%252F%252BBmtlAdDYBQAA%26po%3D%5B%28pg%3A2062857+pid%3A100858%29%5D&trknvpsvc=%3Ca%3Enqc%3DAQAAAAAAAAQAAAIAAAAAAAAAAAAABAAAAQAEAAAAAQCAAQABAAAAIAAAAAAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAIAACABAAIAAABAAAAAAAAAAAgAQA**%26nqt%3DAQAAAAAAAAQAAAIAAAAAAAAAAAAABAAAAQAEAAAAAQCAAQABAAAAIAAAAAAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAIAACABAIIAAABAAAAAAAAAAAgAQA**%26es%3D0%26ec%3D1%3C%2Fa%3E&tguid=ae70db601680aca524931354fe0d8632&imp=2317508");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
     ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 16
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2367355);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:50:28.580")));
+    ubiEvent.setRemoteIP("206.126.218.39");
+    ubiEvent.setRequestCorrelationId("49e3f8689a5b4a01");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6pdhc9%3Fjqpvgig%282720127-171e7ad54e2-0x2fc3");
+    ubiEvent.setEventFamily("SAND");
+    ubiEvent.setEventAction("AUCT");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(862792734381L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("sand.stratus.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "flgs=AA**&sagooglssa=true&saaoluc=UPfdb71cdb-f91b-11e9-b40d-0eb5e2a831ee&saaoluco=1&saidpubid=183403&saidxuc=XbY5v9HM6GYAACkpBH8AAAB9ACoAAAIB&saanxuco=1&sarbcuc=K29P8DLS-4-9W20&sagoogltagid=21663075830&sapbmsid=165303&saopxpubid=537121625&efam=SAND&ac=119173659&sarbcuco=1&saucxgdprct=false&ciid=rVZ04sg*&sapbmuc=B1CAD7C7-8803-4545-9782-DC085A2AA780&sapcxcat=&saopxuc=a61e2ec0-60cd-8cf1-9e03-e86ae044ec9f&saiid=6799fe4e-4cd5-4ea6-a992-47cce3265446&sarbctid=650078&cflgs=AA**&sapbmpubid=156009&samslid=2940%2C8150%2C8165%2C7460%2C8085%2C8080%2C7425%2C7690%2C8075%2C4422%2C4428%2C9240%2C4302%2C216%2C9225%2C3438%2C8065%2C8170%2C3450%2C4434%2C6565%2C6940%2C5270%2C8105%2C2868%2C3126%2C8090%2C4416%2C3660%2C8095%2C8110%2C6585%2C8120%2C7470%2C4296%2C7450%2C5435%2C8160%2C7420%2C6170%2C8725%2C7475%2C8060%2C9220%2C5420%2C7655%2C7530%2C7520%2C8115%2C8070%2C6595%2C6155%2C4242%2C2436%2C8130&eactn=AUCT&saanxpid=9794063&rq=49e3f8689a5b4a01&sagoogluc=CAESEE3x9R7nk1V93EFwDmV44_o&sameid=57b4aefb3d7641e29242e8df8196786f&sapcxkw=&schemaversion=3&sapbmuco=1&sagooglsid=21663075830009&saaolpubid=12005&saanxuc=2846386642456817880&sapbmtid=851352&saidxuco=1&pagename=SandPage&saucxgdpry=false&sagoogluco=1&saanxmid=7208&saaolsid=345487&saty=1&saebaypid=100858&g=ae70db601680aca524931354fe0d8632&h=60&saopxuco=1&salv=5&saidtid=29011&p=2367355&r=-1552470496&t=0&u=119173659&sarbcpubid=11440&sarbcsid=138876&saopxtid=538587091&pn=2&ciid=rVZ04sg*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D49e3f8689a5b4a01%26node_id%3D299637e3314e0ba8%26REQUEST_GUID%3D171e7ad5-4e20-aade-2c87-ca15fdfee40c%26logid%3Dt6pdhc9%253Fjqpvgig%25282720127-171e7ad54e2-0x2fc3&TPool=r1sand&TDuration=400&ContentLength=159&ForwardedFor=10.212.208.138&Script=sand&Server=sand.stratus.ebay.com&TMachine=10.173.226.200&TStamp=18:50:28.58&TName=sand.v1&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39&Referer=https://mesg.ebay.com/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396"));
+    ubiEvent.setUrlQueryString(
+        "/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setPageName("sand.v1");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(-1552470496L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://mesg.ebay.com/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setUserId("119173659");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 17
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2317508);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:50:28.667")));
+    ubiEvent.setRemoteIP("10.164.20.233");
+    ubiEvent.setRequestCorrelationId("7dda670f7a125333");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ckuvthu%60t*7544%3A32-171e7ad553d-0x189");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1,GingerClient/2.9.7-RELEASE");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(346268980653L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("internal.rover.vip.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "nqc=AQAAAAAAAAQAAAIAAAAAAAAAAAAABAAAAQAEAAAAAQCAAQABAAAAIAAAAAAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAIAACABAAIAAABAAAAAAAAAAAgAQA**&c=1&g=ae70db601680aca524931354fe0d8632&h=60&px=4249&chnl=9&n=ae70db601680aca524931354fe0d8630&uc=1&es=0&nqt=AQAAAAAAAAQAAAIAAAAAAAAAAAAABAAAAQAEAAAAAQCAAQABAAAAIAAAAAAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAIAACABAIIAAABAAAAAAAAAAAgAQA**&p=2317508&uaid=e7ad553c1710aa19f504234ce1b865a7S0&bs=0&t=0&cflgs=QA**&ul=en-US&plmt=RwYAAB%252BLCAAAAAAAAACNVEuP2zYQ%252FisBz4zNt6S9BW1RJMihrZtcgkVBkZTNriwJpGSvu9j%252F3hnaWnQDBN3Lp2%252FewxmRT2TakzvBjKh1RckUyd23JxI9ueOMGSYpcRHt3DDOai641JqSBDribNvaRmtv6k41HWu6VtnOqZp1bV17TygJM6S7h6%252B9poWwYel7SsarYoI0h0ubIjo7ELhUHOgMhidi0bxzdvC2R7u9ZXPQMbGhYr6FrkzNrLNaqEZCc6oLzNdGMghYcsmI7AgMVeOMKiBdDsgqwVgNYv9wLjlTDO%252F20c%252FvnE2lJ5xEiRzcjSTU8MY0XMiSac2dX1hcfacERCB7nFY2vLDlbUNs21s2v%252FbixFpgHXCcppfaLt3o3k%252FpSw6rOPXHuRznulnQWId5wuOMk%252Bk64KeQLp%252FHM9p690r2PZ6uL%252FyAm%252FiP7RTH17H%252Btd2n%252FSu5w5Y628MOYGxY6JvghgolAWpTU9EoRiUXhkpjGFVCCaokAxCNoUoJgVADSAUAsVLJmmpRQZjSjGolEKSmhmsEMBhtgOkaoQHAGhX6VRgBTANUBVCEupVGq5YABrJUpmG0ZgUqBIMA%252BWrONLKiQ1YhNGiAzDXnyAQyDOOy6BDQmWOWCoo34goMQLH7Z9hYuQY5%252FhPwewhxf4DBGsYoOcNPeoBLahj4DWE%252Bj%252BnhIy7XCKXLCr4McS6a0NrLBmHJm8fNsU%252Fbv3zo7NLj2qel7WM%252B%252FHmZoIaAVHZ6iMNv32nz9RJ%252B2pV%252BbkL%252BGlKO44C%252F84Zvrhct9SButzGVinm2c3QbNx63Lm1PW8e32W13a7b317j3anOMw%252BbvTOAseNpcHocfnRd%252B9xS6FPLh59DbC7mTjKHLTfkTPhswXRLzxw%252FQ8JyWAMLwNYbzH1eXF2X%252Bdbf7ZbBtH%252FyqC8MJTjCl0S9uxtPBaxTdA160t1zWDEf7UGb%252Ff5PPcQ64H%252Bh0X67lG160fXyLpyDPOCSLj7TWGtzwhzitb%252B8R9Bw%252Bj6X26Ipkc5HsWKTsy6KDTe7w%252BwL3FjLhcsYOnxtM7ubi6PAAz%252FfP%252FwLgn%252BmKRwYAAA%253D%253D&ec=1&pn=2&rq=7dda670f7a125333&pagename=cos__mfe&po=%5B%28pg%3A2062857+pid%3A100603%29%5D&ciid=rVU9n1A*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D7dda670f7a125333%26node_id%3D067698570b9ae873%26REQUEST_GUID%3D171e7ad5-53b0-aa19-f504-bc3aef97c641%26logid%3Dt6qjpbq%253F%253Ckuvthu%2560t%2A7544%253A32-171e7ad553d-0x189%26cal_mod%3Dfalse&TPool=r1rover&TDuration=3&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=206.126.218.39&Script=/roverimp/0/2062857/9&Server=internal.rover.vip.ebay.com&TMachine=10.161.159.80&TStamp=18:50:28.66&TName=roverimp&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1,GingerClient/2.9.7-RELEASE&RemoteIP=10.164.20.233"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/2062857/9?site=0&trknvp=n%3Dae70db601680aca524931354fe0d8630%26plmt%3DRwYAAB%252BLCAAAAAAAAACNVEuP2zYQ%252FisBz4zNt6S9BW1RJMihrZtcgkVBkZTNriwJpGSvu9j%252F3hnaWnQDBN3Lp2%252FewxmRT2TakzvBjKh1RckUyd23JxI9ueOMGSYpcRHt3DDOai641JqSBDribNvaRmtv6k41HWu6VtnOqZp1bV17TygJM6S7h6%252B9poWwYel7SsarYoI0h0ubIjo7ELhUHOgMhidi0bxzdvC2R7u9ZXPQMbGhYr6FrkzNrLNaqEZCc6oLzNdGMghYcsmI7AgMVeOMKiBdDsgqwVgNYv9wLjlTDO%252F20c%252FvnE2lJ5xEiRzcjSTU8MY0XMiSac2dX1hcfacERCB7nFY2vLDlbUNs21s2v%252FbixFpgHXCcppfaLt3o3k%252FpSw6rOPXHuRznulnQWId5wuOMk%252Bk64KeQLp%252FHM9p690r2PZ6uL%252FyAm%252FiP7RTH17H%252Btd2n%252FSu5w5Y628MOYGxY6JvghgolAWpTU9EoRiUXhkpjGFVCCaokAxCNoUoJgVADSAUAsVLJmmpRQZjSjGolEKSmhmsEMBhtgOkaoQHAGhX6VRgBTANUBVCEupVGq5YABrJUpmG0ZgUqBIMA%252BWrONLKiQ1YhNGiAzDXnyAQyDOOy6BDQmWOWCoo34goMQLH7Z9hYuQY5%252FhPwewhxf4DBGsYoOcNPeoBLahj4DWE%252Bj%252BnhIy7XCKXLCr4McS6a0NrLBmHJm8fNsU%252Fbv3zo7NLj2qel7WM%252B%252FHmZoIaAVHZ6iMNv32nz9RJ%252B2pV%252BbkL%252BGlKO44C%252F84Zvrhct9SButzGVinm2c3QbNx63Lm1PW8e32W13a7b317j3anOMw%252BbvTOAseNpcHocfnRd%252B9xS6FPLh59DbC7mTjKHLTfkTPhswXRLzxw%252FQ8JyWAMLwNYbzH1eXF2X%252Bdbf7ZbBtH%252FyqC8MJTjCl0S9uxtPBaxTdA160t1zWDEf7UGb%252Ff5PPcQ64H%252Bh0X67lG160fXyLpyDPOCSLj7TWGtzwhzitb%252B8R9Bw%252Bj6X26Ipkc5HsWKTsy6KDTe7w%252BwL3FjLhcsYOnxtM7ubi6PAAz%252FfP%252FwLgn%252BmKRwYAAA%253D%253D%26po%3D%5B%28pg%3A2062857+pid%3A100603%29%5D&trknvpsvc=%3Ca%3Enqc%3DAQAAAAAAAAQAAAIAAAAAAAAAAAAABAAAAQAEAAAAAQCAAQABAAAAIAAAAAAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAIAACABAAIAAABAAAAAAAAAAAgAQA**%26nqt%3DAQAAAAAAAAQAAAIAAAAAAAAAAAAABAAAAQAEAAAAAQCAAQABAAAAIAAAAAAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAIAACABAIIAAABAAAAAAAAAAAgAQA**%26es%3D0%26ec%3D1%3C%2Fa%3E&tguid=ae70db601680aca524931354fe0d8632&imp=2317508");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 18
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("ae70db601680aca524931354fe0d8632");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2367355);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:50:28.685")));
+    ubiEvent.setRemoteIP("206.126.218.39");
+    ubiEvent.setRequestCorrelationId("c2O%2B6xun4QzU");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6pdhc9%3Ftilvgig%28%7E3dn%3F*w%60ut3541-171e7ad554d-0x8f60");
+    ubiEvent.setEventFamily("SAND");
+    ubiEvent.setEventAction("AUCT");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("206.126.218.39");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(443829671341L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("sand.stratus.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "flgs=AA**&sameid=cabba955d68f49f09fb4afc480fb88dd&sapcxkw=&schemaversion=3&pagename=SandPage&saucxgdpry=false&efam=SAND&ac=119173659&saucxgdprct=false&saty=1&g=ae70db601680aca524931354fe0d8632&saebaypid=100603&h=60&salv=5&ciid=rVVPVmc*&p=2367355&r=-1552470496&sapcxcat=&t=0&saiid=b0605585-66d3-4a3d-a90a-b5f5ea7e5b59&u=119173659&cflgs=AA**&samslid=2940%2C8150%2C8165%2C7460%2C8085%2C8080%2C7425%2C7690%2C8075%2C4422%2C4428%2C9240%2C4302%2C216%2C9225%2C3438%2C8065%2C8170%2C3450%2C4434%2C6565%2C6940%2C5270%2C8105%2C2868%2C3126%2C8090%2C4416%2C3660%2C8095%2C8110%2C6585%2C8120%2C7470%2C4296%2C7450%2C5435%2C8160%2C7420%2C6170%2C8725%2C7475%2C8060%2C9220%2C5420%2C7655%2C7530%2C7520%2C8115%2C8070%2C6595%2C6155%2C4242%2C2436%2C8130&eactn=AUCT&pn=2&rq=c2O%2B6xun4QzU&ciid=rVVPVmc*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Dc2O%2B6xun4QzU%26node_id%3D4817d1a6be709b74%26REQUEST_GUID%3D171e7ad5-54d0-a4d5-6676-660cf868e4cf%26logid%3Dt6pdhc9%253Ftilvgig%2528%257E3dn%253F%2Aw%2560ut3541-171e7ad554d-0x8f60&TPool=r1sand&TDuration=4&ContentLength=183&ForwardedFor=10.211.25.233&Script=sand&Server=sand.stratus.ebay.com&TMachine=10.77.86.103&TStamp=18:50:28.68&TName=sand.v1&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1&RemoteIP=206.126.218.39&Referer=https://mesg.ebay.com/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396"));
+    ubiEvent.setUrlQueryString(
+        "/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setPageName("sand.v1");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(-1552470496L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://mesg.ebay.com/mesgweb/ViewMessageDetail/email/0/db64bcce16c24d7eba2d9bb82cf38396");
+    ubiEvent.setUserId("119173659");
     ubiEvent.setRegu(0);
     ubiEvent.setStaticPageType(0);
     ubiEvent.setSourceImprId(null);
@@ -2824,6 +3352,2518 @@ public class MetricsForSessionDQTest {
     sessionMetrics.end(sessionAccumulator);
     Assert.assertEquals(4, sessionAccumulator.getUbiSession().getTrafficSrcId());
   }
+
+  @Test
+  public void test_TrafficSourceMetric13() throws Exception {
+
+    // 1
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("d52fb1481710a4d264558da69f8a715d");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(true);
+    ubiEvent.setPageId(3084);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:36:58.682")));
+    ubiEvent.setRemoteIP("172.58.157.100");
+    ubiEvent.setRequestCorrelationId("44abb6fd73f87506");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ckuvthu%60t*0%3C7%3E%3B44-171e7d7e7be-0x19e");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(false);
+    ubiEvent.setClientIP("172.58.157.100");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(374681233367L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "rdt=1&c=1&g=d52fb1481710a4d264558da69f8a715d&nid=&h=48&cguidsrc=cookie&n=d52fb1481710a4d264558da69f8a715b&uc=1&url_mpre=https%3A%2F%2Fwww.ebay.com%2Fc%2F2222324832&p=3084&uaid=e7d7e7bd1710acc3c571d17fc0e37d72S0&bs=0&rvrid=2410463730471&t=0&cflgs=EA**&ul=en-US&hrc=301&pn=2&pcguid=d52fb1481710a4d264558da69f8a715b&rq=44abb6fd73f87506&pagename=EntryTracking&ciid=1%2Be9PFc*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D44abb6fd73f87506%26node_id%3D1cc66574125ef79d%26REQUEST_GUID%3D171e7d7e-7ba0-acc3-c572-e729de5ec6fc%26logid%3Dt6qjpbq%253F%253Ckuvthu%2560t%2A0%253C7%253E%253B44-171e7d7e7be-0x19e%26cal_mod%3Dfalse&TPool=r1rover&TDuration=59&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=172.58.157.100&Script=/rover/1/711-219698-2056-1/2&Server=rover.ebay.com&TMachine=10.204.60.87&TStamp=19:36:58.68&TName=rover&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1&RemoteIP=172.58.157.100&Encoding=gzip, deflate, br"));
+    ubiEvent.setUrlQueryString(
+        "/rover/1/711-219698-2056-1/2?gclid=Cj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB&adpos=&PARM3_ID=GBH_165&cmpgn=344175529&crlp=289697120826&rule=&ul_ref=https%253A%252F%252Frover.ebay.com%252Frover%252F0%252F0%252F99%253Floc%253Dhttps%25253A%25252F%25252Frover.ebay.com%25252Frover%25252F1%25252F711-219698-2056-1%25252F2%25253Fmpre%25253Dhttps%25253A%25252F%25252Fwww.ebay.com%25252Fc%25252F2222324832%252526rule%25253D%252526crlp%25253D289697120826%252526adpos%25253D%252526device%25253Dm%252526cmpgn%25253D344175529%252526PARM3_ID%25253DGBH_165%252526gclid%25253DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%2526rvr_id%253D0%2526rvr_ts%253De7d7e70e1710aa162630649effdf75d8&device=m&crdt=0&mpre=https%3A%2F%2Fwww.ebay.com%2Fc%2F2222324832");
+    ubiEvent.setPageName("rover");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 2
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("d52fb1481710a4d264558da69f8a715d");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2455605);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:36:59.500")));
+    ubiEvent.setRemoteIP("172.58.157.100");
+    ubiEvent.setRequestCorrelationId("e7d7e9fe1710ad332cd15f28fff27545");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dqkisqn47pse31%28%3F%3F%3B2%3F%3E-vrubqst-whh-%60dfz%2Behn-171e7d7eaed-0xce");
+    ubiEvent.setEventFamily("PRP");
+    ubiEvent.setEventAction("EXPM");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("172.58.157.100");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(496281840343L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("www.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "nqc=AAAAAAAABAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA*&flgs=AA**&uc=1&nqt=AAAAAAAABAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA*&mos=iOS&bs=0&pageci=2dba9a86-f91b-4411-a1f0-56155bc58605&osv=13_1_2&ul=en-US&pcl=2&callingpagename=viexpsvc__VIEWPRODUCTCLUSTER&glpsl=4475%3A9925%2C6409%2C6846%2C&glpsm=4475%2C3637%2C4277%2C&svctime=50&ec=2&pagename=prpexpsvc__product_v1_module_provider_PRODUCTID_GET&app=3564&prpnewui=true&res=480x320&efam=PRP&pri=2222324832&g=d52fb1481710a4d264558da69f8a715d&h=48&mobile=true&leaf=11071&cp=2546137&requestPri=2222324832&n=d52fb1481710a4d264558da69f8a715b&es=0&p=2455605&t=0&cflgs=EA**&eactn=EXPM&respCode=200&rq=e7d7e9fe1710ad332cd15f28fff27545&pooltype=production&ciid=1%2BqzjHM*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D9ca65b574c5a353a%26node_id%3Daff4a177ca953f5f%26REQUEST_GUID%3D171e7d7e-ae90-aae8-c735-0147fe8add79%26logid%3Dt6wwm53vpd77%253C%253Dqkisqn47pse31%2528%253F%253F%253B2%253F%253E-vrubqst-whh-%2560dfz%252Behn-171e7d7eaed-0xce%26cal_mod%3Dfalse&TPool=r1prpexpsvc8&TDuration=1&TStatus=0&TType=URL&ContentLength=1306&ForwardedFor=23.33.238.125;172.58.157.100&Script=/trk20svc/TrackingResource/v1&Server=www.ebay.com&TMachine=10.174.140.115&TStamp=19:36:59.50&TName=Ginger.CollectionSvc.track&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1&RemoteIP=172.58.157.100&Encoding=gzip"));
+    ubiEvent.setUrlQueryString(
+        "/c/2222324832?ul_ref=https%3A%2F%2Frover.ebay.com%2Frover%2F1%2F711-219698-2056-1%2F2%3Fmpre%3Dhttps%3A%2F%2Fwww.ebay.com%2Fc%2F2222324832%26rule%3D%26crlp%3D289697120826%26adpos%3D%26device%3Dm%26cmpgn%3D344175529%26PARM3_ID%3DGBH_165%26gclid%3DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%26ul_ref%3Dhttps%25253A%25252F%25252Frover.ebay.com%25252Frover%25252F0%25252F0%25252F99%25253Floc%25253Dhttps%2525253A%2525252F%2525252Frover.ebay.com%2525252Frover%2525252F1%2525252F711-219698-2056-1%2525252F2%2525253Fmpre%2525253Dhttps%2525253A%2525252F%2525252Fwww.ebay.com%2525252Fc%2525252F2222324832%25252526rule%2525253D%25252526crlp%2525253D289697120826%25252526adpos%2525253D%25252526device%2525253Dm%25252526cmpgn%2525253D344175529%25252526PARM3_ID%2525253DGBH_165%25252526gclid%2525253DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%252526rvr_id%25253D0%252526rvr_ts%25253De7d7e70e1710aa162630649effdf75d8%26srcrot%3D711-219698-2056-1%26rvr_id%3D2410463730471%26rvr_ts%3De7d7e7f41710acc3c572f8d7ffdfed95");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(3564);
+    ubiEventList.add(ubiEvent);
+
+    // 3
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("d52fb1481710a4d264558da69f8a715d");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2370942);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:36:59.534")));
+    ubiEvent.setRemoteIP("172.58.157.100");
+    ubiEvent.setRequestCorrelationId("e7d7e9fe1710ad332cd15f28fff27545");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dqkisqn47pse31%283674%3F%3E-171e7d7eb0f-0x134");
+    ubiEvent.setEventFamily("LST");
+    ubiEvent.setEventAction("ANSTMPL");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("172.58.157.100");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(657600539607L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("www.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "app=3564&res=480x320&flgs=AA**&efam=LST&g=d52fb1481710a4d264558da69f8a715d&h=48&mobile=true&pagetmpl=SRP&n=d52fb1481710a4d264558da69f8a715b&uc=1&mos=iOS&p=2370942&bs=0&osv=13_1_2&pageci=75c0460a-8f42-11ea-be96-b259064e8d6b&t=0&cflgs=AA**&ul=en-US&eactn=ANSTMPL&rq=e7d7e9fe1710ad332cd15f28fff27545&pagename=ANSWERS_PLATFORM_PAGE&ciid=1%2BsLHJk*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De7d7e9fe1710ad332cd15f28fff27545%26node_id%3De6e120f2bb16325b%26REQUEST_GUID%3D171e7d7e-aa30-ad39-2797-eaa7fe8798b2%26logid%3Dt6wwm53vpd77%253C%253Dqkisqn47pse31%25283674%253F%253E-171e7d7eb0f-0x134%26cal_mod%3Dfalse&TPool=r1searchsvc&TDuration=1&TStatus=0&TType=URL&ContentLength=871&ForwardedFor=23.33.238.125;172.58.157.100&Script=/trk20svc/TrackingResource/v1&Server=www.ebay.com&TMachine=10.155.28.153&TStamp=19:36:59.53&TName=Ginger.CollectionSvc.track&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1&RemoteIP=172.58.157.100&Encoding=gzip"));
+    ubiEvent.setUrlQueryString(
+        "/c/2222324832?ul_ref=https%3A%2F%2Frover.ebay.com%2Frover%2F1%2F711-219698-2056-1%2F2%3Fmpre%3Dhttps%3A%2F%2Fwww.ebay.com%2Fc%2F2222324832%26rule%3D%26crlp%3D289697120826%26adpos%3D%26device%3Dm%26cmpgn%3D344175529%26PARM3_ID%3DGBH_165%26gclid%3DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%26ul_ref%3Dhttps%25253A%25252F%25252Frover.ebay.com%25252Frover%25252F0%25252F0%25252F99%25253Floc%25253Dhttps%2525253A%2525252F%2525252Frover.ebay.com%2525252Frover%2525252F1%2525252F711-219698-2056-1%2525252F2%2525253Fmpre%2525253Dhttps%2525253A%2525252F%2525252Fwww.ebay.com%2525252Fc%2525252F2222324832%25252526rule%2525253D%25252526crlp%2525253D289697120826%25252526adpos%2525253D%25252526device%2525253Dm%25252526cmpgn%2525253D344175529%25252526PARM3_ID%2525253DGBH_165%25252526gclid%2525253DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%252526rvr_id%25253D0%252526rvr_ts%25253De7d7e70e1710aa162630649effdf75d8%26srcrot%3D711-219698-2056-1%26rvr_id%3D2410463730471%26rvr_ts%3De7d7e7f41710acc3c572f8d7ffdfed95");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(3564);
+    ubiEventList.add(ubiEvent);
+
+    // 4
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("d52fb1481710a4d264558da69f8a715d");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2370942);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:36:59.690")));
+    ubiEvent.setRemoteIP("172.58.157.100");
+    ubiEvent.setRequestCorrelationId("e7d7e9fe1710ad332cd15f28fff27545");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dqkisqn47pse31%28%3F13515-vrubqst-whh-%60dfz%2Behn-171e7d7ebab-0x132");
+    ubiEvent.setEventFamily("LST");
+    ubiEvent.setEventAction("ANSTRIG");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("172.58.157.100");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(508276763607L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("www.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "app=3564&res=480x320&flgs=AA**&efam=LST&g=d52fb1481710a4d264558da69f8a715d&h=48&mobile=true&n=d52fb1481710a4d264558da69f8a715b&uc=1&mos=iOS&p=2370942&bs=0&osv=13_1_2&pageci=75c54f5e-8f42-11ea-9a17-c6f8c3503081&t=0&cflgs=AA**&ul=en-US&eactn=ANSTRIG&rq=e7d7e9fe1710ad332cd15f28fff27545&pagename=ANSWERS_PLATFORM_PAGE&ciid=1%2BunV3Y*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De7d7e9fe1710ad332cd15f28fff27545%26node_id%3D2defb77a8a8cd7e6%26REQUEST_GUID%3D171e7d7e-ac10-ad39-2797-eaa7fe8798ab%26logid%3Dt6wwm53vpd77%253C%253Dqkisqn47pse31%2528%253F13515-vrubqst-whh-%2560dfz%252Behn-171e7d7ebab-0x132%26cal_mod%3Dfalse&TPool=r1searchsvc&TDuration=2&TStatus=0&TType=URL&ContentLength=899&ForwardedFor=23.33.238.125;172.58.157.100&Script=/trk20svc/TrackingResource/v1&Server=www.ebay.com&TMachine=10.110.87.118&TStamp=19:36:59.69&TName=Ginger.CollectionSvc.track&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1&RemoteIP=172.58.157.100&Encoding=gzip"));
+    ubiEvent.setUrlQueryString(
+        "/c/2222324832?ul_ref=https%3A%2F%2Frover.ebay.com%2Frover%2F1%2F711-219698-2056-1%2F2%3Fmpre%3Dhttps%3A%2F%2Fwww.ebay.com%2Fc%2F2222324832%26rule%3D%26crlp%3D289697120826%26adpos%3D%26device%3Dm%26cmpgn%3D344175529%26PARM3_ID%3DGBH_165%26gclid%3DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%26ul_ref%3Dhttps%25253A%25252F%25252Frover.ebay.com%25252Frover%25252F0%25252F0%25252F99%25253Floc%25253Dhttps%2525253A%2525252F%2525252Frover.ebay.com%2525252Frover%2525252F1%2525252F711-219698-2056-1%2525252F2%2525253Fmpre%2525253Dhttps%2525253A%2525252F%2525252Fwww.ebay.com%2525252Fc%2525252F2222324832%25252526rule%2525253D%25252526crlp%2525253D289697120826%25252526adpos%2525253D%25252526device%2525253Dm%25252526cmpgn%2525253D344175529%25252526PARM3_ID%2525253DGBH_165%25252526gclid%2525253DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%252526rvr_id%25253D0%252526rvr_ts%25253De7d7e70e1710aa162630649effdf75d8%26srcrot%3D711-219698-2056-1%26rvr_id%3D2410463730471%26rvr_ts%3De7d7e7f41710acc3c572f8d7ffdfed95");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(3564);
+    ubiEventList.add(ubiEvent);
+
+    // 5
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("d52fb1481710a4d264558da69f8a715d");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2552134);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:36:59.674")));
+    ubiEvent.setRemoteIP("172.58.157.100");
+    ubiEvent.setRequestCorrelationId("e7d7e9fe1710ad332cd15f28fff27545");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dqkisqn47pse31%2877701%3E0%2Busqdrrp%2Btil%2Bceb%7C%28dlh-171e7d7eb9a-0xe6");
+    ubiEvent.setEventFamily("LST");
+    ubiEvent.setEventAction("SERV");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("172.58.157.100");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(508275715031L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("www.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "app=3564&res=480x320&flgs=AA**&efam=LST&g=d52fb1481710a4d264558da69f8a715d&h=48&mobile=true&n=d52fb1481710a4d264558da69f8a715b&uc=1&mos=iOS&p=2552134&bs=0&osv=13_1_2&t=0&cflgs=AA**&ul=en-US&itmattr=bhEAAB%2BLCAAAAAAAAAC9mEuzqkYUhf%2BLU07Kbt6cqgwERFBQRMVHkkGDzUN5g4Dcuv89nkplJINUdc51hI%2Fiq9177bUX%2FpgUyeTzjx%2BTuEknnxN6EFAYs%2FXkY1In1euD2XY2n71ec9M%2BB55BMYqM1ZWHC3mHnf3999cPE4yCySeEQICvN3V8nXyCj0lcF9U%2FF0369fXHpEBh9rr4%2BfEvjEmvkc%2Fw5TtMN%2B9iGLmPYoZrt1dOVznqpmciGAekvksC7x1mza6aYpxjq2TpwhbljZIxakhWmdiDLveYd9hmjfhnaPinSt4vt4uLw99lnhCW4oi%2F1eAdNjvQfBhvq6lx6ERnJXrw6DkGIcwT%2BK7r32GqsaqdAqC2SQs%2B0SD0H0u5Jq3M7zIEf0llrPjIYZyF7zDjHN26MO8umqsl%2FT7NxZOtsGSVxaBlmPQ5Iv1o9ejtfrOwNaVxpVTlslNC2rPXMeat%2BEuOEYYYN1JRvMPWBQWL5a6xb%2Bc5Xd2X0VpnSrKhpn3Ig%2BQx4iCyERvaqSqWIJ72cpkVUVyst2QCkUQu6CA%2F4iA6cjXLVTutxo6HFGmdHzCpN%2BI7oON4pDLdG3YSvToIEdeKC5tLn%2B2RtGdhwzTpfcSujPRJaVrxVPn91rv6fZOjTU7WM6%2FnB8yiX9QzoffYMB2BpXoHZ77vLbKZuAdTsL1uKzIjZtNCqstwZKjNy2wl29EQ4KOdAXfHc7c4IJM%2BEw1M3I65%2Fjc4CMu2aVXeuxHXtyJJY7ho1y%2FQg9%2F09BKujTmZGguhgSGL32HatOxCOajgZndBshesbLfeWWSVVZ6YMV4%2BUlkG%2Bq2q3lVQRqZ%2BuOdx4z7JjpFOxDKrgpFjXJlctvCl5GiZ%2FcEfPCQdn%2FWMLPCwJXjS6PEOmydOWgValDS45bB05BK41EVi6VdNO2JX3yB9OmwF1h%2BakX0motxUmfvejKhL68ydma48%2F7tAwNiclWXJelB4h9lnVd5fZ6A6WqDpHXyYhUVGGAtSP6BzKXuHLeypvp42hnhxcLQ3lCiEAkdmxBzAgSd0I4HHxHxA7XZlXT8GM%2BP01lo5W8IMEgPxlvfcSGWWHznxQ0eQWg8rOOhaAAMyI6YH5GW0NDLU1tlJTpsep2p3ydSd4dLb4daRwR4eV%2FPJSAaxp%2BKcqS5PrKPaFUvzdkNxTOaNzFDDocfsSEhlUZ%2ByBt94dl6ngrmOD%2BcL2VC%2FYkGL%2B9uI9L8hFnBsHVRYHJG%2BLpur604QD9n6lvuCoD06g9D1mRZj%2FhFVI94IeC2XFAtAd2F4c1bbiJcdIN1nhZfDdkSNwzY4XZcCghW3Kk%2B8e4hWEVnPmDZohNgfUaNq7n3g166FTymSnVupPL0L4aa%2Bt3gA95F%2FC6xOL4Ncmd8MhuqOqr7eCweLbJ%2B9Ag%2BLQTsSUv%2B%2FwPPX697br3vv8zqKPURx3J8TSklQXVPsnTokTYUoXaXo12NHQe1SVDWUOVepvUsdp5T8iJPmtzijlKjKX89cqP5aUX4x%2BaQ5locC%2FfNvt44U4m4RAAA%3D&eactn=SERV&rq=e7d7e9fe1710ad332cd15f28fff27545&pagename=Organic tracking for PL&ciid=1%2BuXV3Y*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D611af91a0345eb53%26node_id%3Ddd0eaa931e7a2466%26REQUEST_GUID%3D171e7d7e-b970-a6e5-7763-0003fdf3258c%26logid%3Dt6wwm53vpd77%253C%253Dqkisqn47pse31%252877701%253E0%252Busqdrrp%252Btil%252Bceb%257C%2528dlh-171e7d7eb9a-0xe6%26cal_mod%3Dfalse&TPool=r1searchsvc&TDuration=1&TStatus=0&TType=URL&ContentLength=2344&ForwardedFor=23.33.238.125;172.58.157.100&Script=/trk20svc/TrackingResource/v1&Server=www.ebay.com&TMachine=10.110.87.118&TStamp=19:36:59.67&TName=Ginger.CollectionSvc.track&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1&RemoteIP=172.58.157.100&Encoding=gzip"));
+    ubiEvent.setUrlQueryString(
+        "/c/2222324832?ul_ref=https%3A%2F%2Frover.ebay.com%2Frover%2F1%2F711-219698-2056-1%2F2%3Fmpre%3Dhttps%3A%2F%2Fwww.ebay.com%2Fc%2F2222324832%26rule%3D%26crlp%3D289697120826%26adpos%3D%26device%3Dm%26cmpgn%3D344175529%26PARM3_ID%3DGBH_165%26gclid%3DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%26ul_ref%3Dhttps%25253A%25252F%25252Frover.ebay.com%25252Frover%25252F0%25252F0%25252F99%25253Floc%25253Dhttps%2525253A%2525252F%2525252Frover.ebay.com%2525252Frover%2525252F1%2525252F711-219698-2056-1%2525252F2%2525253Fmpre%2525253Dhttps%2525253A%2525252F%2525252Fwww.ebay.com%2525252Fc%2525252F2222324832%25252526rule%2525253D%25252526crlp%2525253D289697120826%25252526adpos%2525253D%25252526device%2525253Dm%25252526cmpgn%2525253D344175529%25252526PARM3_ID%2525253DGBH_165%25252526gclid%2525253DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%252526rvr_id%25253D0%252526rvr_ts%25253De7d7e70e1710aa162630649effdf75d8%26srcrot%3D711-219698-2056-1%26rvr_id%3D2410463730471%26rvr_ts%3De7d7e7f41710acc3c572f8d7ffdfed95");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(3564);
+    ubiEventList.add(ubiEvent);
+
+    // 6
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("d52fb1481710a4d264558da69f8a715d");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2317508);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:36:59.908")));
+    ubiEvent.setRemoteIP("10.69.230.106");
+    ubiEvent.setRequestCorrelationId("e7d7e9fe1710ad332cd15f28fff27545");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*517%3E11%28twwgsvv%28umj%28bad%7F%29%60jk-171e7d7ec85-0x697b2c");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("172.58.157.100");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1,GingerClient/2.9.7-RELEASE");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(756225010903L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("internal.rover.vip.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "nqc=AAAAAAAABAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA*&c=1&g=d52fb1481710a4d264558da69f8a715d&h=48&px=4249&chnl=9&n=d52fb1481710a4d264558da69f8a715b&uc=1&es=0&nqt=AAAAAAAABAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA*&p=2317508&uaid=e7d7ec841710a4d12b00c9719e4c85e6S0&bs=0&t=0&cflgs=QA**&ul=en-US&plmt=wxUAAB%252BLCAAAAAAAAADFWFtz2jgU%252Fisdvy6d6OoLM%252FsAuWxJeknoNmna6TDGlo2IsYwvkNDJf98jYy5JMHW3ScuLLFk%252B%252Bs4nHZ3v8N1IQqNNODOxRVpGIo321%252B%252BG9I02RhjZMOTBEEHYQSbGyKEIOS0jhTGDMZMh0wscRxBmesw2A4yYZ%252BtZpsUCo2WIHMx9g9Zdmq2sw8dkYbmhZBlMmhjtuIiilpGp1VNitBllDm8ZAQBpGTIz2t8NC74DDBY27u%252FBqEzStTn3JiuIbRl6XG1WYWxuDwMeLFcxksR4tAos4oA%252FUbnK9loIpsNkvGzIsqHLhi0bDg2C1tSwEKIWRyZ3LBjZAG0ZtnaW6lEHnjoXneMO%252FI57Y%252F425%252FNRYd9e2YvpqSqiEHf%252B1kuiyi7GW2awhlA%252BaBC8fM9WE3n57v6%252BVXHrBRRPlar1mmFmotJrss9rrD1DbYypiRyTIsDQhAobUWxxSllDKj4s%252FnpzwLvZ3dEXNMVE8JszNd5QgX%252BNCmyiqJjWU7E%252BAPSXDkAzV7s92Tv5nCanSB7cdqdxMpLJ%252B4vn2XV8p6ZT7GX1rhKrcpW9wK7rAMDMYg7%252B87tOJ2JkjjNUURGrWDwhQ0d%252BSQZvRAZwwcBHbDUhg1BEOLds0%252BHNyOh8ImYoL9KD3qe53T%252Bzh%252Fhq2O81IaOeAj9PCiZqTwN3VgffbHYasEkQEGA3IgASAqKQU5q5f8hOu2fR57cCf5hY3T73cPyx28j9JjeAOVTp1K1PAWRFhPX8YWEhSpGDSE1asH%252FrXRgWSSZ8VMsEWR8J%252B5fuQooo5ACTWKiZ0y%252BZC6k9D2Voz%252FZcBdThaJkNnd%252BQAk4mX6xTkpz8G%252BaO0%252B%252BRq8sQ8%252BsmztZf%252FKNkmpPxvhxXpXuMnv%252BIM0QJSEGCzD948YPsczUXtm2DQIU37gx6RzLzLrUTE1lKncmt0QYGlLdkws3KrquWjDz4IvM1P0OR5f8UIsvOU%252BUXXt6DUeO1BpOr3I0%252ByoUYpO5cg3D0sc6E8A%252FdXIQqvdtyAViophGNmhC86pYv7ZUNSrXlkZgI6L1Xr8rHV4EqYr807qbe6KIQpe3SzupLRqvFt3E%252BzEKlrdeul8sZANTvAzfKxLYrGkKFSEfOEjg8OcY9kAbn5qvhuUmiV5Ge%252FlKlMpQxfOypVPdTN76RcbjqittEeLBWX8xEXOgR1%252B%252FD4ldChqMcuiM304SDf7onEqndHEwCMfDcvDzFRVoulIkoEmlPv05SNVHaAahM3LwcilUnz1M5LHKpYm1W5THs2ZGb61s%252FykqzMp%252FoMiCJPHeS5MY3fWS8vNx5D9hAZTRVZY%252BFt8seKHwoIYhXZU%252FgkYDRADuU%252BdA6NiYEmB9SBw8ZLw%252Ff85Y9m2BoWvaA%252FvHmambvufQ2%252BmdH4fNY8GyH4yoaaTP9wqrpvGrLK%252BZ%252FKrUdxcrvQ8pYEfjkJq3PnqSmktjG9ABLfd57iGF5rfItMGR4Zy%252FGSX2FR9epnDUEU1%252Ba%252FAgMnPnbeRQM96VY09mttmvhvOv4J4e9a%252Fluykhybnc%252FHMb0KHwKZ7M%252Fk8RJ85msUESqPs2bDTG8%252FdI5656PFoG4Oo%252FR5UeTj2VwvQfDT1Sb1otvy0%252F8C7BD7j2WAT8MrPq0vjuwdgBurk%252Bdl48wMlvEs1jWgqF4%252Fc%252FRDlH1R%252BhLJ1PPpPX0bf7rwi%252FP38L2EHdGey4FwnEVkJg0xHN8Td5Zbv8yfHMTjkf%252BUV8dLKzjXRG5EoQY7EBuWCtCEbhFlO%252BWhOSxJFyKwInyRfTeLUXZTCaDGR8NkvnANwc5fyrL1lJppTQeKJot9bKlaR4LmEqrVMplW848lS3f7v8DPxGNysMVAAA%253D&ec=2&pn=2&rq=e7d7e9fe1710ad332cd15f28fff27545&pagename=cos__mfe&po=%5B%28pg%3A2546172+pid%3A101082+pladvids%3A%5B0%5D%29%28pg%3A2546172+pid%3A101071+pladvids%3A%5B0%5D%29%5D&ciid=1%2ByFErA*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De7d7e9fe1710ad332cd15f28fff27545%26node_id%3Dd3eef1d981cc4bc0%26REQUEST_GUID%3D171e7d7e-c840-a4d1-2b06-6191ca9ca62f%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A517%253E11%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7d7ec85-0x697b2c%26cal_mod%3Dfalse&TPool=r1rover&TDuration=2&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=172.58.157.100&Script=/roverimp/0/2546172/9&Server=internal.rover.vip.ebay.com&TMachine=10.77.18.176&TStamp=19:36:59.90&TName=roverimp&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1,GingerClient/2.9.7-RELEASE&RemoteIP=10.69.230.106"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/2546172/9?site=0&trknvp=n%3Dd52fb1481710a4d264558da69f8a715b%26plmt%3DwxUAAB%252BLCAAAAAAAAADFWFtz2jgU%252Fisdvy6d6OoLM%252FsAuWxJeknoNmna6TDGlo2IsYwvkNDJf98jYy5JMHW3ScuLLFk%252B%252Bs4nHZ3v8N1IQqNNODOxRVpGIo321%252B%252BG9I02RhjZMOTBEEHYQSbGyKEIOS0jhTGDMZMh0wscRxBmesw2A4yYZ%252BtZpsUCo2WIHMx9g9Zdmq2sw8dkYbmhZBlMmhjtuIiilpGp1VNitBllDm8ZAQBpGTIz2t8NC74DDBY27u%252FBqEzStTn3JiuIbRl6XG1WYWxuDwMeLFcxksR4tAos4oA%252FUbnK9loIpsNkvGzIsqHLhi0bDg2C1tSwEKIWRyZ3LBjZAG0ZtnaW6lEHnjoXneMO%252FI57Y%252F425%252FNRYd9e2YvpqSqiEHf%252B1kuiyi7GW2awhlA%252BaBC8fM9WE3n57v6%252BVXHrBRRPlar1mmFmotJrss9rrD1DbYypiRyTIsDQhAobUWxxSllDKj4s%252FnpzwLvZ3dEXNMVE8JszNd5QgX%252BNCmyiqJjWU7E%252BAPSXDkAzV7s92Tv5nCanSB7cdqdxMpLJ%252B4vn2XV8p6ZT7GX1rhKrcpW9wK7rAMDMYg7%252B87tOJ2JkjjNUURGrWDwhQ0d%252BSQZvRAZwwcBHbDUhg1BEOLds0%252BHNyOh8ImYoL9KD3qe53T%252Bzh%252Fhq2O81IaOeAj9PCiZqTwN3VgffbHYasEkQEGA3IgASAqKQU5q5f8hOu2fR57cCf5hY3T73cPyx28j9JjeAOVTp1K1PAWRFhPX8YWEhSpGDSE1asH%252FrXRgWSSZ8VMsEWR8J%252B5fuQooo5ACTWKiZ0y%252BZC6k9D2Voz%252FZcBdThaJkNnd%252BQAk4mX6xTkpz8G%252BaO0%252B%252BRq8sQ8%252BsmztZf%252FKNkmpPxvhxXpXuMnv%252BIM0QJSEGCzD948YPsczUXtm2DQIU37gx6RzLzLrUTE1lKncmt0QYGlLdkws3KrquWjDz4IvM1P0OR5f8UIsvOU%252BUXXt6DUeO1BpOr3I0%252ByoUYpO5cg3D0sc6E8A%252FdXIQqvdtyAViophGNmhC86pYv7ZUNSrXlkZgI6L1Xr8rHV4EqYr807qbe6KIQpe3SzupLRqvFt3E%252BzEKlrdeul8sZANTvAzfKxLYrGkKFSEfOEjg8OcY9kAbn5qvhuUmiV5Ge%252FlKlMpQxfOypVPdTN76RcbjqittEeLBWX8xEXOgR1%252B%252FD4ldChqMcuiM304SDf7onEqndHEwCMfDcvDzFRVoulIkoEmlPv05SNVHaAahM3LwcilUnz1M5LHKpYm1W5THs2ZGb61s%252FykqzMp%252FoMiCJPHeS5MY3fWS8vNx5D9hAZTRVZY%252BFt8seKHwoIYhXZU%252FgkYDRADuU%252BdA6NiYEmB9SBw8ZLw%252Ff85Y9m2BoWvaA%252FvHmambvufQ2%252BmdH4fNY8GyH4yoaaTP9wqrpvGrLK%252BZ%252FKrUdxcrvQ8pYEfjkJq3PnqSmktjG9ABLfd57iGF5rfItMGR4Zy%252FGSX2FR9epnDUEU1%252Ba%252FAgMnPnbeRQM96VY09mttmvhvOv4J4e9a%252Fluykhybnc%252FHMb0KHwKZ7M%252Fk8RJ85msUESqPs2bDTG8%252FdI5656PFoG4Oo%252FR5UeTj2VwvQfDT1Sb1otvy0%252F8C7BD7j2WAT8MrPq0vjuwdgBurk%252Bdl48wMlvEs1jWgqF4%252Fc%252FRDlH1R%252BhLJ1PPpPX0bf7rwi%252FP38L2EHdGey4FwnEVkJg0xHN8Td5Zbv8yfHMTjkf%252BUV8dLKzjXRG5EoQY7EBuWCtCEbhFlO%252BWhOSxJFyKwInyRfTeLUXZTCaDGR8NkvnANwc5fyrL1lJppTQeKJot9bKlaR4LmEqrVMplW848lS3f7v8DPxGNysMVAAA%253D%26po%3D%5B%28pg%3A2546172+pid%3A101082+pladvids%3A%5B0%5D%29%28pg%3A2546172+pid%3A101071+pladvids%3A%5B0%5D%29%5D&trknvpsvc=%3Ca%3Enqc%3DAAAAAAAABAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA*%26nqt%3DAAAAAAAABAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA*%26es%3D0%26ec%3D2%3C%2Fa%3E&tguid=d52fb1481710a4d264558da69f8a715d&imp=2317508");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 7
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("d52fb1481710a4d264558da69f8a715d");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2455605);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:36:59.539")));
+    ubiEvent.setRemoteIP("172.58.157.100");
+    ubiEvent.setRequestCorrelationId("e7d7e9fe1710ad332cd15f28fff27545");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dqkisqn47pse31%285222%3F5-vrubqst-whh-%60dfz%2Behn-171e7d7eb14-0xe3");
+    ubiEvent.setEventFamily("PRP");
+    ubiEvent.setEventAction("EXPM");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("172.58.157.100");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(522150669015L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("www.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "nqc=AAAAAAAABAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA*&flgs=AA**&saasll=0&uc=1&nqt=AAAAAAAABAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA*&mos=iOS&bs=0&pageci=2dba9a86-f91b-4411-a1f0-56155bc58605&osv=13_1_2&ul=en-US&pcl=2&callingpagename=viexpsvc__VIEWPRODUCTCLUSTER&svctime=116&ec=2&pagename=prpexpsvc__product_v1_module_provider_PRODUCTID_GET&app=3564&prpnewui=true&res=480x320&efam=PRP&pri=2222324832&g=d52fb1481710a4d264558da69f8a715d&h=48&mobile=true&cp=2546137&n=d52fb1481710a4d264558da69f8a715b&es=0&p=2455605&t=0&cflgs=EA**&eactn=EXPM&respCode=200&rq=e7d7e9fe1710ad332cd15f28fff27545&pooltype=production&ciid=1%2Bqaknk*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D4ba94750bebb0569%26node_id%3D6752aec22436e623%26REQUEST_GUID%3D171e7d7e-b100-ad39-2797-eaa7fe8798a4%26logid%3Dt6wwm53vpd77%253C%253Dqkisqn47pse31%25285222%253F5-vrubqst-whh-%2560dfz%252Behn-171e7d7eb14-0xe3%26cal_mod%3Dfalse&TPool=r1prpexpsvc8&TDuration=2&TStatus=0&TType=URL&ContentLength=1224&ForwardedFor=23.33.238.125;172.58.157.100&Script=/trk20svc/TrackingResource/v1&Server=www.ebay.com&TMachine=10.211.146.121&TStamp=19:36:59.53&TName=Ginger.CollectionSvc.track&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1&RemoteIP=172.58.157.100&Encoding=gzip"));
+    ubiEvent.setUrlQueryString(
+        "/c/2222324832?ul_ref=https%3A%2F%2Frover.ebay.com%2Frover%2F1%2F711-219698-2056-1%2F2%3Fmpre%3Dhttps%3A%2F%2Fwww.ebay.com%2Fc%2F2222324832%26rule%3D%26crlp%3D289697120826%26adpos%3D%26device%3Dm%26cmpgn%3D344175529%26PARM3_ID%3DGBH_165%26gclid%3DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%26ul_ref%3Dhttps%25253A%25252F%25252Frover.ebay.com%25252Frover%25252F0%25252F0%25252F99%25253Floc%25253Dhttps%2525253A%2525252F%2525252Frover.ebay.com%2525252Frover%2525252F1%2525252F711-219698-2056-1%2525252F2%2525253Fmpre%2525253Dhttps%2525253A%2525252F%2525252Fwww.ebay.com%2525252Fc%2525252F2222324832%25252526rule%2525253D%25252526crlp%2525253D289697120826%25252526adpos%2525253D%25252526device%2525253Dm%25252526cmpgn%2525253D344175529%25252526PARM3_ID%2525253DGBH_165%25252526gclid%2525253DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%252526rvr_id%25253D0%252526rvr_ts%25253De7d7e70e1710aa162630649effdf75d8%26srcrot%3D711-219698-2056-1%26rvr_id%3D2410463730471%26rvr_ts%3De7d7e7f41710acc3c572f8d7ffdfed95");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(3564);
+    ubiEventList.add(ubiEvent);
+
+    // 8
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("d52fb1481710a4d264558da69f8a715d");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2370942);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:36:59.690")));
+    ubiEvent.setRemoteIP("172.58.157.100");
+    ubiEvent.setRequestCorrelationId("e7d7e9fe1710ad332cd15f28fff27545");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dqkisqn47pse31%2877701%3E4%2Busqdrrp%2Btil%2Bceb%7C%28dlh-171e7d7ebaa-0x10a");
+    ubiEvent.setEventFamily("LST");
+    ubiEvent.setEventAction("ANSTMPL");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("172.58.157.100");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(508276698071L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("www.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "app=3564&res=480x320&flgs=AA**&efam=LST&g=d52fb1481710a4d264558da69f8a715d&h=48&mobile=true&pagetmpl=SRP&n=d52fb1481710a4d264558da69f8a715b&uc=1&mos=iOS&p=2370942&bs=0&osv=13_1_2&pageci=75c54f5e-8f42-11ea-9a17-c6f8c3503081&t=0&cflgs=AA**&ul=en-US&eactn=ANSTMPL&rq=e7d7e9fe1710ad332cd15f28fff27545&pagename=ANSWERS_PLATFORM_PAGE&ciid=1%2BumV3Y*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De7d7e9fe1710ad332cd15f28fff27545%26node_id%3Dd7d8aa59123bfba4%26REQUEST_GUID%3D171e7d7e-ac10-ad39-2797-eaa7fe8798ab%26logid%3Dt6wwm53vpd77%253C%253Dqkisqn47pse31%252877701%253E4%252Busqdrrp%252Btil%252Bceb%257C%2528dlh-171e7d7ebaa-0x10a%26cal_mod%3Dfalse&TPool=r1searchsvc&TDuration=1&TStatus=0&TType=URL&ContentLength=871&ForwardedFor=23.33.238.125;172.58.157.100&Script=/trk20svc/TrackingResource/v1&Server=www.ebay.com&TMachine=10.110.87.118&TStamp=19:36:59.69&TName=Ginger.CollectionSvc.track&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1&RemoteIP=172.58.157.100&Encoding=gzip"));
+    ubiEvent.setUrlQueryString(
+        "/c/2222324832?ul_ref=https%3A%2F%2Frover.ebay.com%2Frover%2F1%2F711-219698-2056-1%2F2%3Fmpre%3Dhttps%3A%2F%2Fwww.ebay.com%2Fc%2F2222324832%26rule%3D%26crlp%3D289697120826%26adpos%3D%26device%3Dm%26cmpgn%3D344175529%26PARM3_ID%3DGBH_165%26gclid%3DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%26ul_ref%3Dhttps%25253A%25252F%25252Frover.ebay.com%25252Frover%25252F0%25252F0%25252F99%25253Floc%25253Dhttps%2525253A%2525252F%2525252Frover.ebay.com%2525252Frover%2525252F1%2525252F711-219698-2056-1%2525252F2%2525253Fmpre%2525253Dhttps%2525253A%2525252F%2525252Fwww.ebay.com%2525252Fc%2525252F2222324832%25252526rule%2525253D%25252526crlp%2525253D289697120826%25252526adpos%2525253D%25252526device%2525253Dm%25252526cmpgn%2525253D344175529%25252526PARM3_ID%2525253DGBH_165%25252526gclid%2525253DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%252526rvr_id%25253D0%252526rvr_ts%25253De7d7e70e1710aa162630649effdf75d8%26srcrot%3D711-219698-2056-1%26rvr_id%3D2410463730471%26rvr_ts%3De7d7e7f41710acc3c572f8d7ffdfed95");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(3564);
+    ubiEventList.add(ubiEvent);
+
+    // 9
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("d52fb1481710a4d264558da69f8a715d");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2370942);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:36:59.534")));
+    ubiEvent.setRemoteIP("172.58.157.100");
+    ubiEvent.setRequestCorrelationId("e7d7e9fe1710ad332cd15f28fff27545");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dqkisqn47pse31%28706%3D32-vrubqst-whh-%60dfz%2Behn-171e7d7eb0f-0x109");
+    ubiEvent.setEventFamily("LST");
+    ubiEvent.setEventAction("ANSTRIG");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("172.58.157.100");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(657600539607L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("www.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "app=3564&res=480x320&flgs=AA**&efam=LST&g=d52fb1481710a4d264558da69f8a715d&h=48&mobile=true&n=d52fb1481710a4d264558da69f8a715b&uc=1&mos=iOS&p=2370942&bs=0&osv=13_1_2&pageci=75c0460a-8f42-11ea-be96-b259064e8d6b&t=0&cflgs=AA**&ul=en-US&eactn=ANSTRIG&rq=e7d7e9fe1710ad332cd15f28fff27545&pagename=ANSWERS_PLATFORM_PAGE&ciid=1%2BsLHJk*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De7d7e9fe1710ad332cd15f28fff27545%26node_id%3D0ad20c8f02806721%26REQUEST_GUID%3D171e7d7e-aa30-ad39-2797-eaa7fe8798b2%26logid%3Dt6wwm53vpd77%253C%253Dqkisqn47pse31%2528706%253D32-vrubqst-whh-%2560dfz%252Behn-171e7d7eb0f-0x109%26cal_mod%3Dfalse&TPool=r1searchsvc&TDuration=1&TStatus=0&TType=URL&ContentLength=899&ForwardedFor=23.33.238.125;172.58.157.100&Script=/trk20svc/TrackingResource/v1&Server=www.ebay.com&TMachine=10.155.28.153&TStamp=19:36:59.53&TName=Ginger.CollectionSvc.track&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1&RemoteIP=172.58.157.100&Encoding=gzip"));
+    ubiEvent.setUrlQueryString(
+        "/c/2222324832?ul_ref=https%3A%2F%2Frover.ebay.com%2Frover%2F1%2F711-219698-2056-1%2F2%3Fmpre%3Dhttps%3A%2F%2Fwww.ebay.com%2Fc%2F2222324832%26rule%3D%26crlp%3D289697120826%26adpos%3D%26device%3Dm%26cmpgn%3D344175529%26PARM3_ID%3DGBH_165%26gclid%3DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%26ul_ref%3Dhttps%25253A%25252F%25252Frover.ebay.com%25252Frover%25252F0%25252F0%25252F99%25253Floc%25253Dhttps%2525253A%2525252F%2525252Frover.ebay.com%2525252Frover%2525252F1%2525252F711-219698-2056-1%2525252F2%2525253Fmpre%2525253Dhttps%2525253A%2525252F%2525252Fwww.ebay.com%2525252Fc%2525252F2222324832%25252526rule%2525253D%25252526crlp%2525253D289697120826%25252526adpos%2525253D%25252526device%2525253Dm%25252526cmpgn%2525253D344175529%25252526PARM3_ID%2525253DGBH_165%25252526gclid%2525253DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%252526rvr_id%25253D0%252526rvr_ts%25253De7d7e70e1710aa162630649effdf75d8%26srcrot%3D711-219698-2056-1%26rvr_id%3D2410463730471%26rvr_ts%3De7d7e7f41710acc3c572f8d7ffdfed95");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(3564);
+    ubiEventList.add(ubiEvent);
+
+    // 10
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("d52fb1481710a4d264558da69f8a715d");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(true);
+    ubiEvent.setPageId(3084);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:36:58.508")));
+    ubiEvent.setRemoteIP("172.58.157.100");
+    ubiEvent.setRequestCorrelationId("2762a2860cae2991");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ckuvthu%60t*023%3F%3B%3C6%29pqtfwpu%29osu%29fgg%7E-fij-171e7d7e70d-0x120");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(false);
+    ubiEvent.setClientIP("172.58.157.100");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(426846840791L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "rdt=1&c=1&g=d52fb1481710a4d264558da69f8a715d&h=48&cguidsrc=cookie&n=d52fb1481710a4d264558da69f8a715b&uc=1&url_mpre=https%3A%2F%2Frover.ebay.com%2Frover%2F1%2F711-219698-2056-1%2F2%3Fmpre%3Dhttps%3A%2F%2Fwww.ebay.com%2Fc%2F2222324832%26rule%3D%26crlp%3D289697120826%26adpos%3D%26device%3Dm%26cmpgn%3D344175529%26PARM3_ID%3DGBH_165%26gclid%3DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB&p=3084&uaid=e7d7e70d1710aa1626357806c001f919S0&bs=0&t=0&cflgs=EA**&ul=en-US&hrc=301&pn=2&pcguid=d52fb1481710a4d264558da69f8a715b&rq=2762a2860cae2991&pagename=EntryTracking&ciid=1%2BcNYmM*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D2762a2860cae2991%26node_id%3D1d83ed830144a470%26REQUEST_GUID%3D171e7d7e-70c0-aa16-2637-eb47dde5c67f%26logid%3Dt6qjpbq%253F%253Ckuvthu%2560t%2A023%253F%253B%253C6%2529pqtfwpu%2529osu%2529fgg%257E-fij-171e7d7e70d-0x120%26cal_mod%3Dfalse&TPool=r1rover&TDuration=3&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=172.58.157.100&Script=/rover/0/0/99&Server=rover.ebay.com&TMachine=10.161.98.99&TStamp=19:36:58.50&TName=rover&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1&RemoteIP=172.58.157.100&Encoding=gzip, deflate, br"));
+    ubiEvent.setUrlQueryString(
+        "/rover/0/0/99?loc=https%3A%2F%2Frover.ebay.com%2Frover%2F1%2F711-219698-2056-1%2F2%3Fmpre%3Dhttps%3A%2F%2Fwww.ebay.com%2Fc%2F2222324832%26rule%3D%26crlp%3D289697120826%26adpos%3D%26device%3Dm%26cmpgn%3D344175529%26PARM3_ID%3DGBH_165%26gclid%3DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB");
+    ubiEvent.setPageName("rover");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 11
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("d52fb1481710a4d264558da69f8a715d");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2546137);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:36:59.984")));
+    ubiEvent.setRemoteIP("172.58.157.100");
+    ubiEvent.setRequestCorrelationId("e7d7e9fe1710ad332cd15f28fff27545");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dqkisqn47pse31%284%3F%3B30%3F-vrubqst-whh-%60dfz%2Behn-171e7d7ecd1-0x28d");
+    ubiEvent.setEventFamily("ITM");
+    ubiEvent.setEventAction("EXPC");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("172.58.157.100");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(991089060567L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AIAxIIEAAAAAAAIAcQAEABAAgEABgAAAAAAwAAABAAAiAAAAAAAAUEA*");
+    ubiEvent.setWebServer("www.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "snippet=1&nqc=AAAAAAAABAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA*&flgs=AIAxIIEAAAAAAAIAcQAEABAAgEABgAAAAAAwAAABAAAiAAAAAAAAUEA*&ssc=27034591012&gsp=0&viStreamId=d52fb1481710a4d264558da69f8a715d&snippetlength=218&obfs_sid_uid_same=false&mos=iOS&nqt=AAAAAAAABAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA*&ppc_ofid=6342819202&osv=13_1_2&callingpagename=viexpsvc__VIEWPRODUCTCLUSTER&viSignedInFlag=0&noep=3&vibisdm=683X1024&app=3564&itmSrc=FB_L&!_OBFS_SELLERID=1301608862&bdrs=0&OBFS_EP_STATE=NOT_IN_EXPERIMENT&fbscore=1095&!_callingpageid=2546172&swccount=1&invThreshold=5&meta=293&OBFS_STATUS=NOT_REQUIRED&curprice=434.95&maturity_score=5&viPageType=0&attrct=18&ccc_off_id=6342779101&!pymntMethods=PPL|VSA|MSC|AMX|DSC&rq=e7d7e9fe1710ad332cd15f28fff27545&l1=32852&l2=184972&qtys=11&itmcond=1000&!_OBFS_BUYER_VIEWING_SITEID=0&bs=0&OBFS_ITEMID=233356539340&!viqsig=URGENCY%2CLAST_ONE_SIGNAL|SHIPPING%2CFREE_SHIPPING_SIGNAL|POPULARITY%2CVIEWERS_COUNT_1_HOUR_SIGNAL|RETURNS%2CSELLER_ACCEPT_RETURNS_SIGNAL,URGENCY%2CLAST_ONE_SIGNAL|SHIPPING%2CFREE_SHIPPING_SIGNAL|POPULARITY%2CVIEWERS_COUNT_1_HOUR_SIGNAL|RETURNS%2CSELLER_ACCEPT_RETURNS_SIGNAL&binamt=434.95&obfs_desc_has_contactInfo=false&vibisb=1000&vibisd=683X1024&sn=createmagic14&qtya=1&st=9&c=1&pudo=0&vibisbm=1000&g=d52fb1481710a4d264558da69f8a715d&h=48&leaf=11071&cp=2546137&prd_qualify=VALID&n=d52fb1481710a4d264558da69f8a715b&!_OBFS_PHONE_COUNT=0&p=2546137&fdp=99&t=0&nofp=3&rpdur=30&tr=2160850&dc=1&!vidsig=URGENCY%2CLAST_ONE_SIGNAL|EMPHASIS|POPULARITY%2CVIEWERS_COUNT_1_HOUR_SIGNAL%2C2|DEFAULT|RETURNS%2CSELLER_ACCEPT_RETURNS_SIGNAL%2C30|DEFAULT,URGENCY%2CLAST_ONE_SIGNAL|EMPHASIS|POPULARITY%2CVIEWERS_COUNT_1_HOUR_SIGNAL%2C2|DEFAULT|RETURNS%2CSELLER_ACCEPT_RETURNS_SIGNAL%2C30|DEFAULT&nozp=3&rating=4.57&!_OBFS_LINK_COUNT=0&uc=1&mbsa=500&MskuCtbRdt=0&reviews=7&ul=en-US&hrc=200&pymntVersion=1&ec=2&res=480x320&guwatch=true&efam=ITM&itm=233356539340&pri=2222324832&vpcg=false&epidonvi=23025578695&iver=2727126462013&!_OBFS_BUYERID=0&es=0&clp_iid_epid_mismatch=true&itmtitle=Smart+TV+4K+Samsung+50+Inch+LED+2160P+Ultra+HD+Built+In+WiFi+HDMI+USB+Best+New&cflgs=EA**&bcdata=t%3A5%3Bbc%3A1586461038455%2C1865552%2C1648392%2C115077697%2C738302&gxoe=vine&merchdisp=101082%2C101071&simSrc=FB_L&fbcause=IIS_THRESHOLD&eactn=EXPC&shipsiteid=0&obfs_listing_is_eligible=true&nw=61&vibis=400&OBFS_NON_OBFUSCATION_REASON=NO_CONTACT_INFO_DETECTED&oosType=FB_L&ppfoid=0&pagename=viexpsvc__VIEWPRODUCTCLUSTER&!sh1srv=USD%3A0.0%5E-1%5E-1%5E2020-05-13T03%3A00%3A00-07%3A00%5E2020-05-27T03%3A00%3A00-07%3A00%5EECONOMY%5EOther%5E0%5E-1%5E5%5E-1%5EUS%5Enull%5E233356539340%5E-1%5E5%5E14&qtymod=true&bcvalid=true&mobile=true&iisll=0&fimbsa=500&pidinstock=false&vidsigct=3&cp_usd=434.95&swcembg=true&!_OBFS_EMAIL_COUNT=0&ciid=1%2BqCweY*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Dd9428d23d72646c7%26node_id%3Db4caec094767e2b9%26REQUEST_GUID%3D171e7d7e-ccd0-a69c-1e64-0d7fff6cc498%26logid%3Dt6wwm53vpd77%253C%253Dqkisqn47pse31%25284%253F%253B30%253F-vrubqst-whh-%2560dfz%252Behn-171e7d7ecd1-0x28d%26cal_mod%3Dfalse&TPool=r1viexpsvc3&TDuration=2&TStatus=0&TType=URL&ContentLength=3945&ForwardedFor=23.33.238.125;172.58.157.100&Script=/trk20svc/TrackingResource/v1&Server=www.ebay.com&TMachine=10.105.193.230&TStamp=19:36:59.98&TName=Ginger.CollectionSvc.track&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1&RemoteIP=172.58.157.100&Encoding=gzip"));
+    ubiEvent.setUrlQueryString(
+        "/c/2222324832?ul_ref=https%3A%2F%2Frover.ebay.com%2Frover%2F1%2F711-219698-2056-1%2F2%3Fmpre%3Dhttps%3A%2F%2Fwww.ebay.com%2Fc%2F2222324832%26rule%3D%26crlp%3D289697120826%26adpos%3D%26device%3Dm%26cmpgn%3D344175529%26PARM3_ID%3DGBH_165%26gclid%3DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%26ul_ref%3Dhttps%25253A%25252F%25252Frover.ebay.com%25252Frover%25252F0%25252F0%25252F99%25253Floc%25253Dhttps%2525253A%2525252F%2525252Frover.ebay.com%2525252Frover%2525252F1%2525252F711-219698-2056-1%2525252F2%2525253Fmpre%2525253Dhttps%2525253A%2525252F%2525252Fwww.ebay.com%2525252Fc%2525252F2222324832%25252526rule%2525253D%25252526crlp%2525253D289697120826%25252526adpos%2525253D%25252526device%2525253Dm%25252526cmpgn%2525253D344175529%25252526PARM3_ID%2525253DGBH_165%25252526gclid%2525253DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%252526rvr_id%25253D0%252526rvr_ts%25253De7d7e70e1710aa162630649effdf75d8%26srcrot%3D711-219698-2056-1%26rvr_id%3D2410463730471%26rvr_ts%3De7d7e7f41710acc3c572f8d7ffdfed95");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(233356539340L);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(3564);
+    ubiEventList.add(ubiEvent);
+
+    // 12
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("d52fb1481710a4d264558da69f8a715d");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2455605);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:36:59.702")));
+    ubiEvent.setRemoteIP("172.58.157.100");
+    ubiEvent.setRequestCorrelationId("e7d7e9fe1710ad332cd15f28fff27545");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dqkisqn47pse31%285262%3F4-vrubqst-whh-%60dfz%2Behn-171e7d7ebb7-0x174");
+    ubiEvent.setEventFamily("PRP");
+    ubiEvent.setEventAction("EXPM");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("172.58.157.100");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(522152241879L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("www.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "nqc=AAAAAAAABAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA*&flgs=AA**&uc=1&nqt=AAAAAAAABAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA*&mos=iOS&bs=0&pageci=2dba9a86-f91b-4411-a1f0-56155bc58605&osv=13_1_2&ul=en-US&pcl=2&callingpagename=viexpsvc__VIEWPRODUCTCLUSTER&glpsm=4551%2C&svctime=253&ec=2&pagename=prpexpsvc__product_v1_module_provider_PRODUCTID_GET&app=3564&prpnewui=true&res=480x320&efam=PRP&pri=2222324832&g=d52fb1481710a4d264558da69f8a715d&h=48&mobile=true&FBLCOUNT=9&cp=2546137&n=d52fb1481710a4d264558da69f8a715b&es=0&p=2455605&t=0&cflgs=EA**&eactn=EXPM&respCode=200&rq=e7d7e9fe1710ad332cd15f28fff27545&pooltype=production&ciid=1%2Bqyknk*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D7a9775d02f1ea667%26node_id%3De96cac226ee27324%26REQUEST_GUID%3D171e7d7e-bb30-ad39-2797-eaa7fe87989b%26logid%3Dt6wwm53vpd77%253C%253Dqkisqn47pse31%25285262%253F4-vrubqst-whh-%2560dfz%252Behn-171e7d7ebb7-0x174%26cal_mod%3Dfalse&TPool=r1prpexpsvc8&TDuration=2&TStatus=0&TType=URL&ContentLength=1242&ForwardedFor=23.33.238.125;172.58.157.100&Script=/trk20svc/TrackingResource/v1&Server=www.ebay.com&TMachine=10.211.146.121&TStamp=19:36:59.70&TName=Ginger.CollectionSvc.track&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1&RemoteIP=172.58.157.100&Encoding=gzip"));
+    ubiEvent.setUrlQueryString(
+        "/c/2222324832?ul_ref=https%3A%2F%2Frover.ebay.com%2Frover%2F1%2F711-219698-2056-1%2F2%3Fmpre%3Dhttps%3A%2F%2Fwww.ebay.com%2Fc%2F2222324832%26rule%3D%26crlp%3D289697120826%26adpos%3D%26device%3Dm%26cmpgn%3D344175529%26PARM3_ID%3DGBH_165%26gclid%3DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%26ul_ref%3Dhttps%25253A%25252F%25252Frover.ebay.com%25252Frover%25252F0%25252F0%25252F99%25253Floc%25253Dhttps%2525253A%2525252F%2525252Frover.ebay.com%2525252Frover%2525252F1%2525252F711-219698-2056-1%2525252F2%2525253Fmpre%2525253Dhttps%2525253A%2525252F%2525252Fwww.ebay.com%2525252Fc%2525252F2222324832%25252526rule%2525253D%25252526crlp%2525253D289697120826%25252526adpos%2525253D%25252526device%2525253Dm%25252526cmpgn%2525253D344175529%25252526PARM3_ID%2525253DGBH_165%25252526gclid%2525253DCj0KCQjwncT1BRDhARIsAOQF9LnseFFhRejiM4LLxjrhboQtptIVKpqW9YxgpFJ-I_GJgmTLGPCjzScaAvCiEALw_wcB%252526rvr_id%25253D0%252526rvr_ts%25253De7d7e70e1710aa162630649effdf75d8%26srcrot%3D711-219698-2056-1%26rvr_id%3D2410463730471%26rvr_ts%3De7d7e7f41710acc3c572f8d7ffdfed95");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(3564);
+    ubiEventList.add(ubiEvent);
+
+
+    sessionMetrics.init();
+    sessionMetrics.start(sessionAccumulator);
+    for (UbiEvent event : ubiEventList) {
+      sessionMetrics.feed(event, sessionAccumulator);
+    }
+    sessionMetrics.end(sessionAccumulator);
+    Assert.assertEquals(10, sessionAccumulator.getUbiSession().getTrafficSrcId());
+  }
+
+  @Test
+  public void test_TrafficSourceMetric14() throws Exception {
+
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("e849ff051710a4d020811edeff6818ad");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2317508);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 21:41:35.848")));
+    ubiEvent.setRemoteIP("10.77.72.251");
+    ubiEvent.setRequestCorrelationId("e82ae452e93b7b80");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*0631%3B7%28twwgsvv%28umj%28bad%7F%29%60jk-171e849ff69-0x198");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("162.14.22.99");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50,GingerClient/2.9.7-RELEASE");
+    ubiEvent.setCobrand(0);
+    ubiEvent.setCurrentImprId(994392538953L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("internal.rover.vip.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "c=1&g=e88ee98d1710acc3d3911a0ac0f5d4b2&rurl=https%25253A%25252F%25252Fwww.ebay-kleinanzeigen.de%25252Fs-haus-garten%25252Fgartendeko-alte%25252Fk0c80&h=8d&px=4249&chnl=9&uc=77&p=1605052&uaid=e88ee98e1710acc3d3911a0ac0f5d4b1S0&bs=77&catid=80&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2F&r=715462550&t=77®=Hamburg&cflgs=QA**&ul=de-DE&pn=2&rq=deeaab0130c48395&pagename=http://kleinanzeigen.ebay.de/anzeigen/s-suchen.html&ciid=jumUPTk*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Ddeeaab0130c48395%26node_id%3D4b542f8f20dcfdc8%26REQUEST_GUID%3D171e88ee-9860-acc3-d392-fdf6de68a87c%26logid%3Dt6qjpbq%253F%253Ckuvthu%2560t%2A0%253D0%253F326-171e88ee995-0x109%26cal_mod%3Dfalse&TPool=r1rover&TDuration=16&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=90.186.49.84&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.204.61.57&TStamp=22:56:52.23&TName=roverimp_INTL&Agent=Mozilla/5.0 (iPad; CPU OS 12_4_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.2 Mobile/15E148 Safari/604.1&RemoteIP=90.186.49.84&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=reg%3DHamburg%26catid%3D80%26rurl%3Dhttps%25253A%25252F%25252Fwww.ebay-kleinanzeigen.de%25252Fs-haus-garten%25252Fgartendeko-alte%25252Fk0c80&mpt=1588744612147&imp=1605052");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("e849ff051710a4d020811edeff6818ad");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2507874);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 21:41:36.151")));
+    ubiEvent.setRemoteIP(null);
+    ubiEvent.setRequestCorrelationId("e81bc51a1710a9e4f1e6a615ffff7af8");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6kjkbpujn%60%602%3D9vjdkjkbpujn%60%602*ib%60ks%28rbpv6770-171e84a0096-0x2353");
+    ubiEvent.setEventFamily("PRLS");
+    ubiEvent.setEventAction("ALGO");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP(null);
+    ubiEvent.setAgentInfo(null);
+    ubiEvent.setCobrand(0);
+    ubiEvent.setCurrentImprId(275028115530L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("homesplice4.vip.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "expl=0&meid=c6327233e276416a951874b8e59f3113&flgs=AA**&efam=PRLS&sv=9&g=e849ff051710a4d020811edeff6818ad&h=05&snappy=1&schemaversion=3&ciid=SgD0CEA*&p=2507874&t=0&cflgs=AA**&plmt=100012&pl=vhrw1OKD0IS9XAAqU2ltcGxBTUx2NVBhaXJ3aXNlV2ViAAAC9pCQ2eEHAo7Z2OY7AkBlODQ5ZmYwNTE3MTBhNGQwMjA4MTFlZGVmZjY4MThhZAAAAgpDTjo6OgIyMC4xMTcwMC4yMDYyNS4yMDY2Ny4yMDY4MQAABBgCBm1scmYC6KnRzMYJAoSD5NtKAAAAYOZTKj8CAAAAAImxOj8AAAAAAADwPwQzMQAAAAACAhJlcGlkUHJpY2UCAACAPgAAAojSquqaBwAAAACAsQU0PwIAAADgKtFDPwk7FABACjI1LBU%2BIGFyYml0cmFnZRE%2BTIDdt9aQCgL0j8SaCAAAAKCFsSM%2FAX4QYKlXPD8JQwTwPzJDAEKBACzUmb3whwoCuIeN0BAJMgQAAAFDHQFywQAU7tvWjtsVAS4MQA57RgV%2BDEBnBVwNfggMQAQBvgACDQIAAAX0SOb68bTuFgKqmdmKYQAAAMDwJSUFOAzArotCDThycwBI%2Fq%2BhwtEGAsSi748JAAAAYJq0FAVADOASQjeOQAAQzPK0sa0hMAkBOu4AABwNswgqAioBtwmzLLKooaDGFALmqaq9JQGzCKTqLgVzDGCZWD82cwAMAhICEhk4FNLgyL%2BcBwFoDED0lRsFMxiArdkzP5qZAQEACQlrBAAAThoCEOj2oNjhBTsMgDjwHgU7DOBmkUA6bgAIIAIgGW4M%2BMiH4gkzDGCsdysFMwxAdptDDTMAFAluDAIWAhYZM0ia25a17hYCttbF9wsAAABAZ%2F8pCTgI%2FIlFDThyjAEUuPnThvwPAeEM4D0nQwU7DGAUVlk2OwAMAgQCBBlzLNKx6ZL6CAL63fXnBkHvCFEcMQU4CMAyvxHeUTcIDAIMHTgA8Y63AQgiAiIZMyzqqNyj%2BQ8Cor%2BipQUB3ghxDiYFaxSgVII3PzMFAQARKRZWhAEs4ruOhcwNAryuwI5SAasIDBU7BUAMQHhOUg3jDatWQAAs2pX%2F7%2BsWApqDk8UWAYAIgLsqBUAMwFdsOA1AABYy4wMEJmFx4wx8ZXBpNisEEOzEuNCfIaUQAEA9AU4FSAhAJOZxagAQMkgARisEGNahr47sFgKlBiGvCAUvOgVDDMBfn01VjxAQMjQsMp1xQoQAEMjq4LeoAcsQACDHWi8FQQggiFExt00qDAIQAhA5hCzutpWJpRYCnJqMtg0BeQEBOnMDDTglRDUBkeQUzIPXhZEKFbkMYMvGQAV4DEAAr1MNuQARhrkAEKSUmb6yRagFATqBAAD4NiUFQoQAFOSFu877D3UmCGCKTynIDKCtmUYtyAAIbkgCSKKnjq7oDgLe2ZOUDgAAAGARNyAFxAygSWA9DUAtBAwCHgIeOTwU2MzAj%2B8SAbIMoNHaMwUzDGCvs0cNMwAACXMMAgoCChkzMKDCh%2Ff0CAL%2BxPbSnAEBOgEBFe9F8wQzEw05CCgCKBk5KOTf4d2IEQK45P3lwQkI4BjFCaQIgKyWkiwDKOTSuJzKDQKK8IrHAeQM4KJfLAWxDCAN0Ts2bAMMAhQCFBl4DPi%2B%2B9s9XAjAiL4p4AxgwCRWDektHEUgQpMCLNiPsbr3CAKq8vXWDAHsCJ1pMAV4CGA1hTGcfgQHKPr2%2B%2FjnDgKEzciHgScIoDPFCYMIgP3YUWMACS0zCAYCBhm7EPbGhsnnAe0MAMB3u%2Bl6FCAPzDo%2FZgUBAAoNMwgcAhwZMxCSiIuUkOUvCAAO5AmpDCCIPFMN6THSCA4CDhkzEKSLm7nfxQkFATrMAQT7P%2BliCCYCJhkzEOaPj4XMZW4MwIipRSUPDKA%2BAFsNZo2zAAIBAQFP5ZUw9Mm86%2BwSAq7QjLLJAQFpCPF3NgU5DOCbA05taAAJNmQEQosBLIjgrdrHDQK4tMfzwQFEDOBa6UEJRAQOKbEwNowBbvAELMrYqbHUEQKenKezqwFOBQE6%2FgAA83q5Ayis%2BPnwrg8C%2FNWDukpEAAkBcl4CDO6w87YWoAkMwAqpIgXNDMAojzMtSjbNAEY4BCzoj5zn4QcCzsfQsDQOoAkEqYupdQxgMQ9QDUPxlggIAgg5jRTw24bwgQ2V9AyAfKs3BXsM4ESgRU1eDBhABDIBVFI8CBDg0Ivh%2BInuBNEGyfMMgEWrNDqHAwgaAhoZcyz%2Bnu6Igw0CwP%2BuxGgpGAAAOW0JAQDwTWsIJAIkGTgEpr9lvwz%2BxJmYwZwQ4GuaSj8hpQxgbkBiDeM6JgFCNwIk9OjOiooKAsS284V6BQEBQx0BDXsB7m4zAhCancKLhEX4DAD5cCgFiAiALDjRn1H4CBgCGBnAENCqg4GpydIIsPIxCTMImsNBDbttkQF4Qt4BXAAAAQoeVG9yYUl0ZW1Db3ZpZXdzBDIxAE2scPA%2FLENhc3NpbmlQcm9kdWN0UHJvbW90ZWQEMjQGFSQANg0kKFRpdGxlU2VlZENhHSkENRoVKQBILikAIEhpZ2hJZGZPcj4yAAgzMWQVMgAuNpwABE9mEaQwMzIAAQAAAAAAAPA%2FAA%3D%3D&eactn=ALGO&algo=HOMESPLICE.plsim.SimplAMLv5PairwiseWeb&pn=2&rq=e81bc51a1710a9e4f1e6a615ffff7af8&pooltype=prod&pagename=PromotedListingsMLPipeline&ciid=SgD0CEA*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De81bc51a1710a9e4f1e6a615ffff7af8%26node_id%3D1c9f41d70a17fb85%26REQUEST_GUID%3D171e84a0-0960-a370-8400-ef36fff7d974%26logid%3Dt6kjkbpujn%2560%25602%253D9vjdkjkbpujn%2560%25602%2Aib%2560ks%2528rbpv6770-171e84a0096-0x2353&TPool=r1homesplice4&TDuration=93&ContentLength=1031&ForwardedFor=10.156.175.130&Script=api&Server=homesplice4.vip.ebay.com&TMachine=10.55.8.64&TStamp=21:41:36.15&TName=postSim"));
+    ubiEvent.setUrlQueryString(null);
+    ubiEvent.setPageName("postSim");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("e849ff051710a4d020811edeff6818ad");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2047675);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 21:41:35.742")));
+    ubiEvent.setRemoteIP("162.14.22.99");
+    ubiEvent.setRequestCorrelationId("e82ae452e93b7b80");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6ulcpjqcj9%3Ftilsobtlrbn%28075141-vrubqst-whh-%60dfz%2Behn-171e849ff11-0x170");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("162.14.22.99");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50");
+    ubiEvent.setCobrand(0);
+    ubiEvent.setCurrentImprId(34393685833L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("QIAwIIEAACAAAAAAAQAAABAAgABBAAAAAABwAAABAAAEAEAAAAAAEA**");
+    ubiEvent.setWebServer("www.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "visplt=100564%2C100939%2C100726%2C100566%2C100920%2C100921%2C100922%2C100923%2C&nqc=AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAADAAAAAACAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAABAAAQAAAAAAAg*&flgs=QIAwIIEAACAAAAAAAQAAABAAgABBAAAAAABwAAABAAAEAEAAAAAAEA**&ssc=2839973011&nozp=1&!ampid=3P_IMP&endeddiff=9D&bsnippets=true&sdes=1&!_OBFS_LINK_COUNT=0&obfs_sid_uid_same=false&uc=45&shsvrcnt=1&mbsa=500&nqt=AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAADAAAAAACAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAABAAAQAAAAAAAg*&uaid=e849ff051710a4d020811edeff6818acS0&!SHIPPINGSERVICE=SSP%3A1%5EDSP%3A1&swcenabled=true&ul=zh-CN&pymntVersion=1&ec=1&noep=2&vibisdm=803X1071&iwsv=0&!IMPORT_CHARGE=USD%3A19.13%5E%5E%5E%5E&!vimc=1%5E32%5E100008,1%5E34%5E100623,1%5E242%5E100011%2C100012&itm=133371659323&promol=0&!_OBFS_SELLERID=391826031&pri=8026527303&mtpvi=0&iver=2629166321003&!_OBFS_BUYERID=0&bdrs=0&OBFS_EP_STATE=NOT_IN_EXPERIMENT&fistime=32&es=0&vimr=EMPTY&fbscore=17938&!_callingpageid=2047675&swccount=1&itmtitle=Chefman+%E5%8E%8B%E9%93%B8%E7%94%B5%E5%8A%A8%E5%BE%97%E5%8A%9B%2F%E9%A3%9F%E5%93%81%E5%88%87%E7%89%87%E6%9C%BA&cflgs=QAE*&meta=11700&slr=391826031&pymntMethods=PPL%7CVSA%7CMSC%7CAMX%7CDSC&OBFS_STATUS=NOT_REQUIRED&curprice=69.95&attrct=13&virvwcnt=0&rq=e82ae452e93b7b80&bc=0&visbetyp=2&l1=20625&virvwavg=0.0&shipsiteid=0&l2=20667&obfs_listing_is_eligible=true&qtys=1&nw=1&vibis=300&itmcond=1000&!_OBFS_BUYER_VIEWING_SITEID=0&OBFS_NON_OBFUSCATION_REASON=NO_CONTACT_INFO_DETECTED&bs=223&OBFS_ITEMID=133371659323&obfs_desc_has_contactInfo=false&vibisb=1000&vibisd=803X1071&ppfoid=0&qtya=1&pagename=ViewItemPageRaptor&!sh1srv=USD%3A55.989999999999995%5E-1%5E-1%5E2020-05-18T03%3A41%3A36-07%3A00%5E2020-05-28T03%3A41%3A36-07%3A00%5EEXPEDITED%5EInternationalPriorityShipping%5E1%5EUSD%3A19.13%5E1%5E-1%5ECN%5Enull%5E133371659323%5E-1%5E11%5E19&st=9&c=1&vibisbm=1000&g=e849ff051710a4d020811edeff6818ad&rpg=2047675&h=05&leaf=20681&fimbsa=500&!_OBFS_PHONE_COUNT=0&p=2047675&iimp=0&cp_usd=69.95&fdp=99&swcembg=true&t=0&srv=0&nofp=2&!_OBFS_EMAIL_COUNT=0&pn=2&qtrmn=0&dc=45&ciid=Sf8FAgg*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De82ae452e93b7b80%26node_id%3D2b3a22d3f8969716%26REQUEST_GUID%3D171e849f-efe0-a4d0-2081-f28bff921565%26logid%3Dt6ulcpjqcj9%253Ftilsobtlrbn%2528075141-vrubqst-whh-%2560dfz%252Behn-171e849ff11-0x170&TPool=r1viewitem&TDuration=669&TStatus=0&TType=URL&ContentLength=0&ForwardedFor=162.14.22.99, 23.33.94.197,23.200.238.206&Script=/itm&Server=www.ebay.com&TMachine=10.77.2.8&TStamp=21:41:35.74&TName=ViewItemPageRaptor&Agent=Mozilla/5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50&RemoteIP=162.14.22.99&Encoding=gzip"));
+    ubiEvent.setUrlQueryString(
+        "/itm/133371659323");
+    ubiEvent.setPageName("ViewItemPageRaptor");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(133371659323L);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    sessionMetrics.init();
+    sessionMetrics.start(sessionAccumulator);
+    for (UbiEvent event : ubiEventList) {
+      sessionMetrics.feed(event, sessionAccumulator);
+    }
+    sessionMetrics.end(sessionAccumulator);
+    Assert.assertEquals(12, sessionAccumulator.getUbiSession().getTrafficSrcId());
+  }
+
+  @Test
+  public void test_TrafficSourceMetric15() throws Exception {
+
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("batchguidf51ccbc84bf64506b2de3c2");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2369663);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 22:04:48.006")));
+    ubiEvent.setRemoteIP(null);
+    ubiEvent.setRequestCorrelationId("c848d436e7f8ddc0");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dqkisqn47pse31%285262%3F4-vrubqst-whh-%60dfz%2Behn-171e85f3d87-0x1d6");
+    ubiEvent.setEventFamily("MLSG");
+    ubiEvent.setEventAction("EMIT");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP(null);
+    ubiEvent.setAgentInfo(null);
+    ubiEvent.setCobrand(0);
+    ubiEvent.setCurrentImprId(998802406751L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer(null);
+    ubiEvent.setApplicationPayload(
+        "nqc=AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAACAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAGA&flgs=AA**&mlCondition=1000&mlFpMinBinPrice=4.51&mlLeaf1Cat=33164&nqt=AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAACAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIACAAQABAAAAAAGAAACA&mlUserId=origUserId%3DorigAcctId%3D0&mlEpid=18035256422&mlGuid=guid%3Dbatchguidf51ccbc84bf64506b2de3c2%2Cpageid%3D0&mlFixedPrice=6.95&ec=1&pagename=invmlsvc__DefaultPage&efam=MLSG&mlAppId=56507&g=batchguidf51ccbc84bf64506b2de3c2&h=null&mlItmTitle=CND+Shellac+Luxe+Decadence+12.5ml&mlInvocationId=batchguidf51ccbc84bf64506b2de3c2&es=0&p=2369663&dsktop=true&mlFpConf=0.5695012914728708&t=0&mlFpMaxBinPrice=8.14&cflgs=AA**&!mlReqGuidance=FIXED_PRICE&eactn=EMIT&rq=c848d436e7f8ddc0&ciid=Xz1Djeg*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De2395f499d68bd2f%26node_id%3D653d16cb1f20e227%26REQUEST_GUID%3D171e85f3-d840-a488-de82-5b26e4bfa586%26logid%3Dt6wwm53vpd77%253C%253Dqkisqn47pse31%25285262%253F4-vrubqst-whh-%2560dfz%252Behn-171e85f3d87-0x1d6%26cal_mod%3Dfalse&TPool=r1invmlsvc46&TDuration=1&TStatus=0&TType=URL&ContentLength=1301&Script=/trk20svc/TrackingResource/v1&TMachine=10.72.141.232&TStamp=22:04:48.00&TName=Ginger.CollectionSvc.track"));
+    ubiEvent.setUrlQueryString(
+        "/trk20svc/TrackingResource/v1/track");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    sessionMetrics.init();
+    sessionMetrics.start(sessionAccumulator);
+    for (UbiEvent event : ubiEventList) {
+      sessionMetrics.feed(event, sessionAccumulator);
+    }
+    sessionMetrics.end(sessionAccumulator);
+    Assert.assertEquals(12, sessionAccumulator.getUbiSession().getTrafficSrcId());
+  }
+
+  @Test
+  public void test_TrafficSourceMetric16() throws Exception {
+
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("342b9b1a16f0a4d34ed02cdbff9e987d");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(1605052);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 20:59:06.472")));
+    ubiEvent.setRemoteIP("91.11.93.188");
+    ubiEvent.setRequestCorrelationId("37c09fca40ec2063");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ctofthu%60t*0102005%29pqtfwpu%29pie%29fgg%7E-fij-171e82318f2-0x10f");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("91.11.93.188");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Linux; Android 7.1.1; SM-T555 Build/NMF26X; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/81.0.4044.117 Safari/537.36 [FB_IAB/FB4A;FBAV/268.1.0.54.121;]");
+    ubiEvent.setCobrand(9);
+    ubiEvent.setCurrentImprId(170539423779L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.de");
+    ubiEvent.setApplicationPayload(
+        "c=1&g=342b9b1a16f0a4d34ed02cdbff9e987d&rurl=http%25253A%25252F%25252Fm.facebook.com%25252F&h=1a&px=4249&js=1&chnl=9&n=342bb2d516f0aad33664a23fff8bec91&uc=77&p=1605052&uaid=e82318eb1710a99b427789f9c3281140S0&bs=77&catid=223&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2Fs-autoteile-reifen%2Fmannheim%2Fc223l7971%3Forigin%3DDELETED_AD%26utm_source%3Dsharesheet%26utm_medium%3Dsocial%26utm_campaign%3Dsocialbuttons%26utm_content%3Dapp_android&r=1831914225&t=77®=Mannheim%2520-%2520Baden-W%25C3%25BCrttemberg&cflgs=EA**&ul=de-DE&pn=2&rq=37c09fca40ec2063&pagename=http://kleinanzeigen.ebay.de/anzeigen/s-suchen.html&ciid=IxjxtCc*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D37c09fca40ec2063%26node_id%3Dcdbe51c977cd747a%26REQUEST_GUID%3D171e8231-8e80-a99b-4276-8bace04a21b9%26logid%3Dt6qjpbq%253F%253Ctofthu%2560t%2A0102005%2529pqtfwpu%2529pie%2529fgg%257E-fij-171e82318f2-0x10f%26cal_mod%3Dfalse&TPool=r1rover&TDuration=12&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=91.11.93.188, 2.21.133.197&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.153.180.39&TStamp=20:59:06.47&TName=roverimp_INTL&Agent=Mozilla/5.0 (Linux; Android 7.1.1; SM-T555 Build/NMF26X; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/81.0.4044.117 Safari/537.36 [FB_IAB/FB4A;FBAV/268.1.0.54.121;]&RemoteIP=91.11.93.188&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/s-autoteile-reifen/mannheim/c223l7971?origin=DELETED_AD&utm_source=sharesheet&utm_medium=social&utm_campaign=socialbuttons&utm_content=app_android"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=reg%3DMannheim%2520-%2520Baden-W%25C3%25BCrttemberg%26catid%3D223%26rurl%3Dhttp%25253A%25252F%25252Fm.facebook.com%25252F&mpt=1588737545925&imp=1605052");
+    ubiEvent.setPageName("roverimp_INTL");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(77);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(1831914225L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay-kleinanzeigen.de/s-autoteile-reifen/mannheim/c223l7971?origin=DELETED_AD&utm_source=sharesheet&utm_medium=social&utm_campaign=socialbuttons&utm_content=app_android");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("342b9b1a16f0a4d34ed02cdbff9e987d");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(1605052);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 21:00:25.907")));
+    ubiEvent.setRemoteIP("91.11.93.188");
+    ubiEvent.setRequestCorrelationId("237b84fd8e8d9a85");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ctofthu%60t*0106617%29pqtfwpu%29pie%29fgg%7E-fij-171e8244f3f-0x1a1");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("91.11.93.188");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (Linux; Android 7.1.1; SM-T555 Build/NMF26X; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/81.0.4044.117 Safari/537.36 [FB_IAB/FB4A;FBAV/268.1.0.54.121;]");
+    ubiEvent.setCobrand(9);
+    ubiEvent.setCurrentImprId(117645987620L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.de");
+    ubiEvent.setApplicationPayload(
+        "c=1&g=342b9b1a16f0a4d34ed02cdbff9e987d&rurl=http%25253A%25252F%25252Fm.facebook.com%25252F&h=1a&px=4249&js=1&chnl=9&n=342bb2d516f0aad33664a23fff8bec91&uc=77&p=1605052&uaid=e8244f371710abc641b12b4ec2c14f53S0&bs=77&catid=223&ref=https%3A%2F%2Fwww.ebay-kleinanzeigen.de%2Fs-autoteile-reifen%2Fmannheim%2Fc223l7971%3Forigin%3DDELETED_AD%26utm_source%3Dsharesheet%26utm_medium%3Dsocial%26utm_campaign%3Dsocialbuttons%26utm_content%3Dapp_android&r=1831914225&t=77®=Mannheim%2520-%2520Baden-W%25C3%25BCrttemberg&cflgs=EA**&ul=de-DE&pn=2&rq=237b84fd8e8d9a85&pagename=http://kleinanzeigen.ebay.de/anzeigen/s-suchen.html&ciid=JE8%2FZBs*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D237b84fd8e8d9a85%26node_id%3Da81ef4ccf8e5a898%26REQUEST_GUID%3D171e8244-f330-abc6-41b6-b49fe013420b%26logid%3Dt6qjpbq%253F%253Ctofthu%2560t%2A0106617%2529pqtfwpu%2529pie%2529fgg%257E-fij-171e8244f3f-0x1a1%26cal_mod%3Dfalse&TPool=r1rover&TDuration=14&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=91.11.93.188, 2.21.133.197&Script=/roverimp/0/0/9&Server=rover.ebay.de&TMachine=10.188.100.27&TStamp=21:00:25.90&TName=roverimp_INTL&Agent=Mozilla/5.0 (Linux; Android 7.1.1; SM-T555 Build/NMF26X; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/81.0.4044.117 Safari/537.36 [FB_IAB/FB4A;FBAV/268.1.0.54.121;]&RemoteIP=91.11.93.188&Encoding=gzip&Referer=https://www.ebay-kleinanzeigen.de/s-autoteile-reifen/mannheim/c223l7971?origin=DELETED_AD&utm_source=sharesheet&utm_medium=social&utm_campaign=socialbuttons&utm_content=app_android"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/9?trknvp=reg%3DMannheim%2520-%2520Baden-W%25C3%25BCrttemberg%26catid%3D223%26rurl%3Dhttp%25253A%25252F%25252Fm.facebook.com%25252F&mpt=1588737625397&imp=1605052");
+    ubiEvent.setPageName("roverimp_INTL");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(77);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(1831914225L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay-kleinanzeigen.de/s-autoteile-reifen/mannheim/c223l7971?origin=DELETED_AD&utm_source=sharesheet&utm_medium=social&utm_campaign=socialbuttons&utm_content=app_android");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    sessionMetrics.init();
+    sessionMetrics.start(sessionAccumulator);
+    for (UbiEvent event : ubiEventList) {
+      sessionMetrics.feed(event, sessionAccumulator);
+    }
+    sessionMetrics.end(sessionAccumulator);
+    Assert.assertEquals(22, sessionAccumulator.getUbiSession().getTrafficSrcId());
+  }
+
+  @Test
+  public void test_TrafficSourceMetric17() throws Exception {
+
+    // 1
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("c6621823167bfe71e16f8e5001055762");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2051248);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 20:06:45.851")));
+    ubiEvent.setRemoteIP("10.211.141.235");
+    ubiEvent.setRequestCorrelationId("4b203ea75ca99fab");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*517%3E46%28twwgsvv%28umj%28bad%7F%29%60jk-171e7f3b94f-0x157696a");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("10.211.141.235");
+    ubiEvent.setAgentInfo("eBayAndroid/5.15.0.20");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(288405567987L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "tz=5.5&lv=1&dn=ANE-LX1&ist=0&tzname=Asia%2FKolkata&uc=1&mos=Android&bs=0&uaid=e7f3b94f1710a4d26432b619985cb433S0&memsz=2048.0&osv=9&ul=en-US&mtsts=2020-05-05T20%3A06%3A45.851&pagename=Foreground&app=2571&res=1080x2060&c=1&mav=5.15.0&g=c6621823167bfe71e16f8e5001055762&h=23&reqts=1588734441798&cguidsrc=cookie&n=ddbdb8c51700a9cd62471b77f67bb112&ort=p&p=2051248&ttp=Page&mnt=WIFI&carrier=wifi&t=203&prefl=en_GB&cflgs=EA**&ids=MP&mrollp=29&gadid=87b0c09c-6275-47ff-91fd-2829510145e4%2C1&mppid=0&androidid=49aa5023a9867212&pcguid=ddbdb8c51700a9cd62471b77f67bb112&pn=2&rq=4b203ea75ca99fab&ciid=87lPJkM*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D4b203ea75ca99fab%26node_id%3D67c30a68ac34d624%26REQUEST_GUID%3D171e7f3b-94e0-a4d2-6433-dde5c76086e8%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A517%253E46%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7f3b94f-0x157696a%26cal_mod%3Dfalse&TPool=r1rover&TDuration=4&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=10.211.16.16&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.77.38.67&TStamp=20:07:21.80&TName=roverimp&Agent=eBayAndroid/5.15.0.20&RemoteIP=10.211.141.235"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&imp=2051248&lv=udid%3Dc6621823167bfe71e16f8e5001055762%26ai%3D2571%26mav%3D5.15.0%26site%3D203%26memsz%3D2048.0%26res%3D1080x2060%26mrollp%3D29%26c%3D1%26ids%3DMP%26osv%3D9%26mnt%3DWIFI%26prefl%3Den_GB%26ist%3D0%26tzname%3DAsia%2FKolkata%26androidid%3D49aa5023a9867212%26reqts%3D1588734441798%26tz%3D5.5%26mos%3DAndroid%26ort%3Dp%26carrier%3Dwifi%26gadid%3D87b0c09c-6275-47ff-91fd-2829510145e4%2C1%26dn%3DANE-LX1%26dpi%3D435.428x432.179%26mppid%3D0%26ttp%3DPage%26mtsts%3D2020-05-05T20%3A06%3A45.851");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(203);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    // 2
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("c6621823167bfe71e16f8e5001055762");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(3084);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 21:10:53.903")));
+    ubiEvent.setRemoteIP("10.195.199.95");
+    ubiEvent.setRequestCorrelationId("24a385c4c9cdc305");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*hf%7Cig%28rbpv6710-171e82de450-0x120");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("10.195.199.95");
+    ubiEvent.setAgentInfo("eBayAndroid/5.15.0.20");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(55168787501L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "app=2571&c=1&g=c6621823167bfe71e16f8e5001055762&nid=&h=23&cguidsrc=cookie&n=ddbdb8c51700a9cd62471b77f67bb112&uc=1&p=3084&uaid=e82de4501710a77d80c3e132fac5c1ddS0&bs=0&rvrid=2410752785839&t=203&cflgs=EA**&ul=en-US&mppid=117&pn=2&pcguid=ddbdb8c51700a9cd62471b77f67bb112&rq=24a385c4c9cdc305&pagename=EntryTracking&ciid=LeRQ2Aw*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D24a385c4c9cdc305%26node_id%3D69def36862fb9b72%26REQUEST_GUID%3D171e82de-44f0-a77d-80c6-af50fd429273%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2Ahf%257Cig%2528rbpv6710-171e82de450-0x120%26cal_mod%3Dfalse&TPool=r1rover&TDuration=26&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=10.156.200.85&Script=/rover/1/0/4&Server=localhost&TMachine=10.119.216.12&TStamp=21:10:53.90&TName=rover&Agent=eBayAndroid/5.15.0.20&RemoteIP=10.195.199.95"));
+    ubiEvent.setUrlQueryString(
+        "/rover/1/0/4?res=1080x2060&memsz=2048.0&mnt=WIFI&prefl=en_GB&tzname=Asia%2FKolkata&androidid=49aa5023a9867212&ort=p&carrier=wifi&dn=ANE-LX1&dpi=435.428x432.179&mtsts=2020-05-05T21%3A10%3A49.675&ctr=0&nrd=1&site=203&mrollp=29&mav=5.15.0&c=2&osv=9&ids=MP&ist=0&udid=c6621823167bfe71e16f8e5001055762&rvrhostname=rover.ebay.com&ai=2571&rvrsite=0&reqts=1588738253895&tz=5.5&rlutype=1&mos=Android&gadid=87b0c09c-6275-47ff-91fd-2829510145e4%2C1&mppid=117");
+    ubiEvent.setPageName("rover");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(203);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    // 3
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("c6621823167bfe71e16f8e5001055762");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2371265);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 20:06:47.085")));
+    ubiEvent.setRemoteIP("10.211.141.235");
+    ubiEvent.setRequestCorrelationId("4b203ea75ca99fab");
+    ubiEvent.setSid("p2047939");
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*517%3E46%28twwgsvv%28umj%28bad%7F%29%60jk-171e7f3b95a-0x997c30f");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("10.211.141.235");
+    ubiEvent.setAgentInfo("eBayAndroid/5.15.0.20");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(288406288883L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "tz=5.5&lv=1&dn=ANE-LX1&ist=0&tzname=Asia%2FKolkata&uc=1&mos=Android&bs=0&uaid=e7f3b95a1710a4d26432b619985cb423S0&memsz=2048.0&osv=9&ul=en-US&mtsts=2020-05-05T20%3A06%3A47.085&pagename=HomeCards&app=2571&res=1080x2060&c=3&mav=5.15.0&g=c6621823167bfe71e16f8e5001055762&h=23&reqts=1588734441799&cguidsrc=cookie&n=ddbdb8c51700a9cd62471b77f67bb112&ort=p&p=2371265&ttp=Page&mnt=WIFI&carrier=wifi&t=203&prefl=en_GB&cflgs=EA**&ids=MP&mrollp=29&gadid=87b0c09c-6275-47ff-91fd-2829510145e4%2C1&mppid=0&androidid=49aa5023a9867212&pcguid=ddbdb8c51700a9cd62471b77f67bb112&pn=2&rq=4b203ea75ca99fab&ciid=87laJkM*&sid=p2047939");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D4b203ea75ca99fab%26node_id%3D9e19ce8f3996d9cd%26REQUEST_GUID%3D171e7f3b-9590-a4d2-6433-dde5c76086e0%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A517%253E46%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7f3b95a-0x997c30f%26cal_mod%3Dfalse&TPool=r1rover&TDuration=3&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=10.211.16.16&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.77.38.67&TStamp=20:07:21.81&TName=roverimp&Agent=eBayAndroid/5.15.0.20&RemoteIP=10.211.141.235"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&imp=2371265&lv=udid%3Dc6621823167bfe71e16f8e5001055762%26ai%3D2571%26mav%3D5.15.0%26site%3D203%26memsz%3D2048.0%26res%3D1080x2060%26mrollp%3D29%26c%3D3%26ids%3DMP%26osv%3D9%26mnt%3DWIFI%26prefl%3Den_GB%26ist%3D0%26tzname%3DAsia%2FKolkata%26androidid%3D49aa5023a9867212%26reqts%3D1588734441799%26tz%3D5.5%26mos%3DAndroid%26ort%3Dp%26carrier%3Dwifi%26gadid%3D87b0c09c-6275-47ff-91fd-2829510145e4%2C1%26dn%3DANE-LX1%26dpi%3D435.428x432.179%26mppid%3D0%26ttp%3DPage%26mtsts%3D2020-05-05T20%3A06%3A47.085&_trksid=p2047939");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(203);
+    ubiEvent.setClickId(3);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    // 4
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("c6621823167bfe71e16f8e5001055762");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2051248);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 21:10:51.909")));
+    ubiEvent.setRemoteIP("10.156.85.171");
+    ubiEvent.setRequestCorrelationId("5e7c1ac387b43996");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ckuvthu%60t*0%3D00463-171e82de7cd-0x1a8");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("10.156.85.171");
+    ubiEvent.setAgentInfo("eBayAndroid/5.15.0.20");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(417430628141L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "tz=5.5&lv=1&dn=ANE-LX1&ist=0&tzname=Asia%2FKolkata&uc=1&mlocerr=1&mos=Android&bs=0&uaid=e82de7cd1710aaa30613aabec1647ce3S0&mlocset=0&memsz=2048.0&osv=9&ul=en-US&mtsts=2020-05-05T21%3A10%3A51.909&apn=1&pagename=Foreground&app=2571&res=1080x2060&c=1&mav=5.15.0&mtsgitcommit=d6b703b28b7c71bdb516eedb3d62a9c832dfa163&g=c6621823167bfe71e16f8e5001055762&h=23&reqts=1588738254787&cguidsrc=cookie&n=ddbdb8c51700a9cd62471b77f67bb112&ort=p&p=2051248&ttp=Page&mnt=WIFI&carrier=wifi&t=203&prefl=en_GB&cflgs=EA**&ids=MP&mrollp=29&gadid=87b0c09c-6275-47ff-91fd-2829510145e4%2C1&mppid=0&androidid=49aa5023a9867212&pcguid=ddbdb8c51700a9cd62471b77f67bb112&pn=2&rq=5e7c1ac387b43996&ciid=LefNMGE*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D5e7c1ac387b43996%26node_id%3D7e56b1ed05a20cc4%26REQUEST_GUID%3D171e82de-7cb0-aaa3-0612-e71bdea2d36a%26logid%3Dt6qjpbq%253F%253Ckuvthu%2560t%2A0%253D00463-171e82de7cd-0x1a8%26cal_mod%3Dfalse&TPool=r1rover&TDuration=4&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=10.156.197.55&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.170.48.97&TStamp=21:10:54.79&TName=roverimp&Agent=eBayAndroid/5.15.0.20&RemoteIP=10.156.85.171"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&imp=2051248&lv=udid%3Dc6621823167bfe71e16f8e5001055762%26ai%3D2571%26mav%3D5.15.0%26site%3D203%26memsz%3D2048.0%26res%3D1080x2060%26mrollp%3D29%26c%3D1%26ids%3DMP%26osv%3D9%26mnt%3DWIFI%26mtsgitcommit%3Dd6b703b28b7c71bdb516eedb3d62a9c832dfa163%26prefl%3Den_GB%26ist%3D0%26tzname%3DAsia%2FKolkata%26mlocerr%3D1%26androidid%3D49aa5023a9867212%26reqts%3D1588738254787%26tz%3D5.5%26mos%3DAndroid%26mlocset%3D0%26ort%3Dp%26carrier%3Dwifi%26gadid%3D87b0c09c-6275-47ff-91fd-2829510145e4%2C1%26dn%3DANE-LX1%26dpi%3D435.428x432.179%26apn%3D1%26mppid%3D0%26ttp%3DPage%26mtsts%3D2020-05-05T21%3A10%3A51.909");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(203);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    // 5
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("c6621823167bfe71e16f8e5001055762");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2047939);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 20:06:47.124")));
+    ubiEvent.setRemoteIP("10.211.141.235");
+    ubiEvent.setRequestCorrelationId("4b203ea75ca99fab");
+    ubiEvent.setSid("p2051248");
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*517%3E46%28twwgsvv%28umj%28bad%7F%29%60jk-171e7f3b956-0x116");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("10.211.141.235");
+    ubiEvent.setAgentInfo("eBayAndroid/5.15.0.20");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(288406026739L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "tz=5.5&lv=1&dn=ANE-LX1&ist=0&tzname=Asia%2FKolkata&uc=1&mos=Android&bs=0&uaid=e7f3b9561710a4d26432b619985cb42bS0&memsz=2048.0&osv=9&ul=en-US&mtsts=2020-05-05T20%3A06%3A47.124&pagename=HomePage&app=2571&res=1080x2060&c=2&mav=5.15.0&g=c6621823167bfe71e16f8e5001055762&h=23&reqts=1588734441798&cguidsrc=cookie&n=ddbdb8c51700a9cd62471b77f67bb112&ort=p&p=2047939&ttp=Page&mnt=WIFI&carrier=wifi&t=203&prefl=en_GB&cflgs=EA**&ids=MP&mrollp=29&gadid=87b0c09c-6275-47ff-91fd-2829510145e4%2C1&mppid=0&androidid=49aa5023a9867212&pcguid=ddbdb8c51700a9cd62471b77f67bb112&pn=2&rq=4b203ea75ca99fab&ciid=87lWJkM*&sid=p2051248");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D4b203ea75ca99fab%26node_id%3De78793aecf60e488%26REQUEST_GUID%3D171e7f3b-9550-a4d2-6433-dde5c76086e5%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A517%253E46%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7f3b956-0x116%26cal_mod%3Dfalse&TPool=r1rover&TDuration=3&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=10.211.16.16&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.77.38.67&TStamp=20:07:21.81&TName=roverimp&Agent=eBayAndroid/5.15.0.20&RemoteIP=10.211.141.235"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&imp=2047939&lv=udid%3Dc6621823167bfe71e16f8e5001055762%26ai%3D2571%26mav%3D5.15.0%26site%3D203%26memsz%3D2048.0%26res%3D1080x2060%26mrollp%3D29%26c%3D2%26ids%3DMP%26osv%3D9%26mnt%3DWIFI%26prefl%3Den_GB%26ist%3D0%26tzname%3DAsia%2FKolkata%26androidid%3D49aa5023a9867212%26reqts%3D1588734441798%26tz%3D5.5%26mos%3DAndroid%26ort%3Dp%26carrier%3Dwifi%26gadid%3D87b0c09c-6275-47ff-91fd-2829510145e4%2C1%26dn%3DANE-LX1%26dpi%3D435.428x432.179%26mppid%3D0%26ttp%3DPage%26mtsts%3D2020-05-05T20%3A06%3A47.124&_trksid=p2051248");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(203);
+    ubiEvent.setClickId(2);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    // 6
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("c6621823167bfe71e16f8e5001055762");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2047939);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 21:10:52.592")));
+    ubiEvent.setRemoteIP("10.156.85.171");
+    ubiEvent.setRequestCorrelationId("5e7c1ac387b43996");
+    ubiEvent.setSid("p2051248");
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ckuvthu%60t*0%3D00463-171e82de7d2-0x10c");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("10.156.85.171");
+    ubiEvent.setAgentInfo("eBayAndroid/5.15.0.20");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(417430955821L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "tz=5.5&lv=1&dn=ANE-LX1&ist=0&tzname=Asia%2FKolkata&uc=1&mos=Android&bs=0&uaid=e82de7d21710aaa30613aabec1647ce1S0&memsz=2048.0&osv=9&ul=en-US&mtsts=2020-05-05T21%3A10%3A52.592&pagename=HomePage&app=2571&res=1080x2060&c=2&mav=5.15.0&mtsgitcommit=d6b703b28b7c71bdb516eedb3d62a9c832dfa163&g=c6621823167bfe71e16f8e5001055762&h=23&reqts=1588738254787&cguidsrc=cookie&n=ddbdb8c51700a9cd62471b77f67bb112&ort=p&p=2047939&ttp=Page&mnt=WIFI&carrier=wifi&t=203&prefl=en_GB&cflgs=EA**&ids=MP&mrollp=29&gadid=87b0c09c-6275-47ff-91fd-2829510145e4%2C1&mppid=0&androidid=49aa5023a9867212&pcguid=ddbdb8c51700a9cd62471b77f67bb112&pn=2&rq=5e7c1ac387b43996&ciid=LefSMGE*&sid=p2051248");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D5e7c1ac387b43996%26node_id%3Db23a02efe7b76e03%26REQUEST_GUID%3D171e82de-7d10-aaa3-0612-e71bdea2d369%26logid%3Dt6qjpbq%253F%253Ckuvthu%2560t%2A0%253D00463-171e82de7d2-0x10c%26cal_mod%3Dfalse&TPool=r1rover&TDuration=3&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=10.156.197.55&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.170.48.97&TStamp=21:10:54.80&TName=roverimp&Agent=eBayAndroid/5.15.0.20&RemoteIP=10.156.85.171"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&imp=2047939&lv=udid%3Dc6621823167bfe71e16f8e5001055762%26ai%3D2571%26mav%3D5.15.0%26site%3D203%26memsz%3D2048.0%26res%3D1080x2060%26mrollp%3D29%26c%3D2%26ids%3DMP%26osv%3D9%26mnt%3DWIFI%26mtsgitcommit%3Dd6b703b28b7c71bdb516eedb3d62a9c832dfa163%26prefl%3Den_GB%26ist%3D0%26tzname%3DAsia%2FKolkata%26androidid%3D49aa5023a9867212%26reqts%3D1588738254787%26tz%3D5.5%26mos%3DAndroid%26ort%3Dp%26carrier%3Dwifi%26gadid%3D87b0c09c-6275-47ff-91fd-2829510145e4%2C1%26dn%3DANE-LX1%26dpi%3D435.428x432.179%26mppid%3D0%26ttp%3DPage%26mtsts%3D2020-05-05T21%3A10%3A52.592&_trksid=p2051248");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(203);
+    ubiEvent.setClickId(2);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    // 7
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("c6621823167bfe71e16f8e5001055762");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2050454);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 20:06:46.596")));
+    ubiEvent.setRemoteIP("10.174.236.27");
+    ubiEvent.setRequestCorrelationId("5cfb8711605f6011");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ctofthu%60t*0116455%29pqtfwpu%29pie%29fgg%7E-fij-171e7f3b76c-0x111");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("10.174.236.27");
+    ubiEvent.setAgentInfo("eBayAndroid/5.15.0.20");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(33058240499L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "tz=5.5&lv=1&dn=ANE-LX1&ist=0&rlutype=1&tzname=Asia%2FKolkata&uc=1&mos=Android&bs=0&uaid=e7f3b76c1710a99b2072a130c2f3c892S0&memsz=2048.0&osv=9&ul=en-US&maup=1&mtsts=2020-05-05T20%3A06%3A46.596&pagename=Install&app=2571&res=1080x2060&c=2&mav=5.15.0&g=c6621823167bfe71e16f8e5001055762&h=23&reqts=1588734441309&cguidsrc=cookie&n=ddbdb8c51700a9cd62471b77f67bb112&ort=p&p=2050454&mnt=WIFI&carrier=wifi&t=203&prefl=en_GB&cflgs=EA**&ids=MP&mrollp=29&gadid=87b0c09c-6275-47ff-91fd-2829510145e4%2C1&mppid=117&androidid=49aa5023a9867212&pcguid=ddbdb8c51700a9cd62471b77f67bb112&pn=2&rq=5cfb8711605f6011&ciid=87dssgc*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D5cfb8711605f6011%26node_id%3D802695c9cdce8f40%26REQUEST_GUID%3D171e7f3b-76b0-a99b-2070-dbf0e02cbe9e%26logid%3Dt6qjpbq%253F%253Ctofthu%2560t%2A0116455%2529pqtfwpu%2529pie%2529fgg%257E-fij-171e7f3b76c-0x111%26cal_mod%3Dfalse&TPool=r1rover&TDuration=41&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=10.211.196.118&Script=/roverimp/1/0/4&Server=localhost&TMachine=10.153.178.7&TStamp=20:07:21.32&TName=roverimp&Agent=eBayAndroid/5.15.0.20&RemoteIP=10.174.236.27"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/1/0/4?res=1080x2060&memsz=2048.0&imp=2050454&lv=udid%3Dc6621823167bfe71e16f8e5001055762%26ai%3D2571%26mav%3D5.15.0%26site%3D203%26memsz%3D2048.0%26res%3D1080x2060%26mrollp%3D29%26c%3D2%26osv%3D9%26ids%3DMP%26mnt%3DWIFI%26prefl%3Den_GB%26ist%3D0%26tzname%3DAsia%2FKolkata%26androidid%3D49aa5023a9867212%26reqts%3D1588734441309%26tz%3D5.5%26rlutype%3D1%26maup%3D1%26mos%3DAndroid%26ort%3Dp%26carrier%3Dwifi%26gadid%3D87b0c09c-6275-47ff-91fd-2829510145e4%2C1%26dn%3DANE-LX1%26dpi%3D435.428x432.179%26mppid%3D117%26mtsts%3D2020-05-05T20%3A06%3A46.596&mnt=WIFI&prefl=en_GB&tzname=Asia%2FKolkata&androidid=49aa5023a9867212&maup=1&ort=p&carrier=wifi&dpi=435.428x432.179&dn=ANE-LX1&site=203&mrollp=29&c=2&mav=5.15.0&ids=MP&osv=9&udid=c6621823167bfe71e16f8e5001055762&ist=0&rvrhostname=rover.ebay.com&ai=2571&rvrsite=0&reqts=1588734441309&tz=5.5&rlutype=1&mos=Android&gadid=87b0c09c-6275-47ff-91fd-2829510145e4%2C1&mppid=117");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(203);
+    ubiEvent.setClickId(2);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    // 8
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("c6621823167bfe71e16f8e5001055762");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2050454);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 21:10:52.738")));
+    ubiEvent.setRemoteIP("10.156.85.171");
+    ubiEvent.setRequestCorrelationId("5569074351a0ac5a");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Ckuvthu%60t*0233%3B%3C0%29pqtfwpu%29osu%29fgg%7E-fij-171e82de5fb-0x14b");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("10.156.85.171");
+    ubiEvent.setAgentInfo("eBayAndroid/5.15.0.20");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(451709429037L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "tz=5.5&lv=1&dn=ANE-LX1&ist=0&rlutype=1&tzname=Asia%2FKolkata&uc=1&mos=Android&bs=0&uaid=e82de5fa1710aaa2b6973ca6c670a973S0&memsz=2048.0&osv=9&ul=en-US&maup=1&mtsts=2020-05-05T21%3A10%3A52.738&pagename=Install&app=2571&res=1080x2060&c=3&mav=5.15.0&mtsgitcommit=d6b703b28b7c71bdb516eedb3d62a9c832dfa163&g=c6621823167bfe71e16f8e5001055762&h=23&reqts=1588738254321&cguidsrc=cookie&n=ddbdb8c51700a9cd62471b77f67bb112&ort=p&p=2050454&mnt=WIFI&carrier=wifi&t=203&prefl=en_GB&cflgs=EA**&ids=MP&mrollp=29&gadid=87b0c09c-6275-47ff-91fd-2829510145e4%2C1&mppid=117&androidid=49aa5023a9867212&pcguid=ddbdb8c51700a9cd62471b77f67bb112&pn=2&rq=5569074351a0ac5a&ciid=LeX6K2k*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D5569074351a0ac5a%26node_id%3Da16f3bd6dfee94dc%26REQUEST_GUID%3D171e82de-5fa0-aaa2-b692-62d5e147dcfd%26logid%3Dt6qjpbq%253F%253Ckuvthu%2560t%2A0233%253B%253C0%2529pqtfwpu%2529osu%2529fgg%257E-fij-171e82de5fb-0x14b%26cal_mod%3Dfalse&TPool=r1rover&TDuration=44&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=10.158.128.210&Script=/roverimp/1/0/4&Server=localhost&TMachine=10.170.43.105&TStamp=21:10:54.33&TName=roverimp&Agent=eBayAndroid/5.15.0.20&RemoteIP=10.156.85.171"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/1/0/4?res=1080x2060&memsz=2048.0&imp=2050454&lv=udid%3Dc6621823167bfe71e16f8e5001055762%26ai%3D2571%26mav%3D5.15.0%26site%3D203%26memsz%3D2048.0%26res%3D1080x2060%26mrollp%3D29%26c%3D3%26osv%3D9%26ids%3DMP%26mnt%3DWIFI%26mtsgitcommit%3Dd6b703b28b7c71bdb516eedb3d62a9c832dfa163%26prefl%3Den_GB%26ist%3D0%26tzname%3DAsia%2FKolkata%26androidid%3D49aa5023a9867212%26reqts%3D1588738254321%26tz%3D5.5%26rlutype%3D1%26maup%3D1%26mos%3DAndroid%26ort%3Dp%26carrier%3Dwifi%26gadid%3D87b0c09c-6275-47ff-91fd-2829510145e4%2C1%26dn%3DANE-LX1%26dpi%3D435.428x432.179%26mppid%3D117%26mtsts%3D2020-05-05T21%3A10%3A52.738&mnt=WIFI&prefl=en_GB&tzname=Asia%2FKolkata&androidid=49aa5023a9867212&maup=1&ort=p&carrier=wifi&dpi=435.428x432.179&dn=ANE-LX1&site=203&mrollp=29&c=3&mav=5.15.0&ids=MP&osv=9&udid=c6621823167bfe71e16f8e5001055762&mtsgitcommit=d6b703b28b7c71bdb516eedb3d62a9c832dfa163&ist=0&rvrhostname=rover.ebay.com&ai=2571&rvrsite=0&reqts=1588738254321&tz=5.5&rlutype=1&mos=Android&gadid=87b0c09c-6275-47ff-91fd-2829510145e4%2C1&mppid=117");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(203);
+    ubiEvent.setClickId(3);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    // 9
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("c6621823167bfe71e16f8e5001055762");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(3084);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 20:07:20.813")));
+    ubiEvent.setRemoteIP("10.211.45.181");
+    ubiEvent.setRequestCorrelationId("9c0547ef3aa10337");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*517%3E70%28twwgsvv%28umj%28bad%7F%29%60jk-171e7f3b56e-0x10c");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("10.211.45.181");
+    ubiEvent.setAgentInfo("eBayAndroid/5.15.0.20");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(605681464819L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "app=2571&c=1&g=c6621823167bfe71e16f8e5001055762&nid=&h=23&cguidsrc=cookie&n=ddbdb8c51700a9cd62471b77f67bb112&uc=1&p=3084&uaid=e7f3b56d1710a4d058d1d4a29869c333S0&bs=0&rvrid=2410646535800&t=203&cflgs=EA**&ul=en-US&mppid=117&pn=2&pcguid=ddbdb8c51700a9cd62471b77f67bb112&rq=9c0547ef3aa10337&pagename=EntryTracking&ciid=87VtBY0*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D9c0547ef3aa10337%26node_id%3Ddf6e8688890248db%26REQUEST_GUID%3D171e7f3b-56d0-a4d0-58d1-99bdc76cae77%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A517%253E70%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7f3b56e-0x10c%26cal_mod%3Dfalse&TPool=r1rover&TDuration=34&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=10.77.22.209&Script=/rover/1/0/4&Server=localhost&TMachine=10.77.5.141&TStamp=20:07:20.81&TName=rover&Agent=eBayAndroid/5.15.0.20&RemoteIP=10.211.45.181"));
+    ubiEvent.setUrlQueryString(
+        "/rover/1/0/4?res=1080x2060&memsz=2048.0&mnt=WIFI&prefl=en_GB&tzname=Asia%2FKolkata&androidid=49aa5023a9867212&ort=p&carrier=wifi&dn=ANE-LX1&dpi=435.428x432.179&mtsts=2020-05-05T20%3A06%3A43.704&ctr=0&nrd=1&site=203&mrollp=29&mav=5.15.0&c=1&osv=9&ids=MP&ist=0&udid=c6621823167bfe71e16f8e5001055762&rvrhostname=rover.ebay.com&ai=2571&rvrsite=0&reqts=1588734440810&tz=5.5&rlutype=1&mos=Android&gadid=87b0c09c-6275-47ff-91fd-2829510145e4%2C1&mppid=117");
+    ubiEvent.setPageName("rover");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(203);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    // 10
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("c6621823167bfe71e16f8e5001055762");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2051249);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 21:11:10.264")));
+    ubiEvent.setRemoteIP("10.173.105.59");
+    ubiEvent.setRequestCorrelationId("cd0282b9ec77f893");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*517%3E6%3D%28twwgsvv%28umj%28bad%7F%29%60jk-171e82e2ce0-0x8ede2ca");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("10.173.105.59");
+    ubiEvent.setAgentInfo("eBayAndroid/5.15.0.20");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(635753671726L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "tz=5.5&lv=1&dn=ANE-LX1&ist=0&tzname=Asia%2FKolkata&uc=1&mlocerr=1&mos=Android&bs=0&uaid=e82e2cdf1710a4d05947db4f991efbccS0&mlocset=0&memsz=2048.0&osv=9&ul=en-US&mtsts=2020-05-05T21%3A11%3A10.264&ec=4&apn=1&pagename=Background&app=2571&res=1080x2060&c=4&mav=5.15.0&g=c6621823167bfe71e16f8e5001055762&h=23&reqts=1588738272468&cguidsrc=cookie&n=ddbdb8c51700a9cd62471b77f67bb112&es=203&ort=p&p=2051249&ttp=Page&mnt=WIFI&carrier=wifi&t=203&prefl=en_GB&cflgs=EA**&ids=MP&mrollp=29&gadid=87b0c09c-6275-47ff-91fd-2829510145e4%2C1&mppid=0&androidid=49aa5023a9867212&pcguid=ddbdb8c51700a9cd62471b77f67bb112&pn=2&rq=cd0282b9ec77f893&ciid=LizfBZQ*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Dcd0282b9ec77f893%26node_id%3D0f8010a7a3500009%26REQUEST_GUID%3D171e82e2-cdf0-a4d0-5946-0abac7c3eaa6%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A517%253E6%253D%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e82e2ce0-0x8ede2ca%26cal_mod%3Dfalse&TPool=r1rover&TDuration=3&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=10.156.197.55&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.77.5.148&TStamp=21:11:12.47&TName=roverimp&Agent=eBayAndroid/5.15.0.20&RemoteIP=10.173.105.59"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&trknvpsvc=%3Ca%3Ees%3D203%26ec%3D4%3C%2Fa%3E&imp=2051249&lv=udid%3Dc6621823167bfe71e16f8e5001055762%26ai%3D2571%26mav%3D5.15.0%26site%3D203%26memsz%3D2048.0%26res%3D1080x2060%26mrollp%3D29%26c%3D4%26osv%3D9%26ids%3DMP%26mnt%3DWIFI%26prefl%3Den_GB%26ist%3D0%26tzname%3DAsia%2FKolkata%26mlocerr%3D1%26androidid%3D49aa5023a9867212%26reqts%3D1588738272468%26tz%3D5.5%26mos%3DAndroid%26mlocset%3D0%26ort%3Dp%26carrier%3Dwifi%26gadid%3D87b0c09c-6275-47ff-91fd-2829510145e4%2C1%26dn%3DANE-LX1%26dpi%3D435.428x432.179%26apn%3D1%26mppid%3D0%26ttp%3DPage%26mtsts%3D2020-05-05T21%3A11%3A10.264");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(203);
+    ubiEvent.setClickId(4);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    // 11
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("c6621823167bfe71e16f8e5001055762");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2371265);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 21:10:56.611")));
+    ubiEvent.setRemoteIP("10.173.105.59");
+    ubiEvent.setRequestCorrelationId("cd0282b9ec77f893");
+    ubiEvent.setSid("p2047939");
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*517%3E6%3D%28twwgsvv%28umj%28bad%7F%29%60jk-171e82e2cdc-0x19c");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("10.173.105.59");
+    ubiEvent.setAgentInfo("eBayAndroid/5.15.0.20");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(635753671726L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "tz=5.5&lv=1&dn=ANE-LX1&ist=0&tzname=Asia%2FKolkata&uc=1&mos=Android&bs=0&uaid=e82e2cdc1710a4d05947db4f991efbceS0&memsz=2048.0&osv=9&ul=en-US&mtsts=2020-05-05T21%3A10%3A56.611&ec=4&pagename=HomeCards&app=2571&res=1080x2060&c=3&mav=5.15.0&g=c6621823167bfe71e16f8e5001055762&h=23&reqts=1588738272468&cguidsrc=cookie&n=ddbdb8c51700a9cd62471b77f67bb112&es=203&ort=p&p=2371265&ttp=Page&mnt=WIFI&carrier=wifi&t=203&prefl=en_GB&cflgs=EA**&ids=MP&mrollp=29&gadid=87b0c09c-6275-47ff-91fd-2829510145e4%2C1&mppid=0&androidid=49aa5023a9867212&pcguid=ddbdb8c51700a9cd62471b77f67bb112&pn=2&rq=cd0282b9ec77f893&ciid=LizcBZQ*&sid=p2047939");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Dcd0282b9ec77f893%26node_id%3Da2987ddb63a3cc26%26REQUEST_GUID%3D171e82e2-cdc0-a4d0-5946-0abac7c3eaa7%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A517%253E6%253D%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e82e2cdc-0x19c%26cal_mod%3Dfalse&TPool=r1rover&TDuration=3&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=10.156.197.55&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.77.5.148&TStamp=21:11:12.47&TName=roverimp&Agent=eBayAndroid/5.15.0.20&RemoteIP=10.173.105.59"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&trknvpsvc=%3Ca%3Ees%3D203%26ec%3D4%3C%2Fa%3E&imp=2371265&lv=udid%3Dc6621823167bfe71e16f8e5001055762%26ai%3D2571%26mav%3D5.15.0%26site%3D203%26memsz%3D2048.0%26res%3D1080x2060%26mrollp%3D29%26c%3D3%26osv%3D9%26ids%3DMP%26mnt%3DWIFI%26prefl%3Den_GB%26ist%3D0%26tzname%3DAsia%2FKolkata%26androidid%3D49aa5023a9867212%26reqts%3D1588738272468%26tz%3D5.5%26mos%3DAndroid%26ort%3Dp%26carrier%3Dwifi%26gadid%3D87b0c09c-6275-47ff-91fd-2829510145e4%2C1%26dn%3DANE-LX1%26dpi%3D435.428x432.179%26mppid%3D0%26ttp%3DPage%26mtsts%3D2020-05-05T21%3A10%3A56.611&_trksid=p2047939");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(203);
+    ubiEvent.setClickId(3);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    sessionMetrics.init();
+    sessionMetrics.start(sessionAccumulator);
+    for (UbiEvent event : ubiEventList) {
+      sessionMetrics.feed(event, sessionAccumulator);
+    }
+    sessionMetrics.end(sessionAccumulator);
+    Assert.assertEquals(14, sessionAccumulator.getUbiSession().getTrafficSrcId());
+  }
+
+  @Test
+  public void test_TrafficSourceMetric18() throws Exception {
+
+    // 1
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("9d531d97170aaad5f2b032300104c1bd");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2367320);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:40:14.144")));
+    ubiEvent.setRemoteIP("10.153.189.142");
+    ubiEvent.setRequestCorrelationId("0915531b9779ee47");
+    ubiEvent.setSid("p2051248");
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*517%3F%3B2%28twwgsvv%28umj%28bad%7F%29%60jk-171e7a4899c-0x19e2155");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("68.53.26.66");
+    ubiEvent.setAgentInfo("eBayAndroid/6.0.1.15");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(765202303396L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "nqc=UAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*&tz=-5.0&nid=587821589072&lv=1&dn=SM-G975U&ist=0&uc=1&mos=Android&nqt=UAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*&uaid=e7a4899c1710ad329b276d299e431dc0S0&osv=10&ul=en-US&mtsts=2020-05-05T18%3A40%3A14.144&ec=4&navp=user.saved_searches&app=2571&res=1080x2029&cguidsrc=cookie&es=0&cflgs=EA**&ids=MP%253Dmarines1624&designsystem=6&mppid=0&mrollp=62&gadid=b1f485c6-ea40-482b-8548-aa94728ab48d%2C0&naid=GO_TO_SAVED_SEARCHES&androidid=242e1919bddc9378&pcguid=9d5323d01700ad4d14769f4ce029570f&rq=0915531b9779ee47&user_name=marines1624&tzname=America%2FChicago&bs=0&memsz=4096.0&!xt=59341&pagename=DeepLinkAction&uit=1583189780000&c=4&mav=6.0.1&g=9d531d97170aaad5f2b032300104c1bd&deeplink=ebay%253A%252F%252Flink%252F%253Fnav%253Duser.saved_searches%2526isnotif%253D1&h=97&reqts=1588729252243&ntype=SVDSRCH_SINGLE&n=9d5323d01700ad4d14769f4ce029570f&ort=p&p=2367320&ttp=Page&carrier=Xfinity+Mobile+Wi-Fi+Calling&mnt=WIFI&t=0&u=1012482381&prefl=en_US&pn=2&ciid=pImcKbI*&sid=p2051248");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D0915531b9779ee47%26node_id%3Dd4ae47a8eada9b0f%26REQUEST_GUID%3D171e7a48-99b0-ad32-9b26-ea1aca942efd%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A517%253F%253B2%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7a4899c-0x19e2155%26cal_mod%3Dfalse&TPool=r1rover&TDuration=3&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=68.53.26.66&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.211.41.178&TStamp=18:40:52.25&TName=roverimp&Agent=eBayAndroid/6.0.1.15&RemoteIP=10.153.189.142"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&trknvpsvc=%3Ca%3Ees%3D0%26nqc%3DUAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*%26nqt%3DUAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*%26ec%3D4%26uit%3D1583189780000%3C%2Fa%3E&imp=2367320&lv=udid%3D9d531d97170aaad5f2b032300104c1bd%26ai%3D2571%26mav%3D6.0.1%26site%3D0%26ou%3DnY%252BsHZ2PrBmdj6wVnY%252BsEZ2PrA2dj6AEkYClAJKBqQ2dj6x9nY%252BseQ**%26res%3D1080x2029%26memsz%3D4096.0%26designsystem%3D6%26mnt%3DWIFI%26prefl%3Den_US%26tzname%3DAmerica%2FChicago%26androidid%3D242e1919bddc9378%26ntype%3DSVDSRCH_SINGLE%26ort%3Dp%26carrier%3DXfinity+Mobile+Wi-Fi+Calling%26naid%3DGO_TO_SAVED_SEARCHES%26dpi%3D391.8855x391.29675%26dn%3DSM-G975U%26navp%3Duser.saved_searches%26mrollp%3D62%26c%3D4%26ids%3DMP%253Dmarines1624%26osv%3D10%26nid%3D587821589072%26dlsource%3Dntray%26ist%3D0%26%21xt%3D59341%26user_name%3Dmarines1624%26reqts%3D1588729252243%26tz%3D-5.0%26mos%3DAndroid%26deeplink%3Debay%253A%252F%252Flink%252F%253Fnav%253Duser.saved_searches%2526isnotif%253D1%26gadid%3Db1f485c6-ea40-482b-8548-aa94728ab48d%2C0%26mppid%3D0%26ttp%3DPage%26mtsts%3D2020-05-05T18%3A40%3A14.144&_trksid=p2051248");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(4);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("1012482381");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    // 2
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("9d531d97170aaad5f2b032300104c1bd");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2367320);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:40:14.144")));
+    ubiEvent.setRemoteIP("10.153.189.142");
+    ubiEvent.setRequestCorrelationId("0915531b9779ee47");
+    ubiEvent.setSid("p2051248");
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*517%3F%3B2%28twwgsvv%28umj%28bad%7F%29%60jk-171e7a4899c-0x19e2155");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("68.53.26.66");
+    ubiEvent.setAgentInfo("eBayAndroid/6.0.1.15");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(765202303396L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "nqc=UAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*&tz=-5.0&nid=587821589072&lv=1&dn=SM-G975U&ist=0&uc=1&mos=Android&nqt=UAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*&uaid=e7a4899c1710ad329b276d299e431dc0S0&osv=10&ul=en-US&mtsts=2020-05-05T18%3A40%3A14.144&ec=4&navp=user.saved_searches&app=2571&res=1080x2029&cguidsrc=cookie&es=0&cflgs=EA**&ids=MP%253Dmarines1624&designsystem=6&mppid=0&mrollp=62&gadid=b1f485c6-ea40-482b-8548-aa94728ab48d%2C0&naid=GO_TO_SAVED_SEARCHES&androidid=242e1919bddc9378&pcguid=9d5323d01700ad4d14769f4ce029570f&rq=0915531b9779ee47&user_name=marines1624&tzname=America%2FChicago&bs=0&memsz=4096.0&!xt=59341&pagename=DeepLinkAction&uit=1583189780000&c=4&mav=6.0.1&g=9d531d97170aaad5f2b032300104c1bd&deeplink=ebay%253A%252F%252Flink%252F%253Fnav%253Duser.saved_searches%2526isnotif%253D1&h=97&reqts=1588729252243&ntype=SVDSRCH_SINGLE&n=9d5323d01700ad4d14769f4ce029570f&ort=p&p=2367320&ttp=Page&carrier=Xfinity+Mobile+Wi-Fi+Calling&mnt=WIFI&t=0&u=1012482381&prefl=en_US&pn=2&ciid=pImcKbI*&sid=p2051248");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D0915531b9779ee47%26node_id%3Dd4ae47a8eada9b0f%26REQUEST_GUID%3D171e7a48-99b0-ad32-9b26-ea1aca942efd%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A517%253F%253B2%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7a4899c-0x19e2155%26cal_mod%3Dfalse&TPool=r1rover&TDuration=3&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=68.53.26.66&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.211.41.178&TStamp=18:40:52.25&TName=roverimp&Agent=eBayAndroid/6.0.1.15&RemoteIP=10.153.189.142"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&trknvpsvc=%3Ca%3Ees%3D0%26nqc%3DUAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*%26nqt%3DUAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*%26ec%3D4%26uit%3D1583189780000%3C%2Fa%3E&imp=2367320&lv=udid%3D9d531d97170aaad5f2b032300104c1bd%26ai%3D2571%26mav%3D6.0.1%26site%3D0%26ou%3DnY%252BsHZ2PrBmdj6wVnY%252BsEZ2PrA2dj6AEkYClAJKBqQ2dj6x9nY%252BseQ**%26res%3D1080x2029%26memsz%3D4096.0%26designsystem%3D6%26mnt%3DWIFI%26prefl%3Den_US%26tzname%3DAmerica%2FChicago%26androidid%3D242e1919bddc9378%26ntype%3DSVDSRCH_SINGLE%26ort%3Dp%26carrier%3DXfinity+Mobile+Wi-Fi+Calling%26naid%3DGO_TO_SAVED_SEARCHES%26dpi%3D391.8855x391.29675%26dn%3DSM-G975U%26navp%3Duser.saved_searches%26mrollp%3D62%26c%3D4%26ids%3DMP%253Dmarines1624%26osv%3D10%26nid%3D587821589072%26dlsource%3Dntray%26ist%3D0%26%21xt%3D59341%26user_name%3Dmarines1624%26reqts%3D1588729252243%26tz%3D-5.0%26mos%3DAndroid%26deeplink%3Debay%253A%252F%252Flink%252F%253Fnav%253Duser.saved_searches%2526isnotif%253D1%26gadid%3Db1f485c6-ea40-482b-8548-aa94728ab48d%2C0%26mppid%3D0%26ttp%3DPage%26mtsts%3D2020-05-05T18%3A40%3A14.144&_trksid=p2051248");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(4);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("1012482381");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    // 3
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("9d531d97170aaad5f2b032300104c1bd");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2050466);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:40:14.262")));
+    ubiEvent.setRemoteIP("10.153.189.142");
+    ubiEvent.setRequestCorrelationId("0915531b9779ee47");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*517%3F%3B2%28twwgsvv%28umj%28bad%7F%29%60jk-171e7a489a0-0x6fc33a4");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("68.53.26.66");
+    ubiEvent.setAgentInfo("eBayAndroid/6.0.1.15");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(765202500004L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "nqc=UAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*&user_name=marines1624&tz=-5.0&lv=1&dn=SM-G975U&ist=0&tzname=America%2FChicago&uc=1&nqt=UAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*&mos=Android&bs=0&uaid=e7a4899f1710ad329b276d299e431db8S0&memsz=4096.0&osv=10&ul=en-US&mtsts=2020-05-05T18%3A40%3A14.262&!xt=59341&ec=4&pagename=SearchResultsFromSSNotification&app=2571&res=1080x2029&uit=1583189780000&c=5&mav=6.0.1&g=9d531d97170aaad5f2b032300104c1bd&h=97&reqts=1588729252243&cguidsrc=cookie&n=9d5323d01700ad4d14769f4ce029570f&es=0&ort=p&p=2050466&ttp=Page&mnt=WIFI&carrier=Xfinity+Mobile+Wi-Fi+Calling&t=0&u=1012482381&prefl=en_US&cflgs=EA**&ids=MP%253Dmarines1624&designsystem=6&mrollp=62&gadid=b1f485c6-ea40-482b-8548-aa94728ab48d%2C0&mppid=0&androidid=242e1919bddc9378&pcguid=9d5323d01700ad4d14769f4ce029570f&pn=2&rq=0915531b9779ee47&ciid=pImfKbI*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D0915531b9779ee47%26node_id%3Dcebd4e49be3d1fa8%26REQUEST_GUID%3D171e7a48-99f0-ad32-9b26-ea1aca942ef9%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A517%253F%253B2%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7a489a0-0x6fc33a4%26cal_mod%3Dfalse&TPool=r1rover&TDuration=2&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=68.53.26.66&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.211.41.178&TStamp=18:40:52.25&TName=roverimp&Agent=eBayAndroid/6.0.1.15&RemoteIP=10.153.189.142"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&trknvpsvc=%3Ca%3Ees%3D0%26nqc%3DUAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*%26nqt%3DUAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*%26ec%3D4%26uit%3D1583189780000%3C%2Fa%3E&imp=2050466&lv=udid%3D9d531d97170aaad5f2b032300104c1bd%26ai%3D2571%26mav%3D6.0.1%26site%3D0%26ou%3DnY%252BsHZ2PrBmdj6wVnY%252BsEZ2PrA2dj6AEkYClAJKBqQ2dj6x9nY%252BseQ**%26memsz%3D4096.0%26res%3D1080x2029%26mrollp%3D62%26designsystem%3D6%26c%3D5%26osv%3D10%26ids%3DMP%253Dmarines1624%26mnt%3DWIFI%26ist%3D0%26prefl%3Den_US%26%21xt%3D59341%26tzname%3DAmerica%2FChicago%26user_name%3Dmarines1624%26androidid%3D242e1919bddc9378%26reqts%3D1588729252243%26tz%3D-5.0%26mos%3DAndroid%26ort%3Dp%26carrier%3DXfinity+Mobile+Wi-Fi+Calling%26gadid%3Db1f485c6-ea40-482b-8548-aa94728ab48d%2C0%26dn%3DSM-G975U%26dpi%3D391.8855x391.29675%26mppid%3D0%26ttp%3DPage%26mtsts%3D2020-05-05T18%3A40%3A14.262");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(5);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("1012482381");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    // 4
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("9d531d97170aaad5f2b032300104c1bd");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2356359);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:40:26.013")));
+    ubiEvent.setRemoteIP("68.53.26.66");
+    ubiEvent.setRequestCorrelationId("74bccef829254c16");
+    ubiEvent.setSid("p2506613.m5234.l47241");
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dpiesqn47pse31%2853%3A323%3A%2Busqdrrp%2Buk%60%2Bceb%7C%28dlh-171e7a48b5e-0x126");
+    ubiEvent.setEventFamily("MYBPH");
+    ubiEvent.setEventAction("ACTN");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("68.53.26.66");
+    ubiEvent.setAgentInfo("ebayUserAgent/eBayAndroid;6.0.1;Android;10;samsung;beyond2q;Xfinity Mobile Wi-Fi Calling;1080x2029;3.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(378332154788L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("apisd.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "flgs=AA**&tz=-5.0&dm=samsung&dn=beyond2q&trknvpsvc=%3Ca%3Ees%3D0%26nqc%3DUAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*%26nqt%3DUAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*%26ec%3D4%26uit%3D1583189780000%3C%2Fa%3E&sid=p2506613.m5234.l47241&mos=Android&osv=10&callingpagename=txexpsvc__experience_myebay_buying_v1_purchase_activity_GET&mtsts=2020-05-06T01%3A40%3A26.013Z&!xt=59341&pagename=PulsarGateway&app=2571&res=0x0&efam=MYBPH&mav=6.0.1&c=8&ou=1012482381&g=9d531d97170aaad5f2b032300104c1bd&h=97&nativeApp=true&cp=2506613&an=eBayAndroid&n=9d5323d01700ad4d14769f4ce029570f&ort=p&p=2356359&t=0&u=1012482381&cflgs=AA**&actionKind=NAVSRC&ids=MP%3Dmarines1624&designsystem=6&mrollp=62&gadid=b1f485c6-ea40-482b-8548-aa94728ab48d%2C0&eactn=ACTN&androidid=242e1919bddc9378&rq=74bccef829254c16&ciid=pItaFlg*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D74bccef829254c16%26node_id%3D63df2a622ec3d6a2%26REQUEST_GUID%3D171e7a48b4f.a9cd6e4.75382.b9e6754b%26logid%3Dt6wwm53vpd77%253C%253Dpiesqn47pse31%252853%253A323%253A%252Busqdrrp%252Buk%2560%252Bceb%257C%2528dlh-171e7a48b5e-0x126%26cal_mod%3Dfalse&TPool=r1pulsgwy&TDuration=2&TStatus=0&TType=URL&ContentLength=1374&ForwardedFor=68.53.26.66; 23.58.92.61&Script=/trk20svc/TrackingResource/v1&Server=apisd.ebay.com&TMachine=10.188.22.88&TStamp=18:40:52.70&TName=Ginger.CollectionSvc.track&Agent=ebayUserAgent/eBayAndroid;6.0.1;Android;10;samsung;beyond2q;Xfinity Mobile Wi-Fi Calling;1080x2029;3.0&RemoteIP=68.53.26.66&Encoding=gzip&Referer=null"));
+    ubiEvent.setUrlQueryString(
+        "/base/tracking/v1/track_events");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(8);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("1012482381");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    // 5
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("9d531d97170aaad5f2b032300104c1bd");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2051249);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:40:52.260")));
+    ubiEvent.setRemoteIP("10.153.11.133");
+    ubiEvent.setRequestCorrelationId("32e511b19d5ecd29");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*517%3E46%28twwgsvv%28umj%28bad%7F%29%60jk-171e7a48a6f-0x6e05f5b");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("68.53.26.66");
+    ubiEvent.setAgentInfo("eBayAndroid/6.0.1.15");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(288407653028L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "nqc=UAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*&tz=-5.0&lv=1&dn=SM-G975U&ist=0&uc=1&mos=Android&nqt=UAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*&uaid=e7a48a6f1710a4d26432b6199873ba37S0&osv=10&ul=en-US&mtsts=2020-05-05T18%3A40%3A52.260&ec=4&apn=1&app=2571&res=1080x2029&cguidsrc=cookie&es=0&cflgs=EA**&ids=MP%253Dmarines1624&designsystem=6&mppid=0&mrollp=62&gadid=b1f485c6-ea40-482b-8548-aa94728ab48d%2C0&androidid=242e1919bddc9378&pcguid=9d5323d01700ad4d14769f4ce029570f&rq=32e511b19d5ecd29&user_name=marines1624&tzname=America%2FChicago&mlocerr=1&bs=0&mlocset=3&memsz=4096.0&!xt=59341&pagename=Background&uit=1583189780000&c=9&mav=6.0.1&g=9d531d97170aaad5f2b032300104c1bd&h=97&reqts=1588729252456&n=9d5323d01700ad4d14769f4ce029570f&ort=p&p=2051249&ttp=Page&carrier=Xfinity+Mobile+Wi-Fi+Calling&mnt=WIFI&t=0&u=1012482381&prefl=en_US&pn=2&ciid=pIpvJkM*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D32e511b19d5ecd29%26node_id%3D5036ec4ba367392d%26REQUEST_GUID%3D171e7a48-a6e0-a4d2-6433-dde5c76cf97e%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A517%253E46%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7a48a6f-0x6e05f5b%26cal_mod%3Dfalse&TPool=r1rover&TDuration=3&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=68.53.26.66&Script=/roverimp/0/0/14&Server=rover.ebay.com&TMachine=10.77.38.67&TStamp=18:40:52.46&TName=roverimp&Agent=eBayAndroid/6.0.1.15&RemoteIP=10.153.11.133"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?trknvpsvc=%3Ca%3Ees%3D0%26nqc%3DUAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*%26nqt%3DUAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*%26ec%3D4%26uit%3D1583189780000%3C%2Fa%3E&imp=2051249&lv=udid%3D9d531d97170aaad5f2b032300104c1bd%26ai%3D2571%26mav%3D6.0.1%26site%3D0%26ou%3DnY%252BsHZ2PrBmdj6wVnY%252BsEZ2PrA2dj6AEkYClAJKBqQ2dj6x9nY%252BseQ**%26res%3D1080x2029%26memsz%3D4096.0%26designsystem%3D6%26mnt%3DWIFI%26prefl%3Den_US%26tzname%3DAmerica%2FChicago%26androidid%3D242e1919bddc9378%26ort%3Dp%26carrier%3DXfinity+Mobile+Wi-Fi+Calling%26dpi%3D391.8855x391.29675%26dn%3DSM-G975U%26apn%3D1%26mrollp%3D62%26c%3D9%26ids%3DMP%253Dmarines1624%26osv%3D10%26ist%3D0%26%21xt%3D59341%26mlocerr%3D1%26user_name%3Dmarines1624%26reqts%3D1588729252456%26tz%3D-5.0%26mos%3DAndroid%26mlocset%3D3%26gadid%3Db1f485c6-ea40-482b-8548-aa94728ab48d%2C0%26mppid%3D0%26ttp%3DPage%26mtsts%3D2020-05-05T18%3A40%3A52.260");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(9);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("1012482381");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    // 6
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("9d531d97170aaad5f2b032300104c1bd");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2174529);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:40:15.632")));
+    ubiEvent.setRemoteIP("10.153.189.142");
+    ubiEvent.setRequestCorrelationId("0915531b9779ee47");
+    ubiEvent.setSid("p2051246");
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*517%3F%3B2%28twwgsvv%28umj%28bad%7F%29%60jk-171e7a489a3-0x123");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("68.53.26.66");
+    ubiEvent.setAgentInfo("eBayAndroid/6.0.1.15");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(765202762148L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "nqc=UAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*&FollowFilter=searches&tz=-5.0&lv=1&dn=SM-G975U&ist=0&uc=1&mos=Android&nqt=UAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*&uaid=e7a489a31710ad329b276d299e431db2S0&osv=10&ul=en-US&mtsts=2020-05-05T18%3A40%3A15.632&ec=4&app=2571&res=1080x2029&sort=alpha&cguidsrc=cookie&es=0&cflgs=EA**&memcnt=6&ids=MP%253Dmarines1624&designsystem=6&mppid=0&mrollp=62&gadid=b1f485c6-ea40-482b-8548-aa94728ab48d%2C0&androidid=242e1919bddc9378&pcguid=9d5323d01700ad4d14769f4ce029570f&rq=0915531b9779ee47&user_name=marines1624&tzname=America%2FChicago&bs=0&memsz=4096.0&intrstcnt=7&!xt=59341&pagename=Following&uit=1583189780000&c=6&mav=6.0.1&g=9d531d97170aaad5f2b032300104c1bd&h=97&reqts=1588729252243&n=9d5323d01700ad4d14769f4ce029570f&ort=p&p=2174529&ttp=Page&carrier=Xfinity+Mobile+Wi-Fi+Calling&mnt=WIFI&t=0&u=1012482381&prefl=en_US&pn=2&ciid=pImjKbI*&sid=p2051246");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D0915531b9779ee47%26node_id%3D48ef1ea267e21149%26REQUEST_GUID%3D171e7a48-9a20-ad32-9b26-ea1aca942ef6%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A517%253F%253B2%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7a489a3-0x123%26cal_mod%3Dfalse&TPool=r1rover&TDuration=3&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=68.53.26.66&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.211.41.178&TStamp=18:40:52.25&TName=roverimp&Agent=eBayAndroid/6.0.1.15&RemoteIP=10.153.189.142"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&trknvpsvc=%3Ca%3Ees%3D0%26nqc%3DUAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*%26nqt%3DUAAAAAAABAAAAAEABABAAAAAAQASAAAAAIAAACAAAQAAAQAAQAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAATAEIAAAAAAAggAE*%26ec%3D4%26uit%3D1583189780000%3C%2Fa%3E&imp=2174529&lv=udid%3D9d531d97170aaad5f2b032300104c1bd%26ai%3D2571%26mav%3D6.0.1%26site%3D0%26ou%3DnY%252BsHZ2PrBmdj6wVnY%252BsEZ2PrA2dj6AEkYClAJKBqQ2dj6x9nY%252BseQ**%26res%3D1080x2029%26memsz%3D4096.0%26sort%3Dalpha%26designsystem%3D6%26mnt%3DWIFI%26prefl%3Den_US%26tzname%3DAmerica%2FChicago%26androidid%3D242e1919bddc9378%26ort%3Dp%26carrier%3DXfinity+Mobile+Wi-Fi+Calling%26memcnt%3D6%26dpi%3D391.8855x391.29675%26dn%3DSM-G975U%26intrstcnt%3D7%26mrollp%3D62%26c%3D6%26ids%3DMP%253Dmarines1624%26osv%3D10%26FollowFilter%3Dsearches%26ist%3D0%26%21xt%3D59341%26user_name%3Dmarines1624%26reqts%3D1588729252243%26tz%3D-5.0%26mos%3DAndroid%26bncnt%3D0%26gadid%3Db1f485c6-ea40-482b-8548-aa94728ab48d%2C0%26mppid%3D0%26ttp%3DPage%26mtsts%3D2020-05-05T18%3A40%3A15.632&_trksid=p2051246");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(6);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("1012482381");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(2571);
+    ubiEventList.add(ubiEvent);
+
+    sessionMetrics.init();
+    sessionMetrics.start(sessionAccumulator);
+    for (UbiEvent event : ubiEventList) {
+      sessionMetrics.feed(event, sessionAccumulator);
+    }
+    sessionMetrics.end(sessionAccumulator);
+    Assert.assertEquals(27, sessionAccumulator.getUbiSession().getTrafficSrcId());
+  }
+
+  @Test
+  public void test_TrafficSourceMetric19() throws Exception {
+
+    // 1
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("e7a455bc1710a866609d6af7ffbff02d");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2317508);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:40:39.086")));
+    ubiEvent.setRemoteIP("10.105.220.23");
+    ubiEvent.setRequestCorrelationId("bd12071140599762");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*062363%28twwgsvv%28umj%28bad%7F%29%60jk-171e7a4562f-0x191");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("86.20.187.195");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Mobile/15E148 Safari/604.1,GingerClient/2.9.7-RELEASE");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(942983304868L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("internal.rover.vip.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "nqc=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB&c=1&g=e7a455bc1710a866609d6af7ffbff02d&h=bc&px=4249&chnl=9&uc=1&es=3&nqt=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB&p=2317508&uaid=e7a4562f1710a128edb4d670d07c2e5dS0&bs=0&t=3&cflgs=QA**&ul=en-US&plmt=VQkAAB%252BLCAAAAAAAAADFVU1z2zYQ%252FSsaZCYnWQK%252FRd9kt2nTcSdJZSeHTCYDAqCIigRYAJTiePzfuwvqw46TGefS2gdoH4Bd7Nu3yzvSr8l5nCRpFqdT0ity%252FvGOKEHOI0oXi2xKOEAxjQpaxpSWtMiKKbGAkbiUohJ1nHJZpVXCF1nKcwDjnKYF5xmZEunB3SdY2egWrumhbafEjEAPbprbykI8CARGlCR4z8PGHWG4veJMC9biPkNvJM6TEs8kUZHHsOZFShcEghiPDgDZ7OBHJZkVE29V10kL4PBzL1Y9BqeAKM7t%252Fqfu2T7EWvT2xkm7N%252Fu288gZGUkDhHFMR37x5B62QzpOfZW4NlKtGwgTZ3RKdkr4hpwnlMI5Lf3O2M1r9JQs0gL9iButfEBkxW5nw2bmIDPezLudrDD0ULXKNde3PTiPwQfrN0q%252F%252FQZ1I4t%252FrMJD9oZ7L61TRiMzs2gWJUiTbcGcz5WdYTznmVd8xk0353a%252BnfNo7vh8dfB2Nt47S2ed0rO%252FHSaLabpQ3R8metp6uBPTeyC%252Bbgdksmatk0C%252Be71cPbCu2NfbK8NOBxzr5Aoi%252FiVrK11zOqrfK7l7grrfVqtfNataCS68HQCTegsZ99aIgXtkA%252BSn%252BAaF8BzBOKBiGYr0wxI55SVWMAHdqCATWbA0yyoeFRFlizzPaSlyVhd1XdU1jQW5RyoYdlmWZTTKUQnbQ%252FN0gEewfCHnQJ%252FhwWIuWMwEy4lQ6PCMd4O0t086AiplatQ6RuJYCljgVijPvv%252FzMj72f442pXGcHPqfxVFVFjyXLM9TEVclS0TJUlmJMi%252Br%252BLn9zx07ND9NkmPzN5IJaS9Nayx2%252Fa4BEj%252BPIJx5ZH46aoiwwRts1KGrpH1TLwUqsZyWcKRVGnUJRaiN9q9Yp1pkZSutYJpNJ1BIdwYtrWoyHkFZXSvfQgdFyQn6RTpuVR%252Bk8njDdEzpK6U3I87x7cHBiJEXNM%252FSiyXZbz08%252F%252B3eNU4OQJPwd0AvGN%252BsrRk0aujFqwX%252BY7YmRLnRQAZmeVC2R%252FTCtEepQ64gbdauesaVXoea44XfQzc%252BSiymj7YePBV3wmuWYiV7ZpnHCo0VQZl6UFg1oJd9mAvZmh3q6TiijyMRav%252BWreWbENSFmS8QCGWCyYZd8zF01dmwOaPYBg8MKOo%252F39P2ZHLZwvyG4TZ5ObkeMRdmqZcOX2BqrDFvmNYSx11XS4%252BET0mDpsQZII4pLyuzfVz1kc1xhl3Cw72Fo%252FI0lNboZdiQQOHmmtl1mCafq5ZpRPngvOmWJ6b25V714MxYKSYYF5%252FsZde3bBwfwB%252FmZDRrQW0iaDsEvH%252F6FehkmDPPaNE9C%252BNN8qepVCs%252FjGPrv%252Fxm%252FPSE%252FM7g%252Fj%252BHJthV%252BARQSu7%252FBY%252B%252FPetVCQAA&ec=2&pn=2&rq=bd12071140599762&pagename=cos__mfe&po=%5B%28pg%3A2334524+pid%3A100885%29%28pg%3A2334524+pid%3A100692%29%5D&ciid=pFYvjts*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Dbd12071140599762%26node_id%3Dbcfd18ce08755a69%26REQUEST_GUID%3D171e7a45-62e0-a128-edb2-b9bee8083794%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A062363%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7a4562f-0x191%26cal_mod%3Dfalse&TPool=r1rover&TDuration=2&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=86.20.187.195&Script=/roverimp/0/2334524/9&Server=internal.rover.vip.ebay.com&TMachine=10.18.142.219&TStamp=18:40:39.08&TName=roverimp&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Mobile/15E148 Safari/604.1,GingerClient/2.9.7-RELEASE&RemoteIP=10.105.220.23"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/2334524/9?site=3&trknvp=plmt%3DVQkAAB%252BLCAAAAAAAAADFVU1z2zYQ%252FSsaZCYnWQK%252FRd9kt2nTcSdJZSeHTCYDAqCIigRYAJTiePzfuwvqw46TGefS2gdoH4Bd7Nu3yzvSr8l5nCRpFqdT0ity%252FvGOKEHOI0oXi2xKOEAxjQpaxpSWtMiKKbGAkbiUohJ1nHJZpVXCF1nKcwDjnKYF5xmZEunB3SdY2egWrumhbafEjEAPbprbykI8CARGlCR4z8PGHWG4veJMC9biPkNvJM6TEs8kUZHHsOZFShcEghiPDgDZ7OBHJZkVE29V10kL4PBzL1Y9BqeAKM7t%252Fqfu2T7EWvT2xkm7N%252Fu288gZGUkDhHFMR37x5B62QzpOfZW4NlKtGwgTZ3RKdkr4hpwnlMI5Lf3O2M1r9JQs0gL9iButfEBkxW5nw2bmIDPezLudrDD0ULXKNde3PTiPwQfrN0q%252F%252FQZ1I4t%252FrMJD9oZ7L61TRiMzs2gWJUiTbcGcz5WdYTznmVd8xk0353a%252BnfNo7vh8dfB2Nt47S2ed0rO%252FHSaLabpQ3R8metp6uBPTeyC%252Bbgdksmatk0C%252Be71cPbCu2NfbK8NOBxzr5Aoi%252FiVrK11zOqrfK7l7grrfVqtfNataCS68HQCTegsZ99aIgXtkA%252BSn%252BAaF8BzBOKBiGYr0wxI55SVWMAHdqCATWbA0yyoeFRFlizzPaSlyVhd1XdU1jQW5RyoYdlmWZTTKUQnbQ%252FN0gEewfCHnQJ%252FhwWIuWMwEy4lQ6PCMd4O0t086AiplatQ6RuJYCljgVijPvv%252FzMj72f442pXGcHPqfxVFVFjyXLM9TEVclS0TJUlmJMi%252Br%252BLn9zx07ND9NkmPzN5IJaS9Nayx2%252Fa4BEj%252BPIJx5ZH46aoiwwRts1KGrpH1TLwUqsZyWcKRVGnUJRaiN9q9Yp1pkZSutYJpNJ1BIdwYtrWoyHkFZXSvfQgdFyQn6RTpuVR%252Bk8njDdEzpK6U3I87x7cHBiJEXNM%252FSiyXZbz08%252F%252B3eNU4OQJPwd0AvGN%252BsrRk0aujFqwX%252BY7YmRLnRQAZmeVC2R%252FTCtEepQ64gbdauesaVXoea44XfQzc%252BSiymj7YePBV3wmuWYiV7ZpnHCo0VQZl6UFg1oJd9mAvZmh3q6TiijyMRav%252BWreWbENSFmS8QCGWCyYZd8zF01dmwOaPYBg8MKOo%252F39P2ZHLZwvyG4TZ5ObkeMRdmqZcOX2BqrDFvmNYSx11XS4%252BET0mDpsQZII4pLyuzfVz1kc1xhl3Cw72Fo%252FI0lNboZdiQQOHmmtl1mCafq5ZpRPngvOmWJ6b25V714MxYKSYYF5%252FsZde3bBwfwB%252FmZDRrQW0iaDsEvH%252F6FehkmDPPaNE9C%252BNN8qepVCs%252FjGPrv%252Fxm%252FPSE%252FM7g%252Fj%252BHJthV%252BARQSu7%252FBY%252B%252FPetVCQAA%26po%3D%5B%28pg%3A2334524+pid%3A100885%29%28pg%3A2334524+pid%3A100692%29%5D&trknvpsvc=%3Ca%3Enqc%3DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB%26nqt%3DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB%26es%3D3%26ec%3D2%3C%2Fa%3E&tguid=e7a455bc1710a866609d6af7ffbff02d&imp=2317508");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(3);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 2
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("e7a455bc1710a866609d6af7ffbff02d");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2367355);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:40:39.081")));
+    ubiEvent.setRemoteIP("86.20.187.195");
+    ubiEvent.setRequestCorrelationId("e6f2c6a31710aca06e10b994fed69c98");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6pdhc9%3Ftilvgig%28%7C%3Egcb*w%60ut3550-171e7a45629-0x46ee");
+    ubiEvent.setEventFamily("SAND");
+    ubiEvent.setEventAction("AUCT");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("86.20.187.195");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(7);
+    ubiEvent.setCurrentImprId(626363487908L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("sand.stratus.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "flgs=AA**&sameid=29edbdf24ceb4b3c854c629e26047cc5&sapcxkw=beard+trimmer&schemaversion=3&pagename=SandPage&saucxgdpry=true&efam=SAND&ac=&saucxgdprct=false&saty=1&g=e7a455bc1710a866609d6af7ffbff02d&saebaypid=100885&h=bc&salv=5&ciid=pFYs1pE*&p=2367355&r=-2100344230&sapcxcat=26395%2C31762%2C67408&t=3&saiid=2833f499-f9ed-4ec7-9d3f-030009bdf1ec&cflgs=AA**&samslid=&eactn=AUCT&pn=2&rq=e6f2c6a31710aca06e10b994fed69c98&ciid=pFYs1pE*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De6f2c6a31710aca06e10b994fed69c98%26node_id%3D8327fb3647daec3b%26REQUEST_GUID%3D171e7a45-6290-a9bd-6912-067ffc83007d%26logid%3Dt6pdhc9%253Ftilvgig%2528%257C%253Egcb%2Aw%2560ut3550-171e7a45629-0x46ee&TPool=r1sand&TDuration=5&ContentLength=160&ForwardedFor=10.110.67.85&Script=sand&Server=sand.stratus.ebay.com&TMachine=10.155.214.145&TStamp=18:40:39.08&TName=sand.v1&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Mobile/15E148 Safari/604.1&RemoteIP=86.20.187.195&Referer=https://www.ebay.co.uk/sch/i.html?_nkw=beard trimmer&_sacat=0&_pgn=2"));
+    ubiEvent.setUrlQueryString(
+        "/sch/i.html?_nkw=beard trimmer&_sacat=0&_pgn=3");
+    ubiEvent.setPageName("sand.v1");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(3);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(-2100344230L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay.co.uk/sch/i.html?_nkw=beard trimmer&_sacat=0&_pgn=2");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+    // 3
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("e7a455bc1710a866609d6af7ffbff02d");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2370942);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 18:40:39.400")));
+    ubiEvent.setRemoteIP("86.20.187.195");
+    ubiEvent.setRequestCorrelationId("bd12071140599762");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dpiesqn47pse31%2853311%3F2%2Busqdrrp%2Buk%60%2Bceb%7C%28dlh-171e7a4576a-0xd9");
+    ubiEvent.setEventFamily("LST");
+    ubiEvent.setEventAction("ANSTRIG");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("86.20.187.195");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Mobile/15E148 Safari/604.1");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(65554962340L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("www.ebay.co.uk");
+    ubiEvent.setApplicationPayload(
+        "flgs=AA**&uc=3&modulereq=prov%3AVEHICLE_PARTS_PROVIDER%7Cmi%3A1003%7Cenabled%3A1%7Ccandidate%3A0%7Cnoshowcode%3ANO_DATA%7Ciid%3A1%2Cprov%3ASEARCH_GUIDANCE_PROVIDER%7Cmi%3A2682%7Cscen%3AShopByBrand%7Cenabled%3A1%7Ccandidate%3A1%7Ciid%3A1%2Cprov%3ASEARCH_GUIDANCE_PROVIDER%7Cmi%3A2682%7Cscen%3AShopByType%7Cenabled%3A1%7Ccandidate%3A1%7Ciid%3A2%2Cprov%3ASEARCH_GUIDANCE_PROVIDER%7Cmi%3A2682%7Cscen%3AShopByFeatures%7Cenabled%3A1%7Ccandidate%3A1%7Ciid%3A3%2Cprov%3ASPONSORED_ITEMS_ANSWER_PROVIDER%7Cmi%3A45600%7Cenabled%3A1%7Ccandidate%3A0%7Cnoshowcode%3ANO_DATA%7Ciid%3A1%2Cprov%3AMFE_AD_PROVIDER%7Cmi%3A5156%7Cenabled%3A1%7Ccandidate%3A1%7Ciid%3A1%2Cprov%3AMFE_AD_PROVIDER%7Cmi%3A4751%7Cenabled%3A1%7Ccandidate%3A1%7Ciid%3A1&mos=iOS&bs=3&osv=13_3_1&pageci=96de2f8c-8f3a-11ea-ae5f-74dbd1807e50&ul=en-GB&callingpagename=searchsvc__experience_search_v1_get_search_result_GET&pagename=ANSWERS_PLATFORM_PAGE&app=3564&res=480x320&efam=LST&c=1&g=e7a455bc1710a866609d6af7ffbff02d&h=bc&mobile=true&cp=2351460&sections=rgn%3ARIVER%7Csection%3ATOP_SECTION%7Cslots%3A3%2Crgn%3ARIVER%7Csection%3AMIDDLE_SECTION%7Cslots%3A2%2Crgn%3ARIVER%7Csection%3ABOTTOM_SECTION%7Cslots%3A4%2Crgn%3ABELOW_RIVER%7Csection%3AFULL_REGION%7Cslots%3A1%2Crgn%3ACENTER_TOP%7Csection%3AFULL_REGION%7Cslots%3A1&p=2370942&t=3&cflgs=QA**&moduletrig=prov%3AMFE_AD_PROVIDER%7Cmi%3A4751%7Ciid%3A0%7Cscen%3A100692%7Cslot%3A2%7Crank%3A1%7Cscore%3A0.0%2Cprov%3ASTATUS_BAR_PROVIDER%7Cmi%3A4495%7Ciid%3A0%7Cscen%3AStatusBar%7Cslot%3A1%7Crank%3A1%7Cscore%3A0.0%2Cprov%3APAGINATION_PROVIDER%7Cmi%3A1686%7Ciid%3A0%7Cscen%3APAGINATION_ALL%7Cslot%3A51%7Crank%3A2%7Cscore%3A0.0%2Cprov%3AMULTI_ASPECT_GUIDANCE_PROVIDER%7Cmi%3A43632%7Ciid%3A0%7Cscen%3AMULTI_ASPECT_GUIDANCE_PROVIDER%7Cslot%3A1%7Crank%3A1%7Cscore%3A0.0%2Cprov%3AMFE_AD_PROVIDER%7Cmi%3A5156%7Ciid%3A0%7Cscen%3A100885%7Cslot%3A1%7Crank%3A1%7Cscore%3A0.0&eactn=ANSTRIG&rq=bd12071140599762&ciid=pFdhQw8*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Dbd12071140599762%26node_id%3D2f1199f65eba2e21%26REQUEST_GUID%3D171e7a45-7610-acc4-30f5-ab54fbc4a91a%26logid%3Dt6wwm53vpd77%253C%253Dpiesqn47pse31%252853311%253F2%252Busqdrrp%252Buk%2560%252Bceb%257C%2528dlh-171e7a4576a-0xd9%26cal_mod%3Dfalse&TPool=r1searchsvc&TDuration=3&TStatus=0&TType=URL&ContentLength=2087&ForwardedFor= 23.212.1.71;86.20.187.195;95.100.156.181&Script=/trk20svc/TrackingResource/v1&Server=www.ebay.co.uk&TMachine=10.204.67.15&TStamp=18:40:39.40&TName=Ginger.CollectionSvc.track&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Mobile/15E148 Safari/604.1&RemoteIP=86.20.187.195&Encoding=gzip&Referer=https://www.ebay.co.uk/sch/i.html?_nkw=beard+trimmer&_sacat=0&_pgn=2"));
+    ubiEvent.setUrlQueryString(
+        "/sch/i.html?_nkw=beard+trimmer&_sacat=0&_pgn=3");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(3);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://www.ebay.co.uk/sch/i.html?_nkw=beard+trimmer&_sacat=0&_pgn=2");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(null);
+    ubiEventList.add(ubiEvent);
+
+
+    sessionMetrics.init();
+    sessionMetrics.start(sessionAccumulator);
+    for (UbiEvent event : ubiEventList) {
+      sessionMetrics.feed(event, sessionAccumulator);
+    }
+    sessionMetrics.end(sessionAccumulator);
+    Assert.assertEquals(2, sessionAccumulator.getUbiSession().getTrafficSrcId());
+  }
+
+  @Test
+  public void test_TrafficSourceMetric20() throws Exception {
+
+    // 1
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2054081);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:24.318")));
+    ubiEvent.setRemoteIP("10.173.226.107");
+    ubiEvent.setRequestCorrelationId("4d4f2c420ddce57d");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*517%3E7%3C%28twwgsvv%28umj%28bad%7F%29%60jk-171e7c3401e-0x114");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("eBayiPhone/6.0.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(579906453699L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "nqc=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&user_name=geosoc1&tz=-6.00&nid=588088590080&lv=1&dn=iPhone12_1&tzname=America%2FDenver&uc=1&nqt=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&mos=iOS&bs=0&uaid=e7c3401e1710a4d05876588498d86d7cS0&memsz=3.75&osv=13.4.1&ul=en-US&mtsts=2020-05-05T19%3A14%3A24.318&ec=5&pagename=NotificationReceived&app=1462&res=828X1792&uit=1569968239000&c=1&mav=6.0.0&g=8953ec6916d93c1d43031330013330d2&idfa=00000000-0000-0000-0000-000000000000%2C0&h=69&reqts=1588731265036&cguidsrc=cookie&ntype=M2MMSGHDR&n=89663faa16d0a4d128c7a974e64bb162&es=0&ort=P&p=2054081&ttp=Page&mnt=wifi&carrier=wifi&t=0&u=15901402&prefl=en-US&cflgs=EA**&ids=MP%253Dgeosoc1&designsystem=6&mrollp=30.02&pcguid=89663faa16d0a4d128c7a974e64bb162&pn=2&rq=4d4f2c420ddce57d&ciid=w0AeBYc*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D4d4f2c420ddce57d%26node_id%3D95ad90fbe3a8c7cd%26REQUEST_GUID%3D171e7c34-01d0-a4d0-5877-4bcfc7a15d1b%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A517%253E7%253C%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7c3401e-0x114%26cal_mod%3Dfalse&TPool=r1rover&TDuration=2&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=71.205.28.140&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.77.5.135&TStamp=19:14:25.05&TName=roverimp&Agent=eBayiPhone/6.0.0&RemoteIP=10.173.226.107"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&trknvpsvc=%3Ca%3Ees%3D0%26nqc%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26nqt%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26ec%3D5%26uit%3D1569968239000%3C%2Fa%3E&imp=2054081&lv=udid%3D8953ec6916d93c1d43031330013330d2%26ai%3D1462%26mav%3D6.0.0%26site%3D0%26ou%3DnY%252BsHZ2PrBmdj6wVnY%252BsEZ2PrA2dj6wJkYeoCJGGoQ6dj6x9nY%252BseQ**%26memsz%3D3.75%26res%3D828X1792%26mrollp%3D30.02%26designsystem%3D6%26c%3D1%26nid%3D588088590080%26osv%3D13.4.1%26ids%3DMP%253Dgeosoc1%26mnt%3Dwifi%26prefl%3Den-US%26un%3Dgeosoc1%26tzname%3DAmerica%2FDenver%26reqts%3D1588731265036%26tz%3D-6.00%26mos%3DiOS%26ntype%3DM2MMSGHDR%26ort%3DP%26carrier%3Dwifi%26uc%3DUS%26dn%3DiPhone12_1%26idfa%3D00000000-0000-0000-0000-000000000000%2C0%26ttp%3DPage%26mtsts%3D2020-05-05T19%3A14%3A24.318");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("15901402");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    // 2
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2050535);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:24.442")));
+    ubiEvent.setRemoteIP("10.173.226.107");
+    ubiEvent.setRequestCorrelationId("4d4f2c420ddce57d");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*517%3E7%3C%28twwgsvv%28umj%28bad%7F%29%60jk-171e7c3401c-0x129");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("eBayiPhone/6.0.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(579906257091L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "nqc=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&user_name=geosoc1&tz=-6.00&lv=1&dn=iPhone12_1&tzname=America%2FDenver&uc=1&nqt=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&mos=iOS&bs=0&uaid=e7c3401b1710a4d05876588498d86d7eS0&memsz=3.75&osv=13.4.1&ul=en-US&maup=0&mtsts=2020-05-05T19%3A14%3A24.442&ec=5&pagename=Launch&aiBadgeCnt=1&app=1462&res=828X1792&uit=1569968239000&c=3&mav=6.0.0&g=8953ec6916d93c1d43031330013330d2&idfa=00000000-0000-0000-0000-000000000000%2C0&h=69&reqts=1588731265035&cguidsrc=cookie&n=89663faa16d0a4d128c7a974e64bb162&es=0&ort=P&p=2050535&ttp=Page&mnt=wifi&carrier=wifi&t=0&u=15901402&prefl=en-US&cflgs=EA**&mlch=0&ids=MP%253Dgeosoc1&designsystem=6&mrollp=30.02&pcguid=89663faa16d0a4d128c7a974e64bb162&pn=2&rq=4d4f2c420ddce57d&ciid=w0AbBYc*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D4d4f2c420ddce57d%26node_id%3Dc0046ca32c91c312%26REQUEST_GUID%3D171e7c34-01b0-a4d0-5877-4bcfc7a15d1c%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A517%253E7%253C%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7c3401c-0x129%26cal_mod%3Dfalse&TPool=r1rover&TDuration=2&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=71.205.28.140&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.77.5.135&TStamp=19:14:25.05&TName=roverimp&Agent=eBayiPhone/6.0.0&RemoteIP=10.173.226.107"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&trknvpsvc=%3Ca%3Ees%3D0%26nqc%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26nqt%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26ec%3D5%26uit%3D1569968239000%3C%2Fa%3E&imp=2050535&lv=udid%3D8953ec6916d93c1d43031330013330d2%26ai%3D1462%26mav%3D6.0.0%26site%3D0%26ou%3DnY%252BsHZ2PrBmdj6wVnY%252BsEZ2PrA2dj6wJkYeoCJGGoQ6dj6x9nY%252BseQ**%26memsz%3D3.75%26res%3D828X1792%26mrollp%3D30.02%26designsystem%3D6%26c%3D3%26osv%3D13.4.1%26ids%3DMP%253Dgeosoc1%26mnt%3Dwifi%26prefl%3Den-US%26un%3Dgeosoc1%26tzname%3DAmerica%2FDenver%26reqts%3D1588731265035%26tz%3D-6.00%26maup%3D0%26mos%3DiOS%26mlch%3D0%26aiBadgeCnt%3D1%26ort%3DP%26carrier%3Dwifi%26uc%3DUS%26dn%3DiPhone12_1%26idfa%3D00000000-0000-0000-0000-000000000000%2C0%26ttp%3DPage%26mtsts%3D2020-05-05T19%3A14%3A24.442");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(3);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("15901402");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    // 3
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2530290);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:24.742")));
+    ubiEvent.setRemoteIP("71.205.28.140");
+    ubiEvent.setRequestCorrelationId("a326695d57f0111f");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dqkisqn47pse31%28574521-vrubqst-whh-%60dfz%2Behn-171e7c33ee6-0xea");
+    ubiEvent.setEventFamily("MFE");
+    ubiEvent.setEventAction("EXPM");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("ebayUserAgent/eBayIOS;6.0.0;iOS;13.4.1;Apple;iPhone12_1;Verizon;414x896;2.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(179362938563L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("apisd.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "nqc=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAKAABAAg*&flgs=AA**&dm=Apple&dn=iPhone12_1&uc=1&nqt=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&mos=iOS&bs=0&osv=13.4.1&plmt=twAAAB%252BLCAAAAAAAAAA1jtsKgzAQRP9lnlPYxLXJ%252BivFh5jUImiV3ihI%252Fr2r0qcDw87ZWbHc0DiWSjwZLAOay4oho7FE4tkgaXQSg4cSubM2SOwk%252BIrPdQg1%252B1565zk4ztnC4PpSRauMh0pr9%252Fc4GsRNICJE21n8%252FPNJc309fXfMaUd8Hph1SFFbUqtT6DAqbfkBeFdxZrcAAAA%253D&ul=en-US&callingpagename=cartexsvc__DefaultPage&ec=5&pagename=reco__experience_merchandising_v1_module_provider_GET&app=1462&res=0x0&uit=1569968239000&efam=MFE&mav=6.0.0&g=8953ec6916d93c1d43031330013330d2&rpg=2493970&h=69&nativeApp=true&cp=2493970&an=eBayIOS&n=89663faa16d0a4d128c7a974e64bb162&es=0&p=2530290&t=0&u=15901402&cflgs=AA**&eactn=EXPM&rq=a326695d57f0111f&po=%5B%28pg%3A2493970+pid%3A100974%29%5D&ciid=wz7dwik*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D0a1eaf899c6b9695%26node_id%3Db05e9803cef7b465%26REQUEST_GUID%3D171e7c33-ee30-a69c-2292-6c51ffa0a16b%26logid%3Dt6wwm53vpd77%253C%253Dqkisqn47pse31%2528574521-vrubqst-whh-%2560dfz%252Behn-171e7c33ee6-0xea%26cal_mod%3Dfalse&TPool=r1reco&TDuration=1&TStatus=0&TType=URL&ContentLength=1430&ForwardedFor=71.205.28.140;184.25.204.167&Script=/trk20svc/TrackingResource/v1&Server=apisd.ebay.com&TMachine=10.105.194.41&TStamp=19:14:24.74&TName=Ginger.CollectionSvc.track&Agent=ebayUserAgent/eBayIOS;6.0.0;iOS;13.4.1;Apple;iPhone12_1;Verizon;414x896;2.0&RemoteIP=71.205.28.140&Encoding=gzip&Referer=null"));
+    ubiEvent.setUrlQueryString(
+        "/experience/shopping_cart/v1/cart?mode=lite");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("15901402");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    // 4
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2051248);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:24.444")));
+    ubiEvent.setRemoteIP("10.173.226.107");
+    ubiEvent.setRequestCorrelationId("4d4f2c420ddce57d");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*517%3E7%3C%28twwgsvv%28umj%28bad%7F%29%60jk-171e7c34019-0x6ad0b7f");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("eBayiPhone/6.0.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(579906126019L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "nqc=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&user_name=geosoc1&tz=-6.00&lv=1&dn=iPhone12_1&tzname=America%2FDenver&uc=1&nqt=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&mos=iOS&bs=0&uaid=e7c340191710a4d05876588498d86d82S0&mlocset=2&memsz=3.75&osv=13.4.1&ul=en-US&mtsts=2020-05-05T19%3A14%3A24.444&ec=5&pagename=Foreground&app=1462&res=828X1792&uit=1569968239000&c=4&mav=6.0.0&g=8953ec6916d93c1d43031330013330d2&idfa=00000000-0000-0000-0000-000000000000%2C0&h=69&reqts=1588731265035&cguidsrc=cookie&n=89663faa16d0a4d128c7a974e64bb162&es=0&ort=P&p=2051248&ttp=Page&mnt=wifi&carrier=wifi&t=0&u=15901402&prefl=en-US&cflgs=EA**&ids=MP%253Dgeosoc1&designsystem=6&mrollp=30.02&pcguid=89663faa16d0a4d128c7a974e64bb162&pn=2&rq=4d4f2c420ddce57d&ciid=w0AZBYc*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D4d4f2c420ddce57d%26node_id%3Dcc045d5013b6ded3%26REQUEST_GUID%3D171e7c34-0180-a4d0-5877-4bcfc7a15d1e%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A517%253E7%253C%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7c34019-0x6ad0b7f%26cal_mod%3Dfalse&TPool=r1rover&TDuration=2&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=71.205.28.140&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.77.5.135&TStamp=19:14:25.04&TName=roverimp&Agent=eBayiPhone/6.0.0&RemoteIP=10.173.226.107"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&trknvpsvc=%3Ca%3Ees%3D0%26nqc%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26nqt%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26ec%3D5%26uit%3D1569968239000%3C%2Fa%3E&imp=2051248&lv=udid%3D8953ec6916d93c1d43031330013330d2%26ai%3D1462%26mav%3D6.0.0%26site%3D0%26ou%3DnY%252BsHZ2PrBmdj6wVnY%252BsEZ2PrA2dj6wJkYeoCJGGoQ6dj6x9nY%252BseQ**%26memsz%3D3.75%26res%3D828X1792%26mrollp%3D30.02%26designsystem%3D6%26c%3D4%26osv%3D13.4.1%26ids%3DMP%253Dgeosoc1%26mnt%3Dwifi%26prefl%3Den-US%26un%3Dgeosoc1%26tzname%3DAmerica%2FDenver%26reqts%3D1588731265035%26tz%3D-6.00%26mos%3DiOS%26mlocset%3D2%26ort%3DP%26carrier%3Dwifi%26uc%3DUS%26dn%3DiPhone12_1%26idfa%3D00000000-0000-0000-0000-000000000000%2C0%26ttp%3DPage%26mtsts%3D2020-05-05T19%3A14%3A24.444");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(4);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("15901402");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    // 5
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2370942);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:25.009")));
+    ubiEvent.setRemoteIP("71.205.28.140");
+    ubiEvent.setRequestCorrelationId("1Z%2FmkuiOmmzjjccl");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dpiesqn47pse31%2853%3B%3C4%3E5%2Busqdrrp%2Buk%60%2Bceb%7C%28dlh-171e7c33ff2-0xe8");
+    ubiEvent.setEventFamily("LST");
+    ubiEvent.setEventAction("ANSTRIG");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("ebayUserAgent/eBayIOS;6.0.0;iOS;13.4.1;Apple;iPhone12_1;Verizon;414x896;2.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(553629859779L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("apisd.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "flgs=AA**&dm=Apple&dn=iPhone12_1&uc=1&modulereq=prov%3ANATIVE_AFS_ADS_PROVIDER%7Cmi%3A45983%7Cenabled%3A1%7Ccandidate%3A1%7Ciid%3A1%2Cprov%3AVEHICLE_PARTS_PROVIDER%7Cmi%3A1003%7Cenabled%3A1%7Ccandidate%3A1%7Ciid%3A1%2Cprov%3ASEARCH_GUIDANCE_PROVIDER%7Cmi%3A4213%7Cenabled%3A1%7Ccandidate%3A0%7Cnoshowcode%3ANO_DATA%7Ciid%3A1%2Cprov%3ARELATED_SEARCHES_PROVIDER%7Cmi%3A4117%7Cenabled%3A1%7Ccandidate%3A1%7Ciid%3A1%2Cprov%3ASPONSORED_ITEMS_ANSWER_PROVIDER%7Cmi%3A45600%7Cenabled%3A1%7Ccandidate%3A0%7Cnoshowcode%3ANO_DATA%7Ciid%3A1%2Cprov%3AMFE_MERCHANT_PROMOTION_PROVIDER%7Cenabled%3A1%7Ccandidate%3A0%7Cnoshowcode%3ANO_DATA%7Ciid%3A1&mos=iOS&bs=0&pageci=4e4cd0aa-8f3f-11ea-99ee-74dbd1804d73&osv=13.4.1&ul=en-US&pagename=ANSWERS_PLATFORM_PAGE&app=1462&res=0x0&efam=LST&mav=6.0.0&g=8953ec6916d93c1d43031330013330d2&h=69&nativeApp=true&an=eBayIOS&sections=rgn%3ASTATUS_BAR_REGION%7Csection%3AFULL_REGION%7Cslots%3A1%2Crgn%3ARIVER%7Csection%3ATOP_SECTION%7Cslots%3A3%2Crgn%3ARIVER%7Csection%3AMIDDLE_SECTION%7Cslots%3A2%2Crgn%3ARIVER%7Csection%3ABOTTOM_SECTION%7Cslots%3A4%2Crgn%3ACENTER_TOP%7Csection%3AFULL_REGION%7Cslots%3A1&n=89663faa16d0a4d128c7a974e64bb162&p=2370942&t=0&u=15901402&cflgs=AA**&moduletrig=prov%3ARELATED_SEARCHES_PROVIDER%7Cmi%3A4117%7Ciid%3A0%7Cscen%3A%7Cslot%3A9%7Crank%3A1%7Cscore%3A0.0%2Cprov%3ASTATUS_BAR_PROVIDER%7Cmi%3A4495%7Ciid%3A0%7Cscen%3AStatusBar%7Cslot%3A1%7Crank%3A1%7Cscore%3A0.0%2Cprov%3ANATIVE_AFS_ADS_PROVIDER%7Cmi%3A45983%7Ciid%3A0%7Cscen%3ANativeAfsAds%7Cslot%3A9%7Crank%3A1%7Cscore%3A0.0%2Cprov%3ASAVE_SEARCH_ANSWER_PROVIDER%7Cmi%3A44880%7Ciid%3A0%7Cscen%3ASAVE_SEARCH_ALL%7Cslot%3A2%7Crank%3A1%7Cscore%3A0.0&eactn=ANSTRIG&rq=1Z%2FmkuiOmmzjjccl&ciid=wz%2Fp5oA*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D1Z%2FmkuiOmmzjjccl%26node_id%3D2fef6eb2b5f3f43d%26REQUEST_GUID%3D171e7c33ed7.ad383d6.1b621.81a97c87%26logid%3Dt6wwm53vpd77%253C%253Dpiesqn47pse31%252853%253B%253C4%253E5%252Busqdrrp%252Buk%2560%252Bceb%257C%2528dlh-171e7c33ff2-0xe8%26cal_mod%3Dfalse&TPool=r1srchsvc1&TDuration=2&TStatus=0&TType=URL&ContentLength=1865&ForwardedFor=71.205.28.140;184.25.204.167&Script=/trk20svc/TrackingResource/v1&Server=apisd.ebay.com&TMachine=10.173.230.128&TStamp=19:14:25.00&TName=Ginger.CollectionSvc.track&Agent=ebayUserAgent/eBayIOS;6.0.0;iOS;13.4.1;Apple;iPhone12_1;Verizon;414x896;2.0&RemoteIP=71.205.28.140&Encoding=gzip&Referer=null"));
+    ubiEvent.setUrlQueryString(
+        "/search/v2");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("15901402");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    // 6
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(3962);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:25.408")));
+    ubiEvent.setRemoteIP("71.205.28.140");
+    ubiEvent.setRequestCorrelationId("63534c254a7bcb67");
+    ubiEvent.setSid("e11050");
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*422637%28twwgsvv%28umj%28bad%7F%29%60jk-171e7c34184-0x12d");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(204740968899L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("rover.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "webview=true&segname=11050&osub=-1%7E1&chnl=7&uc=1&sid=e11050&bs=0&uaid=e7c341811710aafab2f161519ddbe568S0&ref=https%3A%2F%2Febay.com%2F&bu=43197876151&crd=20200505191352&ul=en-US&pagename=roveropen&app=1462&c=1&euid=5d514476ae794bbc9546d531f12acb9c&ch=osgood&g=8953ec6916d93c1d43031330013330d2&h=69&n=ee8d4ee714c0a7e348a081b0fb9fa503&p=3962&r=-1245461096&t=0&cflgs=EA**&pn=2&rq=63534c254a7bcb67&ciid=w0GDqy8*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D63534c254a7bcb67%26node_id%3Dc1a72e15f4772a33%26REQUEST_GUID%3D171e7c34-1800-aafa-b2f1-aedbca5cd62f%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A422637%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7c34184-0x12d%26cal_mod%3Dfalse&TPool=r1rover&TDuration=4&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=71.205.28.140&Script=/roveropen/0/e11050/7&Server=rover.ebay.com&TMachine=10.175.171.47&TStamp=19:14:25.40&TName=roveropen&Agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148&RemoteIP=71.205.28.140&Encoding=gzip, deflate, br&Referer=https://ebay.com/"));
+    ubiEvent.setUrlQueryString(
+        "/roveropen/0/e11050/7?osub=-1%7E1&crd=20200505191352&sojTags=bu%3Dbu%2Cch%3Dch%2Csegname%3Dsegname%2Ccrd%3Dcrd%2Cosub%3Dosub&ch=osgood&segname=11050&bu=43197876151&euid=5d514476ae794bbc9546d531f12acb9c");
+    ubiEvent.setPageName("roveropen");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(1);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(-1245461096L);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer("https://ebay.com/");
+    ubiEvent.setUserId(null);
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    // 7
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2493970);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:24.749")));
+    ubiEvent.setRemoteIP("71.205.28.140");
+    ubiEvent.setRequestCorrelationId("a326695d57f0111f");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dqkisqn47pse31%28752647-vrubqst-whh-%60dfz%2Behn-171e7c33eed-0x1f8");
+    ubiEvent.setEventFamily("CART");
+    ubiEvent.setEventAction("EXPC");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("ebayUserAgent/eBayIOS;6.0.0;iOS;13.4.1;Apple;iPhone12_1;Verizon;414x896;2.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(775991148227L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AEQ*");
+    ubiEvent.setWebServer("apisd.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "nqc=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAKAABAAg*&flgs=AEQ*&cartic=0&dm=Apple&dn=iPhone12_1&mcc=false&uic=0&uc=1&tic=0&nqt=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&mos=iOS&bs=0&osv=13.4.1&nmq=0&ul=en-US&callingpagename=cartexsvc__DefaultPage&ec=5&pagename=cartexsvc__DefaultPage&app=1462&res=0x0&uit=1569968239000&efam=CART&mav=6.0.0&crtsz=0&ebc=5043141117&g=8953ec6916d93c1d43031330013330d2&rpg=2493970&h=69&num_itm_unavbl=0&prof=IOS&nativeApp=true&cp=2493970&an=eBayIOS&n=89663faa16d0a4d128c7a974e64bb162&es=0&p=2493970&t=0&u=15901402&cflgs=AA**&cmd=DefaultPage&issmeoic=false&eactn=EXPC&bic=0&rq=a326695d57f0111f&ciid=wz6trLQ*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3Db54fb3ee1c9caf5a%26node_id%3De8c44616003bbc4c%26REQUEST_GUID%3D171e7c33-eea0-a12a-cb42-395efe7e477c%26logid%3Dt6wwm53vpd77%253C%253Dqkisqn47pse31%2528752647-vrubqst-whh-%2560dfz%252Behn-171e7c33eed-0x1f8%26cal_mod%3Dfalse&TPool=r1cartexsvc&TDuration=2&TStatus=0&TType=URL&ContentLength=1591&ForwardedFor=71.205.28.140;184.25.204.167&Script=/trk20svc/TrackingResource/v1&Server=apisd.ebay.com&TMachine=10.18.172.180&TStamp=19:14:24.74&TName=Ginger.CollectionSvc.track&Agent=ebayUserAgent/eBayIOS;6.0.0;iOS;13.4.1;Apple;iPhone12_1;Verizon;414x896;2.0&RemoteIP=71.205.28.140&Encoding=gzip&Referer=null"));
+    ubiEvent.setUrlQueryString(
+        "/experience/shopping_cart/v1/cart?mode=lite");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("15901402");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    // 8
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2530290);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:24.588")));
+    ubiEvent.setRemoteIP("71.205.28.140");
+    ubiEvent.setRequestCorrelationId("2775fd0ee0030e8e");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dosusqn47pse31%2850732%3E6%2Busqdrrp%2Bjqp%2Bceb%7C%28dlh-171e7c33e4d-0xc3");
+    ubiEvent.setEventFamily("MFE");
+    ubiEvent.setEventAction("EXPM");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("ebayUserAgent/eBayIOS;6.0.0;iOS;13.4.1;Apple;iPhone12_1;no-carrier;414x896;2.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(664700534467L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("apisd.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "nqc=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAKAABAAg*&flgs=AA**&dm=Apple&dn=iPhone12_1&uc=1&nqt=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&mos=iOS&bs=0&osv=13.4.1&plmt=twAAAB%252BLCAAAAAAAAAA1jtsKgzAQRP9ln1NY05Dt%252BCvFh5iUImiV3ihI%252Fr1TpU8Hhp2zs8pyldYHHGHqZBmkPa8yFGkbVVhwkhkd4OROijdFzFGtFA0wIKpqgvU5xt77kzi5PKnoyLSrWLu9xtFJ%252BgkAqDY8S%252B9%252FPjHn6%252BmzYc4b0mPHzCGVtkyrJzhMa1e%252FEnjFULcAAAA%253D&ul=en-US&callingpagename=cartexsvc__DefaultPage&ec=5&pagename=reco__experience_merchandising_v1_module_provider_GET&app=1462&res=0x0&uit=1569968239000&efam=MFE&mav=6.0.0&g=8953ec6916d93c1d43031330013330d2&rpg=2493970&h=69&nativeApp=true&cp=2493970&an=eBayIOS&n=89663faa16d0a4d128c7a974e64bb162&es=0&p=2530290&t=0&u=15901402&cflgs=AA**&eactn=EXPM&rq=2775fd0ee0030e8e&po=%5B%28pg%3A2493970+pid%3A100974%29%5D&ciid=wz49w5o*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D4666727c5dc35971%26node_id%3D840875bf0918c568%26REQUEST_GUID%3D171e7c33-e480-ad4c-39a0-3b09fbd43731%26logid%3Dt6wwm53vpd77%253C%253Dosusqn47pse31%252850732%253E6%252Busqdrrp%252Bjqp%252Bceb%257C%2528dlh-171e7c33e4d-0xc3%26cal_mod%3Dfalse&TPool=r1reco&TDuration=2&TStatus=0&TType=URL&ContentLength=1426&ForwardedFor=71.205.28.140;184.25.204.167&Script=/trk20svc/TrackingResource/v1&Server=apisd.ebay.com&TMachine=10.212.195.154&TStamp=19:14:24.58&TName=Ginger.CollectionSvc.track&Agent=ebayUserAgent/eBayIOS;6.0.0;iOS;13.4.1;Apple;iPhone12_1;no-carrier;414x896;2.0&RemoteIP=71.205.28.140&Encoding=gzip&Referer=null"));
+    ubiEvent.setUrlQueryString(
+        "/experience/shopping_cart/v1/cart?mode=lite");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("15901402");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    // 9
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2370942);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:25.005")));
+    ubiEvent.setRemoteIP("71.205.28.140");
+    ubiEvent.setRequestCorrelationId("1Z%2FmkuiOmmzjjccl");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dosusqn47pse31%285%3E2725%3A-171e7c33fee-0xd9");
+    ubiEvent.setEventFamily("LST");
+    ubiEvent.setEventAction("ANSTMPL");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("ebayUserAgent/eBayIOS;6.0.0;iOS;13.4.1;Apple;iPhone12_1;Verizon;414x896;2.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(553629794243L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr("postalCodeTestQuery");
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("apisd.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "flgs=AA**&dm=Apple&dn=iPhone12_1&locale=en-US-x-lvariant-MAIN&pagetmpl=SRP&uc=1&modulergn=rgn%3ARIVER%7Crank%3A1%7Cmi%3A44880%7Ciid%3A1%7Cuxcg%3ASAVE_CARD_MESSAGE_GROUP%7Cscen%3ASAVE_SEARCH_ALL%2Crgn%3ARIVER%7Crank%3A2%7Cmi%3A4117%7Ciid%3A1%7Cuxcg%3AQUERY_ANSWER_TEXT_LIST_GROUP%7Cscen%3A%7Csver%3A&mos=iOS&bs=0&pageci=4e4cd0aa-8f3f-11ea-99ee-74dbd1804d73&osv=13.4.1&ul=en-US&pagename=ANSWERS_PLATFORM_PAGE&app=1462&res=0x0&efam=LST&mav=6.0.0&ansdomain=SEARCH&g=8953ec6916d93c1d43031330013330d2&h=69&nativeApp=true&an=eBayIOS&n=89663faa16d0a4d128c7a974e64bb162&p=2370942&anschannel=NATIVE&t=0&sQr=postalCodeTestQuery&u=15901402&cflgs=AA**&eactn=ANSTMPL&rq=1Z%2FmkuiOmmzjjccl&ciid=wz%2Fo5oA*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D1Z%2FmkuiOmmzjjccl%26node_id%3D2d2989eb02377678%26REQUEST_GUID%3D171e7c33ed7.ad383d6.1b621.81a97c87%26logid%3Dt6wwm53vpd77%253C%253Dosusqn47pse31%25285%253E2725%253A-171e7c33fee-0xd9%26cal_mod%3Dfalse&TPool=r1srchsvc1&TDuration=4&TStatus=0&TType=URL&ContentLength=1149&ForwardedFor=71.205.28.140;184.25.204.167&Script=/trk20svc/TrackingResource/v1&Server=apisd.ebay.com&TMachine=10.173.230.128&TStamp=19:14:25.00&TName=Ginger.CollectionSvc.track&Agent=ebayUserAgent/eBayIOS;6.0.0;iOS;13.4.1;Apple;iPhone12_1;Verizon;414x896;2.0&RemoteIP=71.205.28.140&Encoding=gzip&Referer=null"));
+    ubiEvent.setUrlQueryString(
+        "/search/v2");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("15901402");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    // 10
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2380424);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:24.447")));
+    ubiEvent.setRemoteIP("71.205.28.140");
+    ubiEvent.setRequestCorrelationId("5af9aafccca2fcfc");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dqkisqn47pse31%2855711%3E-vrubqst-whh-%60dfz%2Behn-171e7c33dbf-0xcf");
+    ubiEvent.setEventFamily("NOTF");
+    ubiEvent.setEventAction("EXPC");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("ebayUserAgent/eBayIOS;6.0.0;iOS;13.4.1;Apple;iPhone12_1;Verizon;414x896;2.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(845311786435L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AA**");
+    ubiEvent.setWebServer("apisd.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "!pgi=2380424%3A0&nqc=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAKAABAAg*&flgs=AA**&!qt=225272,226680,226658,226345,225831,225841,226465,225061,225064,226101,59377,226079,225405,226613,226009,225387,225987,226006,226108,59950,226601,225539,61088&!ni_nt=MESSAGE_RECEIVED,ITEM_SHIPPED,PackageDeliveryConfirmation,MESSAGE_RECEIVED&dm=Apple&dn=iPhone12_1&nqt=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&mos=iOS&osv=13.4.1&callingpagename=notifexp__experience_notification_inbox_v1_notification_hub_GET&ec=5&pagename=notifexp__experience_notification_inbox_v1_notification_hub_GET&app=1462&res=0x0&uit=1569968239000&efam=NOTF&mav=6.0.0&ni_nC=1&g=8953ec6916d93c1d43031330013330d2&h=69&ni_tC=4&!ni_nsid=124886112942,313065028923,202927160849,124253423802&nativeApp=true&cp=2380424&an=eBayIOS&n=89663faa16d0a4d128c7a974e64bb162&es=0&p=2380424&!ni_nid=452263537136,435029300216,434904397040,433282286096&t=0&u=15901402&cflgs=AA**&eactn=EXPC&!mi=2|5395%3Atrue&rq=5af9aafccca2fcfc&ciid=wz2C0MQ*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D5f7830f51cbbb6bb%26node_id%3Dd34bcf7c3d04cb5f%26REQUEST_GUID%3D171e7c33-dbc0-a9bd-0c44-3bf2ffa017e7%26logid%3Dt6wwm53vpd77%253C%253Dqkisqn47pse31%252855711%253E-vrubqst-whh-%2560dfz%252Behn-171e7c33dbf-0xcf%26cal_mod%3Dfalse&TPool=r1notifexp&TDuration=1&TStatus=0&TType=URL&ContentLength=1529&ForwardedFor=71.205.28.140;184.25.204.167&Script=/trk20svc/TrackingResource/v1&Server=apisd.ebay.com&TMachine=10.155.208.196&TStamp=19:14:24.44&TName=Ginger.CollectionSvc.track&Agent=ebayUserAgent/eBayIOS;6.0.0;iOS;13.4.1;Apple;iPhone12_1;Verizon;414x896;2.0&RemoteIP=71.205.28.140&Encoding=gzip&Referer=null"));
+    ubiEvent.setUrlQueryString(
+        "/experience/notification_inbox/v1/notification_hub?offset=0&limit=40");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("15901402");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    // 11
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2054060);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:24.320")));
+    ubiEvent.setRemoteIP("10.173.226.107");
+    ubiEvent.setRequestCorrelationId("4d4f2c420ddce57d");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*517%3E7%3C%28twwgsvv%28umj%28bad%7F%29%60jk-171e7c34020-0x121");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("eBayiPhone/6.0.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(579906584771L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "nqc=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&user_name=geosoc1&tz=-6.00&nid=588088590080&pnact=1&lv=1&dn=iPhone12_1&tzname=America%2FDenver&uc=1&nqt=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&mos=iOS&bs=0&uaid=e7c340201710a4d05876588498d86d7aS0&memsz=3.75&osv=13.4.1&ul=en-US&mtsts=2020-05-05T19%3A14%3A24.320&ec=5&pagename=NotificationAction&app=1462&res=828X1792&uit=1569968239000&c=2&mav=6.0.0&g=8953ec6916d93c1d43031330013330d2&idfa=00000000-0000-0000-0000-000000000000%2C0&h=69&reqts=1588731265036&cguidsrc=cookie&ntype=M2MMSGHDR&n=89663faa16d0a4d128c7a974e64bb162&es=0&ort=P&p=2054060&ttp=Page&mnt=wifi&carrier=wifi&t=0&u=15901402&prefl=en-US&cflgs=EA**&ids=MP%253Dgeosoc1&designsystem=6&mrollp=30.02&pcguid=89663faa16d0a4d128c7a974e64bb162&pn=2&rq=4d4f2c420ddce57d&ciid=w0AgBYc*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D4d4f2c420ddce57d%26node_id%3D3f41458df9862a0c%26REQUEST_GUID%3D171e7c34-01f0-a4d0-5877-4bcfc7a15d1a%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2A517%253E7%253C%2528twwgsvv%2528umj%2528bad%257F%2529%2560jk-171e7c34020-0x121%26cal_mod%3Dfalse&TPool=r1rover&TDuration=1&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=71.205.28.140&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.77.5.135&TStamp=19:14:25.05&TName=roverimp&Agent=eBayiPhone/6.0.0&RemoteIP=10.173.226.107"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&trknvpsvc=%3Ca%3Ees%3D0%26nqc%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26nqt%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26ec%3D5%26uit%3D1569968239000%3C%2Fa%3E&imp=2054060&lv=udid%3D8953ec6916d93c1d43031330013330d2%26ai%3D1462%26mav%3D6.0.0%26site%3D0%26ou%3DnY%252BsHZ2PrBmdj6wVnY%252BsEZ2PrA2dj6wJkYeoCJGGoQ6dj6x9nY%252BseQ**%26memsz%3D3.75%26res%3D828X1792%26mrollp%3D30.02%26pnact%3D1%26designsystem%3D6%26c%3D2%26nid%3D588088590080%26osv%3D13.4.1%26ids%3DMP%253Dgeosoc1%26mnt%3Dwifi%26prefl%3Den-US%26un%3Dgeosoc1%26tzname%3DAmerica%2FDenver%26reqts%3D1588731265036%26tz%3D-6.00%26mos%3DiOS%26ntype%3DM2MMSGHDR%26ort%3DP%26carrier%3Dwifi%26uc%3DUS%26dn%3DiPhone12_1%26idfa%3D00000000-0000-0000-0000-000000000000%2C0%26ttp%3DPage%26mtsts%3D2020-05-05T19%3A14%3A24.320");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(2);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("15901402");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    // 12
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2493970);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:24.605")));
+    ubiEvent.setRemoteIP("71.205.28.140");
+    ubiEvent.setRequestCorrelationId("2775fd0ee0030e8e");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6wwm53vpd77%3C%3Dqkisqn47pse31%285222%3F3-vrubqst-whh-%60dfz%2Behn-171e7c33e5e-0x12a");
+    ubiEvent.setEventFamily("CART");
+    ubiEvent.setEventAction("EXPC");
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("ebayUserAgent/eBayIOS;6.0.0;iOS;13.4.1;Apple;iPhone12_1;no-carrier;414x896;2.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(629446229443L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags("AEQ*");
+    ubiEvent.setWebServer("apisd.ebay.com");
+    ubiEvent.setApplicationPayload(
+        "nqc=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAKAABAAg*&flgs=AEQ*&cartic=0&dm=Apple&dn=iPhone12_1&mcc=false&uic=0&uc=1&tic=0&nqt=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&mos=iOS&bs=0&osv=13.4.1&nmq=0&ul=en-US&callingpagename=cartexsvc__DefaultPage&ec=5&pagename=cartexsvc__DefaultPage&app=1462&res=0x0&uit=1569968239000&efam=CART&mav=6.0.0&crtsz=0&ebc=5043141117&g=8953ec6916d93c1d43031330013330d2&rpg=2493970&h=69&num_itm_unavbl=0&prof=IOS&nativeApp=true&cp=2493970&an=eBayIOS&n=89663faa16d0a4d128c7a974e64bb162&es=0&p=2493970&t=0&u=15901402&cflgs=AA**&cmd=DefaultPage&issmeoic=false&eactn=EXPC&bic=0&rq=2775fd0ee0030e8e&ciid=wz3rjZI*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3D4af3f1f8d706a0b7%26node_id%3Dd4771a1eb8f204d6%26REQUEST_GUID%3D171e7c33-e590-aaf8-d921-a630fe167314%26logid%3Dt6wwm53vpd77%253C%253Dqkisqn47pse31%25285222%253F3-vrubqst-whh-%2560dfz%252Behn-171e7c33e5e-0x12a%26cal_mod%3Dfalse&TPool=r1cartexsvc&TDuration=1&TStatus=0&TType=URL&ContentLength=1596&ForwardedFor=71.205.28.140;184.25.204.167&Script=/trk20svc/TrackingResource/v1&Server=apisd.ebay.com&TMachine=10.175.141.146&TStamp=19:14:24.60&TName=Ginger.CollectionSvc.track&Agent=ebayUserAgent/eBayIOS;6.0.0;iOS;13.4.1;Apple;iPhone12_1;no-carrier;414x896;2.0&RemoteIP=71.205.28.140&Encoding=gzip&Referer=null"));
+    ubiEvent.setUrlQueryString(
+        "/experience/shopping_cart/v1/cart?mode=lite");
+    ubiEvent.setPageName("Ginger.CollectionSvc.track");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(0);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("15901402");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    // 13
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2052307);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:24.444")));
+    ubiEvent.setRemoteIP("10.212.191.198");
+    ubiEvent.setRequestCorrelationId("e652e96264977a82");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*t1j%7Fa%28rbpv6710-171e7c3acc4-0x151");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("eBayiPhone/6.0.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(778844810435L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "nqc=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&user_name=geosoc1&tz=-6.00&lv=1&dn=iPhone12_1&tzname=America%2FDenver&uc=1&nqt=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&mos=iOS&bs=0&uaid=e7c3acc41710a6e56b56aedaf1048de9S0&memsz=3.75&osv=13.4.1&ul=en-US&mtsts=2020-05-05T19%3A14%3A24.444&ec=5&pagename=MessageFolder&app=1462&res=828X1792&uit=1569968239000&c=5&mav=6.0.0&mtsgitcommit=d6b703b28b7c71bdb516eedb3d62a9c832dfa163&g=8953ec6916d93c1d43031330013330d2&idfa=00000000-0000-0000-0000-000000000000%2C0&h=69&reqts=1588731292857&cguidsrc=cookie&n=89663faa16d0a4d128c7a974e64bb162&es=0&ort=P&p=2052307&ttp=Page&mnt=wifi&carrier=wifi&t=0&u=15901402&prefl=en-US&cflgs=EA**&ids=MP%253Dgeosoc1&designsystem=6&mrollp=30.02&pcguid=89663faa16d0a4d128c7a974e64bb162&pn=2&rq=e652e96264977a82&ciid=w6zEVrU*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De652e96264977a82%26node_id%3D8d3558196af2d4ff%26REQUEST_GUID%3D171e7c3a-cc30-a6e5-6b56-072cf822ed54%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2At1j%257Fa%2528rbpv6710-171e7c3acc4-0x151%26cal_mod%3Dfalse&TPool=r1rover&TDuration=2&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=71.205.28.140&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.110.86.181&TStamp=19:14:52.86&TName=roverimp&Agent=eBayiPhone/6.0.0&RemoteIP=10.212.191.198"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&trknvpsvc=%3Ca%3Ees%3D0%26nqc%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26nqt%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26ec%3D5%26uit%3D1569968239000%3C%2Fa%3E&imp=2052307&lv=udid%3D8953ec6916d93c1d43031330013330d2%26ai%3D1462%26mav%3D6.0.0%26site%3D0%26ou%3DnY%252BsHZ2PrBmdj6wVnY%252BsEZ2PrA2dj6wJkYeoCJGGoQ6dj6x9nY%252BseQ**%26memsz%3D3.75%26res%3D828X1792%26mrollp%3D30.02%26designsystem%3D6%26c%3D5%26osv%3D13.4.1%26ids%3DMP%253Dgeosoc1%26mnt%3Dwifi%26mtsgitcommit%3Dd6b703b28b7c71bdb516eedb3d62a9c832dfa163%26prefl%3Den-US%26un%3Dgeosoc1%26tzname%3DAmerica%2FDenver%26reqts%3D1588731292857%26tz%3D-6.00%26mos%3DiOS%26ort%3DP%26carrier%3Dwifi%26uc%3DUS%26dn%3DiPhone12_1%26idfa%3D00000000-0000-0000-0000-000000000000%2C0%26ttp%3DPage%26mtsts%3D2020-05-05T19%3A14%3A24.444");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(5);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("15901402");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    // 14
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2051249);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:52.067")));
+    ubiEvent.setRemoteIP("10.212.191.198");
+    ubiEvent.setRequestCorrelationId("e652e96264977a82");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*t1j%7Fa%28rbpv6710-171e7c3acd4-0x170");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("eBayiPhone/6.0.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(778845859011L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "nqc=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&user_name=geosoc1&tz=-6.00&lv=1&dn=iPhone12_1&tzname=America%2FDenver&uc=1&nqt=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&mos=iOS&bs=0&uaid=e7c3acd31710a6e56b56aedaf1048ddfS0&mlocset=2&memsz=3.75&osv=13.4.1&ul=en-US&mtsts=2020-05-05T19%3A14%3A52.067&ec=5&pagename=Background&app=1462&res=828X1792&uit=1569968239000&c=9&mav=6.0.0&mtsgitcommit=d6b703b28b7c71bdb516eedb3d62a9c832dfa163&g=8953ec6916d93c1d43031330013330d2&idfa=00000000-0000-0000-0000-000000000000%2C0&h=69&reqts=1588731292858&cguidsrc=cookie&n=89663faa16d0a4d128c7a974e64bb162&es=0&ort=P&p=2051249&ttp=Page&mnt=wifi&carrier=wifi&t=0&u=15901402&prefl=en-US&cflgs=EA**&ids=MP%253Dgeosoc1&designsystem=6&mrollp=30.02&pcguid=89663faa16d0a4d128c7a974e64bb162&pn=2&rq=e652e96264977a82&ciid=w6zUVrU*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De652e96264977a82%26node_id%3D90824c9c3f382bb4%26REQUEST_GUID%3D171e7c3a-cd30-a6e5-6b56-072cf822ed4e%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2At1j%257Fa%2528rbpv6710-171e7c3acd4-0x170%26cal_mod%3Dfalse&TPool=r1rover&TDuration=2&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=71.205.28.140&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.110.86.181&TStamp=19:14:52.88&TName=roverimp&Agent=eBayiPhone/6.0.0&RemoteIP=10.212.191.198"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&trknvpsvc=%3Ca%3Ees%3D0%26nqc%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26nqt%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26ec%3D5%26uit%3D1569968239000%3C%2Fa%3E&imp=2051249&lv=udid%3D8953ec6916d93c1d43031330013330d2%26ai%3D1462%26mav%3D6.0.0%26site%3D0%26ou%3DnY%252BsHZ2PrBmdj6wVnY%252BsEZ2PrA2dj6wJkYeoCJGGoQ6dj6x9nY%252BseQ**%26memsz%3D3.75%26res%3D828X1792%26mrollp%3D30.02%26designsystem%3D6%26c%3D9%26osv%3D13.4.1%26ids%3DMP%253Dgeosoc1%26mnt%3Dwifi%26mtsgitcommit%3Dd6b703b28b7c71bdb516eedb3d62a9c832dfa163%26prefl%3Den-US%26un%3Dgeosoc1%26tzname%3DAmerica%2FDenver%26reqts%3D1588731292858%26tz%3D-6.00%26mos%3DiOS%26mlocset%3D2%26ort%3DP%26carrier%3Dwifi%26uc%3DUS%26dn%3DiPhone12_1%26idfa%3D00000000-0000-0000-0000-000000000000%2C0%26ttp%3DPage%26mtsts%3D2020-05-05T19%3A14%3A52.067");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(9);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("15901402");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    // 15
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(true);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2054121);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:24.460")));
+    ubiEvent.setRemoteIP("10.212.191.198");
+    ubiEvent.setRequestCorrelationId("e652e96264977a82");
+    ubiEvent.setSid("p2054121.m2622");
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*t1j%7Fa%28rbpv6710-171e7c3acca-0x165");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("eBayiPhone/6.0.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(778845203651L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "nqc=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&tz=-6.00&lv=1&dn=iPhone12_1&uc=1&mos=iOS&nqt=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&uaid=e7c3acca1710a6e56b56aedaf1048de5S0&osv=13.4.1&neSound=1&ul=en-US&mtsts=2020-05-05T19%3A14%3A24.460&ec=5&apn=1&app=1462&res=828X1792&idfa=00000000-0000-0000-0000-000000000000%2C0&cguidsrc=cookie&es=0&cflgs=EA**&ids=MP%253Dgeosoc1&neBadge=1&designsystem=6&mrollp=30.02&pcguid=89663faa16d0a4d128c7a974e64bb162&rq=e652e96264977a82&user_name=geosoc1&tzname=America%2FDenver&bs=0&memsz=3.75&pagename=SettingsNotificationsChanged&uit=1569968239000&mav=6.0.0&c=7&mtsgitcommit=d6b703b28b7c71bdb516eedb3d62a9c832dfa163&g=8953ec6916d93c1d43031330013330d2&neAlert=1&h=69&reqts=1588731292858&n=89663faa16d0a4d128c7a974e64bb162&ort=P&p=2054121&ttp=Page&carrier=wifi&mnt=wifi&t=0&u=15901402&prefl=en-US&pn=2&ciid=w6zKVrU*&sid=p2054121.m2622");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De652e96264977a82%26node_id%3D964d6748b1167b98%26REQUEST_GUID%3D171e7c3a-cc90-a6e5-6b56-072cf822ed52%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2At1j%257Fa%2528rbpv6710-171e7c3acca-0x165%26cal_mod%3Dfalse&TPool=r1rover&TDuration=2&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=71.205.28.140&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.110.86.181&TStamp=19:14:52.87&TName=roverimp&Agent=eBayiPhone/6.0.0&RemoteIP=10.212.191.198"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&trknvpsvc=%3Ca%3Ees%3D0%26nqc%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26nqt%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26ec%3D5%26uit%3D1569968239000%3C%2Fa%3E&imp=2054121&lv=udid%3D8953ec6916d93c1d43031330013330d2%26ai%3D1462%26mav%3D6.0.0%26site%3D0%26ou%3DnY%252BsHZ2PrBmdj6wVnY%252BsEZ2PrA2dj6wJkYeoCJGGoQ6dj6x9nY%252BseQ**%26res%3D828X1792%26memsz%3D3.75%26designsystem%3D6%26mnt%3Dwifi%26prefl%3Den-US%26tzname%3DAmerica%2FDenver%26neAlert%3D1%26neBadge%3D1%26ort%3DP%26carrier%3Dwifi%26dn%3DiPhone12_1%26apn%3D1%26mrollp%3D30.02%26c%3D7%26ids%3DMP%253Dgeosoc1%26osv%3D13.4.1%26neSound%3D1%26mtsgitcommit%3Dd6b703b28b7c71bdb516eedb3d62a9c832dfa163%26un%3Dgeosoc1%26reqts%3D1588731292858%26tz%3D-6.00%26mos%3DiOS%26uc%3DUS%26idfa%3D00000000-0000-0000-0000-000000000000%2C0%26ttp%3DPage%26mtsts%3D2020-05-05T19%3A14%3A24.460&_trksid=p2054121.m2622");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(7);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("15901402");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    // 16
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2052307);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:24.451")));
+    ubiEvent.setRemoteIP("10.212.191.198");
+    ubiEvent.setRequestCorrelationId("e652e96264977a82");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*t1j%7Fa%28rbpv6710-171e7c3acc7-0x16d");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("eBayiPhone/6.0.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(778845007043L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "nqc=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&user_name=geosoc1&tz=-6.00&lv=1&dn=iPhone12_1&tzname=America%2FDenver&uc=1&nqt=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&mos=iOS&bs=0&uaid=e7c3acc71710a6e56b56aedaf1048de7S0&memsz=3.75&osv=13.4.1&ul=en-US&mtsts=2020-05-05T19%3A14%3A24.451&ec=5&pagename=MessageFolder&app=1462&res=828X1792&uit=1569968239000&c=6&mav=6.0.0&mtsgitcommit=d6b703b28b7c71bdb516eedb3d62a9c832dfa163&g=8953ec6916d93c1d43031330013330d2&idfa=00000000-0000-0000-0000-000000000000%2C0&h=69&reqts=1588731292857&cguidsrc=cookie&n=89663faa16d0a4d128c7a974e64bb162&es=0&ort=P&p=2052307&ttp=Page&mnt=wifi&carrier=wifi&t=0&u=15901402&prefl=en-US&cflgs=EA**&ids=MP%253Dgeosoc1&designsystem=6&mrollp=30.02&pcguid=89663faa16d0a4d128c7a974e64bb162&pn=2&rq=e652e96264977a82&ciid=w6zHVrU*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De652e96264977a82%26node_id%3D8be75838deb75da7%26REQUEST_GUID%3D171e7c3a-cc60-a6e5-6b56-072cf822ed53%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2At1j%257Fa%2528rbpv6710-171e7c3acc7-0x16d%26cal_mod%3Dfalse&TPool=r1rover&TDuration=3&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=71.205.28.140&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.110.86.181&TStamp=19:14:52.87&TName=roverimp&Agent=eBayiPhone/6.0.0&RemoteIP=10.212.191.198"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&trknvpsvc=%3Ca%3Ees%3D0%26nqc%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26nqt%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26ec%3D5%26uit%3D1569968239000%3C%2Fa%3E&imp=2052307&lv=udid%3D8953ec6916d93c1d43031330013330d2%26ai%3D1462%26mav%3D6.0.0%26site%3D0%26ou%3DnY%252BsHZ2PrBmdj6wVnY%252BsEZ2PrA2dj6wJkYeoCJGGoQ6dj6x9nY%252BseQ**%26memsz%3D3.75%26res%3D828X1792%26mrollp%3D30.02%26designsystem%3D6%26c%3D6%26osv%3D13.4.1%26ids%3DMP%253Dgeosoc1%26mnt%3Dwifi%26mtsgitcommit%3Dd6b703b28b7c71bdb516eedb3d62a9c832dfa163%26prefl%3Den-US%26un%3Dgeosoc1%26tzname%3DAmerica%2FDenver%26reqts%3D1588731292857%26tz%3D-6.00%26mos%3DiOS%26ort%3DP%26carrier%3Dwifi%26uc%3DUS%26dn%3DiPhone12_1%26idfa%3D00000000-0000-0000-0000-000000000000%2C0%26ttp%3DPage%26mtsts%3D2020-05-05T19%3A14%3A24.451");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(6);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("15901402");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    // 17
+    ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("8953ec6916d93c1d43031330013330d2");
+    ubiEvent.setIframe(false);
+    ubiEvent.setRdt(false);
+    ubiEvent.setPageId(2048313);
+    ubiEvent.setEventTimestamp(Long.parseLong(SojTimestamp.getSojTimestamp("2020-05-05 19:14:25.102")));
+    ubiEvent.setRemoteIP("10.212.191.198");
+    ubiEvent.setRequestCorrelationId("e652e96264977a82");
+    ubiEvent.setSid(null);
+    ubiEvent.setRlogid("t6qjpbq%3F%3Cumjthu%60t*t1j%7Fa%28rbpv6710-171e7c3acd1-0x15e");
+    ubiEvent.setEventFamily(null);
+    ubiEvent.setEventAction(null);
+    ubiEvent.setPartialValidPage(true);
+    ubiEvent.setClientIP("71.205.28.140");
+    ubiEvent.setAgentInfo("eBayiPhone/6.0.0");
+    ubiEvent.setCobrand(6);
+    ubiEvent.setCurrentImprId(778845662403L);
+    ubiEvent.setEventAttr(null);
+    ubiEvent.setReservedForFuture(0);
+    ubiEvent.setSqr(null);
+    ubiEvent.setFlags(null);
+    ubiEvent.setWebServer("localhost");
+    ubiEvent.setApplicationPayload(
+        "nqc=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&user_name=geosoc1&tz=-6.00&lv=1&dn=iPhone12_1&tzname=America%2FDenver&uc=1&nqt=EQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*&mos=iOS&bs=0&uaid=e7c3acd11710a6e56b56aedaf1048de1S0&memsz=3.75&osv=13.4.1&ul=en-US&mtsts=2020-05-05T19%3A14%3A25.102&ec=5&pagename=ViewMessage&app=1462&res=828X1792&uit=1569968239000&c=8&mav=6.0.0&mtsgitcommit=d6b703b28b7c71bdb516eedb3d62a9c832dfa163&g=8953ec6916d93c1d43031330013330d2&idfa=00000000-0000-0000-0000-000000000000%2C0&h=69&reqts=1588731292858&cguidsrc=cookie&n=89663faa16d0a4d128c7a974e64bb162&es=0&ort=P&p=2048313&ttp=Page&mnt=wifi&carrier=wifi&t=0&u=15901402&prefl=en-US&cflgs=EA**&ids=MP%253Dgeosoc1&designsystem=6&mrollp=30.02&pcguid=89663faa16d0a4d128c7a974e64bb162&pn=2&rq=e652e96264977a82&ciid=w6zRVrU*");
+    ubiEvent.setClientData(constructClientData(
+        "TPayload=corr_id_%3De652e96264977a82%26node_id%3Da3b78b6b71d47092%26REQUEST_GUID%3D171e7c3a-cd10-a6e5-6b56-072cf822ed4f%26logid%3Dt6qjpbq%253F%253Cumjthu%2560t%2At1j%257Fa%2528rbpv6710-171e7c3acd1-0x15e%26cal_mod%3Dfalse&TPool=r1rover&TDuration=2&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=71.205.28.140&Script=/roverimp/0/0/14&Server=localhost&TMachine=10.110.86.181&TStamp=19:14:52.88&TName=roverimp&Agent=eBayiPhone/6.0.0&RemoteIP=10.212.191.198"));
+    ubiEvent.setUrlQueryString(
+        "/roverimp/0/0/14?rvrhostname=rover.ebay.com&rvrsite=0&trknvpsvc=%3Ca%3Ees%3D0%26nqc%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26nqt%3DEQAAAAAAgAAAAAAABAAIABAAAAAQBAAEAAAIACAAAQAAABAAQAAAAgAAAIAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEKAABAAg*%26ec%3D5%26uit%3D1569968239000%3C%2Fa%3E&imp=2048313&lv=udid%3D8953ec6916d93c1d43031330013330d2%26ai%3D1462%26mav%3D6.0.0%26site%3D0%26ou%3DnY%252BsHZ2PrBmdj6wVnY%252BsEZ2PrA2dj6wJkYeoCJGGoQ6dj6x9nY%252BseQ**%26memsz%3D3.75%26res%3D828X1792%26mrollp%3D30.02%26designsystem%3D6%26c%3D8%26osv%3D13.4.1%26ids%3DMP%253Dgeosoc1%26mnt%3Dwifi%26mtsgitcommit%3Dd6b703b28b7c71bdb516eedb3d62a9c832dfa163%26prefl%3Den-US%26un%3Dgeosoc1%26tzname%3DAmerica%2FDenver%26reqts%3D1588731292858%26tz%3D-6.00%26mos%3DiOS%26ort%3DP%26carrier%3Dwifi%26uc%3DUS%26dn%3DiPhone12_1%26idfa%3D00000000-0000-0000-0000-000000000000%2C0%26ttp%3DPage%26mtsts%3D2020-05-05T19%3A14%3A25.102");
+    ubiEvent.setPageName("roverimp");
+    ubiEvent.setVersion(3);
+    ubiEvent.setSiteId(0);
+    ubiEvent.setClickId(8);
+    ubiEvent.setItemId(null);
+    ubiEvent.setRefererHash(null);
+    ubiEvent.setCookies(null);
+    ubiEvent.setReferrer(null);
+    ubiEvent.setUserId("15901402");
+    ubiEvent.setRegu(0);
+    ubiEvent.setStaticPageType(0);
+    ubiEvent.setSourceImprId(null);
+    ubiEvent.setAppId(1462);
+    ubiEventList.add(ubiEvent);
+
+    sessionMetrics.init();
+    sessionMetrics.start(sessionAccumulator);
+    for (UbiEvent event : ubiEventList) {
+      sessionMetrics.feed(event, sessionAccumulator);
+    }
+    sessionMetrics.end(sessionAccumulator);
+    Assert.assertEquals(27, sessionAccumulator.getUbiSession().getTrafficSrcId());
+  }
+
 
   private ClientData constructClientData(String clientDatastr) {
     ClientData clientData = new ClientData();
