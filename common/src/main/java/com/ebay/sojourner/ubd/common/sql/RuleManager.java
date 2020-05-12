@@ -5,8 +5,9 @@ import com.ebay.sojourner.ubd.common.zookeeper.ZkClient;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import lombok.Getter;
@@ -23,7 +24,8 @@ public class RuleManager {
   private static final RuleManager INSTANCE = new RuleManager();
   private final RuleFetcher ruleFetcher;
   private final ZkClient zkClient;
-  private final Executor zkExecutor;
+  private final ExecutorService zkExecutor;
+  private final ScheduledExecutorService schedulingExecutor;
 
   @Getter
   private Set<SqlEventRule> sqlEventRuleSet = new CopyOnWriteArraySet<>();
@@ -33,6 +35,7 @@ public class RuleManager {
     ruleFetcher = new RuleFetcher();
     zkClient = new ZkClient();
     zkExecutor = Executors.newSingleThreadExecutor();
+    schedulingExecutor = Executors.newSingleThreadScheduledExecutor();
 
     // 1. fetch all rules at startup
     // initRules();
@@ -84,7 +87,7 @@ public class RuleManager {
   }
 
   private void initScheduling() {
-    Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(() -> {
+    schedulingExecutor.scheduleWithFixedDelay(() -> {
       updateRules(ruleFetcher.fetchAllRules());
     }, 6, 6, TimeUnit.HOURS);
   }
@@ -116,15 +119,16 @@ public class RuleManager {
   }
 
   private Set<Long> getRuleIdSet(Set<SqlEventRule> sqlEventRules) {
-
     return sqlEventRules
         .stream()
-        .map(rule -> rule.getRuleId())
+        .map(SqlEventRule::getRuleId)
         .collect(Collectors.toSet());
   }
 
   public void close() {
     zkClient.stop();
+    zkExecutor.shutdown();
+    schedulingExecutor.shutdown();
   }
 
   public static void main(String[] args) throws Exception {

@@ -108,7 +108,7 @@ public class UbiSession implements Serializable, Cloneable {
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   };
   private int seqNum;
-  private IntermediateMetrics intermediateMetrics;
+  private IntermediateMetrics intermediateMetrics ;
   private Long firstSessionStartDt;
 
   public UbiSession() {
@@ -179,5 +179,9 @@ public class UbiSession implements Serializable, Cloneable {
     }
 
     return this;
+  }
+
+  public void initIntermediateMetrics() {
+    intermediateMetrics = new IntermediateMetrics();
   }
 }

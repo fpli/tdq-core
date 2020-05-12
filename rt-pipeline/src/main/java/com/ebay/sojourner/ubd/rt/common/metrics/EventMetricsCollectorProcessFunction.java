@@ -2,6 +2,7 @@ package com.ebay.sojourner.ubd.rt.common.metrics;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.EventBotDetector;
+import com.ebay.sojourner.ubd.common.sql.RuleManager;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -50,8 +51,8 @@ public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEve
   public void processElement(UbiEvent ubiEvent, Context ctx, Collector<UbiEvent> out) {
 
     eventTotalCounter.inc();
-    Set<Long> dynamicRuleIdSet = EventBotDetector
-        .getRuleManager().getSqlEventRuleSet()
+    Set<Long> dynamicRuleIdSet = RuleManager
+        .getInstance().getSqlEventRuleSet()
         .stream()
         .map(rule -> rule.getRuleId())
         .collect(Collectors.toSet());

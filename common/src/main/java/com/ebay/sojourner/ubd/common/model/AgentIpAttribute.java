@@ -1,5 +1,6 @@
 package com.ebay.sojourner.ubd.common.model;
 
+import com.ebay.sojourner.ubd.common.util.TransformUtil;
 import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -44,7 +45,7 @@ public class AgentIpAttribute implements Attribute<IntermediateSession>, Seriali
   private int newGuidCnt = 0;
   //    private int guidCnt = 0;
   private Set<String> cguidSet = new HashSet<String>();
-  private Set<String> guidSet = new HashSet<String>();
+  private Set<Guid> guidSet = new HashSet<Guid>();
   private Boolean isAllAgentHoper = true;
   private int totalCntForSec1 = 0;
 
@@ -118,11 +119,17 @@ public class AgentIpAttribute implements Attribute<IntermediateSession>, Seriali
         newGuidCnt += 1;
       }
       if (intermediateSession.getGuid() != null) {
-        guidSet.add(intermediateSession.getGuid());
+        Long[] long4Cguid = TransformUtil.mD522Long(intermediateSession.getGuid());
+        Guid guid = new Guid();
+        guid.setGuid1(long4Cguid[0]);
+        guid.setGuid2(long4Cguid[1]);
+        guidSet.add(guid);
       }
 
       if (intermediateSession.getFirstCguid() != null) {
-        cguidSet.add(intermediateSession.getFirstCguid());
+        if (cguidSet.size() <= 5) {
+          cguidSet.add(intermediateSession.getFirstCguid());
+        }
       }
       isAllAgentHoper = isAllAgentHoper && UbiSessionHelper.isAgentHoper(intermediateSession);
     }

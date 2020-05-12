@@ -582,8 +582,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
-    intermediateMetrics = new IntermediateMetrics();
-    sessionAccumulator.getUbiSession().setIntermediateMetrics(intermediateMetrics);
+    sessionAccumulator.getUbiSession().initIntermediateMetrics();
 
   }
 
