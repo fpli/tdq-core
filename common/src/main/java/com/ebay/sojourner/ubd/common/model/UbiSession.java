@@ -70,7 +70,7 @@ public class UbiSession implements Serializable, Cloneable {
   private int pageCnt;
   private int searchCnt;
   private int viewCnt;
-  private Boolean isRefererNull; // for bot207
+  private boolean refererNull; // for bot207
   private int siidCnt2; // for bot207
   private int viCnt; // for bot215
 
@@ -79,7 +79,7 @@ public class UbiSession implements Serializable, Cloneable {
   private Set<String> agentSets = new HashSet<>();
   private String agentInfo;
   private String clientIp;
-  private Boolean findFirst;
+  private boolean findFirst;
   private String internalIp;
   private String externalIp;
   private String externalIp2;
@@ -109,13 +109,13 @@ public class UbiSession implements Serializable, Cloneable {
     //        this.agentSets= new HashSet<String>();
   }
 
-  public boolean isRefererNull() {
-    return isRefererNull;
-  }
-
-  public void setIsRefererNull(boolean refererNull) {
-    isRefererNull = refererNull;
-  }
+  //  public boolean isRefererNull() {
+  //    return isRefererNull;
+  //  }
+  //
+  //  public void setIsRefererNull(boolean refererNull) {
+  //    isRefererNull = refererNull;
+  //  }
 
   public UbiSession merge(UbiSession ubiSession) {
     this.eventCnt += ubiSession.getEventCnt();
