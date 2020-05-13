@@ -70,7 +70,7 @@ public class UbiSession implements Serializable, Cloneable {
   private int pageCnt;
   private int searchCnt;
   private int viewCnt;
-  private boolean isRefererNull; // for bot207
+  private Boolean isRefererNull; // for bot207
   private int siidCnt2; // for bot207
   private int viCnt; // for bot215
 
@@ -79,7 +79,7 @@ public class UbiSession implements Serializable, Cloneable {
   private Set<String> agentSets = new HashSet<>();
   private String agentInfo;
   private String clientIp;
-  private boolean findFirst;
+  private Boolean findFirst;
   private String internalIp;
   private String externalIp;
   private String externalIp2;
