@@ -39,40 +39,40 @@ kafkaConsumerConfig:
 
 kafkaProducerConfig:
   bootstrapServersForSession:
-    - rhs-rdrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
   bootstrapServersForEvent:
-    - rhs-rdrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
   bootstrapServersForBot:
-    - rhs-rdrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
   bootstrapServersForCopy:
-    - rhs-rdrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
   bootstrapServersForCrossSessionDQ:
-    - rhs-rdrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
-    - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
   sessionTopic: behavior.trafficjam.session
   eventTopic: behavior.trafficjam.event
   botTopic: behavior.trafficjam.bot
-  copyTopic: behavior.trafficjam.session.dq.data.prepare
-  crossSessionDQTopic: behavior.trafficjam.session.dq
+  copyTopic: behavior.total.new.session.dq
+  crossSessionDQTopic: behavior.total.new.cross.session.dq
 
 rheos:
   serviceUrl: https://rheos-services.stratus.ebay.com
