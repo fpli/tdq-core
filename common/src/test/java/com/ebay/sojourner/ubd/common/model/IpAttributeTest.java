@@ -84,10 +84,13 @@ public class IpAttributeTest {
 
   @Test
   public void test_feed_botFlag210_sessionCntGt20_and_sameMktCnt() {
+    Guid guid=new Guid();
+    guid.setGuid1(1);
+    guid.setGuid2(1);
     agentIpAttribute.setTotalCnt(21);
     agentIpAttribute.setTotalCntForSec1(5);
     agentIpAttribute.setMktgCnt(21);
-    agentIpAttribute.setGuidSet(Sets.newHashSet("1"));
+    agentIpAttribute.setGuidSet(Sets.newHashSet(guid));
 
     ipAttribute.feed(agentIpAttribute, 210, true);
 

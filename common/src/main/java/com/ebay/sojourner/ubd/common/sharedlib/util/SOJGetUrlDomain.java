@@ -26,7 +26,6 @@ public class SOJGetUrlDomain {
   }
 
   public static void main(String[] args) {
-    System.out.println(getUrlDomain("https://www.ebay-kleinanzeigen.de/").matches(".*(ebay|\\"
-        + ".kijiji\\.).*"));
+    System.out.println(getUrlDomain("https://www.ebay-kleinanzeigen.de/s-hille-coaster-530/k0"));
   }
 }
