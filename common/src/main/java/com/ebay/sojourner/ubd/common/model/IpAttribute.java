@@ -93,7 +93,7 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
     }
 
     int cguidCnt = agentIpAttribute.getCguidSet().size();
-    int guidCnt = agentIpAttribute.getGuidSet().size();
+    int guidCnt = (int)Math.round(agentIpAttribute.getGuidSet().getEstimate());
     if (sessionCnt > 10
         && sessionCnt == agentIpAttribute.getNewGuidCnt()
         && (cguidCnt < 3 || agentIpAttribute.getMaxValidPageCnt() < 10)) {

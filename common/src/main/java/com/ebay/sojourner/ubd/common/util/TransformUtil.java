@@ -34,12 +34,12 @@ public class TransformUtil {
   }
 
 
-  public static Long[] md522Long(CharSequence cmd) {
+  public static long[] md522Long(CharSequence cmd) {
     if (cmd == null) {
-      return new Long[]{null, null};
+      return new long[]{Long.MIN_VALUE, Long.MIN_VALUE};
     }
     if (StringUtils.isBlank(cmd)) {
-      return new Long[]{0L, 0L};
+      return new long[]{0L, 0L};
     }
     String md = cmd.toString();
     int firstLen = LEN;
@@ -54,7 +54,7 @@ public class TransformUtil {
     if (secondLen > 0) {
       part2 = getOneLong(md.substring(LEN, secondLen));
     }
-    return new Long[]{part1, part2};
+    return new long[]{part1, part2};
   }
 
   private static Long getOneLong(String part) {

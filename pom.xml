@@ -155,6 +155,11 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>org.apache.datasketches</groupId>
+        <artifactId>datasketches-java</artifactId>
+        <version>1.2.0-incubating</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
         <version>${commons.lang3.version}</version>

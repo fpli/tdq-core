@@ -3,6 +3,8 @@ package com.ebay.sojourner.ubd.common.model;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.google.common.collect.Sets;
+import org.apache.datasketches.hll.HllSketch;
+import org.apache.datasketches.hll.TgtHllType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -84,13 +86,13 @@ public class IpAttributeTest {
 
   @Test
   public void test_feed_botFlag210_sessionCntGt20_and_sameMktCnt() {
-    Guid guid=new Guid();
-    guid.setGuid1(1);
-    guid.setGuid2(1);
+
     agentIpAttribute.setTotalCnt(21);
     agentIpAttribute.setTotalCntForSec1(5);
     agentIpAttribute.setMktgCnt(21);
-    agentIpAttribute.setGuidSet(Sets.newHashSet(guid));
+    HllSketch hllSketch = new HllSketch(2,TgtHllType.HLL_8);
+    hllSketch.update(1);
+    agentIpAttribute.setGuidSet(hllSketch);
 
     ipAttribute.feed(agentIpAttribute, 210, true);
 
