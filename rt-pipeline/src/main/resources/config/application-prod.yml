@@ -71,7 +71,7 @@ kafkaProducerConfig:
   sessionTopic: behavior.trafficjam.session
   eventTopic: behavior.trafficjam.event
   botTopic: behavior.trafficjam.bot
-  copyTopic: behavior.trafficjam.pathfinder.copy
+  copyTopic: behavior.trafficjam.session.dq.data.prepare
   crossSessionDQTopic: behavior.trafficjam.session.dq
 
 rheos:

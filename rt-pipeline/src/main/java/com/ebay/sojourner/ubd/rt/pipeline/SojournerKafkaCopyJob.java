@@ -68,7 +68,8 @@ public class SojournerKafkaCopyJob {
     DataStream<SojBytesEvent> bytesFilterDataStream = sojBytesDataStream
         .filter(new SojBytesEventFilterFunction())
         .setParallelism(AppEnv.config().getFlink().getApp().getEventParallelism())
-        .name("Bytes Filter");
+        .name("Bytes Filter")
+        .disableChaining();
 
     // sink for copy
     bytesFilterDataStream

@@ -1,8 +1,8 @@
 package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.rule.BotRule1;
 import com.ebay.sojourner.ubd.common.rule.Rule;
+import com.ebay.sojourner.ubd.common.sql.SqlEventRule;
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -15,7 +15,7 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
   private static volatile EventBotDetector eventBotDetector;
 
   // private RuleManager ruleManager = RuleManager.getInstance();
-  private Set<Rule> botRules = new CopyOnWriteArraySet<>();
+  private Set<SqlEventRule> botRules = new CopyOnWriteArraySet<>();
 
   private EventBotDetector() {
     initBotRules();
@@ -57,8 +57,6 @@ public class EventBotDetector implements BotDetector<UbiEvent> {
   // static rules
   @Override
   public void initBotRules() {
-
-    botRules.add(new BotRule1());
 
     /*
     botRules.add(Rules.ICF_RULE_1_COMPILER);
