@@ -1,6 +1,7 @@
 package com.ebay.sojourner.ubd.common.zookeeper;
 
 import com.ebay.sojourner.ubd.common.util.Constants;
+import com.google.common.base.Charsets;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.RetryPolicy;
@@ -28,6 +29,7 @@ public class ZkClient {
         .sessionTimeoutMs(Constants.ZK_SESSION_TIME_OUT)
         .connectionTimeoutMs(Constants.ZK_CONNECTION_TIME_OUT)
         .namespace(Constants.ZK_NAMESPACE)
+        .authorization("digest", "sojourner:sojourner".getBytes(Charsets.UTF_8))
         .build();
     // start client
     client.start();
