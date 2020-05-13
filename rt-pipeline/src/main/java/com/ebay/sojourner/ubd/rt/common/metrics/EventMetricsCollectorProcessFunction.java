@@ -1,7 +1,6 @@
 package com.ebay.sojourner.ubd.rt.common.metrics;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.detectors.EventBotDetector;
 import com.ebay.sojourner.ubd.common.sql.RuleManager;
 import java.util.Arrays;
 import java.util.Collection;
