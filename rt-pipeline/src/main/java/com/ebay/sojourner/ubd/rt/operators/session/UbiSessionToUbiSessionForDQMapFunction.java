@@ -78,7 +78,7 @@ public class UbiSessionToUbiSessionForDQMapFunction extends
     ubiSessionForDQ.setViCnt(ubiSession.getViCnt());
     ubiSessionForDQ.setAgentInfo(ubiSession.getAgentInfo());
     ubiSessionForDQ.setClientIp(ubiSession.getClientIp());
-    ubiSessionForDQ.setFindFirst(ubiSession.isFindFirst());
+    ubiSessionForDQ.setFindFirst(ubiSession.getFindFirst());
     ubiSessionForDQ.setInternalIp(ubiSession.getInternalIp());
     ubiSessionForDQ.setExternalIp(ubiSession.getExternalIp());
     ubiSessionForDQ.setExternalIp2(ubiSession.getExternalIp2());

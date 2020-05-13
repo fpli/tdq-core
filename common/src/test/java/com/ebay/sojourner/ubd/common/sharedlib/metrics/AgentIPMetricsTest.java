@@ -40,7 +40,7 @@ class AgentIPMetricsTest extends BaseMetricsTest {
     SessionAccumulator sessionAccumulator = new SessionAccumulator(ubiSession);
     agentIPMetrics.start(sessionAccumulator);
 
-    Assertions.assertThat(sessionAccumulator.getUbiSession().isFindFirst()).isFalse();
+    Assertions.assertThat(sessionAccumulator.getUbiSession().getFindFirst()).isFalse();
     Assertions.assertThat(sessionAccumulator.getUbiSession().getInternalIp()).isNull();
     Assertions.assertThat(sessionAccumulator.getUbiSession().getExternalIp()).isNull();
     Assertions.assertThat(sessionAccumulator.getUbiSession().getExternalIp2()).isNull();
