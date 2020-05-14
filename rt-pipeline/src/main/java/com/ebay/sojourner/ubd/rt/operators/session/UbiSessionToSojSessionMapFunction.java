@@ -35,6 +35,7 @@ public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSessio
     sojSession.setEndPageId(ubiSession.getEndPageId());
     sojSession.setDurationSec(ubiSession.getDurationSec());
     sojSession.setEventCnt(ubiSession.getEventCnt());
+    sojSession.setAbsEventCnt(ubiSession.getAbsEventCnt());
     sojSession.setViCoreCnt(ubiSession.getViCoreCnt());
     sojSession.setBidCoreCnt(ubiSession.getBidCoreCnt());
     sojSession.setBinCoreCnt(ubiSession.getBinCoreCnt());
@@ -52,6 +53,7 @@ public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSessio
     sojSession.setMyebayCnt(ubiSession.getMyebayCnt());
     sojSession.setSigninPageCnt(ubiSession.getSigninPageCnt());
     sojSession.setFirstSessionStartDt(ubiSession.getFirstSessionStartDt());
+    sojSession.setSingleClickSessionFlag(ubiSession.getSingleClickSessionFlag());
     return sojSession;
   }
 }

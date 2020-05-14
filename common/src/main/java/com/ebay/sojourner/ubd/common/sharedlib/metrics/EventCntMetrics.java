@@ -16,6 +16,7 @@ public class EventCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
     sessionAccumulator.getUbiSession().setAbsEventCnt(0);
     sessionAccumulator.getUbiSession().setEventCnt(0);
     sessionAccumulator.getUbiSession().setNonIframeRdtEventCnt(0);
+    sessionAccumulator.getUbiSession().setSearchViewPageCnt(0);
   }
 
   @Override
@@ -25,17 +26,17 @@ public class EventCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
         .setAbsEventCnt(sessionAccumulator.getUbiSession().getAbsEventCnt() + 1);
     if (!event.isIframe()) {
       if (!event.isRdt()) {
-        sessionAccumulator
-            .getUbiSession()
+        sessionAccumulator.getUbiSession()
             .setEventCnt(sessionAccumulator.getUbiSession().getEventCnt() + 1);
-        sessionAccumulator
-            .getUbiSession()
-            .setNonIframeRdtEventCnt(
-                sessionAccumulator.getUbiSession().getNonIframeRdtEventCnt() + 1);
+        sessionAccumulator.getUbiSession().setNonIframeRdtEventCnt(
+            sessionAccumulator.getUbiSession().getNonIframeRdtEventCnt() + 1);
+        sessionAccumulator.getUbiSession()
+            .setSearchViewPageCnt(sessionAccumulator.getUbiSession().getSearchViewPageCnt() + 1);
       } else if (indicator.isCorrespondingPageEvent(event)) {
-        sessionAccumulator
-            .getUbiSession()
+        sessionAccumulator.getUbiSession()
             .setEventCnt(sessionAccumulator.getUbiSession().getEventCnt() + 1);
+        sessionAccumulator.getUbiSession()
+            .setSearchViewPageCnt(sessionAccumulator.getUbiSession().getSearchViewPageCnt() + 1);
       }
     }
   }

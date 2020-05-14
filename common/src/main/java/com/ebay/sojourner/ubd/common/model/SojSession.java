@@ -28,6 +28,7 @@ public class SojSession implements Serializable, Cloneable {
   private Long startTimestamp;
   private int durationSec;
   private int eventCnt;
+  private int absEventCnt;
   private int viCoreCnt;
   private int bidCoreCnt;
   private int binCoreCnt;
@@ -49,6 +50,7 @@ public class SojSession implements Serializable, Cloneable {
   private int signinPageCnt;
   private int nonIframeRdtEventCnt;
   private Long firstSessionStartDt;
+  private Boolean singleClickSessionFlag;
   private Set<Integer> botFlagList = new LinkedHashSet<>();
 
   public SojSession() {
