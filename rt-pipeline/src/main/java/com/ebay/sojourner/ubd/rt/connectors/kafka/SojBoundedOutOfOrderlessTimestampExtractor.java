@@ -4,7 +4,6 @@ import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.common.model.SojSession;
-import com.ebay.sojourner.ubd.common.model.UbiSessionForDQ;
 import com.ebay.sojourner.ubd.common.util.SojTimestamp;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -26,13 +25,10 @@ public class SojBoundedOutOfOrderlessTimestampExtractor<T> extends
       return rawEvent.getRheosHeader().getEventCreateTimestamp();
     } else if (t instanceof SojSession) {
       SojSession sojSession = (SojSession) t;
-      return sojSession.getAbsStartTimestamp();
+      return SojTimestamp.getSojTimestampToUnixTimestamp(sojSession.getAbsEndTimestamp());
     } else if (t instanceof SojEvent) {
       SojEvent sojEvent = (SojEvent) t;
       return sojEvent.getGenerateTime();
-    } else if (t instanceof UbiSessionForDQ) {
-      UbiSessionForDQ ubiSessionForDQ = (UbiSessionForDQ) t;
-      return ubiSessionForDQ.getAbsEndTimestamp();
     } else if (t instanceof IntermediateSession) {
       IntermediateSession intermediateSession = (IntermediateSession) t;
       return SojTimestamp.getSojTimestampToUnixTimestamp(intermediateSession.getAbsEndTimestamp());
