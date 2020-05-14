@@ -1,15 +1,12 @@
 package com.ebay.sojourner.ubd.common.sql;
 
 import com.ebay.sojourner.ubd.common.util.Constants;
-import com.ebay.sojourner.ubd.common.util.RestApiUtils;
+import com.ebay.sojourner.ubd.common.util.RestClientUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -18,63 +15,53 @@ import okhttp3.Response;
 @Slf4j
 public class RuleFetcher {
 
-  private ScheduledExecutorService scheduledExecutorService;
-  private OkHttpClient client;
-  private Request request;
-  private RuleManager ruleManager;
+  private final OkHttpClient client;
+  private final ObjectMapper objectMapper;
+  private static final String FETCH_ALL_RULES =
+      Constants.REST_SERVER + Constants.API_RULE_LIST_PUBLISHED;
+  private static final String FETCH_RULE_PREFIX =
+      Constants.REST_SERVER + Constants.API_SPECIFIED_RULE_PREFIX;
 
-  public RuleFetcher(RuleManager ruleManager) {
-    client = RestApiUtils.getRestClient();
-    this.ruleManager = ruleManager;
+  public RuleFetcher() {
+    this.client = RestClientUtils.getRestClient();
+    this.objectMapper = new ObjectMapper();
   }
 
-  protected void fetchRulesPeriodically() {
-    scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-    log.info("Fetch rules periodically");
-    scheduledExecutorService
-        .scheduleAtFixedRate(this::fetchRules, 5, 60, TimeUnit.MINUTES);
-  }
+  public List<RuleDefinition> fetchAllRules() {
+    List<RuleDefinition> ruleDefinitionList = Lists.newArrayList();
 
-  public synchronized void fetchRules() {
     try {
-      request = RestApiUtils
-          .buildRequest(Constants.REST_SERVER + Constants.API_RULE_LIST_PUBLISHED);
+      Request request = RestClientUtils
+          .buildRequest(FETCH_ALL_RULES);
+      log.info("Fetching rules url is {}", FETCH_ALL_RULES);
       Response response = client.newCall(request).execute();
-      ObjectMapper objectMapper = new ObjectMapper();
-      List<RuleDefinition> responseBodyContent = objectMapper
+      ruleDefinitionList = objectMapper
           .reader()
           .forType(new TypeReference<List<RuleDefinition>>() {
           })
           .readValue(response.body().string());
-      log.info("Fetch rules at " + new Date());
-      log.info("Rules = " + responseBodyContent);
-
-      if (ruleManager != null) {
-        ruleManager.updateRules(responseBodyContent);
-      }
-
+      log.info("Rules = " + ruleDefinitionList);
     } catch (IOException e) {
-      log.warn("fetch all published rule failed", e);
+      log.error("fetch all published rule failed", e);
     }
+
+    return ruleDefinitionList;
   }
 
-  public synchronized void fetchRulesById(Long ruleId, String id) {
-
+  public RuleDefinition fetchRuleById(String id) {
+    RuleDefinition ruleDefinition = null;
     try {
-      request = RestApiUtils.buildRequest(
-          Constants.REST_SERVER + Constants.API_SPECIFIED_RULE_PREFIX + id);
+      Request request = RestClientUtils
+          .buildRequest(FETCH_RULE_PREFIX + id);
+      log.info("Fetching rule {}, and url is {}", id, FETCH_ALL_RULES);
       Response response = client.newCall(request).execute();
-      ObjectMapper objectMapper = new ObjectMapper();
       String responseBody = response.body().string();
-      RuleDefinition responseBodyContent = objectMapper
-          .readValue(responseBody, RuleDefinition.class);
-      log.info("Fetch rules at " + new Date());
-      log.info("Rules = " + responseBodyContent);
-      if (ruleManager != null) {
-        ruleManager.updateRulesById(responseBodyContent, ruleId);
-      }
+      ruleDefinition = objectMapper.readValue(responseBody, RuleDefinition.class);
+      log.info("Rule = " + ruleDefinition);
     } catch (IOException e) {
-      log.warn("fetch specified rule failed", e);
+      log.error("fetch specified rule failed", e);
     }
+
+    return ruleDefinition;
   }
 }

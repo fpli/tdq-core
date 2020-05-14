@@ -15,4 +15,12 @@ public class BitUtils {
       return (l & (1 << (index - 1))) > 0 ? 1 : 0;
     }
   }
+
+  public static long setBit(long source, int pos) {
+    return source |= (long)1 << pos;
+  }
+
+  public static boolean isBitSet(long source, int pos) {
+    return (source & (long)1 << pos) != 0;
+  }
 }

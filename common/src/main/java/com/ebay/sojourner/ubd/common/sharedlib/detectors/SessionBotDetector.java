@@ -1,6 +1,7 @@
 package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.ubd.common.rule.BotRule1;
 import com.ebay.sojourner.ubd.common.rule.BotRule10;
 import com.ebay.sojourner.ubd.common.rule.BotRule11;
 import com.ebay.sojourner.ubd.common.rule.BotRule12;
@@ -8,7 +9,6 @@ import com.ebay.sojourner.ubd.common.rule.BotRule15;
 import com.ebay.sojourner.ubd.common.rule.BotRule203;
 import com.ebay.sojourner.ubd.common.rule.BotRule204;
 import com.ebay.sojourner.ubd.common.rule.BotRule205;
-import com.ebay.sojourner.ubd.common.rule.BotRule206;
 import com.ebay.sojourner.ubd.common.rule.BotRule207;
 import com.ebay.sojourner.ubd.common.rule.BotRule212;
 import com.ebay.sojourner.ubd.common.rule.BotRule215;
@@ -75,6 +75,7 @@ public class SessionBotDetector implements BotDetector<UbiSession> {
 
   @Override
   public void initBotRules() {
+    botRules.add(new BotRule1());
     botRules.add(new BotRule15());
     botRules.add(new BotRule9());
     botRules.add(new BotRule10());
@@ -82,7 +83,7 @@ public class SessionBotDetector implements BotDetector<UbiSession> {
     botRules.add(new BotRule203());
     botRules.add(new BotRule204());
     botRules.add(new BotRule205());
-    botRules.add(new BotRule206());
+    //    botRules.add(new BotRule206());
     botRules.add(new BotRule207());
     //    botRules.add(new BotRule208());
     botRules.add(new BotRule212());

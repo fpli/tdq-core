@@ -5,8 +5,10 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.PageIndicator;
 import com.ebay.sojourner.ubd.common.sharedlib.util.IsValidIPv4;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
+import com.ebay.sojourner.ubd.common.util.IntermediateLkp;
 import com.ebay.sojourner.ubd.common.util.Property;
 import com.ebay.sojourner.ubd.common.util.PropertyUtils;
+import com.ebay.sojourner.ubd.common.util.SojUtils;
 import com.ebay.sojourner.ubd.common.util.UBIConfig;
 import java.util.Set;
 
@@ -76,6 +78,22 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
           }
         }
+
+        // for ScEvent
+        Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
+        if (!IntermediateLkp.getInstance().getScPageSet1().contains(pageId)
+            && !IntermediateLkp.getInstance().getScPageSet2().contains(pageId)) {
+          if (sessionAccumulator.getUbiSession().getStartTimestampForScEvent() == null) {
+            sessionAccumulator.getUbiSession()
+                .setStartTimestampForScEvent(event.getEventTimestamp());
+          } else if (event.getEventTimestamp() != null
+              && sessionAccumulator.getUbiSession().getStartTimestampForScEvent() > event
+              .getEventTimestamp()) {
+            sessionAccumulator.getUbiSession()
+                .setStartTimestampForScEvent(event.getEventTimestamp());
+
+          }
+        }
       }
       if (sessionAccumulator.getUbiSession().getStartTimestampNOIFRAME() == null) {
         sessionAccumulator.getUbiSession().setStartTimestampNOIFRAME(event.getEventTimestamp());
@@ -86,6 +104,15 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
       }
 
+    }
+    if (event.getReferrer() != null) {
+      if (sessionAccumulator.getUbiSession().getStartTimestampForReferrer() == null) {
+        sessionAccumulator.getUbiSession().setStartTimestampForReferrer(event.getEventTimestamp());
+      } else if (event.getEventTimestamp() != null
+          && sessionAccumulator.getUbiSession().getStartTimestampForReferrer() > event
+          .getEventTimestamp()) {
+        sessionAccumulator.getUbiSession().setStartTimestampForReferrer(event.getEventTimestamp());
+      }
     }
     if (sessionAccumulator.getUbiSession().getAbsStartTimestamp() == null) {
       sessionAccumulator.getUbiSession().setAbsStartTimestamp(event.getEventTimestamp());
@@ -101,6 +128,86 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
         && sessionAccumulator.getUbiSession().getAbsEndTimestamp() < event.getEventTimestamp()) {
       sessionAccumulator.getUbiSession().setAbsEndTimestamp(event.getEventTimestamp());
       //      eventListenerContainer.onLateEventChange(event,sessionAccumulator.getUbiSession());
+    }
+    // for roverclick
+    if (SojUtils.isRoverClick(event)) {
+      if (sessionAccumulator.getUbiSession().getAbsStartTimestampForRoverClick() == null) {
+        sessionAccumulator.getUbiSession()
+            .setAbsStartTimestampForRoverClick(event.getEventTimestamp());
+      } else if (event.getEventTimestamp() != null
+          && sessionAccumulator.getUbiSession().getAbsStartTimestampForRoverClick() > event
+          .getEventTimestamp()) {
+        sessionAccumulator.getUbiSession()
+            .setAbsStartTimestampForRoverClick(event.getEventTimestamp());
+      }
+    }
+
+    // for rover3084
+    if (SojUtils.isRover3084Click(event)) {
+      if (sessionAccumulator.getUbiSession().getAbsStartTimestampForRover3084() == null) {
+        sessionAccumulator.getUbiSession()
+            .setAbsStartTimestampForRover3084(event.getEventTimestamp());
+      } else if (event.getEventTimestamp() != null
+          && sessionAccumulator.getUbiSession().getAbsStartTimestampForRover3084() > event
+          .getEventTimestamp()) {
+        sessionAccumulator.getUbiSession()
+            .setAbsStartTimestampForRover3084(event.getEventTimestamp());
+      }
+    }
+    // for rover3085
+    if (SojUtils.isRover3085Click(event)) {
+      if (sessionAccumulator.getUbiSession().getAbsStartTimestampForRover3085() == null) {
+        sessionAccumulator.getUbiSession()
+            .setAbsStartTimestampForRover3085(event.getEventTimestamp());
+      } else if (event.getEventTimestamp() != null
+          && sessionAccumulator.getUbiSession().getAbsStartTimestampForRover3085() > event
+          .getEventTimestamp()) {
+        sessionAccumulator.getUbiSession()
+            .setAbsStartTimestampForRover3085(event.getEventTimestamp());
+      }
+    }
+
+    // for rover3962
+    if (SojUtils.isRover3962Click(event)) {
+      if (sessionAccumulator.getUbiSession().getAbsStartTimestampForRover3962() == null) {
+        sessionAccumulator.getUbiSession()
+            .setAbsStartTimestampForRover3962(event.getEventTimestamp());
+      } else if (event.getEventTimestamp() != null
+          && sessionAccumulator.getUbiSession().getAbsStartTimestampForRover3962() > event
+          .getEventTimestamp()) {
+        sessionAccumulator.getUbiSession()
+            .setAbsStartTimestampForRover3962(event.getEventTimestamp());
+      }
+    }
+
+    // for NotifyClick
+    if (IntermediateLkp.getInstance()
+        .getNotifyCLickPageSet()
+        .contains(event.getPageId())) {
+      if (sessionAccumulator.getUbiSession().getAbsStartTimestampForNotifyClick() == null) {
+        sessionAccumulator.getUbiSession()
+            .setAbsStartTimestampForNotifyClick(event.getEventTimestamp());
+      } else if (event.getEventTimestamp() != null
+          && sessionAccumulator.getUbiSession().getAbsStartTimestampForNotifyClick() > event
+          .getEventTimestamp()) {
+        sessionAccumulator.getUbiSession()
+            .setAbsStartTimestampForNotifyClick(event.getEventTimestamp());
+      }
+    }
+
+    // for NotifyView
+    if(IntermediateLkp.getInstance()
+        .getNotifyViewPageSet()
+        .contains(event.getPageId())) {
+      if (sessionAccumulator.getUbiSession().getAbsStartTimestampForNotifyView() == null) {
+        sessionAccumulator.getUbiSession()
+            .setAbsStartTimestampForNotifyView(event.getEventTimestamp());
+      } else if (event.getEventTimestamp() != null
+          && sessionAccumulator.getUbiSession().getAbsStartTimestampForNotifyView() > event
+          .getEventTimestamp()) {
+        sessionAccumulator.getUbiSession()
+            .setAbsStartTimestampForNotifyView(event.getEventTimestamp());
+      }
     }
   }
 

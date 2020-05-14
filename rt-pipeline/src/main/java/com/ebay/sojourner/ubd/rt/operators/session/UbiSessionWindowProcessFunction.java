@@ -72,7 +72,6 @@ public class UbiSessionWindowProcessFunction
     ubiSession.setBotFlag(sessionAccumulator.getUbiSession().getBotFlag());
     ubiSession.setVersion(sessionAccumulator.getUbiSession().getVersion());
     ubiSession.setFirstUserId(sessionAccumulator.getUbiSession().getFirstUserId());
-    ubiSession.setSiteFlagsSet(sessionAccumulator.getUbiSession().getSiteFlagsSet());
     ubiSession.setSiteFlags(sessionAccumulator.getUbiSession().getSiteFlags());
     ubiSession.setAttrFlags(sessionAccumulator.getUbiSession().getAttrFlags());
     ubiSession.setBotFlags(sessionAccumulator.getUbiSession().getBotFlags());

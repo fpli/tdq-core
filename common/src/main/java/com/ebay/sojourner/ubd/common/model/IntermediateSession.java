@@ -15,86 +15,69 @@ import org.apache.avro.specific.SpecificData;
 public class IntermediateSession extends org.apache.avro.specific.SpecificRecordBase implements
     org.apache.avro.specific.SpecificRecord {
 
-  private static final long serialVersionUID = 7871119040536988827L;
-  public static final org.apache.avro.Schema SCHEMA$
-      = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Intermediate"
-      + "Session\",\"namespace\":\"com.ebay.sojourner.ubd.common.model\",\"fields\":[{\"name\":\""
-      + "guid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\""
-      + ":\"from ubisession guid\"},{\"name\":\"guid1\",\"type\":[\"null\",\"long\"],\"doc\":\"fro"
-      + "m ubisession guid1\"},{\"name\":\"guid2\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubi"
-      + "session guid2\"},{\"name\":\"absEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubi"
-      + "session absEventCnt\"},{\"name\":\"nonIframeRdtEventCnt\",\"type\":[\"null\",\"int\"],\""
-      + "doc\":\"from ubisession nonIframeRdtEventCnt\"},{\"name\":\"ip\",\"type\":[\"null\",{\"ty"
-      + "pe\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession ip\"},{\"name"
-      + "\":\"userAgent\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]"
-      + ",\"doc\":\"from ubisession userAgent\"},{\"name\":\"singleClickSessionFlag\",\"type\":[\"n"
-      + "ull\",\"boolean\"],\"doc\":\"from ubisession singleClickSessionFlag\"},{\"name\":\"botFla"
-      + "g\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession botFlag\"},{\"name\":\"firstCgui"
-      + "d\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"fr"
-      + "om ubisession firstCguid\"},{\"name\":\"firstUserId\",\"type\":[\"null\",{\"type\":\"strin"
-      + "g\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession firstUserId\"},{\"name\":"
-      + "\"validPageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession validPageCnt\"},{\""
-      + "name\":\"trafficSrcId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession trafficSrcI"
-      + "d\"},{\"name\":\"exInternalIp\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.strin"
-      + "g\":\"String\"}],\"doc\":\"from ubisession exInternalIp\"},{\"name\":\"homepageCnt\",\"ty"
-      + "pe\":[\"null\",\"int\"],\"doc\":\"from ubisession homepageCnt\"},{\"name\":\"signinPageCn"
-      + "t\",\"type\":[\"null\",\"int\"],\"doc\":\"fron ubisession signinPageCnt\"},{\"name\":\"co"
-      + "brand\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession cobrand\"},{\"name\":\"star"
-      + "tTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession startTimestamp\"},{\""
-      + "name\":\"agentCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession agentCnt\"},{\""
-      + "name\":\"firstAppId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession firstAppId\"},"
-      + "{\"name\":\"bidBinConfirmFlag\",\"type\":[\"null\",\"boolean\"],\"doc\":\"from ubisession "
-      + "bidBinConfirmFlag\"},{\"name\":\"clientIp\",\"type\":[\"null\",{\"type\":\"string\",\"avro"
-      + ".java.string\":\"String\"}],\"doc\":\"from ubisession clientIp\"},{\"name\":\"absStartTime"
-      + "stamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession absStartTimestamp\"},{\"nam"
-      + "e\":\"familyViCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession familyViCnt\"},{"
-      + "\"name\":\"agentString\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"St"
-      + "ring\"}],\"doc\":\"from ubisession agentString\"}]}");
-
-  public static org.apache.avro.Schema getClassSchema() {
-    return SCHEMA$;
-  }
-
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
+      "{\"type\":\"record\",\"name\":\"IntermediateSession\",\"namespace\":\"com.ebay.sojourner"
+          + ".ubd.common.model\",\"fields\":[{\"name\":\"guid\",\"type\":[\"null\","
+          + "{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession "
+          + "guid\"},{\"name\":\"guid1\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession "
+          + "guid1\"},{\"name\":\"guid2\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession "
+          + "guid2\"},{\"name\":\"absEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from "
+          + "ubisession absEventCnt\"},{\"name\":\"nonIframeRdtEventCnt\",\"type\":[\"null\","
+          + "\"int\"],\"doc\":\"from ubisession nonIframeRdtEventCnt\"},{\"name\":\"ip\","
+          + "\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],"
+          + "\"doc\":\"from ubisession ip\"},{\"name\":\"userAgent\",\"type\":[\"null\","
+          + "{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession "
+          + "userAgent\"},{\"name\":\"singleClickSessionFlag\",\"type\":[\"null\",\"boolean\"],"
+          + "\"doc\":\"from ubisession singleClickSessionFlag\"},{\"name\":\"botFlag\","
+          + "\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession botFlag\"},"
+          + "{\"name\":\"firstCguid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java"
+          + ".string\":\"String\"}],\"doc\":\"from ubisession firstCguid\"},"
+          + "{\"name\":\"firstUserId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java"
+          + ".string\":\"String\"}],\"doc\":\"from ubisession firstUserId\"},"
+          + "{\"name\":\"validPageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession "
+          + "validPageCnt\"},{\"name\":\"trafficSrcId\",\"type\":[\"null\",\"int\"],"
+          + "\"doc\":\"from ubisession trafficSrcId\"},{\"name\":\"exInternalIp\","
+          + "\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],"
+          + "\"doc\":\"from ubisession exInternalIp\"},{\"name\":\"homepageCnt\","
+          + "\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession homepageCnt\"},"
+          + "{\"name\":\"signinPageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"fron ubisession "
+          + "signinPageCnt\"},{\"name\":\"cobrand\",\"type\":[\"null\",\"int\"],\"doc\":\"from "
+          + "ubisession cobrand\"},{\"name\":\"startTimestamp\",\"type\":[\"null\",\"long\"],"
+          + "\"doc\":\"from ubisession startTimestamp\"},{\"name\":\"agentCnt\","
+          + "\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession agentCnt\"},"
+          + "{\"name\":\"firstAppId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession "
+          + "firstAppId\"},{\"name\":\"bidBinConfirmFlag\",\"type\":[\"null\",\"boolean\"],"
+          + "\"doc\":\"from ubisession bidBinConfirmFlag\"},{\"name\":\"clientIp\","
+          + "\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],"
+          + "\"doc\":\"from ubisession clientIp\"},{\"name\":\"absStartTimestamp\","
+          + "\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession absStartTimestamp\"},"
+          + "{\"name\":\"familyViCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession "
+          + "familyViCnt\"},{\"name\":\"agentString\",\"type\":[\"null\",{\"type\":\"string\","
+          + "\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession agentString\"},"
+          + "{\"name\":\"botFlagList\",\"type\":[\"null\",{\"type\":\"array\","
+          + "\"items\":\"int\"}],\"default\":null},{\"name\":\"absEndTimestamp\","
+          + "\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession absEndTimestamp\"},"
+          + "{\"name\":\"endTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession "
+          + "endTimestamp\"},{\"name\":\"sojDataDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from "
+          + "ubisession sojDataDt\"},{\"name\":\"sessionId\",\"type\":[\"null\","
+          + "{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession "
+          + "sessionId\"},{\"name\":\"sessionSkey\",\"type\":[\"null\",\"long\"],\"doc\":\"from "
+          + "ubisession sessionSkey\"},{\"name\":\"sessionStartDt\",\"type\":[\"null\",\"long\"],"
+          + "\"doc\":\"from ubisession sessionStartDt\"}]}");
+  private static final long serialVersionUID = -2981782155953805541L;
   private static SpecificData MODEL$ = new SpecificData();
-
   private static final BinaryMessageEncoder<IntermediateSession> ENCODER =
       new BinaryMessageEncoder<IntermediateSession>(MODEL$, SCHEMA$);
-
   private static final BinaryMessageDecoder<IntermediateSession> DECODER =
       new BinaryMessageDecoder<IntermediateSession>(MODEL$, SCHEMA$);
-
-  /**
-   * Return the BinaryMessageDecoder instance used by this class.
-   */
-  public static BinaryMessageDecoder<IntermediateSession> getDecoder() {
-    return DECODER;
-  }
-
-  /**
-   * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link
-   * SchemaStore}.
-   *
-   * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
-   */
-  public static BinaryMessageDecoder<IntermediateSession> createDecoder(SchemaStore resolver) {
-    return new BinaryMessageDecoder<IntermediateSession>(MODEL$, SCHEMA$, resolver);
-  }
-
-  /**
-   * Serializes this IntermediateSession to a ByteBuffer.
-   */
-  public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
-    return ENCODER.encode(this);
-  }
-
-  /**
-   * Deserializes a IntermediateSession from a ByteBuffer.
-   */
-  public static IntermediateSession fromByteBuffer(
-      java.nio.ByteBuffer b) throws java.io.IOException {
-    return DECODER.decode(b);
-  }
-
+  @SuppressWarnings("unchecked")
+  private static final org.apache.avro.io.DatumWriter<IntermediateSession>
+      WRITER$ = (org.apache.avro.io.DatumWriter<IntermediateSession>) MODEL$
+      .createDatumWriter(SCHEMA$);
+  @SuppressWarnings("unchecked")
+  private static final org.apache.avro.io.DatumReader<IntermediateSession>
+      READER$ = (org.apache.avro.io.DatumReader<IntermediateSession>) MODEL$
+      .createDatumReader(SCHEMA$);
   /**
    * from ubisession guid
    */
@@ -220,14 +203,44 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
    */
   @Deprecated
   public java.lang.String agentString;
-
+  @Deprecated
+  public java.util.List<java.lang.Integer> botFlagList;
+  /**
+   * from ubisession absEndTimestamp
+   */
+  @Deprecated
+  public java.lang.Long absEndTimestamp;
+  /**
+   * from ubisession endTimestamp
+   */
+  @Deprecated
+  public java.lang.Long endTimestamp;
+  /**
+   * from ubisession sojDataDt
+   */
+  @Deprecated
+  public java.lang.Long sojDataDt;
+  /**
+   * from ubisession sessionId
+   */
+  @Deprecated
+  public java.lang.String sessionId;
+  /**
+   * from ubisession sessionSkey
+   */
+  @Deprecated
+  public java.lang.Long sessionSkey;
+  /**
+   * from ubisession sessionStartDt
+   */
+  @Deprecated
+  public java.lang.Long sessionStartDt;
   /**
    * Default constructor.  Note that this does not initialize fields to their default values from
    * the schema.  If that is desired then one should use <code>newBuilder()</code>.
    */
   public IntermediateSession() {
   }
-
   /**
    * All-args constructor.
    *
@@ -256,6 +269,13 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
    * @param absStartTimestamp from ubisession absStartTimestamp
    * @param familyViCnt from ubisession familyViCnt
    * @param agentString from ubisession agentString
+   * @param botFlagList The new value for botFlagList
+   * @param absEndTimestamp from ubisession absEndTimestamp
+   * @param endTimestamp from ubisession endTimestamp
+   * @param sojDataDt from ubisession sojDataDt
+   * @param sessionId from ubisession sessionId
+   * @param sessionSkey from ubisession sessionSkey
+   * @param sessionStartDt from ubisession sessionStartDt
    */
   public IntermediateSession(java.lang.String guid, java.lang.Long guid1, java.lang.Long guid2,
       java.lang.Integer absEventCnt, java.lang.Integer nonIframeRdtEventCnt, java.lang.String ip,
@@ -265,8 +285,10 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
       java.lang.Integer homepageCnt, java.lang.Integer signinPageCnt, java.lang.Integer cobrand,
       java.lang.Long startTimestamp, java.lang.Integer agentCnt, java.lang.Integer firstAppId,
       java.lang.Boolean bidBinConfirmFlag, java.lang.String clientIp,
-      java.lang.Long absStartTimestamp, java.lang.Integer familyViCnt,
-      java.lang.String agentString) {
+      java.lang.Long absStartTimestamp, java.lang.Integer familyViCnt, java.lang.String agentString,
+      java.util.List<java.lang.Integer> botFlagList, java.lang.Long absEndTimestamp,
+      java.lang.Long endTimestamp, java.lang.Long sojDataDt, java.lang.String sessionId,
+      java.lang.Long sessionSkey, java.lang.Long sessionStartDt) {
     this.guid = guid;
     this.guid1 = guid1;
     this.guid2 = guid2;
@@ -292,6 +314,81 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
     this.absStartTimestamp = absStartTimestamp;
     this.familyViCnt = familyViCnt;
     this.agentString = agentString;
+    this.botFlagList = botFlagList;
+    this.absEndTimestamp = absEndTimestamp;
+    this.endTimestamp = endTimestamp;
+    this.sojDataDt = sojDataDt;
+    this.sessionId = sessionId;
+    this.sessionSkey = sessionSkey;
+    this.sessionStartDt = sessionStartDt;
+  }
+
+  public static org.apache.avro.Schema getClassSchema() {
+    return SCHEMA$;
+  }
+
+  /**
+   * Return the BinaryMessageDecoder instance used by this class.
+   */
+  public static BinaryMessageDecoder<IntermediateSession> getDecoder() {
+    return DECODER;
+  }
+
+  /**
+   * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link
+   * SchemaStore}.
+   *
+   * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
+   */
+  public static BinaryMessageDecoder<IntermediateSession> createDecoder(SchemaStore resolver) {
+    return new BinaryMessageDecoder<IntermediateSession>(MODEL$, SCHEMA$, resolver);
+  }
+
+  /**
+   * Deserializes a IntermediateSession from a ByteBuffer.
+   */
+  public static IntermediateSession fromByteBuffer(
+      java.nio.ByteBuffer b) throws java.io.IOException {
+    return DECODER.decode(b);
+  }
+
+  /**
+   * Creates a new IntermediateSession RecordBuilder.
+   *
+   * @return A new IntermediateSession RecordBuilder
+   */
+  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder() {
+    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder();
+  }
+
+  /**
+   * Creates a new IntermediateSession RecordBuilder by copying an existing Builder.
+   *
+   * @param other The existing builder to copy.
+   * @return A new IntermediateSession RecordBuilder
+   */
+  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder(
+      com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder other) {
+    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder(other);
+  }
+
+  /**
+   * Creates a new IntermediateSession RecordBuilder by copying an existing IntermediateSession
+   * instance.
+   *
+   * @param other The existing instance to copy.
+   * @return A new IntermediateSession RecordBuilder
+   */
+  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder(
+      com.ebay.sojourner.ubd.common.model.IntermediateSession other) {
+    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder(other);
+  }
+
+  /**
+   * Serializes this IntermediateSession to a ByteBuffer.
+   */
+  public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
+    return ENCODER.encode(this);
   }
 
   public org.apache.avro.Schema getSchema() {
@@ -351,6 +448,20 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
         return familyViCnt;
       case 24:
         return agentString;
+      case 25:
+        return botFlagList;
+      case 26:
+        return absEndTimestamp;
+      case 27:
+        return endTimestamp;
+      case 28:
+        return sojDataDt;
+      case 29:
+        return sessionId;
+      case 30:
+        return sessionSkey;
+      case 31:
+        return sessionStartDt;
       default:
         throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
@@ -434,6 +545,27 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
         break;
       case 24:
         agentString = (java.lang.String) value$;
+        break;
+      case 25:
+        botFlagList = (java.util.List<java.lang.Integer>) value$;
+        break;
+      case 26:
+        absEndTimestamp = (java.lang.Long) value$;
+        break;
+      case 27:
+        endTimestamp = (java.lang.Long) value$;
+        break;
+      case 28:
+        sojDataDt = (java.lang.Long) value$;
+        break;
+      case 29:
+        sessionId = (java.lang.String) value$;
+        break;
+      case 30:
+        sessionSkey = (java.lang.Long) value$;
+        break;
+      case 31:
+        sessionStartDt = (java.lang.Long) value$;
         break;
       default:
         throw new org.apache.avro.AvroRuntimeException("Bad index");
@@ -891,35 +1023,141 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
   }
 
   /**
-   * Creates a new IntermediateSession RecordBuilder.
+   * Gets the value of the 'botFlagList' field.
    *
-   * @return A new IntermediateSession RecordBuilder
+   * @return The value of the 'botFlagList' field.
    */
-  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder() {
-    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder();
+  public java.util.List<java.lang.Integer> getBotFlagList() {
+    return botFlagList;
   }
 
   /**
-   * Creates a new IntermediateSession RecordBuilder by copying an existing Builder.
+   * Sets the value of the 'botFlagList' field.
    *
-   * @param other The existing builder to copy.
-   * @return A new IntermediateSession RecordBuilder
+   * @param value the value to set.
    */
-  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder(
-      com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder other) {
-    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder(other);
+  public void setBotFlagList(java.util.List<java.lang.Integer> value) {
+    this.botFlagList = value;
   }
 
   /**
-   * Creates a new IntermediateSession RecordBuilder by copying an existing IntermediateSession
-   * instance.
+   * Gets the value of the 'absEndTimestamp' field.
    *
-   * @param other The existing instance to copy.
-   * @return A new IntermediateSession RecordBuilder
+   * @return from ubisession absEndTimestamp
    */
-  public static com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder newBuilder(
-      com.ebay.sojourner.ubd.common.model.IntermediateSession other) {
-    return new com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder(other);
+  public java.lang.Long getAbsEndTimestamp() {
+    return absEndTimestamp;
+  }
+
+  /**
+   * Sets the value of the 'absEndTimestamp' field. from ubisession absEndTimestamp
+   *
+   * @param value the value to set.
+   */
+  public void setAbsEndTimestamp(java.lang.Long value) {
+    this.absEndTimestamp = value;
+  }
+
+  /**
+   * Gets the value of the 'endTimestamp' field.
+   *
+   * @return from ubisession endTimestamp
+   */
+  public java.lang.Long getEndTimestamp() {
+    return endTimestamp;
+  }
+
+  /**
+   * Sets the value of the 'endTimestamp' field. from ubisession endTimestamp
+   *
+   * @param value the value to set.
+   */
+  public void setEndTimestamp(java.lang.Long value) {
+    this.endTimestamp = value;
+  }
+
+  /**
+   * Gets the value of the 'sojDataDt' field.
+   *
+   * @return from ubisession sojDataDt
+   */
+  public java.lang.Long getSojDataDt() {
+    return sojDataDt;
+  }
+
+  /**
+   * Sets the value of the 'sojDataDt' field. from ubisession sojDataDt
+   *
+   * @param value the value to set.
+   */
+  public void setSojDataDt(java.lang.Long value) {
+    this.sojDataDt = value;
+  }
+
+  /**
+   * Gets the value of the 'sessionId' field.
+   *
+   * @return from ubisession sessionId
+   */
+  public java.lang.String getSessionId() {
+    return sessionId;
+  }
+
+  /**
+   * Sets the value of the 'sessionId' field. from ubisession sessionId
+   *
+   * @param value the value to set.
+   */
+  public void setSessionId(java.lang.String value) {
+    this.sessionId = value;
+  }
+
+  /**
+   * Gets the value of the 'sessionSkey' field.
+   *
+   * @return from ubisession sessionSkey
+   */
+  public java.lang.Long getSessionSkey() {
+    return sessionSkey;
+  }
+
+  /**
+   * Sets the value of the 'sessionSkey' field. from ubisession sessionSkey
+   *
+   * @param value the value to set.
+   */
+  public void setSessionSkey(java.lang.Long value) {
+    this.sessionSkey = value;
+  }
+
+  /**
+   * Gets the value of the 'sessionStartDt' field.
+   *
+   * @return from ubisession sessionStartDt
+   */
+  public java.lang.Long getSessionStartDt() {
+    return sessionStartDt;
+  }
+
+  /**
+   * Sets the value of the 'sessionStartDt' field. from ubisession sessionStartDt
+   *
+   * @param value the value to set.
+   */
+  public void setSessionStartDt(java.lang.Long value) {
+    this.sessionStartDt = value;
+  }
+
+  @Override
+  public void writeExternal(java.io.ObjectOutput out)
+      throws java.io.IOException {
+    WRITER$.write(this, SpecificData.getEncoder(out));
+  }
+
+  @Override
+  public void readExternal(java.io.ObjectInput in)
+      throws java.io.IOException {
+    READER$.read(this, SpecificData.getDecoder(in));
   }
 
   /**
@@ -1029,6 +1267,31 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      * from ubisession agentString
      */
     private java.lang.String agentString;
+    private java.util.List<java.lang.Integer> botFlagList;
+    /**
+     * from ubisession absEndTimestamp
+     */
+    private java.lang.Long absEndTimestamp;
+    /**
+     * from ubisession endTimestamp
+     */
+    private java.lang.Long endTimestamp;
+    /**
+     * from ubisession sojDataDt
+     */
+    private java.lang.Long sojDataDt;
+    /**
+     * from ubisession sessionId
+     */
+    private java.lang.String sessionId;
+    /**
+     * from ubisession sessionSkey
+     */
+    private java.lang.Long sessionSkey;
+    /**
+     * from ubisession sessionStartDt
+     */
+    private java.lang.Long sessionStartDt;
 
     /**
      * Creates a new Builder
@@ -1146,6 +1409,34 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
         this.agentString = data().deepCopy(fields()[24].schema(), other.agentString);
         fieldSetFlags()[24] = true;
       }
+      if (isValidValue(fields()[25], other.botFlagList)) {
+        this.botFlagList = data().deepCopy(fields()[25].schema(), other.botFlagList);
+        fieldSetFlags()[25] = true;
+      }
+      if (isValidValue(fields()[26], other.absEndTimestamp)) {
+        this.absEndTimestamp = data().deepCopy(fields()[26].schema(), other.absEndTimestamp);
+        fieldSetFlags()[26] = true;
+      }
+      if (isValidValue(fields()[27], other.endTimestamp)) {
+        this.endTimestamp = data().deepCopy(fields()[27].schema(), other.endTimestamp);
+        fieldSetFlags()[27] = true;
+      }
+      if (isValidValue(fields()[28], other.sojDataDt)) {
+        this.sojDataDt = data().deepCopy(fields()[28].schema(), other.sojDataDt);
+        fieldSetFlags()[28] = true;
+      }
+      if (isValidValue(fields()[29], other.sessionId)) {
+        this.sessionId = data().deepCopy(fields()[29].schema(), other.sessionId);
+        fieldSetFlags()[29] = true;
+      }
+      if (isValidValue(fields()[30], other.sessionSkey)) {
+        this.sessionSkey = data().deepCopy(fields()[30].schema(), other.sessionSkey);
+        fieldSetFlags()[30] = true;
+      }
+      if (isValidValue(fields()[31], other.sessionStartDt)) {
+        this.sessionStartDt = data().deepCopy(fields()[31].schema(), other.sessionStartDt);
+        fieldSetFlags()[31] = true;
+      }
     }
 
     /**
@@ -1256,6 +1547,34 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
       if (isValidValue(fields()[24], other.agentString)) {
         this.agentString = data().deepCopy(fields()[24].schema(), other.agentString);
         fieldSetFlags()[24] = true;
+      }
+      if (isValidValue(fields()[25], other.botFlagList)) {
+        this.botFlagList = data().deepCopy(fields()[25].schema(), other.botFlagList);
+        fieldSetFlags()[25] = true;
+      }
+      if (isValidValue(fields()[26], other.absEndTimestamp)) {
+        this.absEndTimestamp = data().deepCopy(fields()[26].schema(), other.absEndTimestamp);
+        fieldSetFlags()[26] = true;
+      }
+      if (isValidValue(fields()[27], other.endTimestamp)) {
+        this.endTimestamp = data().deepCopy(fields()[27].schema(), other.endTimestamp);
+        fieldSetFlags()[27] = true;
+      }
+      if (isValidValue(fields()[28], other.sojDataDt)) {
+        this.sojDataDt = data().deepCopy(fields()[28].schema(), other.sojDataDt);
+        fieldSetFlags()[28] = true;
+      }
+      if (isValidValue(fields()[29], other.sessionId)) {
+        this.sessionId = data().deepCopy(fields()[29].schema(), other.sessionId);
+        fieldSetFlags()[29] = true;
+      }
+      if (isValidValue(fields()[30], other.sessionSkey)) {
+        this.sessionSkey = data().deepCopy(fields()[30].schema(), other.sessionSkey);
+        fieldSetFlags()[30] = true;
+      }
+      if (isValidValue(fields()[31], other.sessionStartDt)) {
+        this.sessionStartDt = data().deepCopy(fields()[31].schema(), other.sessionStartDt);
+        fieldSetFlags()[31] = true;
       }
     }
 
@@ -2183,8 +2502,8 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
      *
      * @return This builder.
      */
-    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder clearBidBinConfirmFlag()
-    {
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder
+    clearBidBinConfirmFlag() {
       bidBinConfirmFlag = null;
       fieldSetFlags()[20] = false;
       return this;
@@ -2367,6 +2686,314 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
       return this;
     }
 
+    /**
+     * Gets the value of the 'botFlagList' field.
+     *
+     * @return The value.
+     */
+    public java.util.List<java.lang.Integer> getBotFlagList() {
+      return botFlagList;
+    }
+
+    /**
+     * Sets the value of the 'botFlagList' field.
+     *
+     * @param value The value of 'botFlagList'.
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setBotFlagList(
+        java.util.List<java.lang.Integer> value) {
+      validate(fields()[25], value);
+      this.botFlagList = value;
+      fieldSetFlags()[25] = true;
+      return this;
+    }
+
+    /**
+     * Checks whether the 'botFlagList' field has been set.
+     *
+     * @return True if the 'botFlagList' field has been set, false otherwise.
+     */
+    public boolean hasBotFlagList() {
+      return fieldSetFlags()[25];
+    }
+
+
+    /**
+     * Clears the value of the 'botFlagList' field.
+     *
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder clearBotFlagList() {
+      botFlagList = null;
+      fieldSetFlags()[25] = false;
+      return this;
+    }
+
+    /**
+     * Gets the value of the 'absEndTimestamp' field. from ubisession absEndTimestamp
+     *
+     * @return The value.
+     */
+    public java.lang.Long getAbsEndTimestamp() {
+      return absEndTimestamp;
+    }
+
+    /**
+     * Sets the value of the 'absEndTimestamp' field. from ubisession absEndTimestamp
+     *
+     * @param value The value of 'absEndTimestamp'.
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setAbsEndTimestamp(
+        java.lang.Long value) {
+      validate(fields()[26], value);
+      this.absEndTimestamp = value;
+      fieldSetFlags()[26] = true;
+      return this;
+    }
+
+    /**
+     * Checks whether the 'absEndTimestamp' field has been set. from ubisession absEndTimestamp
+     *
+     * @return True if the 'absEndTimestamp' field has been set, false otherwise.
+     */
+    public boolean hasAbsEndTimestamp() {
+      return fieldSetFlags()[26];
+    }
+
+
+    /**
+     * Clears the value of the 'absEndTimestamp' field. from ubisession absEndTimestamp
+     *
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder clearAbsEndTimestamp() {
+      absEndTimestamp = null;
+      fieldSetFlags()[26] = false;
+      return this;
+    }
+
+    /**
+     * Gets the value of the 'endTimestamp' field. from ubisession endTimestamp
+     *
+     * @return The value.
+     */
+    public java.lang.Long getEndTimestamp() {
+      return endTimestamp;
+    }
+
+    /**
+     * Sets the value of the 'endTimestamp' field. from ubisession endTimestamp
+     *
+     * @param value The value of 'endTimestamp'.
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setEndTimestamp(
+        java.lang.Long value) {
+      validate(fields()[27], value);
+      this.endTimestamp = value;
+      fieldSetFlags()[27] = true;
+      return this;
+    }
+
+    /**
+     * Checks whether the 'endTimestamp' field has been set. from ubisession endTimestamp
+     *
+     * @return True if the 'endTimestamp' field has been set, false otherwise.
+     */
+    public boolean hasEndTimestamp() {
+      return fieldSetFlags()[27];
+    }
+
+
+    /**
+     * Clears the value of the 'endTimestamp' field. from ubisession endTimestamp
+     *
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder clearEndTimestamp() {
+      endTimestamp = null;
+      fieldSetFlags()[27] = false;
+      return this;
+    }
+
+    /**
+     * Gets the value of the 'sojDataDt' field. from ubisession sojDataDt
+     *
+     * @return The value.
+     */
+    public java.lang.Long getSojDataDt() {
+      return sojDataDt;
+    }
+
+    /**
+     * Sets the value of the 'sojDataDt' field. from ubisession sojDataDt
+     *
+     * @param value The value of 'sojDataDt'.
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setSojDataDt(
+        java.lang.Long value) {
+      validate(fields()[28], value);
+      this.sojDataDt = value;
+      fieldSetFlags()[28] = true;
+      return this;
+    }
+
+    /**
+     * Checks whether the 'sojDataDt' field has been set. from ubisession sojDataDt
+     *
+     * @return True if the 'sojDataDt' field has been set, false otherwise.
+     */
+    public boolean hasSojDataDt() {
+      return fieldSetFlags()[28];
+    }
+
+
+    /**
+     * Clears the value of the 'sojDataDt' field. from ubisession sojDataDt
+     *
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder clearSojDataDt() {
+      sojDataDt = null;
+      fieldSetFlags()[28] = false;
+      return this;
+    }
+
+    /**
+     * Gets the value of the 'sessionId' field. from ubisession sessionId
+     *
+     * @return The value.
+     */
+    public java.lang.String getSessionId() {
+      return sessionId;
+    }
+
+    /**
+     * Sets the value of the 'sessionId' field. from ubisession sessionId
+     *
+     * @param value The value of 'sessionId'.
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setSessionId(
+        java.lang.String value) {
+      validate(fields()[29], value);
+      this.sessionId = value;
+      fieldSetFlags()[29] = true;
+      return this;
+    }
+
+    /**
+     * Checks whether the 'sessionId' field has been set. from ubisession sessionId
+     *
+     * @return True if the 'sessionId' field has been set, false otherwise.
+     */
+    public boolean hasSessionId() {
+      return fieldSetFlags()[29];
+    }
+
+
+    /**
+     * Clears the value of the 'sessionId' field. from ubisession sessionId
+     *
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder clearSessionId() {
+      sessionId = null;
+      fieldSetFlags()[29] = false;
+      return this;
+    }
+
+    /**
+     * Gets the value of the 'sessionSkey' field. from ubisession sessionSkey
+     *
+     * @return The value.
+     */
+    public java.lang.Long getSessionSkey() {
+      return sessionSkey;
+    }
+
+    /**
+     * Sets the value of the 'sessionSkey' field. from ubisession sessionSkey
+     *
+     * @param value The value of 'sessionSkey'.
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setSessionSkey(
+        java.lang.Long value) {
+      validate(fields()[30], value);
+      this.sessionSkey = value;
+      fieldSetFlags()[30] = true;
+      return this;
+    }
+
+    /**
+     * Checks whether the 'sessionSkey' field has been set. from ubisession sessionSkey
+     *
+     * @return True if the 'sessionSkey' field has been set, false otherwise.
+     */
+    public boolean hasSessionSkey() {
+      return fieldSetFlags()[30];
+    }
+
+
+    /**
+     * Clears the value of the 'sessionSkey' field. from ubisession sessionSkey
+     *
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder clearSessionSkey() {
+      sessionSkey = null;
+      fieldSetFlags()[30] = false;
+      return this;
+    }
+
+    /**
+     * Gets the value of the 'sessionStartDt' field. from ubisession sessionStartDt
+     *
+     * @return The value.
+     */
+    public java.lang.Long getSessionStartDt() {
+      return sessionStartDt;
+    }
+
+    /**
+     * Sets the value of the 'sessionStartDt' field. from ubisession sessionStartDt
+     *
+     * @param value The value of 'sessionStartDt'.
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder setSessionStartDt(
+        java.lang.Long value) {
+      validate(fields()[31], value);
+      this.sessionStartDt = value;
+      fieldSetFlags()[31] = true;
+      return this;
+    }
+
+    /**
+     * Checks whether the 'sessionStartDt' field has been set. from ubisession sessionStartDt
+     *
+     * @return True if the 'sessionStartDt' field has been set, false otherwise.
+     */
+    public boolean hasSessionStartDt() {
+      return fieldSetFlags()[31];
+    }
+
+
+    /**
+     * Clears the value of the 'sessionStartDt' field. from ubisession sessionStartDt
+     *
+     * @return This builder.
+     */
+    public com.ebay.sojourner.ubd.common.model.IntermediateSession.Builder clearSessionStartDt() {
+      sessionStartDt = null;
+      fieldSetFlags()[31] = false;
+      return this;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public IntermediateSession build() {
@@ -2418,33 +3045,25 @@ public class IntermediateSession extends org.apache.avro.specific.SpecificRecord
             fieldSetFlags()[23] ? this.familyViCnt : (java.lang.Integer) defaultValue(fields()[23]);
         record.agentString =
             fieldSetFlags()[24] ? this.agentString : (java.lang.String) defaultValue(fields()[24]);
+        record.botFlagList = fieldSetFlags()[25] ? this.botFlagList
+            : (java.util.List<java.lang.Integer>) defaultValue(fields()[25]);
+        record.absEndTimestamp = fieldSetFlags()[26] ? this.absEndTimestamp
+            : (java.lang.Long) defaultValue(fields()[26]);
+        record.endTimestamp =
+            fieldSetFlags()[27] ? this.endTimestamp : (java.lang.Long) defaultValue(fields()[27]);
+        record.sojDataDt =
+            fieldSetFlags()[28] ? this.sojDataDt : (java.lang.Long) defaultValue(fields()[28]);
+        record.sessionId =
+            fieldSetFlags()[29] ? this.sessionId : (java.lang.String) defaultValue(fields()[29]);
+        record.sessionSkey =
+            fieldSetFlags()[30] ? this.sessionSkey : (java.lang.Long) defaultValue(fields()[30]);
+        record.sessionStartDt =
+            fieldSetFlags()[31] ? this.sessionStartDt : (java.lang.Long) defaultValue(fields()[31]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
       }
     }
-  }
-
-  @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumWriter<IntermediateSession>
-      WRITER$ = (org.apache.avro.io.DatumWriter<IntermediateSession>) MODEL$
-      .createDatumWriter(SCHEMA$);
-
-  @Override
-  public void writeExternal(java.io.ObjectOutput out)
-      throws java.io.IOException {
-    WRITER$.write(this, SpecificData.getEncoder(out));
-  }
-
-  @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumReader<IntermediateSession>
-      READER$ = (org.apache.avro.io.DatumReader<IntermediateSession>) MODEL$
-      .createDatumReader(SCHEMA$);
-
-  @Override
-  public void readExternal(java.io.ObjectInput in)
-      throws java.io.IOException {
-    READER$.read(this, SpecificData.getDecoder(in));
   }
 
 }

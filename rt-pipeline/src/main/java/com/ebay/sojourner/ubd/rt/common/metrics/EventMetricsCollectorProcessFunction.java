@@ -1,7 +1,7 @@
 package com.ebay.sojourner.ubd.rt.common.metrics;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.detectors.EventBotDetector;
+import com.ebay.sojourner.ubd.common.sql.RuleManager;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -9,13 +9,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.stream.Collectors;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.metrics.Counter;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.util.Collector;
 
-public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEvent,UbiEvent> {
+public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEvent, UbiEvent> {
 
   private Set<Long> eventDynamicRuleCounterNameSet = new CopyOnWriteArraySet<>();
   private List<String> eventStaticRuleCounterNameList;
@@ -46,10 +47,15 @@ public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEve
   }
 
   @Override
-  public void processElement(UbiEvent ubiEvent, Context ctx, Collector<UbiEvent> out)
-      throws Exception {
+  public void processElement(UbiEvent ubiEvent, Context ctx, Collector<UbiEvent> out) {
+
     eventTotalCounter.inc();
-    Set<Long> dynamicRuleIdSet = EventBotDetector.dynamicRuleIdSet();
+    Set<Long> dynamicRuleIdSet = RuleManager
+        .getInstance().getSqlEventRuleSet()
+        .stream()
+        .map(rule -> rule.getRuleId())
+        .collect(Collectors.toSet());
+
     if (CollectionUtils.isNotEmpty(dynamicRuleIdSet)) {
       Collection intersection = CollectionUtils
           .intersection(dynamicRuleIdSet, eventDynamicRuleCounterNameSet);

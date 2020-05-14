@@ -8,9 +8,9 @@ import com.ebay.sojourner.ubd.common.sharedlib.util.GUID2Date;
 import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -27,13 +27,10 @@ public class UbiSessionHelper {
   public static final int IAB_INITIAL_CAPACITY = 10 * 1024; // 16 * 1024 * 1024 = 16m
   private static final int DIRECT_SESSION_SRC = 1;
   private static final int SINGLE_PAGE_SESSION = 1;
+
   private static Map<String, Boolean> iabCache =
-      new LinkedHashMap<String, Boolean>(IAB_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, true) {
-        @Override
-        protected boolean removeEldestEntry(Map.Entry<String, Boolean> eldest) {
-          return size() > IAB_MAX_CAPACITY;
-        }
-      };
+      new ConcurrentHashMap<>(IAB_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
+
   private List<String> iabAgentRegs;
 
   public UbiSessionHelper() {
@@ -192,14 +189,33 @@ public class UbiSessionHelper {
     return false;
   }
 
-  public boolean isIabAgent(UbiSession session) throws InterruptedException {
-    if (session.getNonIframeRdtEventCnt() > 0 && session.getUserAgent() != null) {
-      Boolean whether = iabCache.get(session.getUserAgent());
-      if (whether == null) {
-        whether = checkIabAgent(session.getUserAgent());
-        iabCache.put(session.getUserAgent(), whether);
+  public static void main(String[] args) {
+    String agent =
+        "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534+ (KHTML, like Gecko) BingPreview/1"
+            + ".0b";
+    ;
+    if (StringUtils.isNotBlank(agent)) {
+      for (String iabAgentReg : LkpManager.getInstance().getIabAgentRegs()) {
+        if (agent.toLowerCase().contains(iabAgentReg)) {
+          System.out.println(true);
+          ;
+        }
       }
+    }
+  }
 
+  public boolean isIabAgent(UbiSession session) throws InterruptedException {
+    if (session.getNonIframeRdtEventCnt() > 0 && (session.getUserAgent() != null
+        || session.getAgentInfo() != null)) {
+      String userAgent =
+          session.getUserAgent() == null ? session.getAgentInfo() : session.getUserAgent();
+      Boolean whether = iabCache.get(userAgent);
+      if (whether == null) {
+        whether = checkIabAgent(userAgent);
+        if (iabCache.size() < IAB_MAX_CAPACITY) {
+          iabCache.put(userAgent, whether);
+        }
+      }
       return whether;
     }
 

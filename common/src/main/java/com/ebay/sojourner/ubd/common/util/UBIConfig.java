@@ -188,6 +188,9 @@ public class UBIConfig {
     setString(Property.EXCLUDE_IP_PATTERN, getUBIProperty(Property.EXCLUDE_IP_PATTERN));
     setString(Property.EBAY_SITE_COBRAND, getUBIProperty(Property.EBAY_SITE_COBRAND));
     setString(Property.INVALID_BOT_FILTER, getUBIProperty(Property.INVALID_BOT_FILTER));
+    setString(Property.MOBILE_PAGES, getUBIProperty(Property.MOBILE_PAGES));
+    setString(Property.PRELOAD_PAYLOAD_TAGS, getUBIProperty(Property.PRELOAD_PAYLOAD_TAGS));
+
     // Extra metrics for page list
     setString(Property.INVALID_PAGE_IDS, getUBIProperty(Property.INVALID_PAGE_IDS));
     // Set APP PAYLOAD KV Property

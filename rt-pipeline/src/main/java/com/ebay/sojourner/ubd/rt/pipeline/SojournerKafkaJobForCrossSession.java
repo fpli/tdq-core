@@ -4,7 +4,6 @@ import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
@@ -15,12 +14,8 @@ import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFuncti
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
-import java.util.concurrent.TimeUnit;
-import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
-import org.apache.flink.streaming.api.CheckpointingMode;
-import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -42,35 +37,7 @@ public class SojournerKafkaJobForCrossSession {
     // 0.1 UBI configuration
     // 0.2 Flink configuration
     final StreamExecutionEnvironment executionEnvironment =
-        StreamExecutionEnvironment.getExecutionEnvironment();
-    executionEnvironment.getConfig().setGlobalJobParameters(parameterTool);
-    executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
-
-    // checkpoint settings
-    executionEnvironment.enableCheckpointing(
-        AppEnv.config().getFlink().getCheckpoint().getInterval().getSeconds() * 1000,
-        CheckpointingMode.EXACTLY_ONCE);
-    executionEnvironment
-        .getCheckpointConfig()
-        .setCheckpointTimeout(
-            AppEnv.config().getFlink().getCheckpoint().getTimeout().getSeconds() * 1000);
-    executionEnvironment
-        .getCheckpointConfig()
-        .setMinPauseBetweenCheckpoints(
-            AppEnv.config().getFlink().getCheckpoint().getMinPauseBetween().getSeconds() * 1000);
-    executionEnvironment
-        .getCheckpointConfig()
-        .setMaxConcurrentCheckpoints(
-            AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent() == null
-                ? 1
-                : AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
-    executionEnvironment.setStateBackend(
-        StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
-    executionEnvironment.setRestartStrategy(
-        RestartStrategies.fixedDelayRestart(
-            3, // number of restart attempts
-            org.apache.flink.api.common.time.Time.of(10, TimeUnit.SECONDS) // delay
-        ));
+        ExecutionEnvUtil.prepare(parameterTool);
 
     // for soj nrt output
     // 1. Rheos Consumer
@@ -78,7 +45,7 @@ public class SojournerKafkaJobForCrossSession {
     // 1.2 Assign timestamps and emit watermarks.
     DataStream<RawEvent> rawEventDataStreamForRNO =
         executionEnvironment
-            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
+            .addSource(KafkaSourceFunction.buildSource(Constants.TOPIC_PATHFINDER_EVENTS,
                 Constants.BOOTSTRAP_SERVERS_RNO, Constants.GROUP_ID_RNO_DQ, RawEvent.class))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
@@ -89,7 +56,7 @@ public class SojournerKafkaJobForCrossSession {
 
     DataStream<RawEvent> rawEventDataStreamForSLC =
         executionEnvironment
-            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
+            .addSource(KafkaSourceFunction.buildSource(Constants.TOPIC_PATHFINDER_EVENTS,
                 Constants.BOOTSTRAP_SERVERS_SLC, Constants.GROUP_ID_SLC_DQ, RawEvent.class))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null
@@ -100,7 +67,7 @@ public class SojournerKafkaJobForCrossSession {
 
     DataStream<RawEvent> rawEventDataStreamForLVS =
         executionEnvironment
-            .addSource(KafkaSourceFunction.generateWatermark(Constants.TOPIC_PATHFINDER_EVENTS,
+            .addSource(KafkaSourceFunction.buildSource(Constants.TOPIC_PATHFINDER_EVENTS,
                 Constants.BOOTSTRAP_SERVERS_LVS, Constants.GROUP_ID_LVS_DQ, RawEvent.class))
             .setParallelism(
                 AppEnv.config().getFlink().getApp().getSourceParallelism() == null

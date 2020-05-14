@@ -11,4 +11,5 @@ public class HdfsPathConstants {
       PARENT_PATH + AppEnv.config().getHdfs().getSinkSignaturePath();
   public static final String LATE_EVENT_PATH =
       PARENT_PATH + AppEnv.config().getHdfs().getSinkLateEventPath();
+
 }
