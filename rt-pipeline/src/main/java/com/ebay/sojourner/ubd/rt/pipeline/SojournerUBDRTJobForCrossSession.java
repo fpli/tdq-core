@@ -2,6 +2,7 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.IntermediateSession;
+import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpWindowProcessFunction;
@@ -11,7 +12,6 @@ import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 
@@ -112,15 +112,12 @@ public class SojournerUBDRTJobForCrossSession {
             .name("Signature Bot Detector")
             .uid("connectLevel");
 
-    intermediateSessionWithSignature
+*/
+    intermediateSessionDataStream
         .addSink(HdfsSinkUtil.signatureSinkWithParquet())
-        .setParallelism(580)
+        .setParallelism(200)
         .name("IntermediateSession sink")
         .uid("intermediateSessionHdfsSink");
-        */
-
-    agentIpAttributeDatastream.addSink(new DiscardingSink<>()).name("agentIp attribute")
-        .disableChaining();
 
     // Submit this job
     executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForDQPipeline());
