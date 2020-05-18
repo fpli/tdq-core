@@ -143,4 +143,12 @@ public class SOJNameValueParser {
 
     return getTagValues(string, keySet);
   }
+
+  public static void main(String[] args) {
+    System.out.println(getTagValue("app=2571&c=1&g=bbffceff169e2254039923d001172c86&nid=&h=ff"
+        + "&cguidsrc=cookie&n=bbffd7151690aad765a3bca7d819e376&uc=1&p=3084&uaid"
+        + "=1a1fee4f1720a9b12a948c5bdcfe98faS0&bs=0&rvrid=2426431642212&t=3&cflgs=EA**&ul=en-US"
+        + "&mppid=117&pn=2&pcguid=bbffd7151690aad765a3bca7d819e376&rq=6a7d991ef6510251&pagename"
+        + "=EntryTracking&ciid=H%2B5PEqk*","mppid"));
+  }
 }

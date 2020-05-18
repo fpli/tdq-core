@@ -106,6 +106,8 @@ public class SOJTS2Date {
 
   public static void main(String[] args) {
 
+    Long a =null;
+    System.out.println(getDateStr(a));
     long millis = getUnixTimestamp(3584201122910000L);
     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT-7"));
     calendar.setTimeInMillis(millis);

@@ -1204,9 +1204,11 @@ public class IntermediateMetrics implements Serializable {
   public void start(UbiEvent event) {
     // null
   }
+
   public void setNotifyClickTs(Long notifyClickTs) {
     this.notifyClickTs = notifyClickTs;
   }
+
   public void setNotifyViewTs(Long notifyViewTs) {
     this.notifyViewTs = notifyViewTs;
   }
