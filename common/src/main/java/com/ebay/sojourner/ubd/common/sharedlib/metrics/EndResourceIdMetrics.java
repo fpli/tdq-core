@@ -6,7 +6,7 @@ import com.ebay.sojourner.ubd.common.model.UbiEvent;
 /**
  *                     select p as _exitPage, timestamp as _exitTime
  *                     from SOJEvent(p is not null and rdt = 0 and _ifrm = false and (session.string('_exitPage') is null or (session.long('_exitTime') is not null and timestamp - session.long('_exitTime') > 0)));
- *                     
+ *
  * select p as _exitPage from SOJEvent(p is not null and rdt = 0 and _ifrm = false);
  *
  * select ColonFieldUtil.extractField(r1, 1) as _exitPage, _ct as _exitTime

@@ -51,6 +51,31 @@ public class SojSession implements Serializable, Cloneable {
   private int nonIframeRdtEventCnt;
   private Long firstSessionStartDt;
   private Boolean singleClickSessionFlag;
+  private int asqCnt;
+  private int atcCnt;
+  private int atlCnt;
+  private int boCnt;
+  private int srpCnt;
+  private int servEventCnt;
+  private int searchViewPageCnt;
+  private String browserFamily;
+  private String browserVersion;
+  private String city;
+  private String continent;
+  private String country;
+  private String deviceClass;//first
+  private String deviceFamily;//first
+  private int endResourceId;
+  private boolean isReturningVisitor;
+  private String lineSpeed;
+  private String osFamily;
+  private String osVersion;
+  private int pulsarEventCnt;
+  private String region;
+  private long sessionEndDt;
+  private int startResourceId;
+  private String streamId;
+  private String buserId;
   private Set<Integer> botFlagList = new LinkedHashSet<>();
 
   public SojSession() {

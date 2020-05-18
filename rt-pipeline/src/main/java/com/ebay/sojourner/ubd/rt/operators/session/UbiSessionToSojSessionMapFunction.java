@@ -54,6 +54,31 @@ public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSessio
     sojSession.setSigninPageCnt(ubiSession.getSigninPageCnt());
     sojSession.setFirstSessionStartDt(ubiSession.getFirstSessionStartDt());
     sojSession.setSingleClickSessionFlag(ubiSession.getSingleClickSessionFlag());
+    sojSession.setAsqCnt(ubiSession.getAsqCnt());
+    sojSession.setAtcCnt(ubiSession.getAtcCnt());
+    sojSession.setAtlCnt(ubiSession.getAtlCnt());
+    sojSession.setBoCnt(ubiSession.getBoCnt());
+    sojSession.setSrpCnt(ubiSession.getSrpCnt());
+    sojSession.setServEventCnt(ubiSession.getServEventCnt());
+    sojSession.setSearchViewPageCnt(ubiSession.getSearchViewPageCnt());
+    sojSession.setBrowserFamily(ubiSession.getBrowserFamily());
+    sojSession.setBrowserVersion(ubiSession.getBrowserVersion());
+    sojSession.setCity(ubiSession.getCity());
+    sojSession.setContinent(ubiSession.getContinent());
+    sojSession.setCountry(ubiSession.getCountry());
+    sojSession.setDeviceClass(ubiSession.getDeviceClass());
+    sojSession.setDeviceFamily(ubiSession.getDeviceFamily());
+    sojSession.setEndResourceId(ubiSession.getEndResourceId());
+    sojSession.setReturningVisitor(ubiSession.isReturningVisitor());
+    sojSession.setLineSpeed(ubiSession.getLineSpeed());
+    sojSession.setOsFamily(ubiSession.getOsFamily());
+    sojSession.setOsVersion(ubiSession.getOsVersion());
+    sojSession.setPulsarEventCnt(ubiSession.getPulsarEventCnt());
+    sojSession.setRegion(ubiSession.getRegion());
+    sojSession.setSessionEndDt(ubiSession.getSessionEndDt());
+    sojSession.setStartResourceId(ubiSession.getStartResourceId());
+    sojSession.setStreamId(ubiSession.getStreamId());
+    sojSession.setBuserId(ubiSession.getBuserId());
     return sojSession;
   }
 }
