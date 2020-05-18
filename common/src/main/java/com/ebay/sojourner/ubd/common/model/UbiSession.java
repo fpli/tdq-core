@@ -15,18 +15,18 @@ public class UbiSession implements Serializable, Cloneable {
   private String sessionId;
   private long sessionSkey;
   private Long sessionStartDt;
-  private String ip;
+  private String ip; //ipv4 in jetstream
   private String userAgent;
-  private String sessionReferrer;
+  private String sessionReferrer;//referer in jetstream
   private int botFlag;
   private int version;
-  private String firstUserId;
+  private String firstUserId; // userid in jetstream
   private long siteFlags;
   private int attrFlags;
   private int botFlags;
   private Long findingFlags;
-  private int startPageId;
-  private int endPageId;
+  private int startPageId; //pageid in jetstream
+  private int endPageId; //pageid in jetstream
   private Long startTimestamp;
   private Long startTimestampNOIFRAMERDT;
   private Long endTimestampNOIFRAMERDT;
@@ -41,19 +41,19 @@ public class UbiSession implements Serializable, Cloneable {
   private Long absStartTimestampForNotifyClick;
   private Long absStartTimestampForNotifyView;
   private int durationSec;
-  private int eventCnt;
-  private int viCoreCnt;
-  private int bidCoreCnt;
-  private int binCoreCnt;
-  private int watchCoreCnt;
+  private int eventCnt; // sojeventcnt in jetstream
+  private int viCoreCnt; // vicnt in jetstream
+  private int bidCoreCnt; // bidcnt in Jetstream
+  private int binCoreCnt; // bincnt in jetstream
+  private int watchCoreCnt; // watchcnt in jetstream
   private int trafficSrcId;
   private Long absStartTimestamp;
   private int absDuration;
   private int cobrand;
-  private int firstSiteId;
-  private String firstCguid;
+  private int firstSiteId; // siteid in jetstream
+  private String firstCguid; //cguid in jetstream
   private Long firstMappedUserId;
-  private Integer firstAppId;
+  private Integer firstAppId; // appid in jetstream
   private Long endTimestamp;
   private int homepageCnt;
   private int grCnt;
@@ -61,11 +61,11 @@ public class UbiSession implements Serializable, Cloneable {
   private int myebayCnt;
   private int signinPageCnt;
   private int nonIframeRdtEventCnt;
-  private Boolean singleClickSessionFlag;
+  private Boolean singleClickSessionFlag; // Not exists in SojSession
   private Boolean bidBinConfirmFlag;
   private Boolean sessionEndedFlag;
   private String oldSessionSkey;
-  private int absEventCnt;
+  private int absEventCnt; // Not exists in SojSession
   private int validPageCnt;
   private int agentCnt;
   private String agentString;
@@ -110,6 +110,32 @@ public class UbiSession implements Serializable, Cloneable {
   private int seqNum;
   private IntermediateMetrics intermediateMetrics ;
   private Long firstSessionStartDt;
+  //Column exists in Jetstream but not exists in Flink
+  private int asqCnt;
+  private int atcCnt;
+  private int atlCnt;
+  private int boCnt;
+  private String browserFamily;
+  private String browserVersion;
+  private String city;
+  private String continent;
+  private String country;
+  private String deviceClass;
+  private String deviceFamily;
+  private int endResourceId;
+  private boolean isReturningVisitor;
+  private String lineSpeed;
+  private String osFamily;
+  private String osVersion;
+  private int pulsarEventCnt;
+  private String region;
+  private int searchViewPageCnt;
+  private int servEventCnt;
+  private long sessionEndDt;
+  private int srpCnt;
+  private int startResourceId;
+  private String streamId;
+  private String buserId;
 
   public UbiSession() {
     //        this.distinctClickIdSet = new HashSet<Integer>();

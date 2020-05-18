@@ -3,6 +3,7 @@ package com.ebay.dss.soj.ubd.rule;
 import java.time.Duration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class BotRuleDescTest {
@@ -11,26 +12,28 @@ public class BotRuleDescTest {
 
   @BeforeEach
   public void init() {
-    String sql = "select 1 as bot_flag from ubi_event";
+    String sql = "select 1 as bot_flag from soj.idl_event";
     botRuleDesc = BotRuleDesc.of(sql);
   }
 
   @Test
   public void testToBotRuleDesc() {
-    Assertions.assertEquals(new BotRuleDesc(1, "ubi_event", Duration.ofMinutes(10)), botRuleDesc);
+    Assertions
+        .assertEquals(new BotRuleDesc(1, "DEFAULT.UBI_EVENT", Duration.ofMinutes(60)), botRuleDesc);
   }
 
+  @Disabled
   @Test
-  public void testGenBeforeScript() {
-    String script = BotRuleDesc.genBeforeCheckScript(botRuleDesc);
-    String expected = "select * from default.ubi_session_dq_overall";
-    Assertions.assertEquals(expected, script);
-  }
-
-  @Test
-  public void testGenAfterScript() {
-    String script = BotRuleDesc.genAfterCheckScript(botRuleDesc);
-    String expected = "select * from default.ubi_bot_dq_overall";
+  public void testGenScript() {
+    String script = BotRuleDesc.genCheckScript(botRuleDesc);
+    System.out.println(script);
+    String expected = "select count(*) from DEFAULT.UBI_EVENT\n"
+        + "where array_contains(botFlags, 1)\n"
+        + "and sojlib.ts_mils(eventTimestamp) > '2020/05/06 20:00:28.232'\n"
+        + "union all\n"
+        + "select count(*) from DEFAULT.UBI_EVENT\n"
+        + "where array_contains(botFlags, 1001)\n"
+        + "and sojlib.ts_mils(eventTimestamp) > '2020/05/06 20:00:28.232'\n";
     Assertions.assertEquals(expected, script);
   }
 }
