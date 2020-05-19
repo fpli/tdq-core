@@ -92,7 +92,7 @@ public class IpAttributeTest {
     agentIpAttribute.setMktgCnt(21);
     HllSketch hllSketch = new HllSketch(2,TgtHllType.HLL_8);
     hllSketch.update(1);
-    agentIpAttribute.setGuidSet(hllSketch);
+    agentIpAttribute.setHllSketch(hllSketch.toCompactByteArray());
 
     ipAttribute.feed(agentIpAttribute, 210, true);
 

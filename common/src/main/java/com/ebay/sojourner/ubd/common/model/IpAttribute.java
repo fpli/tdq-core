@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.Data;
+import org.apache.datasketches.hll.HllSketch;
 
 @Data
 public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
@@ -93,7 +94,8 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
     }
 
     int cguidCnt = agentIpAttribute.getCguidSet().size();
-    int guidCnt = (int)Math.round(agentIpAttribute.getGuidSet().getEstimate());
+    int guidCnt = agentIpAttribute.getHllSketch() == null ? 0 :
+        (int) Math.round(HllSketch.heapify(agentIpAttribute.getHllSketch()).getEstimate());
     if (sessionCnt > 10
         && sessionCnt == agentIpAttribute.getNewGuidCnt()
         && (cguidCnt < 3 || agentIpAttribute.getMaxValidPageCnt() < 10)) {
