@@ -1,6 +1,8 @@
 package com.ebay.sojourner.ubd.rt.connectors.filesystem;
 
 import com.ebay.sojourner.ubd.common.model.IntermediateSession;
+import com.ebay.sojourner.ubd.common.model.JetStreamOutputEvent;
+import com.ebay.sojourner.ubd.common.model.JetStreamOutputSession;
 import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.rt.util.HdfsPathConstants;
@@ -33,4 +35,13 @@ public class HdfsSinkUtil {
     return HdfsSinkUtil.createWithParquet(HdfsPathConstants.LATE_EVENT_PATH, SojEvent.class);
   }
 
+  public static StreamingFileSink jetstreamSojEventSinkWithParquet() {
+    return HdfsSinkUtil
+        .createWithParquet(HdfsPathConstants.JETSTREAM_EVENT_PATH, JetStreamOutputEvent.class);
+  }
+
+  public static StreamingFileSink jetstreamSojSessionSinkWithParquet() {
+    return HdfsSinkUtil
+        .createWithParquet(HdfsPathConstants.JETSTREAM_SESSION_PATH, JetStreamOutputSession.class);
+  }
 }
