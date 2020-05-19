@@ -2,16 +2,27 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.IntermediateSession;
+import com.ebay.sojourner.ubd.rt.common.broadcast.CrossSessionDQBroadcastProcessFunction;
+import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
+import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAgg;
+import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAggSliding;
+import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpFilterFunction;
+import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpSignatureWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
+import java.util.Set;
+import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 
@@ -40,9 +51,16 @@ public class SojournerUBDRTJobForCrossSession {
             .name("Rheos Kafka Consumer For Cross Session DQ")
             .uid("kafkaSourceForCrossSessionDQ");
 
+    DataStream<IntermediateSession> agentIpFilterStream =
+        intermediateSessionDataStream
+            .filter(new AgentIpFilterFunction())
+            .setParallelism(AppEnv.config().getFlink().app.getCrossSessionParallelism())
+            .name("Agent Ip filter")
+            .uid("agentIpFilter");
+
     // cross session
     DataStream<AgentIpAttribute> agentIpAttributeDatastream =
-        intermediateSessionDataStream
+        agentIpFilterStream
             .keyBy("userAgent", "clientIp")
             .window(TumblingEventTimeWindows.of(Time.minutes(5)))
             .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
@@ -60,6 +78,7 @@ public class SojournerUBDRTJobForCrossSession {
             .name("Attribute Operator (GUID)")
             .setParallelism(AppEnv.config().getFlink().app.getGuidParallelism())
             .uid("guidLevel");
+            */
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureDataStream =
         agentIpAttributeDatastream
@@ -71,7 +90,7 @@ public class SojournerUBDRTJobForCrossSession {
             .name("Attribute Operator (Agent+IP)")
             .setParallelism(AppEnv.config().getFlink().app.getAgentIpParallelism())
             .uid("agentIpLevel");
-
+    /*
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureDataStream =
         agentIpAttributeDatastream
             .keyBy("agent")
@@ -84,7 +103,7 @@ public class SojournerUBDRTJobForCrossSession {
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureDataStream =
         agentIpAttributeDatastream
-            .keyBy("clientIp")
+            .keyBy("ip")
             .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
@@ -98,24 +117,24 @@ public class SojournerUBDRTJobForCrossSession {
             .union(agentSignatureDataStream)
             .union(ipSignatureDataStream)
             .union(guidSignatureDataStream);
+    */
 
     // attribute signature broadcast
     BroadcastStream<Tuple4<String, Boolean, Set<Integer>, Long>> attributeSignatureBroadcastStream =
-        attributeSignatureDataStream.broadcast(MapStateDesc.attributeSignatureDesc);
+        agentIpSignatureDataStream.broadcast(MapStateDesc.attributeSignatureDesc);
 
     // connect broadcast
     SingleOutputStreamOperator<IntermediateSession> intermediateSessionWithSignature =
-        intermediateSessionDataStream
+        agentIpFilterStream
             .connect(attributeSignatureBroadcastStream)
             .process(new CrossSessionDQBroadcastProcessFunction())
             .setParallelism(AppEnv.config().getFlink().app.getBroadcastParallelism())
             .name("Signature Bot Detector")
             .uid("connectLevel");
 
-*/
-    intermediateSessionDataStream
+    intermediateSessionWithSignature
         .addSink(HdfsSinkUtil.signatureSinkWithParquet())
-        .setParallelism(200)
+        .setParallelism(AppEnv.config().getFlink().app.getBroadcastParallelism())
         .name("IntermediateSession sink")
         .uid("intermediateSessionHdfsSink");
 
