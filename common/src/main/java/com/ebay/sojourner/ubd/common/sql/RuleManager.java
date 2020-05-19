@@ -1,12 +1,21 @@
 package com.ebay.sojourner.ubd.common.sql;
 
+import com.ebay.sojourner.ubd.common.util.Constants;
+import com.ebay.sojourner.ubd.common.zookeeper.ZkClient;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.recipes.cache.PathChildrenCache;
+import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent.Type;
 
 @Slf4j
 public class RuleManager {
@@ -15,7 +24,7 @@ public class RuleManager {
   private final RuleFetcher ruleFetcher;
   // private final ZkClient zkClient;
   // private final ExecutorService zkExecutor;
-  // private final ScheduledExecutorService schedulingExecutor;
+  private final ScheduledExecutorService schedulingExecutor;
 
   @Getter
   private Set<SqlEventRule> sqlEventRuleSet = new CopyOnWriteArraySet<>();
@@ -23,16 +32,16 @@ public class RuleManager {
   private RuleManager() {
 
     ruleFetcher = new RuleFetcher();
+    schedulingExecutor = Executors.newSingleThreadScheduledExecutor();
+
+    // TODO(Jason) disable zk for now
+    // 1. init zk listener
     // zkClient = new ZkClient();
     // zkExecutor = Executors.newSingleThreadExecutor();
-    // schedulingExecutor = Executors.newSingleThreadScheduledExecutor();
-
-    // 1. fetch all rules at startup
-    // initRules();
-    // 2. init zk listener
     // initZkListener();
-    // 3. init scheduling
-    // initScheduling();
+
+    // 2. init scheduling
+    initScheduling(15L, 15L);
 
   }
 
@@ -40,13 +49,12 @@ public class RuleManager {
     return INSTANCE;
   }
 
-  private void initRules() {
+  public void initRules() {
     log.info("init all rules");
     updateRules(ruleFetcher.fetchAllRules());
   }
 
-  /*
-  private void initZkListener() {
+  private void initZkListener(ZkClient zkClient, ExecutorService zkExecutor) {
     CuratorFramework client = zkClient.getClient();
     PathChildrenCache cache = new PathChildrenCache(client, Constants.ZK_NODE_PATH, true);
     // add listener
@@ -77,12 +85,11 @@ public class RuleManager {
     }
   }
 
-  private void initScheduling() {
+  private void initScheduling(Long initDelayInSeconds, Long delayInSeconds) {
     schedulingExecutor.scheduleWithFixedDelay(() -> {
       updateRules(ruleFetcher.fetchAllRules());
-    }, 6, 15, TimeUnit.SECONDS);
+    }, initDelayInSeconds, delayInSeconds, TimeUnit.SECONDS);
   }
-  */
 
   private void updateRules(List<RuleDefinition> ruleDefinitions) {
     if (CollectionUtils.isNotEmpty(ruleDefinitions)) {
@@ -121,7 +128,7 @@ public class RuleManager {
   public void close() {
     // zkClient.stop();
     // zkExecutor.shutdown();
-    // schedulingExecutor.shutdown();
+    schedulingExecutor.shutdown();
   }
 
   public static void main(String[] args) throws Exception {
