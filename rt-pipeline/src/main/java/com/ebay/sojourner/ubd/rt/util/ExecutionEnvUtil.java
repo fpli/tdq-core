@@ -75,7 +75,7 @@ public class ExecutionEnvUtil {
     /**
      * StateBackend
      */
-    env.setStateBackend(StateBackendFactory.getStateBackend(StateBackendFactory.FS));
+    env.setStateBackend(StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
 
     return env;
   }

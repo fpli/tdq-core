@@ -4,6 +4,7 @@ import com.ebay.sojourner.ubd.common.model.JetStreamOutputEvent;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.IOException;
 import org.apache.avro.generic.GenericRecord;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 
@@ -17,30 +18,58 @@ public class SojEventDeserializationSchema implements DeserializationSchema<JetS
         RheosEventSerdeFactory.getRheosEventDeserializer().decode(rheosEvent);
 
     long eventCreateTimestamp = rheosEvent.getEventCreateTimestamp();
-    String guid = String.valueOf(genericRecord.get("guid"));
-    Long eventTimestamp = (Long) genericRecord.get("eventTimestamp");
-    String sid = String.valueOf(genericRecord.get("sid"));
-    Long eventCaptureTime = (Long) genericRecord.get("eventCaptureTime");
-    String requestCorrelationId = String.valueOf(genericRecord.get("requestCorrelationId"));
-    String pageFamily = String.valueOf(genericRecord.get("pageFamily"));
-    String remoteIP = String.valueOf(genericRecord.get("remoteIP"));
-    String appVersion = String.valueOf(genericRecord.get("appVersion"));
-    String eventFamily = String.valueOf(genericRecord.get("eventFamily"));
-    String eventAction = String.valueOf(genericRecord.get("eventAction"));
-    String trafficSource = String.valueOf(genericRecord.get("trafficSource"));
-    String osVersion = String.valueOf(genericRecord.get("osVersion"));
-    String deviceFamily = String.valueOf(genericRecord.get("deviceFamily"));
-    String deviceType = String.valueOf(genericRecord.get("deviceType"));
-    String browserVersion = String.valueOf(genericRecord.get("browserVersion"));
-    String browserFamily = String.valueOf(genericRecord.get("browserFamily"));
-    String osFamily = String.valueOf(genericRecord.get("osFamily"));
-    String enrichedOsVersion = String.valueOf(genericRecord.get("enrichedOsVersion"));
-    String rlogid = String.valueOf(genericRecord.get("rlogid"));
+    String guid = getString(genericRecord.get("guid"));
+    Long eventTimestamp = getLong(genericRecord.get("eventTimestamp"));
+    String sid = getString(genericRecord.get("sid"));
+    Long eventCaptureTime = getLong(genericRecord.get("eventCaptureTime"));
+    String requestCorrelationId = getString(genericRecord.get("requestCorrelationId"));
+    String pageFamily = getString(genericRecord.get("pageFamily"));
+    String remoteIP = getString(genericRecord.get("remoteIP"));
+    String appVersion = getString(genericRecord.get("appVersion"));
+    String eventFamily = getString(genericRecord.get("eventFamily"));
+    String eventAction = getString(genericRecord.get("eventAction"));
+    String trafficSource = getString(genericRecord.get("trafficSource"));
+    String osVersion = getString(genericRecord.get("osVersion"));
+    String deviceFamily = getString(genericRecord.get("deviceFamily"));
+    String deviceType = getString(genericRecord.get("deviceType"));
+    String browserVersion = getString(genericRecord.get("browserVersion"));
+    String browserFamily = getString(genericRecord.get("browserFamily"));
+    String osFamily = getString(genericRecord.get("osFamily"));
+    String enrichedOsVersion = getString(genericRecord.get("enrichedOsVersion"));
+    String rlogid = getString(genericRecord.get("rlogid"));
 
     return new JetStreamOutputEvent(guid, eventTimestamp, eventCreateTimestamp, sid,
         eventCaptureTime, requestCorrelationId, pageFamily, remoteIP, appVersion, eventFamily,
         eventAction, trafficSource, osVersion, deviceFamily, deviceType, browserVersion,
         browserFamily, osFamily, enrichedOsVersion, rlogid);
+  }
+
+  private Integer getInteger(Object o){
+    if(StringUtils.isEmpty(getString(o))){
+      return null;
+    }else{
+      return Integer.valueOf(getString(o));
+    }
+  }
+  private boolean getBoolean(Object o){
+    if(StringUtils.isEmpty(getString(o))){
+      return false;
+    }else{
+      return Boolean.valueOf(getString(o));
+    }
+  }
+
+
+  private Long getLong(Object o){
+    if(StringUtils.isEmpty(getString(o))){
+      return null;
+    }else{
+      return Long.valueOf(getString(o));
+    }
+  }
+
+  private String getString(Object o) {
+    return (o != null&&!"null".equals(o.toString())) ? o.toString() : null;
   }
 
   @Override
