@@ -60,6 +60,10 @@ public class EventListenerContainer {
     addListener(new AgentStringMetrics());
     addListener(new PageIdMetrics());
     addListener(new FirstMappedUserIdMetrics());
+    addListener(new OsMetrics());
+    addListener(new BrowserMetrics());
+    addListener(new DeviceMetrics());
+    addListener(new AddressMetrics());
   }
 
   private void initListener() throws Exception {
@@ -94,7 +98,18 @@ public class EventListenerContainer {
       if (eventListener instanceof FirstMappedUserIdMetrics) {
         ((FirstMappedUserIdMetrics) eventListener).init();
       }
+      if (eventListener instanceof OsMetrics) {
+        ((OsMetrics) eventListener).init();
+      }
+      if (eventListener instanceof BrowserMetrics) {
+        ((BrowserMetrics) eventListener).init();
+      }
+      if (eventListener instanceof DeviceMetrics) {
+        ((DeviceMetrics) eventListener).init();
+      }
+      if (eventListener instanceof AddressMetrics) {
+        ((AddressMetrics) eventListener).init();
+      }
     }
   }
-
 }

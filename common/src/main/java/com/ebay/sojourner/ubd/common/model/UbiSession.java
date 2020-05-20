@@ -111,29 +111,30 @@ public class UbiSession implements Serializable, Cloneable {
   private IntermediateMetrics intermediateMetrics;
   private Long firstSessionStartDt;
   //Column exists in Jetstream but not exists in Flink
-  private int asqCnt;//select * from SOJEvent(_pgf = 'ASQ' and rdt = 0  and _ifrm = false)
-  private int atcCnt;//select * from SOJEvent(_pgf = 'ATC' and rdt = 0  and _ifrm = false)
-  private int atlCnt;//select * from SOJEvent(_pgf = 'ATL' and rdt = 0  and _ifrm = false)
-  private int boCnt;//select * from SOJEvent(_pgf = 'BO' and rdt = 0  and _ifrm = false)
-  private int srpCnt;//select * from SOJEvent(_pgf in ('GR', 'GR-1') and rdt = 0  and _ifrm = false)
-  private int servEventCnt;//select * from SOJEvent(p is not null and rdt = 0 and _ifrm = false)
-  private int searchViewPageCnt;
-  private String browserFamily;
-  private String browserVersion;
+  private int asqCnt = 0;//from SOJEvent(_pgf = 'ASQ' and rdt = 0  and _ifrm = false)
+  private int atcCnt = 0;//from SOJEvent(_pgf = 'ATC' and rdt = 0  and _ifrm = false)
+  private int atlCnt = 0;//from SOJEvent(_pgf = 'ATL' and rdt = 0  and _ifrm = false)
+  private int boCnt = 0;//from SOJEvent(_pgf = 'BO' and rdt = 0  and _ifrm = false)
+  private int srpCnt = 0;//from SOJEvent(_pgf in ('GR', 'GR-1') and rdt = 0 and _ifrm = false)
+  private int servEventCnt = 0;//select * from SOJEvent(p is not null and rdt = 0 and _ifrm = false)
+  private int searchViewPageCnt = 0;
   private String city;
-  private String continent;
+  private String region;
   private String country;
-  private String deviceClass;//first
-  private String deviceFamily;//first
+  private String continent;
+  private String browserFamily;//Exists in UBI_EVENT, get first
+  private String browserVersion;//Exists in UBI_EVENT, get first
+  private String deviceClass;//Exists in UBI_EVENT, get first
+  private String deviceFamily;//Exists in UBI_EVENT, get first
+  private String osFamily;//Exists in UBI_EVENT, get first
+  private String osVersion;//Exists in UBI_EVENT, get first
+  private int startResourceId;//Capture first non-iframe/rdt page view and refresh metadata
+  //if r1 is not null, extract second field from r1 as pageId, and use it first for exit page logic
   private int endResourceId;
   private boolean isReturningVisitor;
   private String lineSpeed;
-  private String osFamily;
-  private String osVersion;
-  private int pulsarEventCnt;
-  private String region;
+  private int pulsarEventCnt = 0;
   private long sessionEndDt;
-  private int startResourceId;
   private String streamId;
   private String buserId;
 
