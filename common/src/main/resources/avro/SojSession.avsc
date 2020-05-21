@@ -170,5 +170,113 @@
     "name" : "firstSessionStartDt",
     "type" : [ "null", "long" ],
     "doc": "from ubisession firstSessionStartDt"
-  } ]
+  },{
+    "name" : "sessionEndDt",
+    "type" : [ "null", "long" ],
+    "doc": "from ubisession sessionEndDt"
+  }, {
+    "name" : "absEventCnt",
+    "type" : [ "null", "int" ],
+    "doc": "from ubisession absEventCnt"
+  }, {
+    "name" : "singleClickSessionFlag",
+    "type" : [ "null", "boolean" ],
+    "doc": "from ubisession singleClickSessionFlag"
+  }, {
+    "name" : "asqCnt",
+    "type" : [ "null", "int" ],
+    "doc": "from ubisession asqCnt"
+  }, {
+    "name" : "atcCnt",
+    "type" : [ "null", "int" ],
+    "doc": "from ubisession atcCnt"
+  }, {
+    "name" : "atlCnt",
+    "type" : [ "null", "int" ],
+    "doc": "from ubisession atlCnt"
+  }, {
+    "name" : "boCnt",
+    "type" : [ "null", "int" ],
+    "doc": "from ubisession boCnt"
+  }, {
+    "name" : "srpCnt",
+    "type" : [ "null", "int" ],
+    "doc": "from ubisession srpCnt"
+  }, {
+    "name" : "servEventCnt",
+    "type" : [ "null", "int" ],
+    "doc": "from ubisession servEventCnt"
+  } , {
+    "name" : "searchViewPageCnt",
+    "type" : [ "null", "int" ],
+    "doc": "from ubisession searchViewPageCnt"
+  }, {
+    "name" : "browserFamily",
+    "type" : [ "null", "string" ],
+    "doc": "from ubisession browserFamily"
+  }, {
+    "name" : "browserVersion",
+    "type" : [ "null", "string" ],
+    "doc": "from ubisession browserVersion"
+  }, {
+    "name" : "city",
+    "type" : [ "null", "string" ],
+    "doc": "from ubisession city"
+  }, {
+    "name" : "region",
+    "type" : [ "null", "string" ],
+    "doc": "from ubisession region"
+  }, {
+    "name" : "country",
+    "type" : [ "null", "string" ],
+    "doc": "from ubisession country"
+  }, {
+    "name" : "continent",
+    "type" : [ "null", "string" ],
+    "doc": "from ubisession continent"
+  }, {
+    "name" : "deviceClass",
+    "type" : [ "null", "string" ],
+    "doc": "from ubisession deviceClass"
+  }, {
+    "name" : "deviceFamily",
+    "type" : [ "null", "string" ],
+    "doc": "from ubisession deviceFamily"
+  }, {
+     "name" : "endResourceId",
+     "type" : [ "null", "int" ],
+     "doc": "from ubisession endResourceId"
+  }, {
+    "name" : "startResourceId",
+    "type" : [ "null", "int" ],
+    "doc": "from ubisession startResourceId"
+  }, {
+    "name" : "isReturningVisitor",
+    "type" : [ "null", "boolean" ],
+    "doc": "from ubisession isReturningVisitor"
+  }, {
+    "name" : "lineSpeed",
+    "type" : [ "null", "string" ],
+    "doc": "from ubisession lineSpeed"
+  }, {
+    "name" : "osFamily",
+    "type" : [ "null", "string" ],
+    "doc": "from ubisession osFamily"
+  }, {
+    "name" : "osVersion",
+    "type" : [ "null", "string" ],
+    "doc": "from ubisession osVersion"
+  }, {
+    "name" : "pulsarEventCnt",
+    "type" : [ "null", "int" ],
+    "doc": "from ubisession pulsarEventCnt"
+  }, {
+    "name" : "streamId",
+    "type" : [ "null", "string" ],
+    "doc": "from ubisession streamId"
+  }, {
+    "name" : "buserId",
+    "type" : [ "null", "string" ],
+    "doc": "from ubisession buserId"
+  }]
 }

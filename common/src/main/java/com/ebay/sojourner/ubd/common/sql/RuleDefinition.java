@@ -15,9 +15,9 @@ public class RuleDefinition {
   private String description;
   private int version;
   private String status;
-  protected String createdBy;
-  protected String updatedBy;
-  protected String createTime;
-  protected String updateTime;
-  private Boolean isActive;
+  private String createdBy;
+  private String updatedBy;
+  private String createTime;
+  private String updateTime;
+  private Boolean isLatest;
 }
