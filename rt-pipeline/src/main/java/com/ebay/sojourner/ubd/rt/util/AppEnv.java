@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.java.utils.ParameterTool;
 
+@Deprecated
 @Slf4j
 @Data
 public class AppEnv {
