@@ -122,7 +122,7 @@ public class JSColumnParser implements FieldParser<RawEvent, UbiEvent> {
     if (StringUtils.isNotEmpty(streamId)) {
       ubiEvent.setStreamId(streamId);
     }
-    ubiEvent.setReturningVisitor(returningVisitor);
+    ubiEvent.setIsReturningVisitor(returningVisitor);
     ubiEvent.setRlogid(rawEvent.getClientData().getRlogid());
     ubiEvent.setRemoteIP(rawEvent.getClientData().getRemoteIP());
   }

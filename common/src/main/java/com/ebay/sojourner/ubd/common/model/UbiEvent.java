@@ -98,6 +98,10 @@ public class UbiEvent implements Serializable {
 
   //  private Map<String, Object> counters;
 
+  public void setIsReturningVisitor(boolean returningVisitor) {
+    isReturningVisitor = returningVisitor;
+  }
+
   public void updateSessionId() {
     int charPos = Constants.HEX_DIGITS.length;
     int mask = (1 << 4) - 1;

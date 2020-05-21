@@ -143,8 +143,8 @@ public class UbiSession implements Serializable, Cloneable {
     //        this.agentSets= new HashSet<String>();
   }
 
-  public boolean isRefererNull() {
-    return isRefererNull;
+  public void setIsReturningVisitor(boolean returningVisitor) {
+    isReturningVisitor = returningVisitor;
   }
 
   public void setIsRefererNull(boolean refererNull) {

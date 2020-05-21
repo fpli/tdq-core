@@ -115,7 +115,7 @@ public class UbiSessionWindowProcessFunction
     ubiSession.setOsVersion(sessionAccumulator.getUbiSession().getOsVersion());
     ubiSession.setStartResourceId(sessionAccumulator.getUbiSession().getStartResourceId());
     ubiSession.setEndResourceId(sessionAccumulator.getUbiSession().getEndResourceId());
-    ubiSession.setReturningVisitor(sessionAccumulator.getUbiSession().isReturningVisitor());
+    ubiSession.setIsReturningVisitor(sessionAccumulator.getUbiSession().isReturningVisitor());
     ubiSession.setLineSpeed(sessionAccumulator.getUbiSession().getLineSpeed());
     ubiSession.setPulsarEventCnt(sessionAccumulator.getUbiSession().getPulsarEventCnt());
     ubiSession.setSessionEndDt(sessionAccumulator.getUbiSession().getSessionEndDt());
