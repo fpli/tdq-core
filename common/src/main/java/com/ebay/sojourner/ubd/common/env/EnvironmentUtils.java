@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EnvironmentUtils {
 
-  private final static List<AbstractEnvironment> propSources = Lists.newArrayList();
+  private static final List<AbstractEnvironment> propSources = Lists.newArrayList();
 
   static {
     log.info("Load environment properties file");
