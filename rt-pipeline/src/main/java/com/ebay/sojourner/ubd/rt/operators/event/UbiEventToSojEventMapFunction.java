@@ -61,7 +61,8 @@ public class UbiEventToSojEventMapFunction extends RichMapFunction<UbiEvent, Soj
     sojEvent.setSessionEndTime(ubiEvent.getSessionEndTime());
     sojEvent.setSessionSkey(ubiEvent.getSessionSkey());
     sojEvent.setSessionId(ubiEvent.getSessionId());
-    sojEvent.setSessionStartDt(SOJTS2Date.getDateStr(ubiEvent.getSessionStartDt()));
+    sojEvent.setSessionStartDt(ubiEvent.getSessionStartDt()==null?null:
+        SOJTS2Date.getDateStr(ubiEvent.getSessionStartDt()));
     sojEvent.setSojDataDt(SOJTS2Date.getDateStr(ubiEvent.getSojDataDt()));
     sojEvent.setSessionStartTime(ubiEvent.getSessionStartTime());
     sojEvent.setSid(ubiEvent.getSid());

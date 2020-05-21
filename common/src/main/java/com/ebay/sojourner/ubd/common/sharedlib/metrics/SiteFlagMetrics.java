@@ -40,16 +40,15 @@ public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
     //    siteFlagMetrics.end(sessionAccumulator);
     //    System.out.println(sessionAccumulator.getUbiSession().getSiteFlags());
     siteFlagMetrics.start(sessionAccumulator);
-    ubiEvent.setSiteId(216);
+    ubiEvent.setSiteId(77);
     siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
-    siteFlagMetrics.end(sessionAccumulator);
+    //    siteFlagMetrics.end(sessionAccumulator);
     System.out.println(sessionAccumulator.getUbiSession().getSiteFlags());
 
   }
 
-  void setSiteFlag(Integer siteId, SessionAccumulator sessionAccumulator) {
+  void setSiteFlag(int siteId, SessionAccumulator sessionAccumulator) {
     long siteFlagsMid = sessionAccumulator.getUbiSession().getSiteFlags();
-    System.out.println(Long.MAX_VALUE);
     switch (siteId) {
       case 4:
       case 5:
@@ -232,7 +231,7 @@ public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
   //    for (int i = 0; i < NUMBER_SITE_FLAG - 1; i++) {
   //      sb.append(siteFlags[i]).append(",");
   //    }
-  //    sb.append(siteFlags[NUMBER_SITE_FLAG - 1]).append("}");
+  //    sb.append(siteFlags[NUMBER_SITE_FLAG - 1]) .append("}");
   //    return sb.toString();
   //  }
 
@@ -242,7 +241,7 @@ public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
-    sessionAccumulator.getUbiSession().setSiteFlags(0);
+    sessionAccumulator.getUbiSession().setSiteFlags(0L);
   }
 
   @Override

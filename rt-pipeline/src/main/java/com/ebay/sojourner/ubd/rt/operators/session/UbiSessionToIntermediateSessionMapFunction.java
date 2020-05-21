@@ -45,7 +45,7 @@ public class UbiSessionToIntermediateSessionMapFunction extends
     intermediateSession.setFamilyViCnt(ubiSession.getFamilyViCnt());
     intermediateSession.setBotFlagList(new ArrayList<>(ubiSession.getBotFlagList()));
     intermediateSession.setEndTimestamp(ubiSession.getEndTimestamp());
-    intermediateSession.setAbsEndTimestamp(ubiSession.getAbsStartTimestamp());
+    intermediateSession.setAbsEndTimestamp(ubiSession.getAbsEndTimestamp());
     intermediateSession.setSessionId(ubiSession.getSessionId());
     intermediateSession.setSessionSkey(ubiSession.getSessionSkey());
     intermediateSession.setSojDataDt(ubiSession.getSojDataDt());

@@ -51,9 +51,7 @@ public class SojournerRTLoadJob {
             .addSource(KafkaSourceFunction.buildSource(Constants.TOPIC_PATHFINDER_EVENTS,
                 Constants.BOOTSTRAP_SERVERS_RNO, Constants.GROUP_ID_RNO_DQ, RawEvent.class))
             .setParallelism(
-                AppEnv.config().getFlink().getApp().getSourceParallelism() == null
-                    ? 100
-                    : AppEnv.config().getFlink().getApp().getSourceParallelism())
+                AppEnv.config().getFlink().getApp().getSourceParallelism())
             .name("Rheos Kafka Consumer For RNO")
             .uid("kafkaSourceForRNO");
 
@@ -62,9 +60,7 @@ public class SojournerRTLoadJob {
             .addSource(KafkaSourceFunction.buildSource(Constants.TOPIC_PATHFINDER_EVENTS,
                 Constants.BOOTSTRAP_SERVERS_SLC, Constants.GROUP_ID_SLC_DQ, RawEvent.class))
             .setParallelism(
-                AppEnv.config().getFlink().getApp().getSourceParallelism() == null
-                    ? 100
-                    : AppEnv.config().getFlink().getApp().getSourceParallelism())
+                AppEnv.config().getFlink().getApp().getSourceParallelism())
             .name("Rheos Kafka Consumer For SLC")
             .uid("kafkaSourceForSLC");
 
@@ -73,9 +69,7 @@ public class SojournerRTLoadJob {
             .addSource(KafkaSourceFunction.buildSource(Constants.TOPIC_PATHFINDER_EVENTS,
                 Constants.BOOTSTRAP_SERVERS_LVS, Constants.GROUP_ID_LVS_DQ, RawEvent.class))
             .setParallelism(
-                AppEnv.config().getFlink().getApp().getSourceParallelism() == null
-                    ? 100
-                    : AppEnv.config().getFlink().getApp().getSourceParallelism())
+                AppEnv.config().getFlink().getApp().getSourceParallelism())
             .name("Rheos Kafka Consumer For LVS")
             .uid("kafkaSourceForLVS");
 
@@ -117,7 +111,7 @@ public class SojournerRTLoadJob {
         ubiEventDataStream
             .keyBy("guid")
             .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-            .allowedLateness(Time.minutes(1))
+            .allowedLateness(Time.minutes(5))
             .sideOutputLateData(lateEventOutputTag)
             .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction());
 

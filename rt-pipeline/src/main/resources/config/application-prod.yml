@@ -23,6 +23,18 @@ kafkaConsumerConfig:
     - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
+  bootstrapServersForJetStreamSession:
+    - rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
+  bootstrapServersForJetStreamEvent:
+    - rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
   groupIdForLVS: sojourner-pathfinder-lvs
   groupIdForSLC: sojourner-pathfinder-slc
   groupIdForRNO: sojourner-pathfinder-rno
@@ -35,7 +47,15 @@ kafkaConsumerConfig:
   groupIdForBot: sojourner-pathfinder-bot
   groupIdForCopy: sojourner-pathfinder-copy
   groupIdForCrossSession: sojourner-pathfinder-cross-session-dq
+  groupIdForJetStreamNonBotSession: jetstream-non-bot-session
+  groupIdForJetStreamNonBotEvent: jetstream-non-bot-event
+  groupIdForJetStreamBotSession: jetstream-bot-session
+  groupIdForJetStreamBotEvent: jetstream-bot-event
   topic: behavior.pathfinder.events.total
+  jetStreamNonBotSessionTopic: behavior.pulsar.sojsession.sessionend
+  jetStreamNonBotEventTopic: behavior.total.sojevent.total
+  jetStreamBotSessionTopic: behavior.pulsar.sojsession.botsession
+  jetStreamBotEventTopic: behavior.pulsar.misc.bot
 
 kafkaProducerConfig:
   bootstrapServersForSession:
@@ -68,11 +88,11 @@ kafkaProducerConfig:
     - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
     - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
     - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
-  sessionTopic: behavior.trafficjam.session
-  eventTopic: behavior.trafficjam.event
+  sessionTopic: behavior.total.new.sojsession
+  eventTopic: behavior.total.new.sojevent
   botTopic: behavior.trafficjam.bot
-  copyTopic: behavior.total.new.session.dq
-  crossSessionDQTopic: behavior.total.new.cross.session.dq
+  copyTopic: behavior.total.new.event.fordq
+  crossSessionDQTopic: behavior.total.new.session.fordq
 
 rheos:
   serviceUrl: https://rheos-services.stratus.ebay.com
@@ -88,21 +108,21 @@ flink:
     nameForHotDeployPipeline: Unified Bot Detection RT Hot Deploy Pipeline
     nameForKafkaSinkPipeline: Unified Bot Detection RT kafka Sink Pipeline
     nameForKafkaCopyPipeline: Unified Bot Detection RT kafka Copy Pipeline
-    source-parallelism: 75
-    event-parallelism: 75
-    session-parallelism: 75
+    source-parallelism: 100
+    event-parallelism: 100
+    session-parallelism: 580
     pre-agentIp-parallelism: 580
     agentIp-parallelism: 580
     agent-parallelism: 580
     ip-parallelism: 580
     guid-parallelism: 580
     copy-kafka-parallelism: 50
-    event-kafka-parallelism: 75
-    session-kafka-parallelism: 50
-    cross-session-kafka-parallelism: 50
+    event-kafka-parallelism: 580
+    session-kafka-parallelism: 580
+    cross-session-kafka-parallelism: 580
     bot-kafka-parallelism: 50
     broadcast-parallelism: 580
-    metrics-parallelism: 480
+    metrics-parallelism: 580
   checkpoint:
     data-dir: /opt/sojourner-ubd/checkpoint
     interval: 5m
@@ -116,3 +136,5 @@ hdfs:
   sinkSessionPath: /sessions
   sinkSignaturePath: /signatures
   sinkLateEventPath: /late_events
+  sinkJetstreamEventPath: /jetstream_events
+  sinkJetstreamSessionPath: /jetstream_sessions

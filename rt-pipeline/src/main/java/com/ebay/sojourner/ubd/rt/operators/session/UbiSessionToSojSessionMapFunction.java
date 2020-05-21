@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.rt.operators.session;
 import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.RulePriorityUtils;
+import java.util.ArrayList;
 import org.apache.flink.api.common.functions.RichMapFunction;
 
 public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSession, SojSession> {
@@ -21,7 +22,7 @@ public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSessio
     sojSession.setEndTimestamp(ubiSession.getEndTimestamp());
     sojSession.setAbsStartTimestamp(ubiSession.getAbsStartTimestamp());
     sojSession.setAbsEndTimestamp(ubiSession.getAbsEndTimestamp());
-    sojSession.setBotFlagList(ubiSession.getBotFlagList());
+    sojSession.setBotFlagList(new ArrayList<>(ubiSession.getBotFlagList()));
     sojSession.setNonIframeRdtEventCnt(ubiSession.getNonIframeRdtEventCnt());
     sojSession.setSessionReferrer(ubiSession.getSessionReferrer());
     sojSession.setBotFlag(RulePriorityUtils.getHighPriorityBotFlag(ubiSession.getBotFlagList()));
@@ -69,7 +70,7 @@ public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSessio
     sojSession.setDeviceClass(ubiSession.getDeviceClass());
     sojSession.setDeviceFamily(ubiSession.getDeviceFamily());
     sojSession.setEndResourceId(ubiSession.getEndResourceId());
-    sojSession.setReturningVisitor(ubiSession.isReturningVisitor());
+    sojSession.setIsReturningVisitor(ubiSession.isReturningVisitor());
     sojSession.setLineSpeed(ubiSession.getLineSpeed());
     sojSession.setOsFamily(ubiSession.getOsFamily());
     sojSession.setOsVersion(ubiSession.getOsVersion());

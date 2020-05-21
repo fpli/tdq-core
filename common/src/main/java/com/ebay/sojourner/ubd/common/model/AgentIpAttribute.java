@@ -1,6 +1,5 @@
 package com.ebay.sojourner.ubd.common.model;
 
-import com.ebay.sojourner.ubd.common.util.TransformUtil;
 import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -48,7 +47,8 @@ public class AgentIpAttribute implements Attribute<IntermediateSession>, Seriali
   //    private int guidCnt = 0;
   private Set<String> cguidSet = new HashSet<String>();
   //  private Set<Guid> guidSet = new HashSet<Guid>();
-  private HllSketch guidSet = new HllSketch(20, TgtHllType.HLL_8);
+  //  private HllSketch guidSet = new HllSketch(20, TgtHllType.HLL_8);
+  private byte[] hllSketch ;
   private Boolean isAllAgentHoper = true;
   private int totalCntForSec1 = 0;
 
@@ -122,8 +122,15 @@ public class AgentIpAttribute implements Attribute<IntermediateSession>, Seriali
         newGuidCnt += 1;
       }
       if (intermediateSession.getGuid() != null) {
-        long[] long4Cguid = TransformUtil.md522Long(intermediateSession.getGuid());
-        guidSet.update(long4Cguid);
+        HllSketch guidSet ;
+        if(hllSketch==null){
+          guidSet = new HllSketch(12,TgtHllType.HLL_4);
+        }else{
+          guidSet = HllSketch.heapify(hllSketch);
+        }
+        //        long[] long4Cguid = TransformUtil.md522Long(intermediateSession.getGuid());
+        guidSet.update(intermediateSession.getGuid());
+        hllSketch=guidSet.toCompactByteArray();
       }
 
       if (intermediateSession.getFirstCguid() != null) {
@@ -215,7 +222,7 @@ public class AgentIpAttribute implements Attribute<IntermediateSession>, Seriali
     newGuidCnt = 0;
     //        guidCnt = 0;
     cguidSet.clear();
-    guidSet.reset();
+    hllSketch=null;
     isAllAgentHoper = true;
     totalCntForSec1 = 0;
   }
