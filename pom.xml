@@ -16,6 +16,7 @@
     <module>batch-pipeline</module>
     <module>dist</module>
     <module>rule-test</module>
+    <module>connector</module>
   </modules>
 
   <properties>

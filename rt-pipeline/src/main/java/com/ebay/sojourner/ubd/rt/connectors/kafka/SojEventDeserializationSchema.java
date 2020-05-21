@@ -17,6 +17,7 @@ public class SojEventDeserializationSchema implements DeserializationSchema<JetS
     GenericRecord genericRecord =
         RheosEventSerdeFactory.getRheosEventDeserializer().decode(rheosEvent);
 
+    // generate jetstream output event
     long eventCreateTimestamp = rheosEvent.getEventCreateTimestamp();
     String guid = getString(genericRecord.get("guid"));
     Long eventTimestamp = getLong(genericRecord.get("eventTimestamp"));
@@ -37,39 +38,67 @@ public class SojEventDeserializationSchema implements DeserializationSchema<JetS
     String osFamily = getString(genericRecord.get("osFamily"));
     String enrichedOsVersion = getString(genericRecord.get("enrichedOsVersion"));
     String rlogid = getString(genericRecord.get("rlogid"));
+    String sessionId = getString(genericRecord.get("sessionId"));
+    String cguid = getString(genericRecord.get("cguid"));
+    Integer pageId = getInteger(genericRecord.get("pageId"));
+    String pageName = getString(genericRecord.get("pageName"));
+    String userId = getString(genericRecord.get("userId"));
+    String clickId = getString(genericRecord.get("clickId"));
+    String siteId = getString(genericRecord.get("siteId"));
+    String seqNum = getString(genericRecord.get("seqNum"));
+    String ciid = getString(genericRecord.get("ciid"));
+    String siid = getString(genericRecord.get("siid"));
+    Integer rdt = getInteger(genericRecord.get("rdt"));
+    Integer regu = getInteger(genericRecord.get("regu"));
+    boolean iframe = getBoolean(genericRecord.get("iframe"));
+    String refererHash = getString(genericRecord.get("refererHash"));
+    String sqr = getString(genericRecord.get("sqr"));
+    String itemId = getString(genericRecord.get("itemId"));
+    String flags = getString(genericRecord.get("flags"));
+    String urlQueryString = getString(genericRecord.get("urlQueryString"));
+    String webServer = getString(genericRecord.get("webServer"));
+    String cookies = getString(genericRecord.get("cookies"));
+    Integer bot = getInteger(genericRecord.get("bot"));
+    String clientIP = getString(genericRecord.get("clientIP"));
+    String agentInfo = getString(genericRecord.get("agentInfo"));
+    String appId = getString(genericRecord.get("appId"));
+    String cobrand = getString(genericRecord.get("cobrand"));
 
     return new JetStreamOutputEvent(guid, eventTimestamp, eventCreateTimestamp, sid,
         eventCaptureTime, requestCorrelationId, pageFamily, remoteIP, appVersion, eventFamily,
         eventAction, trafficSource, osVersion, deviceFamily, deviceType, browserVersion,
-        browserFamily, osFamily, enrichedOsVersion, rlogid);
+        browserFamily, osFamily, enrichedOsVersion, rlogid, sessionId, cguid, pageId, pageName,
+        userId, clickId, siteId, seqNum, ciid, siid, rdt, regu, iframe, refererHash, sqr, itemId,
+        flags, urlQueryString, webServer, cookies, bot, clientIP, agentInfo, appId, cobrand);
   }
 
-  private Integer getInteger(Object o){
-    if(StringUtils.isEmpty(getString(o))){
+  private Integer getInteger(Object o) {
+    if (StringUtils.isEmpty(getString(o))) {
       return null;
-    }else{
+    } else {
       return Integer.valueOf(getString(o));
     }
   }
-  private boolean getBoolean(Object o){
-    if(StringUtils.isEmpty(getString(o))){
+
+  private boolean getBoolean(Object o) {
+    if (StringUtils.isEmpty(getString(o))) {
       return false;
-    }else{
+    } else {
       return Boolean.valueOf(getString(o));
     }
   }
 
 
-  private Long getLong(Object o){
-    if(StringUtils.isEmpty(getString(o))){
+  private Long getLong(Object o) {
+    if (StringUtils.isEmpty(getString(o))) {
       return null;
-    }else{
+    } else {
       return Long.valueOf(getString(o));
     }
   }
 
   private String getString(Object o) {
-    return (o != null&&!"null".equals(o.toString())) ? o.toString() : null;
+    return (o != null && !"null".equals(o.toString())) ? o.toString() : null;
   }
 
   @Override

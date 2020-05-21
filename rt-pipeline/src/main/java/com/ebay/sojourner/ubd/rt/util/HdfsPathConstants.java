@@ -12,7 +12,7 @@ public class HdfsPathConstants {
   public static final String LATE_EVENT_PATH =
       PARENT_PATH + AppEnv.config().getHdfs().getSinkLateEventPath();
   public static final String JETSTREAM_EVENT_PATH =
-      PARENT_PATH + AppEnv.config().getHdfs().getSinkLateEventPath();
+      PARENT_PATH + AppEnv.config().getHdfs().getSinkJetstreamEventPath();
   public static final String JETSTREAM_SESSION_PATH =
-      PARENT_PATH + AppEnv.config().getHdfs().getSinkLateEventPath();
+      PARENT_PATH + AppEnv.config().getHdfs().getSinkJetstreamSessionPath();
 }

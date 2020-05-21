@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 import com.ebay.sojourner.ubd.common.model.JetStreamOutputEvent;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.JetStreamOutputEventFilterFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
@@ -39,21 +40,31 @@ public class JetstreamSojEventDataDump {
             .addSource(KafkaSourceFunction.buildSource(Constants.TOPIC_JETSTREAM_NON_BOT_EVENT,
                 Constants.BOOTSTRAP_SERVERS_JETSTREAM_EVENT, Constants.GROUP_ID_NON_BOT_EVENT,
                 JetStreamOutputEvent.class))
-            .setParallelism(150)
-            .name("Rheos Kafka Consumer For Jetstrem bot event")
-            .uid("jetstreamBotEvent");
+            .setParallelism(75)
+            .name("Rheos Kafka Consumer For Jetstrem non bot event")
+            .uid("jetstreamNonBotEvent");
 
     // union bot and non bot
     DataStream<JetStreamOutputEvent> jetStreamOutputEventDataStream =
         jetStreamOutputBotEventDataStream.union(jetStreamOutputNonBotEventDataStream);
 
+    // filter 5% data
+    DataStream<JetStreamOutputEvent> jetstreamFilterStream =
+        jetStreamOutputEventDataStream
+            .filter(new JetStreamOutputEventFilterFunction())
+            .setParallelism(75)
+            .name("jetstream event filter")
+            .uid("jetstreamDataFilter");
+
     // sink hdfs
-    jetStreamOutputEventDataStream
+    jetstreamFilterStream
         .addSink(HdfsSinkUtil.jetstreamSojEventSinkWithParquet())
-        .setParallelism(100)
+        .setParallelism(75)
         .name("jetstream sojevent sink")
         .uid("jetstreamEventSink")
         .disableChaining();
 
+    // submit job
+    executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForFullPipeline());
   }
 }

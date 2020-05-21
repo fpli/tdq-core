@@ -30,11 +30,11 @@ kafkaConsumerConfig:
     - rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
     - rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
   bootstrapServersForJetStreamEvent:
-    - rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
-    - rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
-    - rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
-    - rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
-    - rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
   groupIdForLVS: sojourner-pathfinder-lvs
   groupIdForSLC: sojourner-pathfinder-slc
   groupIdForRNO: sojourner-pathfinder-rno
