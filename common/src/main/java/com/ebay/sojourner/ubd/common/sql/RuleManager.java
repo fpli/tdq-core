@@ -2,6 +2,7 @@ package com.ebay.sojourner.ubd.common.sql;
 
 import com.ebay.sojourner.ubd.common.util.Constants;
 import com.ebay.sojourner.ubd.common.zookeeper.ZkClient;
+import com.google.common.base.Preconditions;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -87,6 +88,7 @@ public class RuleManager {
 
   private void initScheduling(Long initDelayInSeconds, Long delayInSeconds) {
     schedulingExecutor.scheduleWithFixedDelay(() -> {
+      log.info("Scheduled to fetch rules");
       updateRules(ruleFetcher.fetchAllRules());
     }, initDelayInSeconds, delayInSeconds, TimeUnit.SECONDS);
   }
@@ -95,34 +97,19 @@ public class RuleManager {
     if (CollectionUtils.isNotEmpty(ruleDefinitions)) {
       sqlEventRuleSet = ruleDefinitions
           .stream()
-          .filter(RuleDefinition::getIsActive)
           .map(rule -> SqlEventRule
               .of(rule.getContent(), rule.getBizId(), rule.getVersion(), rule.getCategory()))
           .collect(Collectors.toSet());
     }
-    log.info("Rules deployed: " + this.sqlEventRuleSet.size());
-    log.info("rule set" + sqlEventRuleSet.size());
+    log.info("Deployed rules count: {}", this.sqlEventRuleSet.size());
   }
 
   private void updateRule(RuleDefinition ruleDefinition) {
-
-    if (ruleDefinition != null && ruleDefinition.getIsActive()) {
-      SqlEventRule sqlEventRule = SqlEventRule
-          .of(ruleDefinition.getContent(), ruleDefinition.getBizId(), ruleDefinition.getVersion(),
-              ruleDefinition.getCategory());
-      sqlEventRuleSet.add(sqlEventRule);
-    } else if (ruleDefinition != null && !ruleDefinition.getIsActive()) {
-      if (getRuleIdSet(sqlEventRuleSet).contains(ruleDefinition.getBizId())) {
-        sqlEventRuleSet.removeIf(rule -> rule.getRuleId() == ruleDefinition.getBizId());
-      }
-    }
-  }
-
-  private Set<Long> getRuleIdSet(Set<SqlEventRule> sqlEventRules) {
-    return sqlEventRules
-        .stream()
-        .map(SqlEventRule::getRuleId)
-        .collect(Collectors.toSet());
+    Preconditions.checkNotNull(ruleDefinition);
+    SqlEventRule sqlEventRule = SqlEventRule
+        .of(ruleDefinition.getContent(), ruleDefinition.getBizId(), ruleDefinition.getVersion(),
+            ruleDefinition.getCategory());
+    sqlEventRuleSet.add(sqlEventRule);
   }
 
   public void close() {
