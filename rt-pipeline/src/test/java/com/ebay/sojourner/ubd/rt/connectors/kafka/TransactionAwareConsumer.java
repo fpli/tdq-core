@@ -18,7 +18,7 @@ public class TransactionAwareConsumer {
     consumerProps.put("auto.offset.reset", "earliest");
     consumerProps.put("enable.auto.commit", "false");
     consumerProps.put("isolation.level", "read_uncommitted");
-//    consumerProps.put("isolation.level", "read_committed");
+    // consumerProps.put("isolation.level", "read_committed");
     consumerProps.put(KEY_DESERIALIZER_CLASS_CONFIG,
         "org.apache.kafka.common.serialization.StringDeserializer");
     consumerProps.put(VALUE_DESERIALIZER_CLASS_CONFIG,

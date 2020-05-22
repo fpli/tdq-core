@@ -77,6 +77,12 @@
       <artifactId>flink-avro</artifactId>
     </dependency>
 
+    <!-- flink hadoop connector -->
+    <dependency>
+      <groupId>org.apache.flink</groupId>
+      <artifactId>flink-connector-filesystem_2.11</artifactId>
+    </dependency>
+
     <!-- rheos jdk dependencies-->
     <dependency>
       <groupId>io.ebay.rheos</groupId>
@@ -94,6 +100,8 @@
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
     </dependency>
+
+    <!-- hadoop dependency -->
     <dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-common</artifactId>
@@ -102,19 +110,12 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-hdfs</artifactId>
     </dependency>
+
     <!-- Test Dependencies -->
     <dependency>
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest_${scala.binary.version}</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-shaded-hadoop2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-connector-filesystem_2.11</artifactId>
     </dependency>
   </dependencies>
 
@@ -182,11 +183,13 @@
           </execution>
         </executions>
       </plugin>
+
       <!--job-uploader-maven-plugin-->
       <plugin>
         <groupId>io.ebay.rheos.streaming</groupId>
         <artifactId>job-uploader-maven-plugin</artifactId>
       </plugin>
+
       <!-- Enable surefire and scalatest in all children, in one place: -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
