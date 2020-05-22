@@ -92,7 +92,7 @@ kafkaProducerConfig:
   eventTopic: behavior.total.new.sojevent
   botTopic: behavior.trafficjam.bot
   copyTopic: behavior.total.new.event.fordq
-  crossSessionDQTopic: behavior.total.new.session.fordq
+  crossSessionDQTopic: behavior.total.new.session.dq
 
 rheos:
   serviceUrl: https://rheos-services.stratus.ebay.com

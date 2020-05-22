@@ -69,5 +69,7 @@ under the License.
     files="src/test/java/com/ebay/sojourner/ubd/common/sharedlib/metrics/MetricsForSessionDQTest.java"/>
   <suppress checks=".*"
     files="src/main/java/com/ebay/sojourner/ubd/common/model/SojSession.java"/>
+  <suppress checks=".*"
+    files="src/main/java/com/ebay/sojourner/ubd/common/model/IntermediateSession.java"/>
   <suppress checks="NewlineAtEndOfFile" files=".java" />
 </suppressions>
