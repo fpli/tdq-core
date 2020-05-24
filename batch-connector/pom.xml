@@ -15,5 +15,12 @@
   <packaging>jar</packaging>
   <name>Sojourner UBD - Batch Connector</name>
 
-
+  <dependencies>
+    <!-- Sojourner UBD dependencies -->
+    <dependency>
+      <groupId>com.ebay.sojourner</groupId>
+      <artifactId>sojourner-ubd-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>
