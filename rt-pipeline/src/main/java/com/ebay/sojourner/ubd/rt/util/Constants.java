@@ -90,6 +90,29 @@ public class Constants {
       String.join(",",
           AppEnv.config().getKafkaProducerConfig().getBootstrapServersForCrossSessionDQ());
 
+  // jetstream sojevent
+  public static final String BOOTSTRAP_SERVERS_JETSTREAM_EVENT = String
+      .join(",", AppEnv.config().getKafkaConsumerConfig().getBootstrapServersForJetStreamEvent());
+  public static final String TOPIC_JETSTREAM_NON_BOT_EVENT = AppEnv.config()
+      .getKafkaConsumerConfig().getJetStreamNonBotEventTopic();
+  public static final String TOPIC_JETSTREAM_BOT_EVENT = AppEnv.config().getKafkaConsumerConfig()
+      .getJetStreamBotEventTopic();
+  public static final String GROUP_ID_NON_BOT_EVENT = AppEnv.config().getKafkaConsumerConfig()
+      .getGroupIdForJetStreamNonBotEvent();
+  public static final String GROUP_ID_BOT_EVENT = AppEnv.config().getKafkaConsumerConfig()
+      .getGroupIdForJetStreamBotEvent();
+  public static final String BOOTSTRAP_SERVERS_JETSTREAM_SESSION = String
+      .join(",", AppEnv.config().getKafkaConsumerConfig().getBootstrapServersForJetStreamSession());
+  public static final String TOPIC_JETSTREAM_NON_BOT_SESSION = AppEnv.config()
+      .getKafkaConsumerConfig().getJetStreamNonBotSessionTopic();
+  public static final String TOPIC_JETSTREAM_BOT_SESSION = AppEnv.config().getKafkaConsumerConfig()
+      .getJetStreamBotSessionTopic();
+  public static final String GROUP_ID_NON_BOT_SESSION = AppEnv.config().getKafkaConsumerConfig()
+      .getGroupIdForJetStreamNonBotSession();
+  public static final String GROUP_ID_BOT_SESSION = AppEnv.config().getKafkaConsumerConfig()
+      .getGroupIdForJetStreamBotSession();
+
+
   // message key
   public static final String MESSAGE_KEY = "guid";
 }

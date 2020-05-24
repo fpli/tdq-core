@@ -87,8 +87,20 @@ public class UbiEvent implements Serializable {
   private String osFamily;
   private String enrichedOsVersion;
   private String rlogid;
+  private String city;
+  private String region;
+  private String country;
+  private String continent;
+  private String lineSpeed;
+  private boolean isReturningVisitor;
+  private String streamId;
+  private String buserId;
 
   //  private Map<String, Object> counters;
+
+  public void setIsReturningVisitor(boolean returningVisitor) {
+    isReturningVisitor = returningVisitor;
+  }
 
   public void updateSessionId() {
     int charPos = Constants.HEX_DIGITS.length;

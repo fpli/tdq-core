@@ -108,32 +108,33 @@ public class UbiSession implements Serializable, Cloneable {
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   };
   private int seqNum;
-  private IntermediateMetrics intermediateMetrics ;
+  private IntermediateMetrics intermediateMetrics;
   private Long firstSessionStartDt;
   //Column exists in Jetstream but not exists in Flink
-  private int asqCnt;
-  private int atcCnt;
-  private int atlCnt;
-  private int boCnt;
-  private String browserFamily;
-  private String browserVersion;
+  private int asqCnt = 0;//from SOJEvent(_pgf = 'ASQ' and rdt = 0  and _ifrm = false)
+  private int atcCnt = 0;//from SOJEvent(_pgf = 'ATC' and rdt = 0  and _ifrm = false)
+  private int atlCnt = 0;//from SOJEvent(_pgf = 'ATL' and rdt = 0  and _ifrm = false)
+  private int boCnt = 0;//from SOJEvent(_pgf = 'BO' and rdt = 0  and _ifrm = false)
+  private int srpCnt = 0;//from SOJEvent(_pgf in ('GR', 'GR-1') and rdt = 0 and _ifrm = false)
+  private int servEventCnt = 0;//select * from SOJEvent(p is not null and rdt = 0 and _ifrm = false)
+  private int searchViewPageCnt = 0;
   private String city;
-  private String continent;
+  private String region;
   private String country;
-  private String deviceClass;
-  private String deviceFamily;
+  private String continent;
+  private String browserFamily;//Exists in UBI_EVENT, get first
+  private String browserVersion;//Exists in UBI_EVENT, get first
+  private String deviceClass;//Exists in UBI_EVENT, get first
+  private String deviceFamily;//Exists in UBI_EVENT, get first
+  private String osFamily;//Exists in UBI_EVENT, get first
+  private String osVersion;//Exists in UBI_EVENT, get first
+  private int startResourceId;//Capture first non-iframe/rdt page view and refresh metadata
+  //if r1 is not null, extract second field from r1 as pageId, and use it first for exit page logic
   private int endResourceId;
   private boolean isReturningVisitor;
   private String lineSpeed;
-  private String osFamily;
-  private String osVersion;
-  private int pulsarEventCnt;
-  private String region;
-  private int searchViewPageCnt;
-  private int servEventCnt;
+  private int pulsarEventCnt = 0;
   private long sessionEndDt;
-  private int srpCnt;
-  private int startResourceId;
   private String streamId;
   private String buserId;
 
@@ -142,8 +143,8 @@ public class UbiSession implements Serializable, Cloneable {
     //        this.agentSets= new HashSet<String>();
   }
 
-  public boolean isRefererNull() {
-    return isRefererNull;
+  public void setIsReturningVisitor(boolean returningVisitor) {
+    isReturningVisitor = returningVisitor;
   }
 
   public void setIsRefererNull(boolean refererNull) {
@@ -172,6 +173,13 @@ public class UbiSession implements Serializable, Cloneable {
     this.viewCnt += ubiSession.getViewCnt();
     this.siidCnt += ubiSession.getSiidCnt();
     this.siidCnt2 += ubiSession.getSiidCnt2();
+    this.asqCnt += ubiSession.getAsqCnt();
+    this.atcCnt += ubiSession.getAtcCnt();
+    this.atlCnt += ubiSession.getAtlCnt();
+    this.boCnt += ubiSession.getBoCnt();
+    this.srpCnt += ubiSession.getSrpCnt();
+    this.searchViewPageCnt += ubiSession.getSearchViewPageCnt();
+    this.servEventCnt += ubiSession.getServEventCnt();
     this.maxScsSeqNum = Math.max(this.maxScsSeqNum, ubiSession.getMaxScsSeqNum());
     this.oldSessionSkeySet.addAll(ubiSession.getOldSessionSkeySet());
     this.botFlagList.addAll(ubiSession.getBotFlagList());

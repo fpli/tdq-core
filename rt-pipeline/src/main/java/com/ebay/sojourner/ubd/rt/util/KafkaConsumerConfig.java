@@ -10,6 +10,8 @@ public class KafkaConsumerConfig {
   private List<String> bootstrapServersForSLC;
   private List<String> bootstrapServersForLVS;
   private List<String> bootstrapServersForQA;
+  private List<String> bootstrapServersForJetStreamSession;
+  private List<String> bootstrapServersForJetStreamEvent;
   private String groupIdForLVS;
   private String groupIdForSLC;
   private String groupIdForRNO;
@@ -22,5 +24,13 @@ public class KafkaConsumerConfig {
   private String groupIdForBot;
   private String groupIdForCopy;
   private String groupIdForCrossSession;
+  private String groupIdForJetStreamNonBotSession;
+  private String groupIdForJetStreamNonBotEvent;
+  private String groupIdForJetStreamBotSession;
+  private String groupIdForJetStreamBotEvent;
   private String topic;
+  private String jetStreamNonBotSessionTopic;
+  private String jetStreamNonBotEventTopic;
+  private String jetStreamBotSessionTopic;
+  private String jetStreamBotEventTopic;
 }

@@ -23,9 +23,21 @@ kafkaConsumerConfig:
     - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
     - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-  groupIdForLVS: sojourner-pathfinder-lvs
-  groupIdForSLC: sojourner-pathfinder-slc
-  groupIdForRNO: sojourner-pathfinder-rno
+  bootstrapServersForJetStreamSession:
+    - rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
+    - rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
+  bootstrapServersForJetStreamEvent:
+    - rhs-rdrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+    - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+  groupIdForLVS: sojourner-pathfinder-lvs-test
+  groupIdForSLC: sojourner-pathfinder-slc-test
+  groupIdForRNO: sojourner-pathfinder-rno-test
   groupIdForLVSDQ: sojourner-pathfinder-lvs-dq
   groupIdForSLCDQ: sojourner-pathfinder-slc-dq
   groupIdForRNODQ: sojourner-pathfinder-rno-dq
@@ -35,7 +47,15 @@ kafkaConsumerConfig:
   groupIdForBot: sojourner-pathfinder-bot
   groupIdForCopy: sojourner-pathfinder-copy
   groupIdForCrossSession: sojourner-pathfinder-cross-session-dq
+  groupIdForJetStreamNonBotSession: jetstream-non-bot-session
+  groupIdForJetStreamNonBotEvent: jetstream-non-bot-event
+  groupIdForJetStreamBotSession: jetstream-bot-session
+  groupIdForJetStreamBotEvent: jetstream-bot-event
   topic: behavior.pathfinder.events.total
+  jetStreamNonBotSessionTopic: behavior.pulsar.sojsession.sessionend
+  jetStreamNonBotEventTopic: behavior.total.sojevent.total
+  jetStreamBotSessionTopic: behavior.pulsar.sojsession.botsession
+  jetStreamBotEventTopic: behavior.pulsar.misc.bot
 
 kafkaProducerConfig:
   bootstrapServersForSession:
@@ -72,7 +92,7 @@ kafkaProducerConfig:
   eventTopic: behavior.total.new.sojevent
   botTopic: behavior.trafficjam.bot
   copyTopic: behavior.total.new.event.fordq
-  crossSessionDQTopic: behavior.total.new.session.fordq
+  crossSessionDQTopic: behavior.total.new.session.dq
 
 rheos:
   serviceUrl: https://rheos-services.stratus.ebay.com
@@ -90,19 +110,19 @@ flink:
     nameForKafkaCopyPipeline: Unified Bot Detection RT kafka Copy Pipeline
     source-parallelism: 100
     event-parallelism: 100
-    session-parallelism: 580
-    pre-agentIp-parallelism: 580
-    agentIp-parallelism: 580
-    agent-parallelism: 580
-    ip-parallelism: 580
+    session-parallelism: 750
+    pre-agentIp-parallelism: 750
+    agentIp-parallelism: 750
+    agent-parallelism: 750
+    ip-parallelism: 750
     guid-parallelism: 580
     copy-kafka-parallelism: 50
-    event-kafka-parallelism: 580
-    session-kafka-parallelism: 580
+    event-kafka-parallelism: 750
+    session-kafka-parallelism: 750
     cross-session-kafka-parallelism: 580
     bot-kafka-parallelism: 50
-    broadcast-parallelism: 580
-    metrics-parallelism: 580
+    broadcast-parallelism: 750
+    metrics-parallelism: 750
   checkpoint:
     data-dir: /opt/sojourner-ubd/checkpoint
     interval: 5m
@@ -116,3 +136,5 @@ hdfs:
   sinkSessionPath: /sessions
   sinkSignaturePath: /signatures
   sinkLateEventPath: /late_events
+  sinkJetstreamEventPath: /jetstream_events
+  sinkJetstreamSessionPath: /jetstream_sessions

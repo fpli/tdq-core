@@ -10,4 +10,6 @@ public class HdfsConfig {
   private String sinkSessionPath;
   private String sinkSignaturePath;
   private String sinkLateEventPath;
+  private String sinkJetstreamEventPath;
+  private String sinkJetstreamSessionPath;
 }

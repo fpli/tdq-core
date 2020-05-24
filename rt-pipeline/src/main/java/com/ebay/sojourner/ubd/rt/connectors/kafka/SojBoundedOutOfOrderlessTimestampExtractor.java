@@ -1,6 +1,8 @@
 package com.ebay.sojourner.ubd.rt.connectors.kafka;
 
 import com.ebay.sojourner.ubd.common.model.IntermediateSession;
+import com.ebay.sojourner.ubd.common.model.JetStreamOutputEvent;
+import com.ebay.sojourner.ubd.common.model.JetStreamOutputSession;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.common.model.SojSession;
@@ -29,9 +31,15 @@ public class SojBoundedOutOfOrderlessTimestampExtractor<T> extends
     } else if (t instanceof SojEvent) {
       SojEvent sojEvent = (SojEvent) t;
       return sojEvent.getGenerateTime();
+    } else if (t instanceof JetStreamOutputEvent) {
+      JetStreamOutputEvent jetStreamOutputEvent = (JetStreamOutputEvent) t;
+      return jetStreamOutputEvent.getEventCreateTimestamp();
     } else if (t instanceof IntermediateSession) {
       IntermediateSession intermediateSession = (IntermediateSession) t;
       return SojTimestamp.getSojTimestampToUnixTimestamp(intermediateSession.getAbsEndTimestamp());
+    } else if (t instanceof JetStreamOutputSession) {
+      JetStreamOutputSession jetStreamOutputSession = (JetStreamOutputSession) t;
+      return jetStreamOutputSession.getEventCreateTimestamp();
     } else {
       return 0;
     }
