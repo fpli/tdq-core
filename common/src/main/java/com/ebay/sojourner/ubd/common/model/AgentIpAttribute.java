@@ -1,19 +1,17 @@
 package com.ebay.sojourner.ubd.common.model;
 
-import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
+import com.ebay.sojourner.ubd.common.util.SessionCoreHelper;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.Data;
-import org.apache.datasketches.hll.HllSketch;
-import org.apache.datasketches.hll.TgtHllType;
 
 @Data
-public class AgentIpAttribute implements Attribute<IntermediateSession>, Serializable {
+public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
 
-  private String clientIp;
-  private String agent;
+  private Integer clientIp;
+  private AgentHash agent;
   private Set<Integer> botFlagList = new LinkedHashSet<>();
   private int scsCountForBot5 = 0;
   private int scsCountForBot6 = 0;
@@ -45,10 +43,10 @@ public class AgentIpAttribute implements Attribute<IntermediateSession>, Seriali
   private int siteCnt = 0;
   private int newGuidCnt = 0;
   //    private int guidCnt = 0;
-  private Set<String> cguidSet = new HashSet<String>();
+  private Set<Guid> cguidSet = new HashSet<>();
   //  private Set<Guid> guidSet = new HashSet<Guid>();
   //  private HllSketch guidSet = new HllSketch(20, TgtHllType.HLL_8);
-  private byte[] hllSketch ;
+  private byte[] hllSketch;
   private Boolean isAllAgentHoper = true;
   private int totalCntForSec1 = 0;
 
@@ -56,33 +54,33 @@ public class AgentIpAttribute implements Attribute<IntermediateSession>, Seriali
   }
 
   @Override
-  public void feed(IntermediateSession intermediateSession, int botFlag, boolean isNeeded) {
+  public void feed(SessionCore intermediateSession, int botFlag, boolean isNeeded) {
     if (isNeeded) {
       totalSessionCnt += 1;
-      if (intermediateSession.getFirstCguid() == null) {
+      if (intermediateSession.getCguid() == null) {
         nocguidSessionCnt += 1;
       }
 
-      if (UbiSessionHelper.isSps(intermediateSession)) {
+      if (SessionCoreHelper.isSps(intermediateSession)) {
         spsSessionCnt += 1;
       }
 
-      if (UbiSessionHelper.isNoUid(intermediateSession)) {
+      if (SessionCoreHelper.isNoUid(intermediateSession)) {
         nouidSessionCnt += 1;
       }
 
-      if (UbiSessionHelper.isDirect(intermediateSession)) {
+      if (SessionCoreHelper.isDirect(intermediateSession)) {
         directSessionCnt += 1;
       }
-      if (UbiSessionHelper.isMktg(intermediateSession)) {
+      if (SessionCoreHelper.isMktg(intermediateSession)) {
         mktgSessionCnt += 1;
       }
 
-      if (UbiSessionHelper.getExInternalIp(intermediateSession) != null) {
+      if (SessionCoreHelper.getExInternalIp(intermediateSession) != null) {
         ipCountForSuspect = 1;
       }
 
-      if (UbiSessionHelper.getExInternalIp(intermediateSession) != null) {
+      if (SessionCoreHelper.getExInternalIp(intermediateSession) != null) {
         ipCount = 1;
       }
       totalCnt += 1;
@@ -97,48 +95,47 @@ public class AgentIpAttribute implements Attribute<IntermediateSession>, Seriali
       }
       maxValidPageCnt = Math.max(maxValidPageCnt, intermediateSession.getValidPageCnt());
 
-      if (UbiSessionHelper.isHomePage(intermediateSession)) {
+      if (SessionCoreHelper.isHomePage(intermediateSession)) {
         homePageCnt += 1;
       }
-      if (UbiSessionHelper.isFamilyVi(intermediateSession)) {
+      if (SessionCoreHelper.isFamilyVi(intermediateSession)) {
         familyViCnt += 1;
       }
-      if (UbiSessionHelper.isSignIn(intermediateSession)) {
+      if (SessionCoreHelper.isSignIn(intermediateSession)) {
         signinCnt += 1;
       }
-      if (UbiSessionHelper.isNoUid(intermediateSession)) {
+      if (SessionCoreHelper.isNoUid(intermediateSession)) {
         noUidCnt += 1;
       }
-      if (UbiSessionHelper.isDirect(intermediateSession)) {
+      if (SessionCoreHelper.isDirect(intermediateSession)) {
         directCnt += 1;
       }
-      if (UbiSessionHelper.isMktg(intermediateSession)) {
+      if (SessionCoreHelper.isMktg(intermediateSession)) {
         mktgCnt += 1;
       }
-      if (UbiSessionHelper.isSite(intermediateSession)) {
+      if (SessionCoreHelper.isSite(intermediateSession)) {
         siteCnt += 1;
       }
-      if (UbiSessionHelper.isNewGuid(intermediateSession)) {
+      if (SessionCoreHelper.isNewGuid(intermediateSession)) {
         newGuidCnt += 1;
       }
-      if (intermediateSession.getGuid() != null) {
-        HllSketch guidSet ;
-        if(hllSketch==null){
-          guidSet = new HllSketch(12,TgtHllType.HLL_4);
-        }else{
-          guidSet = HllSketch.heapify(hllSketch);
-        }
-        //        long[] long4Cguid = TransformUtil.md522Long(intermediateSession.getGuid());
-        guidSet.update(intermediateSession.getGuid());
-        hllSketch=guidSet.toCompactByteArray();
-      }
+      //      if (intermediateSession.get() != null) {
+      //        HllSketch guidSet;
+      //        if (hllSketch == null) {
+      //          guidSet = new HllSketch(12, TgtHllType.HLL_4);
+      //        } else {
+      //          guidSet = HllSketch.heapify(hllSketch);
+      //        }
+      //        guidSet.update(intermediateSession.getGuid());
+      //        hllSketch = guidSet.toCompactByteArray();
+      //      }
 
-      if (intermediateSession.getFirstCguid() != null) {
+      if (intermediateSession.getCguid() != null) {
         if (cguidSet.size() <= 5) {
-          cguidSet.add(intermediateSession.getFirstCguid());
+          cguidSet.add(intermediateSession.getCguid());
         }
       }
-      isAllAgentHoper = isAllAgentHoper && UbiSessionHelper.isAgentHoper(intermediateSession);
+      isAllAgentHoper = isAllAgentHoper && SessionCoreHelper.isAgentHoper(intermediateSession);
     }
     switch (botFlag) {
       case 5:
@@ -173,7 +170,7 @@ public class AgentIpAttribute implements Attribute<IntermediateSession>, Seriali
   }
 
   @Override
-  public void revert(IntermediateSession intermediateSession, int botFlag) {
+  public void revert(SessionCore intermediateSession, int botFlag) {
     switch (botFlag) {
       case 5:
         scsCountForBot5 = -1;
@@ -222,7 +219,7 @@ public class AgentIpAttribute implements Attribute<IntermediateSession>, Seriali
     newGuidCnt = 0;
     //        guidCnt = 0;
     cguidSet.clear();
-    hllSketch=null;
+    hllSketch = null;
     isAllAgentHoper = true;
     totalCntForSec1 = 0;
   }

@@ -2,7 +2,6 @@ package com.ebay.sojourner.ubd.common.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.google.common.collect.Sets;
 import org.apache.datasketches.hll.HllSketch;
 import org.apache.datasketches.hll.TgtHllType;
 import org.junit.jupiter.api.BeforeEach;
@@ -133,7 +132,7 @@ public class IpAttributeTest {
     agentIpAttribute.setTotalCnt(201);
     agentIpAttribute.setTotalCntForSec1(5);
     agentIpAttribute.setNoUidCnt(51);
-    agentIpAttribute.setCguidSet(Sets.newHashSet("1", "2", "3", "4"));
+    //    agentIpAttribute.setCguidSet(Sets.newHashSet("1", "2", "3", "4"));
 
     ipAttribute.feed(agentIpAttribute, 210, true);
 

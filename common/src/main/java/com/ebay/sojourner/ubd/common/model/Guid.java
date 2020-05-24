@@ -5,25 +5,58 @@
  */
 package com.ebay.sojourner.ubd.common.model;
 
-import org.apache.avro.specific.SpecificData;
-import org.apache.avro.message.BinaryMessageEncoder;
 import org.apache.avro.message.BinaryMessageDecoder;
+import org.apache.avro.message.BinaryMessageEncoder;
 import org.apache.avro.message.SchemaStore;
+import org.apache.avro.specific.SpecificData;
 
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
-public class Guid extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
+public class Guid extends org.apache.avro.specific.SpecificRecordBase implements
+    org.apache.avro.specific.SpecificRecord {
+
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
+      "{\"type\":\"record\",\"name\":\"Guid\",\"namespace\":\"com.ebay.sojourner.ubd.common"
+          + ".model\",\"fields\":[{\"name\":\"guid1\",\"type\":\"long\"},{\"name\":\"guid2\","
+          + "\"type\":\"long\"}]}");
   private static final long serialVersionUID = -9221542456359635901L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Guid\",\"namespace\":\"com.ebay.sojourner.ubd.common.model\",\"fields\":[{\"name\":\"guid1\",\"type\":\"long\"},{\"name\":\"guid2\",\"type\":\"long\"}]}");
-  public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
-
   private static SpecificData MODEL$ = new SpecificData();
-
   private static final BinaryMessageEncoder<Guid> ENCODER =
       new BinaryMessageEncoder<Guid>(MODEL$, SCHEMA$);
-
   private static final BinaryMessageDecoder<Guid> DECODER =
       new BinaryMessageDecoder<Guid>(MODEL$, SCHEMA$);
+  @SuppressWarnings("unchecked")
+  private static final org.apache.avro.io.DatumWriter<Guid>
+      WRITER$ = (org.apache.avro.io.DatumWriter<Guid>) MODEL$.createDatumWriter(SCHEMA$);
+  @SuppressWarnings("unchecked")
+  private static final org.apache.avro.io.DatumReader<Guid>
+      READER$ = (org.apache.avro.io.DatumReader<Guid>) MODEL$.createDatumReader(SCHEMA$);
+  @Deprecated
+  public long guid1;
+  @Deprecated
+  public long guid2;
+
+  /**
+   * Default constructor.  Note that this does not initialize fields to their default values from
+   * the schema.  If that is desired then one should use <code>newBuilder()</code>.
+   */
+  public Guid() {
+  }
+
+  /**
+   * All-args constructor.
+   *
+   * @param guid1 The new value for guid1
+   * @param guid2 The new value for guid2
+   */
+  public Guid(java.lang.Long guid1, java.lang.Long guid2) {
+    this.guid1 = guid1;
+    this.guid2 = guid2;
+  }
+
+  public static org.apache.avro.Schema getClassSchema() {
+    return SCHEMA$;
+  }
 
   /**
    * Return the BinaryMessageDecoder instance used by this class.
@@ -33,98 +66,26 @@ public class Guid extends org.apache.avro.specific.SpecificRecordBase implements
   }
 
   /**
-   * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link SchemaStore}.
+   * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link
+   * SchemaStore}.
+   *
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
    */
   public static BinaryMessageDecoder<Guid> createDecoder(SchemaStore resolver) {
     return new BinaryMessageDecoder<Guid>(MODEL$, SCHEMA$, resolver);
   }
 
-  /** Serializes this Guid to a ByteBuffer. */
-  public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
-    return ENCODER.encode(this);
-  }
-
-  /** Deserializes a Guid from a ByteBuffer. */
+  /**
+   * Deserializes a Guid from a ByteBuffer.
+   */
   public static Guid fromByteBuffer(
       java.nio.ByteBuffer b) throws java.io.IOException {
     return DECODER.decode(b);
   }
 
-  @Deprecated public long guid1;
-  @Deprecated public long guid2;
-
-  /**
-   * Default constructor.  Note that this does not initialize fields
-   * to their default values from the schema.  If that is desired then
-   * one should use <code>newBuilder()</code>.
-   */
-  public Guid() {}
-
-  /**
-   * All-args constructor.
-   * @param guid1 The new value for guid1
-   * @param guid2 The new value for guid2
-   */
-  public Guid(java.lang.Long guid1, java.lang.Long guid2) {
-    this.guid1 = guid1;
-    this.guid2 = guid2;
-  }
-
-  public org.apache.avro.Schema getSchema() { return SCHEMA$; }
-  // Used by DatumWriter.  Applications should not call.
-  public java.lang.Object get(int field$) {
-    switch (field$) {
-    case 0: return guid1;
-    case 1: return guid2;
-    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
-    }
-  }
-
-  // Used by DatumReader.  Applications should not call.
-  @SuppressWarnings(value="unchecked")
-  public void put(int field$, java.lang.Object value$) {
-    switch (field$) {
-    case 0: guid1 = (java.lang.Long)value$; break;
-    case 1: guid2 = (java.lang.Long)value$; break;
-    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
-    }
-  }
-
-  /**
-   * Gets the value of the 'guid1' field.
-   * @return The value of the 'guid1' field.
-   */
-  public java.lang.Long getGuid1() {
-    return guid1;
-  }
-
-  /**
-   * Sets the value of the 'guid1' field.
-   * @param value the value to set.
-   */
-  public void setGuid1(java.lang.Long value) {
-    this.guid1 = value;
-  }
-
-  /**
-   * Gets the value of the 'guid2' field.
-   * @return The value of the 'guid2' field.
-   */
-  public java.lang.Long getGuid2() {
-    return guid2;
-  }
-
-  /**
-   * Sets the value of the 'guid2' field.
-   * @param value the value to set.
-   */
-  public void setGuid2(java.lang.Long value) {
-    this.guid2 = value;
-  }
-
   /**
    * Creates a new Guid RecordBuilder.
+   *
    * @return A new Guid RecordBuilder
    */
   public static com.ebay.sojourner.ubd.common.model.Guid.Builder newBuilder() {
@@ -133,38 +94,131 @@ public class Guid extends org.apache.avro.specific.SpecificRecordBase implements
 
   /**
    * Creates a new Guid RecordBuilder by copying an existing Builder.
+   *
    * @param other The existing builder to copy.
    * @return A new Guid RecordBuilder
    */
-  public static com.ebay.sojourner.ubd.common.model.Guid.Builder newBuilder(com.ebay.sojourner.ubd.common.model.Guid.Builder other) {
+  public static com.ebay.sojourner.ubd.common.model.Guid.Builder newBuilder(
+      com.ebay.sojourner.ubd.common.model.Guid.Builder other) {
     return new com.ebay.sojourner.ubd.common.model.Guid.Builder(other);
   }
 
   /**
    * Creates a new Guid RecordBuilder by copying an existing Guid instance.
+   *
    * @param other The existing instance to copy.
    * @return A new Guid RecordBuilder
    */
-  public static com.ebay.sojourner.ubd.common.model.Guid.Builder newBuilder(com.ebay.sojourner.ubd.common.model.Guid other) {
+  public static com.ebay.sojourner.ubd.common.model.Guid.Builder newBuilder(
+      com.ebay.sojourner.ubd.common.model.Guid other) {
     return new com.ebay.sojourner.ubd.common.model.Guid.Builder(other);
+  }
+
+  /**
+   * Serializes this Guid to a ByteBuffer.
+   */
+  public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
+    return ENCODER.encode(this);
+  }
+
+  public org.apache.avro.Schema getSchema() {
+    return SCHEMA$;
+  }
+
+  // Used by DatumWriter.  Applications should not call.
+  public java.lang.Object get(int field$) {
+    switch (field$) {
+      case 0:
+        return guid1;
+      case 1:
+        return guid2;
+      default:
+        throw new org.apache.avro.AvroRuntimeException("Bad index");
+    }
+  }
+
+  // Used by DatumReader.  Applications should not call.
+  @SuppressWarnings(value = "unchecked")
+  public void put(int field$, java.lang.Object value$) {
+    switch (field$) {
+      case 0:
+        guid1 = (java.lang.Long) value$;
+        break;
+      case 1:
+        guid2 = (java.lang.Long) value$;
+        break;
+      default:
+        throw new org.apache.avro.AvroRuntimeException("Bad index");
+    }
+  }
+
+  /**
+   * Gets the value of the 'guid1' field.
+   *
+   * @return The value of the 'guid1' field.
+   */
+  public java.lang.Long getGuid1() {
+    return guid1;
+  }
+
+  /**
+   * Sets the value of the 'guid1' field.
+   *
+   * @param value the value to set.
+   */
+  public void setGuid1(java.lang.Long value) {
+    this.guid1 = value;
+  }
+
+  /**
+   * Gets the value of the 'guid2' field.
+   *
+   * @return The value of the 'guid2' field.
+   */
+  public java.lang.Long getGuid2() {
+    return guid2;
+  }
+
+  /**
+   * Sets the value of the 'guid2' field.
+   *
+   * @param value the value to set.
+   */
+  public void setGuid2(java.lang.Long value) {
+    this.guid2 = value;
+  }
+
+  @Override
+  public void writeExternal(java.io.ObjectOutput out)
+      throws java.io.IOException {
+    WRITER$.write(this, SpecificData.getEncoder(out));
+  }
+
+  @Override
+  public void readExternal(java.io.ObjectInput in)
+      throws java.io.IOException {
+    READER$.read(this, SpecificData.getDecoder(in));
   }
 
   /**
    * RecordBuilder for Guid instances.
    */
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<Guid>
-    implements org.apache.avro.data.RecordBuilder<Guid> {
+      implements org.apache.avro.data.RecordBuilder<Guid> {
 
     private long guid1;
     private long guid2;
 
-    /** Creates a new Builder */
+    /**
+     * Creates a new Builder
+     */
     private Builder() {
       super(SCHEMA$);
     }
 
     /**
      * Creates a Builder by copying an existing Builder.
+     *
      * @param other The existing Builder to copy.
      */
     private Builder(com.ebay.sojourner.ubd.common.model.Guid.Builder other) {
@@ -181,10 +235,11 @@ public class Guid extends org.apache.avro.specific.SpecificRecordBase implements
 
     /**
      * Creates a Builder by copying an existing Guid instance
+     *
      * @param other The existing instance to copy.
      */
     private Builder(com.ebay.sojourner.ubd.common.model.Guid other) {
-            super(SCHEMA$);
+      super(SCHEMA$);
       if (isValidValue(fields()[0], other.guid1)) {
         this.guid1 = data().deepCopy(fields()[0].schema(), other.guid1);
         fieldSetFlags()[0] = true;
@@ -196,18 +251,20 @@ public class Guid extends org.apache.avro.specific.SpecificRecordBase implements
     }
 
     /**
-      * Gets the value of the 'guid1' field.
-      * @return The value.
-      */
+     * Gets the value of the 'guid1' field.
+     *
+     * @return The value.
+     */
     public java.lang.Long getGuid1() {
       return guid1;
     }
 
     /**
-      * Sets the value of the 'guid1' field.
-      * @param value The value of 'guid1'.
-      * @return This builder.
-      */
+     * Sets the value of the 'guid1' field.
+     *
+     * @param value The value of 'guid1'.
+     * @return This builder.
+     */
     public com.ebay.sojourner.ubd.common.model.Guid.Builder setGuid1(long value) {
       validate(fields()[0], value);
       this.guid1 = value;
@@ -216,36 +273,40 @@ public class Guid extends org.apache.avro.specific.SpecificRecordBase implements
     }
 
     /**
-      * Checks whether the 'guid1' field has been set.
-      * @return True if the 'guid1' field has been set, false otherwise.
-      */
+     * Checks whether the 'guid1' field has been set.
+     *
+     * @return True if the 'guid1' field has been set, false otherwise.
+     */
     public boolean hasGuid1() {
       return fieldSetFlags()[0];
     }
 
 
     /**
-      * Clears the value of the 'guid1' field.
-      * @return This builder.
-      */
+     * Clears the value of the 'guid1' field.
+     *
+     * @return This builder.
+     */
     public com.ebay.sojourner.ubd.common.model.Guid.Builder clearGuid1() {
       fieldSetFlags()[0] = false;
       return this;
     }
 
     /**
-      * Gets the value of the 'guid2' field.
-      * @return The value.
-      */
+     * Gets the value of the 'guid2' field.
+     *
+     * @return The value.
+     */
     public java.lang.Long getGuid2() {
       return guid2;
     }
 
     /**
-      * Sets the value of the 'guid2' field.
-      * @param value The value of 'guid2'.
-      * @return This builder.
-      */
+     * Sets the value of the 'guid2' field.
+     *
+     * @param value The value of 'guid2'.
+     * @return This builder.
+     */
     public com.ebay.sojourner.ubd.common.model.Guid.Builder setGuid2(long value) {
       validate(fields()[1], value);
       this.guid2 = value;
@@ -254,18 +315,20 @@ public class Guid extends org.apache.avro.specific.SpecificRecordBase implements
     }
 
     /**
-      * Checks whether the 'guid2' field has been set.
-      * @return True if the 'guid2' field has been set, false otherwise.
-      */
+     * Checks whether the 'guid2' field has been set.
+     *
+     * @return True if the 'guid2' field has been set, false otherwise.
+     */
     public boolean hasGuid2() {
       return fieldSetFlags()[1];
     }
 
 
     /**
-      * Clears the value of the 'guid2' field.
-      * @return This builder.
-      */
+     * Clears the value of the 'guid2' field.
+     *
+     * @return This builder.
+     */
     public com.ebay.sojourner.ubd.common.model.Guid.Builder clearGuid2() {
       fieldSetFlags()[1] = false;
       return this;
@@ -283,24 +346,6 @@ public class Guid extends org.apache.avro.specific.SpecificRecordBase implements
         throw new org.apache.avro.AvroRuntimeException(e);
       }
     }
-  }
-
-  @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumWriter<Guid>
-    WRITER$ = (org.apache.avro.io.DatumWriter<Guid>)MODEL$.createDatumWriter(SCHEMA$);
-
-  @Override public void writeExternal(java.io.ObjectOutput out)
-    throws java.io.IOException {
-    WRITER$.write(this, SpecificData.getEncoder(out));
-  }
-
-  @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumReader<Guid>
-    READER$ = (org.apache.avro.io.DatumReader<Guid>)MODEL$.createDatumReader(SCHEMA$);
-
-  @Override public void readExternal(java.io.ObjectInput in)
-    throws java.io.IOException {
-    READER$.read(this, SpecificData.getDecoder(in));
   }
 
 }

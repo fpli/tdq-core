@@ -4,9 +4,10 @@ import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
+import com.ebay.sojourner.ubd.common.model.SessionCore;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
 import com.ebay.sojourner.ubd.common.util.BotRules;
-import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
+import com.ebay.sojourner.ubd.common.util.SessionCoreHelper;
 
 public class ScsCountForBot5Indicator<Source, Target> extends AbstractIndicator<Source, Target> {
 
@@ -28,15 +29,15 @@ public class ScsCountForBot5Indicator<Source, Target> extends AbstractIndicator<
 
   @Override
   public void feed(Source source, Target target, boolean isNeeded) throws Exception {
-    if (source instanceof IntermediateSession) {
-      IntermediateSession intermediateSession = (IntermediateSession) source;
+    if (source instanceof SessionCore) {
+      SessionCore intermediateSession = (SessionCore) source;
       AgentIpAttributeAccumulator agentIpAttributeAccumulator =
           (AgentIpAttributeAccumulator) target;
       if (agentIpAttributeAccumulator.getAgentIpAttribute().getScsCountForBot5() < 0) {
         return;
       } else {
         if (isValid(intermediateSession)) {
-          if (UbiSessionHelper.isSingleClickSession(intermediateSession)) {
+          if (SessionCoreHelper.isSingleClickSession(intermediateSession)) {
             agentIpAttributeAccumulator
                 .getAgentIpAttribute()
                 .feed(intermediateSession, BotRules.SCS_ON_AGENTIP, isNeeded);
@@ -69,9 +70,9 @@ public class ScsCountForBot5Indicator<Source, Target> extends AbstractIndicator<
     return false;
   }
 
-  private boolean isValid(IntermediateSession intermediateSession) {
-    return !UbiSessionHelper.isNonIframRdtCountZero(intermediateSession)
+  private boolean isValid(SessionCore intermediateSession) {
+    return !SessionCoreHelper.isNonIframRdtCountZero(intermediateSession)
         && intermediateSession.getIp() != null
-        && !UbiSessionHelper.isSingleClickNull(intermediateSession);
+        && !SessionCoreHelper.isSingleClickNull(intermediateSession);
   }
 }

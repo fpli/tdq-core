@@ -1,7 +1,7 @@
 package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
 import com.ebay.sojourner.ubd.common.model.GuidAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.IntermediateSession;
+import com.ebay.sojourner.ubd.common.model.SessionCore;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,13 +10,13 @@ class AbsEventCountIndicatorTest {
 
   AbsEventCountIndicator absEventCountIndicator;
   GuidAttributeAccumulator guidAttributeAccumulator;
-  IntermediateSession intermediateSession;
+  SessionCore intermediateSession;
 
   @BeforeEach
   void setup() {
     absEventCountIndicator = new AbsEventCountIndicator();
     guidAttributeAccumulator = new GuidAttributeAccumulator();
-    intermediateSession = new IntermediateSession();
+    intermediateSession = new SessionCore();
   }
 
   @Test

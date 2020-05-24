@@ -20,7 +20,7 @@ import org.apache.flink.configuration.Configuration;
 
 public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSession, SessionCore> {
 
-  public static final int DEFAULT_MAX_CAPACITY = 262144000; // 250 * 1024 * 1024 = 250m - refer 
+  public static final int DEFAULT_MAX_CAPACITY = 262144000; // 250 * 1024 * 1024 = 250m - refer
   // io.sort.mb (default spill size)
   public static final int DEFAULT_INITIAL_CAPACITY = 16777216; // 16 * 1024 * 1024 = 16m
   public static final float DEFAULT_LOAD_FACTOR = .75F;
@@ -73,6 +73,14 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
       cguid.setGuid1(long4Cguid[0]);
       cguid.setGuid2(long4Cguid[1]);
       core.setCguid(cguid);
+    }
+
+    if (session.getGuid() != null) {
+      long[] long4Cguid = TransformUtil.md522Long(session.getGuid());
+      Guid guid = new Guid();
+      guid.setGuid1(long4Cguid[0]);
+      guid.setGuid2(long4Cguid[1]);
+      core.setGuid(guid);
     }
 
     core.setAppId(session.getFirstAppId());

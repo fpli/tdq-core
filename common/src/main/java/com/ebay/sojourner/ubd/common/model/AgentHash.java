@@ -5,25 +5,58 @@
  */
 package com.ebay.sojourner.ubd.common.model;
 
-import org.apache.avro.specific.SpecificData;
-import org.apache.avro.message.BinaryMessageEncoder;
 import org.apache.avro.message.BinaryMessageDecoder;
+import org.apache.avro.message.BinaryMessageEncoder;
 import org.apache.avro.message.SchemaStore;
+import org.apache.avro.specific.SpecificData;
 
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
-public class AgentHash extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
+public class AgentHash extends org.apache.avro.specific.SpecificRecordBase implements
+    org.apache.avro.specific.SpecificRecord {
+
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
+      "{\"type\":\"record\",\"name\":\"AgentHash\",\"namespace\":\"com.ebay.sojourner.ubd.common"
+          + ".model\",\"fields\":[{\"name\":\"agentHash1\",\"type\":\"long\"},"
+          + "{\"name\":\"agentHash2\",\"type\":\"long\"}]}");
   private static final long serialVersionUID = -4686851431405104844L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"AgentHash\",\"namespace\":\"com.ebay.sojourner.ubd.common.model\",\"fields\":[{\"name\":\"agentHash1\",\"type\":\"long\"},{\"name\":\"agentHash2\",\"type\":\"long\"}]}");
-  public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
-
   private static SpecificData MODEL$ = new SpecificData();
-
   private static final BinaryMessageEncoder<AgentHash> ENCODER =
       new BinaryMessageEncoder<AgentHash>(MODEL$, SCHEMA$);
-
   private static final BinaryMessageDecoder<AgentHash> DECODER =
       new BinaryMessageDecoder<AgentHash>(MODEL$, SCHEMA$);
+  @SuppressWarnings("unchecked")
+  private static final org.apache.avro.io.DatumWriter<AgentHash>
+      WRITER$ = (org.apache.avro.io.DatumWriter<AgentHash>) MODEL$.createDatumWriter(SCHEMA$);
+  @SuppressWarnings("unchecked")
+  private static final org.apache.avro.io.DatumReader<AgentHash>
+      READER$ = (org.apache.avro.io.DatumReader<AgentHash>) MODEL$.createDatumReader(SCHEMA$);
+  @Deprecated
+  public long agentHash1;
+  @Deprecated
+  public long agentHash2;
+
+  /**
+   * Default constructor.  Note that this does not initialize fields to their default values from
+   * the schema.  If that is desired then one should use <code>newBuilder()</code>.
+   */
+  public AgentHash() {
+  }
+
+  /**
+   * All-args constructor.
+   *
+   * @param agentHash1 The new value for agentHash1
+   * @param agentHash2 The new value for agentHash2
+   */
+  public AgentHash(java.lang.Long agentHash1, java.lang.Long agentHash2) {
+    this.agentHash1 = agentHash1;
+    this.agentHash2 = agentHash2;
+  }
+
+  public static org.apache.avro.Schema getClassSchema() {
+    return SCHEMA$;
+  }
 
   /**
    * Return the BinaryMessageDecoder instance used by this class.
@@ -33,98 +66,26 @@ public class AgentHash extends org.apache.avro.specific.SpecificRecordBase imple
   }
 
   /**
-   * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link SchemaStore}.
+   * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link
+   * SchemaStore}.
+   *
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
    */
   public static BinaryMessageDecoder<AgentHash> createDecoder(SchemaStore resolver) {
     return new BinaryMessageDecoder<AgentHash>(MODEL$, SCHEMA$, resolver);
   }
 
-  /** Serializes this AgentHash to a ByteBuffer. */
-  public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
-    return ENCODER.encode(this);
-  }
-
-  /** Deserializes a AgentHash from a ByteBuffer. */
+  /**
+   * Deserializes a AgentHash from a ByteBuffer.
+   */
   public static AgentHash fromByteBuffer(
       java.nio.ByteBuffer b) throws java.io.IOException {
     return DECODER.decode(b);
   }
 
-  @Deprecated public long agentHash1;
-  @Deprecated public long agentHash2;
-
-  /**
-   * Default constructor.  Note that this does not initialize fields
-   * to their default values from the schema.  If that is desired then
-   * one should use <code>newBuilder()</code>.
-   */
-  public AgentHash() {}
-
-  /**
-   * All-args constructor.
-   * @param agentHash1 The new value for agentHash1
-   * @param agentHash2 The new value for agentHash2
-   */
-  public AgentHash(java.lang.Long agentHash1, java.lang.Long agentHash2) {
-    this.agentHash1 = agentHash1;
-    this.agentHash2 = agentHash2;
-  }
-
-  public org.apache.avro.Schema getSchema() { return SCHEMA$; }
-  // Used by DatumWriter.  Applications should not call.
-  public java.lang.Object get(int field$) {
-    switch (field$) {
-    case 0: return agentHash1;
-    case 1: return agentHash2;
-    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
-    }
-  }
-
-  // Used by DatumReader.  Applications should not call.
-  @SuppressWarnings(value="unchecked")
-  public void put(int field$, java.lang.Object value$) {
-    switch (field$) {
-    case 0: agentHash1 = (java.lang.Long)value$; break;
-    case 1: agentHash2 = (java.lang.Long)value$; break;
-    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
-    }
-  }
-
-  /**
-   * Gets the value of the 'agentHash1' field.
-   * @return The value of the 'agentHash1' field.
-   */
-  public java.lang.Long getAgentHash1() {
-    return agentHash1;
-  }
-
-  /**
-   * Sets the value of the 'agentHash1' field.
-   * @param value the value to set.
-   */
-  public void setAgentHash1(java.lang.Long value) {
-    this.agentHash1 = value;
-  }
-
-  /**
-   * Gets the value of the 'agentHash2' field.
-   * @return The value of the 'agentHash2' field.
-   */
-  public java.lang.Long getAgentHash2() {
-    return agentHash2;
-  }
-
-  /**
-   * Sets the value of the 'agentHash2' field.
-   * @param value the value to set.
-   */
-  public void setAgentHash2(java.lang.Long value) {
-    this.agentHash2 = value;
-  }
-
   /**
    * Creates a new AgentHash RecordBuilder.
+   *
    * @return A new AgentHash RecordBuilder
    */
   public static com.ebay.sojourner.ubd.common.model.AgentHash.Builder newBuilder() {
@@ -133,38 +94,131 @@ public class AgentHash extends org.apache.avro.specific.SpecificRecordBase imple
 
   /**
    * Creates a new AgentHash RecordBuilder by copying an existing Builder.
+   *
    * @param other The existing builder to copy.
    * @return A new AgentHash RecordBuilder
    */
-  public static com.ebay.sojourner.ubd.common.model.AgentHash.Builder newBuilder(com.ebay.sojourner.ubd.common.model.AgentHash.Builder other) {
+  public static com.ebay.sojourner.ubd.common.model.AgentHash.Builder newBuilder(
+      com.ebay.sojourner.ubd.common.model.AgentHash.Builder other) {
     return new com.ebay.sojourner.ubd.common.model.AgentHash.Builder(other);
   }
 
   /**
    * Creates a new AgentHash RecordBuilder by copying an existing AgentHash instance.
+   *
    * @param other The existing instance to copy.
    * @return A new AgentHash RecordBuilder
    */
-  public static com.ebay.sojourner.ubd.common.model.AgentHash.Builder newBuilder(com.ebay.sojourner.ubd.common.model.AgentHash other) {
+  public static com.ebay.sojourner.ubd.common.model.AgentHash.Builder newBuilder(
+      com.ebay.sojourner.ubd.common.model.AgentHash other) {
     return new com.ebay.sojourner.ubd.common.model.AgentHash.Builder(other);
+  }
+
+  /**
+   * Serializes this AgentHash to a ByteBuffer.
+   */
+  public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
+    return ENCODER.encode(this);
+  }
+
+  public org.apache.avro.Schema getSchema() {
+    return SCHEMA$;
+  }
+
+  // Used by DatumWriter.  Applications should not call.
+  public java.lang.Object get(int field$) {
+    switch (field$) {
+      case 0:
+        return agentHash1;
+      case 1:
+        return agentHash2;
+      default:
+        throw new org.apache.avro.AvroRuntimeException("Bad index");
+    }
+  }
+
+  // Used by DatumReader.  Applications should not call.
+  @SuppressWarnings(value = "unchecked")
+  public void put(int field$, java.lang.Object value$) {
+    switch (field$) {
+      case 0:
+        agentHash1 = (java.lang.Long) value$;
+        break;
+      case 1:
+        agentHash2 = (java.lang.Long) value$;
+        break;
+      default:
+        throw new org.apache.avro.AvroRuntimeException("Bad index");
+    }
+  }
+
+  /**
+   * Gets the value of the 'agentHash1' field.
+   *
+   * @return The value of the 'agentHash1' field.
+   */
+  public java.lang.Long getAgentHash1() {
+    return agentHash1;
+  }
+
+  /**
+   * Sets the value of the 'agentHash1' field.
+   *
+   * @param value the value to set.
+   */
+  public void setAgentHash1(java.lang.Long value) {
+    this.agentHash1 = value;
+  }
+
+  /**
+   * Gets the value of the 'agentHash2' field.
+   *
+   * @return The value of the 'agentHash2' field.
+   */
+  public java.lang.Long getAgentHash2() {
+    return agentHash2;
+  }
+
+  /**
+   * Sets the value of the 'agentHash2' field.
+   *
+   * @param value the value to set.
+   */
+  public void setAgentHash2(java.lang.Long value) {
+    this.agentHash2 = value;
+  }
+
+  @Override
+  public void writeExternal(java.io.ObjectOutput out)
+      throws java.io.IOException {
+    WRITER$.write(this, SpecificData.getEncoder(out));
+  }
+
+  @Override
+  public void readExternal(java.io.ObjectInput in)
+      throws java.io.IOException {
+    READER$.read(this, SpecificData.getDecoder(in));
   }
 
   /**
    * RecordBuilder for AgentHash instances.
    */
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<AgentHash>
-    implements org.apache.avro.data.RecordBuilder<AgentHash> {
+      implements org.apache.avro.data.RecordBuilder<AgentHash> {
 
     private long agentHash1;
     private long agentHash2;
 
-    /** Creates a new Builder */
+    /**
+     * Creates a new Builder
+     */
     private Builder() {
       super(SCHEMA$);
     }
 
     /**
      * Creates a Builder by copying an existing Builder.
+     *
      * @param other The existing Builder to copy.
      */
     private Builder(com.ebay.sojourner.ubd.common.model.AgentHash.Builder other) {
@@ -181,10 +235,11 @@ public class AgentHash extends org.apache.avro.specific.SpecificRecordBase imple
 
     /**
      * Creates a Builder by copying an existing AgentHash instance
+     *
      * @param other The existing instance to copy.
      */
     private Builder(com.ebay.sojourner.ubd.common.model.AgentHash other) {
-            super(SCHEMA$);
+      super(SCHEMA$);
       if (isValidValue(fields()[0], other.agentHash1)) {
         this.agentHash1 = data().deepCopy(fields()[0].schema(), other.agentHash1);
         fieldSetFlags()[0] = true;
@@ -196,18 +251,20 @@ public class AgentHash extends org.apache.avro.specific.SpecificRecordBase imple
     }
 
     /**
-      * Gets the value of the 'agentHash1' field.
-      * @return The value.
-      */
+     * Gets the value of the 'agentHash1' field.
+     *
+     * @return The value.
+     */
     public java.lang.Long getAgentHash1() {
       return agentHash1;
     }
 
     /**
-      * Sets the value of the 'agentHash1' field.
-      * @param value The value of 'agentHash1'.
-      * @return This builder.
-      */
+     * Sets the value of the 'agentHash1' field.
+     *
+     * @param value The value of 'agentHash1'.
+     * @return This builder.
+     */
     public com.ebay.sojourner.ubd.common.model.AgentHash.Builder setAgentHash1(long value) {
       validate(fields()[0], value);
       this.agentHash1 = value;
@@ -216,36 +273,40 @@ public class AgentHash extends org.apache.avro.specific.SpecificRecordBase imple
     }
 
     /**
-      * Checks whether the 'agentHash1' field has been set.
-      * @return True if the 'agentHash1' field has been set, false otherwise.
-      */
+     * Checks whether the 'agentHash1' field has been set.
+     *
+     * @return True if the 'agentHash1' field has been set, false otherwise.
+     */
     public boolean hasAgentHash1() {
       return fieldSetFlags()[0];
     }
 
 
     /**
-      * Clears the value of the 'agentHash1' field.
-      * @return This builder.
-      */
+     * Clears the value of the 'agentHash1' field.
+     *
+     * @return This builder.
+     */
     public com.ebay.sojourner.ubd.common.model.AgentHash.Builder clearAgentHash1() {
       fieldSetFlags()[0] = false;
       return this;
     }
 
     /**
-      * Gets the value of the 'agentHash2' field.
-      * @return The value.
-      */
+     * Gets the value of the 'agentHash2' field.
+     *
+     * @return The value.
+     */
     public java.lang.Long getAgentHash2() {
       return agentHash2;
     }
 
     /**
-      * Sets the value of the 'agentHash2' field.
-      * @param value The value of 'agentHash2'.
-      * @return This builder.
-      */
+     * Sets the value of the 'agentHash2' field.
+     *
+     * @param value The value of 'agentHash2'.
+     * @return This builder.
+     */
     public com.ebay.sojourner.ubd.common.model.AgentHash.Builder setAgentHash2(long value) {
       validate(fields()[1], value);
       this.agentHash2 = value;
@@ -254,18 +315,20 @@ public class AgentHash extends org.apache.avro.specific.SpecificRecordBase imple
     }
 
     /**
-      * Checks whether the 'agentHash2' field has been set.
-      * @return True if the 'agentHash2' field has been set, false otherwise.
-      */
+     * Checks whether the 'agentHash2' field has been set.
+     *
+     * @return True if the 'agentHash2' field has been set, false otherwise.
+     */
     public boolean hasAgentHash2() {
       return fieldSetFlags()[1];
     }
 
 
     /**
-      * Clears the value of the 'agentHash2' field.
-      * @return This builder.
-      */
+     * Clears the value of the 'agentHash2' field.
+     *
+     * @return This builder.
+     */
     public com.ebay.sojourner.ubd.common.model.AgentHash.Builder clearAgentHash2() {
       fieldSetFlags()[1] = false;
       return this;
@@ -276,31 +339,15 @@ public class AgentHash extends org.apache.avro.specific.SpecificRecordBase imple
     public AgentHash build() {
       try {
         AgentHash record = new AgentHash();
-        record.agentHash1 = fieldSetFlags()[0] ? this.agentHash1 : (java.lang.Long) defaultValue(fields()[0]);
-        record.agentHash2 = fieldSetFlags()[1] ? this.agentHash2 : (java.lang.Long) defaultValue(fields()[1]);
+        record.agentHash1 =
+            fieldSetFlags()[0] ? this.agentHash1 : (java.lang.Long) defaultValue(fields()[0]);
+        record.agentHash2 =
+            fieldSetFlags()[1] ? this.agentHash2 : (java.lang.Long) defaultValue(fields()[1]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
       }
     }
-  }
-
-  @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumWriter<AgentHash>
-    WRITER$ = (org.apache.avro.io.DatumWriter<AgentHash>)MODEL$.createDatumWriter(SCHEMA$);
-
-  @Override public void writeExternal(java.io.ObjectOutput out)
-    throws java.io.IOException {
-    WRITER$.write(this, SpecificData.getEncoder(out));
-  }
-
-  @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumReader<AgentHash>
-    READER$ = (org.apache.avro.io.DatumReader<AgentHash>)MODEL$.createDatumReader(SCHEMA$);
-
-  @Override public void readExternal(java.io.ObjectInput in)
-    throws java.io.IOException {
-    READER$.read(this, SpecificData.getDecoder(in));
   }
 
 }

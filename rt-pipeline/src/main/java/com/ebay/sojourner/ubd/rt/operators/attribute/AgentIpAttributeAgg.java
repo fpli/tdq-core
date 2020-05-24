@@ -1,7 +1,7 @@
 package com.ebay.sojourner.ubd.rt.operators.attribute;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.IntermediateSession;
+import com.ebay.sojourner.ubd.common.model.SessionCore;
 import com.ebay.sojourner.ubd.common.sharedlib.indicators.AgentIpIndicators;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.functions.AggregateFunction;
@@ -9,7 +9,7 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 @Slf4j
 public class AgentIpAttributeAgg
     implements AggregateFunction<
-    IntermediateSession, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
+    SessionCore, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
 
   // private AgentIpIndicators agentIpIndicators;
 
@@ -30,12 +30,12 @@ public class AgentIpAttributeAgg
 
   @Override
   public AgentIpAttributeAccumulator add(
-      IntermediateSession intermediateSession,
+      SessionCore intermediateSession,
       AgentIpAttributeAccumulator agentIpAttributeAccumulator) {
     if (agentIpAttributeAccumulator.getAgentIpAttribute().getClientIp() == null
         && agentIpAttributeAccumulator.getAgentIpAttribute().getAgent() == null) {
       agentIpAttributeAccumulator.getAgentIpAttribute()
-          .setClientIp(intermediateSession.getClientIp());
+          .setClientIp(intermediateSession.getIp());
       agentIpAttributeAccumulator.getAgentIpAttribute()
           .setAgent(intermediateSession.getUserAgent());
     }

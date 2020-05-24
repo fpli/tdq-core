@@ -1,7 +1,7 @@
 package com.ebay.sojourner.ubd.rt.operators.attribute;
 
 import com.ebay.sojourner.ubd.common.model.GuidAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.IntermediateSession;
+import com.ebay.sojourner.ubd.common.model.SessionCore;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.GuidSignatureBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.indicators.GuidIndicators;
 import com.ebay.sojourner.ubd.common.util.Constants;
@@ -12,7 +12,7 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 
 @Slf4j
 public class GuidAttributeAgg implements
-    AggregateFunction<IntermediateSession,
+    AggregateFunction<SessionCore,
         GuidAttributeAccumulator, GuidAttributeAccumulator> {
 
   private static final String GUID = Constants.GUID_LEVEL;
@@ -39,11 +39,11 @@ public class GuidAttributeAgg implements
 
   @Override
   public GuidAttributeAccumulator add(
-      IntermediateSession session, GuidAttributeAccumulator guidAttributeAccumulator) {
+      SessionCore session, GuidAttributeAccumulator guidAttributeAccumulator) {
     if (guidAttributeAccumulator.getGuidAttribute().getGuid1() == 0
         && guidAttributeAccumulator.getGuidAttribute().getGuid2() == 0) {
-      guidAttributeAccumulator.getGuidAttribute().setGuid1(session.getGuid1());
-      guidAttributeAccumulator.getGuidAttribute().setGuid2(session.getGuid2());
+      guidAttributeAccumulator.getGuidAttribute().setGuid1(session.getGuid().getGuid1());
+      guidAttributeAccumulator.getGuidAttribute().setGuid2(session.getGuid().getGuid2());
     }
     try {
       GuidIndicators.getInstance().feed(session, guidAttributeAccumulator, true);

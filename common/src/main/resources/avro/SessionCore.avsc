@@ -67,6 +67,10 @@
     } ],
     "default" : null
   }, {
+        "name" : "guid",
+        "type" : [ "null", "Guid" ],
+           "default" : null
+      }, {
     "name" : "validPageCnt",
     "type" : [ "null", "int" ],
     "default" : null

@@ -155,13 +155,6 @@ public abstract class SessionCoreHelper {
     return false;
   }
 
-//    public static boolean isExInternalIpTrimedDiff(SessionCore session) {
-//        if (session.getFlags() != null) {
-//            return BitUtils.isBitSet(session.getFlags(), SessionFlags.EXINTERNALIP_TRIMED_DIFF);
-//        }
-//        return false;
-//    }
-
   public static Integer getExInternalIp(SessionCore session) {
     if (isExInternalIpDiff(session)) {
       return session.getExInternalIp();

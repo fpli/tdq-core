@@ -14,7 +14,7 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
   public static final int MAX_CGUID_THRESHOLD = 5;
   public static final int SESSION_COUNT_THRESHOLD = 300;
   public static final Set<Integer> pageSessionSet = new HashSet<>(Arrays.asList(2, 3, 4, 5));
-  private String clientIp;
+  private Integer clientIp;
   private int scsCount = 0;
   private Set<Integer> botFlagList = new LinkedHashSet<>();
 
