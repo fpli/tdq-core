@@ -20,12 +20,20 @@ public class BitUtils {
     return source |= (long) 1 << pos;
   }
 
+  public static int setBit(int source, int pos) {
+    return source |= 1 << pos;
+  }
+
+  public static boolean isBitSet(int source, int pos) {
+    return (source & 1 << pos) != 0;
+  }
+
   public static boolean isBitSet(long source, int pos) {
     return (source & (long) 1 << pos) != 0;
   }
 
   public static void main(String[] args) {
 
-    System.out.println(setBit(0,4));
+    System.out.println(setBit(0, 4));
   }
 }

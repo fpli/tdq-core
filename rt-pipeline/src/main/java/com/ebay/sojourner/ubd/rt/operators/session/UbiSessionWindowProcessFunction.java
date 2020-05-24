@@ -36,7 +36,6 @@ public class UbiSessionWindowProcessFunction
       Iterable<SessionAccumulator> elements,
       Collector<UbiSession> out)
       throws Exception {
-
     if (sessionMetrics == null) {
       sessionMetrics = SessionMetrics.getInstance();
     }

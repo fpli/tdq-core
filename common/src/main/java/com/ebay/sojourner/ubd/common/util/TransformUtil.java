@@ -7,9 +7,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
-/**
- * @author lubliu
- */
 public class TransformUtil {
 
   private static final Logger LOGGER = Logger.getLogger(TransformUtil.class);
