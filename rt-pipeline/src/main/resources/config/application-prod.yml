@@ -138,3 +138,4 @@ hdfs:
   sinkLateEventPath: /late_events
   sinkJetstreamEventPath: /jetstream_events
   sinkJetstreamSessionPath: /jetstream_sessions
+  sinkIntermediateSessionPath: /cross_session

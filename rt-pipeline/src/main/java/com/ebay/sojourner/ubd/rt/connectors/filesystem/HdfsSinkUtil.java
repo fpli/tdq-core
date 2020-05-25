@@ -1,5 +1,6 @@
 package com.ebay.sojourner.ubd.rt.connectors.filesystem;
 
+import com.ebay.sojourner.ubd.common.model.CrossSessionSignature;
 import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.JetStreamOutputEvent;
 import com.ebay.sojourner.ubd.common.model.JetStreamOutputSession;
@@ -28,7 +29,12 @@ public class HdfsSinkUtil {
 
   public static StreamingFileSink signatureSinkWithParquet() {
     return HdfsSinkUtil
-        .createWithParquet(HdfsPathConstants.SIGNATURE_PATH, IntermediateSession.class);
+        .createWithParquet(HdfsPathConstants.SIGNATURE_PATH, CrossSessionSignature.class);
+  }
+
+  public static StreamingFileSink intermediateSessionSinkWithParquet() {
+    return HdfsSinkUtil
+        .createWithParquet(HdfsPathConstants.INTERMEDIATE_SESSION_PATH, IntermediateSession.class);
   }
 
   public static StreamingFileSink lateEventSinkWithParquet() {

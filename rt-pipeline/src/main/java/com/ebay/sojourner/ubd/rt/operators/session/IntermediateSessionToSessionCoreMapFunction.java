@@ -51,8 +51,8 @@ public class IntermediateSessionToSessionCoreMapFunction extends
   }
 
   @Override
-  public SessionCore map(IntermediateSession IntermediateSession) throws Exception {
-    SessionCore sessionCore = transToSessionCore(IntermediateSession);
+  public SessionCore map(IntermediateSession intermediateSession) throws Exception {
+    SessionCore sessionCore = transToSessionCore(intermediateSession);
     return sessionCore;
   }
 

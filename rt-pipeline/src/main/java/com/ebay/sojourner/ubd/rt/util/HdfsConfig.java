@@ -12,4 +12,5 @@ public class HdfsConfig {
   private String sinkLateEventPath;
   private String sinkJetstreamEventPath;
   private String sinkJetstreamSessionPath;
+  private String sinkIntermediateSessionPath;
 }

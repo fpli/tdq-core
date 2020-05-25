@@ -15,4 +15,6 @@ public class HdfsPathConstants {
       PARENT_PATH + AppEnv.config().getHdfs().getSinkJetstreamEventPath();
   public static final String JETSTREAM_SESSION_PATH =
       PARENT_PATH + AppEnv.config().getHdfs().getSinkJetstreamSessionPath();
+  public static final String INTERMEDIATE_SESSION_PATH =
+      PARENT_PATH + AppEnv.config().getHdfs().getSinkIntermediateSessionPath();
 }
