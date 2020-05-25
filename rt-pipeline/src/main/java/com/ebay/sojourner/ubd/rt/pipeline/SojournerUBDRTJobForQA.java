@@ -1,8 +1,8 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
-import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
+import com.ebay.sojourner.ubd.common.model.SessionCore;
 import com.ebay.sojourner.ubd.common.model.SojEvent;
 import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
@@ -31,7 +31,7 @@ import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.DetectableSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
-import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToIntermediateSessionMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSessionCoreMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
@@ -125,8 +125,8 @@ public class SojournerUBDRTJobForQA {
         .uid("sessionLevel");
 
     // ubiSession to intermediateSession
-    DataStream<IntermediateSession> intermediateSessionDataStream = ubiSessionDataStream
-        .map(new UbiSessionToIntermediateSessionMapFunction())
+    DataStream<SessionCore> intermediateSessionDataStream = ubiSessionDataStream
+        .map(new UbiSessionToSessionCoreMapFunction())
         .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
         .name("UbiSession To IntermediateSession")
         .slotSharingGroup("SESSION")

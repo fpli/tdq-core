@@ -1,7 +1,9 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.IntermediateSession;
+import com.ebay.sojourner.ubd.common.model.SessionCore;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
+import com.ebay.sojourner.ubd.rt.operators.session.IntermediateSessionToSessionCoreMapFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
 import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
@@ -34,6 +36,13 @@ public class SojournerUBDRTJobForCrossSession {
             .setParallelism(AppEnv.config().getFlink().app.getCrossSessionParallelism())
             .name("Rheos Kafka Consumer For Cross Session DQ")
             .uid("kafkaSourceForCrossSessionDQ");
+    // IntermediateSession to SessionCore
+    DataStream<SessionCore> sessionCoreDS = intermediateSessionDataStream
+        .map(new IntermediateSessionToSessionCoreMapFunction())
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .slotSharingGroup("SESSION")
+        .name("IntermediateSession To SessionCore")
+        .uid("crossSessionLevel");
 
     /*
     // filter agent ip

@@ -1,8 +1,8 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
-import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
+import com.ebay.sojourner.ubd.common.model.SessionCore;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
@@ -25,7 +25,7 @@ import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.DetectableSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
-import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToIntermediateSessionMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSessionCoreMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
@@ -164,11 +164,19 @@ public class SojournerUBDRTJob {
         ubiSessionDataStream.getSideOutput(lateEventOutputTag);
 
     // ubiSession to intermediateSession
-    DataStream<IntermediateSession> intermediateSessionDataStream = ubiSessionDataStream
-        .map(new UbiSessionToIntermediateSessionMapFunction())
+    //    DataStream<IntermediateSession> intermediateSessionDataStream = ubiSessionDataStream
+    //        .map(new UbiSessionToIntermediateSessionMapFunction())
+    //        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+    //        .slotSharingGroup("SESSION")
+    //        .name("UbiSession To IntermediateSession")
+    //        .uid("crossSessionLevel");
+    //
+    // ubiSession to SessionCore
+    DataStream<SessionCore> sessionCoreDS = ubiSessionDataStream
+        .map(new UbiSessionToSessionCoreMapFunction())
         .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
         .slotSharingGroup("SESSION")
-        .name("UbiSession To IntermediateSession")
+        .name("UbiSession To SessionCore")
         .uid("crossSessionLevel");
 
     /*
@@ -179,8 +187,8 @@ public class SojournerUBDRTJob {
     4.4 Store bot signature
     */
     DataStream<AgentIpAttribute> agentIpAttributeDatastream =
-        intermediateSessionDataStream
-            .keyBy("userAgent", "clientIp")
+        sessionCoreDS
+            .keyBy("userAgent", "ip")
             .window(TumblingEventTimeWindows.of(Time.minutes(5)))
             .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
             .name("Attribute Operator (Agent+IP Pre-Aggregation)")
@@ -407,12 +415,12 @@ public class SojournerUBDRTJob {
         .name("Late Event")
         .uid("lateEvent");
 
-    intermediateSessionDataStream
-        .addSink(new DiscardingSink<>())
-        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
-        .slotSharingGroup("SESSION")
-        .name("Intermediate Session")
-        .uid("intermediateSession");
+    //    intermediateSessionDataStream
+    //        .addSink(new DiscardingSink<>())
+    //        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+    //        .slotSharingGroup("SESSION")
+    //        .name("Intermediate Session")
+    //        .uid("intermediateSession");
 
     /*
     // sink kafka for cross session dq

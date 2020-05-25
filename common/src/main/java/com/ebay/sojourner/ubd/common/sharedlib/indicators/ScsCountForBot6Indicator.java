@@ -3,10 +3,11 @@ package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 import com.ebay.sojourner.ubd.common.model.AgentAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.IntermediateSession;
+import com.ebay.sojourner.ubd.common.model.SessionCore;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
 import com.ebay.sojourner.ubd.common.util.BotRules;
-import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
+import com.ebay.sojourner.ubd.common.util.SessionCoreHelper;
+import com.ebay.sojourner.ubd.common.util.TransformUtil;
 
 public class ScsCountForBot6Indicator<Source, Target> extends AbstractIndicator<Source, Target> {
 
@@ -31,15 +32,15 @@ public class ScsCountForBot6Indicator<Source, Target> extends AbstractIndicator<
   @Override
   public void feed(Source source, Target target, boolean isNeeded) throws Exception {
 
-    if (source instanceof IntermediateSession) {
-      IntermediateSession intermediateSession = (IntermediateSession) source;
+    if (source instanceof SessionCore) {
+      SessionCore intermediateSession = (SessionCore) source;
       AgentIpAttributeAccumulator agentIpAttributeAccumulator =
           (AgentIpAttributeAccumulator) target;
       if (agentIpAttributeAccumulator.getAgentIpAttribute().getScsCountForBot6() < 0) {
 
       } else {
         if (isValid(intermediateSession)) {
-          if (UbiSessionHelper.isSingleClickSession(intermediateSession)) {
+          if (SessionCoreHelper.isSingleClickSession(intermediateSession)) {
             agentIpAttributeAccumulator
                 .getAgentIpAttribute()
                 .feed(intermediateSession, BotRules.SCS_ON_AGENT, isNeeded);
@@ -51,8 +52,8 @@ public class ScsCountForBot6Indicator<Source, Target> extends AbstractIndicator<
         }
       }
 
-      if (UbiSessionHelper.isNonIframRdtCountZero(intermediateSession)
-          && !isIpBlank(intermediateSession.getIp())
+      if (SessionCoreHelper.isNonIframRdtCountZero(intermediateSession)
+          && !isIpBlank(TransformUtil.int2Ip(intermediateSession.getIp()))
           && agentIpAttributeAccumulator.getAgentIpAttribute().getIpCount() <= 0) {
         agentIpAttributeAccumulator.getAgentIpAttribute().setIpCount(1);
       }
@@ -67,8 +68,8 @@ public class ScsCountForBot6Indicator<Source, Target> extends AbstractIndicator<
 
   @Override
   public boolean filter(Source source, Target target) throws Exception {
-    if (source instanceof IntermediateSession) {
-      IntermediateSession intermediateSession = (IntermediateSession) source;
+    if (source instanceof SessionCore) {
+      SessionCore intermediateSession = (SessionCore) source;
       int targetFlag = BotRules.SCS_ON_AGENT;
       if (botFilter.filter(intermediateSession, targetFlag)) {
         return true;
@@ -81,10 +82,10 @@ public class ScsCountForBot6Indicator<Source, Target> extends AbstractIndicator<
     return false;
   }
 
-  private boolean isValid(IntermediateSession intermediateSession) {
-    return !UbiSessionHelper.isNonIframRdtCountZero(intermediateSession)
-        && !isIpBlank(intermediateSession.getIp())
-        && !UbiSessionHelper.isSingleClickNull(intermediateSession);
+  private boolean isValid(SessionCore intermediateSession) {
+    return !SessionCoreHelper.isNonIframRdtCountZero(intermediateSession)
+        && !isIpBlank(TransformUtil.int2Ip(intermediateSession.getIp()))
+        && !SessionCoreHelper.isSingleClickNull(intermediateSession);
   }
 
   protected boolean isIpBlank(String ip) {

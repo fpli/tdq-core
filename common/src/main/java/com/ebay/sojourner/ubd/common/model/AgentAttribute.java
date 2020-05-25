@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable {
 
-  private String agent;
+  private AgentHash agent;
   private int scsCount;
   private int ipCount;
   private int totalSessionCnt = 0;

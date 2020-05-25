@@ -1,11 +1,11 @@
 package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
 import com.ebay.sojourner.ubd.common.model.GuidAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.IntermediateSession;
+import com.ebay.sojourner.ubd.common.model.SessionCore;
 import com.ebay.sojourner.ubd.common.util.BotRules;
 
 public class AbsEventCountIndicator
-    extends AbstractIndicator<IntermediateSession, GuidAttributeAccumulator> {
+    extends AbstractIndicator<SessionCore, GuidAttributeAccumulator> {
 
   @Override
   public void start(GuidAttributeAccumulator guidAttributeAccumulator) throws Exception {
@@ -14,7 +14,7 @@ public class AbsEventCountIndicator
 
   @Override
   public void feed(
-        IntermediateSession intermediateSession, GuidAttributeAccumulator guidAttributeAccumulator,
+      SessionCore intermediateSession, GuidAttributeAccumulator guidAttributeAccumulator,
       boolean isNeeded)
       throws Exception {
     guidAttributeAccumulator
@@ -23,7 +23,7 @@ public class AbsEventCountIndicator
   }
 
   @Override
-  public boolean filter(IntermediateSession intermediateSession,
+  public boolean filter(SessionCore intermediateSession,
       GuidAttributeAccumulator guidAttributeAccumulator)
       throws Exception {
     return false;

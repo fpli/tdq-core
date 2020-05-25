@@ -2,8 +2,8 @@ package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
+import com.ebay.sojourner.ubd.common.model.SessionCore;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
 import com.ebay.sojourner.ubd.common.util.BotRules;
 
@@ -27,8 +27,8 @@ public class SuspectIPIndicator<Source, Target> extends AbstractIndicator<Source
 
   @Override
   public void feed(Source source, Target target, boolean isNeeded) throws Exception {
-    if (source instanceof IntermediateSession) {
-      IntermediateSession intermediateSession = (IntermediateSession) source;
+    if (source instanceof SessionCore) {
+      SessionCore intermediateSession = (SessionCore) source;
       AgentIpAttributeAccumulator agentIpAttributeAccumulator =
           (AgentIpAttributeAccumulator) target;
       agentIpAttributeAccumulator
@@ -45,13 +45,13 @@ public class SuspectIPIndicator<Source, Target> extends AbstractIndicator<Source
 
   @Override
   public boolean filter(Source source, Target target) throws Exception {
-    if (source instanceof IntermediateSession) {
-      IntermediateSession intermediateSession = (IntermediateSession) source;
+    if (source instanceof SessionCore) {
+      SessionCore intermediateSession = (SessionCore) source;
       int targetFlag = BotRules.DECLARED_AGENT;
       if (botFilter.filter(intermediateSession, targetFlag)) {
         return true;
       }
-      return intermediateSession.getClientIp() == null;
+      return intermediateSession.getIp() == null;
     }
     return false;
   }

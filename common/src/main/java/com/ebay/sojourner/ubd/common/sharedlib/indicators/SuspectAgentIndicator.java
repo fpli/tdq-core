@@ -4,6 +4,7 @@ import com.ebay.sojourner.ubd.common.model.AgentAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.IntermediateSession;
+import com.ebay.sojourner.ubd.common.model.SessionCore;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
 import com.ebay.sojourner.ubd.common.util.BotRules;
 
@@ -27,8 +28,8 @@ public class SuspectAgentIndicator<Source, Target> extends AbstractIndicator<Sou
 
   @Override
   public void feed(Source source, Target target, boolean isNeeded) throws Exception {
-    if (source instanceof IntermediateSession) {
-      IntermediateSession intermediateSession = (IntermediateSession) source;
+    if (source instanceof SessionCore) {
+      SessionCore intermediateSession = (SessionCore) source;
       AgentIpAttributeAccumulator agentIpAttributeAccumulator =
           (AgentIpAttributeAccumulator) target;
       agentIpAttributeAccumulator

@@ -1,20 +1,27 @@
 package com.ebay.sojourner.ubd.rt.operators.attribute;
 
-import com.ebay.sojourner.ubd.common.model.IntermediateSession;
+import com.ebay.sojourner.ubd.common.model.AgentHash;
+import com.ebay.sojourner.ubd.common.model.SessionCore;
+import com.ebay.sojourner.ubd.common.util.TransformUtil;
 import org.apache.flink.api.common.functions.RichFilterFunction;
 
-public class AgentIpFilterFunction extends RichFilterFunction<IntermediateSession> {
+public class AgentIpFilterFunction extends RichFilterFunction<SessionCore> {
 
   @Override
-  public boolean filter(IntermediateSession intermediateSession) throws Exception {
+  public boolean filter(SessionCore intermediateSession) throws Exception {
 
-    if (intermediateSession.getClientIp() != null && intermediateSession.getUserAgent() != null) {
-      return intermediateSession.getClientIp().equals("40.77.189.106")
+    if (intermediateSession.getIp() != null && intermediateSession.getUserAgent() != null) {
+      long[] agentHashArr = TransformUtil.md522Long("Mozilla/5.0 (Windows NT 6.1; WOW64) A"
+          + "ppleWebKit/534+ (KHTML, like Gecko) BingPreview/1.0b");
+      AgentHash agentHash = new AgentHash();
+      agentHash.setAgentHash1(agentHashArr[0]);
+      agentHash.setAgentHash2(agentHashArr[1]);
+      return intermediateSession.getIp().equals(TransformUtil.ipToInt("40.77.189.106"))
           && intermediateSession.getUserAgent()
-          .equals("Mozilla/5.0 (Windows NT 6.1; WOW64) A"
-              + "ppleWebKit/534+ (KHTML, like Gecko) BingPreview/1.0b");
+          .equals(agentHash);
     }
 
     return false;
   }
+
 }

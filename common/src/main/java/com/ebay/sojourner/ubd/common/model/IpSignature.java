@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class IpSignature implements Signature, Serializable {
 
-  private Map<String, Set<Integer>> ipBotSignature = new HashMap<>();
+  private Map<Integer, Set<Integer>> ipBotSignature = new HashMap<>();
 
   public IpSignature() {
   }
