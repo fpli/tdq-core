@@ -42,7 +42,7 @@ public class RuleManager {
     // initZkListener();
 
     // 2. init scheduling
-    initScheduling(15L, 15L);
+    // initScheduling(15L, 15L);
 
   }
 
