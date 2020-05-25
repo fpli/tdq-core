@@ -20,7 +20,9 @@ public class GuidAttribute implements Attribute<SessionCore>, Serializable {
 
   public void feed(SessionCore intermediateSession, int botFlag, boolean isNeeded) {
     if (isNeeded) {
-      absEventCount += intermediateSession.getAbsEventCnt();
+      if(intermediateSession.getAbsEventCnt()!=null) {
+        absEventCount += intermediateSession.getAbsEventCnt();
+      }
     }
   }
 

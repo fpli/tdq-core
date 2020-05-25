@@ -3,7 +3,6 @@ package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 import com.ebay.sojourner.ubd.common.model.AgentAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.SessionCore;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
 import com.ebay.sojourner.ubd.common.util.BotRules;
@@ -69,8 +68,8 @@ public class ScsCountForBot6Indicator<Source, Target> extends AbstractIndicator<
 
   @Override
   public boolean filter(Source source, Target target) throws Exception {
-    if (source instanceof IntermediateSession) {
-      IntermediateSession intermediateSession = (IntermediateSession) source;
+    if (source instanceof SessionCore) {
+      SessionCore intermediateSession = (SessionCore) source;
       int targetFlag = BotRules.SCS_ON_AGENT;
       if (botFilter.filter(intermediateSession, targetFlag)) {
         return true;
