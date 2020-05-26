@@ -46,8 +46,8 @@ public class TransformUtil {
     } else {
       secondLen = md.length();
     }
-    Long part1 = getOneLong(md.substring(0, firstLen));
-    Long part2 = null;
+    long part1 = getOneLong(md.substring(0, firstLen));
+    long part2 = 0;
     if (secondLen > 0) {
       part2 = getOneLong(md.substring(LEN, secondLen));
     }

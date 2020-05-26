@@ -66,14 +66,24 @@ public class IntermediateSessionToSessionCoreMapFunction extends
       agentHash.setAgentHash1(long4AgentHash[0]);
       agentHash.setAgentHash2(long4AgentHash[1]);
       core.setUserAgent(agentHash);
+    } else {
+      AgentHash agentHash = new AgentHash();
+      agentHash.setAgentHash1(0L);
+      agentHash.setAgentHash2(0L);
+      core.setUserAgent(agentHash);
     }
-    core.setIp(TransformUtil.ipToInt(session.getIp()));
+    core.setIp(TransformUtil.toIntCheckNull(TransformUtil.ipToInt(session.getIp())));
     core.setBotFlag(session.getBotFlag());
     if (session.getFirstCguid() != null) {
       long[] long4Cguid = TransformUtil.md522Long(session.getFirstCguid());
       Guid cguid = new Guid();
       cguid.setGuid1(long4Cguid[0]);
       cguid.setGuid2(long4Cguid[1]);
+      core.setCguid(cguid);
+    } else {
+      Guid cguid = new Guid();
+      cguid.setGuid1(0L);
+      cguid.setGuid2(0L);
       core.setCguid(cguid);
     }
 
@@ -83,6 +93,11 @@ public class IntermediateSessionToSessionCoreMapFunction extends
       guid.setGuid1(long4Cguid[0]);
       guid.setGuid2(long4Cguid[1]);
       core.setGuid(guid);
+    } else {
+      Guid cguid = new Guid();
+      cguid.setGuid1(0L);
+      cguid.setGuid2(0L);
+      core.setGuid(cguid);
     }
 
     core.setAppId(session.getFirstAppId());
@@ -113,6 +128,11 @@ public class IntermediateSessionToSessionCoreMapFunction extends
       agentHash.setAgentHash2(long4AgentHash[1]);
       core.setAgentString(agentHash);
 
+    } else if (StringUtils.isBlank(session.getAgentString())) {
+      AgentHash agentHash = new AgentHash();
+      agentHash.setAgentHash1(0L);
+      agentHash.setAgentHash2(0L);
+      core.setAgentString(agentHash);
     }
 
     if (!MiscUtil.objEquals(session.getIp(), session.getExInternalIp())) {
@@ -126,12 +146,12 @@ public class IntermediateSessionToSessionCoreMapFunction extends
     }
     if (!MiscUtil.objEquals(session.getIp(), eiipTrimed)) {
       core.setFlags(BitUtils.setBit(core.getFlags(), SessionFlags.EXINTERNALIP_DIFF));
-      core.setExInternalIp(TransformUtil.ipToInt(eiipTrimed));
+      core.setExInternalIp(TransformUtil.toIntCheckNull(TransformUtil.ipToInt(eiipTrimed)));
     }
 
     // TODO to match the incorrect old logic , just for 'data quality'
     AgentHash agentString = SessionCoreHelper.getAgentString(core);
-    if (agentString != null) {
+    if (agentString.getAgentHash1()!=0L&&agentString.getAgentHash2()!=0L) {
       //      Boolean equal = base64Cache.get(agentString);
       //      String agentStrAfterBase64 = null;
       //      if (equal == null) {
