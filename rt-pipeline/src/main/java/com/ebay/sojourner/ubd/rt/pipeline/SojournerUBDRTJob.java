@@ -3,6 +3,8 @@ package com.ebay.sojourner.ubd.rt.pipeline;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.SessionCore;
+import com.ebay.sojourner.ubd.common.model.SojEvent;
+import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
@@ -10,6 +12,7 @@ import com.ebay.sojourner.ubd.rt.common.metrics.EventMetricsCollectorProcessFunc
 import com.ebay.sojourner.ubd.rt.common.metrics.PipelineMetricsCollectorProcessFunction;
 import com.ebay.sojourner.ubd.rt.common.state.MapStateDesc;
 import com.ebay.sojourner.ubd.rt.common.windows.OnElementEarlyFiringTrigger;
+import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.ubd.rt.operators.attribute.AgentIpAttributeAgg;
@@ -23,9 +26,11 @@ import com.ebay.sojourner.ubd.rt.operators.attribute.SplitFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.DetectableEventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
+import com.ebay.sojourner.ubd.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.DetectableSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSessionCoreMapFunction;
+import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.ubd.rt.util.AppEnv;
 import com.ebay.sojourner.ubd.rt.util.Constants;
@@ -328,27 +333,32 @@ public class SojournerUBDRTJob {
         attributeSignatureDataStream.broadcast(MapStateDesc.attributeSignatureDesc);
 
     // transform ubiEvent,ubiSession to same type and union
-    DataStream<Either<UbiEvent, UbiSession>> detectableDataStream =
-        ubiSessionDataStream
-            .map(new DetectableSessionMapFunction())
-            .slotSharingGroup("SESSION")
-            .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
-            .union(ubiEventWithSessionId
-                .map(new DetectableEventMapFunction())
-                .slotSharingGroup("SESSION")
-                .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism()));
+    DataStream<Either<UbiEvent, UbiSession>> ubiSessionTransDataStream = ubiSessionDataStream
+        .map(new DetectableSessionMapFunction())
+        .slotSharingGroup("SESSION")
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .name("UbiSessionTransForBroadcast")
+        .uid("ubiSessionTrans");
+
+    DataStream<Either<UbiEvent, UbiSession>> ubiEventTransDataStream = ubiEventWithSessionId
+        .map(new DetectableEventMapFunction())
+        .slotSharingGroup("SESSION")
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .name("UbiEventTransForBroadcast")
+        .uid("ubiEventTrans");
+
+    DataStream<Either<UbiEvent, UbiSession>> detectableDataStream = ubiSessionTransDataStream
+        .union(ubiEventTransDataStream);
 
     // connect ubiEvent,ubiSession DataStream and broadcast Stream
-    SingleOutputStreamOperator<UbiEvent> signatureBotDetectionForEvent =
-        detectableDataStream
-            .connect(attributeSignatureBroadcastStream)
-            .process(new AttributeBroadcastProcessFunctionForDetectable(sessionOutputTag))
-            .setParallelism(AppEnv.config().getFlink().app.getBroadcastParallelism())
-            .slotSharingGroup("AgentIp")
-            .name("Signature Bot Detector")
-            .uid("connectLevel");
+    SingleOutputStreamOperator<UbiEvent> signatureBotDetectionForEvent = detectableDataStream
+        .connect(attributeSignatureBroadcastStream)
+        .process(new AttributeBroadcastProcessFunctionForDetectable(sessionOutputTag))
+        .setParallelism(AppEnv.config().getFlink().app.getBroadcastParallelism())
+        .slotSharingGroup("Broadcast")
+        .name("Signature Bot Detector")
+        .uid("connectLevel");
 
-    /*
     DataStream<UbiSession> signatureBotDetectionForSession = signatureBotDetectionForEvent
         .getSideOutput(sessionOutputTag);
 
@@ -357,6 +367,7 @@ public class SojournerUBDRTJob {
         signatureBotDetectionForEvent
             .map(new UbiEventToSojEventMapFunction())
             .setParallelism(AppEnv.config().getFlink().app.getBroadcastParallelism())
+            .slotSharingGroup("Broadcast")
             .name("UbiEvent to SojEvent")
             .uid("ubiEventToSojEvent");
 
@@ -365,6 +376,7 @@ public class SojournerUBDRTJob {
         signatureBotDetectionForSession
             .map(new UbiSessionToSojSessionMapFunction())
             .setParallelism(AppEnv.config().getFlink().app.getBroadcastParallelism())
+            .slotSharingGroup("Broadcast")
             .name("UbiSession to SojSession")
             .uid("ubiSessionToSojSession");
 
@@ -380,6 +392,7 @@ public class SojournerUBDRTJob {
         .createKafkaProducer(Constants.TOPIC_PRODUCER_SESSION, Constants.BOOTSTRAP_SERVERS_SESSION,
             SojSession.class, Constants.MESSAGE_KEY))
         .setParallelism(AppEnv.config().getFlink().app.getSessionKafkaParallelism())
+        .slotSharingGroup("Broadcast")
         .name("SojSession Kafka")
         .uid("kafkaSinkaForSession");
 
@@ -388,22 +401,23 @@ public class SojournerUBDRTJob {
         .createKafkaProducer(Constants.TOPIC_PRODUCER_EVENT, Constants.BOOTSTRAP_SERVERS_EVENT,
             SojEvent.class, Constants.MESSAGE_KEY))
         .setParallelism(AppEnv.config().getFlink().app.getEventKafkaParallelism())
+        .slotSharingGroup("Broadcast")
         .name("SojEvent Kafka")
         .uid("kafkaSinkForEvent");
-*/
+
     // metrics collector for end to end
-    ubiEventWithSessionId
+    signatureBotDetectionForEvent
         .process(new PipelineMetricsCollectorProcessFunction())
         .setParallelism(AppEnv.config().getFlink().app.getMetricsParallelism())
-        .slotSharingGroup("SESSION")
+        .slotSharingGroup("Broadcast")
         .name("Pipeline End to End Duration")
         .uid("endToEndMetricsCollector");
 
     // metrics collector for event rules hit
-    ubiEventWithSessionId
+    signatureBotDetectionForEvent
         .process(new EventMetricsCollectorProcessFunction())
         .setParallelism(AppEnv.config().getFlink().app.getMetricsParallelism())
-        .slotSharingGroup("SESSION")
+        .slotSharingGroup("Broadcast")
         .name("Event Metrics Collector")
         .uid("eventLevelMetricsCollector");
 
