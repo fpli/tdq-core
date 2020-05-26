@@ -12,4 +12,9 @@ public class EnvSource extends AbstractEnvironment {
       props.put(newKey, value);
     });
   }
+
+  @Override
+  public Integer order() {
+    return 2;
+  }
 }

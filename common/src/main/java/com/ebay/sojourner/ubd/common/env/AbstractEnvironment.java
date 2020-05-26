@@ -25,4 +25,6 @@ public abstract class AbstractEnvironment implements Environment {
     return (T) props.get(key);
   }
 
+  public abstract Integer order();
+
 }

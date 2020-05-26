@@ -20,4 +20,9 @@ public class ArgsSource extends AbstractEnvironment {
       props.put(kv[0], kv[1]);
     });
   }
+
+  @Override
+  public Integer order() {
+    return 1;
+  }
 }
