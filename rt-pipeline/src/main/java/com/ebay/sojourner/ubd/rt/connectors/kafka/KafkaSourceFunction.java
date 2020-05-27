@@ -27,7 +27,9 @@ public class KafkaSourceFunction {
 
     FlinkKafkaConsumer kafkaConsumer = KafkaConnectorFactory
         .createKafkaConsumer(topic, brokers, groupId, tClass);
-    if (groupId.contains("copy") || groupId.contains("cross")) {
+    if (groupId.contains("copy")
+        || groupId.contains("cross")
+        || groupId.contains("dump")) {
       return kafkaConsumer.setStartFromEarliest();
     } else {
       return kafkaConsumer.setStartFromLatest();
