@@ -27,6 +27,7 @@ public class SojournerKafkaToHdfsJob {
     AppEnv.config(parameterTool);
 
     String sourceTopic = parameterTool.get("dump.source.topic");
+    String jobName = parameterTool.get("dump.job.name");
     Class<?> deserializeClass = Class.forName(parameterTool.get("dump.source.class"));
     String hdfsPath = parameterTool.get("dump.hdfs.path");
     String groupId = parameterTool.get("dump.group.id");
@@ -46,6 +47,6 @@ public class SojournerKafkaToHdfsJob {
         .name(String.format("Hdfs sink to location: %s", hdfsPath))
         .uid("HdfsSink")
         .disableChaining();
-    exeEnv.execute();
+    exeEnv.execute(jobName);
   }
 }
