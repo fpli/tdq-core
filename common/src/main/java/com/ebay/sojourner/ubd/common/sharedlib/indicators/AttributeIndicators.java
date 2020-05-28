@@ -27,8 +27,8 @@ public abstract class AttributeIndicators<Source, Target> implements Aggregator<
   }
 
   @Override
-  public void feed(Source intermediateSession, Target agentIpAttributeAccumulator) throws Exception
-  {
+  public void feed(Source intermediateSession, Target agentIpAttributeAccumulator)
+      throws Exception {
   }
 
   public void feed(Source source, Target target, boolean isNeeded) throws Exception {

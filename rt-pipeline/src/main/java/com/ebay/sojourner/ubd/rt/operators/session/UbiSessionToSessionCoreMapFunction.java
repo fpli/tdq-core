@@ -64,7 +64,12 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
       agentHash.setAgentHash1(long4AgentHash[0]);
       agentHash.setAgentHash2(long4AgentHash[1]);
       core.setUserAgent(agentHash);
-    }
+    } else {
+    AgentHash agentHash = new AgentHash();
+    agentHash.setAgentHash1(0L);
+    agentHash.setAgentHash2(0L);
+    core.setUserAgent(agentHash);
+  }
     core.setIp(TransformUtil.ipToInt(session.getIp()));
     core.setBotFlag(session.getBotFlag());
     if (session.getFirstCguid() != null) {
@@ -72,6 +77,11 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
       Guid cguid = new Guid();
       cguid.setGuid1(long4Cguid[0]);
       cguid.setGuid2(long4Cguid[1]);
+      core.setCguid(cguid);
+    }else {
+      Guid cguid = new Guid();
+      cguid.setGuid1(0L);
+      cguid.setGuid2(0L);
       core.setCguid(cguid);
     }
 
@@ -81,6 +91,11 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
       guid.setGuid1(long4Cguid[0]);
       guid.setGuid2(long4Cguid[1]);
       core.setGuid(guid);
+    }else {
+      Guid cguid = new Guid();
+      cguid.setGuid1(0L);
+      cguid.setGuid2(0L);
+      core.setGuid(cguid);
     }
 
     core.setAppId(session.getFirstAppId());
@@ -111,6 +126,11 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
       agentHash.setAgentHash2(long4AgentHash[1]);
       core.setAgentString(agentHash);
 
+    } else if (StringUtils.isBlank(session.getAgentString())) {
+      AgentHash agentHash = new AgentHash();
+      agentHash.setAgentHash1(0L);
+      agentHash.setAgentHash2(0L);
+      core.setAgentString(agentHash);
     }
 
     if (!MiscUtil.objEquals(session.getIp(), session.getExInternalIp())) {

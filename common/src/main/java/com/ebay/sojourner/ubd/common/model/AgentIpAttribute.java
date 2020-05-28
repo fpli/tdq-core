@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.Data;
+import org.apache.datasketches.hll.HllSketch;
+import org.apache.datasketches.hll.TgtHllType;
 
 @Data
 public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
@@ -45,7 +47,7 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
   //    private int guidCnt = 0;
   private Set<Guid> cguidSet = new HashSet<>();
   //  private Set<Guid> guidSet = new HashSet<Guid>();
-  //  private HllSketch guidSet = new HllSketch(20, TgtHllType.HLL_8);
+  private HllSketch guidSet = new HllSketch(20, TgtHllType.HLL_8);
   private byte[] hllSketch;
   private Boolean isAllAgentHoper = true;
   private int totalCntForSec1 = 0;
@@ -119,16 +121,18 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
       if (SessionCoreHelper.isNewGuid(intermediateSession)) {
         newGuidCnt += 1;
       }
-      //      if (intermediateSession.get() != null) {
-      //        HllSketch guidSet;
-      //        if (hllSketch == null) {
-      //          guidSet = new HllSketch(12, TgtHllType.HLL_4);
-      //        } else {
-      //          guidSet = HllSketch.heapify(hllSketch);
-      //        }
-      //        guidSet.update(intermediateSession.getGuid());
-      //        hllSketch = guidSet.toCompactByteArray();
-      //      }
+      if (intermediateSession.getGuid() != null) {
+        HllSketch guidSet;
+        if (hllSketch == null) {
+          guidSet = new HllSketch(12, TgtHllType.HLL_4);
+        } else {
+          guidSet = HllSketch.heapify(hllSketch);
+        }
+        long[] guidList = {intermediateSession.getGuid().getGuid1(),
+            intermediateSession.getGuid().getGuid2()};
+        guidSet.update(guidList);
+        hllSketch = guidSet.toCompactByteArray();
+      }
 
       if (intermediateSession.getCguid() != null) {
         if (cguidSet.size() <= 5) {
