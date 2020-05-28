@@ -149,7 +149,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
 
     // TODO to match the incorrect old logic , just for 'data quality'
     AgentHash agentString = SessionCoreHelper.getAgentString(core);
-    if (agentString != null) {
+    if (agentString.getAgentHash1()==0L&&agentString.getAgentHash2()==0L) {
       //      Boolean equal = base64Cache.get(agentString);
       //      String agentStrAfterBase64 = null;
       //      if (equal == null) {
@@ -163,7 +163,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
       Boolean equal = MiscUtil.objEquals(agentString, agentStrAfterBase64);
       AgentHash agentAfterBase64 = agentString;
       if (!equal) {
-        if (agentStrAfterBase64 == null) {
+        if (agentAfterBase64.getAgentHash1()==0L&&agentAfterBase64.getAgentHash2()==0L) {
           agentBase64 = Base64Ebay.encode(session.getAgentString().getBytes());
           agentStrAfterBase64 = Base64Ebay.decodeUTF8(agentBase64);
         }
