@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.Properties;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer.Semantic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.RoundRobinAssignor;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -49,6 +50,7 @@ public class KafkaConnectorFactory {
     consumerConfig.put(
         ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, RoundRobinAssignor.class.getName());
     consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+    consumerConfig.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
 
     if (tClass.isAssignableFrom(RawEvent.class)) {
       return new FlinkKafkaConsumer<>(
@@ -76,7 +78,7 @@ public class KafkaConnectorFactory {
 
     return new FlinkKafkaProducer<>(topic,
         new AvroKeyedSerializationSchema<>(sinkClass, messageKey), producerConfig,
-        Optional.of(new SojKafkaPartitioner<>()));
+        Optional.of(new SojKafkaPartitioner<>()), Semantic.EXACTLY_ONCE, 5);
   }
 
   public static FlinkKafkaProducer createKafkaProducerForCopy(String topic, String brokers) {
@@ -87,6 +89,6 @@ public class KafkaConnectorFactory {
 
     return new FlinkKafkaProducer<>(topic,
         new SojBytesEventSerializationSchema<>(), producerConfig,
-        Optional.of(new SojKafkaPartitioner<>()));
+        Optional.of(new SojKafkaPartitioner<>()), Semantic.EXACTLY_ONCE, 5);
   }
 }
