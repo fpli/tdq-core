@@ -65,12 +65,13 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
       agentHash.setAgentHash2(long4AgentHash[1]);
       core.setUserAgent(agentHash);
     } else {
-    AgentHash agentHash = new AgentHash();
-    agentHash.setAgentHash1(0L);
-    agentHash.setAgentHash2(0L);
-    core.setUserAgent(agentHash);
-  }
-    core.setIp(TransformUtil.ipToInt(session.getIp()));
+      AgentHash agentHash = new AgentHash();
+      agentHash.setAgentHash1(0L);
+      agentHash.setAgentHash2(0L);
+      core.setUserAgent(agentHash);
+    }
+    core.setIp(TransformUtil.ipToInt(session.getIp()) == null ? 0
+        : TransformUtil.ipToInt(session.getIp()));
     core.setBotFlag(session.getBotFlag());
     if (session.getFirstCguid() != null) {
       long[] long4Cguid = TransformUtil.md522Long(session.getFirstCguid());
@@ -78,7 +79,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
       cguid.setGuid1(long4Cguid[0]);
       cguid.setGuid2(long4Cguid[1]);
       core.setCguid(cguid);
-    }else {
+    } else {
       Guid cguid = new Guid();
       cguid.setGuid1(0L);
       cguid.setGuid2(0L);
@@ -91,7 +92,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
       guid.setGuid1(long4Cguid[0]);
       guid.setGuid2(long4Cguid[1]);
       core.setGuid(guid);
-    }else {
+    } else {
       Guid cguid = new Guid();
       cguid.setGuid1(0L);
       cguid.setGuid2(0L);
@@ -149,7 +150,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
 
     // TODO to match the incorrect old logic , just for 'data quality'
     AgentHash agentString = SessionCoreHelper.getAgentString(core);
-    if (agentString.getAgentHash1()==0L&&agentString.getAgentHash2()==0L) {
+    if (agentString.getAgentHash1() != 0L && agentString.getAgentHash2() != 0L) {
       //      Boolean equal = base64Cache.get(agentString);
       //      String agentStrAfterBase64 = null;
       //      if (equal == null) {
@@ -163,7 +164,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
       Boolean equal = MiscUtil.objEquals(agentString, agentStrAfterBase64);
       AgentHash agentAfterBase64 = agentString;
       if (!equal) {
-        if (agentAfterBase64.getAgentHash1()==0L&&agentAfterBase64.getAgentHash2()==0L) {
+        if (agentAfterBase64.getAgentHash1() == 0L && agentAfterBase64.getAgentHash2() == 0L) {
           agentBase64 = Base64Ebay.encode(session.getAgentString().getBytes());
           agentStrAfterBase64 = Base64Ebay.decodeUTF8(agentBase64);
         }
