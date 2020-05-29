@@ -78,7 +78,7 @@ public class KafkaConnectorFactory {
 
     return new FlinkKafkaProducer<>(topic,
         new AvroKeyedSerializationSchema<>(sinkClass, messageKey), producerConfig,
-        Optional.of(new SojKafkaPartitioner<>()), Semantic.EXACTLY_ONCE, 5);
+        Optional.of(new SojKafkaPartitioner<>()));
   }
 
   public static FlinkKafkaProducer createKafkaProducerForCopy(String topic, String brokers) {
@@ -89,6 +89,6 @@ public class KafkaConnectorFactory {
 
     return new FlinkKafkaProducer<>(topic,
         new SojBytesEventSerializationSchema<>(), producerConfig,
-        Optional.of(new SojKafkaPartitioner<>()), Semantic.EXACTLY_ONCE, 5);
+        Optional.of(new SojKafkaPartitioner<>()));
   }
 }
