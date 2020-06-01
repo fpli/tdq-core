@@ -1,39 +1,37 @@
 package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.sql.RuleChangeEvent;
+import com.ebay.sojourner.ubd.common.sql.RuleChangeEventListener;
+import com.ebay.sojourner.ubd.common.sql.RuleDefinition;
 import com.ebay.sojourner.ubd.common.sql.RuleManager;
 import com.ebay.sojourner.ubd.common.sql.SqlEventRule;
-import java.util.LinkedHashSet;
+import com.google.common.collect.Sets;
 import java.util.Set;
-import lombok.extern.slf4j.Slf4j;
+import java.util.stream.Collectors;
 import org.apache.commons.collections.CollectionUtils;
 
-@Slf4j
-public abstract class AbstractBotDetector<T> implements BotDetector<T> {
+public abstract class AbstractBotDetector<T>
+    implements BotDetector<T>, RuleChangeEventListener<RuleChangeEvent> {
 
-  protected RuleManager ruleManager = RuleManager.getInstance();
+  private final RuleManager ruleManager = RuleManager.getInstance();
 
-  public void init() {
-    ruleManager.initRules();
+  protected Set<SqlEventRule> sqlRules = Sets.newCopyOnWriteArraySet();
+
+  public AbstractBotDetector() {
+    this.initBotRules();
   }
 
+  //FIXME(Jason): this init method should be removed
   @Override
-  public Set<Integer> getBotFlagList(T t) {
-    Set<Integer> botRuleList = new LinkedHashSet<>();
-    Set<SqlEventRule> botRules = ruleManager.getSqlEventRuleSet();
-    if (CollectionUtils.isNotEmpty(botRules)) {
-      for (SqlEventRule rule : botRules) {
-        rule.init();
-        if (t instanceof UbiEvent) {
-          UbiEvent ubiEvent = (UbiEvent) t;
-          int botRule = rule.getBotFlag(ubiEvent);
-          if (botRule != 0) {
-            botRuleList.add(botRule);
-          }
-        }
-      }
+  public void initBotRules() {
+    Set<RuleDefinition> ruleDefinitions = ruleManager.getRuleDefinitions();
+    if (CollectionUtils.isNotEmpty(ruleDefinitions)) {
+      this.sqlRules = ruleDefinitions
+          .stream()
+          .map(rule -> SqlEventRule
+              .of(rule.getContent(), rule.getBizId(), rule.getVersion(), rule.getCategory()))
+          .collect(Collectors.toSet());
     }
-    return botRuleList;
   }
 
   public void close() {

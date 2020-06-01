@@ -1,29 +1,43 @@
 package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.ubd.common.sql.RuleChangeEvent;
+import com.ebay.sojourner.ubd.common.sql.RuleDefinition;
+import com.ebay.sojourner.ubd.common.sql.SqlEventRule;
+import com.google.common.collect.Sets;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 
 @Slf4j
 public class EventBotDetector extends AbstractBotDetector<UbiEvent> {
 
-  private static volatile EventBotDetector eventBotDetector;
-
-  private EventBotDetector() {
-  }
-
-  public static EventBotDetector getInstance() {
-    if (eventBotDetector == null) {
-      synchronized (EventBotDetector.class) {
-        if (eventBotDetector == null) {
-          eventBotDetector = new EventBotDetector();
+  @Override
+  public Set<Integer> getBotFlagList(UbiEvent ubiEvent) {
+    Set<Integer> botRuleList = Sets.newHashSet();
+    if (CollectionUtils.isNotEmpty(sqlRules)) {
+      for (SqlEventRule rule : sqlRules) {
+        rule.init();
+        int botRule = rule.getBotFlag(ubiEvent);
+        if (botRule != 0) {
+          botRuleList.add(botRule);
         }
       }
     }
-    return eventBotDetector;
+    return botRuleList;
   }
 
   @Override
-  public void initBotRules() {
-    super.init();
+  public void onChange(RuleChangeEvent ruleChangeEvent) {
+    Set<RuleDefinition> ruleDefinitions = ruleChangeEvent.getRules();
+    if (CollectionUtils.isNotEmpty(ruleDefinitions)) {
+      this.sqlRules = ruleDefinitions
+          .stream()
+          .map(rule -> SqlEventRule
+              .of(rule.getContent(), rule.getBizId(), rule.getVersion(), rule.getCategory()))
+          .collect(Collectors.toSet());
+    }
+    log.info("Deployed rules count: {}", this.sqlRules.size());
   }
 }

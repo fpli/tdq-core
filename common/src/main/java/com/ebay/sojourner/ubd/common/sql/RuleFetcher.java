@@ -48,20 +48,4 @@ public class RuleFetcher {
     return ruleDefinitionList;
   }
 
-  public RuleDefinition fetchRuleById(String id) {
-    RuleDefinition ruleDefinition = null;
-    try {
-      Request request = RestClientUtils
-          .buildRequest(FETCH_RULE_PREFIX + id);
-      log.info("Fetching rule {}, and url is {}", id, FETCH_ALL_RULES);
-      Response response = client.newCall(request).execute();
-      String responseBody = response.body().string();
-      ruleDefinition = objectMapper.readValue(responseBody, RuleDefinition.class);
-      log.info("Rule = " + ruleDefinition);
-    } catch (IOException e) {
-      log.error("fetch specified rule failed", e);
-    }
-
-    return ruleDefinition;
-  }
 }
