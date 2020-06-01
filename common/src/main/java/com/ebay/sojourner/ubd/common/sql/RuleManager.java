@@ -24,7 +24,8 @@ public class RuleManager {
   private final RuleFetcher ruleFetcher = new RuleFetcher();
   // private final ZkClient zkClient;
   // private final ExecutorService zkExecutor;
-  private final ScheduledExecutorService schedulingExecutor = Executors.newSingleThreadScheduledExecutor();
+  private final ScheduledExecutorService schedulingExecutor =
+      Executors.newSingleThreadScheduledExecutor();
   private final List<RuleChangeEventListener<RuleChangeEvent>> listeners = Lists.newLinkedList();
 
   @Getter
