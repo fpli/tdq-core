@@ -1,38 +1,54 @@
 package com.ebay.sojourner.ubd.common.env;
 
-import com.google.common.collect.Lists;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
 import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class EnvironmentUtils {
 
-  private static final List<AbstractEnvironment> PROP_SOURCES = Lists.newArrayList();
+  private static final Set<AbstractEnvironment> PROP_SOURCES =
+      Sets.newTreeSet(Comparator.comparing(AbstractEnvironment::order));
+
 
   static {
     log.info("Load environment properties file");
 
-    PROP_SOURCES.add(new ArgsSource());
     PROP_SOURCES.add(new EnvSource());
     PROP_SOURCES.add(new PropertySource());
+    PROP_SOURCES.add(new ArgsSource());
 
-    String cmd = System.getProperty("sun.java.command");
-    Optional<String> profile = Lists.newArrayList(cmd.split(" ")).stream()
-        .filter(s -> s != null && s.startsWith("--profile="))
-        .findFirst();
-    if (profile.isPresent()) {
-      // NOT support multiple profiles for now
-      String profileName = profile.get().split("=")[1];
-      String configFileName = "application-" + profileName;
-      PROP_SOURCES.add(new PropertySource(configFileName, 3));
-    }
-
-    PROP_SOURCES.sort(Comparator.comparing(AbstractEnvironment::order));
+    // source props
     for (AbstractEnvironment propSource : PROP_SOURCES) {
       propSource.sourceProps();
     }
+
+  }
+
+  public static void activateProfile(String profile) {
+    Preconditions.checkNotNull(profile);
+
+    String configFileName = "application-" + profile;
+    PROP_SOURCES.add(new PropertySource(configFileName, 3));
+  }
+
+  public static void fromMap(Map<String, Object> map) {
+    Preconditions.checkNotNull(map);
+    PROP_SOURCES.add(new AbstractEnvironment() {
+      @Override
+      public Integer order() {
+        return 0;
+      }
+
+      @Override
+      public void sourceProps() {
+        this.props = map;
+      }
+    });
+
   }
 
   public static String get(String key) {
