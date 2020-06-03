@@ -105,7 +105,7 @@ public class UbiEvent implements Serializable {
   public void updateSessionId() {
     int charPos = Constants.HEX_DIGITS.length;
     int mask = (1 << 4) - 1;
-    long decimal = eventTimestamp;
+    long decimal = eventTimestamp == null ? 0L : eventTimestamp;
     char[] out = new char[Constants.HEX_DIGITS.length];
 
     Arrays.fill(out, '0');
