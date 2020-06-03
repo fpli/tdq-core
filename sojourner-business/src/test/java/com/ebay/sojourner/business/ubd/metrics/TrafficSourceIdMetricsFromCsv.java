@@ -2,9 +2,9 @@ package com.ebay.sojourner.business.ubd.metrics;
 
 import com.ebay.sojourner.business.ubd.util.CsvUtils;
 import com.ebay.sojourner.business.ubd.util.GenerateClientData;
-import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.util.SojTimestamp;
+import com.ebay.sojourner.common.model.SessionAccumulator;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.SojTimestamp;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.csv.CSVRecord;

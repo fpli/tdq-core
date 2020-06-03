@@ -1,9 +1,9 @@
 package com.ebay.sojourner.business.ubd.parser;
 
-import com.ebay.sojourner.ubd.common.util.SOJNVL;
-import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.util.NumberUtils;
+import com.ebay.sojourner.common.util.SOJNVL;
+import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public class IcfParser implements FieldParser<RawEvent, UbiEvent> {

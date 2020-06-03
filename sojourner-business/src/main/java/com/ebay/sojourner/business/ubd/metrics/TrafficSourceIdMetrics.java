@@ -1,12 +1,12 @@
 package com.ebay.sojourner.business.ubd.metrics;
 
-import com.ebay.sojourner.ubd.common.util.IntermediateMetrics;
-import com.ebay.sojourner.ubd.common.util.SOJGetUrlPath;
-import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.util.Property;
-import com.ebay.sojourner.ubd.common.util.PropertyUtils;
-import com.ebay.sojourner.ubd.common.util.UBIConfig;
+import com.ebay.sojourner.common.util.IntermediateMetrics;
+import com.ebay.sojourner.common.util.SOJGetUrlPath;
+import com.ebay.sojourner.common.model.SessionAccumulator;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.Property;
+import com.ebay.sojourner.common.util.PropertyUtils;
+import com.ebay.sojourner.common.util.UBIConfig;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;

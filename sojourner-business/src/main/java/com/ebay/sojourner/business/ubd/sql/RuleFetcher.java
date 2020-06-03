@@ -1,7 +1,7 @@
 package com.ebay.sojourner.business.ubd.sql;
 
-import com.ebay.sojourner.ubd.common.util.Constants;
-import com.ebay.sojourner.ubd.common.util.RestClientUtils;
+import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.common.util.RestClientUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;

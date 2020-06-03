@@ -1,6 +1,6 @@
 package com.ebay.sojourner.business.ubd.detectors;
 
-import com.ebay.sojourner.ubd.common.model.IpAttribute;
+import com.ebay.sojourner.common.model.IpAttribute;
 import com.ebay.sojourner.business.ubd.rule.BotRule7;
 import com.ebay.sojourner.business.ubd.rule.BotRuleForDeclarativeHost;
 import com.ebay.sojourner.business.ubd.rule.BotRuleForSuspectIP;

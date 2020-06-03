@@ -1,7 +1,7 @@
 package com.ebay.sojourner.business.ubd.parser;
 
-import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.business.ubd.util.LoadRawEventAndExpect;
 import com.ebay.sojourner.business.ubd.util.ParserConstants;
 import com.ebay.sojourner.business.ubd.util.TypeTransUtil;

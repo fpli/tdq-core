@@ -1,9 +1,9 @@
 package com.ebay.sojourner.business.ubd.parser;
 
-import com.ebay.sojourner.ubd.common.util.RegexReplace;
-import com.ebay.sojourner.ubd.common.util.SOJURLDecodeEscape;
-import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.RegexReplace;
+import com.ebay.sojourner.common.util.SOJURLDecodeEscape;
+import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.sojourner.common.model.UbiEvent;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;

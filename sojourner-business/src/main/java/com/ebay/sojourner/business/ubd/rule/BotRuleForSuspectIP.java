@@ -1,6 +1,6 @@
 package com.ebay.sojourner.business.ubd.rule;
 
-import com.ebay.sojourner.ubd.common.model.IpAttribute;
+import com.ebay.sojourner.common.model.IpAttribute;
 
 public class BotRuleForSuspectIP extends AbstractBotRule<IpAttribute> {
 

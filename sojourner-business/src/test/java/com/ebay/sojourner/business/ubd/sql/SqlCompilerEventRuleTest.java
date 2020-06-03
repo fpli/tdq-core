@@ -16,7 +16,7 @@ import static com.ebay.sojourner.business.ubd.sql.Rules.RULE_1_COMPILER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.common.model.UbiEvent;
 import org.junit.Test;
 
 public class SqlCompilerEventRuleTest {

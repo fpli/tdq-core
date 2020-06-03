@@ -1,6 +1,6 @@
 package com.ebay.sojourner.business.ubd.sql;
 
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.common.model.UbiEvent;
 import org.apache.calcite.interpreter.Interpreter;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.sql.SqlNode;

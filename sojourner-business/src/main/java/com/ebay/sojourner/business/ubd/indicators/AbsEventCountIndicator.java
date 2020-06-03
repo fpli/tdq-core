@@ -1,8 +1,8 @@
 package com.ebay.sojourner.business.ubd.indicators;
 
-import com.ebay.sojourner.ubd.common.model.GuidAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.SessionCore;
-import com.ebay.sojourner.ubd.common.util.BotRules;
+import com.ebay.sojourner.common.model.GuidAttributeAccumulator;
+import com.ebay.sojourner.common.model.SessionCore;
+import com.ebay.sojourner.common.util.BotRules;
 
 public class AbsEventCountIndicator
     extends AbstractIndicator<SessionCore, GuidAttributeAccumulator> {

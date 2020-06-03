@@ -1,12 +1,12 @@
 package com.ebay.sojourner.business.ubd.parser;
 
-import com.ebay.sojourner.ubd.common.util.IsValidIPv4;
-import com.ebay.sojourner.ubd.common.util.IsValidPrivateIPv4;
-import com.ebay.sojourner.ubd.common.util.SOJListGetValueByIndex;
-import com.ebay.sojourner.ubd.common.util.SOJListLastElement;
-import com.ebay.sojourner.ubd.common.model.ClientData;
-import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.IsValidIPv4;
+import com.ebay.sojourner.common.util.IsValidPrivateIPv4;
+import com.ebay.sojourner.common.util.SOJListGetValueByIndex;
+import com.ebay.sojourner.common.util.SOJListLastElement;
+import com.ebay.sojourner.common.model.ClientData;
+import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.sojourner.common.model.UbiEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 

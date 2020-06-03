@@ -1,6 +1,6 @@
 package com.ebay.sojourner.business.ubd.util;
 
-import com.ebay.sojourner.ubd.common.model.RawEvent;
+import com.ebay.sojourner.common.model.RawEvent;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;

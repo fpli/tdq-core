@@ -2,9 +2,9 @@ package com.ebay.sojourner.business.ubd.metrics;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.common.model.SessionAccumulator;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.model.UbiSession;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;

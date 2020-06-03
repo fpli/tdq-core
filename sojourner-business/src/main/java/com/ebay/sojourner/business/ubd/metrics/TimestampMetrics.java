@@ -1,15 +1,15 @@
 package com.ebay.sojourner.business.ubd.metrics;
 
 import com.ebay.sojourner.business.ubd.parser.PageIndicator;
-import com.ebay.sojourner.ubd.common.util.IsValidIPv4;
-import com.ebay.sojourner.ubd.common.util.SOJTS2Date;
-import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.util.IntermediateLkp;
-import com.ebay.sojourner.ubd.common.util.Property;
-import com.ebay.sojourner.ubd.common.util.PropertyUtils;
-import com.ebay.sojourner.ubd.common.util.SojUtils;
-import com.ebay.sojourner.ubd.common.util.UBIConfig;
+import com.ebay.sojourner.common.util.IsValidIPv4;
+import com.ebay.sojourner.common.util.SOJTS2Date;
+import com.ebay.sojourner.common.model.SessionAccumulator;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.IntermediateLkp;
+import com.ebay.sojourner.common.util.Property;
+import com.ebay.sojourner.common.util.PropertyUtils;
+import com.ebay.sojourner.common.util.SojUtils;
+import com.ebay.sojourner.common.util.UBIConfig;
 import java.util.Set;
 
 public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {

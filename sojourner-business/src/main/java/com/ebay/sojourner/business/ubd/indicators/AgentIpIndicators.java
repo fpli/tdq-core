@@ -1,9 +1,9 @@
 package com.ebay.sojourner.business.ubd.indicators;
 
-import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.SessionCore;
-import com.ebay.sojourner.ubd.common.util.BotFilter;
-import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
+import com.ebay.sojourner.common.model.AgentIpAttributeAccumulator;
+import com.ebay.sojourner.common.model.SessionCore;
+import com.ebay.sojourner.common.util.BotFilter;
+import com.ebay.sojourner.common.util.UbiBotFilter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

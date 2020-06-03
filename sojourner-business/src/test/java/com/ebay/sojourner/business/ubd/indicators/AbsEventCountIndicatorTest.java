@@ -1,7 +1,7 @@
 package com.ebay.sojourner.business.ubd.indicators;
 
-import com.ebay.sojourner.ubd.common.model.GuidAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.SessionCore;
+import com.ebay.sojourner.common.model.GuidAttributeAccumulator;
+import com.ebay.sojourner.common.model.SessionCore;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

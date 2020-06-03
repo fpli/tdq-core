@@ -1,7 +1,7 @@
 package com.ebay.sojourner.business.ubd.rule;
 
-import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.util.BotRules;
+import com.ebay.sojourner.common.model.UbiSession;
+import com.ebay.sojourner.common.util.BotRules;
 
 public class BotRule15 extends AbstractBotRule<UbiSession> {
 

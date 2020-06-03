@@ -4,9 +4,9 @@ import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.reflect.Whitebox.setInternalState;
 
-import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
-import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
+import com.ebay.sojourner.common.model.UbiSession;
+import com.ebay.sojourner.common.util.UbiBotFilter;
+import com.ebay.sojourner.common.util.UbiSessionHelper;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Ignore;

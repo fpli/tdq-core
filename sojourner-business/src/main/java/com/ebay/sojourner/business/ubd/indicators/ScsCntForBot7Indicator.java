@@ -1,13 +1,13 @@
 package com.ebay.sojourner.business.ubd.indicators;
 
-import com.ebay.sojourner.ubd.common.model.AgentHash;
-import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
-import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.IpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.SessionCore;
-import com.ebay.sojourner.ubd.common.util.BotFilter;
-import com.ebay.sojourner.ubd.common.util.BotRules;
-import com.ebay.sojourner.ubd.common.util.SessionCoreHelper;
+import com.ebay.sojourner.common.model.AgentHash;
+import com.ebay.sojourner.common.model.AgentIpAttribute;
+import com.ebay.sojourner.common.model.AgentIpAttributeAccumulator;
+import com.ebay.sojourner.common.model.IpAttributeAccumulator;
+import com.ebay.sojourner.common.model.SessionCore;
+import com.ebay.sojourner.common.util.BotFilter;
+import com.ebay.sojourner.common.util.BotRules;
+import com.ebay.sojourner.common.util.SessionCoreHelper;
 
 public class ScsCntForBot7Indicator<Source, Target> extends AbstractIndicator<Source, Target> {
 

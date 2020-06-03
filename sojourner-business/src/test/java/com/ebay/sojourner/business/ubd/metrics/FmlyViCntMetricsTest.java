@@ -4,10 +4,10 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.reflect.Whitebox.setInternalState;
 
-import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.util.LkpManager;
+import com.ebay.sojourner.common.model.SessionAccumulator;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.model.UbiSession;
+import com.ebay.sojourner.common.util.LkpManager;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;

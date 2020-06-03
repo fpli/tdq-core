@@ -1,6 +1,6 @@
 package com.ebay.sojourner.business.ubd.sql;
 
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.common.model.UbiEvent;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.calcite.adapter.enumerable.EnumerableConvention;

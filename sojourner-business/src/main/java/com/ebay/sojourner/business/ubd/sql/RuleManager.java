@@ -1,7 +1,7 @@
 package com.ebay.sojourner.business.ubd.sql;
 
-import com.ebay.sojourner.ubd.common.util.Constants;
-import com.ebay.sojourner.ubd.common.zookeeper.ZkClient;
+import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.common.zookeeper.ZkClient;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.time.LocalDateTime;

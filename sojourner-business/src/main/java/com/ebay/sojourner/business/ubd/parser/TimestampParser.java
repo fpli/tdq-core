@@ -1,10 +1,10 @@
 package com.ebay.sojourner.business.ubd.parser;
 
-import com.ebay.sojourner.ubd.common.util.SOJNVL;
-import com.ebay.sojourner.ubd.common.util.SOJTS2Date;
-import com.ebay.sojourner.ubd.common.util.SOJURLDecodeEscape;
-import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.SOJNVL;
+import com.ebay.sojourner.common.util.SOJTS2Date;
+import com.ebay.sojourner.common.util.SOJURLDecodeEscape;
+import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.sojourner.common.model.UbiEvent;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

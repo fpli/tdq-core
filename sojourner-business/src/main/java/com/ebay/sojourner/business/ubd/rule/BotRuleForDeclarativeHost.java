@@ -1,8 +1,8 @@
 package com.ebay.sojourner.business.ubd.rule;
 
-import com.ebay.sojourner.ubd.common.model.IpAttribute;
-import com.ebay.sojourner.ubd.common.util.BotHostMatcher;
-import com.ebay.sojourner.ubd.common.util.TransformUtil;
+import com.ebay.sojourner.common.model.IpAttribute;
+import com.ebay.sojourner.common.util.BotHostMatcher;
+import com.ebay.sojourner.common.util.TransformUtil;
 import org.apache.commons.lang3.StringUtils;
 
 public class BotRuleForDeclarativeHost extends AbstractBotRule<IpAttribute> {

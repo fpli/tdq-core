@@ -1,11 +1,11 @@
 package com.ebay.sojourner.business.ubd.metrics;
 
 import com.ebay.sojourner.business.ubd.parser.PageIndicator;
-import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.util.FlagUtils;
-import com.ebay.sojourner.ubd.common.util.Property;
-import com.ebay.sojourner.ubd.common.util.UBIConfig;
+import com.ebay.sojourner.common.model.SessionAccumulator;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.FlagUtils;
+import com.ebay.sojourner.common.util.Property;
+import com.ebay.sojourner.common.util.UBIConfig;
 
 public class BinCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 

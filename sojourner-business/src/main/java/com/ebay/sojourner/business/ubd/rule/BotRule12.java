@@ -1,9 +1,9 @@
 package com.ebay.sojourner.business.ubd.rule;
 
-import static com.ebay.sojourner.ubd.common.util.BotRules.MANY_FAST_EVENTS_BOT_FLAG;
-import static com.ebay.sojourner.ubd.common.util.BotRules.NON_BOT_FLAG;
+import static com.ebay.sojourner.common.util.BotRules.MANY_FAST_EVENTS_BOT_FLAG;
+import static com.ebay.sojourner.common.util.BotRules.NON_BOT_FLAG;
 
-import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.common.model.UbiSession;
 import java.util.Set;
 
 public class BotRule12 extends AbstractBotRule<UbiSession> {

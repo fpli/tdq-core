@@ -1,11 +1,11 @@
 package com.ebay.sojourner.business.ubd.indicators;
 
-import com.ebay.sojourner.ubd.common.model.AgentAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
-import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.SessionCore;
-import com.ebay.sojourner.ubd.common.util.BotFilter;
-import com.ebay.sojourner.ubd.common.util.BotRules;
+import com.ebay.sojourner.common.model.AgentAttributeAccumulator;
+import com.ebay.sojourner.common.model.AgentIpAttribute;
+import com.ebay.sojourner.common.model.AgentIpAttributeAccumulator;
+import com.ebay.sojourner.common.model.SessionCore;
+import com.ebay.sojourner.common.util.BotFilter;
+import com.ebay.sojourner.common.util.BotRules;
 
 public class SuspectAgentIndicator<Source, Target> extends AbstractIndicator<Source, Target> {
 

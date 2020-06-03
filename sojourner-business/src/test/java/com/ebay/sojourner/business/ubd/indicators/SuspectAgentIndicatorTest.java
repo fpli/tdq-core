@@ -3,11 +3,11 @@ package com.ebay.sojourner.business.ubd.indicators;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.powermock.api.mockito.PowerMockito.when;
 
-import com.ebay.sojourner.ubd.common.model.AgentAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
-import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.IntermediateSession;
-import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
+import com.ebay.sojourner.common.model.AgentAttributeAccumulator;
+import com.ebay.sojourner.common.model.AgentIpAttribute;
+import com.ebay.sojourner.common.model.AgentIpAttributeAccumulator;
+import com.ebay.sojourner.common.model.IntermediateSession;
+import com.ebay.sojourner.common.util.UbiBotFilter;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

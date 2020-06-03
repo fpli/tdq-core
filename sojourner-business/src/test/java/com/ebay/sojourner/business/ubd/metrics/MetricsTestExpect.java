@@ -1,6 +1,6 @@
 package com.ebay.sojourner.business.ubd.metrics;
 
-import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.common.model.UbiSession;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 

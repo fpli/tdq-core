@@ -1,9 +1,9 @@
 package com.ebay.sojourner.business.ubd.parser;
 
-import com.ebay.sojourner.ubd.common.util.SOJBase64ToLong;
-import com.ebay.sojourner.ubd.common.util.SOJURLDecodeEscape;
-import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.SOJBase64ToLong;
+import com.ebay.sojourner.common.util.SOJURLDecodeEscape;
+import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.sojourner.common.model.UbiEvent;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;

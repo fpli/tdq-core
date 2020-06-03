@@ -1,7 +1,7 @@
 package com.ebay.sojourner.business.ubd.rule;
 
-import com.ebay.sojourner.ubd.common.model.AgentAttribute;
-import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
+import com.ebay.sojourner.common.model.AgentAttribute;
+import com.ebay.sojourner.common.util.UbiSessionHelper;
 import java.io.IOException;
 
 public class BotRuleForDeclarativeAgent extends AbstractBotRule<AgentAttribute> {

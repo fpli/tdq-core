@@ -1,8 +1,8 @@
 package com.ebay.sojourner.business.ubd.util;
 
-import com.ebay.sojourner.ubd.common.model.ClientData;
-import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.model.RheosHeader;
+import com.ebay.sojourner.common.model.ClientData;
+import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.sojourner.common.model.RheosHeader;
 import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
 

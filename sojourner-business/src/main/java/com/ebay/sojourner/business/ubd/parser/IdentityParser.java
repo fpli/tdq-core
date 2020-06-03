@@ -1,9 +1,9 @@
 package com.ebay.sojourner.business.ubd.parser;
 
-import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.util.Constants;
-import com.ebay.sojourner.ubd.common.util.PropertyUtils;
+import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.common.util.PropertyUtils;
 import java.util.HashMap;
 import java.util.Map;
 

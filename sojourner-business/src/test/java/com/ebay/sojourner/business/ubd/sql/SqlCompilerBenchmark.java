@@ -14,7 +14,7 @@ import static com.ebay.sojourner.business.ubd.sql.Rules.ICF_RULE_6_COMPILER;
 import static com.ebay.sojourner.business.ubd.sql.Rules.ICF_RULE_7_COMPILER;
 import static com.ebay.sojourner.business.ubd.sql.Rules.RULE_1_COMPILER;
 
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.common.model.UbiEvent;
 import java.util.ArrayList;
 import java.util.List;
 

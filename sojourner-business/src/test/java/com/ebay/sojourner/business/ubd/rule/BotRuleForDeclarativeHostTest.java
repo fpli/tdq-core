@@ -4,9 +4,9 @@ import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.reflect.Whitebox.setInternalState;
 
-import com.ebay.sojourner.ubd.common.model.IpAttribute;
-import com.ebay.sojourner.ubd.common.util.BotHostMatcher;
-import com.ebay.sojourner.ubd.common.util.TransformUtil;
+import com.ebay.sojourner.common.model.IpAttribute;
+import com.ebay.sojourner.common.util.BotHostMatcher;
+import com.ebay.sojourner.common.util.TransformUtil;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

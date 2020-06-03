@@ -1,7 +1,7 @@
 package com.ebay.sojourner.business.ubd.rule.icf;
 
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.util.IcfRuleUtils;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.IcfRuleUtils;
 
 public class IcfRule6 extends AbstractIcfRule<UbiEvent> {
 

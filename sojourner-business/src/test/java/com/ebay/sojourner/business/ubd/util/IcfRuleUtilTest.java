@@ -1,7 +1,7 @@
 package com.ebay.sojourner.business.ubd.util;
 
-import com.ebay.sojourner.ubd.common.util.IcfRuleUtils;
-import com.ebay.sojourner.ubd.common.util.NumberUtils;
+import com.ebay.sojourner.common.util.IcfRuleUtils;
+import com.ebay.sojourner.common.util.NumberUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

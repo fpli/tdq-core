@@ -1,7 +1,7 @@
 package com.ebay.sojourner.business.ubd.sql;
 
-import com.ebay.sojourner.ubd.common.util.BitUtils;
-import com.ebay.sojourner.ubd.common.util.SOJExtractFlag;
+import com.ebay.sojourner.common.util.BitUtils;
+import com.ebay.sojourner.common.util.SOJExtractFlag;
 
 public class UdfManager {
 

@@ -1,10 +1,10 @@
 package com.ebay.sojourner.business.ubd.metrics;
 
-import com.ebay.sojourner.ubd.common.model.ClientData;
-import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.util.SOJParseClientInfo;
+import com.ebay.sojourner.common.model.ClientData;
+import com.ebay.sojourner.common.model.SessionAccumulator;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.model.UbiSession;
+import com.ebay.sojourner.common.util.SOJParseClientInfo;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;

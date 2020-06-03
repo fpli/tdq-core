@@ -1,13 +1,13 @@
 package com.ebay.sojourner.business.ubd.parser;
 
-import com.ebay.sojourner.ubd.common.util.MobileEventsIdentifier;
-import com.ebay.sojourner.ubd.common.util.SOJNVL;
-import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.util.Constants;
-import com.ebay.sojourner.ubd.common.util.LkpManager;
-import com.ebay.sojourner.ubd.common.util.Property;
-import com.ebay.sojourner.ubd.common.util.UBIConfig;
+import com.ebay.sojourner.common.util.MobileEventsIdentifier;
+import com.ebay.sojourner.common.util.SOJNVL;
+import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.common.util.LkpManager;
+import com.ebay.sojourner.common.util.Property;
+import com.ebay.sojourner.common.util.UBIConfig;
 import java.util.Date;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;

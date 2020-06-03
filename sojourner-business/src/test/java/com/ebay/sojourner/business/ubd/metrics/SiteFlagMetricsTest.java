@@ -1,9 +1,9 @@
 package com.ebay.sojourner.business.ubd.metrics;
 
-import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.util.BitUtils;
+import com.ebay.sojourner.common.model.SessionAccumulator;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.model.UbiSession;
+import com.ebay.sojourner.common.util.BitUtils;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collection;

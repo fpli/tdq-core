@@ -1,6 +1,6 @@
 package com.ebay.sojourner.business.ubd.detectors;
 
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
+import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.business.ubd.sql.RuleChangeEvent;
 import com.ebay.sojourner.business.ubd.sql.RuleDefinition;
 import com.ebay.sojourner.business.ubd.sql.SqlEventRule;

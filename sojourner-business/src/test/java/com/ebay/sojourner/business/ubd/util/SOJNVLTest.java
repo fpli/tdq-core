@@ -2,7 +2,7 @@ package com.ebay.sojourner.business.ubd.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.ebay.sojourner.ubd.common.util.SOJNVL;
+import com.ebay.sojourner.common.util.SOJNVL;
 import org.junit.jupiter.api.Test;
 
 public class SOJNVLTest {

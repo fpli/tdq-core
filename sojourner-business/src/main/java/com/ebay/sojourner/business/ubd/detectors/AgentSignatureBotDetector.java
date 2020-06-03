@@ -1,6 +1,6 @@
 package com.ebay.sojourner.business.ubd.detectors;
 
-import com.ebay.sojourner.ubd.common.model.AgentAttribute;
+import com.ebay.sojourner.common.model.AgentAttribute;
 import com.ebay.sojourner.business.ubd.rule.BotRule6;
 import com.ebay.sojourner.business.ubd.rule.BotRuleForDeclarativeAgent;
 import com.ebay.sojourner.business.ubd.rule.BotRuleForSuspectAgent;

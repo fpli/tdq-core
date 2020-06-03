@@ -1,9 +1,9 @@
 package com.ebay.sojourner.business.ubd.rule;
 
-import static com.ebay.sojourner.ubd.common.util.BotRules.NON_BOT_FLAG;
-import static com.ebay.sojourner.ubd.common.util.BotRules.SCS_ON_IP;
+import static com.ebay.sojourner.common.util.BotRules.NON_BOT_FLAG;
+import static com.ebay.sojourner.common.util.BotRules.SCS_ON_IP;
 
-import com.ebay.sojourner.ubd.common.model.IpAttribute;
+import com.ebay.sojourner.common.model.IpAttribute;
 
 public class BotRule7 extends AbstractBotRule<IpAttribute> {
 

@@ -1,7 +1,7 @@
 package com.ebay.sojourner.business.ubd.util;
 
-import com.ebay.sojourner.ubd.common.model.ClientData;
-import com.ebay.sojourner.ubd.common.util.SOJParseClientInfo;
+import com.ebay.sojourner.common.model.ClientData;
+import com.ebay.sojourner.common.util.SOJParseClientInfo;
 
 public class GenerateClientData {
 

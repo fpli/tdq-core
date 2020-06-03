@@ -1,13 +1,13 @@
 package com.ebay.sojourner.business.ubd.metrics;
 
-import com.ebay.sojourner.ubd.common.util.SOJListGetValueByIndex;
-import com.ebay.sojourner.ubd.common.util.SojEventTimeUtil;
-import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.util.Property;
-import com.ebay.sojourner.ubd.common.util.PropertyUtils;
-import com.ebay.sojourner.ubd.common.util.UBIConfig;
+import com.ebay.sojourner.common.util.SOJListGetValueByIndex;
+import com.ebay.sojourner.common.util.SojEventTimeUtil;
+import com.ebay.sojourner.common.model.SessionAccumulator;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.model.UbiSession;
+import com.ebay.sojourner.common.util.Property;
+import com.ebay.sojourner.common.util.PropertyUtils;
+import com.ebay.sojourner.common.util.UBIConfig;
 import java.util.Set;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;

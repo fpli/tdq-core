@@ -1,7 +1,7 @@
 package com.ebay.sojourner.business.ubd.indicators;
 
 import com.ebay.sojourner.business.ubd.metrics.Aggregator;
-import com.ebay.sojourner.ubd.common.util.BotFilter;
+import com.ebay.sojourner.common.util.BotFilter;
 
 /**
  * The aggregation

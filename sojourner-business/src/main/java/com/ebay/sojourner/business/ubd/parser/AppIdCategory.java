@@ -1,8 +1,8 @@
 package com.ebay.sojourner.business.ubd.parser;
 
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.util.Property;
-import com.ebay.sojourner.ubd.common.util.PropertyUtils;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.Property;
+import com.ebay.sojourner.common.util.PropertyUtils;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;

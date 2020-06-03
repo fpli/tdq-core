@@ -1,10 +1,10 @@
 package com.ebay.sojourner.business.ubd.rule;
 
-import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.util.BotRules;
-import com.ebay.sojourner.ubd.common.util.Property;
-import com.ebay.sojourner.ubd.common.util.PropertyUtils;
-import com.ebay.sojourner.ubd.common.util.UBIConfig;
+import com.ebay.sojourner.common.model.UbiSession;
+import com.ebay.sojourner.common.util.BotRules;
+import com.ebay.sojourner.common.util.Property;
+import com.ebay.sojourner.common.util.PropertyUtils;
+import com.ebay.sojourner.common.util.UBIConfig;
 import java.util.Set;
 
 public class BotRule208 extends AbstractBotRule<UbiSession> {

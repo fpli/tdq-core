@@ -1,6 +1,6 @@
 package com.ebay.sojourner.business.ubd.parser;
 
-import com.ebay.sojourner.ubd.common.util.LkpManager;
+import com.ebay.sojourner.common.util.LkpManager;
 
 public interface LkpListener {
 

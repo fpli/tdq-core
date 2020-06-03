@@ -1,11 +1,11 @@
 package com.ebay.sojourner.business.ubd.rule;
 
-import com.ebay.sojourner.ubd.common.model.AgentAttribute;
-import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
-import com.ebay.sojourner.ubd.common.model.GuidAttribute;
-import com.ebay.sojourner.ubd.common.model.IpAttribute;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.common.model.AgentAttribute;
+import com.ebay.sojourner.common.model.AgentIpAttribute;
+import com.ebay.sojourner.common.model.GuidAttribute;
+import com.ebay.sojourner.common.model.IpAttribute;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.model.UbiSession;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 

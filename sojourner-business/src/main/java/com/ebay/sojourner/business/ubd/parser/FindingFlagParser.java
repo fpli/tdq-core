@@ -1,8 +1,8 @@
 package com.ebay.sojourner.business.ubd.parser;
 
-import com.ebay.sojourner.ubd.common.model.RawEvent;
-import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.util.LkpManager;
+import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.LkpManager;
 import java.util.Map;
 
 public class FindingFlagParser implements FieldParser<RawEvent, UbiEvent> {
