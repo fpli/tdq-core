@@ -1,6 +1,5 @@
 package com.ebay.sojourner.ubd.common.util;
 
-import com.ebay.sojourner.ubd.common.sharedlib.util.IsValidIPv4;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

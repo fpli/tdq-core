@@ -29,6 +29,11 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>com.ebay.sojourner</groupId>
+      <artifactId>sojourner-business</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-statebackend-rocksdb_${scala.binary.version}</artifactId>
     </dependency>

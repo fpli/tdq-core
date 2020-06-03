@@ -1,8 +1,8 @@
 package com.ebay.sojourner.ubd.rt.operators.attribute;
 
+import com.ebay.sojourner.business.ubd.indicators.AgentIpIndicators;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.SessionCore;
-import com.ebay.sojourner.ubd.common.sharedlib.indicators.AgentIpIndicators;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.functions.AggregateFunction;
 

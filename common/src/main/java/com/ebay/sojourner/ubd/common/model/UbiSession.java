@@ -1,6 +1,6 @@
 package com.ebay.sojourner.ubd.common.model;
 
-import com.ebay.sojourner.ubd.common.sharedlib.metrics.IntermediateMetrics;
+import com.ebay.sojourner.ubd.common.util.IntermediateMetrics;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedHashSet;

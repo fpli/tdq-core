@@ -1,6 +1,6 @@
 package com.ebay.sojourner.ubd.common.model;
 
-import com.ebay.sojourner.ubd.common.sharedlib.util.CalTimeOfDay;
+import com.ebay.sojourner.ubd.common.util.CalTimeOfDay;
 import lombok.Data;
 
 @Data

@@ -1,9 +1,9 @@
 package com.ebay.sojourner.ubd.rt.operators.attribute;
 
+import com.ebay.sojourner.business.ubd.detectors.AgentIpSignatureBotDetector;
+import com.ebay.sojourner.business.ubd.indicators.AgentIpIndicatorsSliding;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.sharedlib.detectors.AgentIpSignatureBotDetector;
-import com.ebay.sojourner.ubd.common.sharedlib.indicators.AgentIpIndicatorsSliding;
 import com.ebay.sojourner.ubd.common.util.Constants;
 import java.io.IOException;
 import java.util.Set;

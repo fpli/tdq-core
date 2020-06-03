@@ -35,26 +35,8 @@ under the License.
     files="src/main/java/com/ebay/sojourner/ubd/common/model/RheosHeader.java"/>
 
   <!--  Below are the legacy code that will disable firstly to pass style checker-->
-  <suppress checks="MethodName"
-    files="src/test/java/com/ebay/sojourner/ubd/common/util/TypeTransUtil.java"/>
-  <suppress checks="MethodName"
-    files="src/main/java/com/ebay/sojourner/ubd/common/sharedlib/util/GUID2IP.java"/>
-  <suppress checks="MethodName"
-    files="src/main/java/com/ebay/sojourner/ubd/common/sharedlib/util/GUID2Date.java"/>
-  <suppress checks="GenericWhitespace"
-    files="src/main/java/com/ebay/sojourner/ubd/common/sharedlib/indicators/AgentIndicators.java"/>
   <suppress checks="EmptyCatchBlock"
     files="src/main/java/com/ebay/sojourner/ubd/common/util/PropertyUtils.java"/>
-  <suppress checks="EmptyBlock"
-    files="src/main/java/com/ebay/sojourner/ubd/common/sharedlib/metrics/PageIdMetrics.java"/>
-  <suppress checks="EmptyCatchBlock"
-    files="src/main/java/com/ebay/sojourner/ubd/common/sharedlib/util/IntegerField.java"/>
-  <suppress checks="EmptyBlock"
-    files="src/main/java/com/ebay/sojourner/ubd/common/sharedlib/indicators/ScsCountForBot8Indicator.java"/>
-  <suppress checks="EmptyBlock"
-    files="src/main/java/com/ebay/sojourner/ubd/common/sharedlib/indicators/ScsCountForBot6Indicator.java"/>
-  <suppress checks="EmptyBlock"
-    files="src/main/java/com/ebay/sojourner/ubd/common/sharedlib/indicators/ScsCountForBot7Indicator.java"/>
   <suppress checks="FallThrough"
     files="src/main/java/com/ebay/sojourner/ubd/common/model/AgentIpAttribute.java"/>
   <suppress checks="FallThrough"
@@ -64,14 +46,11 @@ under the License.
   <suppress checks=".*"
     files="src/main/java/org/apache/flink/streaming/runtime/operators/windowing/MapWithStateWindowOperator.java"/>
   <suppress checks=".*"
-    files="src/test/java/com/ebay/sojourner/ubd/common/sharedlib/metrics/BotRuleForSessionDQTest.java"/>
-  <suppress checks=".*"
-    files="src/test/java/com/ebay/sojourner/ubd/common/sharedlib/metrics/MetricsForSessionDQTest.java"/>
-  <suppress checks=".*"
     files="src/main/java/com/ebay/sojourner/ubd/common/model/SojSession.java"/>
   <suppress checks=".*"
     files="src/main/java/com/ebay/sojourner/ubd/common/model/IntermediateSession.java"/>
   <suppress checks=".*"
     files="/src/main/java/com/ebay/sojourner/ubd/common/util/Constants.java"/>
   <suppress checks="NewlineAtEndOfFile" files=".java" />
+  <suppress files="[\\/]src/test/java/com/ebay/sojourner/business/ubd[\\/]" checks="[a-zA-Z0-9]*"/>
 </suppressions>

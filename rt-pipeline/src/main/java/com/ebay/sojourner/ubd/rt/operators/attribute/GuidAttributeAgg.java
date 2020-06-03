@@ -1,9 +1,9 @@
 package com.ebay.sojourner.ubd.rt.operators.attribute;
 
+import com.ebay.sojourner.business.ubd.detectors.GuidSignatureBotDetector;
+import com.ebay.sojourner.business.ubd.indicators.GuidIndicators;
 import com.ebay.sojourner.ubd.common.model.GuidAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.SessionCore;
-import com.ebay.sojourner.ubd.common.sharedlib.detectors.GuidSignatureBotDetector;
-import com.ebay.sojourner.ubd.common.sharedlib.indicators.GuidIndicators;
 import com.ebay.sojourner.ubd.common.util.Constants;
 import java.io.IOException;
 import java.util.Set;
