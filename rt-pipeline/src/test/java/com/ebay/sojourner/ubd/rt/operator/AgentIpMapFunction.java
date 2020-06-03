@@ -1,8 +1,8 @@
 package com.ebay.sojourner.ubd.rt.operator;
 
+import com.ebay.sojourner.business.ubd.detectors.AgentIpSignatureBotDetector;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.AgentIpSignature;
-import com.ebay.sojourner.ubd.common.sharedlib.detectors.AgentIpSignatureBotDetector;
 import java.util.Set;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.configuration.Configuration;

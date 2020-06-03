@@ -1,6 +1,5 @@
 package com.ebay.sojourner.ubd.common.util;
 
-import com.ebay.sojourner.ubd.common.sharedlib.util.SOJTS2Date;
 import com.google.common.base.Preconditions;
 import java.io.InputStream;
 import java.util.Map;

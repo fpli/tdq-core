@@ -2,7 +2,7 @@ package com.ebay.sojourner.ubd.rt.util;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.sharedlib.metrics.IntermediateMetrics;
+import com.ebay.sojourner.ubd.common.util.IntermediateMetrics;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
 

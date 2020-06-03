@@ -14,8 +14,9 @@
     <module>common</module>
     <module>rt-pipeline</module>
     <module>batch-connector</module>
-    <module>connectors</module>
-<!--    <module>rule-test</module>-->
+    <module>flink-lib</module>
+    <module>sojourner-business</module>
+    <!--    <module>rule-test</module>-->
   </modules>
 
   <properties>
@@ -258,7 +259,7 @@
         <groupId>org.apache.avro</groupId>
         <artifactId>avro</artifactId>
         <version>${avro.version}</version>
-        <scope>provided</scope>
+<!--        <scope>provided</scope>-->
       </dependency>
       <dependency>
         <groupId>org.projectlombok</groupId>

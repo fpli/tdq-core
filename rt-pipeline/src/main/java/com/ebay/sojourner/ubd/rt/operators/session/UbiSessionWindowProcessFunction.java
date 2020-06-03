@@ -1,9 +1,9 @@
 package com.ebay.sojourner.ubd.rt.operators.session;
 
+import com.ebay.sojourner.business.ubd.detectors.SessionEndBotDetector;
+import com.ebay.sojourner.business.ubd.metrics.SessionMetrics;
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.sharedlib.detectors.SessionEndBotDetector;
-import com.ebay.sojourner.ubd.common.sharedlib.metrics.SessionMetrics;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.java.tuple.Tuple;

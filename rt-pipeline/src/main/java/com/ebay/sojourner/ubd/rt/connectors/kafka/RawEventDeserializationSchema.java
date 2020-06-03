@@ -3,7 +3,7 @@ package com.ebay.sojourner.ubd.rt.connectors.kafka;
 import com.ebay.sojourner.ubd.common.model.ClientData;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.RheosHeader;
-import com.ebay.sojourner.ubd.common.sharedlib.util.CalTimeOfDay;
+import com.ebay.sojourner.ubd.common.util.CalTimeOfDay;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
