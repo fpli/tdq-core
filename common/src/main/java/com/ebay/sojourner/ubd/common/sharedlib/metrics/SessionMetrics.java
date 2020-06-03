@@ -45,6 +45,8 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
     addFieldMetrics(new AttributeFlagMetrics());
     addFieldMetrics(new BidCntMetrics());
     addFieldMetrics(new BinCntMetrics());
+    addFieldMetrics(new SiidCntMetrics());
+
     // Set abEventCnt and eventCnt both
     addFieldMetrics(new EventCntMetrics());
     addFieldMetrics(new OldSessionSkeyMetrics());
@@ -70,6 +72,12 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
     addFieldMetrics(new LogdnCntMetrics());
     addFieldMetrics(new HomepgCntMetrics());
     addFieldMetrics(new FirstMappedUserIdMetrics());
+    addFieldMetrics(new ServEventCntMetrics());
+    addFieldMetrics(new OsMetrics());
+    addFieldMetrics(new DeviceMetrics());
+    addFieldMetrics(new BrowserMetrics());
+    addFieldMetrics(new AddressMetrics());
+    addFieldMetrics(new LineSpeedMetrics());
     // move traffic source id to bottom
     addFieldMetrics(new TrafficSourceIdMetrics());
     // Add extra metrics for new bots

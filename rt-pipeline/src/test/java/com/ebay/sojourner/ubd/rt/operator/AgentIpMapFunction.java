@@ -28,7 +28,7 @@ public class AgentIpMapFunction extends RichMapFunction<AgentIpAttribute, AgentI
     Set<Integer> botFlagList = agentIpSignatureBotDetector.getBotFlagList(value);
     agentIpSignature
         .getAgentIpBotSignature()
-        .put(value.getAgent() + value.getClientIp(), botFlagList);
+        .put(value, botFlagList);
     return agentIpSignature;
   }
 }

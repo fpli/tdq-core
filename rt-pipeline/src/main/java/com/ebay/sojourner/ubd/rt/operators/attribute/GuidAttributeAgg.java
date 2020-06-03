@@ -1,7 +1,7 @@
 package com.ebay.sojourner.ubd.rt.operators.attribute;
 
 import com.ebay.sojourner.ubd.common.model.GuidAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.SessionForGuidEnhancement;
+import com.ebay.sojourner.ubd.common.model.SessionCore;
 import com.ebay.sojourner.ubd.common.sharedlib.detectors.GuidSignatureBotDetector;
 import com.ebay.sojourner.ubd.common.sharedlib.indicators.GuidIndicators;
 import com.ebay.sojourner.ubd.common.util.Constants;
@@ -12,24 +12,24 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 
 @Slf4j
 public class GuidAttributeAgg implements
-    AggregateFunction<SessionForGuidEnhancement,
+    AggregateFunction<SessionCore,
         GuidAttributeAccumulator, GuidAttributeAccumulator> {
 
   private static final String GUID = Constants.GUID_LEVEL;
-  private GuidIndicators guidIndicators;
-  private GuidSignatureBotDetector guidSignatureBotDetector;
+  // private GuidIndicators guidIndicators;
+  // private GuidSignatureBotDetector guidSignatureBotDetector;
   // private RuleManager ruleManager;
 
   @Override
   public GuidAttributeAccumulator createAccumulator() {
 
     GuidAttributeAccumulator guidAttributeAccumulator = new GuidAttributeAccumulator();
-    guidIndicators = GuidIndicators.getInstance();
-    guidSignatureBotDetector = GuidSignatureBotDetector.getInstance();
+    // guidIndicators = GuidIndicators.getInstance();
+    // guidSignatureBotDetector = GuidSignatureBotDetector.getInstance();
     // ruleManager = RuleManager.getInstance();
 
     try {
-      guidIndicators.start(guidAttributeAccumulator);
+      GuidIndicators.getInstance().start(guidAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
       log.error(e.getMessage());
@@ -39,14 +39,14 @@ public class GuidAttributeAgg implements
 
   @Override
   public GuidAttributeAccumulator add(
-      SessionForGuidEnhancement session, GuidAttributeAccumulator guidAttributeAccumulator) {
+      SessionCore session, GuidAttributeAccumulator guidAttributeAccumulator) {
     if (guidAttributeAccumulator.getGuidAttribute().getGuid1() == 0
         && guidAttributeAccumulator.getGuidAttribute().getGuid2() == 0) {
-      guidAttributeAccumulator.getGuidAttribute().setGuid1(session.getGuid1());
-      guidAttributeAccumulator.getGuidAttribute().setGuid2(session.getGuid2());
+      guidAttributeAccumulator.getGuidAttribute().setGuid1(session.getGuid().getGuid1());
+      guidAttributeAccumulator.getGuidAttribute().setGuid2(session.getGuid().getGuid2());
     }
     try {
-      guidIndicators.feed(session, guidAttributeAccumulator, true);
+      GuidIndicators.getInstance().feed(session, guidAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -60,7 +60,8 @@ public class GuidAttributeAgg implements
             GuidSignatureBotDetector.dynamicRuleIdList(), GUID);
             */
         guidBotFlag =
-            guidSignatureBotDetector.getBotFlagList(guidAttributeAccumulator.getGuidAttribute());
+            GuidSignatureBotDetector.getInstance()
+                .getBotFlagList(guidAttributeAccumulator.getGuidAttribute());
         if (guidBotFlag.contains(15)) {
           switch (guidAttributeAccumulator.getBotFlagStatus().get(15)) {
             case 0:

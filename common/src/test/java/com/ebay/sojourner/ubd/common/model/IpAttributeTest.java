@@ -2,7 +2,8 @@ package com.ebay.sojourner.ubd.common.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.google.common.collect.Sets;
+import org.apache.datasketches.hll.HllSketch;
+import org.apache.datasketches.hll.TgtHllType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +23,7 @@ public class IpAttributeTest {
     agentIpAttribute.setTotalCnt(11);
     agentIpAttribute.setScsCountForBot7(1);
 
-    ipAttribute.feed(agentIpAttribute, 7, true);
+    ipAttribute.feed(agentIpAttribute, 7);
 
     assertThat(ipAttribute.getScsCount()).isEqualTo(1);
   }
@@ -35,7 +36,7 @@ public class IpAttributeTest {
     agentIpAttribute.setValidPageCnt(4);
     agentIpAttribute.setIsAllAgentHoper(false);
 
-    ipAttribute.feed(agentIpAttribute, 210, true);
+    ipAttribute.feed(agentIpAttribute, 210);
 
     assertThat(ipAttribute.getTotalCnt()).isEqualTo(11);
     assertThat(ipAttribute.getTotalCntForSec1()).isEqualTo(5);
@@ -48,7 +49,7 @@ public class IpAttributeTest {
     agentIpAttribute.setTotalCntForSec1(5);
     agentIpAttribute.setHomePageCnt(4);
 
-    ipAttribute.feed(agentIpAttribute, 210, true);
+    ipAttribute.feed(agentIpAttribute, 210);
 
     assertThat(ipAttribute.getTotalCnt()).isEqualTo(4);
     assertThat(ipAttribute.getTotalCntForSec1()).isEqualTo(5);
@@ -62,7 +63,7 @@ public class IpAttributeTest {
     agentIpAttribute.setFamilyViCnt(6);
     agentIpAttribute.setSigninCnt(6);
 
-    ipAttribute.feed(agentIpAttribute, 210, true);
+    ipAttribute.feed(agentIpAttribute, 210);
 
     assertThat(ipAttribute.getTotalCnt()).isEqualTo(6);
     assertThat(ipAttribute.getTotalCntForSec1()).isEqualTo(5);
@@ -75,7 +76,7 @@ public class IpAttributeTest {
     agentIpAttribute.setTotalCntForSec1(5);
     agentIpAttribute.setNewGuidCnt(12);
 
-    ipAttribute.feed(agentIpAttribute, 210, true);
+    ipAttribute.feed(agentIpAttribute, 210);
 
     assertThat(ipAttribute.getTotalCnt()).isEqualTo(12);
     assertThat(ipAttribute.getTotalCntForSec1()).isEqualTo(5);
@@ -84,12 +85,15 @@ public class IpAttributeTest {
 
   @Test
   public void test_feed_botFlag210_sessionCntGt20_and_sameMktCnt() {
+
     agentIpAttribute.setTotalCnt(21);
     agentIpAttribute.setTotalCntForSec1(5);
     agentIpAttribute.setMktgCnt(21);
-    agentIpAttribute.setGuidSet(Sets.newHashSet("1"));
+    HllSketch hllSketch = new HllSketch(2,TgtHllType.HLL_8);
+    hllSketch.update(1);
+    agentIpAttribute.setHllSketch(hllSketch.toCompactByteArray());
 
-    ipAttribute.feed(agentIpAttribute, 210, true);
+    ipAttribute.feed(agentIpAttribute, 210);
 
     assertThat(ipAttribute.getTotalCnt()).isEqualTo(21);
     assertThat(ipAttribute.getTotalCntForSec1()).isEqualTo(5);
@@ -102,7 +106,7 @@ public class IpAttributeTest {
     agentIpAttribute.setTotalCntForSec1(5);
     agentIpAttribute.setNoUidCnt(51);
 
-    ipAttribute.feed(agentIpAttribute, 210, true);
+    ipAttribute.feed(agentIpAttribute, 210);
 
     assertThat(ipAttribute.getTotalCnt()).isEqualTo(51);
     assertThat(ipAttribute.getTotalCntForSec1()).isEqualTo(5);
@@ -116,7 +120,7 @@ public class IpAttributeTest {
     agentIpAttribute.setNoUidCnt(51);
     agentIpAttribute.setFamilyViCnt(100);
 
-    ipAttribute.feed(agentIpAttribute, 210, true);
+    ipAttribute.feed(agentIpAttribute, 210);
 
     assertThat(ipAttribute.getTotalCnt()).isEqualTo(101);
     assertThat(ipAttribute.getTotalCntForSec1()).isEqualTo(5);
@@ -128,9 +132,9 @@ public class IpAttributeTest {
     agentIpAttribute.setTotalCnt(201);
     agentIpAttribute.setTotalCntForSec1(5);
     agentIpAttribute.setNoUidCnt(51);
-    agentIpAttribute.setCguidSet(Sets.newHashSet("1", "2", "3", "4"));
+    //    agentIpAttribute.setCguidSet(Sets.newHashSet("1", "2", "3", "4"));
 
-    ipAttribute.feed(agentIpAttribute, 210, true);
+    ipAttribute.feed(agentIpAttribute, 210);
 
     assertThat(ipAttribute.getTotalCnt()).isEqualTo(201);
     assertThat(ipAttribute.getTotalCntForSec1()).isEqualTo(5);

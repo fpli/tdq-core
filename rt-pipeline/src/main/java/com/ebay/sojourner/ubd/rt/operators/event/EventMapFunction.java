@@ -2,7 +2,9 @@ package com.ebay.sojourner.ubd.rt.operators.event;
 
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.detectors.EventBotDetector;
+import com.ebay.sojourner.ubd.common.sharedlib.detectors.AbstractBotDetector;
+import com.ebay.sojourner.ubd.common.sharedlib.detectors.BotDetectorFactory;
+import com.ebay.sojourner.ubd.common.sharedlib.detectors.BotDetectorFactory.Type;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.AgentInfoParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.AppIdParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.CiidParser;
@@ -31,7 +33,7 @@ import com.ebay.sojourner.ubd.common.sharedlib.parser.SqrParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.StaticPageTypeParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.TimestampParser;
 import com.ebay.sojourner.ubd.common.sharedlib.parser.UserIdParser;
-import com.ebay.sojourner.ubd.common.util.Constants;
+import com.ebay.sojourner.ubd.common.sql.RuleManager;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -45,10 +47,8 @@ import org.apache.flink.configuration.Configuration;
 @Slf4j
 public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
-  private static final String EVENT = Constants.EVENT_LEVEL;
   private EventParser parser;
-  private EventBotDetector eventBotDetector;
-  // private RuleManager ruleManager;
+  private AbstractBotDetector<UbiEvent> eventBotDetector;
   private AverageAccumulator avgEventParserDuration = new AverageAccumulator();
   private Map<String, AverageAccumulator> eventParseMap = new ConcurrentHashMap<>();
   private AverageAccumulator avgBotDetectionDuration = new AverageAccumulator();
@@ -57,8 +57,8 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
   public void open(Configuration conf) throws Exception {
     super.open(conf);
     parser = new EventParser();
-    eventBotDetector = EventBotDetector.getInstance();
-    // ruleManager = RuleManager.getInstance();
+    eventBotDetector = BotDetectorFactory.get(Type.EVENT);
+    RuleManager.getInstance().addListener(eventBotDetector);
 
     getRuntimeContext()
         .addAccumulator("Average Duration of Event Parsing", avgEventParserDuration);
@@ -112,14 +112,15 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
     parser.parse(rawEvent, event, eventParseMap);
     avgEventParserDuration.add(System.nanoTime() - startTimeForEventParser);
     long startTimeForEventBotDetection = System.nanoTime();
-    /*
-    eventBotDetector
-        .initDynamicRules(ruleManager, eventBotDetector.rules(),
-            EventBotDetector.dynamicRuleIdList(), EVENT);
-            */
     Set<Integer> botFlagList = eventBotDetector.getBotFlagList(event);
     avgBotDetectionDuration.add(System.nanoTime() - startTimeForEventBotDetection);
     event.getBotFlags().addAll(botFlagList);
     return event;
+  }
+
+  @Override
+  public void close() throws Exception {
+    eventBotDetector.close();
+    super.close();
   }
 }

@@ -46,14 +46,6 @@
     </dependency>
     <dependency>
       <groupId>org.apache.flink</groupId>
-      <artifactId>flink-queryable-state-runtime_${scala.binary.version}</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-queryable-state-client-java_${scala.binary.version}</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.flink</groupId>
       <artifactId>flink-test-utils_${scala.binary.version}</artifactId>
     </dependency>
     <dependency>
@@ -77,6 +69,12 @@
       <artifactId>flink-avro</artifactId>
     </dependency>
 
+    <!-- flink hadoop connector -->
+    <dependency>
+      <groupId>org.apache.flink</groupId>
+      <artifactId>flink-connector-filesystem_2.11</artifactId>
+    </dependency>
+
     <!-- rheos jdk dependencies-->
     <dependency>
       <groupId>io.ebay.rheos</groupId>
@@ -94,6 +92,8 @@
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
     </dependency>
+
+    <!-- hadoop dependency -->
     <dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-common</artifactId>
@@ -102,19 +102,12 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-hdfs</artifactId>
     </dependency>
+
     <!-- Test Dependencies -->
     <dependency>
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest_${scala.binary.version}</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-shaded-hadoop2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-connector-filesystem_2.11</artifactId>
     </dependency>
   </dependencies>
 
@@ -156,37 +149,20 @@
               <transformers>
                 <transformer
                   implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>com.ebay.sojourner.ubd.rt.pipeline.SojournerUBDRTJobForQA</mainClass>
+                  <mainClass>com.ebay.sojourner.ubd.rt.pipeline.SojournerRTJob</mainClass>
                 </transformer>
               </transformers>
             </configuration>
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>com.coderplus.maven.plugins</groupId>
-        <artifactId>copy-rename-maven-plugin</artifactId>
-        <version>1.0</version>
-        <executions>
-          <execution>
-            <id>rename-file</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>rename</goal>
-            </goals>
-            <configuration>
-              <sourceFile>${project.build.outputDirectory}/application-${profiles.active}.yml
-              </sourceFile>
-              <destinationFile>${project.build.outputDirectory}/application.yml</destinationFile>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+
       <!--job-uploader-maven-plugin-->
       <plugin>
         <groupId>io.ebay.rheos.streaming</groupId>
         <artifactId>job-uploader-maven-plugin</artifactId>
       </plugin>
+
       <!-- Enable surefire and scalatest in all children, in one place: -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -197,38 +173,6 @@
         <artifactId>scalatest-maven-plugin</artifactId>
       </plugin>
     </plugins>
-
-    <resources>
-      <resource>
-        <directory>src/main/resources/config</directory>
-        <excludes>
-          <exclude>**/*.*</exclude>
-        </excludes>
-      </resource>
-      <resource>
-        <directory>src/main/resources/config</directory>
-        <filtering>true</filtering>
-        <includes>
-          <include>application-${profiles.active}.yml</include>
-        </includes>
-      </resource>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-        <excludes>
-          <exclude>**/*.keytab</exclude>
-        </excludes>
-      </resource>
-
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>false</filtering>
-        <includes>
-          <include>**/*.keytab</include>
-        </includes>
-      </resource>
-
-    </resources>
   </build>
 
   <!-- This profile helps to make things run out of the box in IntelliJ -->
@@ -267,6 +211,11 @@
         <dependency>
           <groupId>org.apache.avro</groupId>
           <artifactId>avro</artifactId>
+          <scope>compile</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.flink</groupId>
+          <artifactId>flink-statebackend-rocksdb_${scala.binary.version}</artifactId>
           <scope>compile</scope>
         </dependency>
       </dependencies>

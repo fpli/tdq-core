@@ -13,13 +13,13 @@
   <modules>
     <module>common</module>
     <module>rt-pipeline</module>
-    <module>batch-pipeline</module>
-    <module>dist</module>
+    <module>batch-connector</module>
+    <module>connectors</module>
     <module>rule-test</module>
   </modules>
 
   <properties>
-    <global.version>0.8.6-SNAPSHOT</global.version>
+    <global.version>0.8.0-SNAPSHOT</global.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
@@ -30,9 +30,8 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <commons.lang3.version>3.4</commons.lang3.version>
     <lombok.version>1.18.10</lombok.version>
-    <slf4j.version>1.7.7</slf4j.version>
+    <slf4j.version>1.7.30</slf4j.version>
     <log4j.version>1.2.17</log4j.version>
-    <couchbase.client.version>2.7.6</couchbase.client.version>
     <avro.version>1.8.2</avro.version>
     <flink.version>1.7.2</flink.version>
     <spark.version>2.3.1</spark.version>
@@ -49,7 +48,7 @@
     <fastjson.version>1.2.62</fastjson.version>
     <guava.version>28.1-jre</guava.version>
     <okhttp3.version>4.4.1</okhttp3.version>
-    <curator.version>2.12.0</curator.version>
+    <curator.version>4.3.0</curator.version>
     <jacoco.version>0.8.5</jacoco.version>
     <CodeCacheSize>512m</CodeCacheSize>
   </properties>
@@ -150,10 +149,20 @@
       <artifactId>assertj-core</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-csv</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.apache.datasketches</groupId>
+        <artifactId>datasketches-java</artifactId>
+        <version>1.2.0-incubating</version>
+      </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
@@ -226,13 +235,6 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>org.apache.flink</groupId>
-        <artifactId>flink-connector-filesystem_2.11</artifactId>
-        <version>${flink.version}</version>
-        <scope>provided</scope>
-      </dependency>
-
-      <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-log4j12</artifactId>
         <version>${slf4j.version}</version>
@@ -252,11 +254,6 @@
         <groupId>log4j</groupId>
         <artifactId>log4j</artifactId>
         <version>${log4j.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.couchbase.client</groupId>
-        <artifactId>java-client</artifactId>
-        <version>${couchbase.client.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.avro</groupId>
@@ -326,18 +323,13 @@
       </dependency>
       <dependency>
         <groupId>org.apache.flink</groupId>
+        <artifactId>flink-connector-filesystem_2.11</artifactId>
+        <version>${flink.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.flink</groupId>
         <artifactId>flink-metrics-dropwizard</artifactId>
-        <version>${flink.version}</version>
-      </dependency>
-      <!-- queryable-state-runtime is needed to start queryable server in TaskManager -->
-      <dependency>
-        <groupId>org.apache.flink</groupId>
-        <artifactId>flink-queryable-state-runtime_${scala.binary.version}</artifactId>
-        <version>${flink.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.flink</groupId>
-        <artifactId>flink-queryable-state-client-java_${scala.binary.version}</artifactId>
         <version>${flink.version}</version>
       </dependency>
       <dependency>
@@ -410,6 +402,17 @@
         <groupId>com.squareup.okhttp3</groupId>
         <artifactId>okhttp</artifactId>
         <version>${okhttp3.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.curator</groupId>
+        <artifactId>curator-client</artifactId>
+        <version>${curator.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.apache.curator</groupId>
@@ -486,6 +489,7 @@
         <version>${scalatest.version}</version>
         <scope>test</scope>
       </dependency>
+
       <!-- jacoco dependencies -->
       <dependency>
         <groupId>org.jacoco</groupId>
@@ -498,37 +502,25 @@
           </exclusion>
         </exclusions>
       </dependency>
-      <dependency>
-        <groupId>org.apache.flink</groupId>
-        <artifactId>flink-shaded-hadoop2</artifactId>
-        <version>1.7.2</version>
-      </dependency>
+
+      <!-- joda time -->
       <dependency>
         <groupId>joda-time</groupId>
         <artifactId>joda-time</artifactId>
         <version>2.10.5</version>
       </dependency>
+
+      <!--apache common csv-->
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-csv</artifactId>
+        <version>1.2</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <profiles>
-    <profile>
-      <!-- qa -->
-      <id>qa</id>
-      <properties>
-        <profiles.active>qa</profiles.active>
-      </properties>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-    </profile>
-    <profile>
-      <!-- prod -->
-      <id>prod</id>
-      <properties>
-        <profiles.active>prod</profiles.active>
-      </properties>
-    </profile>
     <profile>
       <id>sonar</id>
       <activation>
@@ -587,6 +579,13 @@
             <logViolationsToConsole>true</logViolationsToConsole>
             <failOnViolation>true</failOnViolation>
           </configuration>
+        </plugin>
+
+        <!--  Spotbugs for code statistics analysis      -->
+        <plugin>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>4.0.0</version>
         </plugin>
 
         <!-- Scala Compiler -->
@@ -706,12 +705,14 @@
             <tarLongFileMode>posix</tarLongFileMode>
           </configuration>
         </plugin>
+
         <!--job-uploader-maven-plugin-->
         <plugin>
           <groupId>io.ebay.rheos.streaming</groupId>
           <artifactId>job-uploader-maven-plugin</artifactId>
           <version>1.0-SNAPSHOT</version>
         </plugin>
+
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
@@ -755,6 +756,10 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

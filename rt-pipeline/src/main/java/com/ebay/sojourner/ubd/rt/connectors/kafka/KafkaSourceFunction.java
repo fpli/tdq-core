@@ -7,7 +7,7 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumerBase;
 
 public class KafkaSourceFunction {
 
-  public static <T> FlinkKafkaConsumerBase generateWatermark(String topic, String brokers,
+  public static <T> FlinkKafkaConsumerBase buildSource(String topic, String brokers,
       String groupId, Class<T> tClass) {
 
     FlinkKafkaConsumerBase<T> flinkKafkaConsumerBase
@@ -24,9 +24,11 @@ public class KafkaSourceFunction {
 
   private static <T> FlinkKafkaConsumerBase initKafkaConsumer(String topic, String brokers,
       String groupId, Class<T> tClass) {
+
     FlinkKafkaConsumer kafkaConsumer = KafkaConnectorFactory
         .createKafkaConsumer(topic, brokers, groupId, tClass);
-    if (groupId.contains("copy")) {
+    if (groupId.contains("copy")
+        || groupId.contains("cross")) {
       return kafkaConsumer.setStartFromEarliest();
     } else {
       return kafkaConsumer.setStartFromLatest();

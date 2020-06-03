@@ -1,109 +1,185 @@
-kafkaConsumerConfig:
-  bootstrapServersForRNO:
-    - rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
-    - rhs-glrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
-    - rhs-glrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
-    - rhs-glrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
-    - rhs-glrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
-  bootstrapServersForSLC:
-    - rhs-mwsvkiaa-kfk-slc-1.rheos-streaming-prod.svc.45.tess.io:9092
-    - rhs-mwsvkiaa-kfk-slc-2.rheos-streaming-prod.svc.45.tess.io:9092
-    - rhs-mwsvkiaa-kfk-slc-3.rheos-streaming-prod.svc.45.tess.io:9092
-    - rhs-mwsvkiaa-kfk-slc-4.rheos-streaming-prod.svc.45.tess.io:9092
-    - rhs-mwsvkiaa-kfk-slc-5.rheos-streaming-prod.svc.45.tess.io:9092
-  bootstrapServersForLVS:
-    - rhs-swsvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
-    - rhs-swsvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
-    - rhs-swsvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
-    - rhs-swsvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
-    - rhs-swsvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
-  bootstrapServersForQA:
-    - rhs-vvrvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-vvrvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-  groupIdForLVS: sojourner-pathfinder-lvs
-  groupIdForSLC: sojourner-pathfinder-slc
-  groupIdForRNO: sojourner-pathfinder-rno
-  groupIdForLVSDQ: sojourner-pathfinder-lvs-dq
-  groupIdForSLCDQ: sojourner-pathfinder-slc-dq
-  groupIdForRNODQ: sojourner-pathfinder-rno-dq
-  groupIdForQA: sojourner-pathfinder-qa
-  groupIdForSession: sojourner-pathfinder-session
-  groupIdForEvent: sojourner-pathfinder-event
-  groupIdForBot: sojourner-pathfinder-bot
-  groupIdForCopy: sojourner-pathfinder-copy
-  topic: behavior.pathfinder.events.total
+kafka:
+  common:
+    consumer:
+      max-poll-records: 3000
+      receive-buffer: 8388608
+      fetch-max-bytes: 262144000
+      fetch-max-wait-ms: 1000
+      max-partitions-fetch-bytes: 8388608
+      auto-offset-reset: latest
+    producer:
+      batch-size: 4096
+      request-timeout-ms: 60000
 
-kafkaProducerConfig:
-  bootstrapServersForSession:
-    - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-  bootstrapServersForEvent:
-    - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-  bootstrapServersForBot:
-    - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-  bootstrapServersForCopy:
-    - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
-    - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-  sessionTopic: behavior.trafficjam.session
-  eventTopic: behavior.trafficjam.event
-  botTopic: behavior.trafficjam.bot
-  copyTopic: behavior.trafficjam.pathfinder.copy
+  stream:
+    behavior-pathfinder:
+      bootstrap-servers:
+        rno:
+          - rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
+          - rhs-glrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
+          - rhs-glrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
+          - rhs-glrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
+          - rhs-glrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
+        slc:
+          - rhs-mwsvkiaa-kfk-slc-1.rheos-streaming-prod.svc.45.tess.io:9092
+          - rhs-mwsvkiaa-kfk-slc-2.rheos-streaming-prod.svc.45.tess.io:9092
+          - rhs-mwsvkiaa-kfk-slc-3.rheos-streaming-prod.svc.45.tess.io:9092
+          - rhs-mwsvkiaa-kfk-slc-4.rheos-streaming-prod.svc.45.tess.io:9092
+          - rhs-mwsvkiaa-kfk-slc-5.rheos-streaming-prod.svc.45.tess.io:9092
+        lvs:
+          - rhs-swsvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
+          - rhs-swsvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
+          - rhs-swsvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
+          - rhs-swsvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
+          - rhs-swsvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
+      topic: behavior.pathfinder.events.total
+      group-id:
+        default:
+          rno: sojourner-pathfinder-rno
+          slc: sojourner-pathfinder-slc
+          lvs: sojourner-pathfinder-lvs
 
-rheos:
-  serviceUrl: https://rheos-services.qa.ebay.com
-  iaf:
-    secret: 6218c197-200e-49d7-b404-2a4dbf7595ef
-    env: staging
+    behavior-total-new:
+      bootstrap-servers:
+        default:
+          - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+          - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+          - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+          - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
+          - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
+      topic:
+        session:
+          bot: behavior.total.new.sojsession
+          non-bot: behavior.total.new.sojsession
+        event:
+          bot: behavior.total.new.sojsession
+          non-bot: behavior.total.new.sojevent
+        signature:
+          agent-ip: behavior.total.new.agent.ip
+          agent: behavior.total.new.agent
+          ip: behavior.total.new.ip
+          guid: behavior.total.new.guid
+      group-id:
+        session:
+          bot: sojourner-pathfinder-session
+          non-bot: sojourner-pathfinder-session
+        event:
+          bot: sojourner-pathfinder-event
+          non-bot: sojourner-pathfinder-event
+        signature:
+          agent-ip: sojourner-pathfinder-agent-ip
+          agent: sojourner-pathfinder-agent
+          ip: sojourner-pathfinder-ip
+          guid: sojourner-pathfinder-guid
+      message-key:
+        session: guid
+        event: guid
+        signature: signatureId
+
+    behavior-total:
+      bootstrap-servers:
+        default:
+          - rhs-rdrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.26.tess.io:9092
+          - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
+          - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+          - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+          - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+      topic: behavior.total.sojevent.total
+      groupid: jetstream-non-bot-event
+
+    behavior-pulsar:
+      bootstrap-servers:
+        default:
+          - rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
+          - rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
+          - rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
+          - rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
+          - rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
+      topic:
+        session:
+          bot: behavior.pulsar.sojsession.botsession
+          non-bot: behavior.pulsar.sojsession.sessionend
+        event:
+          bot: behavior.pulsar.misc.bot
+      groupid:
+        session:
+          bot: jetstream-bot-session
+          non-bot: jetstream-non-bot-session
+        event:
+          bot: jetstream-bot-event
 
 flink:
   app:
-    nameForFullPipeline: Unified Bot Detection RT Pipeline
-    nameForRTLoadPipeline: Unified Bot Detection RT Load Pipeline
-    nameForDQPipeline: Unified Bot Detection RT DQ Pipeline
-    nameForHotDeployPipeline: Unified Bot Detection RT Hot Deploy Pipeline
-    nameForKafkaSinkPipeline: Unified Bot Detection RT kafka Sink Pipeline
-    nameForKafkaCopyPipeline: Unified Bot Detection RT kafka Copy Pipeline
-    source-parallelism: 2
-    event-parallelism: 2
-    session-parallelism: 2
-    pre-agentIp-parallelism: 2
-    agentIp-parallelism: 2
-    agent-parallelism: 2
-    ip-parallelism: 2
-    guid-parallelism: 2
-    copy-kafka-parallelism: 2
-    event-kafka-parallelism: 2
-    session-kafka-parallelism: 2
-    bot-kafka-parallelism: 2
-    broadcast-parallelism: 2
-    metrics-parallelism: 2
-  checkpoint:
-    data-dir: /opt/sojourner-ubd/checkpoint
-    interval: 5m
-    timeout: 15m
-    min-pause-between: 2m
-    max-concurrent: 1
+    name:
+      full-pipeline: Unified Bot Detection RT Pipeline
+      data-quality: Unified Bot Detection RT DQ Pipeline
+      hot-deploy: Unified Bot Detection RT Hot Deploy Pipeline
+      hdfs-dump: Unified Bot Detection HDFS Load Pipeline
+      kafka-dump: Unified Bot Detection KAFKA Load Pipeline
+    parallelism:
+      source: 100
+      event: 100
+      session: 640
+      pre-agent-ip: 100
+      agent-ip: 100
+      agent: 100
+      ip: 100
+      guid: 100
+      broadcast: 200
+      metrics: 200
+    slot-sharing-group:
+      default: default
+      source-event-lvs: lvs
+      source-event-slc: slc
+      source-event-rno: rno
+      session: session
+      cross-session: cross-session
+      broadcast: broadcast
+    checkpoint:
+      data-dir: /opt/sojourner-ubd/checkpoint
+      interval-ms: 300000
+      timeout-ms: 900000
+      min-pause-between-ms: 120000
+      max-concurrent: 1
+
+rheos:
+  serviceUrl: https://rheos-services.stratus.ebay.com
+  iaf:
+    secret: c4bb6fca-7ac5-46dd-b218-a49cb6307dbc
+    env: production
 
 hdfs:
-  sinkParentPath: hdfs://hadoop-qa-5878.lvs02.dev.ebayc3.com:8020/user/o_ubi/soj/ubd
-  sinkEventPath: /events
-  sinkSessionPath: /sessions
-  sinkSignaturePath: /signatures
-  sinkLateEventPath: /late_events
+  path:
+    parent: hdfs://apollo-rno/sys/soj/ubd
+    event:
+      bot: /events_bot
+      non-bot: /events
+      late: /events_late
+    session:
+      bot: /sessions_bot
+      non-bot: /sessions_non_bot
+    cross-session: /signatures
+    jetstream:
+      event: /jetstream_events
+      session: /jetstream_sessions
+
+zookeeper:
+  server:
+    - zk-0.sojzk-ns.svc.32.tess.io:2181
+    - zk-1.sojzk-ns.svc.32.tess.io:2181
+    - zk-2.sojzk-ns.svc.32.tess.io:2181
+  sessionTimeoutMs: 15000
+  connectionTimeoutMs: 5000
+  maxRetries: 3
+  baseSleepTimeMs: 1000
+  namespace: sojourner
+  nodepath: /rule/publish/notification
+
+rest-client:
+  rest-server: https://sojubdportalservice.vip.ebay.com
+  published-rule-list: /api/rule/list/published
+  specified-rule: /api/rule/
+  auth-username-key: X-Auth-Username
+  auth-username-value: soj-flink-app
+  auth-token-key: X-Auth-Token
+  anth-token-value: B65613BAE51443268AEBCAEF26C30ABE

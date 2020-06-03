@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.Getter;
 
 @Data
-public class GuidAttribute implements Attribute<SessionForGuidEnhancement>, Serializable {
+public class GuidAttribute implements Attribute<SessionCore>, Serializable {
 
   private long guid1;
   private long guid2;
@@ -18,14 +18,15 @@ public class GuidAttribute implements Attribute<SessionForGuidEnhancement>, Seri
   public GuidAttribute() {
   }
 
-  public void feed(SessionForGuidEnhancement session, int botFlag, boolean isNeeded) {
-    if (isNeeded) {
-      absEventCount += session.getAbsEventCnt();
+  public void feed(SessionCore intermediateSession, int botFlag) {
+    if (intermediateSession.getAbsEventCnt() != null) {
+      absEventCount += intermediateSession.getAbsEventCnt();
     }
+
   }
 
   @Override
-  public void revert(SessionForGuidEnhancement session, int botFlag) {
+  public void revert(SessionCore intermediateSession, int botFlag) {
   }
 
   public void clear() {

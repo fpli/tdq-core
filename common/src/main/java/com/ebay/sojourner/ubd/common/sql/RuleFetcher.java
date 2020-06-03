@@ -1,81 +1,51 @@
 package com.ebay.sojourner.ubd.common.sql;
 
+import com.ebay.sojourner.ubd.common.util.Constants;
+import com.ebay.sojourner.ubd.common.util.RestClientUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Date;
+import com.google.common.collect.Lists;
+import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.apache.log4j.Logger;
 
+@Slf4j
 public class RuleFetcher {
 
-  protected static final Logger LOGGER = Logger.getLogger(RuleManager.class);
-  public static final String REST_SERVER = "https://sojubdportalservice.vip.qa.ebay.com";
-  public static final String API_RULE_LIST_PUBLISHED = "/api/rule/list/published";
+  private final OkHttpClient client;
+  private final ObjectMapper objectMapper;
+  private static final String FETCH_ALL_RULES =
+      Constants.REST_SERVER + Constants.REST_PUBLISHED_RULE_LIST;
+  private static final String FETCH_RULE_PREFIX =
+      Constants.REST_SERVER + Constants.REST_SPECIFIED_RULE;
 
-  private ScheduledExecutorService scheduledExecutorService;
-  private OkHttpClient client;
-  private Request request;
-  private RuleManager ruleManager;
-
-  public RuleFetcher(RuleManager ruleManager) {
-    client = new OkHttpClient();
-    request = new Request.Builder()
-        .url(REST_SERVER + API_RULE_LIST_PUBLISHED)
-        .addHeader("X-Auth-Username", "soj-flink-app")
-        .addHeader("X-Auth-Token", "B65613BAE51443268AEBCAEF26C30ABE")
-        .build();
-    this.ruleManager = ruleManager;
+  public RuleFetcher() {
+    this.client = RestClientUtils.getRestClient();
+    this.objectMapper = new ObjectMapper();
   }
 
-  public void fetchRulesPeriodically() {
-    scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-    System.out.println("Fetch rules periodically");
-    scheduledExecutorService.scheduleAtFixedRate(() -> {
-      fetchRules();
-    }, 0, 10, TimeUnit.SECONDS);
-  }
+  public List<RuleDefinition> fetchAllRules() {
+    List<RuleDefinition> ruleDefinitionList = Lists.newArrayList();
 
-  public synchronized void fetchRules() {
     try {
-      try (Response response = client.newCall(request).execute()) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<RuleDefinition> responseBodyContent = objectMapper.reader()
-            .forType(new TypeReference<List<RuleDefinition>>() {
-            }).readValue(response.body().bytes());
-        System.out.println("Fetch rules at " + new Date());
-        System.out.println("Rules = " + responseBodyContent);
-        if (ruleManager != null) {
-          ruleManager.updateRules(responseBodyContent);
-        }
-      }
-    } catch (Exception e) {
-      LOGGER.warn(e);
+      Request request = RestClientUtils
+          .buildRequest(FETCH_ALL_RULES);
+      log.info("Fetching rules url is {}", FETCH_ALL_RULES);
+      Response response = client.newCall(request).execute();
+      ruleDefinitionList = objectMapper
+          .reader()
+          .forType(new TypeReference<List<RuleDefinition>>() {
+          })
+          .readValue(response.body().string());
+      log.info("Rules = " + ruleDefinitionList);
+    } catch (IOException e) {
+      log.error("fetch all published rule failed", e);
     }
-  }
 
-  public static void example1() throws Exception {
-    RuleFetcher fetcher = new RuleFetcher(null);
-    Response response = fetcher.client.newCall(fetcher.request).execute();
-    ObjectMapper objectMapper = new ObjectMapper();
-    List<RuleDefinition> responseBodyContent = objectMapper.reader()
-        .forType(new TypeReference<List<RuleDefinition>>() {
-        }).readValue(response.body().bytes());
-    System.out.println(responseBodyContent.toString());
-  }
-
-  public static void example2() {
-    RuleFetcher fetcher = new RuleFetcher(null);
-    fetcher.fetchRulesPeriodically();
-  }
-
-  public static void main(String[] args) {
-    example2();
+    return ruleDefinitionList;
   }
 
 }

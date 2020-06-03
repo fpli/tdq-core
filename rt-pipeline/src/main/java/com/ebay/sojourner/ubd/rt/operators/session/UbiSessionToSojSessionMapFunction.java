@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.rt.operators.session;
 import com.ebay.sojourner.ubd.common.model.SojSession;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.util.RulePriorityUtils;
+import java.util.ArrayList;
 import org.apache.flink.api.common.functions.RichMapFunction;
 
 public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSession, SojSession> {
@@ -21,7 +22,7 @@ public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSessio
     sojSession.setEndTimestamp(ubiSession.getEndTimestamp());
     sojSession.setAbsStartTimestamp(ubiSession.getAbsStartTimestamp());
     sojSession.setAbsEndTimestamp(ubiSession.getAbsEndTimestamp());
-    sojSession.setBotFlagList(ubiSession.getBotFlagList());
+    sojSession.setBotFlagList(new ArrayList<>(ubiSession.getBotFlagList()));
     sojSession.setNonIframeRdtEventCnt(ubiSession.getNonIframeRdtEventCnt());
     sojSession.setSessionReferrer(ubiSession.getSessionReferrer());
     sojSession.setBotFlag(RulePriorityUtils.getHighPriorityBotFlag(ubiSession.getBotFlagList()));
@@ -35,6 +36,7 @@ public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSessio
     sojSession.setEndPageId(ubiSession.getEndPageId());
     sojSession.setDurationSec(ubiSession.getDurationSec());
     sojSession.setEventCnt(ubiSession.getEventCnt());
+    sojSession.setAbsEventCnt(ubiSession.getAbsEventCnt());
     sojSession.setViCoreCnt(ubiSession.getViCoreCnt());
     sojSession.setBidCoreCnt(ubiSession.getBidCoreCnt());
     sojSession.setBinCoreCnt(ubiSession.getBinCoreCnt());
@@ -52,6 +54,32 @@ public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSessio
     sojSession.setMyebayCnt(ubiSession.getMyebayCnt());
     sojSession.setSigninPageCnt(ubiSession.getSigninPageCnt());
     sojSession.setFirstSessionStartDt(ubiSession.getFirstSessionStartDt());
+    sojSession.setSingleClickSessionFlag(ubiSession.getSingleClickSessionFlag());
+    sojSession.setAsqCnt(ubiSession.getAsqCnt());
+    sojSession.setAtcCnt(ubiSession.getAtcCnt());
+    sojSession.setAtlCnt(ubiSession.getAtlCnt());
+    sojSession.setBoCnt(ubiSession.getBoCnt());
+    sojSession.setSrpCnt(ubiSession.getSrpCnt());
+    sojSession.setServEventCnt(ubiSession.getServEventCnt());
+    sojSession.setSearchViewPageCnt(ubiSession.getSearchViewPageCnt());
+    sojSession.setBrowserFamily(ubiSession.getBrowserFamily());
+    sojSession.setBrowserVersion(ubiSession.getBrowserVersion());
+    sojSession.setCity(ubiSession.getCity());
+    sojSession.setContinent(ubiSession.getContinent());
+    sojSession.setCountry(ubiSession.getCountry());
+    sojSession.setDeviceClass(ubiSession.getDeviceClass());
+    sojSession.setDeviceFamily(ubiSession.getDeviceFamily());
+    sojSession.setEndResourceId(ubiSession.getEndResourceId());
+    sojSession.setIsReturningVisitor(ubiSession.isReturningVisitor());
+    sojSession.setLineSpeed(ubiSession.getLineSpeed());
+    sojSession.setOsFamily(ubiSession.getOsFamily());
+    sojSession.setOsVersion(ubiSession.getOsVersion());
+    sojSession.setPulsarEventCnt(ubiSession.getPulsarEventCnt());
+    sojSession.setRegion(ubiSession.getRegion());
+    sojSession.setSessionEndDt(ubiSession.getSessionEndDt());
+    sojSession.setStartResourceId(ubiSession.getStartResourceId());
+    sojSession.setStreamId(ubiSession.getStreamId());
+    sojSession.setBuserId(ubiSession.getBuserId());
     return sojSession;
   }
 }

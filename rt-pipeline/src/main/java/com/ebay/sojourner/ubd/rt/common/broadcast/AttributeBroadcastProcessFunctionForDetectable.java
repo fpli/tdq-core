@@ -98,7 +98,7 @@ public class AttributeBroadcastProcessFunctionForDetectable
         ubiEvent.getBotFlags().add(210);
       }
 
-      if (ubiEvent.getBotFlags().contains(223)) {
+      if (ubiEvent.getBotFlags().contains(223)&&ubiEvent.getBotFlags().contains(224)) {
         ubiEvent.getBotFlags().add(211);
       }
       out.collect(ubiEvent);
@@ -152,7 +152,7 @@ public class AttributeBroadcastProcessFunctionForDetectable
         ubiSession.getBotFlagList().add(210);
       }
 
-      if (ubiSession.getBotFlagList().contains(223)) {
+      if (ubiSession.getBotFlagList().contains(223)&&ubiSession.getBotFlagList().contains(224)) {
         ubiSession.getBotFlagList().add(211);
       }
       context.output(outputTag, ubiSession);

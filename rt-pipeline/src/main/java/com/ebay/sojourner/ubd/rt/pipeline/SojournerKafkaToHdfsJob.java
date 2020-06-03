@@ -1,103 +1,50 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
 import com.ebay.sojourner.ubd.common.model.SojEvent;
-import com.ebay.sojourner.ubd.rt.common.state.StateBackendFactory;
+import com.ebay.sojourner.ubd.common.util.Constants;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
-import com.ebay.sojourner.ubd.rt.util.AppEnv;
-import com.ebay.sojourner.ubd.rt.util.Constants;
-import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
-import java.util.concurrent.TimeUnit;
-import org.apache.flink.api.common.restartstrategy.RestartStrategies;
-import org.apache.flink.api.java.utils.ParameterTool;
-import org.apache.flink.streaming.api.CheckpointingMode;
-import org.apache.flink.streaming.api.TimeCharacteristic;
+import com.ebay.sojourner.ubd.rt.util.FlinkEnvUtils;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
+/**
+ * This is a common class used to dump kafka topic to hdfs.
+ * Usage:
+ * --dump.source.topic behavior.total.new.sojevent
+ * --dump.source.class com.ebay.sojourner.ubd.common.model.SojEvent
+ * --dump.hdfs.path hdfs://apollo-rno/sys/soj/ubd/events
+ * --dump.group.id sojourner-pathfinder-event-dump
+ * --dump.parallel.number 200
+ */
 public class SojournerKafkaToHdfsJob {
 
   public static void main(String[] args) throws Exception {
-    // Make sure this is being executed at start up.
-    ParameterTool parameterTool = ExecutionEnvUtil.createParameterTool(args);
-    AppEnv.config(parameterTool);
 
-    // 0.0 Prepare execution environment
-    // 0.1 UBI configuration
-    // 0.2 Flink configuration
-    final StreamExecutionEnvironment executionEnvironment =
-        StreamExecutionEnvironment.getExecutionEnvironment();
-    executionEnvironment.getConfig().setGlobalJobParameters(parameterTool);
-    executionEnvironment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+    final StreamExecutionEnvironment executionEnvironment = FlinkEnvUtils.prepare(args);
 
-    // checkpoint settings
-    executionEnvironment.enableCheckpointing(
-        AppEnv.config().getFlink().getCheckpoint().getInterval().getSeconds() * 1000,
-        CheckpointingMode.EXACTLY_ONCE);
-    executionEnvironment
-        .getCheckpointConfig()
-        .setCheckpointTimeout(
-            AppEnv.config().getFlink().getCheckpoint().getTimeout().getSeconds() * 1000);
-    executionEnvironment
-        .getCheckpointConfig()
-        .setMinPauseBetweenCheckpoints(
-            AppEnv.config().getFlink().getCheckpoint().getMinPauseBetween().getSeconds() * 1000);
-    executionEnvironment
-        .getCheckpointConfig()
-        .setMaxConcurrentCheckpoints(
-            AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent() == null
-                ? 1
-                : AppEnv.config().getFlink().getCheckpoint().getMaxConcurrent());
-    executionEnvironment.setStateBackend(
-        StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
-    executionEnvironment.setRestartStrategy(
-        RestartStrategies.fixedDelayRestart(
-            3, // number of restart attempts
-            org.apache.flink.api.common.time.Time.of(10, TimeUnit.SECONDS) // delay
-        ));
+    String sourceTopic = FlinkEnvUtils.getString("dump.source.topic");
+    Class<?> deserializeClass = Class.forName(FlinkEnvUtils.getString("dump.source.class"));
+    String hdfsPath = FlinkEnvUtils.getString("dump.hdfs.path");
+    String groupId = FlinkEnvUtils.getString("dump.group.id");
+    int sourceParallelNum = FlinkEnvUtils.getInteger("dump.source.parallel.number");
+    int sinkParallelNum = FlinkEnvUtils.getInteger("dump.sink.parallel.number");
+    String bootstrapServers = FlinkEnvUtils
+        .getListString(Constants.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT);
 
-    // kafka source for session
-    /*
-    DataStream<SojSession> sojSessionDataStream =
-        executionEnvironment
-            .addSource(KafkaSourceFunction
-                .generateWatermark(Constants.TOPIC_PRODUCER_SESSION,
-                    Constants.BOOTSTRAP_SERVERS_SESSION, Constants.GROUP_ID_SESSION,
-                    SojSession.class))
-            .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
-            .name("Rheos Kafka Consumer For Session")
-            .uid("kafkaSourceForSession");
-            */
+    DataStream<SojEvent> sourceDataStream = executionEnvironment
+        .addSource(KafkaSourceFunction
+            .buildSource(sourceTopic, bootstrapServers, groupId, deserializeClass))
+        .setParallelism(sourceParallelNum)
+        .name(String.format("Rheos Kafka Consumer from topic: %s", sourceTopic))
+        .uid("non-bot-source-id");
 
-    // kafka source for event
-    DataStream<SojEvent> sojEventDataStream =
-        executionEnvironment
-            .addSource(KafkaSourceFunction
-                .generateWatermark(Constants.TOPIC_PRODUCER_EVENT,
-                    Constants.BOOTSTRAP_SERVERS_EVENT, Constants.GROUP_ID_EVENT,
-                    SojEvent.class))
-            .setParallelism(AppEnv.config().getFlink().app.getEventKafkaParallelism())
-            .name("Rheos Kafka Consumer For Event")
-            .uid("kafkaSourceForEvent");
+    sourceDataStream
+        .addSink(HdfsSinkUtil.createWithParquet(hdfsPath, deserializeClass))
+        .setParallelism(sinkParallelNum)
+        .name(String.format("Hdfs sink to location: %s", hdfsPath))
+        .uid("sink-id");
 
-    // hdfs sink for session
-    /*
-    sojSessionDataStream
-        .addSink(HdfsSinkUtil.sojSessionSinkWithParquet())
-        .setParallelism(AppEnv.config().getFlink().app.getSessionKafkaParallelism())
-        .name("SojSession sink")
-        .uid("sessionHdfsSink")
-        .disableChaining();
-        */
-    // hdfs sink for event
-    sojEventDataStream
-        .addSink(HdfsSinkUtil.sojEventSinkWithParquet())
-        .setParallelism(AppEnv.config().getFlink().app.getEventKafkaParallelism())
-        .name("SojEvent sink")
-        .uid("eventHdfsSink")
-        .disableChaining();
-
-    // Submit this job
-    executionEnvironment.execute(AppEnv.config().getFlink().getApp().getNameForRTLoadPipeline());
+    FlinkEnvUtils.execute(executionEnvironment, FlinkEnvUtils.getString(Constants.NAME_HDFS_DUMP));
   }
 }

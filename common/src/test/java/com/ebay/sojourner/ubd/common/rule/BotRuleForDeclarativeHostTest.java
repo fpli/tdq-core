@@ -8,6 +8,7 @@ import static org.powermock.reflect.Whitebox.setInternalState;
 
 import com.ebay.sojourner.ubd.common.model.IpAttribute;
 import com.ebay.sojourner.ubd.common.util.BotHostMatcher;
+import com.ebay.sojourner.ubd.common.util.TransformUtil;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class BotRuleForDeclarativeHostTest {
     IpAttribute ipAttribute = new IpAttribute();
     ipAttribute.setIsAllAgentHoper(true);
     ipAttribute.setTotalCnt(301);
-    ipAttribute.setClientIp(ip);
+    ipAttribute.setClientIp(TransformUtil.ipToInt(ip));
     when(botHostMatcher.isBotIp(ip)).thenReturn(true);
 
     int botFlag = botRuleForDeclarativeHost.getBotFlag(ipAttribute);
@@ -46,7 +47,7 @@ public class BotRuleForDeclarativeHostTest {
     IpAttribute ipAttribute = new IpAttribute();
     ipAttribute.setIsAllAgentHoper(true);
     ipAttribute.setTotalCnt(300);
-    ipAttribute.setClientIp(ip);
+    ipAttribute.setClientIp(TransformUtil.ipToInt(ip));
 
     int botFlag = botRuleForDeclarativeHost.getBotFlag(ipAttribute);
     Assertions.assertThat(botFlag).isEqualTo(0);

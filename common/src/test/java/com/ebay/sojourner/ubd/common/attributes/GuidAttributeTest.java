@@ -1,7 +1,7 @@
 package com.ebay.sojourner.ubd.common.attributes;
 
 import com.ebay.sojourner.ubd.common.model.GuidAttribute;
-import com.ebay.sojourner.ubd.common.model.SessionForGuidEnhancement;
+import com.ebay.sojourner.ubd.common.model.SessionCore;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.Collection;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-public class GuidAttributeTest extends BaseAttributesTest<SessionForGuidEnhancement> {
+public class GuidAttributeTest extends BaseAttributesTest<SessionCore> {
 
   private GuidAttribute guidAttribute;
   private Pair<JsonNode, List<AttributesTestCase>> pair;

@@ -64,5 +64,14 @@ under the License.
   <suppress checks=".*"
     files="src/main/java/org/apache/flink/streaming/runtime/operators/windowing/MapWithStateWindowOperator.java"/>
   <suppress checks=".*"
-    files="src/test/java/com/ebay/sojourner/ubd/common/sharedlib/metrics/TimestampMetricsTest2.java"/>
+    files="src/test/java/com/ebay/sojourner/ubd/common/sharedlib/metrics/BotRuleForSessionDQTest.java"/>
+  <suppress checks=".*"
+    files="src/test/java/com/ebay/sojourner/ubd/common/sharedlib/metrics/MetricsForSessionDQTest.java"/>
+  <suppress checks=".*"
+    files="src/main/java/com/ebay/sojourner/ubd/common/model/SojSession.java"/>
+  <suppress checks=".*"
+    files="src/main/java/com/ebay/sojourner/ubd/common/model/IntermediateSession.java"/>
+  <suppress checks=".*"
+    files="/src/main/java/com/ebay/sojourner/ubd/common/util/Constants.java"/>
+  <suppress checks="NewlineAtEndOfFile" files=".java" />
 </suppressions>

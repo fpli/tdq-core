@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable {
 
-  private String agent;
+  private AgentHash agent;
   private int scsCount;
   private int ipCount;
   private int totalSessionCnt = 0;
@@ -24,7 +24,7 @@ public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable
   }
 
   @Override
-  public void feed(AgentIpAttribute agentIpAttribute, int botFlag, boolean isNeeded) {
+  public void feed(AgentIpAttribute agentIpAttribute, int botFlag) {
     switch (botFlag) {
       case 6: {
         ipCount += agentIpAttribute.getIpCount();

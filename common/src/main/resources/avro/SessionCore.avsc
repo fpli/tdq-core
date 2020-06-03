@@ -1,0 +1,82 @@
+{
+  "type" : "record",
+  "name" : "SessionCore",
+  "namespace" : "com.ebay.sojourner.ubd.common.model",
+  "fields" : [ {
+    "name" : "botFlag",
+    "type" : "int"
+  }, {
+    "name" : "absEventCnt",
+    "type" : "int"
+  }, {
+    "name" : "flags",
+    "type" : "int"
+  }, {
+    "name" : "distinctGuidsForSameAgentIp",
+    "type" : "int"
+  }, {
+    "name" : "userAgent",
+    "type" : [ "null", {
+      "type" : "record",
+      "name" : "AgentHash",
+      "fields" : [ {
+        "name" : "agentHash1",
+        "type" : "long"
+      }, {
+        "name" : "agentHash2",
+        "type" : "long"
+      } ]
+    } ],
+    "default" : null
+  }, {
+    "name" : "ip",
+    "type" : [ "null", "int" ],
+    "default" : null
+  }, {
+    "name" : "agentString",
+    "type" : [ "null", "AgentHash" ],
+    "default" : null
+  }, {
+    "name" : "agentStringAfterBase64",
+    "type" : [ "null", "AgentHash" ],
+    "default" : null
+  }, {
+    "name" : "exInternalIp",
+    "type" : [ "null", "int" ],
+    "default" : null
+  }, {
+    "name" : "exInternalIpNonTrim",
+    "type" : [ "null", "int" ],
+    "default" : null
+  }, {
+    "name" : "appId",
+    "type" : [ "null", "int" ],
+    "default" : null
+  }, {
+    "name" : "cguid",
+    "type" : [ "null", {
+      "type" : "record",
+      "name" : "Guid",
+      "fields" : [ {
+        "name" : "guid1",
+        "type" : "long"
+      }, {
+        "name" : "guid2",
+        "type" : "long"
+      } ]
+    } ],
+    "default" : null
+  }, {
+        "name" : "guid",
+        "type" : [ "null", "Guid" ],
+           "default" : null
+      }, {
+    "name" : "validPageCnt",
+    "type" : [ "null", "int" ],
+    "default" : null
+  }, {
+    "name" : "sessionStartDt",
+    "type" : [ "null", "long" ],
+    "default" : null
+  } ]
+}

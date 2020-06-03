@@ -5,7 +5,7 @@
   "doc" : " tags not included but in UbiEvent: current_impr_id, source_impr_id, staticPageType, reservedForFuture, eventAttr, oldSessionSkey, seqNum, sessionStartDt, sojDataDt, version",
   "fields" : [{
     "name" : "guid",
-    "type" : "string"
+    "type" : [ "null", "string" ]
   }, {
         "name" : "sessionId",
         "type" : [ "null", "string" ],
@@ -56,7 +56,7 @@
 
      {
     "name" : "eventTimestamp",
-    "type" : "string",
+    "type" : [ "null", "string" ],
     "doc" : "dataClassification=Internal|isEncrypted=false|description=map from timestamp, publish time"
   }, {
     "name" : "eventCaptureTime",
@@ -266,9 +266,7 @@
   }, {
     "name" : "rlogid",
     "type" : [ "null", "string" ],
-    "doc" : "CAL request log id",
-    "default" : null,
-    "avro.java.string" : "String"
+    "doc" : "CAL request log id"
   }, {
     "name" : "clientData",
     "type" :  [ "null", "string" ],

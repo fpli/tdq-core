@@ -15,37 +15,45 @@ public class UbiSession implements Serializable, Cloneable {
   private String sessionId;
   private long sessionSkey;
   private Long sessionStartDt;
-  private String ip;
+  private String ip; //ipv4 in jetstream
   private String userAgent;
-  private String sessionReferrer;
+  private String sessionReferrer;//referer in jetstream
   private int botFlag;
   private int version;
-  private String firstUserId;
-  private Long siteFlags;
+  private String firstUserId; // userid in jetstream
+  private long siteFlags;
   private int attrFlags;
   private int botFlags;
   private Long findingFlags;
-  private int startPageId;
-  private int endPageId;
+  private int startPageId; //pageid in jetstream
+  private int endPageId; //pageid in jetstream
   private Long startTimestamp;
   private Long startTimestampNOIFRAMERDT;
   private Long endTimestampNOIFRAMERDT;
   private Long startTimestampNOIFRAME;
   private Long startTimestampForAgentString;
+  private Long startTimestampForReferrer;
+  private Long startTimestampForScEvent;
+  private Long absStartTimestampForRoverClick;
+  private Long absStartTimestampForRover3084;
+  private Long absStartTimestampForRover3085;
+  private Long absStartTimestampForRover3962;
+  private Long absStartTimestampForNotifyClick;
+  private Long absStartTimestampForNotifyView;
   private int durationSec;
-  private int eventCnt;
-  private int viCoreCnt;
-  private int bidCoreCnt;
-  private int binCoreCnt;
-  private int watchCoreCnt;
+  private int eventCnt; // sojeventcnt in jetstream
+  private int viCoreCnt; // vicnt in jetstream
+  private int bidCoreCnt; // bidcnt in Jetstream
+  private int binCoreCnt; // bincnt in jetstream
+  private int watchCoreCnt; // watchcnt in jetstream
   private int trafficSrcId;
   private Long absStartTimestamp;
   private int absDuration;
   private int cobrand;
-  private int firstSiteId;
-  private String firstCguid;
+  private int firstSiteId; // siteid in jetstream
+  private String firstCguid; //cguid in jetstream
   private Long firstMappedUserId;
-  private Integer firstAppId;
+  private Integer firstAppId; // appid in jetstream
   private Long endTimestamp;
   private int homepageCnt;
   private int grCnt;
@@ -53,11 +61,11 @@ public class UbiSession implements Serializable, Cloneable {
   private int myebayCnt;
   private int signinPageCnt;
   private int nonIframeRdtEventCnt;
-  private Boolean singleClickSessionFlag;
+  private Boolean singleClickSessionFlag; // Not exists in SojSession
   private Boolean bidBinConfirmFlag;
   private Boolean sessionEndedFlag;
   private String oldSessionSkey;
-  private int absEventCnt;
+  private int absEventCnt; // Not exists in SojSession
   private int validPageCnt;
   private int agentCnt;
   private String agentString;
@@ -91,7 +99,6 @@ public class UbiSession implements Serializable, Cloneable {
   private int minSCSeqNum;
   private Long[] minMaxEventTimestamp;
   private Set<Long> oldSessionSkeySet;
-  private byte[] siteFlagsSet;
   private Set<Integer> botFlagList = new LinkedHashSet<>();
   private Set<String> userIdSet = new HashSet<>();
   private Attributes attributes = new Attributes();
@@ -103,19 +110,46 @@ public class UbiSession implements Serializable, Cloneable {
   private int seqNum;
   private IntermediateMetrics intermediateMetrics;
   private Long firstSessionStartDt;
+  //Column exists in Jetstream but not exists in Flink
+  private int asqCnt = 0;//from SOJEvent(_pgf = 'ASQ' and rdt = 0  and _ifrm = false)
+  private int atcCnt = 0;//from SOJEvent(_pgf = 'ATC' and rdt = 0  and _ifrm = false)
+  private int atlCnt = 0;//from SOJEvent(_pgf = 'ATL' and rdt = 0  and _ifrm = false)
+  private int boCnt = 0;//from SOJEvent(_pgf = 'BO' and rdt = 0  and _ifrm = false)
+  private int srpCnt = 0;//from SOJEvent(_pgf in ('GR', 'GR-1') and rdt = 0 and _ifrm = false)
+  private int servEventCnt = 0;//select * from SOJEvent(p is not null and rdt = 0 and _ifrm = false)
+  private int searchViewPageCnt = 0;
+  private String city;
+  private String region;
+  private String country;
+  private String continent;
+  private String browserFamily;//Exists in UBI_EVENT, get first
+  private String browserVersion;//Exists in UBI_EVENT, get first
+  private String deviceClass;//Exists in UBI_EVENT, get first
+  private String deviceFamily;//Exists in UBI_EVENT, get first
+  private String osFamily;//Exists in UBI_EVENT, get first
+  private String osVersion;//Exists in UBI_EVENT, get first
+  private int startResourceId;//Capture first non-iframe/rdt page view and refresh metadata
+  //if r1 is not null, extract second field from r1 as pageId, and use it first for exit page logic
+  private int endResourceId;
+  private boolean isReturningVisitor;
+  private String lineSpeed;
+  private int pulsarEventCnt = 0;
+  private long sessionEndDt;
+  private String streamId;
+  private String buserId;
 
   public UbiSession() {
     //        this.distinctClickIdSet = new HashSet<Integer>();
     //        this.agentSets= new HashSet<String>();
   }
 
-  //  public boolean isRefererNull() {
-  //    return isRefererNull;
-  //  }
-  //
-  //  public void setIsRefererNull(boolean refererNull) {
-  //    isRefererNull = refererNull;
-  //  }
+  public void setIsReturningVisitor(boolean returningVisitor) {
+    isReturningVisitor = returningVisitor;
+  }
+
+  public void setIsRefererNull(boolean refererNull) {
+    isRefererNull = refererNull;
+  }
 
   public UbiSession merge(UbiSession ubiSession) {
     this.eventCnt += ubiSession.getEventCnt();
@@ -139,6 +173,13 @@ public class UbiSession implements Serializable, Cloneable {
     this.viewCnt += ubiSession.getViewCnt();
     this.siidCnt += ubiSession.getSiidCnt();
     this.siidCnt2 += ubiSession.getSiidCnt2();
+    this.asqCnt += ubiSession.getAsqCnt();
+    this.atcCnt += ubiSession.getAtcCnt();
+    this.atlCnt += ubiSession.getAtlCnt();
+    this.boCnt += ubiSession.getBoCnt();
+    this.srpCnt += ubiSession.getSrpCnt();
+    this.searchViewPageCnt += ubiSession.getSearchViewPageCnt();
+    this.servEventCnt += ubiSession.getServEventCnt();
     this.maxScsSeqNum = Math.max(this.maxScsSeqNum, ubiSession.getMaxScsSeqNum());
     this.oldSessionSkeySet.addAll(ubiSession.getOldSessionSkeySet());
     this.botFlagList.addAll(ubiSession.getBotFlagList());
@@ -172,5 +213,9 @@ public class UbiSession implements Serializable, Cloneable {
     }
 
     return this;
+  }
+
+  public void initIntermediateMetrics() {
+    intermediateMetrics = new IntermediateMetrics();
   }
 }

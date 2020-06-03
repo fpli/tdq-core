@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.metrics;
 import com.ebay.sojourner.ubd.common.model.SessionAccumulator;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.ubd.common.util.BitUtils;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,20 +44,11 @@ public class SiteFlagMetricsTest extends BaseMetricsTest {
           DynamicTest.dynamicTest(
               "test siteId " + siteIds.get(i),
               () -> {
-                byte[] siteFlags = {
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0
-                };
-                siteFlags[idx] = 1;
+                long siteFlags = 0;
+                BitUtils.setBit(siteFlags, idx);
                 siteFlagMetrics.start(sessionAccumulator);
                 siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
-                Assertions.assertThat(sessionAccumulator.getUbiSession().getSiteFlagsSet())
+                Assertions.assertThat(sessionAccumulator.getUbiSession().getSiteFlags())
                     .isEqualTo(siteFlags);
               });
       tests.add(dynamicTest);

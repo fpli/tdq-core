@@ -7,15 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SessionDwellMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
-  private Long[] minMaxEventTimestamp;
-
   @Override
   public void init() throws Exception {
   }
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
-    minMaxEventTimestamp = new Long[]{Long.MAX_VALUE, Long.MIN_VALUE};
+    Long[] minMaxEventTimestamp = new Long[]{Long.MAX_VALUE, Long.MIN_VALUE};
     sessionAccumulator.getUbiSession().setMinMaxEventTimestamp(minMaxEventTimestamp);
   }
 
@@ -23,7 +21,7 @@ public class SessionDwellMetrics implements FieldMetrics<UbiEvent, SessionAccumu
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
     long eventTimestamp = event.getEventTimestamp();
     if (!event.isIframe() && !event.isRdt()) {
-      minMaxEventTimestamp = sessionAccumulator.getUbiSession().getMinMaxEventTimestamp();
+      Long[] minMaxEventTimestamp = sessionAccumulator.getUbiSession().getMinMaxEventTimestamp();
       if (minMaxEventTimestamp[0] > eventTimestamp) {
         minMaxEventTimestamp[0] = eventTimestamp;
       }

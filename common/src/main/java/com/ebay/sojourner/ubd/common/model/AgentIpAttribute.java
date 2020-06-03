@@ -1,24 +1,41 @@
 package com.ebay.sojourner.ubd.common.model;
 
-import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
+import com.ebay.sojourner.ubd.common.util.SessionCoreHelper;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import lombok.Data;
+import org.apache.datasketches.hll.HllSketch;
+import org.apache.datasketches.hll.TgtHllType;
 
 @Data
-public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
+public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
 
-  private String clientIp;
-  private String agent;
+  public static final Set<Integer> REF_211 = new HashSet<>(
+      Arrays.asList(201, 203, 204, 205, 206, 207, 208, 212));
+  // Shuffle Key
+  private Integer clientIp;
+  private AgentHash agent;
+
   private Set<Integer> botFlagList = new LinkedHashSet<>();
+
+  // For Bot5
   private int scsCountForBot5 = 0;
+
+  // For Bot6
   private int scsCountForBot6 = 0;
-  private int scsCountForBot7 = 0;
-  private int scsCountForBot8 = 0;
   private int ipCount = 0;
+
+  // For Bot7
+  private int scsCountForBot7 = 0;
+
+
+  //For Bot8
   private int bbcCount = 0;
+  private int scsCountForBot8 = 0;
 
   // for suspected agent
   private int totalSessionCnt = 0;
@@ -43,123 +60,284 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
   private int siteCnt = 0;
   private int newGuidCnt = 0;
   //    private int guidCnt = 0;
-  private Set<String> cguidSet = new HashSet<String>();
-  private Set<String> guidSet = new HashSet<String>();
+  private Set<Guid> cguidSet = new CopyOnWriteArraySet<>();
+  private Set<Guid> guidSet = new CopyOnWriteArraySet<Guid>();
+  //  private HllSketch guidSet = new HllSketch(20, TgtHllType.HLL_8);
+  private byte[] hllSketch;
   private Boolean isAllAgentHoper = true;
   private int totalCntForSec1 = 0;
+
+  // for newbot
+  private boolean hasNewBot = false;
 
   public AgentIpAttribute() {
   }
 
   @Override
-  public void feed(UbiSession ubiSession, int botFlag, boolean isNeeded) {
-    if (isNeeded) {
-      totalSessionCnt += 1;
-      if (ubiSession.getFirstCguid() == null) {
-        nocguidSessionCnt += 1;
-      }
-
-      if (UbiSessionHelper.isSps(ubiSession)) {
-        spsSessionCnt += 1;
-      }
-
-      if (UbiSessionHelper.isNoUid(ubiSession)) {
-        nouidSessionCnt += 1;
-      }
-
-      if (UbiSessionHelper.isDirect(ubiSession)) {
-        directSessionCnt += 1;
-      }
-      if (UbiSessionHelper.isMktg(ubiSession)) {
-        mktgSessionCnt += 1;
-      }
-
-      if (UbiSessionHelper.getExInternalIp(ubiSession) != null) {
-        ipCountForSuspect = 1;
-      }
-
-      if (UbiSessionHelper.getExInternalIp(ubiSession) != null) {
-        ipCount = 1;
-      }
-      totalCnt += 1;
-      consistent =
-          consistent
-              && (validPageCnt == ubiSession.getValidPageCnt()
-              || validPageCnt < 0
-              || ubiSession.getValidPageCnt() < 0);
-
-      if (ubiSession.getValidPageCnt() >= 0) {
-        validPageCnt = ubiSession.getValidPageCnt();
-      }
-      maxValidPageCnt = Math.max(maxValidPageCnt, ubiSession.getValidPageCnt());
-
-      if (UbiSessionHelper.isHomePage(ubiSession)) {
-        homePageCnt += 1;
-      }
-      if (UbiSessionHelper.isFamilyVi(ubiSession)) {
-        familyViCnt += 1;
-      }
-      if (UbiSessionHelper.isSignIn(ubiSession)) {
-        signinCnt += 1;
-      }
-      if (UbiSessionHelper.isNoUid(ubiSession)) {
-        noUidCnt += 1;
-      }
-      if (UbiSessionHelper.isDirect(ubiSession)) {
-        directCnt += 1;
-      }
-      if (UbiSessionHelper.isMktg(ubiSession)) {
-        mktgCnt += 1;
-      }
-      if (UbiSessionHelper.isSite(ubiSession)) {
-        siteCnt += 1;
-      }
-      if (UbiSessionHelper.isNewGuid(ubiSession)) {
-        newGuidCnt += 1;
-      }
-      if (ubiSession.getGuid() != null) {
-        guidSet.add(ubiSession.getGuid());
-      }
-
-      if (ubiSession.getFirstCguid() != null) {
-        cguidSet.add(ubiSession.getFirstCguid());
-      }
-      isAllAgentHoper = isAllAgentHoper && UbiSessionHelper.isAgentHoper(ubiSession);
-    }
+  public void feed(SessionCore sessionCore, int botFlag) {
     switch (botFlag) {
+      case 211: {
+        if (!hasNewBot && REF_211.contains(sessionCore.getBotFlag())) {
+          hasNewBot = true;
+        }
+        break;
+      }
+      case 202: {
+        totalSessionCnt += 1;
+        if (sessionCore.getCguid() == null || (sessionCore.getGuid().getGuid1() == 0L
+            && sessionCore.getGuid().getGuid2() == 0L)) {
+          nocguidSessionCnt += 1;
+        }
+
+        if (SessionCoreHelper.isSps(sessionCore)) {
+          spsSessionCnt += 1;
+        }
+
+        if (SessionCoreHelper.isNoUid(sessionCore)) {
+          nouidSessionCnt += 1;
+        }
+
+        if (SessionCoreHelper.isDirect(sessionCore)) {
+          directSessionCnt += 1;
+        }
+        if (SessionCoreHelper.isMktg(sessionCore)) {
+          mktgSessionCnt += 1;
+        }
+
+        if (SessionCoreHelper.getExInternalIp(sessionCore) != null) {
+          ipCountForSuspect = 1;
+        }
+        break;
+      }
+
+      case 210: {
+        totalCnt += 1;
+        if (validPageCnt >= 0) {
+          consistent =
+              consistent
+                  && (validPageCnt == sessionCore.getValidPageCnt()
+                  || validPageCnt < 0
+                  || sessionCore.getValidPageCnt() < 0);
+        } else {
+          consistent = true;
+        }
+
+        if (sessionCore.getValidPageCnt() >= 0) {
+          validPageCnt = sessionCore.getValidPageCnt();
+        }
+        maxValidPageCnt = Math.max(maxValidPageCnt, sessionCore.getValidPageCnt());
+
+        if (SessionCoreHelper.isHomePage(sessionCore)) {
+          homePageCnt += 1;
+        }
+        if (SessionCoreHelper.isFamilyVi(sessionCore)) {
+          familyViCnt += 1;
+        }
+        if (SessionCoreHelper.isSignIn(sessionCore)) {
+          signinCnt += 1;
+        }
+        if (SessionCoreHelper.isNoUid(sessionCore)) {
+          noUidCnt += 1;
+        }
+        if (SessionCoreHelper.isDirect(sessionCore)) {
+          directCnt += 1;
+        }
+        if (SessionCoreHelper.isMktg(sessionCore)) {
+          mktgCnt += 1;
+        }
+        if (SessionCoreHelper.isSite(sessionCore)) {
+          siteCnt += 1;
+        }
+        if (SessionCoreHelper.isNewGuid(sessionCore)) {
+          newGuidCnt += 1;
+        }
+        if (sessionCore.getGuid() != null) {
+          Guid guid = new Guid();
+          guid.setGuid1(sessionCore.getGuid().getGuid1());
+          guid.setGuid2(sessionCore.getGuid().getGuid2());
+          guidSet.add(guid);
+          //          HllSketch guidSet;
+          //          if (hllSketch == null) {
+          //            guidSet = new HllSketch(12, TgtHllType.HLL_4);
+          //          } else {
+          //            guidSet = HllSketch.heapify(hllSketch);
+          //          }
+          //          long[] guidList = {sessionCore.getGuid().getGuid1(),
+          //              sessionCore.getGuid().getGuid2()};
+          //          guidSet.update(guidList);
+          //          hllSketch = guidSet.toCompactByteArray();
+        }
+        if (sessionCore.getCguid() != null) {
+          if (cguidSet.size() <= 5) {
+            Guid guid = new Guid();
+            guid.setGuid1(sessionCore.getCguid().getGuid1());
+            guid.setGuid2(sessionCore.getCguid().getGuid2());
+            cguidSet.add(guid);
+          }
+        }
+        isAllAgentHoper = isAllAgentHoper && SessionCoreHelper.isAgentHoper(sessionCore);
+        break;
+      }
       case 5:
         scsCountForBot5 += 1;
         break;
-      case 6:
+      case 6: {
         scsCountForBot6 += 1;
+        if (SessionCoreHelper.getExInternalIp(sessionCore) != null) {
+          ipCount = 1;
+        }
         break;
+      }
       case 7:
         scsCountForBot7 += 1;
         break;
-      case 8:
+      case 8: {
         scsCountForBot8 += 1;
         break;
+      }
       default:
         break;
     }
   }
 
+
   public void merge(AgentIpAttribute agentIpAttribute, int botFlag) {
 
     switch (botFlag) {
-      case 5:
-        scsCountForBot5 += agentIpAttribute.getScsCountForBot5();
+      case 5: {
+        if (scsCountForBot5 < 0) {
+          break;
+        } else if (agentIpAttribute.getScsCountForBot5() < 0) {
+          scsCountForBot5 = -1;
+        } else {
+          scsCountForBot5 += agentIpAttribute.getScsCountForBot5();
+        }
         break;
-      case 8:
-        scsCountForBot8 += agentIpAttribute.getScsCountForBot8();
+      }
+      case 6: {
+        if (ipCount > 0 || (agentIpAttribute.getIpCount() > 0)) {
+          ipCount = 1;
+        } else {
+          ipCount = 0;
+        }
+        if (scsCountForBot6 < 0) {
+          break;
+        } else if (agentIpAttribute.getScsCountForBot6() < 0) {
+          scsCountForBot6 = -1;
+        } else {
+          scsCountForBot6 += agentIpAttribute.getScsCountForBot6();
+        }
         break;
+      }
+      case 7: {
+        if (scsCountForBot7 < 0) {
+          break;
+        } else if (agentIpAttribute.getScsCountForBot7() < 0) {
+          scsCountForBot7 = -1;
+        } else {
+          scsCountForBot7 += agentIpAttribute.getScsCountForBot7();
+        }
+        break;
+      }
+      case 8: {
+        bbcCount += agentIpAttribute.getBbcCount();
+        if (scsCountForBot8 < 0) {
+          break;
+        } else if (agentIpAttribute.getScsCountForBot8() < 0) {
+          scsCountForBot8 = -1;
+        } else {
+          scsCountForBot8 += agentIpAttribute.getScsCountForBot8();
+        }
+
+        break;
+      }
+      case 202: {
+        totalSessionCnt += agentIpAttribute.getTotalSessionCnt();
+        nocguidSessionCnt += agentIpAttribute.getNocguidSessionCnt();
+        spsSessionCnt += agentIpAttribute.getSpsSessionCnt();
+        nouidSessionCnt += agentIpAttribute.getNouidSessionCnt();
+        directSessionCnt += agentIpAttribute.getDirectSessionCnt();
+        mktgSessionCnt += agentIpAttribute.getMktgSessionCnt();
+        if (ipCountForSuspect > 0 || (agentIpAttribute.getIpCountForSuspect() > 0)) {
+          ipCountForSuspect = 1;
+        } else {
+          ipCountForSuspect = 0;
+        }
+        break;
+      }
+      case 210: {
+        isAllAgentHoper = isAllAgentHoper && agentIpAttribute.getIsAllAgentHoper();
+        totalCnt += agentIpAttribute.totalCnt;
+        consistent = consistent
+            && agentIpAttribute.consistent
+            && (validPageCnt == agentIpAttribute.getValidPageCnt()
+            || validPageCnt < 0 || agentIpAttribute.getValidPageCnt() < 0);
+
+        if (agentIpAttribute.getValidPageCnt() >= 0) {
+          validPageCnt = agentIpAttribute.getValidPageCnt();
+        }
+        maxValidPageCnt = Math.max(maxValidPageCnt,
+            agentIpAttribute.getMaxValidPageCnt());
+
+        homePageCnt += agentIpAttribute.getHomePageCnt();
+        familyViCnt += agentIpAttribute.getFamilyViCnt();
+        signinCnt += agentIpAttribute.getSigninCnt();
+        noUidCnt += agentIpAttribute.getNoUidCnt();
+        directCnt += agentIpAttribute.getDirectCnt();
+        mktgCnt += agentIpAttribute.getMktgCnt();
+        siteCnt += agentIpAttribute.getSiteCnt();
+        newGuidCnt += agentIpAttribute.getNewGuidCnt();
+
+        HllSketch guidSet;
+        if (hllSketch == null && agentIpAttribute.getHllSketch() == null) {
+          guidSet = new HllSketch(12, TgtHllType.HLL_4);
+          for (Guid guid : this.getGuidSet()) {
+            long[] guidList = {guid.getGuid1(),
+                guid.getGuid2()};
+            guidSet.update(guidList);
+          }
+          getGuidSet().clear();
+          for (Guid guid : agentIpAttribute.getGuidSet()) {
+            long[] guidList = {guid.getGuid1(),
+                guid.getGuid2()};
+            guidSet.update(guidList);
+          }
+          agentIpAttribute.getGuidSet().clear();
+        } else if (hllSketch == null && agentIpAttribute.getHllSketch() != null) {
+
+          guidSet = HllSketch.heapify(agentIpAttribute.getHllSketch());
+          for (Guid guid : this.getGuidSet()) {
+            long[] guidList = {guid.getGuid1(),
+                guid.getGuid2()};
+            guidSet.update(guidList);
+          }
+        } else if (hllSketch != null && agentIpAttribute.getHllSketch() == null) {
+          guidSet = HllSketch.heapify(hllSketch);
+          for (Guid guid : agentIpAttribute.getGuidSet()) {
+            long[] guidList = {guid.getGuid1(),
+                guid.getGuid2()};
+            guidSet.update(guidList);
+          }
+        } else {
+          guidSet = HllSketch.heapify(hllSketch);
+        }
+        hllSketch = guidSet.toCompactByteArray();
+        if (cguidSet.size() < 5) {
+          cguidSet.addAll(agentIpAttribute.getCguidSet());
+        }
+        break;
+      }
+      case 211: {
+        hasNewBot = hasNewBot || agentIpAttribute.isHasNewBot();
+        break;
+      }
       default:
         break;
     }
   }
 
   @Override
-  public void revert(UbiSession ubiSession, int botFlag) {
+  public void revert(SessionCore sessionCore, int botFlag) {
     switch (botFlag) {
       case 5:
         scsCountForBot5 = -1;
@@ -208,7 +386,7 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
     newGuidCnt = 0;
     //        guidCnt = 0;
     cguidSet.clear();
-    guidSet.clear();
+    hllSketch = null;
     isAllAgentHoper = true;
     totalCntForSec1 = 0;
   }
@@ -238,8 +416,27 @@ public class AgentIpAttribute implements Attribute<UbiSession>, Serializable {
         directSessionCnt = 0;
         mktgSessionCnt = 0;
         ipCountForSuspect = 0;
+      case 210:
+        totalCnt = 0;
+        validPageCnt = -1;
+        maxValidPageCnt = -1;
+        consistent = true;
+        homePageCnt = 0;
+        familyViCnt = 0;
+        signinCnt = 0;
+        noUidCnt = 0;
+        directCnt = 0;
+        mktgCnt = 0;
+        siteCnt = 0;
+        newGuidCnt = 0;
+        cguidSet.clear();
+        guidSet.clear();
+        hllSketch = null;
+        isAllAgentHoper = true;
+        totalCntForSec1 = 0;
       default:
         break;
     }
   }
 }
+

@@ -36,7 +36,7 @@ public class AgentIpIndicatorsSliding
 
   @Override
   public void initIndicators() {
-    addIndicators(new ScsCountForBot5Indicator<>(botFilter));
-    addIndicators(new ScsCountForBot8Indicator<>(botFilter));
+    addIndicators(new ScsCntForBot5Indicator<>(botFilter));
+    addIndicators(new ScsCntForBot8Indicator<>(botFilter));
   }
 }

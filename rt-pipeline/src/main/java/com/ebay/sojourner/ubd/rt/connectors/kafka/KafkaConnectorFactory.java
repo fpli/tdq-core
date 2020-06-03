@@ -1,8 +1,11 @@
 package com.ebay.sojourner.ubd.rt.connectors.kafka;
 
+import com.ebay.sojourner.ubd.common.model.JetStreamOutputEvent;
+import com.ebay.sojourner.ubd.common.model.JetStreamOutputSession;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.SojBytesEvent;
-import com.ebay.sojourner.ubd.rt.util.AppEnv;
+import com.ebay.sojourner.ubd.common.util.Constants;
+import com.ebay.sojourner.ubd.rt.util.FlinkEnvUtils;
 import java.util.Optional;
 import java.util.Properties;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
@@ -24,8 +27,8 @@ public class KafkaConnectorFactory {
             "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId="
                 + "\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" "
                 + "iafSecret=\"%s\" iafEnv=\"%s\";",
-            AppEnv.config().getRheos().getIaf().getSecret(),
-            AppEnv.config().getRheos().getIaf().getEnv());
+            FlinkEnvUtils.getString(Constants.IAF_SECRET),
+            FlinkEnvUtils.getString(Constants.IAF_ENV));
 
     props.put(SaslConfigs.SASL_JAAS_CONFIG, saslJaasConfig);
     return props;
@@ -37,16 +40,23 @@ public class KafkaConnectorFactory {
     consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
     consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 
-    consumerConfig.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 3000);
-    consumerConfig.put(ConsumerConfig.RECEIVE_BUFFER_CONFIG, 8 * 1024 * 1024);
-    consumerConfig.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 250 * 1024 * 1024);
-    consumerConfig.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 1000);
+    consumerConfig.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG,
+        FlinkEnvUtils.getInteger(Constants.MAX_POLL_RECORDS));
+    consumerConfig
+        .put(ConsumerConfig.RECEIVE_BUFFER_CONFIG,
+            FlinkEnvUtils.getInteger(Constants.RECEIVE_BUFFER));
+    consumerConfig.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG,
+        FlinkEnvUtils.getInteger(Constants.FETCH_MAX_BYTES));
+    consumerConfig.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG,
+        FlinkEnvUtils.getInteger(Constants.FETCH_MAX_WAIT_MS));
 
-    consumerConfig.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, 8 * 1024 * 1024);
+    consumerConfig.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG,
+        FlinkEnvUtils.getInteger(Constants.MAX_PARTITIONS_FETCH_BYTES));
 
     consumerConfig.put(
         ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, RoundRobinAssignor.class.getName());
-    consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+    consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
+        FlinkEnvUtils.getString(Constants.AUTO_RESET_OFFSET));
 
     if (tClass.isAssignableFrom(RawEvent.class)) {
       return new FlinkKafkaConsumer<>(
@@ -54,6 +64,12 @@ public class KafkaConnectorFactory {
     } else if (tClass.isAssignableFrom(SojBytesEvent.class)) {
       return new FlinkKafkaConsumer<>(
           topic, new SojBytesEventDeserializationSchema(), consumerConfig);
+    } else if (tClass.isAssignableFrom(JetStreamOutputEvent.class)) {
+      return new FlinkKafkaConsumer<>(
+          topic, new SojEventDeserializationSchema(), consumerConfig);
+    } else if (tClass.isAssignableFrom(JetStreamOutputSession.class)) {
+      return new FlinkKafkaConsumer<>(
+          topic, new SojSessionDeserializationSchema(), consumerConfig);
     } else {
       return new FlinkKafkaConsumer<>(
           topic, new AvroKeyedDeserializationSchema<>(tClass), consumerConfig);
@@ -63,7 +79,8 @@ public class KafkaConnectorFactory {
   public static <T> FlinkKafkaProducer createKafkaProducer(String topic, String brokers,
       Class<T> sinkClass, String messageKey) {
     Properties producerConfig = initCommonConfig();
-    producerConfig.put(ProducerConfig.BATCH_SIZE_CONFIG, 4 * 1024);
+    producerConfig
+        .put(ProducerConfig.BATCH_SIZE_CONFIG, FlinkEnvUtils.getInteger(Constants.BATCH_SIZE));
     producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
 
     return new FlinkKafkaProducer<>(topic,
@@ -73,8 +90,11 @@ public class KafkaConnectorFactory {
 
   public static FlinkKafkaProducer createKafkaProducerForCopy(String topic, String brokers) {
     Properties producerConfig = initCommonConfig();
-    producerConfig.put(ProducerConfig.BATCH_SIZE_CONFIG, 4 * 1024);
+    producerConfig
+        .put(ProducerConfig.BATCH_SIZE_CONFIG, FlinkEnvUtils.getInteger(Constants.BATCH_SIZE));
     producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
+    producerConfig.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG,
+        FlinkEnvUtils.getInteger(Constants.REQUEST_TIMEOUT_MS));
 
     return new FlinkKafkaProducer<>(topic,
         new SojBytesEventSerializationSchema<>(), producerConfig,

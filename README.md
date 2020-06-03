@@ -25,7 +25,7 @@ mvn clean package -DskipTests
 
 
 You can run or debug applications in IDE. E.g. to run real time pipeline, you run
-`com.ebay.sojourner.ubd.rt.pipeline.SojournerUBDRTJob`
+`com.ebay.sojourner.ubd.rt.pipeline.SojournerRTJob`
 
 ## Run on a Local Flink Cluster
 Start a local Flink cluster:
@@ -37,5 +37,5 @@ Start a local Flink cluster:
 Run `sojourner-ubd-rt-pipeline`:
 
 ```
-<FLINK_HOME>/bin/flink run -c com.ebay.sojourner.ubd.rt.pipeline.SojournerUBDRTJob <sojourner-ubd>/rt-pipeline/target/sojourner-ubd-rt-pipeline-0.1-SNAPSHOT.jar
+<FLINK_HOME>/bin/flink run -c com.ebay.sojourner.ubd.rt.pipeline.SojournerRTJob <sojourner-ubd>/rt-pipeline/target/sojourner-ubd-rt-pipeline-0.1-SNAPSHOT.jar
 ```

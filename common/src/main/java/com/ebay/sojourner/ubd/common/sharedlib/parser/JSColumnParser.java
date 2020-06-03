@@ -21,6 +21,14 @@ public class JSColumnParser implements FieldParser<RawEvent, UbiEvent> {
   private static final String EVENT_FAMILY = "efam";
   private static final String SID = "sid";
   private static final String RQ = "rq";
+  private static final String CITY = "cty";
+  private static final String REGION = "rgn";
+  private static final String COUNTRY = "cn";
+  private static final String CONTINENT = "con";
+  private static final String LINE_SPEED = "ls";
+  private static final String RETURNING_VISITOR = "rv";
+  private static final String STREAM_ID = "rv";
+  private static final String BUSER_ID = "si";
 
   @Override
   public void init() throws Exception {
@@ -46,6 +54,14 @@ public class JSColumnParser implements FieldParser<RawEvent, UbiEvent> {
     String eventFamily = map.get(EVENT_FAMILY);
     String sid = map.get(SID);
     String rq = map.get(RQ);
+    String city = map.get(CITY);
+    String region = map.get(REGION);
+    String country = map.get(COUNTRY);
+    String continent = map.get(CONTINENT);
+    String lineSpeed = map.get(LINE_SPEED);
+    boolean returningVisitor = Boolean.parseBoolean(map.get(RETURNING_VISITOR));
+    String streamId = map.get(STREAM_ID);
+    String buserId = map.get(BUSER_ID);
     if (StringUtils.isNotEmpty(deviceFamily)) {
       ubiEvent.setDeviceFamily(deviceFamily);
     }
@@ -76,7 +92,6 @@ public class JSColumnParser implements FieldParser<RawEvent, UbiEvent> {
     if (StringUtils.isNotEmpty(eventAction)) {
       ubiEvent.setEventAction(eventAction);
     }
-
     if (StringUtils.isNotEmpty(eventFamily)) {
       ubiEvent.setEventFamily(eventFamily);
     }
@@ -86,6 +101,28 @@ public class JSColumnParser implements FieldParser<RawEvent, UbiEvent> {
     if (StringUtils.isNotEmpty(rq)) {
       ubiEvent.setRequestCorrelationId(rq);
     }
+    if (StringUtils.isNotEmpty(city)) {
+      ubiEvent.setCity(city);
+    }
+    if (StringUtils.isNotEmpty(region)) {
+      ubiEvent.setRegion(region);
+    }
+    if (StringUtils.isNotEmpty(country)) {
+      ubiEvent.setCountry(country);
+    }
+    if (StringUtils.isNotEmpty(continent)) {
+      ubiEvent.setContinent(continent);
+    }
+    if (StringUtils.isNotEmpty(lineSpeed)) {
+      ubiEvent.setLineSpeed(lineSpeed);
+    }
+    if (StringUtils.isNotEmpty(buserId)) {
+      ubiEvent.setBuserId(buserId);
+    }
+    if (StringUtils.isNotEmpty(streamId)) {
+      ubiEvent.setStreamId(streamId);
+    }
+    ubiEvent.setIsReturningVisitor(returningVisitor);
     ubiEvent.setRlogid(rawEvent.getClientData().getRlogid());
     ubiEvent.setRemoteIP(rawEvent.getClientData().getRemoteIP());
   }

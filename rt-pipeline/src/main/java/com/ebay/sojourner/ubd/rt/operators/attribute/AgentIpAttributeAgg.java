@@ -1,7 +1,7 @@
 package com.ebay.sojourner.ubd.rt.operators.attribute;
 
 import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.UbiSession;
+import com.ebay.sojourner.ubd.common.model.SessionCore;
 import com.ebay.sojourner.ubd.common.sharedlib.indicators.AgentIpIndicators;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.functions.AggregateFunction;
@@ -9,18 +9,18 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 @Slf4j
 public class AgentIpAttributeAgg
     implements AggregateFunction<
-    UbiSession, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
+    SessionCore, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
 
-  private AgentIpIndicators agentIpIndicators;
+  // private AgentIpIndicators agentIpIndicators;
 
   @Override
   public AgentIpAttributeAccumulator createAccumulator() {
 
     AgentIpAttributeAccumulator agentIpAttributeAccumulator = new AgentIpAttributeAccumulator();
-    agentIpIndicators = AgentIpIndicators.getInstance();
+    // agentIpIndicators = AgentIpIndicators.getInstance();
 
     try {
-      agentIpIndicators.start(agentIpAttributeAccumulator);
+      AgentIpIndicators.getInstance().start(agentIpAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
       log.error(e.getMessage());
@@ -30,15 +30,18 @@ public class AgentIpAttributeAgg
 
   @Override
   public AgentIpAttributeAccumulator add(
-      UbiSession session, AgentIpAttributeAccumulator agentIpAttributeAccumulator) {
+      SessionCore sessionCore,
+      AgentIpAttributeAccumulator agentIpAttributeAccumulator) {
     if (agentIpAttributeAccumulator.getAgentIpAttribute().getClientIp() == null
         && agentIpAttributeAccumulator.getAgentIpAttribute().getAgent() == null) {
-      agentIpAttributeAccumulator.getAgentIpAttribute().setClientIp(session.getClientIp());
-      agentIpAttributeAccumulator.getAgentIpAttribute().setAgent(session.getUserAgent());
+      agentIpAttributeAccumulator.getAgentIpAttribute()
+          .setClientIp(sessionCore.getIp());
+      agentIpAttributeAccumulator.getAgentIpAttribute()
+          .setAgent(sessionCore.getUserAgent());
     }
     try {
 
-      agentIpIndicators.feed(session, agentIpAttributeAccumulator, true);
+      AgentIpIndicators.getInstance().feed(sessionCore, agentIpAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
     }

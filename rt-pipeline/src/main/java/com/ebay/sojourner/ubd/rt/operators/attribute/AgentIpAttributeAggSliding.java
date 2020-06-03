@@ -16,20 +16,20 @@ public class AgentIpAttributeAggSliding
     AgentIpAttribute, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
 
   private static final String AGENTIP = Constants.AGENTIP_LEVEL;
-  private AgentIpIndicatorsSliding agentIpIndicators;
-  private AgentIpSignatureBotDetector agentIpSignatureBotDetector;
+  // private AgentIpIndicatorsSliding agentIpIndicators;
+  // private AgentIpSignatureBotDetector agentIpSignatureBotDetector;
   // private RuleManager ruleManager;
 
   @Override
   public AgentIpAttributeAccumulator createAccumulator() {
 
     AgentIpAttributeAccumulator agentIpAttributeAccumulator = new AgentIpAttributeAccumulator();
-    agentIpIndicators = AgentIpIndicatorsSliding.getInstance();
-    agentIpSignatureBotDetector = AgentIpSignatureBotDetector.getInstance();
+    // agentIpIndicators = AgentIpIndicatorsSliding.getInstance();
+    // agentIpSignatureBotDetector = AgentIpSignatureBotDetector.getInstance();
     // ruleManager = RuleManager.getInstance();
 
     try {
-      agentIpIndicators.start(agentIpAttributeAccumulator);
+      AgentIpIndicatorsSliding.getInstance().start(agentIpAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
       log.error(e.getMessage());
@@ -46,7 +46,8 @@ public class AgentIpAttributeAggSliding
       agentIpAttributeAccumulator.getAgentIpAttribute().setAgent(agentIpAttribute.getAgent());
     }
     try {
-      agentIpIndicators.feed(agentIpAttribute, agentIpAttributeAccumulator, true);
+      AgentIpIndicatorsSliding.getInstance()
+          .feed(agentIpAttribute, agentIpAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -62,7 +63,7 @@ public class AgentIpAttributeAggSliding
                 AgentIpSignatureBotDetector.dynamicRuleIdList(), AGENTIP);
                 */
         agentIpBotFlag =
-            agentIpSignatureBotDetector.getBotFlagList(
+            AgentIpSignatureBotDetector.getInstance().getBotFlagList(
                 agentIpAttributeAccumulator.getAgentIpAttribute());
         if (agentIpBotFlag.contains(5)) {
           switch (agentIpAttributeAccumulator.getBotFlagStatus().get(5)) {

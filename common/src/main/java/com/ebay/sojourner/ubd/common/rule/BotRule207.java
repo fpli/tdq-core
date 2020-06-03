@@ -20,10 +20,12 @@ public class BotRule207 extends AbstractBotRule<UbiSession> {
 
   @Override
   public int getBotFlag(UbiSession session) {
+    int cobrand = session.getCobrand()==Integer.MIN_VALUE?session.getFirstCobrand():
+        session.getCobrand();
     if (session.getValidPageCnt() > 5
         && session.getSiidCnt2() <= 1
         && session.isRefererNull()
-        && !cobrandSets.contains(session.getCobrand())) {
+        && !cobrandSets.contains(cobrand)) {
       return BotRules.MANY_VALID_EVENTS_WHITHOUT_REFERER;
     }
     return 0;

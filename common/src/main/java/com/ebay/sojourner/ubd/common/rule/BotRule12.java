@@ -22,7 +22,8 @@ public class BotRule12 extends AbstractBotRule<UbiSession> {
     if (!sessionBotFlagList.contains(MANY_FAST_EVENTS_BOT_FLAG)) {
       if ((start != 0L) && (end != 0L) && (eventCount > 1)) {
         Long duration = Math.abs(end - start);
-        if (duration <= (long) TOTAL_INTERVAL_MICRO_SEC * (eventCount - 1)) {
+
+        if (duration > 0 && duration <= (long) TOTAL_INTERVAL_MICRO_SEC * (eventCount - 1)) {
           botFlag = MANY_FAST_EVENTS_BOT_FLAG;
         }
       }

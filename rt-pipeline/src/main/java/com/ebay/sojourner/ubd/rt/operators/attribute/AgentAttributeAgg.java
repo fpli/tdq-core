@@ -16,20 +16,20 @@ public class AgentAttributeAgg
     AgentIpAttribute, AgentAttributeAccumulator, AgentAttributeAccumulator> {
 
   private static final String AGENT = Constants.AGENT_LEVEL;
-  private AgentIndicators agentIndicators;
-  private AgentSignatureBotDetector agentSignatureBotDetector;
+  // private AgentIndicators agentIndicators;
+  // private AgentSignatureBotDetector agentSignatureBotDetector;
   // private RuleManager ruleManager;
 
   @Override
   public AgentAttributeAccumulator createAccumulator() {
 
     AgentAttributeAccumulator agentAttributeAccumulator = new AgentAttributeAccumulator();
-    agentIndicators = AgentIndicators.getInstance();
-    agentSignatureBotDetector = AgentSignatureBotDetector.getInstance();
+    // agentIndicators = AgentIndicators.getInstance();
+    // agentSignatureBotDetector = AgentSignatureBotDetector.getInstance();
     // ruleManager = RuleManager.getInstance();
 
     try {
-      agentIndicators.start(agentAttributeAccumulator);
+      AgentIndicators.getInstance().start(agentAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
       log.error(e.getMessage());
@@ -45,7 +45,7 @@ public class AgentAttributeAgg
       agentAttributeAccumulator.getAgentAttribute().setAgent(agentIpAttribute.getAgent());
     }
     try {
-      agentIndicators.feed(agentIpAttribute, agentAttributeAccumulator, true);
+      AgentIndicators.getInstance().feed(agentIpAttribute, agentAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -60,7 +60,8 @@ public class AgentAttributeAgg
             AgentSignatureBotDetector.dynamicRuleIdList(), AGENT);
             */
         agentBotFlag =
-            agentSignatureBotDetector.getBotFlagList(agentAttributeAccumulator.getAgentAttribute());
+            AgentSignatureBotDetector.getInstance()
+                .getBotFlagList(agentAttributeAccumulator.getAgentAttribute());
         if (agentBotFlag.contains(6)) {
           switch (agentAttributeAccumulator.getBotFlagStatus().get(6)) {
             case 0:

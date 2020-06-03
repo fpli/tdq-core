@@ -15,20 +15,20 @@ public class IpAttributeAgg
     implements AggregateFunction<AgentIpAttribute, IpAttributeAccumulator, IpAttributeAccumulator> {
 
   private static final String IP = Constants.IP_LEVEL;
-  private IpIndicators ipIndicators;
-  private IpSignatureBotDetector ipSignatureBotDetector;
+  // private IpIndicators ipIndicators;
+  // private IpSignatureBotDetector ipSignatureBotDetector;
   // private RuleManager ruleManager;
 
   @Override
   public IpAttributeAccumulator createAccumulator() {
 
     IpAttributeAccumulator ipAttributeAccumulator = new IpAttributeAccumulator();
-    ipIndicators = IpIndicators.getInstance();
-    ipSignatureBotDetector = IpSignatureBotDetector.getInstance();
+    // ipIndicators = IpIndicators.getInstance();
+    // ipSignatureBotDetector = IpSignatureBotDetector.getInstance();
     // ruleManager = RuleManager.getInstance();
 
     try {
-      ipIndicators.start(ipAttributeAccumulator);
+      IpIndicators.getInstance().start(ipAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
       log.error(e.getMessage());
@@ -43,7 +43,7 @@ public class IpAttributeAgg
       ipAttributeAccumulator.getIpAttribute().setClientIp(agentIpAttribute.getClientIp());
     }
     try {
-      ipIndicators.feed(agentIpAttribute, ipAttributeAccumulator, true);
+      IpIndicators.getInstance().feed(agentIpAttribute, ipAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -57,7 +57,8 @@ public class IpAttributeAgg
         ipSignatureBotDetector.initDynamicRules(ruleManager, ipSignatureBotDetector.rules(),
             IpSignatureBotDetector.dynamicRuleIdList(), IP);
             */
-        ipBotFlag = ipSignatureBotDetector.getBotFlagList(ipAttributeAccumulator.getIpAttribute());
+        ipBotFlag = IpSignatureBotDetector.getInstance()
+            .getBotFlagList(ipAttributeAccumulator.getIpAttribute());
         if (ipBotFlag.contains(7)) {
           switch (ipAttributeAccumulator.getBotFlagStatus().get(7)) {
             case 0:

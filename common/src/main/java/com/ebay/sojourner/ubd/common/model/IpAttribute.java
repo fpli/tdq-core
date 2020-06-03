@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.Data;
+import org.apache.datasketches.hll.HllSketch;
 
 @Data
 public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
@@ -13,7 +14,7 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
   public static final int MAX_CGUID_THRESHOLD = 5;
   public static final int SESSION_COUNT_THRESHOLD = 300;
   public static final Set<Integer> pageSessionSet = new HashSet<>(Arrays.asList(2, 3, 4, 5));
-  private String clientIp;
+  private Integer clientIp;
   private int scsCount = 0;
   private Set<Integer> botFlagList = new LinkedHashSet<>();
 
@@ -26,16 +27,12 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
   }
 
   @Override
-  public void feed(AgentIpAttribute agentIpAttribute, int botFlag, boolean isNeeded) {
-    if (isNeeded) {
-      totalCnt += agentIpAttribute.getTotalCnt();
-    }
+  public void feed(AgentIpAttribute agentIpAttribute, int botFlag) {
     switch (botFlag) {
       case 7: {
         if (scsCount < 0) {
           return;
         }
-
         if (agentIpAttribute.getScsCountForBot7() < 0) {
           scsCount = -1;
         } else {
@@ -44,8 +41,9 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
         break;
       }
       case 210: {
+        totalCnt += agentIpAttribute.getTotalCnt();
         if (selectRatio(agentIpAttribute)) {
-          totalCntForSec1 += agentIpAttribute.getTotalCntForSec1();
+          totalCntForSec1 += agentIpAttribute.getTotalCnt();
         }
         isAllAgentHoper = isAllAgentHoper && agentIpAttribute.getIsAllAgentHoper();
         break;
@@ -93,7 +91,8 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
     }
 
     int cguidCnt = agentIpAttribute.getCguidSet().size();
-    int guidCnt = agentIpAttribute.getGuidSet().size();
+    int guidCnt = agentIpAttribute.getHllSketch() == null ? 0 :
+        (int) Math.round(HllSketch.heapify(agentIpAttribute.getHllSketch()).getEstimate());
     if (sessionCnt > 10
         && sessionCnt == agentIpAttribute.getNewGuidCnt()
         && (cguidCnt < 3 || agentIpAttribute.getMaxValidPageCnt() < 10)) {

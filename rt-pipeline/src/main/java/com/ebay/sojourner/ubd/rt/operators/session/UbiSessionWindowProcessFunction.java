@@ -36,7 +36,6 @@ public class UbiSessionWindowProcessFunction
       Iterable<SessionAccumulator> elements,
       Collector<UbiSession> out)
       throws Exception {
-
     if (sessionMetrics == null) {
       sessionMetrics = SessionMetrics.getInstance();
     }
@@ -72,7 +71,6 @@ public class UbiSessionWindowProcessFunction
     ubiSession.setBotFlag(sessionAccumulator.getUbiSession().getBotFlag());
     ubiSession.setVersion(sessionAccumulator.getUbiSession().getVersion());
     ubiSession.setFirstUserId(sessionAccumulator.getUbiSession().getFirstUserId());
-    ubiSession.setSiteFlagsSet(sessionAccumulator.getUbiSession().getSiteFlagsSet());
     ubiSession.setSiteFlags(sessionAccumulator.getUbiSession().getSiteFlags());
     ubiSession.setAttrFlags(sessionAccumulator.getUbiSession().getAttrFlags());
     ubiSession.setBotFlags(sessionAccumulator.getUbiSession().getBotFlags());
@@ -97,7 +95,31 @@ public class UbiSessionWindowProcessFunction
     ubiSession.setGrCnt(sessionAccumulator.getUbiSession().getGrCnt());
     ubiSession.setMyebayCnt(sessionAccumulator.getUbiSession().getMyebayCnt());
     ubiSession.setSigninPageCnt(sessionAccumulator.getUbiSession().getSigninPageCnt());
-
+    ubiSession.setAsqCnt(sessionAccumulator.getUbiSession().getAsqCnt());
+    ubiSession.setAtcCnt(sessionAccumulator.getUbiSession().getAtcCnt());
+    ubiSession.setAtlCnt(sessionAccumulator.getUbiSession().getAtlCnt());
+    ubiSession.setBoCnt(sessionAccumulator.getUbiSession().getBoCnt());
+    ubiSession.setSrpCnt(sessionAccumulator.getUbiSession().getSrpCnt());
+    ubiSession.setServEventCnt(sessionAccumulator.getUbiSession().getServEventCnt());
+    ubiSession.setSearchViewPageCnt(sessionAccumulator.getUbiSession().getSearchViewPageCnt());
+    ubiSession.setCity(sessionAccumulator.getUbiSession().getCity());
+    ubiSession.setRegion(sessionAccumulator.getUbiSession().getRegion());
+    ubiSession.setCountry(sessionAccumulator.getUbiSession().getCountry());
+    ubiSession.setContinent(sessionAccumulator.getUbiSession().getContinent());
+    ubiSession.setBrowserFamily(sessionAccumulator.getUbiSession().getBrowserFamily());
+    ubiSession.setBrowserVersion(sessionAccumulator.getUbiSession().getBrowserVersion());
+    ubiSession.setDeviceFamily(sessionAccumulator.getUbiSession().getDeviceFamily());
+    ubiSession.setDeviceClass(sessionAccumulator.getUbiSession().getDeviceClass());
+    ubiSession.setOsFamily(sessionAccumulator.getUbiSession().getOsFamily());
+    ubiSession.setOsVersion(sessionAccumulator.getUbiSession().getOsVersion());
+    ubiSession.setStartResourceId(sessionAccumulator.getUbiSession().getStartResourceId());
+    ubiSession.setEndResourceId(sessionAccumulator.getUbiSession().getEndResourceId());
+    ubiSession.setIsReturningVisitor(sessionAccumulator.getUbiSession().isReturningVisitor());
+    ubiSession.setLineSpeed(sessionAccumulator.getUbiSession().getLineSpeed());
+    ubiSession.setPulsarEventCnt(sessionAccumulator.getUbiSession().getPulsarEventCnt());
+    ubiSession.setSessionEndDt(sessionAccumulator.getUbiSession().getSessionEndDt());
+    ubiSession.setStreamId(sessionAccumulator.getUbiSession().getStreamId());
+    ubiSession.setBuserId(sessionAccumulator.getUbiSession().getBuserId());
     out.collect(ubiSession);
   }
 

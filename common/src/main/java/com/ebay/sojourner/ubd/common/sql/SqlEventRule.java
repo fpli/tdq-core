@@ -19,7 +19,7 @@ import org.apache.calcite.tools.Programs;
 import org.apache.log4j.Logger;
 
 @Data
-@EqualsAndHashCode(of = {"ruleId", "version"}, callSuper = false)
+@EqualsAndHashCode(of = {"ruleId"}, callSuper = false)
 public abstract class SqlEventRule implements Rule<UbiEvent> {
 
   protected static final Logger LOGGER = Logger.getLogger(SqlEventRule.class);

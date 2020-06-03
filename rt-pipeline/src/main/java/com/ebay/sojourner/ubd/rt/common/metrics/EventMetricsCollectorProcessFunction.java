@@ -1,23 +1,25 @@
 package com.ebay.sojourner.ubd.rt.common.metrics;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sharedlib.detectors.EventBotDetector;
+import com.ebay.sojourner.ubd.common.sql.RuleDefinition;
+import com.ebay.sojourner.ubd.common.sql.RuleManager;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.stream.Collectors;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.metrics.Counter;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.util.Collector;
 
-public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEvent,UbiEvent> {
+public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEvent, UbiEvent> {
 
-  private List<Long> eventDynamicRuleCounterNameList = new CopyOnWriteArrayList<>();
+  private Set<Long> eventDynamicRuleCounterNameSet = new CopyOnWriteArraySet<>();
   private List<String> eventStaticRuleCounterNameList;
   private Map<String, Counter> eventRuleCounterNameMap = new ConcurrentHashMap<>();
   private Counter eventTotalCounter;
@@ -46,13 +48,18 @@ public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEve
   }
 
   @Override
-  public void processElement(UbiEvent ubiEvent, Context ctx, Collector<UbiEvent> out)
-      throws Exception {
+  public void processElement(UbiEvent ubiEvent, Context ctx, Collector<UbiEvent> out) {
+
     eventTotalCounter.inc();
-    List<Long> dynamicRuleIdList = EventBotDetector.dynamicRuleIdList();
-    if (CollectionUtils.isNotEmpty(dynamicRuleIdList)) {
+    Set<Long> dynamicRuleIdSet = RuleManager
+        .getInstance().getRuleDefinitions()
+        .stream()
+        .map(RuleDefinition::getBizId)
+        .collect(Collectors.toSet());
+
+    if (CollectionUtils.isNotEmpty(dynamicRuleIdSet)) {
       Collection intersection = CollectionUtils
-          .intersection(dynamicRuleIdList, eventDynamicRuleCounterNameList);
+          .intersection(dynamicRuleIdSet, eventDynamicRuleCounterNameSet);
       if (CollectionUtils.isNotEmpty(intersection)) {
         for (Object ruleId : intersection) {
           Counter dynamicRuleCounter = getRuntimeContext()
@@ -60,7 +67,7 @@ public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEve
               .addGroup("sojourner-ubd")
               .counter("rule" + ruleId);
           eventRuleCounterNameMap.put("rule" + ruleId, dynamicRuleCounter);
-          eventDynamicRuleCounterNameList.add((Long) ruleId);
+          eventDynamicRuleCounterNameSet.add((Long) ruleId);
         }
       }
     }

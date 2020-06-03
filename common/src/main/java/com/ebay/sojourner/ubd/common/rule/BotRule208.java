@@ -20,9 +20,11 @@ public class BotRule208 extends AbstractBotRule<UbiSession> {
 
   @Override
   public int getBotFlag(UbiSession session) {
+    int cobrand = session.getCobrand() == Integer.MIN_VALUE ? session.getFirstCobrand() :
+        session.getCobrand();
     if (session.getAgentString() == null
         && session.getSiidCnt() == 0
-        && !cobrandSet.contains(session.getCobrand())) {
+        && !cobrandSet.contains(cobrand)) {
       return BotRules.DIRECT_ACCESS_BOTFLAG;
     }
     return 0;
