@@ -43,7 +43,7 @@ public class IpAttributeAgg
       ipAttributeAccumulator.getIpAttribute().setClientIp(agentIpAttribute.getClientIp());
     }
     try {
-      IpIndicators.getInstance().feed(agentIpAttribute, ipAttributeAccumulator, true);
+      IpIndicators.getInstance().feed(agentIpAttribute, ipAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
     }

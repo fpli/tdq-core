@@ -83,8 +83,7 @@ public class BaseAttributesTest<T> {
                 T t = (T) inputObjectType.get(attributesInput);
                 attribute.feed(
                     t,
-                    attributesTestCase.getInput().getBotFlag(),
-                    attributesTestCase.getInput().isNeeded());
+                    attributesTestCase.getInput().getBotFlag());
                 Iterator<String> fieldNames = yaml.get(caseNum).get("expectResult").fieldNames();
                 fieldNames.forEachRemaining(
                     field -> {

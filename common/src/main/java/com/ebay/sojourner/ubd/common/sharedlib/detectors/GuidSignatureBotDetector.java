@@ -1,7 +1,7 @@
 package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 
 import com.ebay.sojourner.ubd.common.model.GuidAttribute;
-import com.ebay.sojourner.ubd.common.rule.BotRule15_1;
+import com.ebay.sojourner.ubd.common.rule.BotRule15_Cross;
 import com.ebay.sojourner.ubd.common.rule.Rule;
 import java.io.IOException;
 import java.util.HashSet;
@@ -62,6 +62,6 @@ public class GuidSignatureBotDetector implements BotDetector<GuidAttribute> {
   @Override
   public void initBotRules() {
 
-    botRules.add(new BotRule15_1());
+    botRules.add(new BotRule15_Cross());
   }
 }

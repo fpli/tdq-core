@@ -45,7 +45,7 @@ public class AgentAttributeAgg
       agentAttributeAccumulator.getAgentAttribute().setAgent(agentIpAttribute.getAgent());
     }
     try {
-      AgentIndicators.getInstance().feed(agentIpAttribute, agentAttributeAccumulator, true);
+      AgentIndicators.getInstance().feed(agentIpAttribute, agentAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
     }

@@ -24,7 +24,7 @@ public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable
   }
 
   @Override
-  public void feed(AgentIpAttribute agentIpAttribute, int botFlag, boolean isNeeded) {
+  public void feed(AgentIpAttribute agentIpAttribute, int botFlag) {
     switch (botFlag) {
       case 6: {
         ipCount += agentIpAttribute.getIpCount();

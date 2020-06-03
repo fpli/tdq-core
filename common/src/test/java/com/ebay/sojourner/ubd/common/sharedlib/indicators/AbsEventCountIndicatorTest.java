@@ -28,7 +28,7 @@ class AbsEventCountIndicatorTest {
 
   @Test
   void test_feed() throws Exception {
-    absEventCountIndicator.feed(intermediateSession, guidAttributeAccumulator, true);
+    absEventCountIndicator.feed(intermediateSession, guidAttributeAccumulator);
   }
 
   @Test

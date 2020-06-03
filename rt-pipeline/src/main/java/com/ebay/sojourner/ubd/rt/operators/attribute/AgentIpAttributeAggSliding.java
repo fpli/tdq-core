@@ -47,7 +47,7 @@ public class AgentIpAttributeAggSliding
     }
     try {
       AgentIpIndicatorsSliding.getInstance()
-          .feed(agentIpAttribute, agentIpAttributeAccumulator, true);
+          .feed(agentIpAttribute, agentIpAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
     }

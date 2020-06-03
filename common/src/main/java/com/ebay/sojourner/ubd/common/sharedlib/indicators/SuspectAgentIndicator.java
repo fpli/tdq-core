@@ -3,7 +3,6 @@ package com.ebay.sojourner.ubd.common.sharedlib.indicators;
 import com.ebay.sojourner.ubd.common.model.AgentAttributeAccumulator;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttributeAccumulator;
-import com.ebay.sojourner.ubd.common.model.IntermediateSession;
 import com.ebay.sojourner.ubd.common.model.SessionCore;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
 import com.ebay.sojourner.ubd.common.util.BotRules;
@@ -27,32 +26,33 @@ public class SuspectAgentIndicator<Source, Target> extends AbstractIndicator<Sou
   }
 
   @Override
-  public void feed(Source source, Target target, boolean isNeeded) throws Exception {
+  public void feed(Source source, Target target) throws Exception {
     if (source instanceof SessionCore) {
-      SessionCore intermediateSession = (SessionCore) source;
+      SessionCore sessionCore = (SessionCore) source;
       AgentIpAttributeAccumulator agentIpAttributeAccumulator =
           (AgentIpAttributeAccumulator) target;
       agentIpAttributeAccumulator
           .getAgentIpAttribute()
-          .feed(intermediateSession, BotRules.DECLARED_AGENT, isNeeded);
+          .feed(sessionCore, BotRules.DECLARED_AGENT);
     } else if (source instanceof AgentIpAttribute) {
       AgentIpAttribute agentIpAttribute = (AgentIpAttribute) source;
-      AgentAttributeAccumulator agentAttributeAccumulator = (AgentAttributeAccumulator) target;
+      AgentIpAttributeAccumulator agentAttributeAccumulator = (AgentIpAttributeAccumulator) target;
       agentAttributeAccumulator
-          .getAgentAttribute()
-          .feed(agentIpAttribute, BotRules.DECLARED_AGENT, isNeeded);
+          .getAgentIpAttribute()
+          .merge(agentIpAttribute, BotRules.DECLARED_AGENT);
     }
   }
 
   @Override
   public boolean filter(Source source, Target target) throws Exception {
-    if (source instanceof IntermediateSession) {
-      IntermediateSession intermediateSession = (IntermediateSession) source;
+    if (source instanceof SessionCore) {
+      SessionCore sessionCore = (SessionCore) source;
       int targetFlag = BotRules.DECLARED_AGENT;
-      if (botFilter.filter(intermediateSession, targetFlag)) {
+      if (botFilter.filter(sessionCore, targetFlag)) {
         return true;
       }
-      return intermediateSession.getUserAgent() == null;
+      return sessionCore.getUserAgent() == null || (sessionCore.getUserAgent().getAgentHash1() == 0L
+          && sessionCore.getUserAgent().getAgentHash2() == 0L);
     }
     return false;
   }

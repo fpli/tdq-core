@@ -3,7 +3,7 @@ package com.ebay.sojourner.ubd.common.rule;
 import com.ebay.sojourner.ubd.common.model.GuidAttribute;
 import com.ebay.sojourner.ubd.common.util.BotRules;
 
-public class BotRule15_1 extends AbstractBotRule<GuidAttribute> {
+public class BotRule15_Cross extends AbstractBotRule<GuidAttribute> {
 
   public static final int MANY_EVENTS_BOUND = 10000;
 

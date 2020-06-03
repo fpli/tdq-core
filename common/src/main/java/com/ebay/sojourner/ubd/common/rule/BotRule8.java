@@ -9,7 +9,7 @@ public class BotRule8 extends AbstractBotRule<AgentIpAttribute> {
 
   @Override
   public int getBotFlag(AgentIpAttribute agentIpAttribute) {
-    if (agentIpAttribute.getScsCountForBot8() >= 0
+    if (agentIpAttribute.getScsCountForBot8() > 0
         && agentIpAttribute.getBbcCount() > BID_BIN_COUNT) {
       return BotRules.SCS_CONFIRM_ON_AGENTIP;
     } else {

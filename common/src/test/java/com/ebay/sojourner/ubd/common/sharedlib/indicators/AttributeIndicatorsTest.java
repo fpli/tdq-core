@@ -25,7 +25,7 @@ class AttributeIndicatorsTest {
 
   @Test
   void test_feed_isNeeded() throws Exception {
-    attributeIndicators.feed("test", "test", true);
+    attributeIndicators.feed("test", "test");
   }
 
   @Test
@@ -53,7 +53,7 @@ class AttributeIndicatorsTest {
     }
 
     @Override
-    void feed(String s, String s2, boolean isNeeded) throws Exception {
+    public  void feed(String s, String s2) throws Exception {
     }
   }
 }
