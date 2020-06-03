@@ -1,6 +1,6 @@
 package com.ebay.sojourner.ubd.rt.common.state;
 
-import com.ebay.sojourner.ubd.rt.util.AppEnv;
+import com.ebay.sojourner.ubd.rt.util.FlinkEnvUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.contrib.streaming.state.PredefinedOptions;
 import org.apache.flink.contrib.streaming.state.RocksDBStateBackend;
@@ -13,7 +13,7 @@ public class StateBackendFactory {
   public static final String FS = "FS";
   public static final String ROCKSDB = "ROCKSDB";
   public static final String CHECKPOINT_DATA_URI =
-      "file://" + AppEnv.config().getFlink().getCheckpoint().getDataDir();
+      "file://" + FlinkEnvUtils.getString(Constants.CHECKPOINT_DATA_DIR);
 
   public static StateBackend getStateBackend(String type) {
     switch (type) {

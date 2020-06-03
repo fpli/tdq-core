@@ -1,12 +1,10 @@
 package com.ebay.sojourner.ubd.rt.pipeline;
 
-import com.ebay.sojourner.ubd.common.model.SojSession;
+import com.ebay.sojourner.ubd.common.model.SojEvent;
+import com.ebay.sojourner.ubd.common.util.Constants;
 import com.ebay.sojourner.ubd.rt.connectors.filesystem.HdfsSinkUtil;
 import com.ebay.sojourner.ubd.rt.connectors.kafka.KafkaSourceFunction;
-import com.ebay.sojourner.ubd.rt.util.AppEnv;
-import com.ebay.sojourner.ubd.rt.util.Constants;
-import com.ebay.sojourner.ubd.rt.util.ExecutionEnvUtil;
-import org.apache.flink.api.java.utils.ParameterTool;
+import com.ebay.sojourner.ubd.rt.util.FlinkEnvUtils;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
@@ -22,31 +20,31 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 public class SojournerKafkaToHdfsJob {
 
   public static void main(String[] args) throws Exception {
-    // Make sure this is being executed at start up.
-    ParameterTool parameterTool = ExecutionEnvUtil.createParameterTool(args);
-    AppEnv.config(parameterTool);
 
-    String sourceTopic = parameterTool.get("dump.source.topic");
-    String jobName = parameterTool.get("dump.job.name");
-    Class<?> deserializeClass = Class.forName(parameterTool.get("dump.source.class"));
-    String hdfsPath = parameterTool.get("dump.hdfs.path");
-    String groupId = parameterTool.get("dump.group.id");
-    int parallelNum = Integer.parseInt(parameterTool.get("dump.parallel.number"));
-    String bootstrapServers = Constants.BOOTSTRAP_SERVERS_SESSION;
+    final StreamExecutionEnvironment executionEnvironment = FlinkEnvUtils.prepare(args);
 
-    //Prepare execution environment
-    final StreamExecutionEnvironment exeEnv = ExecutionEnvUtil.prepare(parameterTool);
+    String sourceTopic = FlinkEnvUtils.getString("dump.source.topic");
+    Class<?> deserializeClass = Class.forName(FlinkEnvUtils.getString("dump.source.class"));
+    String hdfsPath = FlinkEnvUtils.getString("dump.hdfs.path");
+    String groupId = FlinkEnvUtils.getString("dump.group.id");
+    int sourceParallelNum = FlinkEnvUtils.getInteger("dump.source.parallel.number");
+    int sinkParallelNum = FlinkEnvUtils.getInteger("dump.sink.parallel.number");
+    String bootstrapServers = FlinkEnvUtils
+        .getListString(Constants.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT);
 
-    DataStream<SojSession> sourceDataStream = exeEnv.addSource(KafkaSourceFunction
-        .buildSource(sourceTopic, bootstrapServers, groupId, deserializeClass))
-        .setParallelism(parallelNum)
+    DataStream<SojEvent> sourceDataStream = executionEnvironment
+        .addSource(KafkaSourceFunction
+            .buildSource(sourceTopic, bootstrapServers, groupId, deserializeClass))
+        .setParallelism(sourceParallelNum)
         .name(String.format("Rheos Kafka Consumer from topic: %s", sourceTopic))
-        .uid("KafkaSource");
-    sourceDataStream.addSink(HdfsSinkUtil.createWithParquet(hdfsPath, deserializeClass))
-        .setParallelism(parallelNum)
+        .uid("non-bot-source-id");
+
+    sourceDataStream
+        .addSink(HdfsSinkUtil.createWithParquet(hdfsPath, deserializeClass))
+        .setParallelism(sinkParallelNum)
         .name(String.format("Hdfs sink to location: %s", hdfsPath))
-        .uid("HdfsSink")
-        .disableChaining();
-    exeEnv.execute(jobName);
+        .uid("sink-id");
+
+    FlinkEnvUtils.execute(executionEnvironment, FlinkEnvUtils.getString(Constants.NAME_HDFS_DUMP));
   }
 }

@@ -20,11 +20,11 @@ public class HdfsSinkUtil {
   }
 
   public static StreamingFileSink sojEventSinkWithParquet() {
-    return HdfsSinkUtil.createWithParquet(HdfsPathConstants.EVENT_PATH, SojEvent.class);
+    return HdfsSinkUtil.createWithParquet(HdfsPathConstants.EVENT_NON_BOT_PATH, SojEvent.class);
   }
 
   public static StreamingFileSink sojSessionSinkWithParquet() {
-    return HdfsSinkUtil.createWithParquet(HdfsPathConstants.SESSION_PATH, SojSession.class);
+    return HdfsSinkUtil.createWithParquet(HdfsPathConstants.SESSION_NON_BOT_PATH, SojSession.class);
   }
 
   public static StreamingFileSink signatureSinkWithParquet() {

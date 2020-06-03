@@ -1,0 +1,19 @@
+flink:
+  app:
+    parallelism:
+      source: 100
+      event: 100
+      session: 640
+      pre-agent-ip: 300
+      agent-ip: 300
+      agent: 300
+      ip: 300
+      guid: 300
+      broadcast: 300
+      metrics: 300
+
+zookeeper:
+  server:
+    - zk-0.sojzk-ns.svc.32.tess.io:2181
+    - zk-1.sojzk-ns.svc.32.tess.io:2181
+    - zk-2.sojzk-ns.svc.32.tess.io:2181

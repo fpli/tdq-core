@@ -3,7 +3,8 @@ package com.ebay.sojourner.ubd.common.env;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import java.util.Comparator;
-import java.util.Map;
+import java.util.Enumeration;
+import java.util.Properties;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,11 +33,13 @@ public class EnvironmentUtils {
     Preconditions.checkNotNull(profile);
 
     String configFileName = "application-" + profile;
-    PROP_SOURCES.add(new PropertySource(configFileName, 3));
+    PropertySource propertySource = new PropertySource(configFileName, 3);
+    propertySource.sourceProps();
+    PROP_SOURCES.add(propertySource);
   }
 
-  public static void fromMap(Map<String, Object> map) {
-    Preconditions.checkNotNull(map);
+  public static void fromProperties(Properties properties) {
+    Preconditions.checkNotNull(properties);
     PROP_SOURCES.add(new AbstractEnvironment() {
       @Override
       public Integer order() {
@@ -45,7 +48,11 @@ public class EnvironmentUtils {
 
       @Override
       public void sourceProps() {
-        this.props = map;
+        Enumeration<?> enumeration = properties.propertyNames();
+        while (enumeration.hasMoreElements()) {
+          String key = (String) enumeration.nextElement();
+          this.props.put(key,properties.get(key));
+        }
       }
     });
 

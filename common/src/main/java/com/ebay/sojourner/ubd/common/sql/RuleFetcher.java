@@ -18,9 +18,9 @@ public class RuleFetcher {
   private final OkHttpClient client;
   private final ObjectMapper objectMapper;
   private static final String FETCH_ALL_RULES =
-      Constants.REST_SERVER + Constants.API_RULE_LIST_PUBLISHED;
+      Constants.REST_SERVER + Constants.REST_PUBLISHED_RULE_LIST;
   private static final String FETCH_RULE_PREFIX =
-      Constants.REST_SERVER + Constants.API_SPECIFIED_RULE_PREFIX;
+      Constants.REST_SERVER + Constants.REST_SPECIFIED_RULE;
 
   public RuleFetcher() {
     this.client = RestClientUtils.getRestClient();

@@ -32,7 +32,7 @@ public class RuleManager {
   private Set<RuleDefinition> ruleDefinitions = Sets.newHashSet();
 
   private RuleManager() {
-    initRules();
+    // initRules();
 
     // TODO(Jason) disable zk for now
     // 1. init zk listener
@@ -41,7 +41,7 @@ public class RuleManager {
     // initZkListener();
 
     // 2. init scheduling
-    initScheduler(30L, 15L);
+    // initScheduler(30L, 15L);
 
   }
 
@@ -75,7 +75,7 @@ public class RuleManager {
     log.info("Init rules count: {}", this.ruleDefinitions.size());
   }
 
-  private void initZkListener(ZkClient zkClient, ExecutorService zkExecutor) {
+  private void initZkListener(ZkClient zkClient, ExecutorService zkExecutor)    {
     CuratorFramework client = zkClient.getClient();
     PathChildrenCache cache = new PathChildrenCache(client, Constants.ZK_NODE_PATH, true);
     // add listener

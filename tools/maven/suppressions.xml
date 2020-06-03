@@ -71,5 +71,7 @@ under the License.
     files="src/main/java/com/ebay/sojourner/ubd/common/model/SojSession.java"/>
   <suppress checks=".*"
     files="src/main/java/com/ebay/sojourner/ubd/common/model/IntermediateSession.java"/>
+  <suppress checks=".*"
+    files="/src/main/java/com/ebay/sojourner/ubd/rt/util/Constants.java"/>
   <suppress checks="NewlineAtEndOfFile" files=".java" />
 </suppressions>

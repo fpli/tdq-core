@@ -16,7 +16,7 @@ import com.ebay.sojourner.ubd.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionToSessionCoreMapFunction;
 import com.ebay.sojourner.ubd.rt.operators.session.UbiSessionWindowProcessFunction;
-import com.ebay.sojourner.ubd.rt.util.AppEnv;
+import com.ebay.sojourner.ubd.rt.util.FlinkEnvUtils;
 import com.ebay.sojourner.ubd.rt.util.RawEventGenerator;
 import com.ebay.sojourner.ubd.rt.util.ResultGenerator;
 import java.util.ArrayList;
@@ -124,7 +124,7 @@ public class IntegrationTest {
     // ubiSession to intermediateSession
     DataStream<SessionCore> intermediateSessionDataStream = ubiSessinDataStream
         .map(new UbiSessionToSessionCoreMapFunction())
-        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
         .name("UbiSession To IntermediateSession")
         .slotSharingGroup("SESSION")
         .uid("CrossSessionLevel");

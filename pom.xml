@@ -13,15 +13,13 @@
   <modules>
     <module>common</module>
     <module>rt-pipeline</module>
-    <module>batch-pipeline</module>
-    <module>dist</module>
-    <module>rule-test</module>
     <module>batch-connector</module>
     <module>connectors</module>
+    <module>rule-test</module>
   </modules>
 
   <properties>
-    <global.version>0.8.2-SNAPSHOT</global.version>
+    <global.version>0.8.0-SNAPSHOT</global.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
@@ -34,7 +32,6 @@
     <lombok.version>1.18.10</lombok.version>
     <slf4j.version>1.7.30</slf4j.version>
     <log4j.version>1.2.17</log4j.version>
-    <couchbase.client.version>2.7.6</couchbase.client.version>
     <avro.version>1.8.2</avro.version>
     <flink.version>1.7.2</flink.version>
     <spark.version>2.3.1</spark.version>
@@ -238,13 +235,6 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>org.apache.flink</groupId>
-        <artifactId>flink-connector-filesystem_2.11</artifactId>
-        <version>${flink.version}</version>
-        <scope>provided</scope>
-      </dependency>
-
-      <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-log4j12</artifactId>
         <version>${slf4j.version}</version>
@@ -264,11 +254,6 @@
         <groupId>log4j</groupId>
         <artifactId>log4j</artifactId>
         <version>${log4j.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.couchbase.client</groupId>
-        <artifactId>java-client</artifactId>
-        <version>${couchbase.client.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.avro</groupId>
@@ -338,18 +323,13 @@
       </dependency>
       <dependency>
         <groupId>org.apache.flink</groupId>
+        <artifactId>flink-connector-filesystem_2.11</artifactId>
+        <version>${flink.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.flink</groupId>
         <artifactId>flink-metrics-dropwizard</artifactId>
-        <version>${flink.version}</version>
-      </dependency>
-      <!-- queryable-state-runtime is needed to start queryable server in TaskManager -->
-      <dependency>
-        <groupId>org.apache.flink</groupId>
-        <artifactId>flink-queryable-state-runtime_${scala.binary.version}</artifactId>
-        <version>${flink.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.flink</groupId>
-        <artifactId>flink-queryable-state-client-java_${scala.binary.version}</artifactId>
         <version>${flink.version}</version>
       </dependency>
       <dependency>
@@ -541,23 +521,6 @@
   </dependencyManagement>
 
   <profiles>
-    <profile>
-      <!-- qa -->
-      <id>qa</id>
-      <properties>
-        <profiles.active>qa</profiles.active>
-      </properties>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-    </profile>
-    <profile>
-      <!-- prod -->
-      <id>prod</id>
-      <properties>
-        <profiles.active>prod</profiles.active>
-      </properties>
-    </profile>
     <profile>
       <id>sonar</id>
       <activation>
