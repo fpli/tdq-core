@@ -61,7 +61,7 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
   private int newGuidCnt = 0;
   //    private int guidCnt = 0;
   private Set<Guid> cguidSet = new CopyOnWriteArraySet<>();
-  private Set<Guid> guidSet = new CopyOnWriteArraySet<Guid>();
+  //   private Set<Guid> guidSet = new CopyOnWriteArraySet<Guid>();
   //  private HllSketch guidSet = new HllSketch(20, TgtHllType.HLL_8);
   private byte[] hllSketch;
   private Boolean isAllAgentHoper = true;
@@ -152,20 +152,20 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
           newGuidCnt += 1;
         }
         if (sessionCore.getGuid() != null) {
-          Guid guid = new Guid();
-          guid.setGuid1(sessionCore.getGuid().getGuid1());
-          guid.setGuid2(sessionCore.getGuid().getGuid2());
-          guidSet.add(guid);
-          //          HllSketch guidSet;
-          //          if (hllSketch == null) {
-          //            guidSet = new HllSketch(12, TgtHllType.HLL_4);
-          //          } else {
-          //            guidSet = HllSketch.heapify(hllSketch);
-          //          }
-          //          long[] guidList = {sessionCore.getGuid().getGuid1(),
-          //              sessionCore.getGuid().getGuid2()};
-          //          guidSet.update(guidList);
-          //          hllSketch = guidSet.toCompactByteArray();
+          //          Guid guid = new Guid();
+          //          guid.setGuid1(sessionCore.getGuid().getGuid1());
+          //          guid.setGuid2(sessionCore.getGuid().getGuid2());
+          //          guidSet.add(guid);
+                    HllSketch guidSet;
+                    if (hllSketch == null) {
+                      guidSet = new HllSketch(12, TgtHllType.HLL_4);
+                    } else {
+                      guidSet = HllSketch.heapify(hllSketch);
+                    }
+                    long[] guidList = {sessionCore.getGuid().getGuid1(),
+                        sessionCore.getGuid().getGuid2()};
+                    guidSet.update(guidList);
+                    hllSketch = guidSet.toCompactByteArray();
         }
         if (sessionCore.getCguid() != null) {
           if (cguidSet.size() <= 5) {
@@ -288,40 +288,40 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
         siteCnt += agentIpAttribute.getSiteCnt();
         newGuidCnt += agentIpAttribute.getNewGuidCnt();
 
-        HllSketch guidSet;
-        if (hllSketch == null && agentIpAttribute.getHllSketch() == null) {
-          guidSet = new HllSketch(12, TgtHllType.HLL_4);
-          for (Guid guid : this.getGuidSet()) {
-            long[] guidList = {guid.getGuid1(),
-                guid.getGuid2()};
-            guidSet.update(guidList);
-          }
-          getGuidSet().clear();
-          for (Guid guid : agentIpAttribute.getGuidSet()) {
-            long[] guidList = {guid.getGuid1(),
-                guid.getGuid2()};
-            guidSet.update(guidList);
-          }
-          agentIpAttribute.getGuidSet().clear();
-        } else if (hllSketch == null && agentIpAttribute.getHllSketch() != null) {
-
-          guidSet = HllSketch.heapify(agentIpAttribute.getHllSketch());
-          for (Guid guid : this.getGuidSet()) {
-            long[] guidList = {guid.getGuid1(),
-                guid.getGuid2()};
-            guidSet.update(guidList);
-          }
-        } else if (hllSketch != null && agentIpAttribute.getHllSketch() == null) {
-          guidSet = HllSketch.heapify(hllSketch);
-          for (Guid guid : agentIpAttribute.getGuidSet()) {
-            long[] guidList = {guid.getGuid1(),
-                guid.getGuid2()};
-            guidSet.update(guidList);
-          }
-        } else {
-          guidSet = HllSketch.heapify(hllSketch);
-        }
-        hllSketch = guidSet.toCompactByteArray();
+          //        HllSketch guidSet;
+          //        if (hllSketch == null && agentIpAttribute.getHllSketch() == null) {
+          //          guidSet = new HllSketch(12, TgtHllType.HLL_4);
+          //          for (Guid guid : this.getGuidSet()) {
+          //            long[] guidList = {guid.getGuid1(),
+          //                guid.getGuid2()};
+          //            guidSet.update(guidList);
+          //          }
+          //          getGuidSet().clear();
+          //          for (Guid guid : agentIpAttribute.getGuidSet()) {
+          //            long[] guidList = {guid.getGuid1(),
+          //                guid.getGuid2()};
+          //            guidSet.update(guidList);
+          //          }
+          //          agentIpAttribute.getGuidSet().clear();
+          //        } else if (hllSketch == null && agentIpAttribute.getHllSketch() != null) {
+          //
+          //          guidSet = HllSketch.heapify(agentIpAttribute.getHllSketch());
+          //          for (Guid guid : this.getGuidSet()) {
+          //            long[] guidList = {guid.getGuid1(),
+          //                guid.getGuid2()};
+          //            guidSet.update(guidList);
+          //          }
+          //        } else if (hllSketch != null && agentIpAttribute.getHllSketch() == null) {
+          //          guidSet = HllSketch.heapify(hllSketch);
+          //          for (Guid guid : agentIpAttribute.getGuidSet()) {
+          //            long[] guidList = {guid.getGuid1(),
+          //                guid.getGuid2()};
+          //            guidSet.update(guidList);
+          //          }
+          //        } else {
+          //          guidSet = HllSketch.heapify(hllSketch);
+          //        }
+          //        hllSketch = guidSet.toCompactByteArray();
         if (cguidSet.size() < 5) {
           cguidSet.addAll(agentIpAttribute.getCguidSet());
         }
