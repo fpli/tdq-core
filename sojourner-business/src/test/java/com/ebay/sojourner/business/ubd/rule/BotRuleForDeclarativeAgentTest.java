@@ -1,11 +1,9 @@
 package com.ebay.sojourner.business.ubd.rule;
 
-import static org.mockito.MockitoAnnotations.initMocks;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import com.ebay.sojourner.ubd.common.model.AgentAttribute;
-import com.ebay.sojourner.ubd.common.rule.BotRuleForDeclarativeAgent;
 import com.ebay.sojourner.ubd.common.util.UbiSessionHelper;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;

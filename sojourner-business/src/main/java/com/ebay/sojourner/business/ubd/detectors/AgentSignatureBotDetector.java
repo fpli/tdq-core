@@ -1,10 +1,10 @@
 package com.ebay.sojourner.business.ubd.detectors;
 
 import com.ebay.sojourner.ubd.common.model.AgentAttribute;
-import com.ebay.sojourner.ubd.common.rule.BotRule6;
-import com.ebay.sojourner.ubd.common.rule.BotRuleForDeclarativeAgent;
-import com.ebay.sojourner.ubd.common.rule.BotRuleForSuspectAgent;
-import com.ebay.sojourner.ubd.common.rule.Rule;
+import com.ebay.sojourner.business.ubd.rule.BotRule6;
+import com.ebay.sojourner.business.ubd.rule.BotRuleForDeclarativeAgent;
+import com.ebay.sojourner.business.ubd.rule.BotRuleForSuspectAgent;
+import com.ebay.sojourner.business.ubd.rule.Rule;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;

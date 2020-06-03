@@ -1,9 +1,9 @@
 package com.ebay.sojourner.business.ubd.detectors;
 
 import com.ebay.sojourner.ubd.common.model.UbiSession;
-import com.ebay.sojourner.ubd.common.rule.BotRule206;
-import com.ebay.sojourner.ubd.common.rule.BotRule208;
-import com.ebay.sojourner.ubd.common.rule.Rule;
+import com.ebay.sojourner.business.ubd.rule.BotRule206;
+import com.ebay.sojourner.business.ubd.rule.BotRule208;
+import com.ebay.sojourner.business.ubd.rule.Rule;
 import com.ebay.sojourner.ubd.common.util.BotFilter;
 import com.ebay.sojourner.ubd.common.util.UbiBotFilter;
 import java.io.IOException;

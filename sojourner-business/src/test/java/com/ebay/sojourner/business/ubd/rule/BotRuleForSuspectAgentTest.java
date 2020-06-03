@@ -1,7 +1,6 @@
 package com.ebay.sojourner.business.ubd.rule;
 
 import com.ebay.sojourner.ubd.common.model.AgentAttribute;
-import com.ebay.sojourner.ubd.common.rule.BotRuleForSuspectAgent;
 import java.util.Collection;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

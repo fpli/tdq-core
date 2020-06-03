@@ -33,7 +33,7 @@ import com.ebay.sojourner.business.ubd.parser.TimestampParser;
 import com.ebay.sojourner.business.ubd.parser.UserIdParser;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sql.RuleManager;
+import com.ebay.sojourner.business.ubd.sql.RuleManager;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;

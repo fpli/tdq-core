@@ -1,7 +1,6 @@
 package com.ebay.sojourner.business.ubd.rule;
 
 import com.ebay.sojourner.ubd.common.model.IpAttribute;
-import com.ebay.sojourner.ubd.common.rule.BotRule7;
 import java.util.Collection;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

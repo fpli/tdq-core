@@ -1,8 +1,8 @@
 package com.ebay.sojourner.ubd.rt.common.metrics;
 
 import com.ebay.sojourner.ubd.common.model.UbiEvent;
-import com.ebay.sojourner.ubd.common.sql.RuleDefinition;
-import com.ebay.sojourner.ubd.common.sql.RuleManager;
+import com.ebay.sojourner.business.ubd.sql.RuleDefinition;
+import com.ebay.sojourner.business.ubd.sql.RuleManager;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;

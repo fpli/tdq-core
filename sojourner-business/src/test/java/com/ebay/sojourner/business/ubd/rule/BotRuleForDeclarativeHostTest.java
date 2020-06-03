@@ -1,13 +1,10 @@
 package com.ebay.sojourner.business.ubd.rule;
 
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.MockitoAnnotations.initMocks;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.reflect.Whitebox.setInternalState;
 
 import com.ebay.sojourner.ubd.common.model.IpAttribute;
-import com.ebay.sojourner.ubd.common.rule.BotRuleForDeclarativeHost;
 import com.ebay.sojourner.ubd.common.util.BotHostMatcher;
 import com.ebay.sojourner.ubd.common.util.TransformUtil;
 import org.assertj.core.api.Assertions;
