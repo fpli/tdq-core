@@ -4,6 +4,7 @@ import com.ebay.sojourner.ubd.common.model.JetStreamOutputEvent;
 import com.ebay.sojourner.ubd.common.model.JetStreamOutputSession;
 import com.ebay.sojourner.ubd.common.model.RawEvent;
 import com.ebay.sojourner.ubd.common.model.SojBytesEvent;
+import com.ebay.sojourner.ubd.common.util.Constants;
 import com.ebay.sojourner.ubd.rt.util.FlinkEnvUtils;
 import java.util.Optional;
 import java.util.Properties;

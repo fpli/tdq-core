@@ -1,5 +1,6 @@
 package com.ebay.sojourner.ubd.rt.common.state;
 
+import com.ebay.sojourner.ubd.common.util.Constants;
 import com.ebay.sojourner.ubd.rt.util.FlinkEnvUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.contrib.streaming.state.PredefinedOptions;
