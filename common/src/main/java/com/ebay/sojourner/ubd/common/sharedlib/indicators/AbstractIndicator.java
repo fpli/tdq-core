@@ -17,11 +17,6 @@ public abstract class AbstractIndicator<Source, Target> implements Aggregator<So
    */
   abstract boolean filter(Source source, Target target) throws Exception;
 
-  /**
-   * Feed the source to be aggregated for the target.
-   */
-  abstract void feed(Source source, Target target, boolean isNeeded) throws Exception;
-
   @Override
   public void init() throws Exception {
     // empty implementation

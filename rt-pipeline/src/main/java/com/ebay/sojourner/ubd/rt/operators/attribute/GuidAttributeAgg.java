@@ -46,7 +46,7 @@ public class GuidAttributeAgg implements
       guidAttributeAccumulator.getGuidAttribute().setGuid2(session.getGuid().getGuid2());
     }
     try {
-      GuidIndicators.getInstance().feed(session, guidAttributeAccumulator, true);
+      GuidIndicators.getInstance().feed(session, guidAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
     }

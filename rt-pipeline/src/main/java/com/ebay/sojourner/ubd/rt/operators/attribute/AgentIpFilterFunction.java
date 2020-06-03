@@ -8,16 +8,16 @@ import org.apache.flink.api.common.functions.RichFilterFunction;
 public class AgentIpFilterFunction extends RichFilterFunction<SessionCore> {
 
   @Override
-  public boolean filter(SessionCore intermediateSession) throws Exception {
+  public boolean filter(SessionCore sessionCore) throws Exception {
 
-    if (intermediateSession.getIp() != null && intermediateSession.getUserAgent() != null) {
+    if (sessionCore.getIp() != null && sessionCore.getUserAgent() != null) {
       long[] agentHashArr = TransformUtil.md522Long("Mozilla/5.0 (Windows NT 6.1; WOW64) A"
           + "ppleWebKit/534+ (KHTML, like Gecko) BingPreview/1.0b");
       AgentHash agentHash = new AgentHash();
       agentHash.setAgentHash1(agentHashArr[0]);
       agentHash.setAgentHash2(agentHashArr[1]);
-      return intermediateSession.getIp().equals(TransformUtil.ipToInt("40.77.189.106"))
-          && intermediateSession.getUserAgent()
+      return sessionCore.getIp().equals(TransformUtil.ipToInt("40.77.189.106"))
+          && sessionCore.getUserAgent()
           .equals(agentHash);
     }
 

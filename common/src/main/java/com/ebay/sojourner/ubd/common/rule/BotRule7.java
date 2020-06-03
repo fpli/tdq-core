@@ -10,7 +10,7 @@ public class BotRule7 extends AbstractBotRule<IpAttribute> {
   @Override
   public int getBotFlag(IpAttribute ipAttribute) {
     int botFlag = NON_BOT_FLAG;
-    if (ipAttribute.getScsCount() >= 1 && ipAttribute.getTotalCnt() >= 20) {
+    if (ipAttribute.getScsCount() >= 20) {
       botFlag = SCS_ON_IP;
     }
     return botFlag;

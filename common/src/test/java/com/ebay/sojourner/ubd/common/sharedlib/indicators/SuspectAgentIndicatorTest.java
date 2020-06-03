@@ -47,7 +47,7 @@ class SuspectAgentIndicatorTest {
   void test_feed_UbiSession() throws Exception {
     SuspectAgentIndicator<IntermediateSession, AgentIpAttributeAccumulator> suspectAgentIndicator =
         new SuspectAgentIndicator<>(mockBotFilter);
-    suspectAgentIndicator.feed(intermediateSession, agentIpAttributeAccumulator, true);
+    suspectAgentIndicator.feed(intermediateSession, agentIpAttributeAccumulator);
   }
 
   @Test
@@ -55,7 +55,7 @@ class SuspectAgentIndicatorTest {
     AgentIpAttribute agentIpAttribute = new AgentIpAttribute();
     SuspectAgentIndicator<AgentIpAttribute, AgentAttributeAccumulator> suspectAgentIndicator =
         new SuspectAgentIndicator<>(mockBotFilter);
-    suspectAgentIndicator.feed(agentIpAttribute, agentAttributeAccumulator, true);
+    suspectAgentIndicator.feed(agentIpAttribute, agentAttributeAccumulator);
   }
 
   @Test

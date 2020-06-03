@@ -2,6 +2,7 @@ package com.ebay.sojourner.ubd.common.util;
 
 import com.ebay.sojourner.ubd.common.model.AgentAttribute;
 import com.ebay.sojourner.ubd.common.model.IntermediateSession;
+import com.ebay.sojourner.ubd.common.model.SessionCore;
 import com.ebay.sojourner.ubd.common.model.UbiSession;
 import com.ebay.sojourner.ubd.common.sharedlib.util.Base64Ebay;
 import com.ebay.sojourner.ubd.common.sharedlib.util.GUID2Date;
@@ -107,9 +108,9 @@ public class UbiSessionHelper {
 
   public static boolean isNonIframRdtCountZero(Object session) {
 
-    if (session instanceof IntermediateSession) {
-      IntermediateSession intermediateSession = (IntermediateSession) session;
-      return intermediateSession.getNonIframeRdtEventCnt() == 0;
+    if (session instanceof SessionCore) {
+      SessionCore intermediateSession = (SessionCore) session;
+      return SessionCoreHelper.isNonIframRdtCountZero(intermediateSession);
     } else {
       UbiSession ubiSession = (UbiSession) session;
       return ubiSession.getNonIframeRdtEventCnt() == 0;

@@ -18,12 +18,11 @@ public class GuidAttribute implements Attribute<SessionCore>, Serializable {
   public GuidAttribute() {
   }
 
-  public void feed(SessionCore intermediateSession, int botFlag, boolean isNeeded) {
-    if (isNeeded) {
-      if(intermediateSession.getAbsEventCnt()!=null) {
-        absEventCount += intermediateSession.getAbsEventCnt();
-      }
+  public void feed(SessionCore intermediateSession, int botFlag) {
+    if (intermediateSession.getAbsEventCnt() != null) {
+      absEventCount += intermediateSession.getAbsEventCnt();
     }
+
   }
 
   @Override

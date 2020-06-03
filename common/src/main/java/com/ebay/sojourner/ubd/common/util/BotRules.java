@@ -37,4 +37,5 @@ public class BotRules {
   // ICF BOT Flag (801 ~ 856 represent 1 ~ 56)
   public static final int ICF_Prefix1 = 80;
   public static final int ICF_Prefix2 = 8;
+
 }

@@ -14,16 +14,15 @@ public class AbsEventCountIndicator
 
   @Override
   public void feed(
-      SessionCore intermediateSession, GuidAttributeAccumulator guidAttributeAccumulator,
-      boolean isNeeded)
+      SessionCore sessionCore, GuidAttributeAccumulator guidAttributeAccumulator)
       throws Exception {
     guidAttributeAccumulator
         .getGuidAttribute()
-        .feed(intermediateSession, BotRules.MANY_EVENTS_BOT_FLAG, isNeeded);
+        .feed(sessionCore, BotRules.MANY_EVENTS_BOT_FLAG);
   }
 
   @Override
-  public boolean filter(SessionCore intermediateSession,
+  public boolean filter(SessionCore sessionCore,
       GuidAttributeAccumulator guidAttributeAccumulator)
       throws Exception {
     return false;

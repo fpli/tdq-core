@@ -36,7 +36,7 @@ public class AgentIndicators
 
   @Override
   public void initIndicators() {
-    addIndicators(new ScsCountForBot6Indicator<>(botFilter));
-    addIndicators(new SuspectAgentIndicator<>(botFilter));
+    addIndicators(new ScsCntForBot6UAIndicator<>(botFilter));
+    addIndicators(new SuspectAgentUAIndicator<>(botFilter));
   }
 }

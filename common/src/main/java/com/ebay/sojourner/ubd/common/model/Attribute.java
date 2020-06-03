@@ -2,7 +2,7 @@ package com.ebay.sojourner.ubd.common.model;
 
 public interface Attribute<T> {
 
-  void feed(T t, int botFlag, boolean isNeeded);
+  void feed(T t, int botFlag);
 
   void revert(T t, int botFlag);
 

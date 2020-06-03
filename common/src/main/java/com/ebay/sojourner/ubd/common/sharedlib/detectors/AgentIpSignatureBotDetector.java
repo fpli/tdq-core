@@ -3,6 +3,7 @@ package com.ebay.sojourner.ubd.common.sharedlib.detectors;
 import com.ebay.sojourner.ubd.common.model.AgentIpAttribute;
 import com.ebay.sojourner.ubd.common.rule.BotRule5;
 import com.ebay.sojourner.ubd.common.rule.BotRule8;
+import com.ebay.sojourner.ubd.common.rule.BotRuleForNewBot;
 import com.ebay.sojourner.ubd.common.rule.Rule;
 import java.io.IOException;
 import java.util.HashSet;
@@ -64,5 +65,6 @@ public class AgentIpSignatureBotDetector implements BotDetector<AgentIpAttribute
   public void initBotRules() {
     botRules.add(new BotRule5());
     botRules.add(new BotRule8());
+    botRules.add(new BotRuleForNewBot());
   }
 }

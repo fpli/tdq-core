@@ -30,18 +30,18 @@ public class AgentIpAttributeAgg
 
   @Override
   public AgentIpAttributeAccumulator add(
-      SessionCore intermediateSession,
+      SessionCore sessionCore,
       AgentIpAttributeAccumulator agentIpAttributeAccumulator) {
     if (agentIpAttributeAccumulator.getAgentIpAttribute().getClientIp() == null
         && agentIpAttributeAccumulator.getAgentIpAttribute().getAgent() == null) {
       agentIpAttributeAccumulator.getAgentIpAttribute()
-          .setClientIp(intermediateSession.getIp());
+          .setClientIp(sessionCore.getIp());
       agentIpAttributeAccumulator.getAgentIpAttribute()
-          .setAgent(intermediateSession.getUserAgent());
+          .setAgent(sessionCore.getUserAgent());
     }
     try {
 
-      AgentIpIndicators.getInstance().feed(intermediateSession, agentIpAttributeAccumulator, true);
+      AgentIpIndicators.getInstance().feed(sessionCore, agentIpAttributeAccumulator);
     } catch (Exception e) {
       e.printStackTrace();
     }
