@@ -78,7 +78,7 @@ public class UbiSession implements Serializable, Cloneable {
   private int pageCnt;
   private int searchCnt;
   private int viewCnt;
-  private boolean isRefererNull; // for bot207
+  private boolean refererNull; // for bot207
   private int siidCnt2; // for bot207
   private int viCnt; // for bot215
 
