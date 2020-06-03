@@ -147,10 +147,6 @@ public class UbiSession implements Serializable, Cloneable {
     isReturningVisitor = returningVisitor;
   }
 
-  public void setIsRefererNull(boolean refererNull) {
-    this.refererNull = refererNull;
-  }
-
   public UbiSession merge(UbiSession ubiSession) {
     this.eventCnt += ubiSession.getEventCnt();
     this.viCnt += ubiSession.getViCnt();
