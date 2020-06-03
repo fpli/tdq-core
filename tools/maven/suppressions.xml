@@ -51,7 +51,12 @@ under the License.
     files="src/main/java/com/ebay/sojourner/common/model/IntermediateSession.java"/>
   <suppress checks=".*"
     files="/src/main/java/com/ebay/sojourner/common/util/Constants.java"/>
-
+  <suppress checks=".*"
+    files="/src/main/java/com/ebay/sojourner/common/model/SessionCore.java"/>
+  <suppress checks=".*"
+    files="/src/main/java/com/ebay/sojourner/common/model/AgentHash.java"/>
+  <suppress checks=".*"
+    files="/src/main/java/com/ebay/sojourner/common/model/Guid.java"/>
   <suppress checks="NewlineAtEndOfFile" files=".java" />
   <suppress files="[\\/]src/test/java/com/ebay/sojourner/business/ubd[\\/]" checks="[a-zA-Z0-9]*"/>
 </suppressions>
