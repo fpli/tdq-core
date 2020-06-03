@@ -2,9 +2,9 @@ package com.ebay.sojourner.rt.pipeline;
 
 import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.util.Constants;
-import com.ebay.sojourner.rt.connectors.filesystem.HdfsSinkUtil;
-import com.ebay.sojourner.rt.connectors.kafka.KafkaSourceFunction;
-import com.ebay.sojourner.rt.util.FlinkEnvUtils;
+import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
+import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
+import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
@@ -40,7 +40,7 @@ public class SojournerKafkaToHdfsJob {
         .uid("non-bot-source-id");
 
     sourceDataStream
-        .addSink(HdfsSinkUtil.createWithParquet(hdfsPath, deserializeClass))
+        .addSink(HdfsConnectorFactory.createWithParquet(hdfsPath, deserializeClass))
         .setParallelism(sinkParallelNum)
         .name(String.format("Hdfs sink to location: %s", hdfsPath))
         .uid("sink-id");

@@ -5,12 +5,11 @@ import com.ebay.sojourner.common.model.CrossSessionSignature;
 import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.SessionCore;
 import com.ebay.sojourner.common.util.Constants;
-import com.ebay.sojourner.rt.util.FlinkEnvUtils;
+import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
+import com.ebay.sojourner.flink.common.state.MapStateDesc;
 import com.ebay.sojourner.rt.common.broadcast.CrossSessionDQBroadcastProcessFunction;
-import com.ebay.sojourner.rt.common.state.MapStateDesc;
-import com.ebay.sojourner.rt.common.windows.OnElementEarlyFiringTrigger;
-import com.ebay.sojourner.rt.connectors.filesystem.HdfsSinkUtil;
-import com.ebay.sojourner.rt.connectors.kafka.KafkaSourceFunction;
+import com.ebay.sojourner.flink.common.windows.OnElementEarlyFiringTrigger;
+import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.rt.operators.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.AgentIpAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.AgentIpAttributeAggSliding;
@@ -23,6 +22,7 @@ import com.ebay.sojourner.rt.operators.attribute.IpAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.IpWindowProcessFunction;
 import com.ebay.sojourner.rt.operators.attribute.TupleToCrossSessionSignatureMapFunction;
 import com.ebay.sojourner.rt.operators.session.IntermediateSessionToSessionCoreMapFunction;
+import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import java.util.Set;
 import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
@@ -129,7 +129,7 @@ public class SojournerRTJobForCrossSessionDQ {
         .uid("tuple4-transform-id");
 
     tupleToCrossSessionDataStream
-        .addSink(HdfsSinkUtil.signatureSinkWithParquet())
+        .addSink(HdfsConnectorFactory.signatureSinkWithParquet())
         .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_IP_PARALLELISM))
         .name("SignaturesSink")
         .uid("signature-sink-id");
@@ -148,7 +148,7 @@ public class SojournerRTJobForCrossSessionDQ {
             .uid("signature-detection-id");
 
     intermediateSessionWithSignature
-        .addSink(HdfsSinkUtil.intermediateSessionSinkWithParquet())
+        .addSink(HdfsConnectorFactory.intermediateSessionSinkWithParquet())
         .setParallelism(FlinkEnvUtils.getInteger(Constants.BROADCAST_PARALLELISM))
         .name("IntermediateSession sink")
         .uid("intermediate-session-sink-id");

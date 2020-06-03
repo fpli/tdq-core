@@ -1,7 +1,7 @@
 package com.ebay.sojourner.rt.common.broadcast;
 
 import com.ebay.sojourner.common.model.IntermediateSession;
-import com.ebay.sojourner.rt.common.state.MapStateDesc;
+import com.ebay.sojourner.flink.common.state.MapStateDesc;
 import com.ebay.sojourner.rt.util.TransformUtil;
 import java.util.HashMap;
 import java.util.Map;

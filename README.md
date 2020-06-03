@@ -1,4 +1,4 @@
-# sojourner-ubd
+# sojourner
 Sojourner Unified Bot Detection
 
 ## Features
@@ -18,14 +18,14 @@ Requirements:
 Build from source:
 
 ```
-git clone git@github.corp.ebay.com:DSS-COREINSIGHTS/sojourner-ubd.git
-cd sojourner-ubd
+git clone git@github.corp.ebay.com:sojourner/sojourner.git
+cd sojourner
 mvn clean package -DskipTests
 ```
 
 
 You can run or debug applications in IDE. E.g. to run real time pipeline, you run
-`com.ebay.sojourner.ubd.rt.pipeline.SojournerRTJob`
+`com.ebay.sojourner.rt.pipeline.SojournerRTJob`
 
 ## Run on a Local Flink Cluster
 Start a local Flink cluster:
@@ -34,8 +34,8 @@ Start a local Flink cluster:
 <FLINK_HOME>/bin/start-cluster.sh
 ```
 
-Run `sojourner-ubd-rt-pipeline`:
+Run `sojourner-rt-pipeline`:
 
 ```
-<FLINK_HOME>/bin/flink run -c com.ebay.sojourner.ubd.rt.pipeline.SojournerRTJob <sojourner-ubd>/rt-pipeline/target/sojourner-ubd-rt-pipeline-0.1-SNAPSHOT.jar
+<FLINK_HOME>/bin/flink run -c com.ebay.sojourner.rt.pipeline.SojournerRTJobForQA <sojourner>/rt-pipeline/target/sojourner-rt-pipeline-0.1-SNAPSHOT.jar
 ```

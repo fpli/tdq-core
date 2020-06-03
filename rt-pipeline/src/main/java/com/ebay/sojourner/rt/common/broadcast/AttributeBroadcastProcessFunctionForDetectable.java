@@ -2,7 +2,7 @@ package com.ebay.sojourner.rt.common.broadcast;
 
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
-import com.ebay.sojourner.rt.common.state.MapStateDesc;
+import com.ebay.sojourner.flink.common.state.MapStateDesc;
 import com.ebay.sojourner.rt.util.TransformUtil;
 import java.util.HashMap;
 import java.util.Map;

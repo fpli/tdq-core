@@ -16,7 +16,8 @@ public class UbiEventToSojEventMapFunction extends RichMapFunction<UbiEvent, Soj
     sojEvent.setApplicationPayload(ubiEvent.getApplicationPayload());
     sojEvent.setAppVersion(ubiEvent.getAppVersion());
     sojEvent.setBotFlags(new ArrayList<>(ubiEvent.getBotFlags()));
-    sojEvent.setClientData(ubiEvent.getClientData().toString());
+    sojEvent.setClientData(
+        ubiEvent.getClientData() == null ? null : ubiEvent.getClientData().toString());
     sojEvent.setBrowserFamily(ubiEvent.getBrowserFamily());
     sojEvent.setBrowserVersion(ubiEvent.getBrowserVersion());
     sojEvent.setClickId(ubiEvent.getClickId());

@@ -6,15 +6,15 @@ import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.Constants;
-import com.ebay.sojourner.rt.connectors.filesystem.HdfsSinkUtil;
-import com.ebay.sojourner.rt.connectors.kafka.KafkaSourceFunction;
+import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
+import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
+import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionWindowProcessFunction;
-import com.ebay.sojourner.rt.util.FlinkEnvUtils;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -107,13 +107,13 @@ public class SojournerRTJobForSessionDQ {
     // "hdfs://apollo-rno//user/o_ubi/events/"
 
     sojSessionStream
-        .addSink(HdfsSinkUtil.sojSessionSinkWithParquet())
+        .addSink(HdfsConnectorFactory.sojSessionSinkWithParquet())
         .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
         .name("SojSession sink")
         .uid("session-sink-id");
 
     sojEventWithSessionId
-        .addSink(HdfsSinkUtil.sojEventSinkWithParquet())
+        .addSink(HdfsConnectorFactory.sojEventSinkWithParquet())
         .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
         .name("SojEvent sink")
         .uid("event-sink-id");

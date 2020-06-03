@@ -4,9 +4,9 @@ import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.rt.common.metrics.EventMetricsCollectorProcessFunction;
-import com.ebay.sojourner.rt.connectors.kafka.KafkaSourceFunction;
+import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.rt.operators.event.EventMapFunction;
-import com.ebay.sojourner.rt.util.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 

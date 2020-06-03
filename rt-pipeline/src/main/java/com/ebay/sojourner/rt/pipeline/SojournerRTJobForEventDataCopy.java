@@ -2,10 +2,10 @@ package com.ebay.sojourner.rt.pipeline;
 
 import com.ebay.sojourner.common.model.SojBytesEvent;
 import com.ebay.sojourner.common.util.Constants;
-import com.ebay.sojourner.rt.connectors.kafka.KafkaConnectorFactory;
-import com.ebay.sojourner.rt.connectors.kafka.KafkaSourceFunction;
+import com.ebay.sojourner.flink.connectors.kafka.KafkaConnectorFactory;
+import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.rt.operators.event.SojBytesEventFilterFunction;
-import com.ebay.sojourner.rt.util.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
