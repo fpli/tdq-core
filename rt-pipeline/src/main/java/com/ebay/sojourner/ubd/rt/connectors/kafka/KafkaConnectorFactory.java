@@ -39,16 +39,17 @@ public class KafkaConnectorFactory {
     consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
     consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 
-    consumerConfig.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 3000);
-    consumerConfig.put(ConsumerConfig.RECEIVE_BUFFER_CONFIG, 8 * 1024 * 1024);
-    consumerConfig.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 250 * 1024 * 1024);
+    consumerConfig.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 2000);
+    consumerConfig.put(ConsumerConfig.RECEIVE_BUFFER_CONFIG, 16 * 1024 * 1024);
+    consumerConfig.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 100 * 1024 * 1024);
     consumerConfig.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 1000);
 
-    consumerConfig.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, 8 * 1024 * 1024);
+    consumerConfig.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, 4 * 1024 * 1024);
 
     consumerConfig.put(
         ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, RoundRobinAssignor.class.getName());
     consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+    consumerConfig.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
 
     if (tClass.isAssignableFrom(RawEvent.class)) {
       return new FlinkKafkaConsumer<>(

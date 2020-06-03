@@ -168,21 +168,23 @@ public class SojournerUBDRTJob {
     DataStream<UbiEvent> latedStream =
         ubiSessionDataStream.getSideOutput(lateEventOutputTag);
 
+    /*
     // ubiSession to intermediateSession
-    //    DataStream<IntermediateSession> intermediateSessionDataStream = ubiSessionDataStream
-    //        .map(new UbiSessionToIntermediateSessionMapFunction())
-    //        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
-    //        .slotSharingGroup("SESSION")
-    //        .name("UbiSession To IntermediateSession")
-    //        .uid("crossSessionLevel");
-    //
+    DataStream<IntermediateSession> intermediateSessionDataStream = ubiSessionDataStream
+        .map(new UbiSessionToIntermediateSessionMapFunction())
+        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .slotSharingGroup("SESSION")
+        .name("UbiSession To IntermediateSession")
+        .uid("crossSessionToIntermediateSession");
+        */
+
     // ubiSession to SessionCore
     DataStream<SessionCore> sessionCoreDS = ubiSessionDataStream
         .map(new UbiSessionToSessionCoreMapFunction())
         .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
         .slotSharingGroup("SESSION")
         .name("UbiSession To SessionCore")
-        .uid("crossSessionLevel");
+        .uid("crossSessionToSessionCore");
 
     /*
     4. Attribute Operator
@@ -196,9 +198,9 @@ public class SojournerUBDRTJob {
             .keyBy("userAgent", "ip")
             .window(TumblingEventTimeWindows.of(Time.minutes(5)))
             .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
-            .name("Attribute Operator (Agent+IP Pre-Aggregation)")
-            .slotSharingGroup("AgentIp")
             .setParallelism(AppEnv.config().getFlink().app.getPreAgentIpParallelism())
+            .slotSharingGroup("AgentIp")
+            .name("Attribute Operator (Agent+IP Pre-Aggregation)")
             .uid("preAgentIpLevel");
 
     /*
@@ -237,9 +239,9 @@ public class SojournerUBDRTJob {
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(
                 new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
-            .name("Attribute Operator (Agent+IP)")
-            .slotSharingGroup("AgentIp")
             .setParallelism(AppEnv.config().getFlink().app.getAgentIpParallelism())
+            .slotSharingGroup("AgentIp")
+            .name("Attribute Operator (Agent+IP)")
             .uid("agentIpLevel");
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureSplitStream;
@@ -248,16 +250,16 @@ public class SojournerUBDRTJob {
     agentIpSignatureSplitStream
         .select("generation")
         .addSink(new DiscardingSink<>())
-        .slotSharingGroup("AgentIp")
         .setParallelism(AppEnv.config().getFlink().app.getAgentIpParallelism())
+        .slotSharingGroup("AgentIp")
         .name("Agent+IP Signature Generation")
         .uid("generationAgentIpLevel");
 
     agentIpSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
-        .slotSharingGroup("AgentIp")
         .setParallelism(AppEnv.config().getFlink().app.getAgentIpParallelism())
+        .slotSharingGroup("AgentIp")
         .name("Agent+IP Signature Expiration")
         .uid("expirationAgentIpLevel");
 
@@ -267,9 +269,9 @@ public class SojournerUBDRTJob {
             .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
-            .name("Attribute Operator (Agent)")
-            .slotSharingGroup("AgentIp")
             .setParallelism(AppEnv.config().getFlink().app.getAgentParallelism())
+            .slotSharingGroup("AgentIp")
+            .name("Attribute Operator (Agent)")
             .uid("agentLevel");
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureSplitStream =
@@ -279,16 +281,16 @@ public class SojournerUBDRTJob {
         .select("generation")
         .addSink(new DiscardingSink<>())
         .setParallelism(AppEnv.config().getFlink().app.getAgentParallelism())
-        .name("Agent Signature Generation")
         .slotSharingGroup("AgentIp")
+        .name("Agent Signature Generation")
         .uid("generationAgentLevel");
 
     agentSignatureSplitStream
         .select("expiration")
         .addSink(new DiscardingSink<>())
         .setParallelism(AppEnv.config().getFlink().app.getAgentParallelism())
-        .name("Agent Signature Expiration")
         .slotSharingGroup("AgentIp")
+        .name("Agent Signature Expiration")
         .uid("expirationAgentLevel");
 
     DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureDataStream =
@@ -297,9 +299,9 @@ public class SojournerUBDRTJob {
             .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
             .trigger(OnElementEarlyFiringTrigger.create())
             .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
-            .name("Attribute Operator (IP)")
-            .slotSharingGroup("AgentIp")
             .setParallelism(AppEnv.config().getFlink().app.getIpParallelism())
+            .slotSharingGroup("AgentIp")
+            .name("Attribute Operator (IP)")
             .uid("ipLevel");
 
     SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureSplitStream =
@@ -335,15 +337,15 @@ public class SojournerUBDRTJob {
     // transform ubiEvent,ubiSession to same type and union
     DataStream<Either<UbiEvent, UbiSession>> ubiSessionTransDataStream = ubiSessionDataStream
         .map(new DetectableSessionMapFunction())
-        .slotSharingGroup("SESSION")
         .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .slotSharingGroup("SESSION")
         .name("UbiSessionTransForBroadcast")
         .uid("ubiSessionTrans");
 
     DataStream<Either<UbiEvent, UbiSession>> ubiEventTransDataStream = ubiEventWithSessionId
         .map(new DetectableEventMapFunction())
-        .slotSharingGroup("SESSION")
         .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
+        .slotSharingGroup("SESSION")
         .name("UbiEventTransForBroadcast")
         .uid("ubiEventTrans");
 
@@ -429,13 +431,6 @@ public class SojournerUBDRTJob {
         .name("Late Event")
         .uid("lateEvent");
 
-    //    intermediateSessionDataStream
-    //        .addSink(new DiscardingSink<>())
-    //        .setParallelism(AppEnv.config().getFlink().app.getSessionParallelism())
-    //        .slotSharingGroup("SESSION")
-    //        .name("Intermediate Session")
-    //        .uid("intermediateSession");
-
     /*
     // sink kafka for cross session dq
     intermediateSessionDataStream
@@ -444,6 +439,7 @@ public class SojournerUBDRTJob {
                 Constants.BOOTSTRAP_SERVERS_CROSS_SESSION_DQ,
                 IntermediateSession.class, Constants.MESSAGE_KEY))
         .setParallelism(AppEnv.config().getFlink().app.getCrossSessionParallelism())
+        .slotSharingGroup("SESSION")
         .name("IntermediateSession Kafka")
         .uid("kafkaSinkForCrossSession");
         */

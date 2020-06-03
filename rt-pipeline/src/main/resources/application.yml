@@ -1,38 +1,77 @@
 kafka:
-  consumer:
-    topic: behavior.pathfinder.events.total
-    bootstrap-servers:
-      rno:
-        - rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
-        - rhs-glrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
-        - rhs-glrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
-        - rhs-glrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
-        - rhs-glrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
-      slc:
-        - rhs-mwsvkiaa-kfk-slc-1.rheos-streaming-prod.svc.45.tess.io:9092
-        - rhs-mwsvkiaa-kfk-slc-2.rheos-streaming-prod.svc.45.tess.io:9092
-        - rhs-mwsvkiaa-kfk-slc-3.rheos-streaming-prod.svc.45.tess.io:9092
-        - rhs-mwsvkiaa-kfk-slc-4.rheos-streaming-prod.svc.45.tess.io:9092
-        - rhs-mwsvkiaa-kfk-slc-5.rheos-streaming-prod.svc.45.tess.io:9092
-      lvs:
-        - rhs-swsvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-swsvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-swsvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-swsvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-swsvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
-    group-id:
-      rno: sojourner-pathfinder-rno
-      slc: sojourner-pathfinder-slc
-      lvs: sojourner-pathfinder-lvs
-  producer:
-    topic:
-      default:
-      session:
-      bot:
-    bootstrap-servers:
-      rno:
-      slc:
-      lvs:
+  stream:
+    behavior-pathfinder:
+      bootstrap-servers:
+        rno:
+          - rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
+          - rhs-glrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
+          - rhs-glrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
+          - rhs-glrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
+          - rhs-glrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
+        slc:
+          - rhs-mwsvkiaa-kfk-slc-1.rheos-streaming-prod.svc.45.tess.io:9092
+          - rhs-mwsvkiaa-kfk-slc-2.rheos-streaming-prod.svc.45.tess.io:9092
+          - rhs-mwsvkiaa-kfk-slc-3.rheos-streaming-prod.svc.45.tess.io:9092
+          - rhs-mwsvkiaa-kfk-slc-4.rheos-streaming-prod.svc.45.tess.io:9092
+          - rhs-mwsvkiaa-kfk-slc-5.rheos-streaming-prod.svc.45.tess.io:9092
+        lvs:
+          - rhs-swsvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
+          - rhs-swsvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
+          - rhs-swsvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
+          - rhs-swsvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
+          - rhs-swsvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
+      topic: behavior.pathfinder.events.total
+      group-id:
+        default:
+          rno: sojourner-pathfinder-rno
+          slc: sojourner-pathfinder-slc
+          lvs: sojourner-pathfinder-lvs
+        dq:
+          rno: sojourner-pathfinder-rno-dq
+          slc: sojourner-pathfinder-slc-dq
+          lvs: sojourner-pathfinder-lvs-dq
+        test:
+          rno: sojourner-pathfinder-rno-test
+          slc: sojourner-pathfinder-slc-test
+          lvs: sojourner-pathfinder-lvs-test
+
+    behavior-total-new:
+      bootstrap-servers:
+        - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
+      topic:
+        session:
+          bot: behavior.total.new.sojsession
+          non-bot: behavior.total.new.sojsession
+        event:
+          bot: behavior.total.new.sojsession
+          non-bot: behavior.total.new.sojevent
+        signature:
+          agent-ip: behavior.total.new.agent.ip
+          agent: behavior.total.new.agent
+          ip: behavior.total.new.ip
+          guid: behavior.total.new.guid
+        dq:
+          session: behavior.total.new.event.fordq
+          cross-session: behavior.total.new.session.dq
+      group-id:
+        session:
+          bot: sojourner-pathfinder-session
+          non-bot: sojourner-pathfinder-session
+        event:
+          bot: sojourner-pathfinder-event
+          non-bot: sojourner-pathfinder-event
+        signature:
+          agent-ip: sojourner-pathfinder-agent-ip
+          agent: sojourner-pathfinder-agent
+          ip: sojourner-pathfinder-ip
+          guid: sojourner-pathfinder-guid
+        dq:
+          session: sojourner-pathfinder-event-copy
+          cross-session: sojourner-pathfinder-session-copy
 
 kafkaConsumerConfig:
   bootstrapServersForRNO:

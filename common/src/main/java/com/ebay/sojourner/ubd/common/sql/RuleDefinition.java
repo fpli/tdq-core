@@ -2,9 +2,11 @@ package com.ebay.sojourner.ubd.common.sql;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode(of = {"bizId", "version"})
 public class RuleDefinition {
 
   private long id;
