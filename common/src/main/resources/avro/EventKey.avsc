@@ -1,8 +1,28 @@
 {
-    "type": "record", "namespace":"com.ebay.sojourner.ubd.common.model", "name" : "EventKey",
-    "fields": [
-             {"name" : "guid", "type": ["string", "null"]}
-,            {"name" : "sessionSkey", "type": ["long", "null"]}
-,            {"name" : "seqNum", "type": ["int", "null"]}
-        ]
+  "type": "record",
+  "namespace": "com.ebay.sojourner.common.model",
+  "name": "EventKey",
+  "fields": [
+    {
+      "name": "guid",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    {
+      "name": "sessionSkey",
+      "type": [
+        "long",
+        "null"
+      ]
+    },
+    {
+      "name": "seqNum",
+      "type": [
+        "int",
+        "null"
+      ]
+    }
+  ]
 }

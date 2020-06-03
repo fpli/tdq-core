@@ -15,7 +15,7 @@
     <module>rt-pipeline</module>
     <module>batch-connector</module>
     <module>flink-lib</module>
-    <module>sojourner-business</module>
+    <module>business</module>
     <!--    <module>rule-test</module>-->
   </modules>
 
