@@ -4,28 +4,22 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <groupId>com.ebay.sojourner</groupId>
-    <artifactId>sojourner-ubd-parent</artifactId>
+    <artifactId>sojourner-parent</artifactId>
     <version>${global.version}</version>
     <relativePath>..</relativePath>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>sojourner-ubd-batch-connector</artifactId>
+  <artifactId>sojourner-batch-connector</artifactId>
   <packaging>jar</packaging>
-  <name>Sojourner UBD - Batch Connector</name>
+  <name>Sojourner - Batch Connector</name>
 
   <dependencies>
     <!-- Sojourner UBD dependencies -->
     <dependency>
       <groupId>com.ebay.sojourner</groupId>
-      <artifactId>sojourner-ubd-connectors</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.ebay.sojourner</groupId>
-      <artifactId>sojourner-ubd-connectors</artifactId>
+      <artifactId>sojourner-connectors</artifactId>
       <version>${project.version}</version>
     </dependency>
 

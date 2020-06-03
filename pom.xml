@@ -4,18 +4,18 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.ebay.sojourner</groupId>
-  <artifactId>sojourner-ubd-parent</artifactId>
+  <artifactId>sojourner-parent</artifactId>
   <version>${global.version}</version>
   <packaging>pom</packaging>
 
-  <name>Sojourner UBD - Parent</name>
+  <name>Sojourner - Parent</name>
 
   <modules>
     <module>common</module>
     <module>rt-pipeline</module>
     <module>batch-connector</module>
     <module>connectors</module>
-    <module>rule-test</module>
+<!--    <module>rule-test</module>-->
   </modules>
 
   <properties>

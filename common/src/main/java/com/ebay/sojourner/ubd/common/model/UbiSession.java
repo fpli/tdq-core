@@ -148,7 +148,7 @@ public class UbiSession implements Serializable, Cloneable {
   }
 
   public void setIsRefererNull(boolean refererNull) {
-    isRefererNull = refererNull;
+    this.refererNull = refererNull;
   }
 
   public UbiSession merge(UbiSession ubiSession) {

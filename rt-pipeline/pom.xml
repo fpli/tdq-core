@@ -5,14 +5,14 @@
 
   <parent>
     <groupId>com.ebay.sojourner</groupId>
-    <artifactId>sojourner-ubd-parent</artifactId>
+    <artifactId>sojourner-parent</artifactId>
     <version>${global.version}</version>
     <relativePath>..</relativePath>
   </parent>
 
-  <artifactId>sojourner-ubd-rt-pipeline</artifactId>
+  <artifactId>sojourner-rt-pipeline</artifactId>
   <packaging>jar</packaging>
-  <name>Sojourner UBD - RT Pipeline</name>
+  <name>Sojourner - RT Pipeline</name>
 
   <properties>
   </properties>
@@ -21,7 +21,7 @@
     <!-- Sojourner UBD dependencies -->
     <dependency>
       <groupId>com.ebay.sojourner</groupId>
-      <artifactId>sojourner-ubd-common</artifactId>
+      <artifactId>sojourner-common</artifactId>
       <version>${project.version}</version>
     </dependency>
 

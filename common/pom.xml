@@ -4,14 +4,14 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.ebay.sojourner</groupId>
-    <artifactId>sojourner-ubd-parent</artifactId>
+    <artifactId>sojourner-parent</artifactId>
     <version>${global.version}</version>
     <relativePath>..</relativePath>
   </parent>
 
-  <artifactId>sojourner-ubd-common</artifactId>
+  <artifactId>sojourner-common</artifactId>
   <packaging>jar</packaging>
-  <name>Sojourner UBD - Common</name>
+  <name>Sojourner - Common</name>
 
   <properties>
   </properties>

@@ -5,19 +5,19 @@
 
   <parent>
     <groupId>com.ebay.sojourner</groupId>
-    <artifactId>sojourner-ubd-parent</artifactId>
+    <artifactId>sojourner-parent</artifactId>
     <version>${global.version}</version>
     <relativePath>..</relativePath>
   </parent>
 
-  <artifactId>sojourner-ubd-rule-test-report</artifactId>
+  <artifactId>sojourner-rule-test-report</artifactId>
   <packaging>jar</packaging>
-  <name>Sojourner UBD - Bot Rule Report</name>
+  <name>Sojourner - Bot Rule Report</name>
 
   <dependencies>
     <dependency>
       <groupId>com.ebay.sojourner</groupId>
-      <artifactId>sojourner-ubd-common</artifactId>
+      <artifactId>sojourner-common</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
