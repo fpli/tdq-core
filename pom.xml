@@ -42,7 +42,6 @@
     <powermock.version>2.0.4</powermock.version>
     <assertj.version>3.9.1</assertj.version>
     <hadoop.version>2.7.3</hadoop.version>
-    <scalatest.version>3.0.5</scalatest.version>
     <snakeyaml.version>1.17</snakeyaml.version>
     <jackson.version>2.9.8</jackson.version>
     <fastjson.version>1.2.62</fastjson.version>
@@ -483,12 +482,6 @@
         <version>${assertj.version}</version>
         <scope>test</scope>
       </dependency>
-      <dependency>
-        <groupId>org.scalatest</groupId>
-        <artifactId>scalatest_${scala.binary.version}</artifactId>
-        <version>${scalatest.version}</version>
-        <scope>test</scope>
-      </dependency>
 
       <!-- jacoco dependencies -->
       <dependency>
@@ -588,56 +581,11 @@
           <version>4.0.0</version>
         </plugin>
 
-        <!-- Scala Compiler -->
-        <plugin>
-          <groupId>net.alchim31.maven</groupId>
-          <artifactId>scala-maven-plugin</artifactId>
-          <version>3.2.2</version>
-          <configuration>
-            <scalaVersion>${scala.complete.version}</scalaVersion>
-            <scalaCompatVersion>${scala.binary.version}</scalaCompatVersion>
-          </configuration>
-          <executions>
-            <execution>
-              <phase>compile</phase>
-              <goals>
-                <goal>compile</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-
-        <plugin>
-          <groupId>org.scalastyle</groupId>
-          <artifactId>scalastyle-maven-plugin</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <verbose>false</verbose>
-            <failOnViolation>true</failOnViolation>
-            <includeTestSourceDirectory>false</includeTestSourceDirectory>
-            <failOnWarning>false</failOnWarning>
-            <sourceDirectory>${basedir}/src/main/scala</sourceDirectory>
-            <testSourceDirectory>${basedir}/src/test/scala</testSourceDirectory>
-            <outputFile>${basedir}/target/scalastyle-output.xml</outputFile>
-            <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
-            <outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
-          </configuration>
-          <executions>
-            <execution>
-              <phase>validate</phase>
-              <goals>
-                <goal>check</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-
         <!-- Surefire runs all Java tests -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>3.0.0-M4</version>
-          <!-- Note config is repeated in scalatest config -->
           <configuration>
             <includes>
               <include>**/Test*.java</include>
@@ -660,36 +608,6 @@
             <!--                        <reuseForks>false</reuseForks>-->
             <!--                        <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>-->
           </configuration>
-        </plugin>
-
-        <!--Scalatest runs all Scala tests-->
-        <plugin>
-          <groupId>org.scalatest</groupId>
-          <artifactId>scalatest-maven-plugin</artifactId>
-          <version>2.0.0</version>
-          <!-- Note config is repeated in surefire config -->
-          <configuration>
-            <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
-            <junitxml>.</junitxml>
-            <filereports>SojournerUBDTestSuite.txt</filereports>
-            <argLine>-ea -Xmx4g -Xss4m -XX:ReservedCodeCacheSize=${CodeCacheSize}</argLine>
-            <stderr/>
-            <environmentVariables>
-            </environmentVariables>
-            <systemProperties>
-              <log4j.configuration>file:src/test/resources/log4j.properties</log4j.configuration>
-              <java.awt.headless>true</java.awt.headless>
-              <java.io.tmpdir>${project.build.directory}/tmp</java.io.tmpdir>
-            </systemProperties>
-          </configuration>
-          <executions>
-            <execution>
-              <id>test</id>
-              <goals>
-                <goal>test</goal>
-              </goals>
-            </execution>
-          </executions>
         </plugin>
 
         <plugin>
@@ -748,10 +666,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>net.alchim31.maven</groupId>
-        <artifactId>scala-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>
