@@ -8,7 +8,7 @@ import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
 import com.ebay.sojourner.rt.common.broadcast.CrossSessionDQBroadcastProcessFunction;
-import com.ebay.sojourner.flink.common.windows.OnElementEarlyFiringTrigger;
+import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.rt.operators.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.AgentIpAttributeAgg;

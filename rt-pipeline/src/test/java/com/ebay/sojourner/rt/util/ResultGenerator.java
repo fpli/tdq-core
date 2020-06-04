@@ -1,38 +1,23 @@
 package com.ebay.sojourner.rt.util;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.ebay.sojourner.common.model.UbiSession;
-import java.io.BufferedReader;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ResultGenerator {
 
   public static List<UbiSession> getUbiSessionList(String fileName) throws IOException {
     InputStream resourceAsStream = RawEventGenerator.class.getResourceAsStream(fileName);
-    InputStreamReader ir = new InputStreamReader(resourceAsStream);
-    BufferedReader br = new BufferedReader(ir);
-    String line = null;
-    List<UbiSession> ubiSessions = new ArrayList<>();
-    UbiSession ubiSession = null;
-    while ((line = br.readLine()) != null) {
-
-      JSONObject obj = JSON.parseObject(line);
-      ubiSession = obj.getObject("UbiSession", UbiSession.class);
-
-      ubiSessions.add(ubiSession);
-    }
-
-    return ubiSessions;
+    ObjectMapper objectMapper = new ObjectMapper();
+    return objectMapper.readValue(resourceAsStream, new TypeReference<List<UbiSession>>() {});
   }
 
   public static void main(String[] args) throws IOException {
 
-    List<UbiSession> ubiSessions = getUbiSessionList("/ExpectedData");
+    List<UbiSession> ubiSessions = getUbiSessionList("/ExpectedData.json");
 
     System.out.print(ubiSessions.get(0));
   }

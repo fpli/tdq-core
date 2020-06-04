@@ -1,4 +1,4 @@
-package com.ebay.sojourner.flink.util;
+package com.ebay.sojourner.flink.common.util;
 
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
