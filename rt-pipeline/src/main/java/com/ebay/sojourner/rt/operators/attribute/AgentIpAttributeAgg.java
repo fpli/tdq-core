@@ -11,20 +11,17 @@ public class AgentIpAttributeAgg
     implements AggregateFunction<
     SessionCore, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
 
-  // private AgentIpIndicators agentIpIndicators;
-
   @Override
   public AgentIpAttributeAccumulator createAccumulator() {
 
     AgentIpAttributeAccumulator agentIpAttributeAccumulator = new AgentIpAttributeAccumulator();
-    // agentIpIndicators = AgentIpIndicators.getInstance();
 
     try {
       AgentIpIndicators.getInstance().start(agentIpAttributeAccumulator);
     } catch (Exception e) {
-      e.printStackTrace();
-      log.error(e.getMessage());
+      log.error("init pre agent ip indicators failed", e);
     }
+
     return agentIpAttributeAccumulator;
   }
 
@@ -32,6 +29,7 @@ public class AgentIpAttributeAgg
   public AgentIpAttributeAccumulator add(
       SessionCore sessionCore,
       AgentIpAttributeAccumulator agentIpAttributeAccumulator) {
+
     if (agentIpAttributeAccumulator.getAgentIpAttribute().getClientIp() == null
         && agentIpAttributeAccumulator.getAgentIpAttribute().getAgent() == null) {
       agentIpAttributeAccumulator.getAgentIpAttribute()
@@ -39,11 +37,11 @@ public class AgentIpAttributeAgg
       agentIpAttributeAccumulator.getAgentIpAttribute()
           .setAgent(sessionCore.getUserAgent());
     }
-    try {
 
+    try {
       AgentIpIndicators.getInstance().feed(sessionCore, agentIpAttributeAccumulator);
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error("start pre agent ip indicators collection failed", e);
     }
 
     return agentIpAttributeAccumulator;

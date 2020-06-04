@@ -4,7 +4,6 @@ import com.ebay.sojourner.business.ubd.detectors.GuidSignatureBotDetector;
 import com.ebay.sojourner.business.ubd.indicators.GuidIndicators;
 import com.ebay.sojourner.common.model.GuidAttributeAccumulator;
 import com.ebay.sojourner.common.model.SessionCore;
-import com.ebay.sojourner.common.util.Constants;
 import java.io.IOException;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -15,25 +14,17 @@ public class GuidAttributeAgg implements
     AggregateFunction<SessionCore,
         GuidAttributeAccumulator, GuidAttributeAccumulator> {
 
-  private static final String GUID = Constants.GUID_LEVEL;
-  // private GuidIndicators guidIndicators;
-  // private GuidSignatureBotDetector guidSignatureBotDetector;
-  // private RuleManager ruleManager;
-
   @Override
   public GuidAttributeAccumulator createAccumulator() {
 
     GuidAttributeAccumulator guidAttributeAccumulator = new GuidAttributeAccumulator();
-    // guidIndicators = GuidIndicators.getInstance();
-    // guidSignatureBotDetector = GuidSignatureBotDetector.getInstance();
-    // ruleManager = RuleManager.getInstance();
 
     try {
       GuidIndicators.getInstance().start(guidAttributeAccumulator);
     } catch (Exception e) {
-      e.printStackTrace();
-      log.error(e.getMessage());
+      log.error("init guid indicators failed", e);
     }
+
     return guidAttributeAccumulator;
   }
 
@@ -48,17 +39,13 @@ public class GuidAttributeAgg implements
     try {
       GuidIndicators.getInstance().feed(session, guidAttributeAccumulator);
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error("start guid indicators collection failed", e);
     }
 
     Set<Integer> guidBotFlag = null;
     try {
       if (guidAttributeAccumulator.getBotFlagStatus().containsValue(0)
           || guidAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
-        /*
-        guidSignatureBotDetector.initDynamicRules(ruleManager, guidSignatureBotDetector.rules(),
-            GuidSignatureBotDetector.dynamicRuleIdList(), GUID);
-            */
         guidBotFlag =
             GuidSignatureBotDetector.getInstance()
                 .getBotFlagList(guidAttributeAccumulator.getGuidAttribute());
@@ -75,11 +62,10 @@ public class GuidAttributeAgg implements
       }
 
     } catch (IOException | InterruptedException e) {
-      log.error("guid getBotFlagList error", e);
+      log.error("star get guid botFlagList failed", e);
     }
 
     Set<Integer> botFlagList = guidAttributeAccumulator.getGuidAttribute().getBotFlagList();
-
     if (guidBotFlag != null && guidBotFlag.size() > 0) {
       botFlagList.addAll(guidBotFlag);
     }

@@ -4,7 +4,6 @@ import com.ebay.sojourner.business.ubd.detectors.AgentIpSignatureBotDetector;
 import com.ebay.sojourner.business.ubd.indicators.AgentIpIndicatorsSliding;
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.AgentIpAttributeAccumulator;
-import com.ebay.sojourner.common.util.Constants;
 import java.io.IOException;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -15,25 +14,17 @@ public class AgentIpAttributeAggSliding
     implements AggregateFunction<
     AgentIpAttribute, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
 
-  private static final String AGENTIP = Constants.AGENTIP_LEVEL;
-  // private AgentIpIndicatorsSliding agentIpIndicators;
-  // private AgentIpSignatureBotDetector agentIpSignatureBotDetector;
-  // private RuleManager ruleManager;
-
   @Override
   public AgentIpAttributeAccumulator createAccumulator() {
 
     AgentIpAttributeAccumulator agentIpAttributeAccumulator = new AgentIpAttributeAccumulator();
-    // agentIpIndicators = AgentIpIndicatorsSliding.getInstance();
-    // agentIpSignatureBotDetector = AgentIpSignatureBotDetector.getInstance();
-    // ruleManager = RuleManager.getInstance();
 
     try {
       AgentIpIndicatorsSliding.getInstance().start(agentIpAttributeAccumulator);
     } catch (Exception e) {
-      e.printStackTrace();
-      log.error(e.getMessage());
+      log.error("init agent ip indicators failed", e);
     }
+
     return agentIpAttributeAccumulator;
   }
 
@@ -49,7 +40,7 @@ public class AgentIpAttributeAggSliding
       AgentIpIndicatorsSliding.getInstance()
           .feed(agentIpAttribute, agentIpAttributeAccumulator);
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error("start agent ip indicators collection failed", e);
     }
 
     Set<Integer> agentIpBotFlag = null;
@@ -57,11 +48,7 @@ public class AgentIpAttributeAggSliding
     try {
       if (agentIpAttributeAccumulator.getBotFlagStatus().containsValue(0)
           || agentIpAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
-        /*
-        agentIpSignatureBotDetector
-            .initDynamicRules(ruleManager, agentIpSignatureBotDetector.rules(),
-                AgentIpSignatureBotDetector.dynamicRuleIdList(), AGENTIP);
-                */
+
         agentIpBotFlag =
             AgentIpSignatureBotDetector.getInstance().getBotFlagList(
                 agentIpAttributeAccumulator.getAgentIpAttribute());
@@ -86,7 +73,7 @@ public class AgentIpAttributeAggSliding
         }
       }
     } catch (IOException | InterruptedException e) {
-      log.error("agentIp getBotFlagList error", e);
+      log.error("start get agent ip botFlagList failed", e);
     }
 
     Set<Integer> botFlagList = agentIpAttributeAccumulator.getAgentIpAttribute().getBotFlagList();

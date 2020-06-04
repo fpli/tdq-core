@@ -41,14 +41,6 @@ public class Constants {
   public static final int MOBILE_HALF_COBRAND = 8;
   public static final int HASH_STUB = 37;
 
-  // dynamicRules category
-  public static final String EVENT_LEVEL = "Event";
-  public static final String SESSION_LEVEL = "Session";
-  public static final String AGENTIP_LEVEL = "AgentIp";
-  public static final String AGENT_LEVEL = "Agent";
-  public static final String IP_LEVEL = "Ip";
-  public static final String GUID_LEVEL = "Guid";
-
   // zookeeper
   public static final String ZOOKEEPER_CONNECTION_STRING =
       "zk-0.sojzk-ns.svc.32.tess.io:2181,"

@@ -4,7 +4,6 @@ import com.ebay.sojourner.business.ubd.detectors.AgentSignatureBotDetector;
 import com.ebay.sojourner.business.ubd.indicators.AgentIndicators;
 import com.ebay.sojourner.common.model.AgentAttributeAccumulator;
 import com.ebay.sojourner.common.model.AgentIpAttribute;
-import com.ebay.sojourner.common.util.Constants;
 import java.io.IOException;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -15,25 +14,17 @@ public class AgentAttributeAgg
     implements AggregateFunction<
     AgentIpAttribute, AgentAttributeAccumulator, AgentAttributeAccumulator> {
 
-  private static final String AGENT = Constants.AGENT_LEVEL;
-  // private AgentIndicators agentIndicators;
-  // private AgentSignatureBotDetector agentSignatureBotDetector;
-  // private RuleManager ruleManager;
-
   @Override
   public AgentAttributeAccumulator createAccumulator() {
 
     AgentAttributeAccumulator agentAttributeAccumulator = new AgentAttributeAccumulator();
-    // agentIndicators = AgentIndicators.getInstance();
-    // agentSignatureBotDetector = AgentSignatureBotDetector.getInstance();
-    // ruleManager = RuleManager.getInstance();
 
     try {
       AgentIndicators.getInstance().start(agentAttributeAccumulator);
     } catch (Exception e) {
-      e.printStackTrace();
-      log.error(e.getMessage());
+      log.error("init agent indicators failed", e);
     }
+
     return agentAttributeAccumulator;
   }
 
@@ -47,18 +38,13 @@ public class AgentAttributeAgg
     try {
       AgentIndicators.getInstance().feed(agentIpAttribute, agentAttributeAccumulator);
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error("start agent indicators collection failed", e);
     }
 
     Set<Integer> agentBotFlag = null;
-
     try {
       if (agentAttributeAccumulator.getBotFlagStatus().containsValue(0)
           || agentAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
-        /*
-        agentSignatureBotDetector.initDynamicRules(ruleManager, agentSignatureBotDetector.rules(),
-            AgentSignatureBotDetector.dynamicRuleIdList(), AGENT);
-            */
         agentBotFlag =
             AgentSignatureBotDetector.getInstance()
                 .getBotFlagList(agentAttributeAccumulator.getAgentAttribute());
@@ -92,11 +78,10 @@ public class AgentAttributeAgg
         }
       }
     } catch (IOException | InterruptedException e) {
-      log.error("agent getBotFlagList error", e);
+      log.error("start get agent botFlagList failed", e);
     }
 
     Set<Integer> botFlagList = agentAttributeAccumulator.getAgentAttribute().getBotFlagList();
-
     if (agentBotFlag != null && agentBotFlag.size() > 0) {
       botFlagList.addAll(agentBotFlag);
     }
