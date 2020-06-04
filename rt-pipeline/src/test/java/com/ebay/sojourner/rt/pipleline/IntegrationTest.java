@@ -63,7 +63,7 @@ public class IntegrationTest {
 
     // create a stream of custom elements and apply transformations
     //        DataStream<RawEvent> rawEventDataStream =
-    // env.fromCollection(RawEventGenerator.getRawEventList("/SourceData")).
+    // env.fromCollection(RawEventGenerator.getRawEventList("/SourceData.json")).
     // assignTimestampsAndWatermarks
     //                (
     //                        new
@@ -210,7 +210,7 @@ public class IntegrationTest {
     JobExecutionResult jobExecutionResult = env.execute();
     jobExecutionResult.isJobExecutionResult();
 
-    List<UbiSession> ubiSessions = ResultGenerator.getUbiSessionList("/ExpectedData");
+    List<UbiSession> ubiSessions = ResultGenerator.getUbiSessionList("/ExpectedData.json");
 
     for (UbiSession ubisession : CollectSink.values) {
       //            System.out.println(JSON.toJSONString(ubisession));
@@ -241,7 +241,7 @@ public class IntegrationTest {
 
       while (isRunning) {
         System.out.println("source thread id:" + Thread.currentThread().getId());
-        List<RawEvent> rawEvents = RawEventGenerator.getRawEventList("/SourceData" + idx);
+        List<RawEvent> rawEvents = RawEventGenerator.getRawEventList("/SourceData.json" + idx);
         for (RawEvent rawEvent : rawEvents) {
           ctx.collect(rawEvent);
         }

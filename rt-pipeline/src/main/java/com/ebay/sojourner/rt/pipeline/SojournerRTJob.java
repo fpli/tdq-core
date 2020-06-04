@@ -12,7 +12,7 @@ import com.ebay.sojourner.flink.common.state.MapStateDesc;
 import com.ebay.sojourner.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
 import com.ebay.sojourner.rt.common.metrics.EventMetricsCollectorProcessFunction;
 import com.ebay.sojourner.rt.common.metrics.PipelineMetricsCollectorProcessFunction;
-import com.ebay.sojourner.flink.common.windows.OnElementEarlyFiringTrigger;
+import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.rt.operators.attribute.AgentAttributeAgg;

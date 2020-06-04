@@ -7,6 +7,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 
+// FIXME: 1. remove joda, use java 8 time api instead.
+//  2. consolidate all datetime utils into one class
 public class SojTimestamp {
 
   public static final long OFFSET = 2208963600000000L;
