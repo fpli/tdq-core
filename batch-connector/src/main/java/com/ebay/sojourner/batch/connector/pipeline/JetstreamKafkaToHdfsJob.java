@@ -1,9 +1,8 @@
-package com.ebay.sojourner.rt.pipeline;
+package com.ebay.sojourner.batch.connector.pipeline;
 
-import com.ebay.sojourner.common.model.JetStreamOutputEvent;
-import com.ebay.sojourner.common.util.Constants;
-import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.util.Constants;
+import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -27,7 +26,7 @@ public class JetstreamKafkaToHdfsJob {
     String nonBotBootstrapServers = FlinkEnvUtils.getString("dump.non.bot.bootstrap.servers");
 
     // bot event kafka source
-    DataStream<JetStreamOutputEvent> jetStreamOutputBotEventDataStream =
+    DataStream jetStreamOutputBotEventDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunction
                 .buildSource(botSourceTopic, botBootstrapServers, botGroupId, deserializeClass))
@@ -36,7 +35,7 @@ public class JetstreamKafkaToHdfsJob {
             .uid("bot-source-id");
 
     // non bot event kafka source
-    DataStream<JetStreamOutputEvent> jetStreamOutputNonBotEventDataStream =
+    DataStream jetStreamOutputNonBotEventDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunction
                 .buildSource(nonBotSourceTopic, nonBotBootstrapServers, nonBotGroupId,
@@ -46,7 +45,7 @@ public class JetstreamKafkaToHdfsJob {
             .uid("non-bot-source-id");
 
     // union bot and non bot
-    DataStream<JetStreamOutputEvent> jetStreamOutputDataStream =
+    DataStream jetStreamOutputDataStream =
         jetStreamOutputBotEventDataStream.union(jetStreamOutputNonBotEventDataStream);
 
     // hdfs sink

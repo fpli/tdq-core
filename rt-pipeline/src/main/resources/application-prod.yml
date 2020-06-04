@@ -1,7 +1,7 @@
 flink:
   app:
     parallelism:
-      source: 100
+      source: 3
       event: 100
       session: 640
       pre-agent-ip: 300

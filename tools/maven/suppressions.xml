@@ -50,7 +50,7 @@ under the License.
   <suppress checks=".*"
     files="src/main/java/com/ebay/sojourner/common/model/IntermediateSession.java"/>
   <suppress checks=".*"
-    files="/src/main/java/com/ebay/sojourner/common/util/Constants.java"/>
+    files="/src/main/java/com/ebay/sojourner/flink/common/util/Constants.java"/>
   <suppress checks=".*"
     files="/src/main/java/com/ebay/sojourner/common/model/SessionCore.java"/>
   <suppress checks=".*"

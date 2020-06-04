@@ -1,8 +1,0 @@
-kafka:
-  stream:
-    behavior-pathfinder:
-      group-id:
-        default:
-          rno: sojourner-pathfinder-rno-performance
-          slc: sojourner-pathfinder-slc-performance
-          lvs: sojourner-pathfinder-lvs-performance

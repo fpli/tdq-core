@@ -1,7 +1,7 @@
 package com.ebay.sojourner.rt.pipeline;
 
 import com.ebay.sojourner.common.model.SojBytesEvent;
-import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.flink.common.util.Constants;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.rt.operators.event.SojBytesEventFilterFunction;

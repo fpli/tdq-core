@@ -1,9 +1,8 @@
-package com.ebay.sojourner.rt.pipeline;
+package com.ebay.sojourner.batch.connector.pipeline;
 
-import com.ebay.sojourner.common.model.SojEvent;
-import com.ebay.sojourner.common.util.Constants;
-import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.util.Constants;
+import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -32,7 +31,7 @@ public class SojournerKafkaToHdfsJob {
     String bootstrapServers = FlinkEnvUtils
         .getListString(Constants.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT);
 
-    DataStream<SojEvent> sourceDataStream = executionEnvironment
+    DataStream sourceDataStream = executionEnvironment
         .addSource(KafkaSourceFunction
             .buildSource(sourceTopic, bootstrapServers, groupId, deserializeClass))
         .setParallelism(sourceParallelNum)

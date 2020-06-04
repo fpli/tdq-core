@@ -5,7 +5,7 @@ import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
-import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.flink.common.util.Constants;
 import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;

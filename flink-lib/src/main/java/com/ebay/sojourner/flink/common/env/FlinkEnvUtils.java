@@ -1,8 +1,8 @@
 package com.ebay.sojourner.flink.common.env;
 
 import com.ebay.sojourner.common.env.EnvironmentUtils;
-import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.flink.common.state.StateBackendFactory;
+import com.ebay.sojourner.flink.common.util.Constants;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

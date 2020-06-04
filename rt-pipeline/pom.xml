@@ -20,11 +20,6 @@
   <dependencies>
     <dependency>
       <groupId>com.ebay.sojourner</groupId>
-      <artifactId>sojourner-common</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.ebay.sojourner</groupId>
       <artifactId>sojourner-flink-lib</artifactId>
       <version>${project.version}</version>
     </dependency>

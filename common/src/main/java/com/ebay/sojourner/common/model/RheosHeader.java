@@ -11,7 +11,7 @@ public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase imp
     org.apache.avro.specific.SpecificRecord {
 
   public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
-      "{\"type\":\"record\",\"name\":\"RheosHeader\",\"namespace\":\"com.ebay.sojourner.ubd.common.model\",\"fields\":[{\"name\":\"eventCreateTimestamp\",\"type\":\"long\"},{\"name\":\"eventSentTimestamp\",\"type\":\"long\"},{\"name\":\"schemaId\",\"type\":\"int\"},{\"name\":\"eventId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"producerId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
+      "{\"type\":\"record\",\"name\":\"RheosHeader\",\"namespace\":\"com.ebay.sojourner.common.model\",\"fields\":[{\"name\":\"eventCreateTimestamp\",\"type\":\"long\"},{\"name\":\"eventSentTimestamp\",\"type\":\"long\"},{\"name\":\"schemaId\",\"type\":\"int\"},{\"name\":\"eventId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"producerId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
   @Deprecated
   public long eventCreateTimestamp;
   @Deprecated

@@ -1,0 +1,4 @@
+flink:
+  app:
+    name:
+      load: flinkload

@@ -4,7 +4,7 @@ import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
-import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.flink.common.util.Constants;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;

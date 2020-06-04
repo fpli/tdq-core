@@ -2,7 +2,7 @@ package com.ebay.sojourner.rt.pipeline;
 
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
-import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.flink.common.util.Constants;
 import com.ebay.sojourner.rt.common.metrics.PipelineMetricsCollectorProcessFunction;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.rt.operators.event.EventMapFunction;

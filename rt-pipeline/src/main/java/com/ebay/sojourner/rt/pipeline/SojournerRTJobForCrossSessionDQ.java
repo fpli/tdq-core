@@ -4,7 +4,7 @@ import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.CrossSessionSignature;
 import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.SessionCore;
-import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.flink.common.util.Constants;
 import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
 import com.ebay.sojourner.rt.common.broadcast.CrossSessionDQBroadcastProcessFunction;
