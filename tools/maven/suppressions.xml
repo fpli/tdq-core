@@ -58,5 +58,6 @@ under the License.
   <suppress checks=".*"
     files="/src/main/java/com/ebay/sojourner/common/model/Guid.java"/>
   <suppress checks="NewlineAtEndOfFile" files=".java" />
+  <suppress checks="NewlineAtEndOfFile" files=".properties" />
   <suppress files="[\\/]src/test/java/com/ebay/sojourner/business/ubd[\\/]" checks="[a-zA-Z0-9]*"/>
 </suppressions>
