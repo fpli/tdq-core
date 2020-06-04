@@ -1,4 +1,4 @@
-package com.ebay.sojourner.business.ubd.sql;
+package sql;
 
 import com.ebay.sojourner.common.model.UbiEvent;
 

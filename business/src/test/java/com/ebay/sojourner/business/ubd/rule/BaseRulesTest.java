@@ -2,6 +2,7 @@ package com.ebay.sojourner.business.ubd.rule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.ebay.sojourner.common.model.rule.Rule;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

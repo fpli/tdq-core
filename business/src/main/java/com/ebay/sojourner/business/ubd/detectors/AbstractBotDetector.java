@@ -1,10 +1,10 @@
 package com.ebay.sojourner.business.ubd.detectors;
 
-import com.ebay.sojourner.business.ubd.sql.RuleChangeEvent;
-import com.ebay.sojourner.business.ubd.sql.RuleChangeEventListener;
-import com.ebay.sojourner.business.ubd.sql.RuleDefinition;
-import com.ebay.sojourner.business.ubd.sql.RuleManager;
-import com.ebay.sojourner.business.ubd.sql.SqlEventRule;
+import com.ebay.sojourner.business.ubd.rule.RuleChangeEventListener;
+import com.ebay.sojourner.business.ubd.rule.RuleManager;
+import com.ebay.sojourner.common.model.rule.RuleChangeEvent;
+import com.ebay.sojourner.common.model.rule.RuleDefinition;
+import com.ebay.sojourner.dsl.sql.SqlEventRule;
 import com.google.common.collect.Sets;
 import java.util.Set;
 import java.util.stream.Collectors;

@@ -11,20 +11,20 @@
     <relativePath>..</relativePath>
   </parent>
 
-  <name>Sojourner - Business</name>
-  <artifactId>sojourner-business</artifactId>
+  <name>Sojourner - SQL DSL</name>
+  <artifactId>sojourner-sql-dsl</artifactId>
   <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
       <groupId>com.ebay.sojourner</groupId>
-      <artifactId>sojourner-sql-dsl</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.ebay.sojourner</groupId>
       <artifactId>sojourner-common</artifactId>
       <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.calcite</groupId>
+      <artifactId>calcite-core</artifactId>
     </dependency>
 
     <!-- Test Dependencies  -->
@@ -34,4 +34,5 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
 </project>

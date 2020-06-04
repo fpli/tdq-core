@@ -1,4 +1,4 @@
-package com.ebay.sojourner.business.ubd.rule;
+package com.ebay.sojourner.common.model.rule;
 
 import java.io.IOException;
 

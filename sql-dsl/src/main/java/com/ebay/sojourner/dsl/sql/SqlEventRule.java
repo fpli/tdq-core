@@ -1,7 +1,7 @@
-package com.ebay.sojourner.business.ubd.sql;
+package com.ebay.sojourner.dsl.sql;
 
-import com.ebay.sojourner.business.ubd.rule.Rule;
 import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.model.rule.Rule;
 import java.util.Locale;
 import java.util.Map;
 import lombok.Data;

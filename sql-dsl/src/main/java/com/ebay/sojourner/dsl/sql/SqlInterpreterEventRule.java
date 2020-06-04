@@ -1,4 +1,4 @@
-package com.ebay.sojourner.business.ubd.sql;
+package com.ebay.sojourner.dsl.sql;
 
 import com.ebay.sojourner.common.model.UbiEvent;
 import org.apache.calcite.interpreter.Interpreter;

@@ -1,4 +1,4 @@
-package com.ebay.sojourner.business.ubd.sql;
+package com.ebay.sojourner.dsl.sql;
 
 public class SojReflectiveDataSource {
 

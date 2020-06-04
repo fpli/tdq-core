@@ -1,4 +1,4 @@
-package com.ebay.sojourner.business.ubd.sql;
+package com.ebay.sojourner.dsl.sql;
 
 import com.ebay.sojourner.common.util.BitUtils;
 import com.ebay.sojourner.common.util.SOJExtractFlag;

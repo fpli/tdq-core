@@ -1,4 +1,4 @@
-package com.ebay.sojourner.business.ubd.sql;
+package com.ebay.sojourner.common.model.rule;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;

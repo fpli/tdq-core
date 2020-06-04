@@ -13,7 +13,7 @@ import com.ebay.sojourner.business.ubd.rule.BotRule207;
 import com.ebay.sojourner.business.ubd.rule.BotRule212;
 import com.ebay.sojourner.business.ubd.rule.BotRule215;
 import com.ebay.sojourner.business.ubd.rule.BotRule9;
-import com.ebay.sojourner.business.ubd.rule.Rule;
+import com.ebay.sojourner.common.model.rule.Rule;
 import com.ebay.sojourner.common.util.BotFilter;
 import com.ebay.sojourner.common.util.UbiBotFilter;
 import java.io.IOException;

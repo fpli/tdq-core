@@ -1,4 +1,4 @@
-package com.ebay.sojourner.business.ubd.sql;
+package com.ebay.sojourner.dsl.sql;
 
 import java.util.HashMap;
 import java.util.Map;

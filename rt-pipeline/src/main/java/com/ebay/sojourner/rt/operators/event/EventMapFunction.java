@@ -4,7 +4,7 @@ import com.ebay.sojourner.business.ubd.detectors.AbstractBotDetector;
 import com.ebay.sojourner.business.ubd.detectors.BotDetectorFactory;
 import com.ebay.sojourner.business.ubd.detectors.BotDetectorFactory.Type;
 import com.ebay.sojourner.business.ubd.parser.EventParser;
-import com.ebay.sojourner.business.ubd.sql.RuleManager;
+import com.ebay.sojourner.business.ubd.rule.RuleManager;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
 import java.util.Set;

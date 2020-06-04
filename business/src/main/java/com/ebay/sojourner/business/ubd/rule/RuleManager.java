@@ -1,5 +1,7 @@
-package com.ebay.sojourner.business.ubd.sql;
+package com.ebay.sojourner.business.ubd.rule;
 
+import com.ebay.sojourner.common.model.rule.RuleChangeEvent;
+import com.ebay.sojourner.common.model.rule.RuleDefinition;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.zookeeper.ZkClient;
 import com.google.common.collect.Lists;

@@ -1,6 +1,6 @@
 package com.ebay.sojourner.business.ubd.rule.icf;
 
-import com.ebay.sojourner.business.ubd.rule.Rule;
+import com.ebay.sojourner.common.model.rule.Rule;
 
 public abstract class AbstractIcfRule<T> implements Rule<T> {
 

@@ -2,7 +2,7 @@ package com.ebay.sojourner.business.ubd.detectors;
 
 import com.ebay.sojourner.common.model.GuidAttribute;
 import com.ebay.sojourner.business.ubd.rule.BotRule15_Cross;
-import com.ebay.sojourner.business.ubd.rule.Rule;
+import com.ebay.sojourner.common.model.rule.Rule;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;

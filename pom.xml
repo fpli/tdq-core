@@ -16,6 +16,7 @@
     <module>batch-connector</module>
     <module>flink-lib</module>
     <module>business</module>
+    <module>sql-dsl</module>
     <!--    <module>rule-test</module>-->
   </modules>
 

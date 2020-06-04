@@ -1,20 +1,21 @@
-package com.ebay.sojourner.business.ubd.sql;
+package sql;
 
-import static com.ebay.sojourner.business.ubd.sql.Rules.ICF_RULE_10_INTERPRETER;
-import static com.ebay.sojourner.business.ubd.sql.Rules.ICF_RULE_11_INTERPRETER;
-import static com.ebay.sojourner.business.ubd.sql.Rules.ICF_RULE_12_INTERPRETER;
-import static com.ebay.sojourner.business.ubd.sql.Rules.ICF_RULE_13_INTERPRETER;
-import static com.ebay.sojourner.business.ubd.sql.Rules.ICF_RULE_1_INTERPRETER;
-import static com.ebay.sojourner.business.ubd.sql.Rules.ICF_RULE_2_INTERPRETER;
-import static com.ebay.sojourner.business.ubd.sql.Rules.ICF_RULE_3_INTERPRETER;
-import static com.ebay.sojourner.business.ubd.sql.Rules.ICF_RULE_4_INTERPRETER;
-import static com.ebay.sojourner.business.ubd.sql.Rules.ICF_RULE_56_INTERPRETER;
-import static com.ebay.sojourner.business.ubd.sql.Rules.ICF_RULE_5_INTERPRETER;
-import static com.ebay.sojourner.business.ubd.sql.Rules.ICF_RULE_6_INTERPRETER;
-import static com.ebay.sojourner.business.ubd.sql.Rules.ICF_RULE_7_INTERPRETER;
-import static com.ebay.sojourner.business.ubd.sql.Rules.RULE_1_INTERPRETER;
+import static com.ebay.sojourner.dsl.sql.Rules.ICF_RULE_10_INTERPRETER;
+import static com.ebay.sojourner.dsl.sql.Rules.ICF_RULE_11_INTERPRETER;
+import static com.ebay.sojourner.dsl.sql.Rules.ICF_RULE_12_INTERPRETER;
+import static com.ebay.sojourner.dsl.sql.Rules.ICF_RULE_13_INTERPRETER;
+import static com.ebay.sojourner.dsl.sql.Rules.ICF_RULE_1_INTERPRETER;
+import static com.ebay.sojourner.dsl.sql.Rules.ICF_RULE_2_INTERPRETER;
+import static com.ebay.sojourner.dsl.sql.Rules.ICF_RULE_3_INTERPRETER;
+import static com.ebay.sojourner.dsl.sql.Rules.ICF_RULE_4_INTERPRETER;
+import static com.ebay.sojourner.dsl.sql.Rules.ICF_RULE_56_INTERPRETER;
+import static com.ebay.sojourner.dsl.sql.Rules.ICF_RULE_5_INTERPRETER;
+import static com.ebay.sojourner.dsl.sql.Rules.ICF_RULE_6_INTERPRETER;
+import static com.ebay.sojourner.dsl.sql.Rules.ICF_RULE_7_INTERPRETER;
+import static com.ebay.sojourner.dsl.sql.Rules.RULE_1_INTERPRETER;
 
 import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.dsl.sql.SqlEventRule;
 import java.util.ArrayList;
 import java.util.List;
 

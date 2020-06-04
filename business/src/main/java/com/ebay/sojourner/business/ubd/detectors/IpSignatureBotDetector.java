@@ -4,7 +4,7 @@ import com.ebay.sojourner.common.model.IpAttribute;
 import com.ebay.sojourner.business.ubd.rule.BotRule7;
 import com.ebay.sojourner.business.ubd.rule.BotRuleForDeclarativeHost;
 import com.ebay.sojourner.business.ubd.rule.BotRuleForSuspectIP;
-import com.ebay.sojourner.business.ubd.rule.Rule;
+import com.ebay.sojourner.common.model.rule.Rule;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;

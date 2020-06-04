@@ -1,6 +1,9 @@
-package com.ebay.sojourner.business.ubd.sql;
+package sql;
 
 import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.dsl.sql.SqlCompilerEventRule;
+import com.ebay.sojourner.dsl.sql.SqlEventRule;
+import com.ebay.sojourner.dsl.sql.SqlInterpreterEventRule;
 import java.util.List;
 
 public class TestUtils {

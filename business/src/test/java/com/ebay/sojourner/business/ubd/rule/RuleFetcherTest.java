@@ -1,5 +1,6 @@
-package com.ebay.sojourner.business.ubd.sql;
+package com.ebay.sojourner.business.ubd.rule;
 
+import com.ebay.sojourner.common.model.rule.RuleDefinition;
 import com.ebay.sojourner.common.util.RestClientUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

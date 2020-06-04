@@ -4,7 +4,7 @@ import com.ebay.sojourner.common.model.AgentAttribute;
 import com.ebay.sojourner.business.ubd.rule.BotRule6;
 import com.ebay.sojourner.business.ubd.rule.BotRuleForDeclarativeAgent;
 import com.ebay.sojourner.business.ubd.rule.BotRuleForSuspectAgent;
-import com.ebay.sojourner.business.ubd.rule.Rule;
+import com.ebay.sojourner.common.model.rule.Rule;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
