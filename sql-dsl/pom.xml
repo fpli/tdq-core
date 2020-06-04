@@ -21,17 +21,15 @@
       <artifactId>sojourner-common</artifactId>
       <version>${project.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.apache.calcite</groupId>
       <artifactId>calcite-core</artifactId>
-    </dependency>
-
-    <!-- Test Dependencies  -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.calcite.avatica</groupId>
+          <artifactId>avatica-server</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 

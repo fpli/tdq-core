@@ -29,8 +29,8 @@
 
     <!-- Test Dependencies  -->
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-csv</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
