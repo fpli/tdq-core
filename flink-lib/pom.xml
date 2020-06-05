@@ -75,7 +75,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.flink</groupId>
-      <artifactId>flink-parquet</artifactId>
+      <artifactId>flink-parquet_2.11</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.parquet</groupId>
