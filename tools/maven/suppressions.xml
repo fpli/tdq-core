@@ -57,6 +57,8 @@ under the License.
     files="/src/main/java/com/ebay/sojourner/common/model/AgentHash.java"/>
   <suppress checks=".*"
     files="/src/main/java/com/ebay/sojourner/common/model/Guid.java"/>
+  <suppress checks=".*"
+    files="/src/main/java/com/ebay/sojourner/common/model/RheosHeader.java"/>
   <suppress checks="NewlineAtEndOfFile" files=".java" />
   <suppress checks="NewlineAtEndOfFile" files=".properties" />
   <suppress files="[\\/]src/test/java/com/ebay/sojourner/business/ubd[\\/]" checks="[a-zA-Z0-9]*"/>

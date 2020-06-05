@@ -49,10 +49,10 @@ kafka:
           - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
       topic:
         session:
-          bot: behavior.total.new.sojsession
+          bot: behavior.total.new.sojsession.bot
           non-bot: behavior.total.new.sojsession
         event:
-          bot: behavior.total.new.sojsession
+          bot: behavior.total.new.sojevent.bot
           non-bot: behavior.total.new.sojevent
         signature:
           agent-ip: behavior.total.new.agent.ip

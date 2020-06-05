@@ -23,10 +23,10 @@ kafka:
           - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
       topic:
         session:
-          bot: behavior.trafficjam.session
+          bot: behavior.trafficjam.session.bot
           non-bot: behavior.trafficjam.session
         event:
-          bot: behavior.trafficjam.event
+          bot: behavior.trafficjam.event.bot
           non-bot: behavior.trafficjam.event
         signature:
           agent-ip: behavior.trafficjam.agent.ip
