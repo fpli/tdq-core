@@ -3,7 +3,7 @@ package com.ebay.sojourner.flink.common.env;
 import com.ebay.sojourner.common.env.EnvironmentUtils;
 import com.ebay.sojourner.flink.common.state.StateBackendFactory;
 import com.ebay.sojourner.flink.common.util.Constants;
-import java.util.HashMap;
+import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +16,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 public class FlinkEnvUtils {
 
-  private static Map<String, String> config = new HashMap<>();
+  private static Map<String, String> config = Maps.newHashMap();
 
   private static void load(String[] args) {
     ParameterTool parameterTool = ParameterTool.fromArgs(args);
@@ -35,7 +35,7 @@ public class FlinkEnvUtils {
     env.getConfig().disableSysoutLogging();
     env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
-    /**
+    /*
      * checkpoint
      */
     env.enableCheckpointing(FlinkEnvUtils
@@ -55,7 +55,7 @@ public class FlinkEnvUtils {
     checkpointConf
         .enableExternalizedCheckpoints(ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
 
-    /**
+    /*
      * StateBackend
      */
     env.setStateBackend(StateBackendFactory.getStateBackend(StateBackendFactory.ROCKSDB));
@@ -79,10 +79,9 @@ public class FlinkEnvUtils {
   }
 
   public static Integer getInteger(String key) {
-
-    Integer value = EnvironmentUtils.get(key, Integer.class);
-    config.put(key, String.valueOf(value));
-    return value;
+    String value = EnvironmentUtils.get(key);
+    config.put(key, value);
+    return Integer.valueOf(value);
   }
 
   public static String getListString(String key) {
