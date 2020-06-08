@@ -1,6 +1,7 @@
 package com.ebay.sojourner.rt.pipeline;
 
 import com.ebay.sojourner.common.model.AgentIpAttribute;
+import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.SessionCore;
 import com.ebay.sojourner.common.model.SojEvent;
@@ -9,6 +10,7 @@ import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
+import com.ebay.sojourner.flink.common.util.DataCenter;
 import com.ebay.sojourner.flink.common.util.OutputTagUtil;
 import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaConnectorFactory;
@@ -40,8 +42,6 @@ import com.ebay.sojourner.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.rt.operators.session.UbiSessionToSessionCoreMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionWindowProcessFunction;
-import java.util.Set;
-import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -72,7 +72,7 @@ public class SojournerRTJobForQA {
         FlinkEnvUtils.getString(Constants.BEHAVIOR_PATHFINDER_TOPIC),
         FlinkEnvUtils.getListString(Constants.BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_LVS),
         FlinkEnvUtils.getString(Constants.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_LVS),
-        FlinkEnvUtils.getString(com.ebay.sojourner.flink.common.util.Constants.LVS),
+        DataCenter.LVS,
         FlinkEnvUtils.getInteger(Constants.SOURCE_PARALLELISM),
         null,
         RawEvent.class);
@@ -82,7 +82,7 @@ public class SojournerRTJobForQA {
     // 2.2 Event level bot detection via bot rule
     DataStream<UbiEvent> ubiEventDataStream = EventDataStreamBuilder.build(
         rawEventDataStream,
-        FlinkEnvUtils.getString(com.ebay.sojourner.flink.common.util.Constants.LVS),
+        DataCenter.LVS,
         FlinkEnvUtils.getInteger(Constants.EVENT_PARALLELISM),
         null);
 
@@ -137,56 +137,51 @@ public class SojournerRTJobForQA {
             .name("Attribute Operator (Agent+IP Pre-Aggregation)")
             .uid("pre-agent-ip-id");
 
-    DataStream<Tuple5<String, String, Boolean, Set<Integer>, Long>> guidSignatureDataStream =
-        sessionCoreDataStream
-            .keyBy("guid")
-            .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
-            .trigger(OnElementEarlyFiringTrigger.create())
-            .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
-            .setParallelism(FlinkEnvUtils.getInteger(Constants.GUID_PARALLELISM))
-            .name("Attribute Operator (GUID)")
-            .uid("guid-id");
+    DataStream<BotSignature> guidSignatureDataStream = sessionCoreDataStream
+        .keyBy("guid")
+        .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
+        .trigger(OnElementEarlyFiringTrigger.create())
+        .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
+        .setParallelism(FlinkEnvUtils.getInteger(Constants.GUID_PARALLELISM))
+        .name("Attribute Operator (GUID)")
+        .uid("guid-id");
 
-    DataStream<Tuple5<String, String, Boolean, Set<Integer>, Long>> agentIpSignatureDataStream =
-        agentIpAttributeDatastream
-            .keyBy("agent", "clientIp")
-            .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
-            .trigger(OnElementEarlyFiringTrigger.create())
-            .aggregate(
-                new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
-            .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_IP_PARALLELISM))
-            .name("Attribute Operator (Agent+IP)")
-            .uid("agent-ip-id");
+    DataStream<BotSignature> agentIpSignatureDataStream = agentIpAttributeDatastream
+        .keyBy("agent", "clientIp")
+        .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
+        .trigger(OnElementEarlyFiringTrigger.create())
+        .aggregate(
+            new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
+        .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_IP_PARALLELISM))
+        .name("Attribute Operator (Agent+IP)")
+        .uid("agent-ip-id");
 
-    DataStream<Tuple5<String, String, Boolean, Set<Integer>, Long>> agentSignatureDataStream =
-        agentIpAttributeDatastream
-            .keyBy("agent")
-            .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
-            .trigger(OnElementEarlyFiringTrigger.create())
-            .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
-            .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_PARALLELISM))
-            .name("Attribute Operator (Agent)")
-            .uid("agent-id");
+    DataStream<BotSignature> agentSignatureDataStream = agentIpAttributeDatastream
+        .keyBy("agent")
+        .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
+        .trigger(OnElementEarlyFiringTrigger.create())
+        .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
+        .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_PARALLELISM))
+        .name("Attribute Operator (Agent)")
+        .uid("agent-id");
 
-    DataStream<Tuple5<String, String, Boolean, Set<Integer>, Long>> ipSignatureDataStream =
-        agentIpAttributeDatastream
-            .keyBy("clientIp")
-            .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
-            .trigger(OnElementEarlyFiringTrigger.create())
-            .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
-            .setParallelism(FlinkEnvUtils.getInteger(Constants.IP_PARALLELISM))
-            .name("Attribute Operator (IP)")
-            .uid("ip-id");
+    DataStream<BotSignature> ipSignatureDataStream = agentIpAttributeDatastream
+        .keyBy("clientIp")
+        .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
+        .trigger(OnElementEarlyFiringTrigger.create())
+        .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
+        .setParallelism(FlinkEnvUtils.getInteger(Constants.IP_PARALLELISM))
+        .name("Attribute Operator (IP)")
+        .uid("ip-id");
 
     // union attribute signature for broadcast
-    DataStream<Tuple5<String, String, Boolean, Set<Integer>, Long>> attributeSignatureDataStream =
-        agentIpSignatureDataStream
-            .union(agentSignatureDataStream)
-            .union(ipSignatureDataStream)
-            .union(guidSignatureDataStream);
+    DataStream<BotSignature> attributeSignatureDataStream = agentIpSignatureDataStream
+        .union(agentSignatureDataStream)
+        .union(ipSignatureDataStream)
+        .union(guidSignatureDataStream);
 
     // attribute signature broadcast
-    BroadcastStream<Tuple5<String, String, Boolean, Set<Integer>, Long>> attributeBroadcastStream =
+    BroadcastStream<BotSignature> attributeSignatureBroadcastStream =
         attributeSignatureDataStream.broadcast(MapStateDesc.attributeSignatureDesc);
 
     // transform ubiEvent,ubiSession to same type and union
@@ -207,7 +202,7 @@ public class SojournerRTJobForQA {
 
     // connect ubiEvent,ubiSession DataStream and broadcast Stream
     SingleOutputStreamOperator<UbiEvent> signatureBotDetectionForEvent = detectableDataStream
-        .connect(attributeBroadcastStream)
+        .connect(attributeSignatureBroadcastStream)
         .process(new AttributeBroadcastProcessFunctionForDetectable(OutputTagUtil.sessionOutputTag))
         .setParallelism(FlinkEnvUtils.getInteger(Constants.BROADCAST_PARALLELISM))
         .name("Signature Bot Detector")

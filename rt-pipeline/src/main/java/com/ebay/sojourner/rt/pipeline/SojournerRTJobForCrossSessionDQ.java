@@ -1,7 +1,7 @@
 package com.ebay.sojourner.rt.pipeline;
 
 import com.ebay.sojourner.common.model.AgentIpAttribute;
-import com.ebay.sojourner.common.model.CrossSessionSignature;
+import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.SessionCore;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
@@ -21,10 +21,7 @@ import com.ebay.sojourner.rt.operators.attribute.GuidAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.GuidWindowProcessFunction;
 import com.ebay.sojourner.rt.operators.attribute.IpAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.IpWindowProcessFunction;
-import com.ebay.sojourner.rt.operators.attribute.TupleToSignatureMapFunction;
 import com.ebay.sojourner.rt.operators.session.IntermediateSessionToSessionCoreMapFunction;
-import java.util.Set;
-import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -65,87 +62,65 @@ public class SojournerRTJobForCrossSessionDQ {
         .uid("session-enhance-id");
 
     // cross session
-    DataStream<AgentIpAttribute> agentIpAttributeDatastream =
-        sessionCoreDS
-            .keyBy("userAgent", "ip")
-            .window(TumblingEventTimeWindows.of(Time.minutes(5)))
-            .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
-            .name("Attribute Operator (Agent+IP Pre-Aggregation)")
-            .setParallelism(FlinkEnvUtils.getInteger(Constants.PRE_AGENT_IP_PARALLELISM))
-            .uid("pre-agent-ip-id");
+    DataStream<AgentIpAttribute> agentIpAttributeDatastream = sessionCoreDS
+        .keyBy("userAgent", "ip")
+        .window(TumblingEventTimeWindows.of(Time.minutes(5)))
+        .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
+        .name("Attribute Operator (Agent+IP Pre-Aggregation)")
+        .setParallelism(FlinkEnvUtils.getInteger(Constants.PRE_AGENT_IP_PARALLELISM))
+        .uid("pre-agent-ip-id");
 
-    DataStream<Tuple5<String, String, Boolean, Set<Integer>, Long>> guidSignatureDataStream =
-        sessionCoreDS
-            .keyBy("guid")
-            .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
-            .trigger(OnElementEarlyFiringTrigger.create())
-            .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
-            .name("Attribute Operator (GUID)")
-            .setParallelism(FlinkEnvUtils.getInteger(Constants.GUID_PARALLELISM))
-            .uid("guid-id");
+    DataStream<BotSignature> guidSignatureDataStream = sessionCoreDS
+        .keyBy("guid")
+        .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
+        .trigger(OnElementEarlyFiringTrigger.create())
+        .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
+        .name("Attribute Operator (GUID)")
+        .setParallelism(FlinkEnvUtils.getInteger(Constants.GUID_PARALLELISM))
+        .uid("guid-id");
 
-    DataStream<Tuple5<String, String, Boolean, Set<Integer>, Long>> agentIpSignatureDataStream =
-        agentIpAttributeDatastream
-            .keyBy("agent", "clientIp")
-            .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
-            .trigger(OnElementEarlyFiringTrigger.create())
-            .aggregate(
-                new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
-            .name("Attribute Operator (Agent+IP)")
-            .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_IP_PARALLELISM))
-            .uid("agent-ip-id");
+    DataStream<BotSignature> agentIpSignatureDataStream = agentIpAttributeDatastream
+        .keyBy("agent", "clientIp")
+        .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
+        .trigger(OnElementEarlyFiringTrigger.create())
+        .aggregate(
+            new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
+        .name("Attribute Operator (Agent+IP)")
+        .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_IP_PARALLELISM))
+        .uid("agent-ip-id");
 
-    DataStream<Tuple5<String, String, Boolean, Set<Integer>, Long>> agentSignatureDataStream =
-        agentIpAttributeDatastream
-            .keyBy("agent")
-            .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
-            .trigger(OnElementEarlyFiringTrigger.create())
-            .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
-            .name("Attribute Operator (Agent)")
-            .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_PARALLELISM))
-            .uid("agent-id");
+    DataStream<BotSignature> agentSignatureDataStream = agentIpAttributeDatastream
+        .keyBy("agent")
+        .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
+        .trigger(OnElementEarlyFiringTrigger.create())
+        .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
+        .name("Attribute Operator (Agent)")
+        .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_PARALLELISM))
+        .uid("agent-id");
 
-    DataStream<Tuple5<String, String, Boolean, Set<Integer>, Long>> ipSignatureDataStream =
-        agentIpAttributeDatastream
-            .keyBy("clientIp")
-            .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
-            .trigger(OnElementEarlyFiringTrigger.create())
-            .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
-            .name("Attribute Operator (IP)")
-            .setParallelism(FlinkEnvUtils.getInteger(Constants.IP_PARALLELISM))
-            .uid("ip-id");
+    DataStream<BotSignature> ipSignatureDataStream = agentIpAttributeDatastream
+        .keyBy("clientIp")
+        .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
+        .trigger(OnElementEarlyFiringTrigger.create())
+        .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
+        .name("Attribute Operator (IP)")
+        .setParallelism(FlinkEnvUtils.getInteger(Constants.IP_PARALLELISM))
+        .uid("ip-id");
 
     // union attribute signature for broadcast
-    DataStream<Tuple5<String, String, Boolean, Set<Integer>, Long>> attributeSignatureDataStream =
-        agentIpSignatureDataStream
-            .union(agentSignatureDataStream)
-            .union(ipSignatureDataStream)
-            .union(guidSignatureDataStream);
-
-    // signatures hdfs sink
-    DataStream<CrossSessionSignature> tupleToCrossSessionDataStream = attributeSignatureDataStream
-        .map(new TupleToSignatureMapFunction())
-        .name("Tuple4ToCrossSessionSignature")
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_IP_PARALLELISM))
-        .uid("tuple4-transform-id");
-
-    tupleToCrossSessionDataStream
-        .addSink(HdfsConnectorFactory.createWithParquet(
-            FlinkEnvUtils.getString(Constants.HDFS_PATH_PARENT) +
-                FlinkEnvUtils.getString(Constants.HDFS_PATH_CROSS_SESSION),
-            CrossSessionSignature.class))
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_IP_PARALLELISM))
-        .name("SignaturesSink")
-        .uid("signature-sink-id");
+    DataStream<BotSignature> attributeSignatureDataStream = agentIpSignatureDataStream
+        .union(agentSignatureDataStream)
+        .union(ipSignatureDataStream)
+        .union(guidSignatureDataStream);
 
     // attribute signature broadcast
-    BroadcastStream<Tuple5<String, String, Boolean, Set<Integer>, Long>> attributeBroadcastStream =
+    BroadcastStream<BotSignature> attributeSignatureBroadcastStream =
         attributeSignatureDataStream.broadcast(MapStateDesc.attributeSignatureDesc);
 
     // connect broadcast
     SingleOutputStreamOperator<IntermediateSession> intermediateSessionWithSignature =
         intermediateSessionDataStream
-            .connect(attributeBroadcastStream)
+            .connect(attributeSignatureBroadcastStream)
             .process(new CrossSessionDQBroadcastProcessFunction())
             .setParallelism(FlinkEnvUtils.getInteger(Constants.BROADCAST_PARALLELISM))
             .name("Signature Bot Detector")

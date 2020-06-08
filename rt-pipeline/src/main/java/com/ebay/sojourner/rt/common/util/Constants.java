@@ -73,6 +73,7 @@ public class Constants {
   public static final String METRICS_PARALLELISM = "flink.app.parallelism.metrics";
 
   public static final String DEFAULT_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.default";
+  public static final String SOURCE_EVENT_SLOT_SHARE_GROUP_PREFFIX = "flink.app.slot-sharing-group.source-event";
   public static final String SOURCE_EVENT_LVS_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event-lvs";
   public static final String SOURCE_EVENT_SLC_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event-slc";
   public static final String SOURCE_EVENT_RNO_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event-rno";

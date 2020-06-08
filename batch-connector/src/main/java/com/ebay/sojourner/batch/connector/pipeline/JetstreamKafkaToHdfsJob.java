@@ -2,6 +2,7 @@ package com.ebay.sojourner.batch.connector.pipeline;
 
 import com.ebay.sojourner.batch.connector.util.Constants;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.util.DataCenter;
 import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.connectors.kafka.SourceDataStreamBuilder;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -28,17 +29,16 @@ public class JetstreamKafkaToHdfsJob {
         .getString(Constants.KAFKA_COMMON_CONSUMER_BROKERS_BOT);
     String nonBotBootstrapServers = FlinkEnvUtils
         .getString(Constants.KAFKA_COMMON_CONSUMER_BROKERS_NON_BOT);
-    String dc = FlinkEnvUtils.getString(com.ebay.sojourner.flink.common.util.Constants.RNO);
 
     // bot event kafka source
     DataStream jetStreamOutputBotEventDataStream = SourceDataStreamBuilder
-        .build(executionEnvironment, botSourceTopic, botBootstrapServers, botGroupId, dc,
-            botSourceParallelNum, null, deserializeClass);
+        .build(executionEnvironment, botSourceTopic, botBootstrapServers, botGroupId,
+            DataCenter.RNO, botSourceParallelNum, null, deserializeClass);
 
     // non bot event kafka source
     DataStream jetStreamOutputNonBotEventDataStream = SourceDataStreamBuilder
-        .build(executionEnvironment, nonBotSourceTopic, nonBotBootstrapServers, nonBotGroupId, dc,
-            nonBotSourceParallelNum, null, deserializeClass);
+        .build(executionEnvironment, nonBotSourceTopic, nonBotBootstrapServers, nonBotGroupId,
+            DataCenter.RNO, nonBotSourceParallelNum, null, deserializeClass);
 
     // union bot and non bot
     DataStream jetStreamOutputDataStream =

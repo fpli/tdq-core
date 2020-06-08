@@ -2,29 +2,25 @@ package com.ebay.sojourner.rt.operators.attribute;
 
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.AgentIpAttributeAccumulator;
-import com.ebay.sojourner.flink.common.util.Constants;
+import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.rt.common.util.SignatureUtils;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import org.apache.flink.api.java.tuple.Tuple;
-import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
 public class AgentIpSignatureWindowProcessFunction extends
-    ProcessWindowFunction<AgentIpAttributeAccumulator,
-        Tuple5<String, String, Boolean, Set<Integer>, Long>, Tuple, TimeWindow> {
+    ProcessWindowFunction<AgentIpAttributeAccumulator, BotSignature, Tuple, TimeWindow> {
 
   private final String signatureId = "agentIp";
 
   @Override
-  public void process(
-      Tuple tuple,
-      Context context,
-      Iterable<AgentIpAttributeAccumulator> elements,
-      Collector<Tuple5<String, String, Boolean, Set<Integer>, Long>> out) {
+  public void process(Tuple tuple, Context context, Iterable<AgentIpAttributeAccumulator> elements,
+      Collector<BotSignature> out) throws Exception {
 
     AgentIpAttributeAccumulator agentIpAttributeAccumulator = elements.iterator().next();
     AgentIpAttribute agentIpAttribute = agentIpAttributeAccumulator.getAgentIpAttribute();
@@ -35,15 +31,14 @@ public class AgentIpSignatureWindowProcessFunction extends
         && botFlagList != null
         && botFlagList.size() > 0) {
 
-      out.collect(
-          new Tuple5<>(
-              signatureId,
-              agentIpAttribute.getAgent().getAgentHash1()
-                  + Constants.SEPARATOR + agentIpAttribute.getAgent().getAgentHash2()
-                  + Constants.SEPARATOR + agentIpAttribute.getClientIp(),
-              false,
-              botFlagList,
-              context.window().maxTimestamp()));
+      BotSignature botSignature = new BotSignature();
+      botSignature.setType(signatureId);
+      botSignature.setIsGeneration(false);
+      botSignature.setBotFlags(new ArrayList<>(botFlagList));
+      botSignature.setExpirationTime(context.window().maxTimestamp());
+      botSignature.setUserAgent(agentIpAttribute.getAgent());
+      botSignature.setIp(agentIpAttribute.getClientIp());
+      out.collect(botSignature);
 
     } else if (context.currentWatermark() < context.window().maxTimestamp()
         && signatureStates.containsValue(1)
@@ -52,15 +47,15 @@ public class AgentIpSignatureWindowProcessFunction extends
 
       Set<Integer> newGenerateSignatures = SignatureUtils.generateNewSignature(signatureStates);
 
-      out.collect(
-          new Tuple5<>(
-              signatureId,
-              agentIpAttribute.getAgent().getAgentHash1()
-                  + Constants.SEPARATOR + agentIpAttribute.getAgent().getAgentHash2()
-                  + Constants.SEPARATOR + agentIpAttribute.getClientIp(),
-              true,
-              newGenerateSignatures,
-              context.window().maxTimestamp()));
+      BotSignature botSignature = new BotSignature();
+      botSignature.setType(signatureId);
+      botSignature.setIsGeneration(true);
+      botSignature.setBotFlags(new ArrayList<>(newGenerateSignatures));
+      botSignature.setExpirationTime(context.window().maxTimestamp());
+      botSignature.setUserAgent(agentIpAttribute.getAgent());
+      botSignature.setIp(agentIpAttribute.getClientIp());
+      out.collect(botSignature);
+
     }
   }
 

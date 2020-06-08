@@ -105,7 +105,6 @@ public class SojournerRTJobForSessionDQ {
 
     // This path is for local test. For production, we should use
     // "hdfs://apollo-rno//user/o_ubi/events/"
-
     sojSessionStream
         .addSink(HdfsConnectorFactory.createWithParquet(
             FlinkEnvUtils.getString(Constants.HDFS_PATH_PARENT) +

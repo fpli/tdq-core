@@ -2,6 +2,7 @@ package com.ebay.sojourner.batch.connector.pipeline;
 
 import com.ebay.sojourner.batch.connector.util.Constants;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.util.DataCenter;
 import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.connectors.kafka.SourceDataStreamBuilder;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -21,12 +22,11 @@ public class SojournerKafkaToHdfsJob {
     int sinkParallelNum = FlinkEnvUtils.getInteger(Constants.SINK_HDFS_PARALLELISM);
     String bootstrapServers = FlinkEnvUtils
         .getString(Constants.KAFKA_COMMON_CONSUMER_BROKERS_DEFAULT);
-    String dc = FlinkEnvUtils.getString(com.ebay.sojourner.flink.common.util.Constants.RNO);
 
     // kafka source
     DataStream sourceDataStream = SourceDataStreamBuilder
-        .build(executionEnvironment, sourceTopic, bootstrapServers, groupId, dc, sourceParallelNum,
-            null, deserializeClass);
+        .build(executionEnvironment, sourceTopic, bootstrapServers, groupId, DataCenter.RNO,
+            sourceParallelNum, null, deserializeClass);
 
     // hdfs sink
     sourceDataStream
