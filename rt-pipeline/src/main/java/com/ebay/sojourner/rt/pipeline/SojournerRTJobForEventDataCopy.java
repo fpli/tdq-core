@@ -1,11 +1,11 @@
 package com.ebay.sojourner.rt.pipeline;
 
 import com.ebay.sojourner.common.model.SojBytesEvent;
-import com.ebay.sojourner.flink.common.util.Constants;
+import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
+import com.ebay.sojourner.rt.common.util.Constants;
 import com.ebay.sojourner.rt.operators.event.SojBytesEventFilterFunction;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
@@ -71,7 +71,8 @@ public class SojournerRTJobForEventDataCopy {
     // sink for session dq
     bytesFilterDataStream
         .addSink(KafkaConnectorFactory.createKafkaProducerForCopy(
-            FlinkEnvUtils.getString(Constants.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_SESSION),
+            FlinkEnvUtils.getString(
+                com.ebay.sojourner.flink.common.util.Constants.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_SESSION),
             FlinkEnvUtils.getListString(Constants.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT)))
         .setParallelism(FlinkEnvUtils.getInteger(Constants.EVENT_PARALLELISM))
         .name("RawEvent")

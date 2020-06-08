@@ -2,17 +2,19 @@ package com.ebay.sojourner.rt.operators.attribute;
 
 import com.ebay.sojourner.business.ubd.detectors.AgentSignatureBotDetector;
 import com.ebay.sojourner.business.ubd.indicators.AgentIndicators;
+import com.ebay.sojourner.common.model.AgentAttribute;
 import com.ebay.sojourner.common.model.AgentAttributeAccumulator;
 import com.ebay.sojourner.common.model.AgentIpAttribute;
+import com.ebay.sojourner.rt.common.util.SignatureUtils;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.functions.AggregateFunction;
 
 @Slf4j
-public class AgentAttributeAgg
-    implements AggregateFunction<
-    AgentIpAttribute, AgentAttributeAccumulator, AgentAttributeAccumulator> {
+public class AgentAttributeAgg implements
+    AggregateFunction<AgentIpAttribute, AgentAttributeAccumulator, AgentAttributeAccumulator> {
 
   @Override
   public AgentAttributeAccumulator createAccumulator() {
@@ -29,12 +31,15 @@ public class AgentAttributeAgg
   }
 
   @Override
-  public AgentAttributeAccumulator add(
-      AgentIpAttribute agentIpAttribute, AgentAttributeAccumulator agentAttributeAccumulator) {
-    if (agentAttributeAccumulator.getAgentAttribute().getAgent() == null) {
+  public AgentAttributeAccumulator add(AgentIpAttribute agentIpAttribute,
+      AgentAttributeAccumulator agentAttributeAccumulator) {
 
-      agentAttributeAccumulator.getAgentAttribute().setAgent(agentIpAttribute.getAgent());
+    AgentAttribute agentAttribute = agentAttributeAccumulator.getAgentAttribute();
+
+    if (agentAttribute.getAgent() == null) {
+      agentAttribute.setAgent(agentIpAttribute.getAgent());
     }
+
     try {
       AgentIndicators.getInstance().feed(agentIpAttribute, agentAttributeAccumulator);
     } catch (Exception e) {
@@ -42,37 +47,36 @@ public class AgentAttributeAgg
     }
 
     Set<Integer> agentBotFlag = null;
+    Map<Integer, Integer> signatureStates = agentAttributeAccumulator.getSignatureStates();
+
     try {
-      if (agentAttributeAccumulator.getBotFlagStatus().containsValue(0)
-          || agentAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
-        agentBotFlag =
-            AgentSignatureBotDetector.getInstance()
-                .getBotFlagList(agentAttributeAccumulator.getAgentAttribute());
+      if (signatureStates.containsValue(0) || signatureStates.containsValue(1)) {
+        agentBotFlag = AgentSignatureBotDetector.getInstance().getBotFlagList(agentAttribute);
         if (agentBotFlag.contains(6)) {
-          switch (agentAttributeAccumulator.getBotFlagStatus().get(6)) {
+          switch (signatureStates.get(6)) {
             case 0:
-              agentAttributeAccumulator.getBotFlagStatus().put(6, 1);
+              signatureStates.put(6, 1);
               break;
             case 1:
-              agentAttributeAccumulator.getBotFlagStatus().put(6, 2);
+              signatureStates.put(6, 2);
               break;
           }
         } else if (agentBotFlag.contains(220)) {
-          switch (agentAttributeAccumulator.getBotFlagStatus().get(220)) {
+          switch (signatureStates.get(220)) {
             case 0:
-              agentAttributeAccumulator.getBotFlagStatus().put(220, 1);
+              signatureStates.put(220, 1);
               break;
             case 1:
-              agentAttributeAccumulator.getBotFlagStatus().put(220, 2);
+              signatureStates.put(220, 2);
               break;
           }
         } else if (agentBotFlag.contains(221)) {
-          switch (agentAttributeAccumulator.getBotFlagStatus().get(221)) {
+          switch (signatureStates.get(221)) {
             case 0:
-              agentAttributeAccumulator.getBotFlagStatus().put(221, 1);
+              signatureStates.put(221, 1);
               break;
             case 1:
-              agentAttributeAccumulator.getBotFlagStatus().put(221, 2);
+              signatureStates.put(221, 2);
               break;
           }
         }
@@ -81,13 +85,9 @@ public class AgentAttributeAgg
       log.error("start get agent botFlagList failed", e);
     }
 
-    Set<Integer> botFlagList = agentAttributeAccumulator.getAgentAttribute().getBotFlagList();
-    if (agentBotFlag != null && agentBotFlag.size() > 0) {
-      botFlagList.addAll(agentBotFlag);
-    }
-
-    agentAttributeAccumulator.getAgentAttribute().setBotFlagList(botFlagList);
-
+    Set<Integer> botFlagList = SignatureUtils
+        .setBotFlags(agentBotFlag, agentAttribute.getBotFlagList());
+    agentAttribute.setBotFlagList(botFlagList);
     return agentAttributeAccumulator;
   }
 

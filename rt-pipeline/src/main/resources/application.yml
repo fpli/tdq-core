@@ -76,46 +76,12 @@ kafka:
         event: guid
         signature: signatureId
 
-    behavior-total:
-      bootstrap-servers:
-        default:
-          - rhs-rdrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.26.tess.io:9092
-          - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
-          - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
-          - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
-          - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
-      topic: behavior.total.sojevent.total
-      groupid: jetstream-non-bot-event
-
-    behavior-pulsar:
-      bootstrap-servers:
-        default:
-          - rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
-          - rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
-          - rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
-          - rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
-          - rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
-      topic:
-        session:
-          bot: behavior.pulsar.sojsession.botsession
-          non-bot: behavior.pulsar.sojsession.sessionend
-        event:
-          bot: behavior.pulsar.misc.bot
-      groupid:
-        session:
-          bot: jetstream-bot-session
-          non-bot: jetstream-non-bot-session
-        event:
-          bot: jetstream-bot-event
-
 flink:
   app:
     name:
       full-pipeline: Unified Bot Detection RT Pipeline
       data-quality: Unified Bot Detection RT DQ Pipeline
       hot-deploy: Unified Bot Detection RT Hot Deploy Pipeline
-      hdfs-dump: Unified Bot Detection HDFS Load Pipeline
-      kafka-dump: Unified Bot Detection KAFKA Load Pipeline
     parallelism:
       source: 100
       event: 100
@@ -183,3 +149,8 @@ rest-client:
   auth-username-value: soj-flink-app
   auth-token-key: X-Auth-Token
   anth-token-value: B65613BAE51443268AEBCAEF26C30ABE
+
+data-center:
+  lvs: LVS
+  slc: SLC
+  rno: RNO

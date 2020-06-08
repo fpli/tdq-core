@@ -2,56 +2,60 @@ package com.ebay.sojourner.rt.operators.attribute;
 
 import com.ebay.sojourner.common.model.IpAttribute;
 import com.ebay.sojourner.common.model.IpAttributeAccumulator;
-import java.util.HashSet;
+import com.ebay.sojourner.flink.common.util.Constants;
+import com.ebay.sojourner.rt.common.util.SignatureUtils;
 import java.util.Map;
 import java.util.Set;
 import org.apache.flink.api.java.tuple.Tuple;
-import org.apache.flink.api.java.tuple.Tuple4;
+import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
-public class IpWindowProcessFunction
-    extends ProcessWindowFunction<
-    IpAttributeAccumulator, Tuple4<String, Boolean, Set<Integer>, Long>, Tuple, TimeWindow> {
+public class IpWindowProcessFunction extends
+    ProcessWindowFunction<IpAttributeAccumulator,
+        Tuple5<String, String, Boolean, Set<Integer>, Long>, Tuple, TimeWindow> {
+
+  private final String signatureId = "ip";
 
   @Override
   public void process(
       Tuple tuple,
       Context context,
       Iterable<IpAttributeAccumulator> elements,
-      Collector<Tuple4<String, Boolean, Set<Integer>, Long>> out)
-      throws Exception {
+      Collector<Tuple5<String, String, Boolean, Set<Integer>, Long>> out) {
 
     IpAttributeAccumulator ipAttributeAccumulator = elements.iterator().next();
     IpAttribute ipAttribute = ipAttributeAccumulator.getIpAttribute();
+    Map<Integer, Integer> signatureStates = ipAttributeAccumulator.getSignatureStates();
+    Set<Integer> botFlagList = ipAttribute.getBotFlagList();
 
     if (context.currentWatermark() >= context.window().maxTimestamp()
-        && ipAttribute.getBotFlagList() != null
-        && ipAttribute.getBotFlagList().size() > 0) {
+        && botFlagList != null
+        && botFlagList.size() > 0) {
+
       out.collect(
-          new Tuple4<>(
-              "ip" + ipAttribute.getClientIp(),
+          new Tuple5<>(
+              signatureId,
+              ipAttribute.getClientIp() + Constants.SEPARATOR,
               false,
-              ipAttribute.getBotFlagList(),
+              botFlagList,
               context.window().maxTimestamp()));
+
     } else if (context.currentWatermark() < context.window().maxTimestamp()
-        && ipAttributeAccumulator.getBotFlagStatus().containsValue(1)
-        && ipAttribute.getBotFlagList() != null
-        && ipAttribute.getBotFlagList().size() > 0) {
-      HashSet<Integer> generationBotFlag = new HashSet<>();
-      for (Map.Entry<Integer, Integer> newBotFlagMap :
-          ipAttributeAccumulator.getBotFlagStatus().entrySet()) {
-        if (newBotFlagMap.getValue() == 1) {
-          generationBotFlag.add(newBotFlagMap.getKey());
-        }
-      }
+        && signatureStates.containsValue(1)
+        && botFlagList != null
+        && botFlagList.size() > 0) {
+
+      Set<Integer> newGenerateSignatures = SignatureUtils.generateNewSignature(signatureStates);
+
       out.collect(
-          new Tuple4<>(
-              "ip" + ipAttribute.getClientIp(),
+          new Tuple5<>(
+              signatureId,
+              ipAttribute.getClientIp() + Constants.SEPARATOR,
               true,
-              generationBotFlag,
+              newGenerateSignatures,
               context.window().maxTimestamp()));
     }
   }

@@ -1,9 +1,9 @@
 flink:
   app:
     parallelism:
-      source: 3
+      source: 100
       event: 100
-      session: 640
+      session: 900
       pre-agent-ip: 300
       agent-ip: 300
       agent: 300

@@ -2,7 +2,7 @@ package com.ebay.sojourner.rt.operators.session;
 
 import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.UbiSession;
-import com.ebay.sojourner.rt.util.TransformUtil;
+import com.ebay.sojourner.common.util.TransformUtil;
 import java.util.ArrayList;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.configuration.Configuration;
@@ -18,7 +18,7 @@ public class UbiSessionToIntermediateSessionMapFunction extends
   @Override
   public IntermediateSession map(UbiSession ubiSession) throws Exception {
     IntermediateSession intermediateSession = new IntermediateSession();
-    Long[] guidEehance = TransformUtil.stringToLong(ubiSession.getGuid());
+    long[] guidEehance = TransformUtil.md522Long(ubiSession.getGuid());
     intermediateSession.setGuid(ubiSession.getGuid());
     intermediateSession.setGuid1(guidEehance[0]);
     intermediateSession.setGuid2(guidEehance[1]);

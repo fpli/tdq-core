@@ -1,0 +1,44 @@
+kafka:
+  common:
+    consumer:
+      brokers:
+        default: rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
+      topic:
+        default: behavior.trafficjam.event
+      group-id:
+        default: sojourner-pathfinder-event
+
+    producer:
+      brokers:
+        default: rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
+      topic:
+        default: behavior.trafficjam.event
+
+flink:
+  app:
+    parallelism:
+      source:
+        default: 2
+      sink:
+        kafka: 2
+        hdfs: 2
+
+rheos:
+  serviceUrl: https://rheos-services.qa.ebay.com
+  iaf:
+    secret: 6218c197-200e-49d7-b404-2a4dbf7595ef
+    env: staging
+
+hdfs:
+  dump:
+    path: hdfs://apollo-rno/sys/soj/ubd/events
+    class-name: com.ebay.sojourner.common.model.SojEvent
+
+zookeeper:
+  server:
+    - zk-0.sojzk-ns.svc.32.tess.io:2181
+    - zk-1.sojzk-ns.svc.32.tess.io:2181
+    - zk-2.sojzk-ns.svc.32.tess.io:2181
+
+rest-client:
+  rest-server: https://sojubdportalservice.vip.qa.ebay.com

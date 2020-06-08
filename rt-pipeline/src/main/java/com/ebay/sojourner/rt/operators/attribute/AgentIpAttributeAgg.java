@@ -1,15 +1,15 @@
 package com.ebay.sojourner.rt.operators.attribute;
 
 import com.ebay.sojourner.business.ubd.indicators.AgentIpIndicators;
+import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.AgentIpAttributeAccumulator;
 import com.ebay.sojourner.common.model.SessionCore;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.functions.AggregateFunction;
 
 @Slf4j
-public class AgentIpAttributeAgg
-    implements AggregateFunction<
-    SessionCore, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
+public class AgentIpAttributeAgg implements
+    AggregateFunction<SessionCore, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
 
   @Override
   public AgentIpAttributeAccumulator createAccumulator() {
@@ -26,16 +26,14 @@ public class AgentIpAttributeAgg
   }
 
   @Override
-  public AgentIpAttributeAccumulator add(
-      SessionCore sessionCore,
+  public AgentIpAttributeAccumulator add(SessionCore sessionCore,
       AgentIpAttributeAccumulator agentIpAttributeAccumulator) {
 
-    if (agentIpAttributeAccumulator.getAgentIpAttribute().getClientIp() == null
-        && agentIpAttributeAccumulator.getAgentIpAttribute().getAgent() == null) {
-      agentIpAttributeAccumulator.getAgentIpAttribute()
-          .setClientIp(sessionCore.getIp());
-      agentIpAttributeAccumulator.getAgentIpAttribute()
-          .setAgent(sessionCore.getUserAgent());
+    AgentIpAttribute agentIpAttribute = agentIpAttributeAccumulator.getAgentIpAttribute();
+
+    if (agentIpAttribute.getClientIp() == null && agentIpAttribute.getAgent() == null) {
+      agentIpAttribute.setClientIp(sessionCore.getIp());
+      agentIpAttribute.setAgent(sessionCore.getUserAgent());
     }
 
     try {

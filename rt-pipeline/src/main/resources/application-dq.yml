@@ -21,7 +21,7 @@ flink:
     parallelism:
       source: 100
       event: 100
-      session: 700
+      session: 420
 
 hdfs:
   path:

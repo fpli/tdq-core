@@ -2,56 +2,59 @@ package com.ebay.sojourner.rt.operators.attribute;
 
 import com.ebay.sojourner.common.model.GuidAttribute;
 import com.ebay.sojourner.common.model.GuidAttributeAccumulator;
-import java.util.HashSet;
+import com.ebay.sojourner.flink.common.util.Constants;
+import com.ebay.sojourner.rt.common.util.SignatureUtils;
 import java.util.Map;
 import java.util.Set;
 import org.apache.flink.api.java.tuple.Tuple;
-import org.apache.flink.api.java.tuple.Tuple4;
+import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
-public class GuidWindowProcessFunction
-    extends ProcessWindowFunction<
-    GuidAttributeAccumulator, Tuple4<String, Boolean, Set<Integer>, Long>, Tuple, TimeWindow> {
+public class GuidWindowProcessFunction extends ProcessWindowFunction<GuidAttributeAccumulator,
+    Tuple5<String, String, Boolean, Set<Integer>, Long>,
+    Tuple, TimeWindow> {
+
+  private final String signatureId = "guid";
 
   @Override
-  public void process(
-      Tuple tuple,
+  public void process(Tuple tuple,
       Context context,
       Iterable<GuidAttributeAccumulator> elements,
-      Collector<Tuple4<String, Boolean, Set<Integer>, Long>> out)
-      throws Exception {
+      Collector<Tuple5<String, String, Boolean, Set<Integer>, Long>> out) {
 
     GuidAttributeAccumulator guidAttributeAccumulator = elements.iterator().next();
     GuidAttribute guidAttribute = guidAttributeAccumulator.getGuidAttribute();
+    Map<Integer, Integer> signatureStates = guidAttributeAccumulator.getSignatureStates();
+    Set<Integer> botFlagList = guidAttribute.getBotFlagList();
 
     if (context.currentWatermark() >= context.window().maxTimestamp()
-        && guidAttribute.getBotFlagList() != null
-        && guidAttribute.getBotFlagList().size() > 0) {
+        && botFlagList != null
+        && botFlagList.size() > 0) {
+
       out.collect(
-          new Tuple4<>(
-              "guid" + guidAttribute.getGuid1() + guidAttribute.getGuid2(),
+          new Tuple5<>(
+              signatureId,
+              guidAttribute.getGuid1() + Constants.SEPARATOR + guidAttribute.getGuid2(),
               false,
-              guidAttribute.getBotFlagList(),
+              botFlagList,
               context.window().maxTimestamp()));
+
     } else if (context.currentWatermark() < context.window().maxTimestamp()
-        && guidAttributeAccumulator.getBotFlagStatus().containsValue(1)
-        && guidAttribute.getBotFlagList() != null
-        && guidAttribute.getBotFlagList().size() > 0) {
-      HashSet<Integer> generationBotFlag = new HashSet<>();
-      for (Map.Entry<Integer, Integer> newBotFlagMap :
-          guidAttributeAccumulator.getBotFlagStatus().entrySet()) {
-        if (newBotFlagMap.getValue() == 1) {
-          generationBotFlag.add(newBotFlagMap.getKey());
-        }
-      }
+        && signatureStates.containsValue(1)
+        && botFlagList != null
+        && botFlagList.size() > 0) {
+
+      Set<Integer> newGenerateSignatures = SignatureUtils.generateNewSignature(signatureStates);
+
       out.collect(
-          new Tuple4<>(
-              "guid" + guidAttribute.getGuid1() + guidAttribute.getGuid2(),
+          new Tuple5<>(
+              signatureId,
+              guidAttribute.getGuid1() + Constants.SEPARATOR + guidAttribute.getGuid2(),
               true,
-              generationBotFlag,
+              newGenerateSignatures,
               context.window().maxTimestamp()));
     }
   }

@@ -8,6 +8,7 @@ import lombok.Data;
 public class CrossSessionSignature implements Serializable {
 
   private String signatureId;
+  private String signatureValue;
   private Boolean isGenerate;
   private Long expirationTime;
   private Set<Integer> botFlags;

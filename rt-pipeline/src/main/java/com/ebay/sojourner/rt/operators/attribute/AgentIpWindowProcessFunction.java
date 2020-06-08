@@ -8,17 +8,15 @@ import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
-public class AgentIpWindowProcessFunction
-    extends ProcessWindowFunction<
-    AgentIpAttributeAccumulator, AgentIpAttribute, Tuple, TimeWindow> {
+public class AgentIpWindowProcessFunction extends
+    ProcessWindowFunction<AgentIpAttributeAccumulator, AgentIpAttribute, Tuple, TimeWindow> {
 
   @Override
   public void process(
       Tuple tuple,
       Context context,
       Iterable<AgentIpAttributeAccumulator> elements,
-      Collector<AgentIpAttribute> out)
-      throws Exception {
+      Collector<AgentIpAttribute> out) {
 
     AgentIpAttributeAccumulator agentIpAttributeAccumulator = elements.iterator().next();
     out.collect(agentIpAttributeAccumulator.getAgentIpAttribute());

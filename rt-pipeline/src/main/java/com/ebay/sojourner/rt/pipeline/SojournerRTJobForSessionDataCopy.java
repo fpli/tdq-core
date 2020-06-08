@@ -5,9 +5,9 @@ import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
-import com.ebay.sojourner.flink.common.util.Constants;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
+import com.ebay.sojourner.rt.common.util.Constants;
 import com.ebay.sojourner.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionAgg;
@@ -146,12 +146,13 @@ public class SojournerRTJobForSessionDataCopy {
 
     // sink for cross session dq
     intermediateSessionDataStream
-        .addSink(KafkaConnectorFactory
-            .createKafkaProducer(
-                FlinkEnvUtils.getString(Constants.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_CROSS_SESSION),
-                FlinkEnvUtils.getListString(Constants.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
-                IntermediateSession.class,
-                FlinkEnvUtils.getString(Constants.BEHAVIOR_TOTAL_NEW_MESSAGE_KEY_SESSION)))
+        .addSink(KafkaConnectorFactory.createKafkaProducer(
+            FlinkEnvUtils.getString(
+                com.ebay.sojourner.flink.common.util
+                    .Constants.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_CROSS_SESSION),
+            FlinkEnvUtils.getListString(Constants.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
+            IntermediateSession.class,
+            FlinkEnvUtils.getString(Constants.BEHAVIOR_TOTAL_NEW_MESSAGE_KEY_SESSION)))
         .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Constants.SESSION_SLOT_SHARE_GROUP))
         .name("IntermediateSession")

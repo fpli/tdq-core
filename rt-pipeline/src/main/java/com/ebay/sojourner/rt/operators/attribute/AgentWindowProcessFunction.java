@@ -2,56 +2,61 @@ package com.ebay.sojourner.rt.operators.attribute;
 
 import com.ebay.sojourner.common.model.AgentAttribute;
 import com.ebay.sojourner.common.model.AgentAttributeAccumulator;
-import java.util.HashSet;
+import com.ebay.sojourner.flink.common.util.Constants;
+import com.ebay.sojourner.rt.common.util.SignatureUtils;
 import java.util.Map;
 import java.util.Set;
 import org.apache.flink.api.java.tuple.Tuple;
-import org.apache.flink.api.java.tuple.Tuple4;
+import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
-public class AgentWindowProcessFunction
-    extends ProcessWindowFunction<
-    AgentAttributeAccumulator, Tuple4<String, Boolean, Set<Integer>, Long>, Tuple, TimeWindow> {
+public class AgentWindowProcessFunction extends ProcessWindowFunction<AgentAttributeAccumulator,
+    Tuple5<String, String, Boolean, Set<Integer>, Long>, Tuple, TimeWindow> {
+
+  private final String signatureId = "agent";
 
   @Override
   public void process(
       Tuple tuple,
       Context context,
       Iterable<AgentAttributeAccumulator> elements,
-      Collector<Tuple4<String, Boolean, Set<Integer>, Long>> out)
-      throws Exception {
+      Collector<Tuple5<String, String, Boolean, Set<Integer>, Long>> out) {
 
     AgentAttributeAccumulator agentAttributeAccumulator = elements.iterator().next();
     AgentAttribute agentAttribute = agentAttributeAccumulator.getAgentAttribute();
+    Map<Integer, Integer> signatureStates = agentAttributeAccumulator.getSignatureStates();
+    Set<Integer> botFlagList = agentAttribute.getBotFlagList();
 
     if (context.currentWatermark() >= context.window().maxTimestamp()
-        && agentAttribute.getBotFlagList() != null
-        && agentAttribute.getBotFlagList().size() > 0) {
+        && botFlagList != null
+        && botFlagList.size() > 0) {
+
       out.collect(
-          new Tuple4<>(
-              "agent" + agentAttribute.getAgent(),
+          new Tuple5<>(
+              signatureId,
+              agentAttribute.getAgent().getAgentHash1()
+                  + Constants.SEPARATOR + agentAttribute.getAgent().getAgentHash2(),
               false,
-              agentAttribute.getBotFlagList(),
+              botFlagList,
               context.window().maxTimestamp()));
+
     } else if (context.currentWatermark() < context.window().maxTimestamp()
-        && agentAttributeAccumulator.getBotFlagStatus().containsValue(1)
-        && agentAttribute.getBotFlagList() != null
-        && agentAttribute.getBotFlagList().size() > 0) {
-      HashSet<Integer> generationBotFlag = new HashSet<>();
-      for (Map.Entry<Integer, Integer> newBotFlagMap :
-          agentAttributeAccumulator.getBotFlagStatus().entrySet()) {
-        if (newBotFlagMap.getValue() == 1) {
-          generationBotFlag.add(newBotFlagMap.getKey());
-        }
-      }
+        && signatureStates.containsValue(1)
+        && botFlagList != null
+        && botFlagList.size() > 0) {
+
+      Set<Integer> newGenerateStates = SignatureUtils.generateNewSignature(signatureStates);
+
       out.collect(
-          new Tuple4<>(
-              "agent" + agentAttribute.getAgent(),
+          new Tuple5<>(
+              signatureId,
+              agentAttribute.getAgent().getAgentHash1()
+                  + Constants.SEPARATOR + agentAttribute.getAgent().getAgentHash2(),
               true,
-              generationBotFlag,
+              newGenerateStates,
               context.window().maxTimestamp()));
     }
   }

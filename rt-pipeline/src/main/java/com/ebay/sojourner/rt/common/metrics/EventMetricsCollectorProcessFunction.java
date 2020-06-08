@@ -3,6 +3,7 @@ package com.ebay.sojourner.rt.common.metrics;
 import com.ebay.sojourner.business.ubd.rule.RuleManager;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.rule.RuleDefinition;
+import com.ebay.sojourner.flink.common.util.Constants;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -19,10 +20,12 @@ import org.apache.flink.util.Collector;
 
 public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEvent, UbiEvent> {
 
-  private Set<Long> eventDynamicRuleCounterNameSet = new CopyOnWriteArraySet<>();
-  private List<String> eventStaticRuleCounterNameList;
-  private Map<String, Counter> eventRuleCounterNameMap = new ConcurrentHashMap<>();
+  private Set<Long> dynamicRuleIdOldSet = new CopyOnWriteArraySet<>();
+  private List<String> eventStaticRuleList;
+  private Map<String, Counter> eventRuleCounterMap = new ConcurrentHashMap<>();
   private Counter eventTotalCounter;
+  private final String ruleCounterPreffix = "rule";
+  private final String ubiEventCounterName = "ubiEvent_count";
 
   @Override
   public void open(Configuration parameters) throws Exception {
@@ -31,19 +34,19 @@ public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEve
     eventTotalCounter =
         getRuntimeContext()
             .getMetricGroup()
-            .addGroup("sojourner-ubd")
-            .counter("ubiEvent count");
+            .addGroup(Constants.SOJ_METRICS_GROUP)
+            .counter(ubiEventCounterName);
 
     // static rule
-    eventStaticRuleCounterNameList = Arrays.asList("rule801", "rule1");
+    eventStaticRuleList = Arrays.asList("rule801", "rule1");
 
-    for (String ruleName : eventStaticRuleCounterNameList) {
+    for (String ruleName : eventStaticRuleList) {
       Counter staticRuleCounter =
           getRuntimeContext()
               .getMetricGroup()
-              .addGroup("sojourner-ubd")
+              .addGroup(Constants.SOJ_METRICS_GROUP)
               .counter(ruleName);
-      eventRuleCounterNameMap.put(ruleName, staticRuleCounter);
+      eventRuleCounterMap.put(ruleName, staticRuleCounter);
     }
   }
 
@@ -51,23 +54,23 @@ public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEve
   public void processElement(UbiEvent ubiEvent, Context ctx, Collector<UbiEvent> out) {
 
     eventTotalCounter.inc();
-    Set<Long> dynamicRuleIdSet = RuleManager
+    Set<Long> dynamicRuleIdNewSet = RuleManager
         .getInstance().getRuleDefinitions()
         .stream()
         .map(RuleDefinition::getBizId)
         .collect(Collectors.toSet());
 
-    if (CollectionUtils.isNotEmpty(dynamicRuleIdSet)) {
+    if (CollectionUtils.isNotEmpty(dynamicRuleIdNewSet)) {
       Collection intersection = CollectionUtils
-          .intersection(dynamicRuleIdSet, eventDynamicRuleCounterNameSet);
+          .intersection(dynamicRuleIdNewSet, dynamicRuleIdOldSet);
       if (CollectionUtils.isNotEmpty(intersection)) {
         for (Object ruleId : intersection) {
           Counter dynamicRuleCounter = getRuntimeContext()
               .getMetricGroup()
-              .addGroup("sojourner-ubd")
-              .counter("rule" + ruleId);
-          eventRuleCounterNameMap.put("rule" + ruleId, dynamicRuleCounter);
-          eventDynamicRuleCounterNameSet.add((Long) ruleId);
+              .addGroup(Constants.SOJ_METRICS_GROUP)
+              .counter(ruleCounterPreffix + ruleId);
+          eventRuleCounterMap.put(ruleCounterPreffix + ruleId, dynamicRuleCounter);
+          dynamicRuleIdOldSet.add((Long) ruleId);
         }
       }
     }
@@ -79,7 +82,7 @@ public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEve
 
     if (!botFlags.isEmpty()) {
       for (int botRule : botFlags) {
-        Counter counter = eventRuleCounterNameMap.get("rule" + botRule);
+        Counter counter = eventRuleCounterMap.get(ruleCounterPreffix + botRule);
         if (botRule != 0 && counter != null) {
           counter.inc();
         }
