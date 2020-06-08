@@ -19,7 +19,9 @@ kafka:
 flink:
   app:
     parallelism:
-      source: 50
+      source: 100
+      event: 100
+      session: 700
 
 hdfs:
   path:
