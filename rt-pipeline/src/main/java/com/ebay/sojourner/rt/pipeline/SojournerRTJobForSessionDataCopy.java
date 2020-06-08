@@ -4,8 +4,8 @@ import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
-import com.ebay.sojourner.flink.common.util.Constants;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.util.Constants;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaConnectorFactory;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
 import com.ebay.sojourner.rt.operators.event.EventMapFunction;
@@ -45,6 +45,7 @@ public class SojournerRTJobForSessionDataCopy {
                         .getString(Constants.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_RNO),
                     RawEvent.class))
             .setParallelism(FlinkEnvUtils.getInteger(Constants.SOURCE_PARALLELISM))
+            .slotSharingGroup(FlinkEnvUtils.getString(Constants.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP))
             .name("Rheos Kafka Consumer For RNO")
             .uid("source-rno-id");
 
@@ -58,6 +59,7 @@ public class SojournerRTJobForSessionDataCopy {
                         .getString(Constants.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_SLC),
                     RawEvent.class))
             .setParallelism(FlinkEnvUtils.getInteger(Constants.SOURCE_PARALLELISM))
+            .slotSharingGroup(FlinkEnvUtils.getString(Constants.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP))
             .name("Rheos Kafka Consumer For SLC")
             .uid("source-slc-id");
 
@@ -71,6 +73,7 @@ public class SojournerRTJobForSessionDataCopy {
                         .getString(Constants.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_LVS),
                     RawEvent.class))
             .setParallelism(FlinkEnvUtils.getInteger(Constants.SOURCE_PARALLELISM))
+            .slotSharingGroup(FlinkEnvUtils.getString(Constants.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP))
             .name("Rheos Kafka Consumer For LVS")
             .uid("source-lvs-id");
 
@@ -80,18 +83,21 @@ public class SojournerRTJobForSessionDataCopy {
     DataStream<UbiEvent> ubiEventDataStreamForRNO = rawEventDataStreamForRNO
         .map(new EventMapFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Constants.EVENT_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Constants.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP))
         .name("Event Operator For RNO")
         .uid("event-rno-id");
 
     DataStream<UbiEvent> ubiEventDataStreamForLVS = rawEventDataStreamForLVS
         .map(new EventMapFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Constants.EVENT_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Constants.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP))
         .name("Event Operator For LVS")
         .uid("event-lvs-id");
 
     DataStream<UbiEvent> ubiEventDataStreamForSLC = rawEventDataStreamForSLC
         .map(new EventMapFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Constants.EVENT_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Constants.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP))
         .name("Event Operator For SLC")
         .uid("event-slc-id");
 
@@ -127,12 +133,14 @@ public class SojournerRTJobForSessionDataCopy {
 
     ubiSessionDataStream
         .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Constants.SESSION_SLOT_SHARE_GROUP))
         .name("Session Operator")
         .uid("session-id");
 
     DataStream<IntermediateSession> intermediateSessionDataStream = ubiSessionDataStream
         .map(new UbiSessionToIntermediateSessionMapFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Constants.SESSION_SLOT_SHARE_GROUP))
         .name("IntermediateSession For Cross Session DQ")
         .uid("session-enhance-id");
 
@@ -145,6 +153,7 @@ public class SojournerRTJobForSessionDataCopy {
                 IntermediateSession.class,
                 FlinkEnvUtils.getString(Constants.BEHAVIOR_TOTAL_NEW_MESSAGE_KEY_SESSION)))
         .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Constants.SESSION_SLOT_SHARE_GROUP))
         .name("IntermediateSession")
         .uid("intermediate-session-sink-id");
 
