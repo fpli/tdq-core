@@ -1,6 +1,7 @@
 package com.ebay.sojourner.rt.pipeline;
 
 import com.ebay.sojourner.common.model.AgentIpAttribute;
+import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.SessionCore;
 import com.ebay.sojourner.common.model.SojEvent;
@@ -36,9 +37,7 @@ import com.ebay.sojourner.rt.operators.session.UbiSessionAgg;
 import com.ebay.sojourner.rt.operators.session.UbiSessionToSessionCoreMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionWindowProcessFunction;
-import java.util.Set;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -147,7 +146,7 @@ public class SojournerRTJobForQA {
             .name("Attribute Operator (Agent+IP Pre-Aggregation)")
             .uid("pre-agent-ip-id");
 
-    DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureDataStream =
+    DataStream<BotSignature> guidSignatureDataStream =
         sessionCoreDataStream
             .keyBy("guid")
             .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
@@ -157,7 +156,7 @@ public class SojournerRTJobForQA {
             .name("Attribute Operator (GUID)")
             .uid("guid-id");
 
-    SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureSplitStream =
+    SplitStream<BotSignature> guidSignatureSplitStream =
         guidSignatureDataStream.split(new SplitFunction());
 
     guidSignatureSplitStream
@@ -174,7 +173,7 @@ public class SojournerRTJobForQA {
         .name("GUID Signature Expiration")
         .uid("guid-expiration-id");
 
-    DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureDataStream =
+    DataStream<BotSignature> agentIpSignatureDataStream =
         agentIpAttributeDatastream
             .keyBy("agent", "clientIp")
             .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
@@ -185,7 +184,7 @@ public class SojournerRTJobForQA {
             .name("Attribute Operator (Agent+IP)")
             .uid("agent-ip-id");
 
-    SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureSplitStream =
+    SplitStream<BotSignature> agentIpSignatureSplitStream =
         agentIpSignatureDataStream.split(new SplitFunction());
 
     agentIpSignatureSplitStream
@@ -202,7 +201,7 @@ public class SojournerRTJobForQA {
         .name("Agent+IP Signature Expiration")
         .uid("agent-ip-expiration-id");
 
-    DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureDataStream =
+    DataStream<BotSignature> agentSignatureDataStream =
         agentIpAttributeDatastream
             .keyBy("agent")
             .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
@@ -212,7 +211,7 @@ public class SojournerRTJobForQA {
             .name("Attribute Operator (Agent)")
             .uid("agent-id");
 
-    SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureSplitStream =
+    SplitStream<BotSignature> agentSignatureSplitStream =
         agentSignatureDataStream.split(new SplitFunction());
 
     agentSignatureSplitStream
@@ -229,7 +228,7 @@ public class SojournerRTJobForQA {
         .name("Agent Signature Expiration")
         .uid("agent-expiration-id");
 
-    DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureDataStream =
+    DataStream<BotSignature> ipSignatureDataStream =
         agentIpAttributeDatastream
             .keyBy("clientIp")
             .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
@@ -239,7 +238,7 @@ public class SojournerRTJobForQA {
             .name("Attribute Operator (IP)")
             .uid("ip-id");
 
-    SplitStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureSplitStream =
+    SplitStream<BotSignature> ipSignatureSplitStream =
         ipSignatureDataStream.split(new SplitFunction());
 
     ipSignatureSplitStream
@@ -257,14 +256,14 @@ public class SojournerRTJobForQA {
         .uid("ip-expiration-id");
 
     // union attribute signature for broadcast
-    DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> attributeSignatureDataStream =
+    DataStream<BotSignature> attributeSignatureDataStream =
         agentIpSignatureDataStream
             .union(agentSignatureDataStream)
             .union(ipSignatureDataStream)
             .union(guidSignatureDataStream);
 
     // attribute signature broadcast
-    BroadcastStream<Tuple4<String, Boolean, Set<Integer>, Long>> attributeSignatureBroadcastStream =
+    BroadcastStream<BotSignature> attributeSignatureBroadcastStream =
         attributeSignatureDataStream.broadcast(MapStateDesc.attributeSignatureDesc);
 
     // transform ubiEvent,ubiSession to same type and union

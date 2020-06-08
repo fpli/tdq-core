@@ -2,11 +2,11 @@ package com.ebay.sojourner.rt.operators.attribute;
 
 import com.ebay.sojourner.common.model.AgentAttribute;
 import com.ebay.sojourner.common.model.AgentAttributeAccumulator;
+import com.ebay.sojourner.common.model.BotSignature;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import org.apache.flink.api.java.tuple.Tuple;
-import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
@@ -14,14 +14,14 @@ import org.apache.flink.util.Collector;
 
 public class AgentWindowProcessFunction
     extends ProcessWindowFunction<
-    AgentAttributeAccumulator, Tuple4<String, Boolean, Set<Integer>, Long>, Tuple, TimeWindow> {
+    AgentAttributeAccumulator, BotSignature, Tuple, TimeWindow> {
 
   @Override
   public void process(
       Tuple tuple,
       Context context,
       Iterable<AgentAttributeAccumulator> elements,
-      Collector<Tuple4<String, Boolean, Set<Integer>, Long>> out)
+      Collector<BotSignature> out)
       throws Exception {
 
     AgentAttributeAccumulator agentAttributeAccumulator = elements.iterator().next();
@@ -30,12 +30,14 @@ public class AgentWindowProcessFunction
     if (context.currentWatermark() >= context.window().maxTimestamp()
         && agentAttribute.getBotFlagList() != null
         && agentAttribute.getBotFlagList().size() > 0) {
+      BotSignature botSignature = new BotSignature();
+      botSignature.setType("agent");
+      botSignature.setIsGeneration(false);
+      botSignature.setBotFlags(new ArrayList<>(agentAttribute.getBotFlagList()));
+      botSignature.setExpirationTime(context.window().maxTimestamp());
+      botSignature.setUserAgent(agentAttribute.getAgent());
       out.collect(
-          new Tuple4<>(
-              "agent" + agentAttribute.getAgent(),
-              false,
-              agentAttribute.getBotFlagList(),
-              context.window().maxTimestamp()));
+          botSignature);
     } else if (context.currentWatermark() < context.window().maxTimestamp()
         && agentAttributeAccumulator.getBotFlagStatus().containsValue(1)
         && agentAttribute.getBotFlagList() != null
@@ -47,12 +49,14 @@ public class AgentWindowProcessFunction
           generationBotFlag.add(newBotFlagMap.getKey());
         }
       }
+      BotSignature botSignature = new BotSignature();
+      botSignature.setType("agent");
+      botSignature.setIsGeneration(true);
+      botSignature.setBotFlags(new ArrayList<>(generationBotFlag));
+      botSignature.setExpirationTime(context.window().maxTimestamp());
+      botSignature.setUserAgent(agentAttribute.getAgent());
       out.collect(
-          new Tuple4<>(
-              "agent" + agentAttribute.getAgent(),
-              true,
-              generationBotFlag,
-              context.window().maxTimestamp()));
+          botSignature);
     }
   }
 

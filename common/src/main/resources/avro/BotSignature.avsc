@@ -1,0 +1,91 @@
+{
+  "type": "record",
+  "namespace": "com.ebay.sojourner.common.model",
+  "name": "BotSignature",
+  "fields": [
+    {
+      "name": "type",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    {
+          "name": "userAgent",
+          "type": [
+            "null",
+            {
+              "type": "record",
+              "name": "AgentHash",
+              "fields": [
+                {
+                  "name": "agentHash1",
+                  "type": "long"
+                },
+                {
+                  "name": "agentHash2",
+                  "type": "long"
+                }
+              ]
+            }
+          ],
+          "default": null
+        },
+     {
+          "name": "ip",
+          "type": [
+            "null",
+            "int"
+          ],
+          "default": null
+        },
+         {
+              "name": "guid",
+              "type": [
+                "null",
+                {
+                  "type": "record",
+                  "name": "Guid",
+                  "fields": [
+                    {
+                      "name": "guid1",
+                      "type": "long"
+                    },
+                    {
+                      "name": "guid2",
+                      "type": "long"
+                    }
+                  ]
+                }
+              ],
+              "default": null
+            },
+   {
+         "name": "botFlags",
+         "type": [
+           "null",
+           {
+             "type": "array",
+             "items": "int"
+           }
+         ],
+         "default": null
+       },
+      {
+           "name": "expirationTime",
+           "type": [
+             "null",
+             "long"
+           ]
+         },
+
+         {
+               "name": "isGeneration",
+               "type": [
+                 "null",
+                 "boolean"
+               ]
+             }
+
+  ]
+}

@@ -30,11 +30,12 @@ public class MapStateDesc {
           TypeInformation.of(new TypeHint<Set<Integer>>() {
           }));
 
-  public static final MapStateDescriptor<String, Map<Integer, Long>> attributeSignatureDesc =
+  public static final MapStateDescriptor<String, Map<String, Map<Integer, Long>>>
+      attributeSignatureDesc =
       new MapStateDescriptor<>(
           "broadcast-attributeSignature-state",
           BasicTypeInfo.STRING_TYPE_INFO,
-          TypeInformation.of(new TypeHint<Map<Integer, Long>>() {
+          TypeInformation.of(new TypeHint<Map<String, Map<Integer, Long>>>() {
           }));
 
   public static final MapStateDescriptor<String, Set<Integer>> guidSignatureDesc =

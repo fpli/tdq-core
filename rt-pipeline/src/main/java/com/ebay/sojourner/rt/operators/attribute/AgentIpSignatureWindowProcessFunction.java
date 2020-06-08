@@ -2,11 +2,11 @@ package com.ebay.sojourner.rt.operators.attribute;
 
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.AgentIpAttributeAccumulator;
+import com.ebay.sojourner.common.model.BotSignature;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import org.apache.flink.api.java.tuple.Tuple;
-import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
@@ -15,7 +15,7 @@ import org.apache.flink.util.Collector;
 public class AgentIpSignatureWindowProcessFunction
     extends ProcessWindowFunction<
     AgentIpAttributeAccumulator,
-    Tuple4<String, Boolean, Set<Integer>, Long>,
+    BotSignature,
     Tuple,
     TimeWindow> {
 
@@ -24,7 +24,7 @@ public class AgentIpSignatureWindowProcessFunction
       Tuple tuple,
       Context context,
       Iterable<AgentIpAttributeAccumulator> elements,
-      Collector<Tuple4<String, Boolean, Set<Integer>, Long>> out)
+      Collector<BotSignature> out)
       throws Exception {
 
     AgentIpAttributeAccumulator agentIpAttributeAccumulator = elements.iterator().next();
@@ -33,12 +33,15 @@ public class AgentIpSignatureWindowProcessFunction
     if (context.currentWatermark() >= context.window().maxTimestamp()
         && agentIpAttribute.getBotFlagList() != null
         && agentIpAttribute.getBotFlagList().size() > 0) {
+      BotSignature botSignature = new BotSignature();
+      botSignature.setType("agentIp");
+      botSignature.setIsGeneration(false);
+      botSignature.setBotFlags(new ArrayList<>(agentIpAttribute.getBotFlagList()));
+      botSignature.setExpirationTime(context.window().maxTimestamp());
+      botSignature.setUserAgent(agentIpAttribute.getAgent());
+      botSignature.setIp(agentIpAttribute.getClientIp());
       out.collect(
-          new Tuple4<>(
-              "agentIp" + agentIpAttribute.getAgent() + agentIpAttribute.getClientIp(),
-              false,
-              agentIpAttribute.getBotFlagList(),
-              context.window().maxTimestamp()));
+          botSignature);
     } else if (context.currentWatermark() < context.window().maxTimestamp()
         && agentIpAttributeAccumulator.getBotFlagStatus().containsValue(1)
         && agentIpAttribute.getBotFlagList() != null
@@ -50,12 +53,15 @@ public class AgentIpSignatureWindowProcessFunction
           generationBotFlag.add(newBotFlagMap.getKey());
         }
       }
+      BotSignature botSignature = new BotSignature();
+      botSignature.setType("agentIp");
+      botSignature.setIsGeneration(true);
+      botSignature.setBotFlags(new ArrayList<>(generationBotFlag));
+      botSignature.setExpirationTime(context.window().maxTimestamp());
+      botSignature.setUserAgent(agentIpAttribute.getAgent());
+      botSignature.setIp(agentIpAttribute.getClientIp());
       out.collect(
-          new Tuple4<>(
-              "agentIp" + agentIpAttribute.getAgent() + agentIpAttribute.getClientIp(),
-              true,
-              generationBotFlag,
-              context.window().maxTimestamp()));
+          botSignature);
     }
   }
 

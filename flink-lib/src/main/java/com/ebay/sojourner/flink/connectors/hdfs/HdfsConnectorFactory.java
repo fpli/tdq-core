@@ -1,6 +1,6 @@
 package com.ebay.sojourner.flink.connectors.hdfs;
 
-import com.ebay.sojourner.common.model.CrossSessionSignature;
+import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.JetStreamOutputEvent;
 import com.ebay.sojourner.common.model.JetStreamOutputSession;
@@ -31,7 +31,7 @@ public class HdfsConnectorFactory {
 
   public static StreamingFileSink signatureSinkWithParquet() {
     return HdfsConnectorFactory
-        .createWithParquet(HdfsPathConstants.SIGNATURE_PATH, CrossSessionSignature.class);
+        .createWithParquet(HdfsPathConstants.SIGNATURE_PATH, BotSignature.class);
   }
 
   public static StreamingFileSink intermediateSessionSinkWithParquet() {

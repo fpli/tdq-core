@@ -1,12 +1,13 @@
 package com.ebay.sojourner.rt.operators.attribute;
 
+import com.ebay.sojourner.common.model.BotSignature;
+import com.ebay.sojourner.common.model.Guid;
 import com.ebay.sojourner.common.model.GuidAttribute;
 import com.ebay.sojourner.common.model.GuidAttributeAccumulator;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import org.apache.flink.api.java.tuple.Tuple;
-import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
@@ -14,14 +15,14 @@ import org.apache.flink.util.Collector;
 
 public class GuidWindowProcessFunction
     extends ProcessWindowFunction<
-    GuidAttributeAccumulator, Tuple4<String, Boolean, Set<Integer>, Long>, Tuple, TimeWindow> {
+    GuidAttributeAccumulator, BotSignature, Tuple, TimeWindow> {
 
   @Override
   public void process(
       Tuple tuple,
       Context context,
       Iterable<GuidAttributeAccumulator> elements,
-      Collector<Tuple4<String, Boolean, Set<Integer>, Long>> out)
+      Collector<BotSignature> out)
       throws Exception {
 
     GuidAttributeAccumulator guidAttributeAccumulator = elements.iterator().next();
@@ -30,12 +31,14 @@ public class GuidWindowProcessFunction
     if (context.currentWatermark() >= context.window().maxTimestamp()
         && guidAttribute.getBotFlagList() != null
         && guidAttribute.getBotFlagList().size() > 0) {
+      BotSignature botSignature = new BotSignature();
+      botSignature.setType("guid");
+      botSignature.setIsGeneration(false);
+      botSignature.setBotFlags(new ArrayList<>(guidAttribute.getBotFlagList()));
+      botSignature.setExpirationTime(context.window().maxTimestamp());
+      botSignature.setGuid(new Guid(guidAttribute.getGuid1(),guidAttribute.getGuid2()));
       out.collect(
-          new Tuple4<>(
-              "guid" + guidAttribute.getGuid1() + guidAttribute.getGuid2(),
-              false,
-              guidAttribute.getBotFlagList(),
-              context.window().maxTimestamp()));
+        botSignature);
     } else if (context.currentWatermark() < context.window().maxTimestamp()
         && guidAttributeAccumulator.getBotFlagStatus().containsValue(1)
         && guidAttribute.getBotFlagList() != null
@@ -47,12 +50,14 @@ public class GuidWindowProcessFunction
           generationBotFlag.add(newBotFlagMap.getKey());
         }
       }
+      BotSignature botSignature = new BotSignature();
+      botSignature.setType("guid");
+      botSignature.setIsGeneration(false);
+      botSignature.setBotFlags(new ArrayList<>(generationBotFlag));
+      botSignature.setExpirationTime(context.window().maxTimestamp());
+      botSignature.setGuid(new Guid(guidAttribute.getGuid1(),guidAttribute.getGuid2()));
       out.collect(
-          new Tuple4<>(
-              "guid" + guidAttribute.getGuid1() + guidAttribute.getGuid2(),
-              true,
-              generationBotFlag,
-              context.window().maxTimestamp()));
+          botSignature);
     }
   }
 

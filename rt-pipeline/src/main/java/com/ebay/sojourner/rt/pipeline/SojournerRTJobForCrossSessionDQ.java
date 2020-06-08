@@ -1,15 +1,16 @@
 package com.ebay.sojourner.rt.pipeline;
 
 import com.ebay.sojourner.common.model.AgentIpAttribute;
-import com.ebay.sojourner.common.model.CrossSessionSignature;
+import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.SessionCore;
-import com.ebay.sojourner.flink.common.util.Constants;
-import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
+import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
-import com.ebay.sojourner.rt.common.broadcast.CrossSessionDQBroadcastProcessFunction;
+import com.ebay.sojourner.flink.common.util.Constants;
 import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
+import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
+import com.ebay.sojourner.rt.common.broadcast.CrossSessionDQBroadcastProcessFunction;
 import com.ebay.sojourner.rt.operators.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.AgentIpAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.AgentIpAttributeAggSliding;
@@ -20,11 +21,7 @@ import com.ebay.sojourner.rt.operators.attribute.GuidAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.GuidWindowProcessFunction;
 import com.ebay.sojourner.rt.operators.attribute.IpAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.IpWindowProcessFunction;
-import com.ebay.sojourner.rt.operators.attribute.TupleToCrossSessionSignatureMapFunction;
 import com.ebay.sojourner.rt.operators.session.IntermediateSessionToSessionCoreMapFunction;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
-import java.util.Set;
-import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -73,7 +70,7 @@ public class SojournerRTJobForCrossSessionDQ {
             .setParallelism(FlinkEnvUtils.getInteger(Constants.PRE_AGENT_IP_PARALLELISM))
             .uid("pre-agent-ip-id");
 
-    DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> guidSignatureDataStream =
+    DataStream<BotSignature> guidSignatureDataStream =
         sessionCoreDS
             .keyBy("guid")
             .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
@@ -83,7 +80,7 @@ public class SojournerRTJobForCrossSessionDQ {
             .setParallelism(FlinkEnvUtils.getInteger(Constants.GUID_PARALLELISM))
             .uid("guid-id");
 
-    DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentIpSignatureDataStream =
+    DataStream<BotSignature> agentIpSignatureDataStream =
         agentIpAttributeDatastream
             .keyBy("agent", "clientIp")
             .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
@@ -94,7 +91,7 @@ public class SojournerRTJobForCrossSessionDQ {
             .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_IP_PARALLELISM))
             .uid("agent-ip-id");
 
-    DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> agentSignatureDataStream =
+    DataStream<BotSignature> agentSignatureDataStream =
         agentIpAttributeDatastream
             .keyBy("agent")
             .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
@@ -104,7 +101,7 @@ public class SojournerRTJobForCrossSessionDQ {
             .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_PARALLELISM))
             .uid("agent-id");
 
-    DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> ipSignatureDataStream =
+    DataStream<BotSignature> ipSignatureDataStream =
         agentIpAttributeDatastream
             .keyBy("clientIp")
             .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
@@ -115,27 +112,28 @@ public class SojournerRTJobForCrossSessionDQ {
             .uid("ip-id");
 
     // union attribute signature for broadcast
-    DataStream<Tuple4<String, Boolean, Set<Integer>, Long>> attributeSignatureDataStream =
+    DataStream<BotSignature> attributeSignatureDataStream =
         agentIpSignatureDataStream
             .union(agentSignatureDataStream)
             .union(ipSignatureDataStream)
             .union(guidSignatureDataStream);
 
     // signatures hdfs sink
-    DataStream<CrossSessionSignature> tupleToCrossSessionDataStream = attributeSignatureDataStream
-        .map(new TupleToCrossSessionSignatureMapFunction())
-        .name("Tuple4ToCrossSessionSignature")
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_IP_PARALLELISM))
-        .uid("tuple4-transform-id");
+    //    DataStream<CrossSessionSignature> tupleToCrossSessionDataStream =
+    //    attributeSignatureDataStream
+    //        .map(new TupleToCrossSessionSignatureMapFunction())
+    //        .name("Tuple4ToCrossSessionSignature")
+    //        .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_IP_PARALLELISM))
+    //        .uid("tuple4-transform-id");
 
-    tupleToCrossSessionDataStream
+    attributeSignatureDataStream
         .addSink(HdfsConnectorFactory.signatureSinkWithParquet())
         .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_IP_PARALLELISM))
         .name("SignaturesSink")
         .uid("signature-sink-id");
 
     // attribute signature broadcast
-    BroadcastStream<Tuple4<String, Boolean, Set<Integer>, Long>> attributeSignatureBroadcastStream =
+    BroadcastStream<BotSignature> attributeSignatureBroadcastStream =
         attributeSignatureDataStream.broadcast(MapStateDesc.attributeSignatureDesc);
 
     // connect broadcast

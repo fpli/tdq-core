@@ -103,6 +103,12 @@ public class UbiSessionHelper {
         && UbiLookups.getInstance().getAgentMatcher().match(userAgent);
   }
 
+  public static boolean isAgentDeclarative(String userAgent)
+      throws IOException, InterruptedException {
+    return StringUtils.isNotBlank(userAgent)
+        && UbiLookups.getInstance().getAgentMatcher().match(userAgent);
+  }
+
   public static boolean isNonIframRdtCountZero(Object session) {
 
     if (session instanceof SessionCore) {
