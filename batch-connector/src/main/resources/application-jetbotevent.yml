@@ -1,0 +1,22 @@
+kafka:
+  common:
+    consumer:
+      brokers:
+        default: rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
+      topic:
+        default: behavior.pulsar.misc.bot
+      group-id:
+        default: sojourner-jetstream-event-bot
+
+flink:
+  app:
+    parallelism:
+      source:
+        default: 30
+      sink:
+        hdfs: 50
+
+hdfs:
+  dump:
+    path: hdfs://apollo-rno/sys/soj/ubd/jetstream_events/type=bot/
+    class-name: com.ebay.sojourner.common.model.JetStreamOutputEvent

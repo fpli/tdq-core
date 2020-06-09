@@ -1,0 +1,22 @@
+kafka:
+  common:
+    consumer:
+      brokers:
+        default: rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
+      topic:
+        default: behavior.pulsar.sojsession.sessionend
+      group-id:
+        default: sojourner-jetstream-session-non-bot
+
+flink:
+  app:
+    parallelism:
+      source:
+        default: 15
+      sink:
+        hdfs: 15
+
+hdfs:
+  dump:
+    path: hdfs://apollo-rno/sys/soj/ubd/jetstream_sessions/type=nonbot/
+    class-name: com.ebay.sojourner.common.model.JetStreamOutputSession

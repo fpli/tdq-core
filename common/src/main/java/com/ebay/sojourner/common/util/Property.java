@@ -244,14 +244,8 @@ public class Property {
   // ------------------------- batch connector property -------------------------
   // kafka consumer
   public static final String KAFKA_COMMON_CONSUMER_BROKERS_DEFAULT = "kafka.common.consumer.brokers.default";
-  public static final String KAFKA_COMMON_CONSUMER_BROKERS_BOT = "kafka.common.consumer.brokers.bot";
-  public static final String KAFKA_COMMON_CONSUMER_BROKERS_NON_BOT = "kafka.common.consumer.brokers.non-bot";
   public static final String KAFKA_COMMON_CONSUMER_TOPIC_DEFAULT = "kafka.common.consumer.topic.default";
-  public static final String KAFKA_COMMON_CONSUMER_TOPIC_BOT = "kafka.common.consumer.topic.bot";
-  public static final String KAFKA_COMMON_CONSUMER_TOPIC_NON_BOT = "kafka.common.consumer.topic.non-bot";
   public static final String KAFKA_COMMON_CONSUMER_GROUP_ID_DEFAULT = "kafka.common.consumer.group-id.default";
-  public static final String KAFKA_COMMON_CONSUMER_GROUP_ID_BOT = "kafka.common.consumer.group-id.bot";
-  public static final String KAFKA_COMMON_CONSUMER_GROUP_ID_NON_BOT = "kafka.common.consumer.group-id.non-bot";
 
   // kafka producer
   public static final String KAFKA_COMMON_PRODUCER_BROKERS_DEFAULT = "kafka.common.producer.brokers.default";
@@ -259,14 +253,12 @@ public class Property {
 
   // parallelism config
   public static final String SOURCE_DEFAULT_PARALLELISM = "flink.app.parallelism.source.default";
-  public static final String SOURCE_BOT_PARALLELISM = "flink.app.parallelism.source.bot";
-  public static final String SOURCE_NON_BOT_PARALLELISM = "flink.app.parallelism.source.non-bot";
   public static final String SINK_HDFS_PARALLELISM = "flink.app.parallelism.sink.hdfs";
   public static final String SINK_KAFKA_PARALLELISM = "flink.app.parallelism.sink.kafka";
 
   // hdfs
   public static final String HDFS_DUMP_PATH = "hdfs.dump.path";
-  public static final String HDFS_DUMP_CLASS = "hdfs.dump.class";
+  public static final String HDFS_DUMP_CLASS = "hdfs.dump.class-name";
 
   // ------------------------- rt pipeline prod property ------------------------
   // stream - pathfinder

@@ -9,8 +9,10 @@ import com.ebay.sojourner.common.util.PropertyUtils;
 import com.ebay.sojourner.common.util.UBIConfig;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+@Slf4j
 public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
 
@@ -259,7 +261,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
         && intermediateMetrics.getRoverEntryTs() <= startTSOnCurrentCobrandSite + SESCOND1
         && "15".equals(intermediateMetrics.getMpxChannelId())) {
 
-      System.out.println("this is for 257 14");
+      log.info("this is for 257 14");
       return 14;
     }
     if (intermediateMetrics.getRoverEntryTs() != null
@@ -369,7 +371,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
     }
     if ("15".equals(intermediateMetrics.getImgMpxChannelId())) {
 
-      System.out.println("this is for 367 14");
+      log.info("this is for 367 14");
       return 14;
     }
     if ("16".equals(intermediateMetrics.getImgMpxChannelId())) {
@@ -388,11 +390,11 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
       return 25;
     }
     if (intermediateMetrics.getRefDomain().startsWith("itemlistings.ebay.")) {
-      System.out.println("this is for 390");
+      log.info("this is for 390");
       return 21;
     }
     if (intermediateMetrics.getRefDomain().matches(regString4Id21)) {
-      System.out.println("this is for 394");
+      log.info("this is for 394");
       return 21;
     }
     if (intermediateMetrics.getRefDomain().contains(".craigslist.")) {
@@ -403,7 +405,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
       return 8;
     }
     if (intermediateMetrics.getRefDomain().matches(".*toolbar.*\\.google\\..*")) {
-      System.out.println("this is for 405");
+      log.info("this is for 405");
       return 21;
     }
     if (intermediateMetrics.getRefDomain().matches(regString4Id22)) {
@@ -456,14 +458,14 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
       if (landPageSet1.contains(intermediateMetrics.getLandPageID())) {
         return 8;
       }
-      System.out.println("this is for 458");
+      log.info("this is for 458");
       return 21;
     }
     if (intermediateMetrics.getRefDomain().matches(regString4Id21_1)) {
       if (landPageSet1.contains(intermediateMetrics.getLandPageID())) {
         return 8;
       }
-      System.out.println("this is for 465");
+      log.info("this is for 465");
       return 21;
     }
     if (StringUtils.isBlank(intermediateMetrics.getRefDomain())
@@ -510,7 +512,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
       return 8;
     }
     if (intermediateMetrics.getSearchAgentTypeId() != null) {
-      System.out.println("this is for 512");
+      log.info("this is for 512");
       return 21;
     }
     if (intermediateMetrics.getFirstNotifyTs() != null
@@ -524,13 +526,13 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
         && intermediateMetrics.getFirstMppId() != null
         && intermediateMetrics.getFirstMppId() > 0) {
 
-      System.out.println("this is for 510 14");
+      log.info("this is for 510 14");
       return 14;
     }
     if (intermediateMetrics.getFinalMppId() != null
         && intermediateMetrics.getFinalMppId() > 0) {
 
-      System.out.println("this is for 523 14");
+      log.info("this is for 523 14");
       return 14;
     }
     if (StringUtils.isBlank(intermediateMetrics.getRefDomain())) {

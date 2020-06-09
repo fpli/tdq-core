@@ -32,10 +32,10 @@ flink:
       kafka-dump: Unified Bot Detection KAFKA Load Pipeline
     parallelism:
       source:
-        default: 100
+        default: 150
       sink:
         kafka: 100
-        hdfs: 100
+        hdfs: 150
     checkpoint:
       data-dir: /opt/sojourner-ubd/checkpoint
       interval-ms: 300000

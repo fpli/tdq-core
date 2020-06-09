@@ -8,6 +8,7 @@ import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
+import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
@@ -23,6 +24,7 @@ import com.ebay.sojourner.rt.common.metrics.EventMetricsCollectorProcessFunction
 import com.ebay.sojourner.rt.common.metrics.GuidMetricsCollectorProcessFunction;
 import com.ebay.sojourner.rt.common.metrics.IpMetricsCollectorProcessFunction;
 import com.ebay.sojourner.rt.common.metrics.PipelineMetricsCollectorProcessFunction;
+import com.ebay.sojourner.rt.common.util.SignatureUtils;
 import com.ebay.sojourner.rt.operators.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.AgentIpAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.AgentIpAttributeAggSliding;
@@ -35,6 +37,7 @@ import com.ebay.sojourner.rt.operators.attribute.IpAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.IpWindowProcessFunction;
 import com.ebay.sojourner.rt.operators.event.DetectableEventMapFunction;
 import com.ebay.sojourner.rt.operators.event.EventDataStreamBuilder;
+import com.ebay.sojourner.rt.operators.event.SojEventFilterFunction;
 import com.ebay.sojourner.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.rt.operators.session.DetectableSessionMapFunction;
@@ -297,8 +300,15 @@ public class SojournerRTJob {
         .name("SojSession")
         .uid("session-sink-id");
 
-    // kafka sink for sojevent
-    sojEventWithSessionId
+    // kafka sink for sojevent --- 5% traffic
+    SingleOutputStreamOperator<SojEvent> sojEventFilterStream = sojEventWithSessionId
+        .filter(new SojEventFilterFunction())
+        .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.BROADCAST_SLOT_SHARE_GROUP))
+        .name("SojEvent Filter")
+        .uid("sojEvent-filter-id");
+
+    sojEventFilterStream
         .addSink(KafkaConnectorFactory.createKafkaProducer(
             FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_EVENT_NON_BOT),
             FlinkEnvUtils.getListString(Property.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
@@ -353,6 +363,27 @@ public class SojournerRTJob {
         .slotSharingGroup(FlinkEnvUtils.getString(Property.BROADCAST_SLOT_SHARE_GROUP))
         .name("Ip Metrics Collector")
         .uid("ip-metrics-id");
+
+    // signature sink
+    SignatureUtils.buildSignatureKafkaSink(agentIpSignatureDataStream,
+        FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_AGENT_IP),
+        Constants.AGENTIP,
+        FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT_IP));
+
+    SignatureUtils.buildSignatureKafkaSink(agentSignatureDataStream,
+        FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_AGENT),
+        Constants.AGENT,
+        FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT));
+
+    SignatureUtils.buildSignatureKafkaSink(ipSignatureDataStream,
+        FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_IP),
+        Constants.IP,
+        FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SIGNATURE_IP));
+
+    SignatureUtils.buildSignatureKafkaSink(guidSignatureDataStream,
+        FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_GUID),
+        Constants.GUID,
+        FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SIGNATURE_GUID));
 
     // late event sink
     latedStream
