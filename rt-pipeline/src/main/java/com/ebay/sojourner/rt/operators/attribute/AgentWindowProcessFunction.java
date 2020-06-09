@@ -2,6 +2,7 @@ package com.ebay.sojourner.rt.operators.attribute;
 
 import com.ebay.sojourner.common.model.AgentAttribute;
 import com.ebay.sojourner.common.model.AgentAttributeAccumulator;
+import com.ebay.sojourner.common.model.AgentHash;
 import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.rt.common.util.SignatureUtils;
 import java.util.ArrayList;
@@ -26,18 +27,16 @@ public class AgentWindowProcessFunction extends
     AgentAttribute agentAttribute = agentAttributeAccumulator.getAgentAttribute();
     Map<Integer, Integer> signatureStates = agentAttributeAccumulator.getSignatureStates();
     Set<Integer> botFlagList = agentAttribute.getBotFlagList();
+    AgentHash agent = agentAttribute.getAgent();
+    long windowEndTime = context.window().maxTimestamp();
 
     if (context.currentWatermark() >= context.window().maxTimestamp()
         && botFlagList != null
         && botFlagList.size() > 0) {
 
-      BotSignature botSignature = new BotSignature();
-      botSignature.setType(signatureId);
-      botSignature.setIsGeneration(false);
-      botSignature.setBotFlags(new ArrayList<>(agentAttribute.getBotFlagList()));
-      botSignature.setExpirationTime(context.window().maxTimestamp());
-      botSignature.setUserAgent(agentAttribute.getAgent());
-      out.collect(botSignature);
+      out.collect(new BotSignature(signatureId, agent, null, null,
+          new ArrayList<>(botFlagList),
+          windowEndTime, false));
 
     } else if (context.currentWatermark() < context.window().maxTimestamp()
         && signatureStates.containsValue(1)
@@ -46,13 +45,9 @@ public class AgentWindowProcessFunction extends
 
       Set<Integer> newGenerateStates = SignatureUtils.generateNewSignature(signatureStates);
 
-      BotSignature botSignature = new BotSignature();
-      botSignature.setType(signatureId);
-      botSignature.setIsGeneration(true);
-      botSignature.setBotFlags(new ArrayList<>(newGenerateStates));
-      botSignature.setExpirationTime(context.window().maxTimestamp());
-      botSignature.setUserAgent(agentAttribute.getAgent());
-      out.collect(botSignature);
+      out.collect(new BotSignature(signatureId, agent, null, null,
+          new ArrayList<>(newGenerateStates),
+          windowEndTime, true));
     }
   }
 

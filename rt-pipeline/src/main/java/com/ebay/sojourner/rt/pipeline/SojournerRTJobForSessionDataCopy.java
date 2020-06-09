@@ -147,9 +147,7 @@ public class SojournerRTJobForSessionDataCopy {
     // sink for cross session dq
     intermediateSessionDataStream
         .addSink(KafkaConnectorFactory.createKafkaProducer(
-            FlinkEnvUtils.getString(
-                com.ebay.sojourner.flink.common.util
-                    .Constants.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_CROSS_SESSION),
+            FlinkEnvUtils.getString(Constants.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_CROSS_SESSION),
             FlinkEnvUtils.getListString(Constants.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
             IntermediateSession.class,
             FlinkEnvUtils.getString(Constants.BEHAVIOR_TOTAL_NEW_MESSAGE_KEY_SESSION)))

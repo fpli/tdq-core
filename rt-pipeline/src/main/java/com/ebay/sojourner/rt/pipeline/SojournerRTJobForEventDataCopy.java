@@ -71,8 +71,7 @@ public class SojournerRTJobForEventDataCopy {
     // sink for session dq
     bytesFilterDataStream
         .addSink(KafkaConnectorFactory.createKafkaProducerForCopy(
-            FlinkEnvUtils.getString(
-                com.ebay.sojourner.flink.common.util.Constants.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_SESSION),
+            FlinkEnvUtils.getString(Constants.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_SESSION),
             FlinkEnvUtils.getListString(Constants.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT)))
         .setParallelism(FlinkEnvUtils.getInteger(Constants.EVENT_PARALLELISM))
         .name("RawEvent")

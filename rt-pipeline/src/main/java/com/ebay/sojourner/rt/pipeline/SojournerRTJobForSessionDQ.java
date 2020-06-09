@@ -37,8 +37,7 @@ public class SojournerRTJobForSessionDQ {
     // kafka source for copy
     DataStream<RawEvent> rawEventDataStream =
         executionEnvironment.addSource(KafkaSourceFunction.buildSource(
-            FlinkEnvUtils.getString(
-                com.ebay.sojourner.flink.common.util.Constants.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_SESSION),
+            FlinkEnvUtils.getString(Constants.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_SESSION),
             FlinkEnvUtils
                 .getListString(Constants.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
             FlinkEnvUtils.getString(Constants.BEHAVIOR_TOTAL_NEW_GROUP_ID_DQ_SESSION),

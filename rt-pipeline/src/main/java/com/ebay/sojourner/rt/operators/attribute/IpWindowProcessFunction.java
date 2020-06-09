@@ -26,18 +26,16 @@ public class IpWindowProcessFunction extends
     IpAttribute ipAttribute = ipAttributeAccumulator.getIpAttribute();
     Map<Integer, Integer> signatureStates = ipAttributeAccumulator.getSignatureStates();
     Set<Integer> botFlagList = ipAttribute.getBotFlagList();
+    Integer clientIp = ipAttribute.getClientIp();
+    long windowEndTime = context.window().maxTimestamp();
 
     if (context.currentWatermark() >= context.window().maxTimestamp()
         && botFlagList != null
         && botFlagList.size() > 0) {
 
-      BotSignature botSignature = new BotSignature();
-      botSignature.setType(signatureId);
-      botSignature.setIsGeneration(false);
-      botSignature.setBotFlags(new ArrayList<>(ipAttribute.getBotFlagList()));
-      botSignature.setExpirationTime(context.window().maxTimestamp());
-      botSignature.setIp(ipAttribute.getClientIp());
-      out.collect(botSignature);
+      out.collect(new BotSignature(signatureId, null, clientIp, null,
+          new ArrayList<>(botFlagList),
+          windowEndTime, false));
 
     } else if (context.currentWatermark() < context.window().maxTimestamp()
         && signatureStates.containsValue(1)
@@ -46,13 +44,9 @@ public class IpWindowProcessFunction extends
 
       Set<Integer> newGenerateSignatures = SignatureUtils.generateNewSignature(signatureStates);
 
-      BotSignature botSignature = new BotSignature();
-      botSignature.setType(signatureId);
-      botSignature.setIsGeneration(true);
-      botSignature.setBotFlags(new ArrayList<>(newGenerateSignatures));
-      botSignature.setExpirationTime(context.window().maxTimestamp());
-      botSignature.setIp(ipAttribute.getClientIp());
-      out.collect(botSignature);
+      out.collect(new BotSignature(signatureId, null, clientIp, null,
+          new ArrayList<>(newGenerateSignatures),
+          windowEndTime, true));
 
     }
   }

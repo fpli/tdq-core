@@ -6,6 +6,7 @@ import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.SessionCore;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
+import com.ebay.sojourner.flink.common.util.OutputTagUtil;
 import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
@@ -43,9 +44,7 @@ public class SojournerRTJobForCrossSessionDQ {
     DataStream<IntermediateSession> intermediateSessionDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunction.buildSource(
-                FlinkEnvUtils.getString(
-                    com.ebay.sojourner.flink.common.util
-                        .Constants.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_CROSS_SESSION),
+                FlinkEnvUtils.getString(Constants.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_CROSS_SESSION),
                 FlinkEnvUtils
                     .getListString(Constants.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
                 FlinkEnvUtils.getString(Constants.BEHAVIOR_TOTAL_NEW_GROUP_ID_DQ_CROSS_SESSION),
@@ -121,7 +120,7 @@ public class SojournerRTJobForCrossSessionDQ {
     SingleOutputStreamOperator<IntermediateSession> intermediateSessionWithSignature =
         intermediateSessionDataStream
             .connect(attributeSignatureBroadcastStream)
-            .process(new CrossSessionDQBroadcastProcessFunction())
+            .process(new CrossSessionDQBroadcastProcessFunction(OutputTagUtil.sessionOutputTag))
             .setParallelism(FlinkEnvUtils.getInteger(Constants.BROADCAST_PARALLELISM))
             .name("Signature Bot Detector")
             .uid("signature-detection-id");

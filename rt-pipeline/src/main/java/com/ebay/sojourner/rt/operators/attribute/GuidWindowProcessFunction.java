@@ -27,18 +27,18 @@ public class GuidWindowProcessFunction extends
     GuidAttribute guidAttribute = guidAttributeAccumulator.getGuidAttribute();
     Map<Integer, Integer> signatureStates = guidAttributeAccumulator.getSignatureStates();
     Set<Integer> botFlagList = guidAttribute.getBotFlagList();
+    long guid1 = guidAttribute.getGuid1();
+    long guid2 = guidAttribute.getGuid2();
+    Guid guid = new Guid(guid1, guid2);
+    long windowEndTime = context.window().maxTimestamp();
 
     if (context.currentWatermark() >= context.window().maxTimestamp()
         && botFlagList != null
         && botFlagList.size() > 0) {
 
-      BotSignature botSignature = new BotSignature();
-      botSignature.setType(signatureId);
-      botSignature.setIsGeneration(false);
-      botSignature.setBotFlags(new ArrayList<>(guidAttribute.getBotFlagList()));
-      botSignature.setExpirationTime(context.window().maxTimestamp());
-      botSignature.setGuid(new Guid(guidAttribute.getGuid1(), guidAttribute.getGuid2()));
-      out.collect(botSignature);
+      out.collect(new BotSignature(signatureId, null, null, guid,
+          new ArrayList<>(botFlagList),
+          windowEndTime, false));
 
     } else if (context.currentWatermark() < context.window().maxTimestamp()
         && signatureStates.containsValue(1)
@@ -46,13 +46,10 @@ public class GuidWindowProcessFunction extends
         && botFlagList.size() > 0) {
 
       Set<Integer> newGenerateSignatures = SignatureUtils.generateNewSignature(signatureStates);
-      BotSignature botSignature = new BotSignature();
-      botSignature.setType(signatureId);
-      botSignature.setIsGeneration(true);
-      botSignature.setBotFlags(new ArrayList<>(newGenerateSignatures));
-      botSignature.setExpirationTime(context.window().maxTimestamp());
-      botSignature.setGuid(new Guid(guidAttribute.getGuid1(), guidAttribute.getGuid2()));
-      out.collect(botSignature);
+
+      out.collect(new BotSignature(signatureId, null, null, guid,
+          new ArrayList<>(newGenerateSignatures),
+          windowEndTime, true));
     }
   }
 

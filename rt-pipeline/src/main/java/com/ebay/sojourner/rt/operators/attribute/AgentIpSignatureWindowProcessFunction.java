@@ -1,5 +1,6 @@
 package com.ebay.sojourner.rt.operators.attribute;
 
+import com.ebay.sojourner.common.model.AgentHash;
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.AgentIpAttributeAccumulator;
 import com.ebay.sojourner.common.model.BotSignature;
@@ -26,19 +27,17 @@ public class AgentIpSignatureWindowProcessFunction extends
     AgentIpAttribute agentIpAttribute = agentIpAttributeAccumulator.getAgentIpAttribute();
     Map<Integer, Integer> signatureStates = agentIpAttributeAccumulator.getSignatureStates();
     Set<Integer> botFlagList = agentIpAttribute.getBotFlagList();
+    AgentHash agent = agentIpAttribute.getAgent();
+    Integer clientIp = agentIpAttribute.getClientIp();
+    long windowEndTime = context.window().maxTimestamp();
 
     if (context.currentWatermark() >= context.window().maxTimestamp()
         && botFlagList != null
         && botFlagList.size() > 0) {
 
-      BotSignature botSignature = new BotSignature();
-      botSignature.setType(signatureId);
-      botSignature.setIsGeneration(false);
-      botSignature.setBotFlags(new ArrayList<>(botFlagList));
-      botSignature.setExpirationTime(context.window().maxTimestamp());
-      botSignature.setUserAgent(agentIpAttribute.getAgent());
-      botSignature.setIp(agentIpAttribute.getClientIp());
-      out.collect(botSignature);
+      out.collect(new BotSignature(signatureId, agent, clientIp, null,
+          new ArrayList<>(botFlagList),
+          windowEndTime, false));
 
     } else if (context.currentWatermark() < context.window().maxTimestamp()
         && signatureStates.containsValue(1)
@@ -47,14 +46,9 @@ public class AgentIpSignatureWindowProcessFunction extends
 
       Set<Integer> newGenerateSignatures = SignatureUtils.generateNewSignature(signatureStates);
 
-      BotSignature botSignature = new BotSignature();
-      botSignature.setType(signatureId);
-      botSignature.setIsGeneration(true);
-      botSignature.setBotFlags(new ArrayList<>(newGenerateSignatures));
-      botSignature.setExpirationTime(context.window().maxTimestamp());
-      botSignature.setUserAgent(agentIpAttribute.getAgent());
-      botSignature.setIp(agentIpAttribute.getClientIp());
-      out.collect(botSignature);
+      out.collect(new BotSignature(signatureId, agent, clientIp, null,
+          new ArrayList<>(newGenerateSignatures),
+          windowEndTime, true));
 
     }
   }

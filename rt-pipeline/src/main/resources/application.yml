@@ -74,7 +74,11 @@ kafka:
       message-key:
         session: guid
         event: guid
-        signature: signatureId
+        signature:
+          guid: guid
+          ip: ip
+          agent: userAgent
+          agent-ip:
 
 flink:
   app:
@@ -149,8 +153,3 @@ rest-client:
   auth-username-value: soj-flink-app
   auth-token-key: X-Auth-Token
   anth-token-value: B65613BAE51443268AEBCAEF26C30ABE
-
-data-center:
-  lvs: LVS
-  slc: SLC
-  rno: RNO

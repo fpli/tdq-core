@@ -19,10 +19,10 @@ public class Constants {
   public static final String BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_LVS = "kafka.stream.behavior-pathfinder.group-id.default.lvs";
 
   // source & sink config
-  public static final String BEHAVIOR_TOTAL_NEW_GROUP_ID_SESSION_BOT = "kafka.stream.behavior-total-new.group-id.session.bot";
-  public static final String BEHAVIOR_TOTAL_NEW_GROUP_ID_SESSION_NON_BOT = "kafka.stream.behavior-total-new.group-id.session.non-bot";
-  public static final String BEHAVIOR_TOTAL_NEW_GROUP_ID_EVENT_BOT = "kafka.stream.behavior-total-new.group-id.event.bot";
-  public static final String BEHAVIOR_TOTAL_NEW_GROUP_ID_EVENT_NON_BOT = "kafka.stream.behavior-total-new.group-id.event.non-bot";
+  public static final String BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_AGENT_IP = "kafka.stream.behavior-total-new.topic.signature.agent-ip";
+  public static final String BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_AGENT = "kafka.stream.behavior-total-new.topic.signature.agent";
+  public static final String BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_IP = "kafka.stream.behavior-total-new.topic.signature.ip";
+  public static final String BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_GUID = "kafka.stream.behavior-total-new.topic.signature.guid";
   public static final String BEHAVIOR_TOTAL_NEW_GROUP_ID_SIGNATURE_AGENT_IP = "kafka.stream.behavior-total-new.group-id.signature.agent-ip";
   public static final String BEHAVIOR_TOTAL_NEW_GROUP_ID_SIGNATURE_AGENT = "kafka.stream.behavior-total-new.group-id.signature.agent";
   public static final String BEHAVIOR_TOTAL_NEW_GROUP_ID_SIGNATURE_IP = "kafka.stream.behavior-total-new.group-id.signature.ip";
@@ -54,6 +54,11 @@ public class Constants {
   public static final String BEHAVIOR_TRAFFICJAM_MESSAGE_KEY_EVENT = "kafka.stream.behavior-trafficjam.message-key.event";
   public static final String BEHAVIOR_TRAFFICJAM_MESSAGE_KEY_SIGNATURE = "kafka.stream.behavior-trafficjam.message-key.signatureId";
 
+  // dq
+  //TODO: will delete after dataquality
+  public static final String BEHAVIOR_TOTAL_NEW_TOPIC_DQ_SESSION = "kafka.stream.behavior-total-new.topic.dq.session";
+  public static final String BEHAVIOR_TOTAL_NEW_TOPIC_DQ_CROSS_SESSION = "kafka.stream.behavior-total-new.topic.dq.cross-session";
+
   /*
     flink config
     1. parallelism and slot share group config
@@ -73,7 +78,6 @@ public class Constants {
   public static final String METRICS_PARALLELISM = "flink.app.parallelism.metrics";
 
   public static final String DEFAULT_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.default";
-  public static final String SOURCE_EVENT_SLOT_SHARE_GROUP_PREFFIX = "flink.app.slot-sharing-group.source-event";
   public static final String SOURCE_EVENT_LVS_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event-lvs";
   public static final String SOURCE_EVENT_SLC_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event-slc";
   public static final String SOURCE_EVENT_RNO_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event-rno";
