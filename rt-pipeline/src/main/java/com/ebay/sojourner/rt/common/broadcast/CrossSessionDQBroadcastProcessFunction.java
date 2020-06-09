@@ -2,24 +2,33 @@ package com.ebay.sojourner.rt.common.broadcast;
 
 import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.IntermediateSession;
+import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.common.util.TransformUtil;
+import com.ebay.sojourner.common.util.UbiSessionHelper;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
-import com.ebay.sojourner.rt.util.TransformUtil;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.util.Collector;
+import org.apache.flink.util.OutputTag;
 
-public class CrossSessionDQBroadcastProcessFunction extends BroadcastProcessFunction<
-    IntermediateSession, BotSignature, IntermediateSession> {
+@Slf4j
+public class CrossSessionDQBroadcastProcessFunction extends
+    BroadcastProcessFunction<IntermediateSession, BotSignature, IntermediateSession> {
 
-  public static final String FIELD_DELIM = "\007";
+  private OutputTag outputTag = null;
+
+  public CrossSessionDQBroadcastProcessFunction(OutputTag sessionOutputTag) {
+    outputTag = sessionOutputTag;
+  }
 
   @Override
-  public void processElement(IntermediateSession intermediateSession, ReadOnlyContext context,
-      Collector<IntermediateSession> out) throws Exception {
+  public void processElement(IntermediateSession intermediateSession,
+      ReadOnlyContext context, Collector<IntermediateSession> out) throws Exception {
 
     ReadOnlyBroadcastState<String, Map<String, Map<Integer, Long>>> attributeSignature =
         context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
@@ -39,7 +48,7 @@ public class CrossSessionDQBroadcastProcessFunction extends BroadcastProcessFunc
     long[] long4AgentHash = TransformUtil
         .md522Long(TransformUtil.getMD5(intermediateSession.getUserAgent()));
     Map<String, Map<Integer, Long>> agentSignature = attributeSignature.get("agent");
-    String agent = long4AgentHash[0] + FIELD_DELIM + long4AgentHash[1];
+    String agent = long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1];
     if (agentSignature.containsKey(agent)) {
       for (Map.Entry<Integer, Long> agentBotFlagMap :
           agentSignature.get(agent).entrySet()) {
@@ -49,14 +58,12 @@ public class CrossSessionDQBroadcastProcessFunction extends BroadcastProcessFunc
 
     // agentIp
     Map<String, Map<Integer, Long>> agentIpSignature = attributeSignature.get("agentIp");
-    String agentIp = long4AgentHash[0] + FIELD_DELIM + long4AgentHash[1] + FIELD_DELIM + (
-        TransformUtil.ipToInt(intermediateSession.getIp()) == null ? "0"
-            : TransformUtil.ipToInt(intermediateSession.getIp()).toString());
+    String agentIp =
+        long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1] + Constants.FIELD_DELIM + (
+            TransformUtil.ipToInt(intermediateSession.getIp()) == null ? "0"
+                : TransformUtil.ipToInt(intermediateSession.getIp()).toString());
     if (agentIpSignature.containsKey(agentIp)) {
-      for (Map.Entry<Integer, Long> agentIpBotFlagMap :
-          agentIpSignature
-              .get(agentIp)
-              .entrySet()) {
+      for (Map.Entry<Integer, Long> agentIpBotFlagMap : agentIpSignature.get(agentIp).entrySet()) {
         intermediateSession.getBotFlagList().add(agentIpBotFlagMap.getKey());
       }
     }
@@ -64,37 +71,39 @@ public class CrossSessionDQBroadcastProcessFunction extends BroadcastProcessFunc
     // guid
     Map<String, Map<Integer, Long>> guidSignature = attributeSignature.get("guid");
     long[] long4Cguid = TransformUtil.md522Long(intermediateSession.getGuid());
-    String guid = long4Cguid[0] + FIELD_DELIM + long4Cguid[1];
+    String guid = long4Cguid[0] + Constants.FIELD_DELIM + long4Cguid[1];
     if (guidSignature.containsKey(guid)) {
-      for (Map.Entry<Integer, Long> guidBotFlagMap :
-          guidSignature.get(guid).entrySet()) {
+      for (Map.Entry<Integer, Long> guidBotFlagMap : guidSignature.get(guid).entrySet()) {
         intermediateSession.getBotFlagList().add(guidBotFlagMap.getKey());
       }
     }
 
-    if ((intermediateSession.getBotFlagList().contains(221) && intermediateSession.getBotFlagList()
-        .contains(223))
+    if ((UbiSessionHelper.isAgentDeclarative(intermediateSession.getUserAgent())
+        && intermediateSession.getBotFlagList().contains(223))
         || (intermediateSession.getBotFlagList().contains(220)
         && intermediateSession.getBotFlagList().contains(222))) {
       intermediateSession.getBotFlagList().add(202);
     }
 
-    if ((intermediateSession.getBotFlagList().contains(221) && intermediateSession.getBotFlagList()
-        .contains(223))
+    if ((UbiSessionHelper.isAgentDeclarative(intermediateSession.getUserAgent())
+        && intermediateSession.getBotFlagList().contains(223))
         || (intermediateSession.getBotFlagList().contains(220)
         && intermediateSession.getBotFlagList().contains(222))) {
       intermediateSession.getBotFlagList().add(210);
     }
 
-    if (intermediateSession.getBotFlagList().contains(223)) {
+    if (intermediateSession.getBotFlagList().contains(223)
+        && intermediateSession.getBotFlagList().contains(224)) {
       intermediateSession.getBotFlagList().add(211);
     }
-    out.collect(intermediateSession);
+    context.output(outputTag, intermediateSession);
+
   }
 
   @Override
-  public void processBroadcastElement(BotSignature attributeSignature,
-      Context context, Collector<IntermediateSession> out) throws Exception {
+  public void processBroadcastElement(BotSignature attributeSignature, Context context,
+      Collector<IntermediateSession> out) throws Exception {
+
     BroadcastState<String, Map<String, Map<Integer, Long>>> attributeBroadcastStatus =
         context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
 
@@ -106,23 +115,24 @@ public class CrossSessionDQBroadcastProcessFunction extends BroadcastProcessFunc
         attributeBroadcastStatus.get(attributeSignature.getType());
     expirationTime = attributeSignature.getExpirationTime();
     isGeneration = attributeSignature.getIsGeneration();
+
     if ("agent".equals(attributeSignature.getType())) {
-      signatureId =
-          attributeSignature.getUserAgent().getAgentHash1() + FIELD_DELIM + attributeSignature
-              .getUserAgent().getAgentHash2();
+      signatureId = attributeSignature.getUserAgent().getAgentHash1() + Constants.FIELD_DELIM
+          + attributeSignature.getUserAgent().getAgentHash2();
 
     } else if ("agentIp".equals(attributeSignature.getType())) {
-      signatureId =
-          attributeSignature.getUserAgent().getAgentHash1() + FIELD_DELIM + attributeSignature
-              .getUserAgent().getAgentHash2() + FIELD_DELIM + attributeSignature.getIp();
+      signatureId = attributeSignature.getUserAgent().getAgentHash1() + Constants.FIELD_DELIM
+          + attributeSignature.getUserAgent().getAgentHash2() + Constants.FIELD_DELIM
+          + attributeSignature.getIp();
 
     } else if ("ip".equals(attributeSignature.getType())) {
       signatureId = attributeSignature.getIp().toString();
     } else if ("guid".equals(attributeSignature.getType())) {
       signatureId =
-          attributeSignature.getGuid().getGuid1() + FIELD_DELIM + attributeSignature.getGuid()
-              .getGuid2();
+          attributeSignature.getGuid().getGuid1() + Constants.FIELD_DELIM + attributeSignature
+              .getGuid().getGuid2();
     }
+
     if (isGeneration) {
       for (int botFlag : botFlags) {
         if (signature.get(signatureId) != null) {
@@ -137,7 +147,6 @@ public class CrossSessionDQBroadcastProcessFunction extends BroadcastProcessFunc
           HashMap<Integer, Long> newBotFlagStatus = new HashMap<>();
           newBotFlagStatus.put(botFlag, expirationTime);
           signature.put(signatureId, newBotFlagStatus);
-
         }
       }
     } else {

@@ -4,15 +4,16 @@ import com.ebay.sojourner.business.ubd.detectors.AgentIpSignatureBotDetector;
 import com.ebay.sojourner.business.ubd.indicators.AgentIpIndicatorsSliding;
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.AgentIpAttributeAccumulator;
+import com.ebay.sojourner.rt.common.util.SignatureUtils;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.functions.AggregateFunction;
 
 @Slf4j
-public class AgentIpAttributeAggSliding
-    implements AggregateFunction<
-    AgentIpAttribute, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
+public class AgentIpAttributeAggSliding implements
+    AggregateFunction<AgentIpAttribute, AgentIpAttributeAccumulator, AgentIpAttributeAccumulator> {
 
   @Override
   public AgentIpAttributeAccumulator createAccumulator() {
@@ -29,13 +30,15 @@ public class AgentIpAttributeAggSliding
   }
 
   @Override
-  public AgentIpAttributeAccumulator add(
-      AgentIpAttribute agentIpAttribute, AgentIpAttributeAccumulator agentIpAttributeAccumulator) {
+  public AgentIpAttributeAccumulator add(AgentIpAttribute agentIpAttribute,
+      AgentIpAttributeAccumulator agentIpAttributeAccumulator) {
+
     if (agentIpAttributeAccumulator.getAgentIpAttribute().getClientIp() == null
         && agentIpAttributeAccumulator.getAgentIpAttribute().getAgent() == null) {
       agentIpAttributeAccumulator.getAgentIpAttribute().setClientIp(agentIpAttribute.getClientIp());
       agentIpAttributeAccumulator.getAgentIpAttribute().setAgent(agentIpAttribute.getAgent());
     }
+
     try {
       AgentIpIndicatorsSliding.getInstance()
           .feed(agentIpAttribute, agentIpAttributeAccumulator);
@@ -44,30 +47,28 @@ public class AgentIpAttributeAggSliding
     }
 
     Set<Integer> agentIpBotFlag = null;
+    Map<Integer, Integer> signatureStates = agentIpAttributeAccumulator.getSignatureStates();
 
     try {
-      if (agentIpAttributeAccumulator.getBotFlagStatus().containsValue(0)
-          || agentIpAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
-
-        agentIpBotFlag =
-            AgentIpSignatureBotDetector.getInstance().getBotFlagList(
-                agentIpAttributeAccumulator.getAgentIpAttribute());
+      if (signatureStates.containsValue(0) || signatureStates.containsValue(1)) {
+        agentIpBotFlag = AgentIpSignatureBotDetector.getInstance()
+            .getBotFlagList(agentIpAttributeAccumulator.getAgentIpAttribute());
         if (agentIpBotFlag.contains(5)) {
-          switch (agentIpAttributeAccumulator.getBotFlagStatus().get(5)) {
+          switch (signatureStates.get(5)) {
             case 0:
-              agentIpAttributeAccumulator.getBotFlagStatus().put(5, 1);
+              signatureStates.put(5, 1);
               break;
             case 1:
-              agentIpAttributeAccumulator.getBotFlagStatus().put(5, 2);
+              signatureStates.put(5, 2);
               break;
           }
         } else if (agentIpBotFlag.contains(8)) {
-          switch (agentIpAttributeAccumulator.getBotFlagStatus().get(8)) {
+          switch (signatureStates.get(8)) {
             case 0:
-              agentIpAttributeAccumulator.getBotFlagStatus().put(8, 1);
+              signatureStates.put(8, 1);
               break;
             case 1:
-              agentIpAttributeAccumulator.getBotFlagStatus().put(8, 2);
+              signatureStates.put(8, 2);
               break;
           }
         }
@@ -76,14 +77,9 @@ public class AgentIpAttributeAggSliding
       log.error("start get agent ip botFlagList failed", e);
     }
 
-    Set<Integer> botFlagList = agentIpAttributeAccumulator.getAgentIpAttribute().getBotFlagList();
-
-    if (agentIpBotFlag != null && agentIpBotFlag.size() > 0) {
-      botFlagList.addAll(agentIpBotFlag);
-    }
-
+    Set<Integer> botFlagList = SignatureUtils.setBotFlags(agentIpBotFlag,
+        agentIpAttributeAccumulator.getAgentIpAttribute().getBotFlagList());
     agentIpAttributeAccumulator.getAgentIpAttribute().setBotFlagList(botFlagList);
-
     return agentIpAttributeAccumulator;
   }
 

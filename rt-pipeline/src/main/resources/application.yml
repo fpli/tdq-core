@@ -10,6 +10,14 @@ kafka:
     producer:
       batch-size: 4096
       request-timeout-ms: 60000
+      message-key:
+        session: guid
+        event: guid
+        signature:
+          guid: guid
+          ip: ip
+          agent: userAgent
+          agent-ip: userAgent
 
   stream:
     behavior-pathfinder:
@@ -71,42 +79,6 @@ kafka:
           agent: sojourner-pathfinder-agent
           ip: sojourner-pathfinder-ip
           guid: sojourner-pathfinder-guid
-      message-key:
-        session: guid
-        event: guid
-        signature: signatureId
-
-    behavior-total:
-      bootstrap-servers:
-        default:
-          - rhs-rdrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.26.tess.io:9092
-          - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
-          - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
-          - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
-          - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
-      topic: behavior.total.sojevent.total
-      groupid: jetstream-non-bot-event
-
-    behavior-pulsar:
-      bootstrap-servers:
-        default:
-          - rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
-          - rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
-          - rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
-          - rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
-          - rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
-      topic:
-        session:
-          bot: behavior.pulsar.sojsession.botsession
-          non-bot: behavior.pulsar.sojsession.sessionend
-        event:
-          bot: behavior.pulsar.misc.bot
-      groupid:
-        session:
-          bot: jetstream-bot-session
-          non-bot: jetstream-non-bot-session
-        event:
-          bot: jetstream-bot-event
 
 flink:
   app:
@@ -114,9 +86,8 @@ flink:
       full-pipeline: Unified Bot Detection RT Pipeline
       data-quality: Unified Bot Detection RT DQ Pipeline
       hot-deploy: Unified Bot Detection RT Hot Deploy Pipeline
-      hdfs-dump: Unified Bot Detection HDFS Load Pipeline
-      kafka-dump: Unified Bot Detection KAFKA Load Pipeline
     parallelism:
+      default: 100
       source: 100
       event: 100
       session: 640
@@ -164,22 +135,13 @@ hdfs:
       session: /jetstream_sessions
 
 zookeeper:
-  server:
-    - zk-0.sojzk-ns.svc.32.tess.io:2181
-    - zk-1.sojzk-ns.svc.32.tess.io:2181
-    - zk-2.sojzk-ns.svc.32.tess.io:2181
   sessionTimeoutMs: 15000
   connectionTimeoutMs: 5000
   maxRetries: 3
   baseSleepTimeMs: 1000
   namespace: sojourner
-  nodepath: /rule/publish/notification
 
 rest-client:
   rest-server: https://sojubdportalservice.vip.ebay.com
-  published-rule-list: /api/rule/list/published
-  specified-rule: /api/rule/
-  auth-username-key: X-Auth-Username
-  auth-username-value: soj-flink-app
-  auth-token-key: X-Auth-Token
-  anth-token-value: B65613BAE51443268AEBCAEF26C30ABE
+  auth-username: soj-flink-app
+  auth-token: B65613BAE51443268AEBCAEF26C30ABE

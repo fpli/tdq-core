@@ -1,9 +1,7 @@
 package com.ebay.sojourner.common.zookeeper;
 
-import com.ebay.sojourner.common.env.EnvironmentUtils;
-import com.ebay.sojourner.common.util.Constants;
 import com.google.common.base.Charsets;
-import java.util.ArrayList;
+import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.RetryPolicy;
@@ -17,33 +15,33 @@ public class ZkClient {
 
   private CuratorFramework client;
 
-  public ZkClient() {
-    init();
+  public ZkClient(ZkConfig config) {
+    init(config);
   }
 
-  private void init() {
-    // create client
-    ArrayList<String> zkServerList = EnvironmentUtils
-        .get(Constants.ZOOKEEPER_SERVER, ArrayList.class);
+  private void init(ZkConfig config) {
+    Preconditions.checkNotNull(config);
+    Preconditions.checkNotNull(config.getServer());
 
+    // create client
     RetryPolicy retryPolicy = new ExponentialBackoffRetry(
-        EnvironmentUtils.get(Constants.ZOOKEEPER_BASE_SLEEP_TIME_MS, Integer.class),
-        EnvironmentUtils.get(Constants.ZOOKEEPER_MAX_RETRIES, Integer.class));
+        config.getBaseSleepTimeMs(),
+        config.getMaxRetries());
+
     client = CuratorFrameworkFactory.builder()
-        .connectString(String.join(",", zkServerList))
+        .connectString(config.getServer())
         .retryPolicy(retryPolicy)
-        .sessionTimeoutMs(
-            EnvironmentUtils.get(Constants.ZOOKEEPER_SESSION_TIMEOUT_MS, Integer.class))
-        .connectionTimeoutMs(
-            EnvironmentUtils.get(Constants.ZOOKEEPER_CONNECTION_TIMEOUT_MS, Integer.class))
-        .namespace(EnvironmentUtils.get(Constants.ZOOKEEPER_NAMESPACE))
+        .sessionTimeoutMs(config.getSessionTimeoutMs())
+        .connectionTimeoutMs(config.getConnectionTimeoutMs())
+        .namespace(config.getNamespace())
         .authorization("digest", "sojourner:sojourner".getBytes(Charsets.UTF_8))
         .build();
+
     // start client
     client.start();
   }
 
-  public void stop() {
+  public void close() {
     // close client
     client.close();
   }

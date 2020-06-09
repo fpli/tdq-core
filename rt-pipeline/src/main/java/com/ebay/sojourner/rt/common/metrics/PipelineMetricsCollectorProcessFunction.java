@@ -3,6 +3,7 @@ package com.ebay.sojourner.rt.common.metrics;
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.SlidingWindowReservoir;
 import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.Constants;
 import java.util.Date;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.dropwizard.metrics.DropwizardHistogramWrapper;
@@ -14,6 +15,9 @@ public class PipelineMetricsCollectorProcessFunction extends ProcessFunction<Ubi
   private transient DropwizardHistogramWrapper siteToSourceWrapper;
   private transient DropwizardHistogramWrapper siteToSinkWrapper;
   private transient DropwizardHistogramWrapper sourceToSinkWrapper;
+  private static final String siteToSource = "site_to_source";
+  private static final String siteToSink = "site_to_sink";
+  private static final String sourceToSink = "source_to_sink";
 
   @Override
   public void open(Configuration parameters) throws Exception {
@@ -25,19 +29,18 @@ public class PipelineMetricsCollectorProcessFunction extends ProcessFunction<Ubi
     Histogram sourceToSinkHistogram =
         new Histogram(new SlidingWindowReservoir(500));
     siteToSourceWrapper = getRuntimeContext().getMetricGroup()
-        .addGroup("sojourner-ubd")
-        .histogram("site to source", new DropwizardHistogramWrapper(siteToSourceHistogram));
+        .addGroup(Constants.SOJ_METRICS_GROUP)
+        .histogram(siteToSource, new DropwizardHistogramWrapper(siteToSourceHistogram));
     siteToSinkWrapper = getRuntimeContext().getMetricGroup()
-        .addGroup("sojourner-ubd")
-        .histogram("site to sink", new DropwizardHistogramWrapper(siteToSinkHistogram));
+        .addGroup(Constants.SOJ_METRICS_GROUP)
+        .histogram(siteToSink, new DropwizardHistogramWrapper(siteToSinkHistogram));
     sourceToSinkWrapper = getRuntimeContext().getMetricGroup()
-        .addGroup("sojourner-ubd")
-        .histogram("source to sink", new DropwizardHistogramWrapper(sourceToSinkHistogram));
+        .addGroup(Constants.SOJ_METRICS_GROUP)
+        .histogram(sourceToSink, new DropwizardHistogramWrapper(sourceToSinkHistogram));
   }
 
   @Override
-  public void processElement(UbiEvent value, Context ctx, Collector<UbiEvent> out)
-      throws Exception {
+  public void processElement(UbiEvent value, Context ctx, Collector<UbiEvent> out) {
     long end = new Date().getTime();
     long siteToSource = value.getIngestTime() - value.getGenerateTime();
     long siteToSink = end - value.getGenerateTime();

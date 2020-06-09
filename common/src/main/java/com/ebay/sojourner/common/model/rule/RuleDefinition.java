@@ -1,13 +1,14 @@
 package com.ebay.sojourner.common.model.rule;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(of = {"bizId", "version"})
-public class RuleDefinition {
+public class RuleDefinition implements Serializable {
 
   private long id;
   private long bizId;

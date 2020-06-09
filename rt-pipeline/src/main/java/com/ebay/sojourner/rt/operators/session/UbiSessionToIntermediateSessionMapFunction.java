@@ -2,7 +2,7 @@ package com.ebay.sojourner.rt.operators.session;
 
 import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.UbiSession;
-import com.ebay.sojourner.rt.util.TransformUtil;
+import com.ebay.sojourner.common.util.TransformUtil;
 import java.util.ArrayList;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.configuration.Configuration;

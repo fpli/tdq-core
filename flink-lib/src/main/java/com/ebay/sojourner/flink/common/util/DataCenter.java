@@ -1,4 +1,4 @@
-package com.ebay.sojourner.rt.pipeline;
+package com.ebay.sojourner.flink.common.util;
 
 public enum DataCenter {
   RNO, SLC, LVS;

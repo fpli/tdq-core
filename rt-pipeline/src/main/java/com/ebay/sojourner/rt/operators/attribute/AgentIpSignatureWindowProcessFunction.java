@@ -1,67 +1,55 @@
 package com.ebay.sojourner.rt.operators.attribute;
 
+import com.ebay.sojourner.common.model.AgentHash;
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.AgentIpAttributeAccumulator;
 import com.ebay.sojourner.common.model.BotSignature;
+import com.ebay.sojourner.rt.common.util.SignatureUtils;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
-public class AgentIpSignatureWindowProcessFunction
-    extends ProcessWindowFunction<
-    AgentIpAttributeAccumulator,
-    BotSignature,
-    Tuple,
-    TimeWindow> {
+public class AgentIpSignatureWindowProcessFunction extends
+    ProcessWindowFunction<AgentIpAttributeAccumulator, BotSignature, Tuple, TimeWindow> {
+
+  private static final String signatureId = "agentIp";
 
   @Override
-  public void process(
-      Tuple tuple,
-      Context context,
-      Iterable<AgentIpAttributeAccumulator> elements,
-      Collector<BotSignature> out)
-      throws Exception {
+  public void process(Tuple tuple, Context context, Iterable<AgentIpAttributeAccumulator> elements,
+      Collector<BotSignature> out) throws Exception {
 
     AgentIpAttributeAccumulator agentIpAttributeAccumulator = elements.iterator().next();
     AgentIpAttribute agentIpAttribute = agentIpAttributeAccumulator.getAgentIpAttribute();
+    Map<Integer, Integer> signatureStates = agentIpAttributeAccumulator.getSignatureStates();
+    Set<Integer> botFlagList = agentIpAttribute.getBotFlagList();
+    AgentHash agent = agentIpAttribute.getAgent();
+    Integer clientIp = agentIpAttribute.getClientIp();
+    long windowEndTime = context.window().maxTimestamp();
 
     if (context.currentWatermark() >= context.window().maxTimestamp()
-        && agentIpAttribute.getBotFlagList() != null
-        && agentIpAttribute.getBotFlagList().size() > 0) {
-      BotSignature botSignature = new BotSignature();
-      botSignature.setType("agentIp");
-      botSignature.setIsGeneration(false);
-      botSignature.setBotFlags(new ArrayList<>(agentIpAttribute.getBotFlagList()));
-      botSignature.setExpirationTime(context.window().maxTimestamp());
-      botSignature.setUserAgent(agentIpAttribute.getAgent());
-      botSignature.setIp(agentIpAttribute.getClientIp());
-      out.collect(
-          botSignature);
+        && botFlagList != null
+        && botFlagList.size() > 0) {
+
+      out.collect(new BotSignature(signatureId, agent, clientIp, null,
+          new ArrayList<>(botFlagList),
+          windowEndTime, false));
+
     } else if (context.currentWatermark() < context.window().maxTimestamp()
-        && agentIpAttributeAccumulator.getBotFlagStatus().containsValue(1)
-        && agentIpAttribute.getBotFlagList() != null
-        && agentIpAttribute.getBotFlagList().size() > 0) {
-      HashSet<Integer> generationBotFlag = new HashSet<>();
-      for (Map.Entry<Integer, Integer> newBotFlagMap :
-          agentIpAttributeAccumulator.getBotFlagStatus().entrySet()) {
-        if (newBotFlagMap.getValue() == 1) {
-          generationBotFlag.add(newBotFlagMap.getKey());
-        }
-      }
-      BotSignature botSignature = new BotSignature();
-      botSignature.setType("agentIp");
-      botSignature.setIsGeneration(true);
-      botSignature.setBotFlags(new ArrayList<>(generationBotFlag));
-      botSignature.setExpirationTime(context.window().maxTimestamp());
-      botSignature.setUserAgent(agentIpAttribute.getAgent());
-      botSignature.setIp(agentIpAttribute.getClientIp());
-      out.collect(
-          botSignature);
+        && signatureStates.containsValue(1)
+        && botFlagList != null
+        && botFlagList.size() > 0) {
+
+      Set<Integer> newGenerateSignatures = SignatureUtils.generateNewSignature(signatureStates);
+
+      out.collect(new BotSignature(signatureId, agent, clientIp, null,
+          new ArrayList<>(newGenerateSignatures),
+          windowEndTime, true));
+
     }
   }
 

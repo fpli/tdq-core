@@ -3,15 +3,18 @@ package com.ebay.sojourner.rt.operators.attribute;
 import com.ebay.sojourner.business.ubd.detectors.IpSignatureBotDetector;
 import com.ebay.sojourner.business.ubd.indicators.IpIndicators;
 import com.ebay.sojourner.common.model.AgentIpAttribute;
+import com.ebay.sojourner.common.model.IpAttribute;
 import com.ebay.sojourner.common.model.IpAttributeAccumulator;
+import com.ebay.sojourner.rt.common.util.SignatureUtils;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.functions.AggregateFunction;
 
 @Slf4j
-public class IpAttributeAgg
-    implements AggregateFunction<AgentIpAttribute, IpAttributeAccumulator, IpAttributeAccumulator> {
+public class IpAttributeAgg implements
+    AggregateFunction<AgentIpAttribute, IpAttributeAccumulator, IpAttributeAccumulator> {
 
   @Override
   public IpAttributeAccumulator createAccumulator() {
@@ -30,9 +33,13 @@ public class IpAttributeAgg
   @Override
   public IpAttributeAccumulator add(
       AgentIpAttribute agentIpAttribute, IpAttributeAccumulator ipAttributeAccumulator) {
+
+    IpAttribute ipAttribute = ipAttributeAccumulator.getIpAttribute();
+
     if (ipAttributeAccumulator.getIpAttribute().getClientIp() == null) {
       ipAttributeAccumulator.getIpAttribute().setClientIp(agentIpAttribute.getClientIp());
     }
+
     try {
       IpIndicators.getInstance().feed(agentIpAttribute, ipAttributeAccumulator);
     } catch (Exception e) {
@@ -40,36 +47,36 @@ public class IpAttributeAgg
     }
 
     Set<Integer> ipBotFlag = null;
+    Map<Integer, Integer> signatureStates = ipAttributeAccumulator.getSignatureStates();
+
     try {
-      if (ipAttributeAccumulator.getBotFlagStatus().containsValue(0)
-          || ipAttributeAccumulator.getBotFlagStatus().containsValue(1)) {
-        ipBotFlag = IpSignatureBotDetector.getInstance()
-            .getBotFlagList(ipAttributeAccumulator.getIpAttribute());
+      if (signatureStates.containsValue(0) || signatureStates.containsValue(1)) {
+        ipBotFlag = IpSignatureBotDetector.getInstance().getBotFlagList(ipAttribute);
         if (ipBotFlag.contains(7)) {
-          switch (ipAttributeAccumulator.getBotFlagStatus().get(7)) {
+          switch (signatureStates.get(7)) {
             case 0:
-              ipAttributeAccumulator.getBotFlagStatus().put(7, 1);
+              signatureStates.put(7, 1);
               break;
             case 1:
-              ipAttributeAccumulator.getBotFlagStatus().put(7, 2);
+              signatureStates.put(7, 2);
               break;
           }
         } else if (ipBotFlag.contains(222)) {
-          switch (ipAttributeAccumulator.getBotFlagStatus().get(222)) {
+          switch (signatureStates.get(222)) {
             case 0:
-              ipAttributeAccumulator.getBotFlagStatus().put(222, 1);
+              signatureStates.put(222, 1);
               break;
             case 1:
-              ipAttributeAccumulator.getBotFlagStatus().put(222, 2);
+              signatureStates.put(222, 2);
               break;
           }
         } else if (ipBotFlag.contains(223)) {
-          switch (ipAttributeAccumulator.getBotFlagStatus().get(223)) {
+          switch (signatureStates.get(223)) {
             case 0:
-              ipAttributeAccumulator.getBotFlagStatus().put(223, 1);
+              signatureStates.put(223, 1);
               break;
             case 1:
-              ipAttributeAccumulator.getBotFlagStatus().put(223, 2);
+              signatureStates.put(223, 2);
               break;
           }
         }
@@ -78,13 +85,8 @@ public class IpAttributeAgg
       log.error("start get ip botFlagList failed", e);
     }
 
-    Set<Integer> botFlagList = ipAttributeAccumulator.getIpAttribute().getBotFlagList();
-    if (ipBotFlag != null && ipBotFlag.size() > 0) {
-      botFlagList.addAll(ipBotFlag);
-    }
-
-    ipAttributeAccumulator.getIpAttribute().setBotFlagList(botFlagList);
-
+    Set<Integer> botFlagList = SignatureUtils.setBotFlags(ipBotFlag, ipAttribute.getBotFlagList());
+    ipAttribute.setBotFlagList(botFlagList);
     return ipAttributeAccumulator;
   }
 

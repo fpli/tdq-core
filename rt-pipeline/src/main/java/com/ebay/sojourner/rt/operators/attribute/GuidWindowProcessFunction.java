@@ -4,60 +4,52 @@ import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.Guid;
 import com.ebay.sojourner.common.model.GuidAttribute;
 import com.ebay.sojourner.common.model.GuidAttributeAccumulator;
+import com.ebay.sojourner.rt.common.util.SignatureUtils;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
-public class GuidWindowProcessFunction
-    extends ProcessWindowFunction<
-    GuidAttributeAccumulator, BotSignature, Tuple, TimeWindow> {
+public class GuidWindowProcessFunction extends
+    ProcessWindowFunction<GuidAttributeAccumulator, BotSignature, Tuple, TimeWindow> {
+
+  private static final String signatureId = "guid";
 
   @Override
-  public void process(
-      Tuple tuple,
-      Context context,
-      Iterable<GuidAttributeAccumulator> elements,
-      Collector<BotSignature> out)
-      throws Exception {
+  public void process(Tuple tuple, Context context, Iterable<GuidAttributeAccumulator> elements,
+      Collector<BotSignature> out) throws Exception {
 
     GuidAttributeAccumulator guidAttributeAccumulator = elements.iterator().next();
     GuidAttribute guidAttribute = guidAttributeAccumulator.getGuidAttribute();
+    Map<Integer, Integer> signatureStates = guidAttributeAccumulator.getSignatureStates();
+    Set<Integer> botFlagList = guidAttribute.getBotFlagList();
+    long guid1 = guidAttribute.getGuid1();
+    long guid2 = guidAttribute.getGuid2();
+    Guid guid = new Guid(guid1, guid2);
+    long windowEndTime = context.window().maxTimestamp();
 
     if (context.currentWatermark() >= context.window().maxTimestamp()
-        && guidAttribute.getBotFlagList() != null
-        && guidAttribute.getBotFlagList().size() > 0) {
-      BotSignature botSignature = new BotSignature();
-      botSignature.setType("guid");
-      botSignature.setIsGeneration(false);
-      botSignature.setBotFlags(new ArrayList<>(guidAttribute.getBotFlagList()));
-      botSignature.setExpirationTime(context.window().maxTimestamp());
-      botSignature.setGuid(new Guid(guidAttribute.getGuid1(),guidAttribute.getGuid2()));
-      out.collect(
-        botSignature);
+        && botFlagList != null
+        && botFlagList.size() > 0) {
+
+      out.collect(new BotSignature(signatureId, null, null, guid,
+          new ArrayList<>(botFlagList),
+          windowEndTime, false));
+
     } else if (context.currentWatermark() < context.window().maxTimestamp()
-        && guidAttributeAccumulator.getBotFlagStatus().containsValue(1)
-        && guidAttribute.getBotFlagList() != null
-        && guidAttribute.getBotFlagList().size() > 0) {
-      HashSet<Integer> generationBotFlag = new HashSet<>();
-      for (Map.Entry<Integer, Integer> newBotFlagMap :
-          guidAttributeAccumulator.getBotFlagStatus().entrySet()) {
-        if (newBotFlagMap.getValue() == 1) {
-          generationBotFlag.add(newBotFlagMap.getKey());
-        }
-      }
-      BotSignature botSignature = new BotSignature();
-      botSignature.setType("guid");
-      botSignature.setIsGeneration(false);
-      botSignature.setBotFlags(new ArrayList<>(generationBotFlag));
-      botSignature.setExpirationTime(context.window().maxTimestamp());
-      botSignature.setGuid(new Guid(guidAttribute.getGuid1(),guidAttribute.getGuid2()));
-      out.collect(
-          botSignature);
+        && signatureStates.containsValue(1)
+        && botFlagList != null
+        && botFlagList.size() > 0) {
+
+      Set<Integer> newGenerateSignatures = SignatureUtils.generateNewSignature(signatureStates);
+
+      out.collect(new BotSignature(signatureId, null, null, guid,
+          new ArrayList<>(newGenerateSignatures),
+          windowEndTime, true));
     }
   }
 
