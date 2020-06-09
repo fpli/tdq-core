@@ -17,7 +17,7 @@ import org.apache.flink.util.Collector;
 public class GuidWindowProcessFunction extends
     ProcessWindowFunction<GuidAttributeAccumulator, BotSignature, Tuple, TimeWindow> {
 
-  private final String signatureId = "guid";
+  private static final String signatureId = "guid";
 
   @Override
   public void process(Tuple tuple, Context context, Iterable<GuidAttributeAccumulator> elements,

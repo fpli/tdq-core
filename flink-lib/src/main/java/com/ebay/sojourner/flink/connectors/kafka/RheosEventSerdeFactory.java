@@ -1,6 +1,6 @@
 package com.ebay.sojourner.flink.connectors.kafka;
 
-import com.ebay.sojourner.flink.common.util.Constants;
+import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import io.ebay.rheos.kafka.client.StreamConnectorConfig;
 import io.ebay.rheos.schema.avro.GenericRecordDomainDataDecoder;
@@ -11,7 +11,7 @@ import java.util.Map;
 public class RheosEventSerdeFactory {
 
   private static final String RHEOS_SERVICES_URL = FlinkEnvUtils
-      .getString(Constants.RHEOS_KAFKA_REGISTRY_URL);
+      .getString(Property.RHEOS_KAFKA_REGISTRY_URL);
   private static RheosEventDeserializer rheosEventHeaderDeserializer;
   private static GenericRecordDomainDataDecoder rheosEventDeserializer;
 

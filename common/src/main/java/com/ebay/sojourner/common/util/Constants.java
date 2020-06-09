@@ -22,9 +22,7 @@ public class Constants {
   public static final String NO_SESSION_ID = "NO_SESSION_ID";
   public static final long NO_TIMESTAMP = Long.MIN_VALUE;
   public static final String DEFAULT_SESSION_FILE_NAME = "session";
-
   public static final long DEFAULT_TRACK_PERIOD = 10 * 1000L; // Default is 10 seconds
-
   public static final long DEFAULT_LARGE_SESSION_EVENTS = 100000;
 
   public static final int DEFAULT_CORE_SITE_COBRAND = 0;
@@ -41,27 +39,19 @@ public class Constants {
   public static final int MOBILE_HALF_COBRAND = 8;
   public static final int HASH_STUB = 37;
 
-  /*
-    zookeeper config
-   */
-  public static final String ZOOKEEPER_SERVER = "zookeeper.server";
-  public static final String ZOOKEEPER_SESSION_TIMEOUT_MS = "zookeeper.sessionTimeoutMs";
-  public static final String ZOOKEEPER_CONNECTION_TIMEOUT_MS = "zookeeper.connectionTimeoutMs";
-  public static final String ZOOKEEPER_MAX_RETRIES = "zookeeper.maxRetries";
-  public static final String ZOOKEEPER_BASE_SLEEP_TIME_MS = "zookeeper.baseSleepTimeMs";
-  public static final String ZOOKEEPER_NAMESPACE = "zookeeper.namespace";
-  public static final String ZK_NODE_PATH = "zookeeper.nodepath";
+  // flink metrics
+  public static final String SOJ_METRICS_GROUP = "sojourner_ubd";
 
-  /*
-    rest client config
-   */
-  public static final String REST_SERVER = "rest-client.rest-server";
-  public static final String REST_PUBLISHED_RULE_LIST = "rest-client.published-rule-list";
-  public static final String REST_SPECIFIED_RULE = "rest-client.specified-rule";
-  public static final String REST_AUTH_USERNAME_KEY = "rest-client.auth-username-key";
-  public static final String REST_AUTH_USERNAME_VALUE = "rest-client.auth-username-value";
-  public static final String REST_AUTH_TOKEN_KEY = "rest-client.auth-token-key";
-  public static final String REST_AUTH_TOKEN_VALUE = "rest-client.auth-token-value";
+  // flied delimiter
+  public static final String FIELD_DELIM = "\007";
+
+  // signatures suffix
+  public static final String GENERATION_PREFFIX = "_g";
+  public static final String EXPIRATION_PREFFIX = "_e";
+  public static final String AGENT = "Agent";
+  public static final String AGENTIP = "AgentIp";
+  public static final String IP = "Ip";
+  public static final String GUID = "Guid";
 
 }
 

@@ -35,8 +35,8 @@ kafka:
           guid: behavior.trafficjam.guid
       group-id:
         session:
-          bot: sojourner-pathfinder-session
-          non-bot: sojourner-pathfinder-session
+          bot: sojourner-pathfinder-session-bot
+          non-bot: sojourner-pathfinder-session-non-bot
         event:
           bot: sojourner-pathfinder-event
           non-bot: sojourner-pathfinder-event

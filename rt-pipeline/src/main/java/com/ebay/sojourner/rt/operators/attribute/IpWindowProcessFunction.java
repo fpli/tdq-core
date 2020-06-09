@@ -16,7 +16,7 @@ import org.apache.flink.util.Collector;
 public class IpWindowProcessFunction extends
     ProcessWindowFunction<IpAttributeAccumulator, BotSignature, Tuple, TimeWindow> {
 
-  private final String signatureId = "ip";
+  private static final String signatureId = "ip";
 
   @Override
   public void process(Tuple tuple, Context context, Iterable<IpAttributeAccumulator> elements,

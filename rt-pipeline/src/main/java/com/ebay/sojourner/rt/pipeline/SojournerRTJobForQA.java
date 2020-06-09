@@ -8,6 +8,7 @@ import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
+import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
 import com.ebay.sojourner.flink.common.util.DataCenter;
@@ -22,7 +23,6 @@ import com.ebay.sojourner.rt.common.metrics.EventMetricsCollectorProcessFunction
 import com.ebay.sojourner.rt.common.metrics.GuidMetricsCollectorProcessFunction;
 import com.ebay.sojourner.rt.common.metrics.IpMetricsCollectorProcessFunction;
 import com.ebay.sojourner.rt.common.metrics.PipelineMetricsCollectorProcessFunction;
-import com.ebay.sojourner.rt.common.util.Constants;
 import com.ebay.sojourner.rt.operators.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.AgentIpAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.AgentIpAttributeAggSliding;
@@ -69,11 +69,11 @@ public class SojournerRTJobForQA {
     // 1.2 Assign timestamps and emit watermarks.
     DataStream<RawEvent> rawEventDataStream = SourceDataStreamBuilder.build(
         executionEnvironment,
-        FlinkEnvUtils.getString(Constants.BEHAVIOR_PATHFINDER_TOPIC),
-        FlinkEnvUtils.getListString(Constants.BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_LVS),
-        FlinkEnvUtils.getString(Constants.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_LVS),
+        FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_TOPIC),
+        FlinkEnvUtils.getListString(Property.BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_LVS),
+        FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_LVS),
         DataCenter.LVS,
-        FlinkEnvUtils.getInteger(Constants.SOURCE_PARALLELISM),
+        FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM),
         null,
         RawEvent.class);
 
@@ -83,7 +83,7 @@ public class SojournerRTJobForQA {
     DataStream<UbiEvent> ubiEventDataStream = EventDataStreamBuilder.build(
         rawEventDataStream,
         DataCenter.LVS,
-        FlinkEnvUtils.getInteger(Constants.EVENT_PARALLELISM),
+        FlinkEnvUtils.getInteger(Property.EVENT_PARALLELISM),
         null);
 
     // refine windowsoperator
@@ -106,7 +106,7 @@ public class SojournerRTJobForQA {
         OutputTagUtil.mappedEventOutputTag);
 
     ubiSessionDataStream
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
         .name("Session Operator")
         .uid("session-id");
 
@@ -119,7 +119,7 @@ public class SojournerRTJobForQA {
     // ubiSession to sessionCore
     DataStream<SessionCore> sessionCoreDataStream = ubiSessionDataStream
         .map(new UbiSessionToSessionCoreMapFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
         .name("UbiSession To SessionCore")
         .uid("session-enhance-id");
 
@@ -133,7 +133,7 @@ public class SojournerRTJobForQA {
             .keyBy("userAgent", "ip")
             .window(TumblingEventTimeWindows.of(Time.minutes(5)))
             .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
-            .setParallelism(FlinkEnvUtils.getInteger(Constants.PRE_AGENT_IP_PARALLELISM))
+            .setParallelism(FlinkEnvUtils.getInteger(Property.PRE_AGENT_IP_PARALLELISM))
             .name("Attribute Operator (Agent+IP Pre-Aggregation)")
             .uid("pre-agent-ip-id");
 
@@ -142,7 +142,7 @@ public class SojournerRTJobForQA {
         .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
         .trigger(OnElementEarlyFiringTrigger.create())
         .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.GUID_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.GUID_PARALLELISM))
         .name("Attribute Operator (GUID)")
         .uid("guid-id");
 
@@ -152,7 +152,7 @@ public class SojournerRTJobForQA {
         .trigger(OnElementEarlyFiringTrigger.create())
         .aggregate(
             new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_IP_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.AGENT_IP_PARALLELISM))
         .name("Attribute Operator (Agent+IP)")
         .uid("agent-ip-id");
 
@@ -161,7 +161,7 @@ public class SojournerRTJobForQA {
         .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
         .trigger(OnElementEarlyFiringTrigger.create())
         .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.AGENT_PARALLELISM))
         .name("Attribute Operator (Agent)")
         .uid("agent-id");
 
@@ -170,7 +170,7 @@ public class SojournerRTJobForQA {
         .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
         .trigger(OnElementEarlyFiringTrigger.create())
         .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.IP_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.IP_PARALLELISM))
         .name("Attribute Operator (IP)")
         .uid("ip-id");
 
@@ -187,13 +187,13 @@ public class SojournerRTJobForQA {
     // transform ubiEvent,ubiSession to same type and union
     DataStream<Either<UbiEvent, UbiSession>> ubiSessionTransDataStream = ubiSessionDataStream
         .map(new DetectableSessionMapFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
         .name("UbiSessionTransForBroadcast")
         .uid("session-broadcast-id");
 
     DataStream<Either<UbiEvent, UbiSession>> ubiEventTransDataStream = ubiEventWithSessionId
         .map(new DetectableEventMapFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
         .name("UbiEventTransForBroadcast")
         .uid("event-broadcast-id");
 
@@ -204,7 +204,7 @@ public class SojournerRTJobForQA {
     SingleOutputStreamOperator<UbiEvent> signatureBotDetectionForEvent = detectableDataStream
         .connect(attributeSignatureBroadcastStream)
         .process(new AttributeBroadcastProcessFunctionForDetectable(OutputTagUtil.sessionOutputTag))
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.BROADCAST_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .name("Signature Bot Detector")
         .uid("signature-detection-id");
 
@@ -215,7 +215,7 @@ public class SojournerRTJobForQA {
     DataStream<SojSession> sojSessionStream =
         signatureBotDetectionForSession
             .map(new UbiSessionToSojSessionMapFunction())
-            .setParallelism(FlinkEnvUtils.getInteger(Constants.BROADCAST_PARALLELISM))
+            .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
             .name("UbiSession to SojSession")
             .uid("session-transform-id");
 
@@ -223,7 +223,7 @@ public class SojournerRTJobForQA {
     DataStream<SojEvent> sojEventWithSessionId =
         signatureBotDetectionForEvent
             .map(new UbiEventToSojEventMapFunction())
-            .setParallelism(FlinkEnvUtils.getInteger(Constants.BROADCAST_PARALLELISM))
+            .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
             .name("UbiEvent to SojEvent")
             .uid("event-transform-id");
 
@@ -236,73 +236,73 @@ public class SojournerRTJobForQA {
     // kafka sink for session
     sojSessionStream.addSink(KafkaConnectorFactory
         .createKafkaProducer(
-            FlinkEnvUtils.getString(Constants.BEHAVIOR_TRAFFICJAM_TOPIC_SESSION_NON_BOT),
-            FlinkEnvUtils.getListString(Constants.BEHAVIOR_TRAFFICJAM_BOOTSTRAP_SERVERS_DEFAULT),
+            FlinkEnvUtils.getString(Property.BEHAVIOR_TRAFFICJAM_TOPIC_SESSION_NON_BOT),
+            FlinkEnvUtils.getListString(Property.BEHAVIOR_TRAFFICJAM_BOOTSTRAP_SERVERS_DEFAULT),
             SojSession.class,
-            FlinkEnvUtils.getString(Constants.BEHAVIOR_TRAFFICJAM_MESSAGE_KEY_SESSION)))
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.BROADCAST_PARALLELISM))
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION)))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .name("SojSession")
         .uid("session-sink-id");
 
     // kafka sink for event
     sojEventWithSessionId.addSink(KafkaConnectorFactory
         .createKafkaProducer(
-            FlinkEnvUtils.getString(Constants.BEHAVIOR_TRAFFICJAM_TOPIC_EVENT_NON_BOT),
-            FlinkEnvUtils.getListString(Constants.BEHAVIOR_TRAFFICJAM_BOOTSTRAP_SERVERS_DEFAULT),
+            FlinkEnvUtils.getString(Property.BEHAVIOR_TRAFFICJAM_TOPIC_EVENT_NON_BOT),
+            FlinkEnvUtils.getListString(Property.BEHAVIOR_TRAFFICJAM_BOOTSTRAP_SERVERS_DEFAULT),
             SojEvent.class,
-            FlinkEnvUtils.getString(Constants.BEHAVIOR_TRAFFICJAM_MESSAGE_KEY_EVENT)))
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.BROADCAST_PARALLELISM))
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT)))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .name("SojEvent")
         .uid("event-sink-id");
 
     // metrics collector for end to end
     signatureBotDetectionForEvent
         .process(new PipelineMetricsCollectorProcessFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.METRICS_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.METRICS_PARALLELISM))
         .name("Pipeline Metrics Collector")
         .uid("pipeline-metrics-id");
 
     // metrics collector for event rules hit
     signatureBotDetectionForEvent
         .process(new EventMetricsCollectorProcessFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.METRICS_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.METRICS_PARALLELISM))
         .name("Event Metrics Collector")
         .uid("event-metrics-id");
 
     // metrics collector for signature generation or expiration
     guidSignatureDataStream
         .process(new GuidMetricsCollectorProcessFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.GUID_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.GUID_PARALLELISM))
         .name("Guid Metrics Collector")
         .uid("guid-metrics-id");
 
     agentIpSignatureDataStream
         .process(new AgentIpMetricsCollectorProcessFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_IP_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.AGENT_IP_PARALLELISM))
         .name("AgentIp Metrics Collector")
         .uid("agentIp-metrics-id");
 
     agentSignatureDataStream
         .process(new AgentMetricsCollectorProcessFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.AGENT_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.AGENT_PARALLELISM))
         .name("Agent Metrics Collector")
         .uid("agent-metrics-id");
 
     ipSignatureDataStream
         .process(new IpMetricsCollectorProcessFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.IP_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.IP_PARALLELISM))
         .name("Ip Metrics Collector")
         .uid("ip-metrics-id");
 
     // late event sink
     latedStream
         .addSink(new DiscardingSink<>())
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
         .name("Late Event")
         .uid("event-late-id");
 
     // Submit this job
     FlinkEnvUtils
-        .execute(executionEnvironment, FlinkEnvUtils.getString(Constants.NAME_FULL_PIPELINE));
+        .execute(executionEnvironment, FlinkEnvUtils.getString(Property.NAME_FULL_PIPELINE));
   }
 }

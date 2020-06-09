@@ -10,6 +10,14 @@ kafka:
     producer:
       batch-size: 4096
       request-timeout-ms: 60000
+      message-key:
+        session: guid
+        event: guid
+        signature:
+          guid: guid
+          ip: ip
+          agent: userAgent
+          agent-ip: userAgent
 
   stream:
     behavior-pathfinder:
@@ -71,14 +79,6 @@ kafka:
           agent: sojourner-pathfinder-agent
           ip: sojourner-pathfinder-ip
           guid: sojourner-pathfinder-guid
-      message-key:
-        session: guid
-        event: guid
-        signature:
-          guid: guid
-          ip: ip
-          agent: userAgent
-          agent-ip:
 
 flink:
   app:
@@ -87,6 +87,7 @@ flink:
       data-quality: Unified Bot Detection RT DQ Pipeline
       hot-deploy: Unified Bot Detection RT Hot Deploy Pipeline
     parallelism:
+      default: 100
       source: 100
       event: 100
       session: 640

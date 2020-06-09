@@ -2,7 +2,7 @@ package com.ebay.sojourner.business.ubd.rule;
 
 import com.ebay.sojourner.common.model.rule.RuleChangeEvent;
 import com.ebay.sojourner.common.model.rule.RuleDefinition;
-import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.common.zookeeper.ZkClient;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -79,7 +79,7 @@ public class RuleManager {
 
   private void initZkListener(ZkClient zkClient, ExecutorService zkExecutor)    {
     CuratorFramework client = zkClient.getClient();
-    PathChildrenCache cache = new PathChildrenCache(client, Constants.ZK_NODE_PATH, true);
+    PathChildrenCache cache = new PathChildrenCache(client, Property.ZK_NODE_PATH, true);
     // add listener
     cache.getListenable()
         .addListener((c, event) -> {

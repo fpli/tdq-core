@@ -3,7 +3,7 @@ package com.ebay.sojourner.rt.common.metrics;
 import com.ebay.sojourner.business.ubd.rule.RuleManager;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.rule.RuleDefinition;
-import com.ebay.sojourner.flink.common.util.Constants;
+import com.ebay.sojourner.common.util.Constants;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -24,8 +24,8 @@ public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEve
   private List<String> eventStaticRuleList;
   private Map<String, Counter> eventRuleCounterMap = new ConcurrentHashMap<>();
   private Counter eventTotalCounter;
-  private final String ruleCounterPreffix = "rule";
-  private final String ubiEventCounterName = "ubiEvent_count";
+  private static final String ruleCounterPreffix = "rule";
+  private static final String ubiEventCounterName = "ubiEvent_count";
 
   @Override
   public void open(Configuration parameters) throws Exception {

@@ -1,7 +1,8 @@
 package com.ebay.sojourner.business.ubd.rule;
 
+import com.ebay.sojourner.common.env.EnvironmentUtils;
 import com.ebay.sojourner.common.model.rule.RuleDefinition;
-import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.common.util.RestClientUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,9 +20,11 @@ public class RuleFetcher {
   private final OkHttpClient client;
   private final ObjectMapper objectMapper;
   private static final String FETCH_ALL_RULES =
-      Constants.REST_SERVER + Constants.REST_PUBLISHED_RULE_LIST;
+      EnvironmentUtils.get(Property.REST_SERVER) + EnvironmentUtils
+          .get(Property.REST_PUBLISHED_RULE_LIST);
   private static final String FETCH_RULE_PREFIX =
-      Constants.REST_SERVER + Constants.REST_SPECIFIED_RULE;
+      EnvironmentUtils.get(Property.REST_SERVER) + EnvironmentUtils
+          .get(Property.REST_SPECIFIED_RULE);
 
   public RuleFetcher() {
     this.client = RestClientUtils.getRestClient();

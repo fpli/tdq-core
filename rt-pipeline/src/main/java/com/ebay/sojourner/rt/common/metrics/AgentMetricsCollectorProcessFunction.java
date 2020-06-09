@@ -1,7 +1,7 @@
 package com.ebay.sojourner.rt.common.metrics;
 
 import com.ebay.sojourner.common.model.BotSignature;
-import com.ebay.sojourner.flink.common.util.Constants;
+import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.rt.common.util.SignatureUtils;
 import java.util.Arrays;
 import java.util.List;

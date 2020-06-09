@@ -5,10 +5,10 @@ import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
+import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
-import com.ebay.sojourner.rt.common.util.Constants;
 import com.ebay.sojourner.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.rt.operators.event.UbiEventToSojEventMapFunction;
@@ -37,19 +37,19 @@ public class SojournerRTJobForSessionDQ {
     // kafka source for copy
     DataStream<RawEvent> rawEventDataStream =
         executionEnvironment.addSource(KafkaSourceFunction.buildSource(
-            FlinkEnvUtils.getString(Constants.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_SESSION),
+            FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_SESSION),
             FlinkEnvUtils
-                .getListString(Constants.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
-            FlinkEnvUtils.getString(Constants.BEHAVIOR_TOTAL_NEW_GROUP_ID_DQ_SESSION),
+                .getListString(Property.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
+            FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_GROUP_ID_DQ_SESSION),
             RawEvent.class))
-            .setParallelism(FlinkEnvUtils.getInteger(Constants.SOURCE_PARALLELISM))
+            .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
             .name("Rheos Kafka Consumer For Session DQ")
             .uid("source-id");
 
     DataStream<UbiEvent> ubiEventDataStream =
         rawEventDataStream
             .map(new EventMapFunction())
-            .setParallelism(FlinkEnvUtils.getInteger(Constants.EVENT_PARALLELISM))
+            .setParallelism(FlinkEnvUtils.getInteger(Property.EVENT_PARALLELISM))
             .name("Event Operator")
             .uid("event-id");
 
@@ -80,7 +80,7 @@ public class SojournerRTJobForSessionDQ {
         mappedEventOutputTag);
 
     ubiSessionDataStream
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
         .name("Session Operator")
         .uid("session-id");
 
@@ -91,14 +91,14 @@ public class SojournerRTJobForSessionDQ {
     SingleOutputStreamOperator<SojSession> sojSessionStream =
         ubiSessionDataStream
             .map(new UbiSessionToSojSessionMapFunction())
-            .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
+            .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
             .name("UbiSession to SojSession")
             .uid("session-transform-id");
 
     // UbiEvent to SojEvent
     DataStream<SojEvent> sojEventWithSessionId = ubiEventWithSessionId
         .map(new UbiEventToSojEventMapFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
         .name("UbiEvent to SojEvent")
         .uid("event-transform-id");
 
@@ -106,24 +106,24 @@ public class SojournerRTJobForSessionDQ {
     // "hdfs://apollo-rno//user/o_ubi/events/"
     sojSessionStream
         .addSink(HdfsConnectorFactory.createWithParquet(
-            FlinkEnvUtils.getString(Constants.HDFS_PATH_PARENT) +
-                FlinkEnvUtils.getString(Constants.HDFS_PATH_SESSION_NON_BOT),
+            FlinkEnvUtils.getString(Property.HDFS_PATH_PARENT) +
+                FlinkEnvUtils.getString(Property.HDFS_PATH_SESSION_NON_BOT),
             SojSession.class))
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
         .name("SojSession sink")
         .uid("session-sink-id");
 
     sojEventWithSessionId
         .addSink(HdfsConnectorFactory.createWithParquet(
-            FlinkEnvUtils.getString(Constants.HDFS_PATH_PARENT) +
-                FlinkEnvUtils.getString(Constants.HDFS_PATH_EVENT_NON_BOT),
+            FlinkEnvUtils.getString(Property.HDFS_PATH_PARENT) +
+                FlinkEnvUtils.getString(Property.HDFS_PATH_EVENT_NON_BOT),
             SojEvent.class))
-        .setParallelism(FlinkEnvUtils.getInteger(Constants.SESSION_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
         .name("SojEvent sink")
         .uid("event-sink-id");
 
     // Submit this job
     FlinkEnvUtils
-        .execute(executionEnvironment, FlinkEnvUtils.getString(Constants.NAME_DATA_QUALITY));
+        .execute(executionEnvironment, FlinkEnvUtils.getString(Property.NAME_DATA_QUALITY));
   }
 }

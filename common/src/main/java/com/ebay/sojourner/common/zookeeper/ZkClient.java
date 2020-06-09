@@ -1,7 +1,7 @@
 package com.ebay.sojourner.common.zookeeper;
 
 import com.ebay.sojourner.common.env.EnvironmentUtils;
-import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.common.util.Property;
 import com.google.common.base.Charsets;
 import java.util.ArrayList;
 import lombok.Getter;
@@ -24,19 +24,19 @@ public class ZkClient {
   private void init() {
     // create client
     ArrayList<String> zkServerList = EnvironmentUtils
-        .get(Constants.ZOOKEEPER_SERVER, ArrayList.class);
+        .get(Property.ZOOKEEPER_SERVER, ArrayList.class);
 
     RetryPolicy retryPolicy = new ExponentialBackoffRetry(
-        EnvironmentUtils.get(Constants.ZOOKEEPER_BASE_SLEEP_TIME_MS, Integer.class),
-        EnvironmentUtils.get(Constants.ZOOKEEPER_MAX_RETRIES, Integer.class));
+        EnvironmentUtils.get(Property.ZOOKEEPER_BASE_SLEEP_TIME_MS, Integer.class),
+        EnvironmentUtils.get(Property.ZOOKEEPER_MAX_RETRIES, Integer.class));
     client = CuratorFrameworkFactory.builder()
         .connectString(String.join(",", zkServerList))
         .retryPolicy(retryPolicy)
         .sessionTimeoutMs(
-            EnvironmentUtils.get(Constants.ZOOKEEPER_SESSION_TIMEOUT_MS, Integer.class))
+            EnvironmentUtils.get(Property.ZOOKEEPER_SESSION_TIMEOUT_MS, Integer.class))
         .connectionTimeoutMs(
-            EnvironmentUtils.get(Constants.ZOOKEEPER_CONNECTION_TIMEOUT_MS, Integer.class))
-        .namespace(EnvironmentUtils.get(Constants.ZOOKEEPER_NAMESPACE))
+            EnvironmentUtils.get(Property.ZOOKEEPER_CONNECTION_TIMEOUT_MS, Integer.class))
+        .namespace(EnvironmentUtils.get(Property.ZOOKEEPER_NAMESPACE))
         .authorization("digest", "sojourner:sojourner".getBytes(Charsets.UTF_8))
         .build();
     // start client

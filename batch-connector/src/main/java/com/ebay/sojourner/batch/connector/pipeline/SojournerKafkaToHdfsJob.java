@@ -1,6 +1,6 @@
 package com.ebay.sojourner.batch.connector.pipeline;
 
-import com.ebay.sojourner.batch.connector.util.Constants;
+import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.util.DataCenter;
 import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
@@ -14,14 +14,14 @@ public class SojournerKafkaToHdfsJob {
 
     final StreamExecutionEnvironment executionEnvironment = FlinkEnvUtils.prepare(args);
 
-    String sourceTopic = FlinkEnvUtils.getString(Constants.KAFKA_COMMON_CONSUMER_TOPIC_DEFAULT);
-    Class<?> deserializeClass = Class.forName(FlinkEnvUtils.getString(Constants.HDFS_DUMP_CLASS));
-    String hdfsPath = FlinkEnvUtils.getString(Constants.HDFS_DUMP_PATH);
-    String groupId = FlinkEnvUtils.getString(Constants.KAFKA_COMMON_CONSUMER_GROUP_ID_DEFAULT);
-    int sourceParallelNum = FlinkEnvUtils.getInteger(Constants.SOURCE_DEFAULT_PARALLELISM);
-    int sinkParallelNum = FlinkEnvUtils.getInteger(Constants.SINK_HDFS_PARALLELISM);
+    String sourceTopic = FlinkEnvUtils.getString(Property.KAFKA_COMMON_CONSUMER_TOPIC_DEFAULT);
+    Class<?> deserializeClass = Class.forName(FlinkEnvUtils.getString(Property.HDFS_DUMP_CLASS));
+    String hdfsPath = FlinkEnvUtils.getString(Property.HDFS_DUMP_PATH);
+    String groupId = FlinkEnvUtils.getString(Property.KAFKA_COMMON_CONSUMER_GROUP_ID_DEFAULT);
+    int sourceParallelNum = FlinkEnvUtils.getInteger(Property.SOURCE_DEFAULT_PARALLELISM);
+    int sinkParallelNum = FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM);
     String bootstrapServers = FlinkEnvUtils
-        .getString(Constants.KAFKA_COMMON_CONSUMER_BROKERS_DEFAULT);
+        .getString(Property.KAFKA_COMMON_CONSUMER_BROKERS_DEFAULT);
 
     // kafka source
     DataStream sourceDataStream = SourceDataStreamBuilder
@@ -37,6 +37,6 @@ public class SojournerKafkaToHdfsJob {
 
     // submit job
     FlinkEnvUtils
-        .execute(executionEnvironment, FlinkEnvUtils.getString(Constants.NAME_HDFS_DUMP_PIPELINE));
+        .execute(executionEnvironment, FlinkEnvUtils.getString(Property.NAME_HDFS_DUMP_PIPELINE));
   }
 }

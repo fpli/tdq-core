@@ -1,6 +1,6 @@
 package com.ebay.sojourner.batch.connector.pipeline;
 
-import com.ebay.sojourner.batch.connector.util.Constants;
+import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.util.DataCenter;
 import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
@@ -14,21 +14,21 @@ public class JetstreamKafkaToHdfsJob {
 
     final StreamExecutionEnvironment executionEnvironment = FlinkEnvUtils.prepare(args);
 
-    String botSourceTopic = FlinkEnvUtils.getString(Constants.KAFKA_COMMON_CONSUMER_TOPIC_BOT);
+    String botSourceTopic = FlinkEnvUtils.getString(Property.KAFKA_COMMON_CONSUMER_TOPIC_BOT);
     String nonBotSourceTopic = FlinkEnvUtils
-        .getString(Constants.KAFKA_COMMON_CONSUMER_TOPIC_NON_BOT);
-    Class<?> deserializeClass = Class.forName(FlinkEnvUtils.getString(Constants.HDFS_DUMP_CLASS));
-    String hdfsPath = FlinkEnvUtils.getString(FlinkEnvUtils.getString(Constants.HDFS_DUMP_PATH));
-    String botGroupId = FlinkEnvUtils.getString(Constants.KAFKA_COMMON_CONSUMER_GROUP_ID_BOT);
+        .getString(Property.KAFKA_COMMON_CONSUMER_TOPIC_NON_BOT);
+    Class<?> deserializeClass = Class.forName(FlinkEnvUtils.getString(Property.HDFS_DUMP_CLASS));
+    String hdfsPath = FlinkEnvUtils.getString(FlinkEnvUtils.getString(Property.HDFS_DUMP_PATH));
+    String botGroupId = FlinkEnvUtils.getString(Property.KAFKA_COMMON_CONSUMER_GROUP_ID_BOT);
     String nonBotGroupId = FlinkEnvUtils
-        .getString(Constants.KAFKA_COMMON_CONSUMER_GROUP_ID_NON_BOT);
-    int botSourceParallelNum = FlinkEnvUtils.getInteger(Constants.SOURCE_BOT_PARALLELISM);
-    int nonBotSourceParallelNum = FlinkEnvUtils.getInteger(Constants.SOURCE_NON_BOT_PARALLELISM);
-    int sinkParallelNum = FlinkEnvUtils.getInteger(Constants.SINK_HDFS_PARALLELISM);
+        .getString(Property.KAFKA_COMMON_CONSUMER_GROUP_ID_NON_BOT);
+    int botSourceParallelNum = FlinkEnvUtils.getInteger(Property.SOURCE_BOT_PARALLELISM);
+    int nonBotSourceParallelNum = FlinkEnvUtils.getInteger(Property.SOURCE_NON_BOT_PARALLELISM);
+    int sinkParallelNum = FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM);
     String botBootstrapServers = FlinkEnvUtils
-        .getString(Constants.KAFKA_COMMON_CONSUMER_BROKERS_BOT);
+        .getString(Property.KAFKA_COMMON_CONSUMER_BROKERS_BOT);
     String nonBotBootstrapServers = FlinkEnvUtils
-        .getString(Constants.KAFKA_COMMON_CONSUMER_BROKERS_NON_BOT);
+        .getString(Property.KAFKA_COMMON_CONSUMER_BROKERS_NON_BOT);
 
     // bot event kafka source
     DataStream jetStreamOutputBotEventDataStream = SourceDataStreamBuilder
@@ -53,6 +53,6 @@ public class JetstreamKafkaToHdfsJob {
 
     // submit job
     FlinkEnvUtils
-        .execute(executionEnvironment, FlinkEnvUtils.getString(Constants.NAME_HDFS_DUMP_PIPELINE));
+        .execute(executionEnvironment, FlinkEnvUtils.getString(Property.NAME_HDFS_DUMP_PIPELINE));
   }
 }

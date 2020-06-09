@@ -76,7 +76,6 @@ public class AvroKeyedSerializationSchema<T> implements KeyedSerializationSchema
       }
     }
     */
-
     return null;
   }
 

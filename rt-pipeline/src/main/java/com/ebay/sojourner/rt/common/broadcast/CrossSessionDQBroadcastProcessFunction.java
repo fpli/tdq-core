@@ -2,10 +2,10 @@ package com.ebay.sojourner.rt.common.broadcast;
 
 import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.IntermediateSession;
+import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.TransformUtil;
 import com.ebay.sojourner.common.util.UbiSessionHelper;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
-import com.ebay.sojourner.flink.common.util.Constants;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
