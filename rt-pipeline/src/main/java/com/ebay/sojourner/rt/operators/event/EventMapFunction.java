@@ -25,8 +25,7 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
   public void open(Configuration conf) throws Exception {
     super.open(conf);
     parser = new EventParser();
-    eventBotDetector = BotDetectorFactory.get(Type.EVENT);
-    RuleManager.getInstance().addListener(eventBotDetector);
+    eventBotDetector = BotDetectorFactory.get(Type.EVENT, RuleManager.getInstance());
 
     getRuntimeContext()
         .addAccumulator("Average Duration of Event Parsing", avgEventParserDuration);
@@ -49,7 +48,7 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
   @Override
   public void close() throws Exception {
-    eventBotDetector.close();
+    RuleManager.getInstance().close();
     super.close();
   }
 }

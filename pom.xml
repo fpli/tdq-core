@@ -46,7 +46,8 @@
     <jackson.version>2.9.8</jackson.version>
     <guava.version>28.1-jre</guava.version>
     <okhttp3.version>4.4.1</okhttp3.version>
-    <curator.version>4.3.0</curator.version>
+    <curator.version>4.2.0</curator.version>
+    <zookeeper.version>3.4.14</zookeeper.version>
     <jacoco.version>0.8.5</jacoco.version>
     <CodeCacheSize>512m</CodeCacheSize>
   </properties>
@@ -138,6 +139,14 @@
           <exclusion>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils-core</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -297,7 +306,8 @@
         <version>${okhttp3.version}</version>
       </dependency>
 
-      <!--  ZooKeeper    -->
+      <!-- ZooKeeper -->
+      <!-- The Curator Client - replacement for the ZooKeeper class in the ZK distribution.   -->
       <dependency>
         <groupId>org.apache.curator</groupId>
         <artifactId>curator-client</artifactId>
@@ -307,12 +317,33 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
           </exclusion>
+          <exclusion>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+          </exclusion>
         </exclusions>
       </dependency>
       <dependency>
         <groupId>org.apache.curator</groupId>
         <artifactId>curator-recipes</artifactId>
         <version>${curator.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.zookeeper</groupId>
+        <artifactId>zookeeper</artifactId>
+        <version>${zookeeper.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <!-- Test Dependencies -->
