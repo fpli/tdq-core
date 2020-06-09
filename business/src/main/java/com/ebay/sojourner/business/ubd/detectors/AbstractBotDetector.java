@@ -13,29 +13,25 @@ import org.apache.commons.collections.CollectionUtils;
 public abstract class AbstractBotDetector<T>
     implements BotDetector<T>, RuleChangeEventListener<RuleChangeEvent> {
 
-  private final RuleManager ruleManager = RuleManager.getInstance();
-
   protected Set<SqlEventRule> sqlRules = Sets.newCopyOnWriteArraySet();
+  protected Set<RuleDefinition> ruleDefinitions;
 
-  public AbstractBotDetector() {
+  public AbstractBotDetector(RuleManager ruleManager) {
+    this.ruleDefinitions = ruleManager.getRuleDefinitions();
+    ruleManager.addListener(this);
     this.initBotRules();
   }
 
   //FIXME(Jason): this init method should be removed
   @Override
   public void initBotRules() {
-    Set<RuleDefinition> ruleDefinitions = ruleManager.getRuleDefinitions();
-    if (CollectionUtils.isNotEmpty(ruleDefinitions)) {
+    if (CollectionUtils.isNotEmpty(this.ruleDefinitions)) {
       this.sqlRules = ruleDefinitions
           .stream()
           .map(rule -> SqlEventRule
               .of(rule.getContent(), rule.getBizId(), rule.getVersion(), rule.getCategory()))
           .collect(Collectors.toSet());
     }
-  }
-
-  public void close() {
-    ruleManager.close();
   }
 
 }

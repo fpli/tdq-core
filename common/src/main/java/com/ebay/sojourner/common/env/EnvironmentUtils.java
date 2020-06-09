@@ -3,6 +3,7 @@ package com.ebay.sojourner.common.env;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,15 @@ public class EnvironmentUtils {
     for (AbstractEnvironment propSource : PROP_SOURCES) {
       if (propSource.contains(key)) {
         return propSource.getProperty(key);
+      }
+    }
+    throw new IllegalStateException("Cannot find property " + key);
+  }
+
+  public static Integer getInteger(String key) {
+    for (AbstractEnvironment propSource : PROP_SOURCES) {
+      if (propSource.contains(key)) {
+        return Integer.valueOf(Objects.requireNonNull(propSource.getProperty(key)));
       }
     }
     throw new IllegalStateException("Cannot find property " + key);

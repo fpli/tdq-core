@@ -230,16 +230,11 @@ public class Property {
   public static final String ZOOKEEPER_MAX_RETRIES = "zookeeper.maxRetries";
   public static final String ZOOKEEPER_BASE_SLEEP_TIME_MS = "zookeeper.baseSleepTimeMs";
   public static final String ZOOKEEPER_NAMESPACE = "zookeeper.namespace";
-  public static final String ZK_NODE_PATH = "zookeeper.nodepath";
 
   // rest client
   public static final String REST_SERVER = "rest-client.rest-server";
-  public static final String REST_PUBLISHED_RULE_LIST = "rest-client.published-rule-list";
-  public static final String REST_SPECIFIED_RULE = "rest-client.specified-rule";
-  public static final String REST_AUTH_USERNAME_KEY = "rest-client.auth-username-key";
-  public static final String REST_AUTH_USERNAME_VALUE = "rest-client.auth-username-value";
-  public static final String REST_AUTH_TOKEN_KEY = "rest-client.auth-token-key";
-  public static final String REST_AUTH_TOKEN_VALUE = "rest-client.auth-token-value";
+  public static final String REST_AUTH_USERNAME = "rest-client.auth-username";
+  public static final String REST_AUTH_TOKEN = "rest-client.auth-token";
 
   // ------------------------- batch connector property -------------------------
   // kafka consumer

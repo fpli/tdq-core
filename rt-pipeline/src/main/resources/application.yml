@@ -135,22 +135,13 @@ hdfs:
       session: /jetstream_sessions
 
 zookeeper:
-  server:
-    - zk-0.sojzk-ns.svc.32.tess.io:2181
-    - zk-1.sojzk-ns.svc.32.tess.io:2181
-    - zk-2.sojzk-ns.svc.32.tess.io:2181
   sessionTimeoutMs: 15000
   connectionTimeoutMs: 5000
   maxRetries: 3
   baseSleepTimeMs: 1000
   namespace: sojourner
-  nodepath: /rule/publish/notification
 
 rest-client:
   rest-server: https://sojubdportalservice.vip.ebay.com
-  published-rule-list: /api/rule/list/published
-  specified-rule: /api/rule/
-  auth-username-key: X-Auth-Username
-  auth-username-value: soj-flink-app
-  auth-token-key: X-Auth-Token
-  anth-token-value: B65613BAE51443268AEBCAEF26C30ABE
+  auth-username: soj-flink-app
+  auth-token: B65613BAE51443268AEBCAEF26C30ABE

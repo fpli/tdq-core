@@ -14,6 +14,3 @@ flink:
 
 zookeeper:
   server:
-    - zk-0.sojzk-ns.svc.32.tess.io:2181
-    - zk-1.sojzk-ns.svc.32.tess.io:2181
-    - zk-2.sojzk-ns.svc.32.tess.io:2181

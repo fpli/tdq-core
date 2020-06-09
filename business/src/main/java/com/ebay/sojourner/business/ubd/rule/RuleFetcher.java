@@ -19,12 +19,10 @@ public class RuleFetcher {
 
   private final OkHttpClient client;
   private final ObjectMapper objectMapper;
-  private static final String FETCH_ALL_RULES =
-      EnvironmentUtils.get(Property.REST_SERVER) + EnvironmentUtils
-          .get(Property.REST_PUBLISHED_RULE_LIST);
-  private static final String FETCH_RULE_PREFIX =
-      EnvironmentUtils.get(Property.REST_SERVER) + EnvironmentUtils
-          .get(Property.REST_SPECIFIED_RULE);
+  private static final String FETCH_ALL_RULES_URL =
+      EnvironmentUtils.get(Property.REST_SERVER) + "/api/rule/list/published";
+  private static final String FETCH_RULE_URL_PREFIX =
+      EnvironmentUtils.get(Property.REST_SERVER) + "/api/rule/";
 
   public RuleFetcher() {
     this.client = RestClientUtils.getRestClient();
@@ -36,20 +34,36 @@ public class RuleFetcher {
 
     try {
       Request request = RestClientUtils
-          .buildRequest(FETCH_ALL_RULES);
-      log.info("Fetching rules url is {}", FETCH_ALL_RULES);
+          .buildRequest(FETCH_ALL_RULES_URL);
+      log.info("Fetching rules url is {}", FETCH_ALL_RULES_URL);
       Response response = client.newCall(request).execute();
       ruleDefinitionList = objectMapper
           .reader()
           .forType(new TypeReference<List<RuleDefinition>>() {
           })
           .readValue(response.body().string());
-      log.info("Rules = " + ruleDefinitionList);
+      log.info("Fetched Rule List = " + ruleDefinitionList);
     } catch (IOException e) {
       log.error("fetch all published rule failed", e);
     }
 
     return ruleDefinitionList;
+  }
+
+  public RuleDefinition fetchRuleById(String id) {
+    RuleDefinition ruleDefinition = null;
+    try {
+      Request request = RestClientUtils
+          .buildRequest(FETCH_RULE_URL_PREFIX + id);
+      Response response = client.newCall(request).execute();
+      String responseBody = response.body().string();
+      ruleDefinition = objectMapper.readValue(responseBody, RuleDefinition.class);
+      log.info("Fetched Rule = " + ruleDefinition);
+    } catch (IOException e) {
+      log.error("fetch specified rule failed", e);
+    }
+
+    return ruleDefinition;
   }
 
 }

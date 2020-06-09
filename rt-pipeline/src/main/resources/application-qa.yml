@@ -71,10 +71,7 @@ rheos:
     env: staging
 
 zookeeper:
-  server:
-    - zk-0.sojzk-ns.svc.32.tess.io:2181
-    - zk-1.sojzk-ns.svc.32.tess.io:2181
-    - zk-2.sojzk-ns.svc.32.tess.io:2181
+  server: localhost:2181
 
 rest-client:
-  rest-server: https://sojubdportalservice.vip.qa.ebay.com
+  rest-server: http://localhost:8080
