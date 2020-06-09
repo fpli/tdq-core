@@ -1,10 +1,13 @@
 package com.ebay.sojourner.common.util;
 
+import com.google.common.base.Stopwatch;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
@@ -44,7 +47,8 @@ public class SOJNameValueParser {
     return null;
   }
 
-  public static void getTagValues(String string, Collection<String> keys, Map<String, String> kvMap)
+  public static void getTagValuesOld(String string, Collection<String> keys,
+      Map<String, String> kvMap)
       throws NullPointerException {
     if (kvMap == null) {
       throw new NullPointerException("No Map init to store the KV");
@@ -118,6 +122,57 @@ public class SOJNameValueParser {
     }
   }
 
+  public static void getTagValues(String string, Collection<String> keys, Map<String, String> kvMap)
+      throws NullPointerException {
+    if (kvMap == null) {
+      throw new NullPointerException("No Map init to store the KV");
+    } else if (kvMap.size() > 0) {
+      kvMap.clear();
+    }
+    if (StringUtils.isBlank(string) || keys == null || keys.size() <= 0) {
+      return;
+    }
+    Collection<String> cleanKeys = new HashSet<String>();
+    Set<String> constructedKeys = new HashSet<>();
+    String keySet = "";
+    int startpos = 0;
+    int endpos = 0;
+
+    // ensure string starts with &
+    string = "&" + string;
+    // set search keys
+    Iterator<String> iterator = keys.iterator();
+    String key = null;
+    while (iterator.hasNext()) {
+      key = iterator.next();
+      if (StringUtils.isNotBlank(key)) {
+        keySet = "&" + key + "=";
+        constructedKeys.add(keySet);
+        cleanKeys.add(key);
+      }
+    }
+    if (cleanKeys.size() == 0) {
+      return;
+    }
+    for (String constructedKey : constructedKeys) {
+      if (string.indexOf(constructedKey) >= 0) {
+        startpos = string.indexOf(constructedKey);
+        endpos =
+            string.substring(startpos + constructedKey.length()).indexOf(KV_DELIMITER);
+        if (endpos < 0) {
+          endpos = string.length();
+        } else {
+          endpos += startpos + constructedKey.length();
+        }
+
+        String[] kvPair = string.substring(startpos + 1, endpos).split("=", 2);
+        if (!kvMap.containsKey(kvPair[0])) {
+          kvMap.put(kvPair[0], kvPair[1].equals("") ? null : kvPair[1]);
+        }
+      }
+    }
+  }
+
   public static Map<String, String> getTagValues(String string, Collection<String> keys) {
     Map<String, String> kvMap = new HashMap<String, String>();
     getTagValues(string, keys, kvMap);
@@ -145,10 +200,29 @@ public class SOJNameValueParser {
   }
 
   public static void main(String[] args) {
-    System.out.println(getTagValue("app=2571&c=1&g=bbffceff169e2254039923d001172c86&nid=&h=ff"
-        + "&cguidsrc=cookie&n=bbffd7151690aad765a3bca7d819e376&uc=1&p=3084&uaid"
-        + "=1a1fee4f1720a9b12a948c5bdcfe98faS0&bs=0&rvrid=2426431642212&t=3&cflgs=EA**&ul=en-US"
-        + "&mppid=117&pn=2&pcguid=bbffd7151690aad765a3bca7d819e376&rq=6a7d991ef6510251&pagename"
-        + "=EntryTracking&ciid=H%2B5PEqk*","mppid"));
+    Map<String, String> kvMap = new HashMap<String, String>();
+    Stopwatch stopwatch = Stopwatch.createStarted();
+    getTagValuesOld("&app=2571&c=1&g=bbffceff169e2254039923d001172c86&nid=&h=ff"
+            + "&cguidsrc=cookie&n=bbffd7151690aad765a3bca7d819e376&uc=1&p=3084&uaid"
+            + "=1a1fee4f1720a9b12a948c5bdcfe98faS0&bs=0&rvrid=2426431642212&t=3&cflgs=EA**&ul=en-US"
+            + "&mppid=117&pn=2&pcguid=bbffd7151690aad765a3bca7d819e376&rq=6a7d991ef6510251&pagename"
+            + "=EntryTracking&ciid=H%2B5PEqk*", new HashSet<>(Arrays.asList("mppid", "app", "gd")),
+        kvMap);
+    stopwatch.stop();
+    System.out.println(stopwatch.elapsed());
+    System.out.println(kvMap);
+
+    kvMap = new HashMap<String, String>();
+    Stopwatch stopwatch2 = Stopwatch.createStarted();
+    getTagValues("&app=2571&c=1&g=bbffceff169e2254039923d001172c86&nid=&h=ff"
+            + "&cguidsrc=cookie&n=bbffd7151690aad765a3bca7d819e376&uc=1&p=3084&uaid"
+            + "=1a1fee4f1720a9b12a948c5bdcfe98faS0&bs=0&rvrid=2426431642212&t=3&cflgs=EA**&ul=en-US"
+            + "&mppid=117&pn=2&pcguid=bbffd7151690aad765a3bca7d819e376&rq=6a7d991ef6510251&pagename"
+            + "=EntryTracking&ciid=H%2B5PEqk*", new HashSet<>(Arrays.asList("mppid", "app", "gd")),
+        kvMap);
+    stopwatch2.stop();
+    System.out.println(stopwatch2.elapsed());
+    System.out.println(kvMap);
+
   }
 }
