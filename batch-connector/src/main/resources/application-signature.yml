@@ -1,0 +1,31 @@
+kafka:
+  common:
+    consumer:
+      brokers:
+        default: rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092,rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092,rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092,rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092,rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
+      topic:
+        ip: behavior.total.new.signature.ip
+        agent: behavior.total.new.signature.agent
+        agent-ip: behavior.total.new.signature.agentIp
+        guid: behavior.total.new.signature.guid
+      group-id:
+        ip: sojourner-pathfinder-ip
+        agent: sojourner-pathfinder-agent
+        agent-ip: sojourner-pathfinder-agent-ip
+        guid: sojourner-pathfinder-agent-guid
+
+flink:
+  app:
+    parallelism:
+      source:
+        ip: 10
+        agent: 10
+        agent-ip: 50
+        guid: 20
+      sink:
+        hdfs: 50
+
+hdfs:
+  dump:
+    path: hdfs://apollo-rno/sys/soj/ubd/signatures
+    class-name: com.ebay.sojourner.common.model.BotSignature

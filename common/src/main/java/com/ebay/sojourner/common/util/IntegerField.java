@@ -48,7 +48,7 @@ public class IntegerField {
         fieldIntVal = Long.parseLong(field.trim());
       }
     } catch (NumberFormatException e) {
-      log.error("Error", e);
+      log.info("parse Long Error");
     }
     return fieldIntVal;
   }

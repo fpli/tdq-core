@@ -240,7 +240,15 @@ public class Property {
   // kafka consumer
   public static final String KAFKA_COMMON_CONSUMER_BROKERS_DEFAULT = "kafka.common.consumer.brokers.default";
   public static final String KAFKA_COMMON_CONSUMER_TOPIC_DEFAULT = "kafka.common.consumer.topic.default";
+  public static final String KAFKA_COMMON_CONSUMER_TOPIC_IP = "kafka.common.consumer.topic.ip";
+  public static final String KAFKA_COMMON_CONSUMER_TOPIC_AGENT = "kafka.common.consumer.topic.agent";
+  public static final String KAFKA_COMMON_CONSUMER_TOPIC_AGENT_IP = "kafka.common.consumer.topic.agent-ip";
+  public static final String KAFKA_COMMON_CONSUMER_TOPIC_GUID = "kafka.common.consumer.topic.guid";
   public static final String KAFKA_COMMON_CONSUMER_GROUP_ID_DEFAULT = "kafka.common.consumer.group-id.default";
+  public static final String KAFKA_COMMON_CONSUMER_GROUP_ID_IP = "kafka.common.consumer.group-id.ip";
+  public static final String KAFKA_COMMON_CONSUMER_GROUP_ID_AGENT = "kafka.common.consumer.group-id.agent";
+  public static final String KAFKA_COMMON_CONSUMER_GROUP_ID_AGENT_IP = "kafka.common.consumer.group-id.agent-ip";
+  public static final String KAFKA_COMMON_CONSUMER_GROUP_ID_GUID = "kafka.common.consumer.group-id.guid";
 
   // kafka producer
   public static final String KAFKA_COMMON_PRODUCER_BROKERS_DEFAULT = "kafka.common.producer.brokers.default";
@@ -248,6 +256,10 @@ public class Property {
 
   // parallelism config
   public static final String SOURCE_DEFAULT_PARALLELISM = "flink.app.parallelism.source.default";
+  public static final String SOURCE_IP_PARALLELISM = "flink.app.parallelism.source.ip";
+  public static final String SOURCE_AGENT_PARALLELISM = "flink.app.parallelism.source.agent";
+  public static final String SOURCE_AGENT_IP_PARALLELISM = "flink.app.parallelism.source.agent-ip";
+  public static final String SOURCE_GUID_PARALLELISM = "flink.app.parallelism.source.guid";
   public static final String SINK_HDFS_PARALLELISM = "flink.app.parallelism.sink.hdfs";
   public static final String SINK_KAFKA_PARALLELISM = "flink.app.parallelism.sink.kafka";
 
