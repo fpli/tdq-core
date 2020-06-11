@@ -63,10 +63,10 @@ kafka:
           bot: behavior.total.new.sojevent.bot
           non-bot: behavior.total.new.sojevent
         signature:
-          agent-ip: behavior.total.new.agent.ip
-          agent: behavior.total.new.agent
-          ip: behavior.total.new.ip
-          guid: behavior.total.new.guid
+          agent-ip: behavior.total.new.signature.agentIp
+          agent: behavior.total.new.signature.agent
+          ip: behavior.total.new.signature.ip
+          guid: behavior.total.new.signature.guid
       group-id:
         session:
           bot: sojourner-pathfinder-session
@@ -83,9 +83,9 @@ kafka:
 flink:
   app:
     name:
-      full-pipeline: Unified Bot Detection RT Pipeline
-      data-quality: Unified Bot Detection RT DQ Pipeline
-      hot-deploy: Unified Bot Detection RT Hot Deploy Pipeline
+      full-pipeline: Sojourner RT Pipeline
+      data-quality: Sojourner RT DQ Pipeline
+      hot-deploy: Sojourner RT Hot Deploy Pipeline
     parallelism:
       default: 100
       source: 100

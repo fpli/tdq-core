@@ -14,7 +14,7 @@ flink:
       source:
         default: 30
       sink:
-        hdfs: 50
+        hdfs: 30
 
 hdfs:
   dump:

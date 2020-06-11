@@ -1,16 +1,17 @@
 flink:
   app:
     parallelism:
+      default: 100
       source: 100
       event: 100
-      session: 900
-      pre-agent-ip: 300
-      agent-ip: 300
-      agent: 300
-      ip: 300
-      guid: 300
-      broadcast: 300
-      metrics: 300
+      session: 640
+      pre-agent-ip: 100
+      agent-ip: 100
+      agent: 100
+      ip: 100
+      guid: 100
+      broadcast: 200
+      metrics: 200
 
 zookeeper:
   server:

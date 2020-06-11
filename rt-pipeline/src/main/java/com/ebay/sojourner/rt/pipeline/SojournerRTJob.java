@@ -177,7 +177,7 @@ public class SojournerRTJob {
             .window(TumblingEventTimeWindows.of(Time.minutes(5)))
             .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
             .setParallelism(FlinkEnvUtils.getInteger(Property.PRE_AGENT_IP_PARALLELISM))
-            .slotSharingGroup(FlinkEnvUtils.getString(Property.BROADCAST_SLOT_SHARE_GROUP))
+            .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
             .name("Attribute Operator (Agent+IP Pre-Aggregation)")
             .uid("pre-agent-ip-id");
 
@@ -187,7 +187,7 @@ public class SojournerRTJob {
         .trigger(OnElementEarlyFiringTrigger.create())
         .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Property.GUID_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.BROADCAST_SLOT_SHARE_GROUP))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Attribute Operator (GUID)")
         .uid("guid-id");
 
@@ -198,7 +198,7 @@ public class SojournerRTJob {
         .aggregate(
             new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Property.AGENT_IP_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.BROADCAST_SLOT_SHARE_GROUP))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Attribute Operator (Agent+IP)")
         .uid("agent-ip-id");
 
@@ -208,7 +208,7 @@ public class SojournerRTJob {
         .trigger(OnElementEarlyFiringTrigger.create())
         .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Property.AGENT_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.BROADCAST_SLOT_SHARE_GROUP))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Attribute Operator (Agent)")
         .uid("agent-id");
 
@@ -218,7 +218,7 @@ public class SojournerRTJob {
         .trigger(OnElementEarlyFiringTrigger.create())
         .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Property.IP_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.BROADCAST_SLOT_SHARE_GROUP))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Attribute Operator (IP)")
         .uid("ip-id");
 
@@ -339,28 +339,28 @@ public class SojournerRTJob {
     guidSignatureDataStream
         .process(new GuidMetricsCollectorProcessFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Property.GUID_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.BROADCAST_SLOT_SHARE_GROUP))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Guid Metrics Collector")
         .uid("guid-metrics-id");
 
     agentIpSignatureDataStream
         .process(new AgentIpMetricsCollectorProcessFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Property.AGENT_IP_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.BROADCAST_SLOT_SHARE_GROUP))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("AgentIp Metrics Collector")
         .uid("agentIp-metrics-id");
 
     agentSignatureDataStream
         .process(new AgentMetricsCollectorProcessFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Property.AGENT_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.BROADCAST_SLOT_SHARE_GROUP))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Agent Metrics Collector")
         .uid("agent-metrics-id");
 
     ipSignatureDataStream
         .process(new IpMetricsCollectorProcessFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Property.IP_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.BROADCAST_SLOT_SHARE_GROUP))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Ip Metrics Collector")
         .uid("ip-metrics-id");
 

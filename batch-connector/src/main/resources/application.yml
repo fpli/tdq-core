@@ -28,8 +28,8 @@ kafka:
 flink:
   app:
     name:
-      hdfs-dump: Unified Bot Detection HDFS Load Pipeline
-      kafka-dump: Unified Bot Detection KAFKA Load Pipeline
+      hdfs-dump: Sojourner HDFS Load Pipeline
+      kafka-dump: Sojourner Kafka Load Pipeline
     parallelism:
       source:
         default: 150
