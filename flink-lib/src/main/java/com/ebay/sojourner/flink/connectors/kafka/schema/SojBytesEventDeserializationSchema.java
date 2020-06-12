@@ -1,18 +1,17 @@
-package com.ebay.sojourner.flink.connectors.kafka;
+package com.ebay.sojourner.flink.connectors.kafka.schema;
 
 import com.ebay.sojourner.common.model.SojBytesEvent;
 import java.io.IOException;
+import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.streaming.util.serialization.KeyedDeserializationSchema;
 
 public class SojBytesEventDeserializationSchema implements
-    KeyedDeserializationSchema<SojBytesEvent> {
+    DeserializationSchema<SojBytesEvent> {
 
   @Override
-  public SojBytesEvent deserialize(byte[] messageKey, byte[] message, String topic, int partition,
-      long offset) throws IOException {
-    if (Math.abs(messageKey[messageKey.length - 1] % 10) == 0) {
-      return new SojBytesEvent(messageKey, message);
+  public SojBytesEvent deserialize(byte[] message) throws IOException {
+    if (Math.abs(message[message.length - 1] % 10) == 0) {
+      return new SojBytesEvent(message, message);
     } else {
       return new SojBytesEvent(null, null);
     }

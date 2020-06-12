@@ -67,15 +67,11 @@ public class SojournerRTJobForQA {
     // 1. Rheos Consumer
     // 1.1 Consume RawEvent from Rheos PathFinder topic
     // 1.2 Assign timestamps and emit watermarks.
-    DataStream<RawEvent> rawEventDataStream = SourceDataStreamBuilder.build(
-        executionEnvironment,
-        FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_TOPIC),
-        FlinkEnvUtils.getListString(Property.BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_LVS),
-        FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_LVS),
-        DataCenter.LVS,
-        FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM),
-        null,
-        RawEvent.class);
+    SourceDataStreamBuilder<RawEvent> dataStreamBuilder = new SourceDataStreamBuilder<>(
+        executionEnvironment, RawEvent.class
+    );
+
+    DataStream<RawEvent> rawEventDataStream = dataStreamBuilder.buildOfDC(DataCenter.LVS);
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent

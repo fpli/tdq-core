@@ -1,6 +1,7 @@
-package com.ebay.sojourner.flink.connectors.kafka;
+package com.ebay.sojourner.flink.connectors.kafka.schema;
 
 import com.ebay.sojourner.common.model.JetStreamOutputEvent;
+import com.ebay.sojourner.flink.connectors.kafka.RheosEventSerdeFactory;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.IOException;
 import org.apache.avro.generic.GenericRecord;

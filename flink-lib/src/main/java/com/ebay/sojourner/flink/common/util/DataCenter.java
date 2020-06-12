@@ -1,7 +1,17 @@
 package com.ebay.sojourner.flink.common.util;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
 public enum DataCenter {
-  RNO, SLC, LVS;
+  RNO("RNO"),
+  SLC("SLC"),
+  LVS("LVS");
+
+  private final String value;
 
   @Override
   public String toString() {

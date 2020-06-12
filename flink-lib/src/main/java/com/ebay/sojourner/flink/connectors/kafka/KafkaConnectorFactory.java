@@ -6,6 +6,13 @@ import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.SojBytesEvent;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
+import com.ebay.sojourner.flink.connectors.kafka.schema.AvroKeyedDeserializationSchema;
+import com.ebay.sojourner.flink.connectors.kafka.schema.AvroKeyedSerializationSchema;
+import com.ebay.sojourner.flink.connectors.kafka.schema.RawEventDeserializationSchema;
+import com.ebay.sojourner.flink.connectors.kafka.schema.SojBytesEventDeserializationSchema;
+import com.ebay.sojourner.flink.connectors.kafka.schema.SojBytesEventSerializationSchema;
+import com.ebay.sojourner.flink.connectors.kafka.schema.SojEventDeserializationSchema;
+import com.ebay.sojourner.flink.connectors.kafka.schema.SojSessionDeserializationSchema;
 import java.util.Optional;
 import java.util.Properties;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
@@ -27,8 +34,8 @@ public class KafkaConnectorFactory {
             "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId="
                 + "\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" "
                 + "iafSecret=\"%s\" iafEnv=\"%s\";",
-            FlinkEnvUtils.getString(Property.IAF_SECRET),
-            FlinkEnvUtils.getString(Property.IAF_ENV));
+            FlinkEnvUtils.getString(Property.RHEOS_CLIENT_IAF_SECRET),
+            FlinkEnvUtils.getString(Property.RHEOS_CLIENT_IAF_ENV));
 
     props.put(SaslConfigs.SASL_JAAS_CONFIG, saslJaasConfig);
     return props;

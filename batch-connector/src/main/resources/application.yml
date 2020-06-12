@@ -1,4 +1,16 @@
 kafka:
+  consumer:
+    stream: behavior.total.new
+    topic: behavior.total.new.sojevent
+    group-id: sojourner-pathfinder-event
+    bootstrap-servers:
+      rno:
+        - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
+
   common:
     consumer:
       max-poll-records: 3000

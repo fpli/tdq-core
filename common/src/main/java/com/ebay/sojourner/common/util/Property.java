@@ -184,9 +184,10 @@ public class Property {
   public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT_IP = "kafka.common.producer.message-key.signature.agent-ip";
 
   // rheos
-  public static final String RHEOS_KAFKA_REGISTRY_URL = "rheos.serviceUrl";
-  public static final String IAF_SECRET = "rheos.iaf.secret";
-  public static final String IAF_ENV = "rheos.iaf.env";
+  public static final String RHEOS_KAFKA_REGISTRY_URL = "rheos.registry-url";
+  public static final String RHEOS_CLIENT_ID = "rheos.client.id";
+  public static final String RHEOS_CLIENT_IAF_SECRET = "rheos.client.iaf.secret";
+  public static final String RHEOS_CLIENT_IAF_ENV = "rheos.client.iaf.env";
 
   // flink checkpoint
   public static final String CHECKPOINT_DATA_DIR = "flink.app.checkpoint.data-dir";
@@ -238,9 +239,10 @@ public class Property {
 
   // ------------------------- batch connector property -------------------------
   // kafka consumer
-  public static final String KAFKA_COMMON_CONSUMER_BROKERS_DEFAULT = "kafka.common.consumer.brokers.default";
-  public static final String KAFKA_COMMON_CONSUMER_TOPIC_DEFAULT = "kafka.common.consumer.topic.default";
-  public static final String KAFKA_COMMON_CONSUMER_GROUP_ID_DEFAULT = "kafka.common.consumer.group-id.default";
+  public static final String KAFKA_CONSUMER_STREAM = "kafka.consumer.stream";
+  public static final String KAFKA_CONSUMER_TOPIC = "kafka.consumer.topic";
+  public static final String KAFKA_CONSUMER_GROUP_ID = "kafka.consumer.group-id";
+  public static final String KAFKA_CONSUMER_BOOTSTRAP_SERVERS = "kafka.consumer.bootstrap-servers";
 
   // kafka producer
   public static final String KAFKA_COMMON_PRODUCER_BROKERS_DEFAULT = "kafka.common.producer.brokers.default";

@@ -1,18 +1,15 @@
 kafka:
+  consumer:
+    stream: behavior-pathfinder
+    group-id: sojourner-pathfinder-qa
+    bootstrap-servers:
+      lvs:
+        - rhs-vvrvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-vvrvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
   stream:
-    behavior-pathfinder:
-      bootstrap-servers:
-        lvs:
-          - rhs-vvrvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
-          - rhs-vvrvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
-          - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
-          - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
-          - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-      topic: behavior.pathfinder.events.total
-      group-id:
-        default:
-          lvs: sojourner-pathfinder-qa
-
     behavior-trafficjam:
       bootstrap-servers:
         default:
@@ -65,13 +62,14 @@ flink:
       metrics: 2
 
 rheos:
-  serviceUrl: https://rheos-services.qa.ebay.com
-  iaf:
-    secret: 6218c197-200e-49d7-b404-2a4dbf7595ef
-    env: staging
+  registry-url: https://rheos-services.qa.ebay.com
+  client:
+    iaf:
+      secret: 6218c197-200e-49d7-b404-2a4dbf7595ef
+      env: staging
 
 zookeeper:
-  server: localhost:2181
+  server: rhs-tdtvkiaa-fzk-lvs-1.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-2.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-3.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-4.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-5.rheos-streaming-qa.svc.32.tess.io:2181
 
 rest-client:
-  rest-server: http://localhost:8080
+  rest-server: https://sojubdportalservice.vip.qa.ebay.com

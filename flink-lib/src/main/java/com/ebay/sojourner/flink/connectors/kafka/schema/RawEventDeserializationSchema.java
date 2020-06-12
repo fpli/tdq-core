@@ -1,9 +1,10 @@
-package com.ebay.sojourner.flink.connectors.kafka;
+package com.ebay.sojourner.flink.connectors.kafka.schema;
 
 import com.ebay.sojourner.common.model.ClientData;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.RheosHeader;
 import com.ebay.sojourner.common.util.CalTimeOfDay;
+import com.ebay.sojourner.flink.connectors.kafka.RheosEventSerdeFactory;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
