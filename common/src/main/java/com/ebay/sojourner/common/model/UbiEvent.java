@@ -140,6 +140,8 @@ public class UbiEvent implements Serializable {
     int prefixLen = 0;
     if (!StringUtils.isBlank(prefix)) {
       prefixLen = prefix.length();
+    }else{
+      prefix="";
     }
     StringBuilder builder = new StringBuilder(prefixLen + 16);
     builder.append(prefix);
