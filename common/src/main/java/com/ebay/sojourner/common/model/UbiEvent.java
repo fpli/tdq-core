@@ -7,11 +7,11 @@ package com.ebay.sojourner.common.model;
 
 import com.ebay.sojourner.common.util.Constants;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.Data;
 import lombok.Getter;
+import org.apache.commons.lang.StringUtils;
 
 @Data
 public class UbiEvent implements Serializable {
@@ -98,6 +98,18 @@ public class UbiEvent implements Serializable {
 
   //  private Map<String, Object> counters;
 
+  public static void main(String[] args) {
+
+    System.out.println(new UbiEvent().concatTimestamp("70e613121720a48123c08d71fb272169",
+        3799995625873000L));
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("70e613121720a48123c08d71fb272169");
+    ubiEvent.setEventTimestamp(3799995625873000L);
+    ubiEvent.updateSessionId();
+    System.out.println(ubiEvent.getSessionId());
+    System.out.println(1 << 4);
+  }
+
   public void setIsReturningVisitor(boolean returningVisitor) {
     isReturningVisitor = returningVisitor;
   }
@@ -117,7 +129,7 @@ public class UbiEvent implements Serializable {
     //    } while (decimal != 0);
 
     // this.sessionId = guid + new String(out, 0, out.length);
-    this.sessionId=concatTimestamp(this.guid,this.eventTimestamp);
+    this.sessionId = concatTimestamp(this.guid, this.eventTimestamp);
   }
 
   public void updateSessionSkey() {
@@ -125,7 +137,11 @@ public class UbiEvent implements Serializable {
   }
 
   private String concatTimestamp(String prefix, long timestamp) {
-    StringBuilder builder = new StringBuilder(prefix.length() + 16);
+    int prefixLen = 0;
+    if (!StringUtils.isBlank(prefix)) {
+      prefixLen = prefix.length();
+    }
+    StringBuilder builder = new StringBuilder(prefixLen + 16);
     builder.append(prefix);
     String x = Long.toHexString(timestamp);
     for (int i = 16 - x.length(); i > 0; i--) {
@@ -141,10 +157,6 @@ public class UbiEvent implements Serializable {
 
   public boolean isNewSession() {
     return Constants.NO_SESSION_ID.equals(sessionId);
-  }
-
-  public boolean hasSessionEndTime() {
-    return Constants.NO_TIMESTAMP != sessionEndTime;
   }
 
   //  public Object get(String key) {
@@ -171,14 +183,7 @@ public class UbiEvent implements Serializable {
   //    counters.put(key, value);
   //  }
 
-  public static void main(String[] args) {
-
-    System.out.println(new UbiEvent().concatTimestamp("70e613121720a48123c08d71fb272169",
-        3799995625873000L));
-    UbiEvent ubiEvent = new UbiEvent();
-    ubiEvent.setGuid("70e613121720a48123c08d71fb272169");
-    ubiEvent.setEventTimestamp(3799995625873000L);
-    ubiEvent.updateSessionId();
-    System.out.println(ubiEvent.getSessionId());
+  public boolean hasSessionEndTime() {
+    return Constants.NO_TIMESTAMP != sessionEndTime;
   }
 }
