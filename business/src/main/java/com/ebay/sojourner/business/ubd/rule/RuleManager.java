@@ -1,17 +1,8 @@
 package com.ebay.sojourner.business.ubd.rule;
 
-import static com.ebay.sojourner.common.util.Property.ZOOKEEPER_BASE_SLEEP_TIME_MS;
-import static com.ebay.sojourner.common.util.Property.ZOOKEEPER_CONNECTION_TIMEOUT_MS;
-import static com.ebay.sojourner.common.util.Property.ZOOKEEPER_MAX_RETRIES;
-import static com.ebay.sojourner.common.util.Property.ZOOKEEPER_NAMESPACE;
-import static com.ebay.sojourner.common.util.Property.ZOOKEEPER_SERVER;
-import static com.ebay.sojourner.common.util.Property.ZOOKEEPER_SESSION_TIMEOUT_MS;
-
-import com.ebay.sojourner.common.env.EnvironmentUtils;
 import com.ebay.sojourner.common.model.rule.RuleChangeEvent;
 import com.ebay.sojourner.common.model.rule.RuleDefinition;
 import com.ebay.sojourner.common.zookeeper.ZkClient;
-import com.ebay.sojourner.common.zookeeper.ZkConfig;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.time.LocalDateTime;
@@ -33,7 +24,7 @@ public class RuleManager {
 
   private static final RuleManager INSTANCE = new RuleManager();
   private final RuleFetcher ruleFetcher = new RuleFetcher();
-  private final ZkClient zkClient;
+  // private final ZkClient zkClient;
   private final ExecutorService zkExecutor = Executors.newSingleThreadExecutor();
   private final ScheduledExecutorService schedulingExecutor =
       Executors.newSingleThreadScheduledExecutor();
@@ -45,9 +36,10 @@ public class RuleManager {
   private Set<RuleDefinition> ruleDefinitions = Sets.newHashSet();
 
   private RuleManager() {
-    initRules();
+    // initRules();
 
     // 1. init zk listener
+    /*
     zkClient = new ZkClient(
         ZkConfig.builder()
             .server(EnvironmentUtils.get(ZOOKEEPER_SERVER))
@@ -58,11 +50,12 @@ public class RuleManager {
             .namespace(EnvironmentUtils.get(ZOOKEEPER_NAMESPACE))
             .build()
     );
+    */
 
-    initZkListener(zkClient, zkExecutor);
+    // initZkListener(zkClient, zkExecutor);
 
     // 2. init scheduling
-    initScheduler(schedulingExecutor, 60L * 60 * 6, 60L * 60 * 6);
+    // initScheduler(schedulingExecutor, 60L * 60 * 6, 60L * 60 * 6);
   }
 
   public static RuleManager getInstance() {
@@ -151,7 +144,7 @@ public class RuleManager {
   }
 
   public void close() {
-    zkClient.close();
+    // zkClient.close();
     zkExecutor.shutdown();
     schedulingExecutor.shutdown();
   }
