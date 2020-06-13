@@ -215,6 +215,11 @@ public class Property {
   public static final String SESSION_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.session";
   public static final String CROSS_SESSION_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.cross-session";
   public static final String BROADCAST_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.broadcast";
+  public static final String PRE_AGENT_IP_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.pre-agent-ip";
+  public static final String AGENT_IP_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.agent-ip";
+  public static final String AGENT_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.agent";
+  public static final String IP_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.ip";
+  public static final String GUID_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.guid";
 
   // flink - app name
   public static final String NAME_FULL_PIPELINE = "flink.app.name.full-pipeline";

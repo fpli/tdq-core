@@ -54,7 +54,7 @@ public class SignatureUtils {
   }
 
   public static void buildSignatureKafkaSink(DataStream<BotSignature> dataStream, String topic,
-      String signatureId, String messageKey) {
+      String signatureId, String slotGroup, String messageKey) {
 
     dataStream
         .addSink(KafkaConnectorFactory.createKafkaProducer(
@@ -63,7 +63,7 @@ public class SignatureUtils {
             BotSignature.class,
             messageKey))
         .setParallelism(FlinkEnvUtils.getInteger(Property.DEFAULT_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
+        .slotSharingGroup(slotGroup)
         .name(String.format("%s Signature", signatureId))
         .uid(String.format("signature-%s-sink-id", signatureId));
 
