@@ -10,6 +10,8 @@ kafka:
 
 flink:
   app:
+    name:
+      hdfs-dump: Sojourner Ip Signature HDFS Load Pipeline
     parallelism:
       source:
         default: 10

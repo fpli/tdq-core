@@ -28,14 +28,14 @@ kafka:
 flink:
   app:
     name:
-      hdfs-dump: Sojourner HDFS Load Pipeline
+      hdfs-dump: Sojourner Event HDFS Load Pipeline
       kafka-dump: Sojourner Kafka Load Pipeline
     parallelism:
       source:
-        default: 150
+        default: 100
       sink:
         kafka: 100
-        hdfs: 150
+        hdfs: 100
     checkpoint:
       data-dir: /opt/sojourner-ubd/checkpoint
       interval-ms: 300000
