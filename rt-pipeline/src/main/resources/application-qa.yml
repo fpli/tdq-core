@@ -1,7 +1,6 @@
 kafka:
   consumer:
-    stream: behavior-pathfinder
-    group-id: sojourner-pathfinder-qa
+    group-id: sojourner-pathfinder-consumer-qa
     bootstrap-servers:
       lvs:
         - rhs-vvrvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
@@ -9,43 +8,28 @@ kafka:
         - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
         - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
         - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-  stream:
-    behavior-trafficjam:
-      bootstrap-servers:
-        default:
-          - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
-          - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
-          - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
-          - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
-          - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-      topic:
-        session:
-          bot: behavior.trafficjam.session.bot
-          non-bot: behavior.trafficjam.session
-        event:
-          bot: behavior.trafficjam.event.bot
-          non-bot: behavior.trafficjam.event
-        signature:
-          agent-ip: behavior.trafficjam.agent.ip
-          agent: behavior.trafficjam.agent
-          ip: behavior.trafficjam.ip
-          guid: behavior.trafficjam.guid
-      group-id:
-        session:
-          bot: sojourner-pathfinder-session-bot
-          non-bot: sojourner-pathfinder-session-non-bot
-        event:
-          bot: sojourner-pathfinder-event
-          non-bot: sojourner-pathfinder-event
-        signature:
-          agent-ip: sojourner-pathfinder-agent-ip
-          agent: sojourner-pathfinder-agent
-          ip: sojourner-pathfinder-ip
-          guid: sojourner-pathfinder-guid
-      message-key:
-        session: guid
-        event: guid
-        signature: signatureId
+
+  producer:
+    stream: behavior-trafficjam
+    topic:
+      session:
+        bot: behavior.trafficjam.session.bot
+        non-bot: behavior.trafficjam.session
+      event:
+        bot: behavior.trafficjam.event.bot
+        non-bot: behavior.trafficjam.event
+      signature:
+        agent-ip: behavior.trafficjam.agent.ip
+        agent: behavior.trafficjam.agent
+        ip: behavior.trafficjam.ip
+        guid: behavior.trafficjam.guid
+    bootstrap-servers:
+      lvs:
+        - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
 
 flink:
   app:
@@ -64,6 +48,7 @@ flink:
 rheos:
   registry-url: https://rheos-services.qa.ebay.com
   client:
+    id: "urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618"
     iaf:
       secret: 6218c197-200e-49d7-b404-2a4dbf7595ef
       env: staging

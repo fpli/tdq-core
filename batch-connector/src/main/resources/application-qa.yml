@@ -35,10 +35,7 @@ hdfs:
     class-name: com.ebay.sojourner.common.model.SojEvent
 
 zookeeper:
-  server:
-    - zk-0.sojzk-ns.svc.32.tess.io:2181
-    - zk-1.sojzk-ns.svc.32.tess.io:2181
-    - zk-2.sojzk-ns.svc.32.tess.io:2181
+  server: rhs-tdtvkiaa-fzk-lvs-1.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-2.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-3.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-4.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-5.rheos-streaming-qa.svc.32.tess.io:2181
 
 rest-client:
   rest-server: https://sojubdportalservice.vip.qa.ebay.com

@@ -2,7 +2,7 @@ kafka:
   consumer:
     stream: behavior.total.new
     topic: behavior.total.new.sojevent
-    group-id: sojourner-pathfinder-event
+    group-id: sojourner-pathfinder-event-non-bot
     bootstrap-servers:
       rno:
         - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
@@ -19,23 +19,19 @@ kafka:
       fetch-max-wait-ms: 1000
       max-partitions-fetch-bytes: 8388608
       auto-offset-reset: latest
-      brokers:
-        default: rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092,rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092,rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092,rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092,rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
-      topic:
-        default: behavior.total.new.sojevent
-      group-id:
-        default: sojourner-pathfinder-event
-
     producer:
       batch-size: 4096
       request-timeout-ms: 60000
-      brokers:
-        default: rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092,rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092,rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092,rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092,rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
-      topic:
-        default: behavior.total.new.sojevent
       message-key:
         session: guid
         event: guid
+
+  producer:
+    stream:
+    topic:
+    bootstrap-servers:
+      rno:
+
 
 flink:
   app:
@@ -56,10 +52,12 @@ flink:
       max-concurrent: 1
 
 rheos:
-  serviceUrl: https://rheos-services.stratus.ebay.com
-  iaf:
-    secret: c4bb6fca-7ac5-46dd-b218-a49cb6307dbc
-    env: production
+  registry-url: https://rheos-services.stratus.ebay.com
+  client:
+    id: "urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618"
+    iaf:
+      secret: c4bb6fca-7ac5-46dd-b218-a49cb6307dbc
+      env: production
 
 hdfs:
   dump:
@@ -67,22 +65,13 @@ hdfs:
     class-name: com.ebay.sojourner.common.model.SojEvent
 
 zookeeper:
-  server:
-    - zk-0.sojzk-ns.svc.32.tess.io:2181
-    - zk-1.sojzk-ns.svc.32.tess.io:2181
-    - zk-2.sojzk-ns.svc.32.tess.io:2181
   sessionTimeoutMs: 15000
   connectionTimeoutMs: 5000
   maxRetries: 3
   baseSleepTimeMs: 1000
   namespace: sojourner
-  nodepath: /rule/publish/notification
 
 rest-client:
   rest-server: https://sojubdportalservice.vip.ebay.com
-  published-rule-list: /api/rule/list/published
-  specified-rule: /api/rule/
-  auth-username-key: X-Auth-Username
-  auth-username-value: soj-flink-app
-  auth-token-key: X-Auth-Token
-  anth-token-value: B65613BAE51443268AEBCAEF26C30ABE
+  auth-username: soj-flink-app
+  anth-token: B65613BAE51443268AEBCAEF26C30ABE

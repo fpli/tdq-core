@@ -64,7 +64,7 @@ public class SojournerRTJobForEventDataCopy {
 
     DataStream<SojBytesEvent> bytesFilterDataStream = sojBytesDataStream
         .filter(new SojBytesEventFilterFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Property.EVENT_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .name("Bytes Filter")
         .uid("byte-filter-id");
 
@@ -73,7 +73,7 @@ public class SojournerRTJobForEventDataCopy {
         .addSink(KafkaConnectorFactory.createKafkaProducerForCopy(
             FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_SESSION),
             FlinkEnvUtils.getListString(Property.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT)))
-        .setParallelism(FlinkEnvUtils.getInteger(Property.EVENT_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .name("RawEvent")
         .uid("event-sink-id");
 
