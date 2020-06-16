@@ -6,6 +6,7 @@
 package com.ebay.sojourner.common.model;
 
 import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.common.util.SojTimestamp;
 import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -100,11 +101,11 @@ public class UbiEvent implements Serializable {
 
   public static void main(String[] args) {
 
-    System.out.println(new UbiEvent().concatTimestamp("70e613121720a48123c08d71fb272169",
-        3799995625873000L));
+    System.out.println(new UbiEvent().concatTimestamp("0174145e1540a5ed28910e02ffa7abf5",
+        3801167554921000L));
     UbiEvent ubiEvent = new UbiEvent();
-    ubiEvent.setGuid("70e613121720a48123c08d71fb272169");
-    ubiEvent.setEventTimestamp(3799995625873000L);
+    ubiEvent.setGuid("0174145e1540a5ed28910e02ffa7abf5");
+    ubiEvent.setEventTimestamp(3801167554921000L);
     ubiEvent.updateSessionId();
     System.out.println(ubiEvent.getSessionId());
     System.out.println(1 << 4);
@@ -137,6 +138,7 @@ public class UbiEvent implements Serializable {
   }
 
   private String concatTimestamp(String prefix, long timestamp) {
+    long unixTimestamp = SojTimestamp.getSojTimestampToUnixTimestamp(timestamp);
     int prefixLen = 0;
     if (!StringUtils.isBlank(prefix)) {
       prefixLen = prefix.length();
@@ -145,7 +147,7 @@ public class UbiEvent implements Serializable {
     }
     StringBuilder builder = new StringBuilder(prefixLen + 16);
     builder.append(prefix);
-    String x = Long.toHexString(timestamp);
+    String x = Long.toHexString(unixTimestamp);
     for (int i = 16 - x.length(); i > 0; i--) {
       builder.append('0');
     }
@@ -188,4 +190,6 @@ public class UbiEvent implements Serializable {
   public boolean hasSessionEndTime() {
     return Constants.NO_TIMESTAMP != sessionEndTime;
   }
+
+
 }
