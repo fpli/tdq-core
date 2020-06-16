@@ -4,19 +4,21 @@ kafka:
       brokers:
         default: rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092,rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092,rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092,rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092,rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
       topic:
-        default: behavior.total.new.signature.agentIp
+        default: behavior.total.new.signature.agent
       group-id:
-        default: sojourner-pathfinder-agent-ip
+        default: sojourner-pathfinder-agent
 
 flink:
   app:
+    name:
+      hdfs-dump: Sojourner Agent Signature HDFS Load Pipeline
     parallelism:
       source:
-        default: 50
+        default: 10
       sink:
-        hdfs: 50
+        hdfs: 10
 
 hdfs:
   dump:
-    path: hdfs://apollo-rno/sys/soj/ubd/signatures/type=agentIp
+    path: hdfs://apollo-rno/sys/soj/ubd/signatures/type=agent
     class-name: com.ebay.sojourner.common.model.BotSignature

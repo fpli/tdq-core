@@ -48,7 +48,7 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
   @Override
   public void close() throws Exception {
-    RuleManager.getInstance().close();
     super.close();
+    // RuleManager.getInstance().close();
   }
 }

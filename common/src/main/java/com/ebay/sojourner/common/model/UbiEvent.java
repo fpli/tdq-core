@@ -7,11 +7,11 @@ package com.ebay.sojourner.common.model;
 
 import com.ebay.sojourner.common.util.Constants;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.Data;
 import lombok.Getter;
+import org.apache.commons.lang.StringUtils;
 
 @Data
 public class UbiEvent implements Serializable {
@@ -98,30 +98,60 @@ public class UbiEvent implements Serializable {
 
   //  private Map<String, Object> counters;
 
+  public static void main(String[] args) {
+
+    System.out.println(new UbiEvent().concatTimestamp("70e613121720a48123c08d71fb272169",
+        3799995625873000L));
+    UbiEvent ubiEvent = new UbiEvent();
+    ubiEvent.setGuid("70e613121720a48123c08d71fb272169");
+    ubiEvent.setEventTimestamp(3799995625873000L);
+    ubiEvent.updateSessionId();
+    System.out.println(ubiEvent.getSessionId());
+    System.out.println(1 << 4);
+  }
+
   public void setIsReturningVisitor(boolean returningVisitor) {
     isReturningVisitor = returningVisitor;
   }
 
   public void updateSessionId() {
-    int charPos = Constants.HEX_DIGITS.length;
-    int mask = (1 << 4) - 1;
-    long decimal = eventTimestamp == null ? 0L : eventTimestamp;
-    char[] out = new char[Constants.HEX_DIGITS.length];
+    //old version
+    //    int charPos = Constants.HEX_DIGITS.length;
+    //    int mask = (1 << 4) - 1;
+    //    long decimal = eventTimestamp == null ? 0L : eventTimestamp;
+    //    char[] out = new char[Constants.HEX_DIGITS.length];
+    //
+    //    Arrays.fill(out, '0');
+    //
+    //    do {
+    //      out[--charPos] = Constants.HEX_DIGITS[(int) (decimal & mask)];
+    //      decimal = decimal >>> 4;
+    //    } while (decimal != 0);
 
-    Arrays.fill(out, '0');
-
-    do {
-      out[--charPos] = Constants.HEX_DIGITS[(int) (decimal & mask)];
-      decimal = decimal >>> 4;
-    } while (decimal != 0);
-
-    this.sessionId = guid + new String(out, 0, out.length);
+    // this.sessionId = guid + new String(out, 0, out.length);
+    this.sessionId = concatTimestamp(this.guid, this.eventTimestamp);
   }
 
   public void updateSessionSkey() {
     this.sessionSkey = this.eventTimestamp / Constants.SESSION_KEY_DIVISION;
   }
 
+  private String concatTimestamp(String prefix, long timestamp) {
+    int prefixLen = 0;
+    if (!StringUtils.isBlank(prefix)) {
+      prefixLen = prefix.length();
+    }else{
+      prefix="";
+    }
+    StringBuilder builder = new StringBuilder(prefixLen + 16);
+    builder.append(prefix);
+    String x = Long.toHexString(timestamp);
+    for (int i = 16 - x.length(); i > 0; i--) {
+      builder.append('0');
+    }
+    builder.append(x);
+    return builder.toString();
+  }
 
   public void eventCountIncrementByOne() {
     eventCnt++;
@@ -129,10 +159,6 @@ public class UbiEvent implements Serializable {
 
   public boolean isNewSession() {
     return Constants.NO_SESSION_ID.equals(sessionId);
-  }
-
-  public boolean hasSessionEndTime() {
-    return Constants.NO_TIMESTAMP != sessionEndTime;
   }
 
   //  public Object get(String key) {
@@ -158,4 +184,8 @@ public class UbiEvent implements Serializable {
   //
   //    counters.put(key, value);
   //  }
+
+  public boolean hasSessionEndTime() {
+    return Constants.NO_TIMESTAMP != sessionEndTime;
+  }
 }

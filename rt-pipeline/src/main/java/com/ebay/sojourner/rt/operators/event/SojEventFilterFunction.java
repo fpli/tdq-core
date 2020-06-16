@@ -7,6 +7,10 @@ public class SojEventFilterFunction extends RichFilterFunction<SojEvent> {
 
   @Override
   public boolean filter(SojEvent value) throws Exception {
-    return value.getGuid().hashCode() % 20 == 0;
+    if (value.getGuid() != null) {
+      return value.getGuid().hashCode() % 20 == 0;
+    }
+
+    return false;
   }
 }

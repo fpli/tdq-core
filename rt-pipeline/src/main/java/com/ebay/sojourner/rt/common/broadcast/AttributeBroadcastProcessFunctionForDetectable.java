@@ -25,12 +25,12 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
     BroadcastProcessFunction<Either<UbiEvent, UbiSession>, BotSignature, UbiEvent> {
 
   private OutputTag outputTag = null;
-  private Counter guidCounter;
+  // private Counter guidCounter;
   private Counter ipCounter;
   private Counter agentCounter;
   private Counter agentIpCounter;
-  private Counter guidIncCounter;
-  private Counter guidDecCounter;
+  // private Counter guidIncCounter;
+  // private Counter guidDecCounter;
   private Counter ipIncCounter;
   private Counter ipDecCounter;
   private Counter agentIncCounter;
@@ -91,6 +91,7 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
       }
 
       // guid
+      /*
       long[] long4Cguid = TransformUtil.md522Long(ubiEvent.getGuid());
       String guid = long4Cguid[0] + Constants.FIELD_DELIM + long4Cguid[1];
       Map<String, Map<Integer, Long>> guidSignature = attributeSignature.get("guid");
@@ -101,6 +102,7 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
           ubiEvent.getBotFlags().add(guidBotFlagMap.getKey());
         }
       }
+      */
 
       if ((UbiSessionHelper.isAgentDeclarative(ubiEvent.getAgentInfo()) && ubiEvent.getBotFlags()
           .contains(223))
@@ -163,6 +165,7 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
       }
 
       // guid
+      /*
       long[] long4Cguid = TransformUtil.md522Long(ubiSession.getGuid());
       String guid = long4Cguid[0] + Constants.FIELD_DELIM + long4Cguid[1];
       Map<String, Map<Integer, Long>> guidSignature = attributeSignature.get("guid");
@@ -173,6 +176,7 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
           ubiSession.getBotFlagList().add(guidBotFlagMap.getKey());
         }
       }
+      */
 
       if ((UbiSessionHelper.isAgentDeclarative(ubiSession.getUserAgent())
           && ubiSession.getBotFlagList().contains(223))
@@ -226,12 +230,15 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
 
     } else if ("ip".equals(attributeSignature.getType())) {
       signatureId = attributeSignature.getIp().toString();
-    } else if ("guid".equals(attributeSignature.getType())) {
+    }
+    /*
+    else if ("guid".equals(attributeSignature.getType())) {
       signatureId =
           attributeSignature.getGuid().getGuid1() + Constants.FIELD_DELIM + attributeSignature
               .getGuid()
               .getGuid2();
     }
+    */
 
     if (signature != null && signature.size() > 0) {
       if (isGeneration) {
@@ -257,10 +264,12 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
             } else if (signatureId.contains("agentIp")) {
               agentIpIncCounter.inc();
               agentIpCounter.inc();
-            } else if (signatureId.contains("guid")) {
+            }
+            /*else if (signatureId.contains("guid")) {
               guidIncCounter.inc();
               guidCounter.inc();
             }
+            */
           }
         }
       } else {
@@ -280,10 +289,13 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
                   } else if (signatureId.contains("agentIp")) {
                     agentIpDecCounter.inc();
                     agentIpCounter.dec();
-                  } else if (signatureId.contains("guid")) {
+                  }
+                  /*
+                  else if (signatureId.contains("guid")) {
                     guidDecCounter.inc();
                     guidCounter.dec();
                   }
+                  */
                   attributeBroadcastStatus.remove(signatureId);
                 }
               }
@@ -296,11 +308,13 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
 
   @Override
   public void open(Configuration parameters) throws Exception {
+    /*
     guidCounter =
         getRuntimeContext()
             .getMetricGroup()
             .addGroup(Constants.SOJ_METRICS_GROUP)
             .counter("guid signature count");
+            */
     ipCounter =
         getRuntimeContext()
             .getMetricGroup()
@@ -316,6 +330,7 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
             .getMetricGroup()
             .addGroup(Constants.SOJ_METRICS_GROUP)
             .counter("agentIp signature count");
+    /*
     guidIncCounter =
         getRuntimeContext()
             .getMetricGroup()
@@ -326,6 +341,7 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
             .getMetricGroup()
             .addGroup(Constants.SOJ_METRICS_GROUP)
             .counter("guid signature dec count");
+            */
     ipIncCounter =
         getRuntimeContext()
             .getMetricGroup()
