@@ -1,5 +1,6 @@
 package com.ebay.sojourner.flink.connectors.kafka;
 
+import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.JetStreamOutputEvent;
 import com.ebay.sojourner.common.model.JetStreamOutputSession;
@@ -40,6 +41,9 @@ public class SojBoundedOutOfOrderlessTimestampExtractor<T> extends
     } else if (t instanceof JetStreamOutputSession) {
       JetStreamOutputSession jetStreamOutputSession = (JetStreamOutputSession) t;
       return jetStreamOutputSession.getEventCreateTimestamp();
+    } else if (t instanceof BotSignature) {
+      BotSignature botSignature = (BotSignature) t;
+      return botSignature.getExpirationTime();
     } else {
       return 0;
     }

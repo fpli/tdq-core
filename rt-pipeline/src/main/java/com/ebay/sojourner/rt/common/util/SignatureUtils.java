@@ -31,7 +31,7 @@ public class SignatureUtils {
 
   public static Set<Integer> setBotFlags(Set<Integer> sourceSet, Set<Integer> targetSet) {
 
-    if (CollectionUtils.isNotEmpty(sourceSet) || targetSet != null) {
+    if (CollectionUtils.isNotEmpty(sourceSet) && CollectionUtils.isNotEmpty(targetSet)) {
       targetSet.addAll(sourceSet);
     }
 
