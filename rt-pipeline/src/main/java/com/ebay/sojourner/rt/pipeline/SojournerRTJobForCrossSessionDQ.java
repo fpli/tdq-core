@@ -44,10 +44,10 @@ public class SojournerRTJobForCrossSessionDQ {
     DataStream<IntermediateSession> intermediateSessionDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunction.buildSource(
-                FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_CROSS_SESSION),
+                FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_TOPIC),
                 FlinkEnvUtils
-                    .getListString(Property.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
-                FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_GROUP_ID_DQ_CROSS_SESSION),
+                    .getListString(Property.KAFKA_CONSUMER_BOOTSTRAP_SERVERS_RNO),
+                FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_GROUP_ID),
                 IntermediateSession.class))
             .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
             .name("Rheos Kafka Consumer For Cross Session DQ")

@@ -2,11 +2,9 @@ package com.ebay.sojourner.flink.connectors.kafka;
 
 import java.util.Properties;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 
-public class KafkaConsumerFactory<T> extends AbstractKafkaConnectorFactory<T> {
+public class KafkaConsumerFactory<T> {
 
-  @Override
   public FlinkKafkaConsumer<T> getConsumer(String topic, Properties config, Class<T> tClass) {
 
     FlinkKafkaConsumer<T> flinkKafkaConsumer = new FlinkKafkaConsumer(
@@ -17,11 +15,5 @@ public class KafkaConsumerFactory<T> extends AbstractKafkaConnectorFactory<T> {
 
     flinkKafkaConsumer.setStartFromLatest();
     return flinkKafkaConsumer;
-  }
-
-  @Override
-  public FlinkKafkaProducer<T> getProducer() {
-    //TODO(Jason): to be implemented
-    return null;
   }
 }

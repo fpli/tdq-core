@@ -59,7 +59,7 @@ public class SignatureUtils {
     dataStream
         .addSink(KafkaConnectorFactory.createKafkaProducer(
             topic,
-            FlinkEnvUtils.getListString(Property.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_RNO),
             BotSignature.class,
             messageKey))
         .setParallelism(FlinkEnvUtils.getInteger(Property.DEFAULT_PARALLELISM))

@@ -173,6 +173,13 @@ public class Property {
   public static final String MAX_PARTITIONS_FETCH_BYTES = "kafka.common.consumer.max-partitions-fetch-bytes";
   public static final String AUTO_RESET_OFFSET = "kafka.common.consumer.auto-offset-reset";
 
+  public static final String KAFKA_CONSUMER_BOOTSTRAP_SERVERS = "kafka.consumer.bootstrap-servers";
+  public static final String KAFKA_CONSUMER_BOOTSTRAP_SERVERS_RNO = "kafka.consumer.bootstrap-servers.rno";
+  public static final String KAFKA_CONSUMER_BOOTSTRAP_SERVERS_SLC = "kafka.consumer.bootstrap-servers.slc";
+  public static final String KAFKA_CONSUMER_BOOTSTRAP_SERVERS_LVS = "kafka.consumer.bootstrap-servers.lvs";
+  public static final String KAFKA_CONSUMER_TOPIC = "kafka.consumer.topic";
+  public static final String KAFKA_CONSUMER_GROUP_ID = "kafka.consumer.group-id";
+
   // kafka producer
   public static final String BATCH_SIZE = "kafka.common.producer.batch-size";
   public static final String REQUEST_TIMEOUT_MS = "kafka.common.producer.request-timeout-ms";
@@ -182,6 +189,9 @@ public class Property {
   public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_GUID = "kafka.common.producer.message-key.signature.guid";
   public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT = "kafka.common.producer.message-key.signature.agent";
   public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT_IP = "kafka.common.producer.message-key.signature.agent-ip";
+  public static final String KAFKA_PRODUCER_BOOTSTRAP_SERVERS_RNO = "kafka.producer.bootstrap-servers.rno";
+  public static final String KAFKA_PRODUCER_BOOTSTRAP_SERVERS_LVS = "kafka.producer.bootstrap-servers.lvs";
+  public static final String KAFKA_PRODUCER_TOPIC = "kafka.producer.topic";
 
   // rheos
   public static final String RHEOS_KAFKA_REGISTRY_URL = "rheos.registry-url";
@@ -242,17 +252,7 @@ public class Property {
   public static final String REST_AUTH_USERNAME = "rest-client.auth-username";
   public static final String REST_AUTH_TOKEN = "rest-client.auth-token";
 
-  // ------------------------- batch connector property -------------------------
-  // kafka consumer
-  public static final String KAFKA_CONSUMER_STREAM = "kafka.consumer.stream";
-  public static final String KAFKA_CONSUMER_TOPIC = "kafka.consumer.topic";
-  public static final String KAFKA_CONSUMER_GROUP_ID = "kafka.consumer.group-id";
-  public static final String KAFKA_CONSUMER_BOOTSTRAP_SERVERS = "kafka.consumer.bootstrap-servers";
-
-  // kafka producer
-  public static final String KAFKA_COMMON_PRODUCER_BROKERS_DEFAULT = "kafka.common.producer.brokers.default";
-  public static final String KAFKA_COMMON_PRODUCER_TOPIC_DEFAULT = "kafka.common.producer.topic.default";
-
+  // ------------------------- batch pipeline common property ---------------------------
   // parallelism config
   public static final String SOURCE_DEFAULT_PARALLELISM = "flink.app.parallelism.source.default";
   public static final String SINK_HDFS_PARALLELISM = "flink.app.parallelism.sink.hdfs";
@@ -262,62 +262,22 @@ public class Property {
   public static final String HDFS_DUMP_PATH = "hdfs.dump.path";
   public static final String HDFS_DUMP_CLASS = "hdfs.dump.class-name";
 
-  // ------------------------- rt pipeline prod property ------------------------
-  // stream - pathfinder
-  public static final String BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_RNO = "kafka.stream.behavior-pathfinder.bootstrap-servers.rno";
-  public static final String BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_SLC = "kafka.stream.behavior-pathfinder.bootstrap-servers.slc";
-  public static final String BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_LVS = "kafka.stream.behavior-pathfinder.bootstrap-servers.lvs";
-  public static final String BEHAVIOR_PATHFINDER_TOPIC = "kafka.stream.behavior-pathfinder.topic";
-  public static final String BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_RNO = "kafka.stream.behavior-pathfinder.group-id.default.rno";
-  public static final String BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_SLC = "kafka.stream.behavior-pathfinder.group-id.default.slc";
-  public static final String BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_LVS = "kafka.stream.behavior-pathfinder.group-id.default.lvs";
-
-  // stream - total-new
-  public static final String BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT = "kafka.stream.behavior-total-new.bootstrap-servers.default";
-  public static final String BEHAVIOR_TOTAL_NEW_TOPIC_SESSION_BOT = "kafka.stream.behavior-total-new.topic.session.bot";
-  public static final String BEHAVIOR_TOTAL_NEW_TOPIC_SESSION_NON_BOT = "kafka.stream.behavior-total-new.topic.session.non-bot";
-  public static final String BEHAVIOR_TOTAL_NEW_TOPIC_EVENT_BOT = "kafka.stream.behavior-total-new.topic.event.bot";
-  public static final String BEHAVIOR_TOTAL_NEW_TOPIC_EVENT_NON_BOT = "kafka.stream.behavior-total-new.topic.event.non-bot";
-  public static final String BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_AGENT_IP = "kafka.stream.behavior-total-new.topic.signature.agent-ip";
-  public static final String BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_AGENT = "kafka.stream.behavior-total-new.topic.signature.agent";
-  public static final String BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_IP = "kafka.stream.behavior-total-new.topic.signature.ip";
-  public static final String BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_GUID = "kafka.stream.behavior-total-new.topic.signature.guid";
-  public static final String BEHAVIOR_TOTAL_NEW_GROUP_ID_SIGNATURE_AGENT_IP = "kafka.stream.behavior-total-new.group-id.signature.agent-ip";
-  public static final String BEHAVIOR_TOTAL_NEW_GROUP_ID_SIGNATURE_AGENT = "kafka.stream.behavior-total-new.group-id.signature.agent";
-  public static final String BEHAVIOR_TOTAL_NEW_GROUP_ID_SIGNATURE_IP = "kafka.stream.behavior-total-new.group-id.signature.ip";
-  public static final String BEHAVIOR_TOTAL_NEW_GROUP_ID_SIGNATURE_GUID = "kafka.stream.behavior-total-new.group-id.signature.guid";
+  // ------------------------- rt pipeline property ------------------------
+  // kafka producer
+  public static final String KAFKA_TOPIC_SESSION_BOT = "kafka.producer.topic.session.bot";
+  public static final String KAFKA_TOPIC_SESSION_NON_BOT = "kafka.producer.topic.session.non-bot";
+  public static final String KAFKA_TOPIC_EVENT_BOT = "kafka.producer.topic.event.bot";
+  public static final String KAFKA_TOPIC_EVENT_NON_BOT = "kafka.producer.topic.event.non-bot";
+  public static final String KAFKA_TOPIC_SIGNATURE_AGENT_IP = "kafka.producer.topic.signature.agent-ip";
+  public static final String KAFKA_TOPIC_SIGNATURE_AGENT = "kafka.producer.topic.signature.agent";
+  public static final String KAFKA_TOPIC_SIGNATURE_IP = "kafka.producer.topic.signature.ip";
+  public static final String KAFKA_TOPIC_SIGNATURE_GUID = "kafka.producer.topic.signature.guid";
 
   // hdfs
   public static final String HDFS_PATH_PARENT = "hdfs.path.parent";
   public static final String HDFS_PATH_EVENT_NON_BOT = "hdfs.path.event.non-bot";
   public static final String HDFS_PATH_SESSION_NON_BOT = "hdfs.path.session.non-bot";
-  public static final String HDFS_PATH_CROSS_SESSION = "hdfs.path.cross-session";
   public static final String HDFS_PATH_INTERMEDIATE_SESSION = "hdfs.path.intermediate-session";
   public static final String HDFS_PATH_SIGNATURES = "hdfs.path.signatures";
-
-  // ---------------------------- rt pipeline dq property ----------------------------
-  public static final String BEHAVIOR_TOTAL_NEW_TOPIC_DQ_SESSION = "kafka.stream.behavior-total-new.topic.dq.session";
-  public static final String BEHAVIOR_TOTAL_NEW_TOPIC_DQ_CROSS_SESSION = "kafka.stream.behavior-total-new.topic.dq.cross-session";
-  public static final String BEHAVIOR_TOTAL_NEW_GROUP_ID_DQ_SESSION = "kafka.stream.behavior-total-new.group-id.dq.session";
-  public static final String BEHAVIOR_TOTAL_NEW_GROUP_ID_DQ_CROSS_SESSION = "kafka.stream.behavior-total-new.group-id.dq.cross-session";
-
-  // ---------------------------- rt pipeline qa property ----------------------------
-  public static final String BEHAVIOR_TRAFFICJAM_BOOTSTRAP_SERVERS_DEFAULT = "kafka.stream.behavior-trafficjam.bootstrap-servers.default";
-  public static final String BEHAVIOR_TRAFFICJAM_TOPIC_SESSION_BOT = "kafka.stream.behavior-trafficjam.topic.session.bot";
-  public static final String BEHAVIOR_TRAFFICJAM_TOPIC_SESSION_NON_BOT = "kafka.stream.behavior-trafficjam.topic.session.non-bot";
-  public static final String BEHAVIOR_TRAFFICJAM_TOPIC_EVENT_BOT = "kafka.stream.behavior-trafficjam.topic.event.bot";
-  public static final String BEHAVIOR_TRAFFICJAM_TOPIC_EVENT_NON_BOT = "kafka.stream.behavior-trafficjam.topic.event.non-bot";
-  public static final String BEHAVIOR_TRAFFICJAM_TOPIC_SIGNATURE_AGENT_IP = "kafka.stream.behavior-trafficjam.topic.signature.agent-ip";
-  public static final String BEHAVIOR_TRAFFICJAM_TOPIC_SIGNATURE_AGENT = "kafka.stream.behavior-trafficjam.topic.signature.agent";
-  public static final String BEHAVIOR_TRAFFICJAM_TOPIC_SIGNATURE_IP = "kafka.stream.behavior-trafficjam.topic.signature.ip";
-  public static final String BEHAVIOR_TRAFFICJAM_TOPIC_SIGNATURE_GUID = "kafka.stream.behavior-trafficjam.topic.signature.guid";
-  public static final String BEHAVIOR_TRAFFICJAM_GROUP_ID_SESSION_NON_BOT = "kafka.stream.behavior-trafficjam.group-id.session.non-bot";
-  public static final String BEHAVIOR_TRAFFICJAM_GROUP_ID_SESSION_BOT = "kafka.stream.behavior-trafficjam.group-id.session.bot";
-  public static final String BEHAVIOR_TRAFFICJAM_GROUP_ID_EVENT_BOT = "kafka.stream.behavior-trafficjam.group-id.event.bot";
-  public static final String BEHAVIOR_TRAFFICJAM_GROUP_ID_EVENT_NON_BOT = "kafka.stream.behavior-trafficjam.group-id.event.non-bot";
-  public static final String BEHAVIOR_TRAFFICJAM_GROUP_ID_SIGNATURE_AGENT_IP = "kafka.stream.behavior-trafficjam.group-id.signature.agent-ip";
-  public static final String BEHAVIOR_TRAFFICJAM_GROUP_ID_SIGNATURE_AGENT = "kafka.stream.behavior-trafficjam.group-id.signature.agent";
-  public static final String BEHAVIOR_TRAFFICJAM_GROUP_ID_SIGNATURE_IP = "kafka.stream.behavior-trafficjam.group-id.signature.ip";
-  public static final String BEHAVIOR_TRAFFICJAM_GROUP_ID_SIGNATURE_GUID = "kafka.stream.behavior-trafficjam.group-id.signature.guid";
 
 }

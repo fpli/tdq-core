@@ -1,6 +1,6 @@
 kafka:
   consumer:
-    stream: behavior-total-new
+    stream: behavior.total.new
     topic: behavior.total.new.event.fordq
     group-id: sojourner-pathfinder-session-dq
     bootstrap-servers:

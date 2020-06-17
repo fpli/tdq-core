@@ -1,12 +1,15 @@
 kafka:
-  common:
-    consumer:
-      brokers:
-        default: rhs-rdrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.26.tess.io:9092,rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092,rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092,rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092,rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
-      topic:
-        default: behavior.total.sojevent.total
-      group-id:
-        default: sojourner-jetstream-event-non-bot
+  consumer:
+    stream: behavior.total
+    topic: behavior.total.sojevent.total
+    group-id: sojourner-jetstream-event-non-bot
+    bootstrap-servers:
+      rno:
+        - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-rdrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
 
 flink:
   app:

@@ -38,11 +38,11 @@ public class SojournerRTJobForSessionDataCopy {
     DataStream<RawEvent> rawEventDataStreamForRNO =
         executionEnvironment
             .addSource(KafkaSourceFunction
-                .buildSource(FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_TOPIC),
+                .buildSource(FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_TOPIC),
                     FlinkEnvUtils
-                        .getListString(Property.BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_RNO),
+                        .getListString(Property.KAFKA_CONSUMER_BOOTSTRAP_SERVERS_RNO),
                     FlinkEnvUtils
-                        .getString(Property.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_RNO),
+                        .getString(Property.KAFKA_CONSUMER_GROUP_ID),
                     RawEvent.class))
             .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
             .slotSharingGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP))
@@ -52,11 +52,11 @@ public class SojournerRTJobForSessionDataCopy {
     DataStream<RawEvent> rawEventDataStreamForSLC =
         executionEnvironment
             .addSource(KafkaSourceFunction
-                .buildSource(FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_TOPIC),
+                .buildSource(FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_TOPIC),
                     FlinkEnvUtils
-                        .getListString(Property.BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_SLC),
+                        .getListString(Property.KAFKA_CONSUMER_BOOTSTRAP_SERVERS_SLC),
                     FlinkEnvUtils
-                        .getString(Property.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_SLC),
+                        .getString(Property.KAFKA_CONSUMER_GROUP_ID),
                     RawEvent.class))
             .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
             .slotSharingGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP))
@@ -66,11 +66,11 @@ public class SojournerRTJobForSessionDataCopy {
     DataStream<RawEvent> rawEventDataStreamForLVS =
         executionEnvironment
             .addSource(KafkaSourceFunction
-                .buildSource(FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_TOPIC),
+                .buildSource(FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_TOPIC),
                     FlinkEnvUtils
-                        .getListString(Property.BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_LVS),
+                        .getListString(Property.KAFKA_CONSUMER_BOOTSTRAP_SERVERS_LVS),
                     FlinkEnvUtils
-                        .getString(Property.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_LVS),
+                        .getString(Property.KAFKA_CONSUMER_GROUP_ID),
                     RawEvent.class))
             .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
             .slotSharingGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP))
@@ -147,8 +147,8 @@ public class SojournerRTJobForSessionDataCopy {
     // sink for cross session dq
     intermediateSessionDataStream
         .addSink(KafkaConnectorFactory.createKafkaProducer(
-            FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_CROSS_SESSION),
-            FlinkEnvUtils.getListString(Property.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
+            FlinkEnvUtils.getString(Property.KAFKA_PRODUCER_TOPIC),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_RNO),
             IntermediateSession.class,
             FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION)))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))

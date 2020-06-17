@@ -232,8 +232,8 @@ public class SojournerRTJobForQA {
     // kafka sink for session
     sojSessionStream.addSink(KafkaConnectorFactory
         .createKafkaProducer(
-            FlinkEnvUtils.getString(Property.BEHAVIOR_TRAFFICJAM_TOPIC_SESSION_NON_BOT),
-            FlinkEnvUtils.getListString(Property.BEHAVIOR_TRAFFICJAM_BOOTSTRAP_SERVERS_DEFAULT),
+            FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SESSION_NON_BOT),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_LVS),
             SojSession.class,
             FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION)))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
@@ -243,8 +243,8 @@ public class SojournerRTJobForQA {
     // kafka sink for event
     sojEventWithSessionId.addSink(KafkaConnectorFactory
         .createKafkaProducer(
-            FlinkEnvUtils.getString(Property.BEHAVIOR_TRAFFICJAM_TOPIC_EVENT_NON_BOT),
-            FlinkEnvUtils.getListString(Property.BEHAVIOR_TRAFFICJAM_BOOTSTRAP_SERVERS_DEFAULT),
+            FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_NON_BOT),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_LVS),
             SojEvent.class,
             FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT)))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))

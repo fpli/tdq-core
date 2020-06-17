@@ -273,8 +273,8 @@ public class SojournerRTJob {
     // kafka sink for sojsession
     sojSessionStream
         .addSink(KafkaConnectorFactory.createKafkaProducer(
-            FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_SESSION_NON_BOT),
-            FlinkEnvUtils.getListString(Property.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
+            FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SESSION_NON_BOT),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_RNO),
             SojSession.class,
             FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION)))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
@@ -292,8 +292,8 @@ public class SojournerRTJob {
 
     sojEventFilterStream
         .addSink(KafkaConnectorFactory.createKafkaProducer(
-            FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_EVENT_NON_BOT),
-            FlinkEnvUtils.getListString(Property.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
+            FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_NON_BOT),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_RNO),
             SojEvent.class,
             FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT)))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
@@ -350,19 +350,19 @@ public class SojournerRTJob {
 
     // signature sink
     SignatureUtils.buildSignatureKafkaSink(agentIpSignatureDataStream,
-        FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_AGENT_IP),
+        FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SIGNATURE_AGENT_IP),
         Constants.AGENTIP,
         FlinkEnvUtils.getString(Property.AGENT_IP_SLOT_SHARE_GROUP),
         FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT_IP));
 
     SignatureUtils.buildSignatureKafkaSink(agentSignatureDataStream,
-        FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_AGENT),
+        FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SIGNATURE_AGENT),
         Constants.AGENT,
         FlinkEnvUtils.getString(Property.AGENT_SLOT_SHARE_GROUP),
         FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT));
 
     SignatureUtils.buildSignatureKafkaSink(ipSignatureDataStream,
-        FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_IP),
+        FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SIGNATURE_IP),
         Constants.IP,
         FlinkEnvUtils.getString(Property.IP_SLOT_SHARE_GROUP),
         FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SIGNATURE_IP));

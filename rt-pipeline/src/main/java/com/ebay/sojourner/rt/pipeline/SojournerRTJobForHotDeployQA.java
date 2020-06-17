@@ -26,10 +26,10 @@ public class SojournerRTJobForHotDeployQA {
     DataStream<RawEvent> rawEventDataStream =
         executionEnvironment
             .addSource(KafkaSourceFunction
-                .buildSource(FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_TOPIC),
+                .buildSource(FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_TOPIC),
                     FlinkEnvUtils
-                        .getListString(Property.BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_LVS),
-                    FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_LVS),
+                        .getListString(Property.KAFKA_CONSUMER_BOOTSTRAP_SERVERS_LVS),
+                    FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_GROUP_ID),
                     RawEvent.class))
             .setParallelism(
                 FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))

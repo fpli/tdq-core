@@ -3,7 +3,7 @@ kafka:
     group-id: sojourner-pathfinder-consumer-dq
 
   producer:
-    stream: behavior-total-new
+    stream: behavior.total.new
     topic: behavior.total.new.event.fordq
     bootstrap-servers:
       rno:

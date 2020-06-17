@@ -25,10 +25,10 @@ public class SojournerRTJobForEventDataCopy {
     DataStream<SojBytesEvent> bytesDataStreamForRNO =
         executionEnvironment
             .addSource(KafkaSourceFunction
-                .buildSource(FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_TOPIC),
+                .buildSource(FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_TOPIC),
                     FlinkEnvUtils
-                        .getListString(Property.BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_RNO),
-                    FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_RNO),
+                        .getListString(Property.KAFKA_CONSUMER_BOOTSTRAP_SERVERS_RNO),
+                    FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_GROUP_ID),
                     SojBytesEvent.class))
             .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
             .name("Rheos Kafka Consumer For RNO")
@@ -37,10 +37,10 @@ public class SojournerRTJobForEventDataCopy {
     DataStream<SojBytesEvent> bytesDataStreamForSLC =
         executionEnvironment
             .addSource(KafkaSourceFunction
-                .buildSource(FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_TOPIC),
+                .buildSource(FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_TOPIC),
                     FlinkEnvUtils
-                        .getListString(Property.BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_SLC),
-                    FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_SLC),
+                        .getListString(Property.KAFKA_CONSUMER_BOOTSTRAP_SERVERS_SLC),
+                    FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_GROUP_ID),
                     SojBytesEvent.class))
             .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
             .name("Rheos Kafka Consumer For SLC")
@@ -49,10 +49,10 @@ public class SojournerRTJobForEventDataCopy {
     DataStream<SojBytesEvent> bytesDataStreamForLVS =
         executionEnvironment
             .addSource(KafkaSourceFunction
-                .buildSource(FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_TOPIC),
+                .buildSource(FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_TOPIC),
                     FlinkEnvUtils
-                        .getListString(Property.BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_LVS),
-                    FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_LVS),
+                        .getListString(Property.KAFKA_CONSUMER_BOOTSTRAP_SERVERS_LVS),
+                    FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_GROUP_ID),
                     SojBytesEvent.class))
             .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
             .name("Rheos Kafka Consumer For LVS")
@@ -71,8 +71,8 @@ public class SojournerRTJobForEventDataCopy {
     // sink for session dq
     bytesFilterDataStream
         .addSink(KafkaConnectorFactory.createKafkaProducerForCopy(
-            FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_SESSION),
-            FlinkEnvUtils.getListString(Property.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT)))
+            FlinkEnvUtils.getString(Property.KAFKA_PRODUCER_TOPIC),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_RNO)))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .name("RawEvent")
         .uid("event-sink-id");

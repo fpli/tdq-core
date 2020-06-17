@@ -1,6 +1,6 @@
 package com.ebay.sojourner.flink.connectors.kafka;
 
-import static com.ebay.sojourner.common.util.Property.KAFKA_CONSUMER_BOOTSTRAP_SERVERS;
+import static com.ebay.sojourner.common.util.Property.KAFKA_CONSUMER_BOOTSTRAP_SERVERS_RNO;
 
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
@@ -59,7 +59,7 @@ public class SourceDataStreamBuilder<T> {
   }
 
   private String getBrokersForDC(DataCenter dc) {
-    String propKey = KAFKA_CONSUMER_BOOTSTRAP_SERVERS + "." + dc.getValue().toLowerCase();
+    String propKey = KAFKA_CONSUMER_BOOTSTRAP_SERVERS_RNO + "." + dc.getValue().toLowerCase();
     return FlinkEnvUtils.getListString(propKey);
   }
 }
