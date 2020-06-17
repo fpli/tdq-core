@@ -201,8 +201,6 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
   public void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
     ubiSession.setAgentInfo(ubiEvent.getAgentInfo());
     ubiSession.setClientIp(ubiEvent.getClientIP());
-    System.out.println("AgentIPMetrics event:" + ubiEvent.getPageId() + " eventtime:" + ubiEvent
-        .getEventTimestamp());
     if (!ubiEvent.isIframe() && !ubiEvent.isRdt()) {
       ubiSession.setAgentInfo(ubiEvent.getAgentInfo());
       ubiSession.setClientIp(ubiEvent.getClientIP());

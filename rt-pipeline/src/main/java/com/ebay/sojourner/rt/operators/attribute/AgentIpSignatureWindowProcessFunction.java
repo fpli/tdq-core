@@ -25,7 +25,7 @@ public class AgentIpSignatureWindowProcessFunction extends
 
     AgentIpAttributeAccumulator agentIpAttributeAccumulator = elements.iterator().next();
     AgentIpAttribute agentIpAttribute = agentIpAttributeAccumulator.getAgentIpAttribute();
-    Map<Integer, Integer> signatureStates = agentIpAttributeAccumulator.getSignatureStates();
+    Map<Integer, Integer> signatureStates = agentIpAttributeAccumulator.getSignatureStatus();
     Set<Integer> botFlagList = agentIpAttribute.getBotFlagList();
     AgentHash agent = agentIpAttribute.getAgent();
     Integer clientIp = agentIpAttribute.getClientIp();

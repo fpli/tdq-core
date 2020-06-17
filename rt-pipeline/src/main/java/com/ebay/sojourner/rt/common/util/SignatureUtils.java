@@ -68,4 +68,21 @@ public class SignatureUtils {
         .uid(String.format("signature-%s-sink-id", signatureId));
 
   }
+
+  public static void updateSignatureStatus(Map<Integer, Integer> signatureStatus,
+      Set<Integer> botFlags) {
+
+    for (Integer botFlag : botFlags) {
+      if (signatureStatus.containsKey(botFlag)) {
+        switch (signatureStatus.get(botFlag)) {
+          case 0:
+            signatureStatus.put(botFlag, 1);
+            break;
+          case 1:
+            signatureStatus.put(botFlag, 2);
+            break;
+        }
+      }
+    }
+  }
 }

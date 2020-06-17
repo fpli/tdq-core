@@ -1,14 +1,13 @@
 package com.ebay.sojourner.business.ubd.parser;
 
-import com.ebay.sojourner.common.util.MobileEventsIdentifier;
-import com.ebay.sojourner.common.util.SOJNVL;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.LkpManager;
+import com.ebay.sojourner.common.util.MobileEventsIdentifier;
 import com.ebay.sojourner.common.util.Property;
+import com.ebay.sojourner.common.util.SOJNVL;
 import com.ebay.sojourner.common.util.UBIConfig;
-import java.util.Date;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -115,14 +114,7 @@ public class CobrandParser implements FieldParser<RawEvent, UbiEvent> {
           return;
         }
       } catch (NullPointerException e) {
-        System.out.println(new Date() + "=====cobrandParser nullpoint====");
-        System.out.println(new Date() + "pageId:" + pageId);
-        System.out.println(new Date() + "expressSite:" + expressSite);
-        if (pageFmlyNameMap != null) {
-          System.out.println(new Date() + "pageFmlyNameMap is not null:" + pageFmlyNameMap.size());
-          System.out.println(new Date() + "pageFmlyNameMap contains pageId:" + pageId);
-        }
-
+        log.error("cobrand parser failed", e);
       }
     }
 

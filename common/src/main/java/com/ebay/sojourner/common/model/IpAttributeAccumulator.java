@@ -8,12 +8,12 @@ import lombok.Data;
 public class IpAttributeAccumulator {
 
   private IpAttribute ipAttribute;
-  private Map<Integer, Integer> signatureStates = new HashMap<>();
+  private Map<Integer, Integer> signatureStatus = new HashMap<>();
 
   public IpAttributeAccumulator() {
     this.ipAttribute = new IpAttribute();
-    signatureStates.put(7, 0);
-    signatureStates.put(222, 0);
-    signatureStates.put(223, 0);
+    signatureStatus.put(7, 0);
+    signatureStatus.put(222, 0);
+    signatureStatus.put(223, 0);
   }
 }
