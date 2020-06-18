@@ -174,9 +174,6 @@ public class Property {
   public static final String AUTO_RESET_OFFSET = "kafka.common.consumer.auto-offset-reset";
 
   public static final String KAFKA_CONSUMER_BOOTSTRAP_SERVERS = "kafka.consumer.bootstrap-servers";
-  public static final String KAFKA_CONSUMER_BOOTSTRAP_SERVERS_RNO = "kafka.consumer.bootstrap-servers.rno";
-  public static final String KAFKA_CONSUMER_BOOTSTRAP_SERVERS_SLC = "kafka.consumer.bootstrap-servers.slc";
-  public static final String KAFKA_CONSUMER_BOOTSTRAP_SERVERS_LVS = "kafka.consumer.bootstrap-servers.lvs";
   public static final String KAFKA_CONSUMER_TOPIC = "kafka.consumer.topic";
   public static final String KAFKA_CONSUMER_GROUP_ID = "kafka.consumer.group-id";
 

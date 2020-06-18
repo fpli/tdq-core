@@ -1,5 +1,7 @@
 package com.ebay.sojourner.rt.pipeline;
 
+import static com.ebay.sojourner.flink.common.util.DataCenter.RNO;
+
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.IntermediateSession;
@@ -10,7 +12,7 @@ import com.ebay.sojourner.flink.common.state.MapStateDesc;
 import com.ebay.sojourner.flink.common.util.OutputTagUtil;
 import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
-import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
+import com.ebay.sojourner.flink.connectors.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.rt.common.broadcast.CrossSessionDQBroadcastProcessFunction;
 import com.ebay.sojourner.rt.operators.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.AgentIpAttributeAgg;
@@ -41,17 +43,12 @@ public class SojournerRTJobForCrossSessionDQ {
     final StreamExecutionEnvironment executionEnvironment = FlinkEnvUtils.prepare(args);
 
     // kafka source for copy
-    DataStream<IntermediateSession> intermediateSessionDataStream =
-        executionEnvironment
-            .addSource(KafkaSourceFunction.buildSource(
-                FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_TOPIC),
-                FlinkEnvUtils
-                    .getListString(Property.KAFKA_CONSUMER_BOOTSTRAP_SERVERS_RNO),
-                FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_GROUP_ID),
-                IntermediateSession.class))
-            .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
-            .name("Rheos Kafka Consumer For Cross Session DQ")
-            .uid("source-id");
+    SourceDataStreamBuilder<IntermediateSession> dataStreamBuilder = new SourceDataStreamBuilder<>(
+        executionEnvironment, IntermediateSession.class
+    );
+
+    DataStream<IntermediateSession> intermediateSessionDataStream = dataStreamBuilder
+        .buildOfDC(RNO);
 
     // intermediateSession to sessionCore
     DataStream<SessionCore> sessionCoreDS = intermediateSessionDataStream

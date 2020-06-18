@@ -16,7 +16,7 @@ public class SojBoundedOutOfOrderlessTimestampExtractor<T> extends
   @Override
   public long extractTimestamp(T t) {
 
-    long filed = TimestampFiledExtractManager.getField(t);
+    long filed = TimestampFieldExtractor.getField(t);
     return filed;
   }
 }

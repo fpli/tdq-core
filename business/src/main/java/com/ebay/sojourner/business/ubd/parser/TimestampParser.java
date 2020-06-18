@@ -28,11 +28,6 @@ public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
   private static final String P_TAG = "p";
   private static final TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
 
-  public static void main(String[] args) {
-    System.out.println(SOJTS2Date.getSojTimestamp(1584039617189L));
-
-  }
-
   public void parse(RawEvent rawEvent, UbiEvent ubiEvent) {
     SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     SimpleDateFormat formaterUtc = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");

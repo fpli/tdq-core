@@ -14,7 +14,7 @@ import com.ebay.sojourner.flink.common.state.MapStateDesc;
 import com.ebay.sojourner.flink.common.util.DataCenter;
 import com.ebay.sojourner.flink.common.util.OutputTagUtil;
 import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
-import com.ebay.sojourner.flink.connectors.kafka.KafkaConnectorFactory;
+import com.ebay.sojourner.flink.connectors.kafka.KafkaProducerFactory;
 import com.ebay.sojourner.flink.connectors.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
 import com.ebay.sojourner.rt.common.metrics.AgentIpMetricsCollectorProcessFunction;
@@ -230,23 +230,22 @@ public class SojournerRTJobForQA {
     // 5.4 Events late
 
     // kafka sink for session
-    sojSessionStream.addSink(KafkaConnectorFactory
-        .createKafkaProducer(
+    sojSessionStream.addSink(KafkaProducerFactory
+        .getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SESSION_NON_BOT),
             FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_LVS),
-            SojSession.class,
-            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION)))
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION),SojSession.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .name("SojSession")
         .uid("session-sink-id");
 
     // kafka sink for event
-    sojEventWithSessionId.addSink(KafkaConnectorFactory
-        .createKafkaProducer(
+    sojEventWithSessionId.addSink(KafkaProducerFactory
+        .getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_NON_BOT),
             FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_LVS),
-            SojEvent.class,
-            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT)))
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT),
+            SojEvent.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .name("SojEvent")
         .uid("event-sink-id");

@@ -9,7 +9,7 @@ import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.util.SojTimestamp;
 
-public class TimestampFiledExtractManager {
+public class TimestampFieldExtractor {
 
   public static <T> long getField(T t) {
 
