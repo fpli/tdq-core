@@ -1,0 +1,19 @@
+kafka:
+  consumer:
+    topic: behavior.total.new.sojsession
+    group-id: sojourner-pathfinder-session-non-bot
+
+flink:
+  app:
+    name:
+      hdfs-dump: Sojourner Non Bot Session HDFS Load Pipeline
+    parallelism:
+      source:
+        default: 30
+      sink:
+        hdfs: 30
+
+hdfs:
+  dump:
+    path: hdfs://apollo-rno/sys/soj/ubd/sessions/type=nonbot
+    class-name: com.ebay.sojourner.common.model.SojSession

@@ -32,18 +32,17 @@ kafka:
     bootstrap-servers:
       rno:
 
-
 flink:
   app:
     name:
-      hdfs-dump: Sojourner Event HDFS Load Pipeline
+      hdfs-dump: Sojourner Non Bot Event HDFS Load Pipeline
       kafka-dump: Sojourner Kafka Load Pipeline
     parallelism:
       source:
-        default: 100
+        default: 90
       sink:
         kafka: 100
-        hdfs: 100
+        hdfs: 90
     checkpoint:
       data-dir: /opt/sojourner-ubd/checkpoint
       interval-ms: 300000
