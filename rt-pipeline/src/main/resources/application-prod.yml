@@ -4,7 +4,7 @@ flink:
       default: 50
       source: 100
       event: 100
-      session: 700
+      session: 600
       pre-agent-ip: 100
       agent-ip: 50
       agent: 50

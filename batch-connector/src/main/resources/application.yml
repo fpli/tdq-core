@@ -39,10 +39,10 @@ flink:
       kafka-dump: Sojourner Kafka Load Pipeline
     parallelism:
       source:
-        default: 90
+        default: 150
       sink:
         kafka: 100
-        hdfs: 90
+        hdfs: 150
     checkpoint:
       data-dir: /opt/sojourner-ubd/checkpoint
       interval-ms: 300000
@@ -60,7 +60,7 @@ rheos:
 
 hdfs:
   dump:
-    path: hdfs://apollo-rno/sys/soj/ubd/events
+    path: hdfs://apollo-rno/sys/soj/ubd/events/type=nonbot
     class-name: com.ebay.sojourner.common.model.SojEvent
 
 zookeeper:

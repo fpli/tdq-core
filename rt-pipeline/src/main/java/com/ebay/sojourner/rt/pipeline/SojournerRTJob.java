@@ -37,7 +37,6 @@ import com.ebay.sojourner.rt.operators.attribute.IpAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.IpWindowProcessFunction;
 import com.ebay.sojourner.rt.operators.event.DetectableEventMapFunction;
 import com.ebay.sojourner.rt.operators.event.EventDataStreamBuilder;
-import com.ebay.sojourner.rt.operators.event.SojEventFilterFunction;
 import com.ebay.sojourner.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.rt.operators.session.DetectableSessionMapFunction;
@@ -286,14 +285,16 @@ public class SojournerRTJob {
         .uid("session-sink-id");
 
     // kafka sink for sojevent --- 5% traffic
+    /*
     SingleOutputStreamOperator<SojEvent> sojEventFilterStream = sojEventWithSessionId
         .filter(new SojEventFilterFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("SojEvent Filter")
         .uid("sojEvent-filter-id");
+        */
 
-    sojEventFilterStream
+    sojEventWithSessionId
         .addSink(KafkaProducerFactory.getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_NON_BOT),
             FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_RNO),

@@ -1,5 +1,9 @@
 package com.ebay.sojourner.flink.connectors.kafka.schema;
 
+import com.ebay.sojourner.common.model.SojEvent;
+import com.ebay.sojourner.common.model.SojSession;
+import com.ebay.sojourner.common.util.Property;
+import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -59,23 +63,22 @@ public class AvroKeyedSerializationSchema<T> implements KeyedSerializationSchema
   @Override
   public String getTargetTopic(T element) {
 
-    /*
     if (element instanceof SojEvent) {
       SojEvent sojEvent = (SojEvent) element;
       if (sojEvent.getBotFlags().size() == 0) {
         return null;
       } else {
-        return FlinkEnvUtils.getString(Constants.BEHAVIOR_TOTAL_NEW_TOPIC_EVENT_BOT);
+        return FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_BOT);
       }
     } else if (element instanceof SojSession) {
       SojSession sojSession = (SojSession) element;
       if (sojSession.getBotFlag() == 0) {
         return null;
       } else {
-        return FlinkEnvUtils.getString(Constants.BEHAVIOR_TOTAL_NEW_TOPIC_SESSION_BOT);
+        return FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SESSION_BOT);
       }
     }
-    */
+
     return null;
   }
 
