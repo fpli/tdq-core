@@ -1,5 +1,9 @@
 package com.ebay.sojourner.rt.pipeline;
 
+import static com.ebay.sojourner.flink.common.util.DataCenter.LVS;
+import static com.ebay.sojourner.flink.common.util.DataCenter.RNO;
+import static com.ebay.sojourner.flink.common.util.DataCenter.SLC;
+
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.RawEvent;
@@ -12,10 +16,9 @@ import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
-import com.ebay.sojourner.flink.common.util.DataCenter;
 import com.ebay.sojourner.flink.common.util.OutputTagUtil;
 import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
-import com.ebay.sojourner.flink.connectors.kafka.KafkaConnectorFactory;
+import com.ebay.sojourner.flink.connectors.kafka.KafkaProducerFactory;
 import com.ebay.sojourner.flink.connectors.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
 import com.ebay.sojourner.rt.common.metrics.AgentIpMetricsCollectorProcessFunction;
@@ -69,54 +72,35 @@ public class SojournerRTJob {
     // 1. Rheos Consumer
     // 1.1 Consume RawEvent from Rheos PathFinder topic
     // 1.2 Assign timestamps and emit watermarks.
-    DataStream<RawEvent> rawEventDataStreamForRNO = SourceDataStreamBuilder.build(
-        executionEnvironment,
-        FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_TOPIC),
-        FlinkEnvUtils.getListString(Property.BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_RNO),
-        FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_RNO),
-        DataCenter.RNO,
-        FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM),
-        FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP),
-        RawEvent.class);
+    SourceDataStreamBuilder<RawEvent> dataStreamBuilder = new SourceDataStreamBuilder<>(
+        executionEnvironment, RawEvent.class
+    );
 
-    DataStream<RawEvent> rawEventDataStreamForSLC = SourceDataStreamBuilder.build(
-        executionEnvironment,
-        FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_TOPIC),
-        FlinkEnvUtils.getListString(Property.BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_SLC),
-        FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_SLC),
-        DataCenter.SLC,
-        FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM),
-        FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP),
-        RawEvent.class);
-
-    DataStream<RawEvent> rawEventDataStreamForLVS = SourceDataStreamBuilder.build(
-        executionEnvironment,
-        FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_TOPIC),
-        FlinkEnvUtils.getListString(Property.BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_LVS),
-        FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_LVS),
-        DataCenter.LVS,
-        FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM),
-        FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP),
-        RawEvent.class);
+    DataStream<RawEvent> rawEventDataStreamForRNO = dataStreamBuilder
+        .buildOfDC(RNO, FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP));
+    DataStream<RawEvent> rawEventDataStreamForSLC = dataStreamBuilder
+        .buildOfDC(SLC, FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP));
+    DataStream<RawEvent> rawEventDataStreamForLVS = dataStreamBuilder
+        .buildOfDC(LVS, FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP));
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
     // 2.2 Event level bot detection via bot rule
     DataStream<UbiEvent> ubiEventDataStreamForLVS = EventDataStreamBuilder.build(
         rawEventDataStreamForLVS,
-        DataCenter.LVS,
+        LVS,
         FlinkEnvUtils.getInteger(Property.EVENT_PARALLELISM),
         FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP));
 
     DataStream<UbiEvent> ubiEventDataStreamForSLC = EventDataStreamBuilder.build(
         rawEventDataStreamForSLC,
-        DataCenter.SLC,
+        SLC,
         FlinkEnvUtils.getInteger(Property.EVENT_PARALLELISM),
         FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP));
 
     DataStream<UbiEvent> ubiEventDataStreamForRNO = EventDataStreamBuilder.build(
         rawEventDataStreamForRNO,
-        DataCenter.RNO,
+        RNO,
         FlinkEnvUtils.getInteger(Property.EVENT_PARALLELISM),
         FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP));
 
@@ -291,11 +275,11 @@ public class SojournerRTJob {
 
     // kafka sink for sojsession
     sojSessionStream
-        .addSink(KafkaConnectorFactory.createKafkaProducer(
-            FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_SESSION_NON_BOT),
-            FlinkEnvUtils.getListString(Property.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
-            SojSession.class,
-            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION)))
+        .addSink(KafkaProducerFactory.getProducer(
+            FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SESSION_NON_BOT),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_RNO),
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION),
+            SojSession.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("SojSession")
@@ -310,11 +294,11 @@ public class SojournerRTJob {
         .uid("sojEvent-filter-id");
 
     sojEventFilterStream
-        .addSink(KafkaConnectorFactory.createKafkaProducer(
-            FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_EVENT_NON_BOT),
-            FlinkEnvUtils.getListString(Property.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
-            SojEvent.class,
-            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT)))
+        .addSink(KafkaProducerFactory.getProducer(
+            FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_NON_BOT),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_RNO),
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT),
+            SojEvent.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("SojEvent")
@@ -369,19 +353,19 @@ public class SojournerRTJob {
 
     // signature sink
     SignatureUtils.buildSignatureKafkaSink(agentIpSignatureDataStream,
-        FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_AGENT_IP),
+        FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SIGNATURE_AGENT_IP),
         Constants.AGENTIP,
         FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP),
         FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT_IP));
 
     SignatureUtils.buildSignatureKafkaSink(agentSignatureDataStream,
-        FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_AGENT),
+        FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SIGNATURE_AGENT),
         Constants.AGENT,
         FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP),
         FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT));
 
     SignatureUtils.buildSignatureKafkaSink(ipSignatureDataStream,
-        FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_IP),
+        FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SIGNATURE_IP),
         Constants.IP,
         FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP),
         FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SIGNATURE_IP));

@@ -1,0 +1,24 @@
+kafka:
+  consumer:
+    stream: behavior.total.new
+    topic: behavior.total.new.event.fordq
+    group-id: sojourner-pathfinder-session-dq
+    bootstrap-servers:
+      rno:
+        - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
+
+flink:
+  app:
+    parallelism:
+      source: 100
+      event: 100
+      session: 420
+
+hdfs:
+  path:
+    session: /sessions_dq
+    event: /events_dq

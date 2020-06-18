@@ -1,0 +1,19 @@
+kafka:
+  consumer:
+    topic: behavior.total.new.sojevent.bot
+    group-id: sojourner-pathfinder-event-bot
+
+flink:
+  app:
+    name:
+      hdfs-dump: Sojourner Bot Event HDFS Load Pipeline
+    parallelism:
+      source:
+        default: 60
+      sink:
+        hdfs: 60
+
+hdfs:
+  dump:
+    path: hdfs://apollo-rno/sys/soj/ubd/events/type=bot
+    class-name: com.ebay.sojourner.common.model.SojEvent

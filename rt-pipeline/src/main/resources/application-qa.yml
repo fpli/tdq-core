@@ -1,54 +1,35 @@
 kafka:
-  stream:
-    behavior-pathfinder:
-      bootstrap-servers:
-        lvs:
-          - rhs-vvrvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
-          - rhs-vvrvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
-          - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
-          - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
-          - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-      topic: behavior.pathfinder.events.total
-      group-id:
-        default:
-          lvs: sojourner-pathfinder-qa
+  consumer:
+    group-id: sojourner-pathfinder-consumer-qa
+    bootstrap-servers:
+      lvs:
+        - rhs-vvrvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-vvrvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
 
-    behavior-trafficjam:
-      bootstrap-servers:
-        default:
-          - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
-          - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
-          - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
-          - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
-          - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-      topic:
-        session:
-          bot: behavior.trafficjam.session.bot
-          non-bot: behavior.trafficjam.session
-        event:
-          bot: behavior.trafficjam.event.bot
-          non-bot: behavior.trafficjam.event
-        signature:
-          agent-ip: behavior.trafficjam.agent.ip
-          agent: behavior.trafficjam.agent
-          ip: behavior.trafficjam.ip
-          guid: behavior.trafficjam.guid
-      group-id:
-        session:
-          bot: sojourner-pathfinder-session-bot
-          non-bot: sojourner-pathfinder-session-non-bot
-        event:
-          bot: sojourner-pathfinder-event
-          non-bot: sojourner-pathfinder-event
-        signature:
-          agent-ip: sojourner-pathfinder-agent-ip
-          agent: sojourner-pathfinder-agent
-          ip: sojourner-pathfinder-ip
-          guid: sojourner-pathfinder-guid
-      message-key:
-        session: guid
-        event: guid
-        signature: signatureId
+  producer:
+    stream: behavior.vtrafficjam
+    topic:
+      session:
+        bot: behavior.trafficjam.session.bot
+        non-bot: behavior.trafficjam.session
+      event:
+        bot: behavior.trafficjam.event.bot
+        non-bot: behavior.trafficjam.event
+      signature:
+        agent-ip: behavior.trafficjam.agent.ip
+        agent: behavior.trafficjam.agent
+        ip: behavior.trafficjam.ip
+        guid: behavior.trafficjam.guid
+    bootstrap-servers:
+      lvs:
+        - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
 
 flink:
   app:
@@ -65,13 +46,15 @@ flink:
       metrics: 2
 
 rheos:
-  serviceUrl: https://rheos-services.qa.ebay.com
-  iaf:
-    secret: 6218c197-200e-49d7-b404-2a4dbf7595ef
-    env: staging
+  registry-url: https://rheos-services.qa.ebay.com
+  client:
+    id: "urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618"
+    iaf:
+      secret: 6218c197-200e-49d7-b404-2a4dbf7595ef
+      env: staging
 
 zookeeper:
-  server: localhost:2181
+  server: rhs-tdtvkiaa-fzk-lvs-1.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-2.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-3.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-4.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-5.rheos-streaming-qa.svc.32.tess.io:2181
 
 rest-client:
-  rest-server: http://localhost:8080
+  rest-server: https://sojubdportalservice.vip.qa.ebay.com

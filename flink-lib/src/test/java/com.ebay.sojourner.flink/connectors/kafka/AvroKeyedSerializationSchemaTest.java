@@ -2,6 +2,7 @@ package com.ebay.sojourner.flink.connectors.kafka;
 
 import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojSession;
+import com.ebay.sojourner.flink.connectors.kafka.schema.AvroKeyedSerializationSchema;
 import org.junit.Ignore;
 import org.junit.Test;
 

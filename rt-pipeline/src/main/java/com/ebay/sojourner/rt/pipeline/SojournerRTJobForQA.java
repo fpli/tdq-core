@@ -14,7 +14,7 @@ import com.ebay.sojourner.flink.common.state.MapStateDesc;
 import com.ebay.sojourner.flink.common.util.DataCenter;
 import com.ebay.sojourner.flink.common.util.OutputTagUtil;
 import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
-import com.ebay.sojourner.flink.connectors.kafka.KafkaConnectorFactory;
+import com.ebay.sojourner.flink.connectors.kafka.KafkaProducerFactory;
 import com.ebay.sojourner.flink.connectors.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
 import com.ebay.sojourner.rt.common.metrics.AgentIpMetricsCollectorProcessFunction;
@@ -67,15 +67,11 @@ public class SojournerRTJobForQA {
     // 1. Rheos Consumer
     // 1.1 Consume RawEvent from Rheos PathFinder topic
     // 1.2 Assign timestamps and emit watermarks.
-    DataStream<RawEvent> rawEventDataStream = SourceDataStreamBuilder.build(
-        executionEnvironment,
-        FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_TOPIC),
-        FlinkEnvUtils.getListString(Property.BEHAVIOR_PATHFINDER_BOOTSTRAP_SERVERS_LVS),
-        FlinkEnvUtils.getString(Property.BEHAVIOR_PATHFINDER_GROUP_ID_DEFAULT_LVS),
-        DataCenter.LVS,
-        FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM),
-        null,
-        RawEvent.class);
+    SourceDataStreamBuilder<RawEvent> dataStreamBuilder = new SourceDataStreamBuilder<>(
+        executionEnvironment, RawEvent.class
+    );
+
+    DataStream<RawEvent> rawEventDataStream = dataStreamBuilder.buildOfDC(DataCenter.LVS);
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
@@ -234,23 +230,22 @@ public class SojournerRTJobForQA {
     // 5.4 Events late
 
     // kafka sink for session
-    sojSessionStream.addSink(KafkaConnectorFactory
-        .createKafkaProducer(
-            FlinkEnvUtils.getString(Property.BEHAVIOR_TRAFFICJAM_TOPIC_SESSION_NON_BOT),
-            FlinkEnvUtils.getListString(Property.BEHAVIOR_TRAFFICJAM_BOOTSTRAP_SERVERS_DEFAULT),
-            SojSession.class,
-            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION)))
+    sojSessionStream.addSink(KafkaProducerFactory
+        .getProducer(
+            FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SESSION_NON_BOT),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_LVS),
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION),SojSession.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .name("SojSession")
         .uid("session-sink-id");
 
     // kafka sink for event
-    sojEventWithSessionId.addSink(KafkaConnectorFactory
-        .createKafkaProducer(
-            FlinkEnvUtils.getString(Property.BEHAVIOR_TRAFFICJAM_TOPIC_EVENT_NON_BOT),
-            FlinkEnvUtils.getListString(Property.BEHAVIOR_TRAFFICJAM_BOOTSTRAP_SERVERS_DEFAULT),
-            SojEvent.class,
-            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT)))
+    sojEventWithSessionId.addSink(KafkaProducerFactory
+        .getProducer(
+            FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_NON_BOT),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_LVS),
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT),
+            SojEvent.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .name("SojEvent")
         .uid("event-sink-id");

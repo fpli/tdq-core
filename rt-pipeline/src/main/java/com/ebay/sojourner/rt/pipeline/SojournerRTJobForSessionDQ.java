@@ -1,5 +1,7 @@
 package com.ebay.sojourner.rt.pipeline;
 
+import static com.ebay.sojourner.flink.common.util.DataCenter.RNO;
+
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojSession;
@@ -8,7 +10,7 @@ import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
-import com.ebay.sojourner.flink.connectors.kafka.KafkaSourceFunction;
+import com.ebay.sojourner.flink.connectors.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.rt.operators.event.UbiEventToSojEventMapFunction;
@@ -35,16 +37,11 @@ public class SojournerRTJobForSessionDQ {
     final StreamExecutionEnvironment executionEnvironment = FlinkEnvUtils.prepare(args);
 
     // kafka source for copy
-    DataStream<RawEvent> rawEventDataStream =
-        executionEnvironment.addSource(KafkaSourceFunction.buildSource(
-            FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_DQ_SESSION),
-            FlinkEnvUtils
-                .getListString(Property.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
-            FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_GROUP_ID_DQ_SESSION),
-            RawEvent.class))
-            .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
-            .name("Rheos Kafka Consumer For Session DQ")
-            .uid("source-id");
+    SourceDataStreamBuilder<RawEvent> dataStreamBuilder = new SourceDataStreamBuilder<>(
+        executionEnvironment, RawEvent.class
+    );
+
+    DataStream<RawEvent> rawEventDataStream = dataStreamBuilder.buildOfDC(RNO);
 
     DataStream<UbiEvent> ubiEventDataStream =
         rawEventDataStream

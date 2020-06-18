@@ -4,7 +4,7 @@ import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
-import com.ebay.sojourner.flink.connectors.kafka.KafkaConnectorFactory;
+import com.ebay.sojourner.flink.connectors.kafka.KafkaProducerFactory;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -57,11 +57,11 @@ public class SignatureUtils {
       String signatureId, String slotGroup, String messageKey) {
 
     dataStream
-        .addSink(KafkaConnectorFactory.createKafkaProducer(
+        .addSink(KafkaProducerFactory.getProducer(
             topic,
-            FlinkEnvUtils.getListString(Property.BEHAVIOR_TOTAL_NEW_BOOTSTRAP_SERVERS_DEFAULT),
-            BotSignature.class,
-            messageKey))
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_RNO),
+            messageKey,
+            BotSignature.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.DEFAULT_PARALLELISM))
         .slotSharingGroup(slotGroup)
         .name(String.format("%s Signature", signatureId))

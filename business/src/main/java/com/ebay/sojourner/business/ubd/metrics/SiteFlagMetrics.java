@@ -6,47 +6,6 @@ import com.ebay.sojourner.common.util.BitUtils;
 
 public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
-  private static final Integer NUMBER_SITE_FLAG = 47;
-
-  // idx 0~46 used
-  // private BitSet siteFlags = new BitSet();
-  //  private int[] siteFlags = {
-  //      0, 0, 0, 0, 0, 0, 0, 0,
-  //      0, 0, 0, 0, 0, 0, 0, 0,
-  //      0, 0, 0, 0, 0, 0, 0, 0,
-  //      0, 0, 0, 0, 0, 0, 0, 0,
-  //      0, 0, 0, 0, 0, 0, 0, 0,
-  //      0, 0, 0, 0, 0, 0, 0, 0,
-  //      0, 0, 0, 0, 0, 0, 0, 0,
-  //      0, 0, 0, 0, 0, 0, 0, 0
-  //  };
-
-  public static void main(String[] args) {
-    SiteFlagMetrics siteFlagMetrics = new SiteFlagMetrics();
-
-    UbiEvent ubiEvent = new UbiEvent();
-    ubiEvent.setSiteId(0);
-    SessionAccumulator sessionAccumulator = new SessionAccumulator();
-    //    siteFlagMetrics.start(sessionAccumulator);
-    //    siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
-    //    ubiEvent.setSiteId(77);
-    //    siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
-    //    ubiEvent.setSiteId(101);
-    //    siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
-    //    ubiEvent.setSiteId(102);
-    //    siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
-    //    ubiEvent.setSiteId(103);
-    //    siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
-    //    siteFlagMetrics.end(sessionAccumulator);
-    //    System.out.println(sessionAccumulator.getUbiSession().getSiteFlags());
-    siteFlagMetrics.start(sessionAccumulator);
-    ubiEvent.setSiteId(77);
-    siteFlagMetrics.feed(ubiEvent, sessionAccumulator);
-    //    siteFlagMetrics.end(sessionAccumulator);
-    System.out.println(sessionAccumulator.getUbiSession().getSiteFlags());
-
-  }
-
   void setSiteFlag(int siteId, SessionAccumulator sessionAccumulator) {
     long siteFlagsMid = sessionAccumulator.getUbiSession().getSiteFlags();
     switch (siteId) {
@@ -223,21 +182,6 @@ public class SiteFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
     }
     sessionAccumulator.getUbiSession().setSiteFlags(siteFlagsMid);
   }
-
-  //  @Override
-  //  public String toString() {
-  //    StringBuilder sb = new StringBuilder();
-  //    sb.append("{");
-  //    for (int i = 0; i < NUMBER_SITE_FLAG - 1; i++) {
-  //      sb.append(siteFlags[i]).append(",");
-  //    }
-  //    sb.append(siteFlags[NUMBER_SITE_FLAG - 1]) .append("}");
-  //    return sb.toString();
-  //  }
-
-  //  public void initSiteFlags() {
-  //    Arrays.fill(siteFlags, (byte) 0);
-  //  }
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {

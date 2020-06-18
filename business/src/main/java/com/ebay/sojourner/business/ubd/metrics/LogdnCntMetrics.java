@@ -9,18 +9,6 @@ public class LogdnCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulato
 
   private static final String SIGN_IN = "SIGNIN";
 
-  public static void main(String[] args) {
-    //    Map<Integer, String[]> pageFmlyNameMap2;
-    //    LkpManager lkpFetcher2;
-    //    lkpFetcher2 = LkpManager.getInstance();
-    //    lkpFetcher2.loadPageFmlys();
-    //    pageFmlyNameMap2 = lkpFetcher2.getPageFmlyMaps();
-    //    if (pageFmlyNameMap2.containsKey(992)) {
-    //      System.out.println(pageFmlyNameMap2.get(992)[1]);
-    //    }
-
-  }
-
   @Override
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
     sessionAccumulator.getUbiSession().setSigninPageCnt(0);

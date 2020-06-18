@@ -1,4 +1,4 @@
-package com.ebay.sojourner.flink.connectors.kafka;
+package com.ebay.sojourner.flink.connectors.kafka.schema;
 
 import com.ebay.sojourner.common.model.SojBytesEvent;
 import org.apache.flink.streaming.util.serialization.KeyedSerializationSchema;

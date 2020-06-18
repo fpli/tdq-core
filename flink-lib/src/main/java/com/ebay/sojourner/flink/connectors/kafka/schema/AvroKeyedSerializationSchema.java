@@ -1,4 +1,4 @@
-package com.ebay.sojourner.flink.connectors.kafka;
+package com.ebay.sojourner.flink.connectors.kafka.schema;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
