@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.flink.api.common.functions.AggregateFunction;
 
 @Slf4j
@@ -47,38 +48,13 @@ public class AgentAttributeAgg implements
     }
 
     Set<Integer> agentBotFlag = null;
-    Map<Integer, Integer> signatureStates = agentAttributeAccumulator.getSignatureStates();
+    Map<Integer, Integer> signatureStatus = agentAttributeAccumulator.getSignatureStatus();
 
     try {
-      if (signatureStates.containsValue(0) || signatureStates.containsValue(1)) {
+      if (signatureStatus.containsValue(0) || signatureStatus.containsValue(1)) {
         agentBotFlag = AgentSignatureBotDetector.getInstance().getBotFlagList(agentAttribute);
-        if (agentBotFlag.contains(6)) {
-          switch (signatureStates.get(6)) {
-            case 0:
-              signatureStates.put(6, 1);
-              break;
-            case 1:
-              signatureStates.put(6, 2);
-              break;
-          }
-        } else if (agentBotFlag.contains(220)) {
-          switch (signatureStates.get(220)) {
-            case 0:
-              signatureStates.put(220, 1);
-              break;
-            case 1:
-              signatureStates.put(220, 2);
-              break;
-          }
-        } else if (agentBotFlag.contains(221)) {
-          switch (signatureStates.get(221)) {
-            case 0:
-              signatureStates.put(221, 1);
-              break;
-            case 1:
-              signatureStates.put(221, 2);
-              break;
-          }
+        if (CollectionUtils.isNotEmpty(agentBotFlag)) {
+          SignatureUtils.updateSignatureStatus(signatureStatus, agentBotFlag);
         }
       }
     } catch (IOException | InterruptedException e) {

@@ -31,7 +31,7 @@ public class SignatureUtils {
 
   public static Set<Integer> setBotFlags(Set<Integer> sourceSet, Set<Integer> targetSet) {
 
-    if (CollectionUtils.isNotEmpty(sourceSet) && CollectionUtils.isNotEmpty(targetSet)) {
+    if (CollectionUtils.isNotEmpty(sourceSet)) {
       targetSet.addAll(sourceSet);
     }
 
@@ -67,5 +67,22 @@ public class SignatureUtils {
         .name(String.format("%s Signature", signatureId))
         .uid(String.format("signature-%s-sink-id", signatureId));
 
+  }
+
+  public static void updateSignatureStatus(Map<Integer, Integer> signatureStatus,
+      Set<Integer> botFlags) {
+
+    for (Integer botFlag : botFlags) {
+      if (signatureStatus.containsKey(botFlag)) {
+        switch (signatureStatus.get(botFlag)) {
+          case 0:
+            signatureStatus.put(botFlag, 1);
+            break;
+          case 1:
+            signatureStatus.put(botFlag, 2);
+            break;
+        }
+      }
+    }
   }
 }

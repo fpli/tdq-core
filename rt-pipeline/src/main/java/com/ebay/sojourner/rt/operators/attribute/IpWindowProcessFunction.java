@@ -24,7 +24,7 @@ public class IpWindowProcessFunction extends
 
     IpAttributeAccumulator ipAttributeAccumulator = elements.iterator().next();
     IpAttribute ipAttribute = ipAttributeAccumulator.getIpAttribute();
-    Map<Integer, Integer> signatureStates = ipAttributeAccumulator.getSignatureStates();
+    Map<Integer, Integer> signatureStates = ipAttributeAccumulator.getSignatureStatus();
     Set<Integer> botFlagList = ipAttribute.getBotFlagList();
     Integer clientIp = ipAttribute.getClientIp();
     long windowEndTime = context.window().maxTimestamp();

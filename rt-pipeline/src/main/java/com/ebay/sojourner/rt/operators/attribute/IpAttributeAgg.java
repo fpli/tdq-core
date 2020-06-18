@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.flink.api.common.functions.AggregateFunction;
 
 @Slf4j
@@ -47,38 +48,13 @@ public class IpAttributeAgg implements
     }
 
     Set<Integer> ipBotFlag = null;
-    Map<Integer, Integer> signatureStates = ipAttributeAccumulator.getSignatureStates();
+    Map<Integer, Integer> signatureStatus = ipAttributeAccumulator.getSignatureStatus();
 
     try {
-      if (signatureStates.containsValue(0) || signatureStates.containsValue(1)) {
+      if (signatureStatus.containsValue(0) || signatureStatus.containsValue(1)) {
         ipBotFlag = IpSignatureBotDetector.getInstance().getBotFlagList(ipAttribute);
-        if (ipBotFlag.contains(7)) {
-          switch (signatureStates.get(7)) {
-            case 0:
-              signatureStates.put(7, 1);
-              break;
-            case 1:
-              signatureStates.put(7, 2);
-              break;
-          }
-        } else if (ipBotFlag.contains(222)) {
-          switch (signatureStates.get(222)) {
-            case 0:
-              signatureStates.put(222, 1);
-              break;
-            case 1:
-              signatureStates.put(222, 2);
-              break;
-          }
-        } else if (ipBotFlag.contains(223)) {
-          switch (signatureStates.get(223)) {
-            case 0:
-              signatureStates.put(223, 1);
-              break;
-            case 1:
-              signatureStates.put(223, 2);
-              break;
-          }
+        if (CollectionUtils.isNotEmpty(ipBotFlag)) {
+          SignatureUtils.updateSignatureStatus(signatureStatus, ipBotFlag);
         }
       }
     } catch (IOException | InterruptedException e) {

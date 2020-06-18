@@ -9,9 +9,9 @@ flink:
       agent-ip: 50
       agent: 50
       ip: 50
-      guid: 50
-      broadcast: 200
-      metrics: 200
+      guid: 100
+      broadcast: 300
+      metrics: 300
 
 zookeeper:
   server:

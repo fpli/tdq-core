@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.flink.api.common.functions.AggregateFunction;
 
 @Slf4j
@@ -47,30 +48,14 @@ public class AgentIpAttributeAggSliding implements
     }
 
     Set<Integer> agentIpBotFlag = null;
-    Map<Integer, Integer> signatureStates = agentIpAttributeAccumulator.getSignatureStates();
+    Map<Integer, Integer> signatureStatus = agentIpAttributeAccumulator.getSignatureStatus();
 
     try {
-      if (signatureStates.containsValue(0) || signatureStates.containsValue(1)) {
+      if (signatureStatus.containsValue(0) || signatureStatus.containsValue(1)) {
         agentIpBotFlag = AgentIpSignatureBotDetector.getInstance()
             .getBotFlagList(agentIpAttributeAccumulator.getAgentIpAttribute());
-        if (agentIpBotFlag.contains(5)) {
-          switch (signatureStates.get(5)) {
-            case 0:
-              signatureStates.put(5, 1);
-              break;
-            case 1:
-              signatureStates.put(5, 2);
-              break;
-          }
-        } else if (agentIpBotFlag.contains(8)) {
-          switch (signatureStates.get(8)) {
-            case 0:
-              signatureStates.put(8, 1);
-              break;
-            case 1:
-              signatureStates.put(8, 2);
-              break;
-          }
+        if (CollectionUtils.isNotEmpty(agentIpBotFlag)) {
+          SignatureUtils.updateSignatureStatus(signatureStatus, agentIpBotFlag);
         }
       }
     } catch (IOException | InterruptedException e) {

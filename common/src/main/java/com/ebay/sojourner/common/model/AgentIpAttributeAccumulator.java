@@ -8,11 +8,11 @@ import lombok.Data;
 public class AgentIpAttributeAccumulator {
 
   private AgentIpAttribute agentIpAttribute;
-  private Map<Integer, Integer> signatureStates = new HashMap<>();
+  private Map<Integer, Integer> signatureStatus = new HashMap<>();
 
   public AgentIpAttributeAccumulator() {
     this.agentIpAttribute = new AgentIpAttribute();
-    signatureStates.put(5, 0);
-    signatureStates.put(8, 0);
+    signatureStatus.put(5, 0);
+    signatureStatus.put(8, 0);
   }
 }

@@ -7,9 +7,9 @@ import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.TransformUtil;
 import com.ebay.sojourner.common.util.UbiSessionHelper;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
@@ -240,70 +240,74 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
     }
     */
 
-    if (signature != null && signature.size() > 0) {
-      if (isGeneration) {
-        for (int botFlag : botFlags) {
-          if (signature.get(signatureId) != null) {
-            if (signature.get(signatureId).containsKey(botFlag)) {
-              if (expirationTime > signature.get(signatureId).get(botFlag)) {
-                signature.get(signatureId).put(botFlag, expirationTime);
-              }
-            } else {
+    if (signature == null) {
+      signature = new ConcurrentHashMap<>();
+    }
+    if (isGeneration) {
+      for (int botFlag : botFlags) {
+        if (signature.get(signatureId) != null) {
+          if (signature.get(signatureId).containsKey(botFlag)) {
+            if (expirationTime > signature.get(signatureId).get(botFlag)) {
               signature.get(signatureId).put(botFlag, expirationTime);
             }
           } else {
-            HashMap<Integer, Long> newBotFlagStatus = new HashMap<>();
-            newBotFlagStatus.put(botFlag, expirationTime);
-            signature.put(signatureId, newBotFlagStatus);
-            if (signatureId.contains("ip")) {
-              ipIncCounter.inc();
-              ipCounter.inc();
-            } else if (signatureId.contains("agent")) {
-              agentIncCounter.inc();
-              agentCounter.inc();
-            } else if (signatureId.contains("agentIp")) {
-              agentIpIncCounter.inc();
-              agentIpCounter.inc();
-            }
-            /*else if (signatureId.contains("guid")) {
-              guidIncCounter.inc();
-              guidCounter.inc();
-            }
-            */
+            signature.get(signatureId).put(botFlag, expirationTime);
           }
+        } else {
+          Map<Integer, Long> newBotFlagStatus = new ConcurrentHashMap<>();
+          newBotFlagStatus.put(botFlag, expirationTime);
+          signature.put(signatureId, newBotFlagStatus);
+          if (signatureId.contains("ip")) {
+            ipIncCounter.inc();
+            ipCounter.inc();
+          } else if (signatureId.contains("agent")) {
+            agentIncCounter.inc();
+            agentCounter.inc();
+          } else if (signatureId.contains("agentIp")) {
+            agentIpIncCounter.inc();
+            agentIpCounter.inc();
+          }
+          /*
+          else if (signatureId.contains("guid")) {
+            guidIncCounter.inc();
+            guidCounter.inc();
+          }
+          */
         }
-      } else {
-        Map<Integer, Long> signatureBotFlagStatus = signature.get(signatureId);
-        if (signatureBotFlagStatus != null) {
-          for (int botFlag : botFlags) {
-            if (signatureBotFlagStatus.containsKey(botFlag)) {
-              if (expirationTime > signatureBotFlagStatus.get(botFlag)) {
-                signatureBotFlagStatus.remove(botFlag);
-                if (signatureBotFlagStatus.size() == 0) {
-                  if (signatureId.contains("ip")) {
-                    ipDecCounter.inc();
-                    ipCounter.dec();
-                  } else if (signatureId.contains("agent")) {
-                    agentDecCounter.inc();
-                    agentCounter.dec();
-                  } else if (signatureId.contains("agentIp")) {
-                    agentIpDecCounter.inc();
-                    agentIpCounter.dec();
-                  }
-                  /*
-                  else if (signatureId.contains("guid")) {
-                    guidDecCounter.inc();
-                    guidCounter.dec();
-                  }
-                  */
-                  attributeBroadcastStatus.remove(signatureId);
+      }
+    } else {
+      Map<Integer, Long> signatureBotFlagStatus = signature.get(signatureId);
+      if (signatureBotFlagStatus != null) {
+        for (int botFlag : botFlags) {
+          if (signatureBotFlagStatus.containsKey(botFlag)) {
+            if (expirationTime > signatureBotFlagStatus.get(botFlag)) {
+              signatureBotFlagStatus.remove(botFlag);
+              if (signatureBotFlagStatus.size() == 0) {
+                if (signatureId.contains("ip")) {
+                  ipDecCounter.inc();
+                  ipCounter.dec();
+                } else if (signatureId.contains("agent")) {
+                  agentDecCounter.inc();
+                  agentCounter.dec();
+                } else if (signatureId.contains("agentIp")) {
+                  agentIpDecCounter.inc();
+                  agentIpCounter.dec();
                 }
+                /*
+                else if (signatureId.contains("guid")) {
+                  guidDecCounter.inc();
+                  guidCounter.dec();
+                }
+                */
+                attributeBroadcastStatus.remove(signatureId);
               }
             }
           }
         }
       }
     }
+
+
   }
 
   @Override

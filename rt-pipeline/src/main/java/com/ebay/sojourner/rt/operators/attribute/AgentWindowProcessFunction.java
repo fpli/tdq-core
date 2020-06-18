@@ -25,7 +25,7 @@ public class AgentWindowProcessFunction extends
 
     AgentAttributeAccumulator agentAttributeAccumulator = elements.iterator().next();
     AgentAttribute agentAttribute = agentAttributeAccumulator.getAgentAttribute();
-    Map<Integer, Integer> signatureStates = agentAttributeAccumulator.getSignatureStates();
+    Map<Integer, Integer> signatureStates = agentAttributeAccumulator.getSignatureStatus();
     Set<Integer> botFlagList = agentAttribute.getBotFlagList();
     AgentHash agent = agentAttribute.getAgent();
     long windowEndTime = context.window().maxTimestamp();
