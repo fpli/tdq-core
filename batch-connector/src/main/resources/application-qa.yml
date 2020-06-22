@@ -35,8 +35,7 @@ kafka:
 flink:
   app:
     parallelism:
-      source:
-        default: 2
+      source: 2
       sink:
         kafka: 2
         hdfs: 2

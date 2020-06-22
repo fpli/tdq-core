@@ -53,10 +53,11 @@ kafka:
         bot: behavior.total.new.sojevent.bot
         non-bot: behavior.total.new.sojevent
       signature:
-        agent-ip: behavior.total.new.agent.ip
-        agent: behavior.total.new.agent
-        ip: behavior.total.new.ip
-        guid: behavior.total.new.guid
+        agent-ip: behavior.total.new.signature.agentIp
+        agent: behavior.total.new.signature.agent
+        ip: behavior.total.new.signature.ip
+        guid: behavior.total.new.signature.guid
+      intermediate-session: behavior.total.new.session.fordq
     bootstrap-servers:
       rno:
         - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
@@ -72,7 +73,6 @@ flink:
       data-quality: Sojourner RT DQ Pipeline
       hot-deploy: Sojourner RT Hot Deploy Pipeline
     parallelism:
-      default: 50
       source: 100
       event: 100
       session: 700

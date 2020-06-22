@@ -6,25 +6,18 @@ import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.TransformUtil;
 import com.ebay.sojourner.common.util.UbiSessionHelper;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.util.Collector;
-import org.apache.flink.util.OutputTag;
 
 @Slf4j
 public class CrossSessionDQBroadcastProcessFunction extends
     BroadcastProcessFunction<IntermediateSession, BotSignature, IntermediateSession> {
-
-  private OutputTag outputTag = null;
-
-  public CrossSessionDQBroadcastProcessFunction(OutputTag sessionOutputTag) {
-    outputTag = sessionOutputTag;
-  }
 
   @Override
   public void processElement(IntermediateSession intermediateSession,
@@ -37,7 +30,7 @@ public class CrossSessionDQBroadcastProcessFunction extends
     String ip = TransformUtil.ipToInt(intermediateSession.getIp()) == null ? "0"
         : TransformUtil.ipToInt(intermediateSession.getIp()).toString();
     Map<String, Map<Integer, Long>> ipSignature = attributeSignature.get("ip");
-    if (ipSignature.containsKey(ip)) {
+    if (ipSignature != null && ipSignature.size() > 0 && ipSignature.containsKey(ip)) {
       for (Map.Entry<Integer, Long> ipBotFlagMap :
           ipSignature.get(ip).entrySet()) {
         intermediateSession.getBotFlagList().add(ipBotFlagMap.getKey());
@@ -49,7 +42,8 @@ public class CrossSessionDQBroadcastProcessFunction extends
         .md522Long(TransformUtil.getMD5(intermediateSession.getUserAgent()));
     Map<String, Map<Integer, Long>> agentSignature = attributeSignature.get("agent");
     String agent = long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1];
-    if (agentSignature.containsKey(agent)) {
+    if (agentSignature != null && agentSignature.size() > 0
+        && agentSignature.containsKey(agent)) {
       for (Map.Entry<Integer, Long> agentBotFlagMap :
           agentSignature.get(agent).entrySet()) {
         intermediateSession.getBotFlagList().add(agentBotFlagMap.getKey());
@@ -57,24 +51,16 @@ public class CrossSessionDQBroadcastProcessFunction extends
     }
 
     // agentIp
-    Map<String, Map<Integer, Long>> agentIpSignature = attributeSignature.get("agentIp");
     String agentIp =
         long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1] + Constants.FIELD_DELIM + (
             TransformUtil.ipToInt(intermediateSession.getIp()) == null ? "0"
                 : TransformUtil.ipToInt(intermediateSession.getIp()).toString());
-    if (agentIpSignature.containsKey(agentIp)) {
-      for (Map.Entry<Integer, Long> agentIpBotFlagMap : agentIpSignature.get(agentIp).entrySet()) {
+    Map<String, Map<Integer, Long>> agentIpSignature = attributeSignature.get("agentIp");
+    if (agentIpSignature != null && agentIpSignature.size() > 0
+        && agentIpSignature.containsKey(agentIp)) {
+      for (Map.Entry<Integer, Long> agentIpBotFlagMap :
+          agentIpSignature.get(agentIp).entrySet()) {
         intermediateSession.getBotFlagList().add(agentIpBotFlagMap.getKey());
-      }
-    }
-
-    // guid
-    Map<String, Map<Integer, Long>> guidSignature = attributeSignature.get("guid");
-    long[] long4Cguid = TransformUtil.md522Long(intermediateSession.getGuid());
-    String guid = long4Cguid[0] + Constants.FIELD_DELIM + long4Cguid[1];
-    if (guidSignature.containsKey(guid)) {
-      for (Map.Entry<Integer, Long> guidBotFlagMap : guidSignature.get(guid).entrySet()) {
-        intermediateSession.getBotFlagList().add(guidBotFlagMap.getKey());
       }
     }
 
@@ -96,7 +82,7 @@ public class CrossSessionDQBroadcastProcessFunction extends
         && intermediateSession.getBotFlagList().contains(224)) {
       intermediateSession.getBotFlagList().add(211);
     }
-    context.output(outputTag, intermediateSession);
+    out.collect(intermediateSession);
 
   }
 
@@ -117,20 +103,23 @@ public class CrossSessionDQBroadcastProcessFunction extends
     isGeneration = attributeSignature.getIsGeneration();
 
     if ("agent".equals(attributeSignature.getType())) {
-      signatureId = attributeSignature.getUserAgent().getAgentHash1() + Constants.FIELD_DELIM
-          + attributeSignature.getUserAgent().getAgentHash2();
+      signatureId =
+          attributeSignature.getUserAgent().getAgentHash1() + Constants.FIELD_DELIM
+              + attributeSignature
+              .getUserAgent().getAgentHash2();
 
     } else if ("agentIp".equals(attributeSignature.getType())) {
-      signatureId = attributeSignature.getUserAgent().getAgentHash1() + Constants.FIELD_DELIM
-          + attributeSignature.getUserAgent().getAgentHash2() + Constants.FIELD_DELIM
-          + attributeSignature.getIp();
+      signatureId =
+          attributeSignature.getUserAgent().getAgentHash1() + Constants.FIELD_DELIM
+              + attributeSignature
+              .getUserAgent().getAgentHash2() + Constants.FIELD_DELIM + attributeSignature.getIp();
 
     } else if ("ip".equals(attributeSignature.getType())) {
       signatureId = attributeSignature.getIp().toString();
-    } else if ("guid".equals(attributeSignature.getType())) {
-      signatureId =
-          attributeSignature.getGuid().getGuid1() + Constants.FIELD_DELIM + attributeSignature
-              .getGuid().getGuid2();
+    }
+
+    if (signature == null) {
+      signature = new ConcurrentHashMap<>();
     }
 
     if (isGeneration) {
@@ -144,7 +133,7 @@ public class CrossSessionDQBroadcastProcessFunction extends
             signature.get(signatureId).put(botFlag, expirationTime);
           }
         } else {
-          HashMap<Integer, Long> newBotFlagStatus = new HashMap<>();
+          Map<Integer, Long> newBotFlagStatus = new ConcurrentHashMap<>();
           newBotFlagStatus.put(botFlag, expirationTime);
           signature.put(signatureId, newBotFlagStatus);
         }

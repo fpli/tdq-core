@@ -14,7 +14,7 @@ public class KafkaProducerFactory {
   public static <T> FlinkKafkaProducer<T> getProducer(String topic, String brokers,
       String messagekey, Class<T> tClass) {
 
-    Properties producerConfig = KafkaConnectorUtils.getKafkaCommonConfig();
+    Properties producerConfig = KafkaConnectorFactory.getKafkaCommonConfig();
 
     producerConfig
         .put(ProducerConfig.BATCH_SIZE_CONFIG, FlinkEnvUtils.getInteger(Property.BATCH_SIZE));

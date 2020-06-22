@@ -18,7 +18,7 @@ public class TimestampFieldExtractor {
       return rawEvent.getRheosHeader().getEventCreateTimestamp();
     } else if (t instanceof SojSession) {
       SojSession sojSession = (SojSession) t;
-      return SojTimestamp.getSojTimestampToUnixTimestamp(sojSession.getAbsEndTimestamp());
+      return SojTimestamp.getSojTimestampToUnixTimestamp(sojSession.getAbsStartTimestamp());
     } else if (t instanceof SojEvent) {
       SojEvent sojEvent = (SojEvent) t;
       return sojEvent.getGenerateTime();
@@ -27,7 +27,8 @@ public class TimestampFieldExtractor {
       return jetStreamOutputEvent.getEventCreateTimestamp();
     } else if (t instanceof IntermediateSession) {
       IntermediateSession intermediateSession = (IntermediateSession) t;
-      return SojTimestamp.getSojTimestampToUnixTimestamp(intermediateSession.getAbsEndTimestamp());
+      return SojTimestamp
+          .getSojTimestampToUnixTimestamp(intermediateSession.getAbsStartTimestamp());
     } else if (t instanceof JetStreamOutputSession) {
       JetStreamOutputSession jetStreamOutputSession = (JetStreamOutputSession) t;
       return jetStreamOutputSession.getEventCreateTimestamp();

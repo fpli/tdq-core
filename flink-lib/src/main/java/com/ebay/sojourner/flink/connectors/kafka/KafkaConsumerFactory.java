@@ -1,5 +1,9 @@
 package com.ebay.sojourner.flink.connectors.kafka;
 
+import com.ebay.sojourner.common.model.BotSignature;
+import com.ebay.sojourner.common.model.IntermediateSession;
+import com.ebay.sojourner.common.model.SojEvent;
+import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import java.util.Properties;
@@ -9,9 +13,11 @@ import org.apache.kafka.clients.consumer.RoundRobinAssignor;
 
 public class KafkaConsumerFactory {
 
+  private static FlinkKafkaConsumer flinkKafkaConsumer;
+
   public static <T> FlinkKafkaConsumer<T> getConsumer(KafkaConfig config, Class<T> tClass) {
 
-    Properties consumerConfig = KafkaConnectorUtils.getKafkaCommonConfig();
+    Properties consumerConfig = KafkaConnectorFactory.getKafkaCommonConfig();
 
     consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, config.getBrokers());
     consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, config.getGroupId());
@@ -31,11 +37,24 @@ public class KafkaConsumerFactory {
     consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
         FlinkEnvUtils.getString(Property.AUTO_RESET_OFFSET));
 
-    FlinkKafkaConsumer<T> flinkKafkaConsumer = new FlinkKafkaConsumer(
-        config.getTopic(),
-        DeserializationSchemaManager.getSchema(tClass),
-        consumerConfig
-    );
+    if (tClass.isAssignableFrom(SojEvent.class)
+        || tClass.isAssignableFrom(SojSession.class)
+        || tClass.isAssignableFrom(BotSignature.class)
+        || tClass.isAssignableFrom(IntermediateSession.class)) {
+
+     flinkKafkaConsumer = new FlinkKafkaConsumer(
+          config.getTopic(),
+          DeserializationSchemaManager.getKeyedSchema(tClass),
+          consumerConfig
+     );
+
+    } else {
+      flinkKafkaConsumer = new FlinkKafkaConsumer(
+          config.getTopic(),
+          DeserializationSchemaManager.getSchema(tClass),
+          consumerConfig
+      );
+    }
 
     if (config.getTopic().contains("dq")) {
       flinkKafkaConsumer.setStartFromEarliest();

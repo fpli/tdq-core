@@ -16,8 +16,7 @@ flink:
     name:
       hdfs-dump: Jetstream Bot Session HDFS Load Pipeline
     parallelism:
-      source:
-        default: 20
+      source: 20
       sink:
         hdfs: 20
 

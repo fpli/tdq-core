@@ -21,22 +21,10 @@ public class SourceDataStreamBuilder<T> {
 
   public DataStream<T> buildOfDC(DataCenter dc, String slotGroup) {
 
-    KafkaConfig kafkaConsumerConfig = KafkaConnectorUtils.getKafkaConsumerConfig(dc);
+    KafkaConfig kafkaConsumerConfig = KafkaConnectorFactory.getKafkaConsumerConfig(dc);
     return environment
         .addSource(KafkaSourceFunction.buildSource(kafkaConsumerConfig, tClass))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
-        .slotSharingGroup(slotGroup)
-        .name(String.format("Rheos Kafka Consumer From DC: %s, Topic: %s",
-            dc, kafkaConsumerConfig.getTopic()))
-        .uid(String.format("source-%s-%s-id", dc, kafkaConsumerConfig.getTopic()));
-  }
-
-  public DataStream<T> buildOfDC(DataCenter dc, String slotGroup, int parallelism) {
-
-    KafkaConfig kafkaConsumerConfig = KafkaConnectorUtils.getKafkaConsumerConfig(dc);
-    return environment
-        .addSource(KafkaSourceFunction.buildSource(kafkaConsumerConfig, tClass))
-        .setParallelism(parallelism)
         .slotSharingGroup(slotGroup)
         .name(String.format("Rheos Kafka Consumer From DC: %s, Topic: %s",
             dc, kafkaConsumerConfig.getTopic()))

@@ -38,8 +38,7 @@ flink:
       hdfs-dump: Sojourner Non Bot Event HDFS Load Pipeline
       kafka-dump: Sojourner Kafka Load Pipeline
     parallelism:
-      source:
-        default: 150
+      source: 150
       sink:
         kafka: 100
         hdfs: 150
