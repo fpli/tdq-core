@@ -34,7 +34,7 @@ import com.ebay.sojourner.rt.operators.attribute.GuidWindowProcessFunction;
 import com.ebay.sojourner.rt.operators.attribute.IpAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.IpWindowProcessFunction;
 import com.ebay.sojourner.rt.operators.event.DetectableEventMapFunction;
-import com.ebay.sojourner.rt.operators.event.EventDataStreamBuilder;
+import com.ebay.sojourner.rt.operators.event.EventMapFunction;
 import com.ebay.sojourner.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.rt.operators.session.DetectableSessionMapFunction;
@@ -76,11 +76,11 @@ public class SojournerRTJobForQA {
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
     // 2.2 Event level bot detection via bot rule
-    DataStream<UbiEvent> ubiEventDataStream = EventDataStreamBuilder.build(
-        rawEventDataStream,
-        DataCenter.LVS,
-        FlinkEnvUtils.getInteger(Property.EVENT_PARALLELISM),
-        null);
+    DataStream<UbiEvent> ubiEventDataStream = rawEventDataStream
+        .map(new EventMapFunction())
+        .setParallelism(FlinkEnvUtils.getInteger(Property.EVENT_PARALLELISM))
+        .name("Event Operator For lvs")
+        .uid("event-lvs-id");
 
     // refine windowsoperator
     // 3. Session Operator
@@ -234,7 +234,7 @@ public class SojournerRTJobForQA {
         .getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SESSION_NON_BOT),
             FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_LVS),
-            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION),SojSession.class))
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION), SojSession.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .name("SojSession")
         .uid("session-sink-id");

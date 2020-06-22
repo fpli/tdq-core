@@ -8,8 +8,7 @@ flink:
     name:
       hdfs-dump: Sojourner Bot Event HDFS Load Pipeline
     parallelism:
-      source:
-        default: 150
+      source: 150
       sink:
         hdfs: 150
 

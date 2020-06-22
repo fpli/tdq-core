@@ -1,15 +1,14 @@
 kafka:
   consumer:
     topic: behavior.total.new.sojsession
-    group-id: sojourner-pathfinder-session-non-bot
+    group-id: sojourner-pathfinder-session-non-bot-test
 
 flink:
   app:
     name:
       hdfs-dump: Sojourner Non Bot Session HDFS Load Pipeline
     parallelism:
-      source:
-        default: 30
+      source: 30
       sink:
         hdfs: 30
 

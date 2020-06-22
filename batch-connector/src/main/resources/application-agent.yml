@@ -8,8 +8,7 @@ flink:
     name:
       hdfs-dump: Sojourner Agent Signature HDFS Load Pipeline
     parallelism:
-      source:
-        default: 10
+      source: 10
       sink:
         hdfs: 10
 

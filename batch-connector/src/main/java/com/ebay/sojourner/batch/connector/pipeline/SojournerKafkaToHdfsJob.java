@@ -17,7 +17,6 @@ public class SojournerKafkaToHdfsJob {
 
     Class<?> deserializeClass = Class.forName(FlinkEnvUtils.getString(Property.HDFS_DUMP_CLASS));
     String hdfsPath = FlinkEnvUtils.getString(Property.HDFS_DUMP_PATH);
-    int sourceParallelNum = FlinkEnvUtils.getInteger(Property.SOURCE_DEFAULT_PARALLELISM);
     int sinkParallelNum = FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM);
 
     // kafka source
@@ -25,7 +24,7 @@ public class SojournerKafkaToHdfsJob {
         executionEnvironment, deserializeClass
     );
 
-    DataStream sourceDataStream = dataStreamBuilder.buildOfDC(RNO, null, sourceParallelNum);
+    DataStream sourceDataStream = dataStreamBuilder.buildOfDC(RNO);
 
     // hdfs sink
     sourceDataStream

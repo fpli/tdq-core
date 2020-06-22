@@ -79,6 +79,7 @@ public class UbiSessionWindowProcessFunction
     ubiSession.setEndPageId(sessionAccumulator.getUbiSession().getEndPageId());
     ubiSession.setDurationSec(sessionAccumulator.getUbiSession().getDurationSec());
     ubiSession.setEventCnt(sessionAccumulator.getUbiSession().getEventCnt());
+    ubiSession.setAbsEventCnt(sessionAccumulator.getUbiSession().getAbsEventCnt());
     ubiSession.setViCoreCnt(sessionAccumulator.getUbiSession().getViCoreCnt());
     ubiSession.setBidCoreCnt(sessionAccumulator.getUbiSession().getBidCoreCnt());
     ubiSession.setBinCoreCnt(sessionAccumulator.getUbiSession().getBinCoreCnt());

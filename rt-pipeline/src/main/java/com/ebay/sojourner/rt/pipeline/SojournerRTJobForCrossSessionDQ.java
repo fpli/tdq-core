@@ -9,7 +9,6 @@ import com.ebay.sojourner.common.model.SessionCore;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
-import com.ebay.sojourner.flink.common.util.OutputTagUtil;
 import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.connectors.kafka.SourceDataStreamBuilder;
@@ -20,8 +19,6 @@ import com.ebay.sojourner.rt.operators.attribute.AgentIpAttributeAggSliding;
 import com.ebay.sojourner.rt.operators.attribute.AgentIpSignatureWindowProcessFunction;
 import com.ebay.sojourner.rt.operators.attribute.AgentIpWindowProcessFunction;
 import com.ebay.sojourner.rt.operators.attribute.AgentWindowProcessFunction;
-import com.ebay.sojourner.rt.operators.attribute.GuidAttributeAgg;
-import com.ebay.sojourner.rt.operators.attribute.GuidWindowProcessFunction;
 import com.ebay.sojourner.rt.operators.attribute.IpAttributeAgg;
 import com.ebay.sojourner.rt.operators.attribute.IpWindowProcessFunction;
 import com.ebay.sojourner.rt.operators.session.IntermediateSessionToSessionCoreMapFunction;
@@ -48,12 +45,13 @@ public class SojournerRTJobForCrossSessionDQ {
     );
 
     DataStream<IntermediateSession> intermediateSessionDataStream = dataStreamBuilder
-        .buildOfDC(RNO);
+        .buildOfDC(RNO,FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP));
 
     // intermediateSession to sessionCore
     DataStream<SessionCore> sessionCoreDS = intermediateSessionDataStream
         .map(new IntermediateSessionToSessionCoreMapFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP))
         .name("IntermediateSession To SessionCore")
         .uid("session-enhance-id");
 
@@ -62,18 +60,10 @@ public class SojournerRTJobForCrossSessionDQ {
         .keyBy("userAgent", "ip")
         .window(TumblingEventTimeWindows.of(Time.minutes(5)))
         .aggregate(new AgentIpAttributeAgg(), new AgentIpWindowProcessFunction())
-        .name("Attribute Operator (Agent+IP Pre-Aggregation)")
         .setParallelism(FlinkEnvUtils.getInteger(Property.PRE_AGENT_IP_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
+        .name("Attribute Operator (Agent+IP Pre-Aggregation)")
         .uid("pre-agent-ip-id");
-
-    DataStream<BotSignature> guidSignatureDataStream = sessionCoreDS
-        .keyBy("guid")
-        .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
-        .trigger(OnElementEarlyFiringTrigger.create())
-        .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
-        .name("Attribute Operator (GUID)")
-        .setParallelism(FlinkEnvUtils.getInteger(Property.GUID_PARALLELISM))
-        .uid("guid-id");
 
     DataStream<BotSignature> agentIpSignatureDataStream = agentIpAttributeDatastream
         .keyBy("agent", "clientIp")
@@ -81,8 +71,9 @@ public class SojournerRTJobForCrossSessionDQ {
         .trigger(OnElementEarlyFiringTrigger.create())
         .aggregate(
             new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
-        .name("Attribute Operator (Agent+IP)")
         .setParallelism(FlinkEnvUtils.getInteger(Property.AGENT_IP_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
+        .name("Attribute Operator (Agent+IP)")
         .uid("agent-ip-id");
 
     DataStream<BotSignature> agentSignatureDataStream = agentIpAttributeDatastream
@@ -90,8 +81,9 @@ public class SojournerRTJobForCrossSessionDQ {
         .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
         .trigger(OnElementEarlyFiringTrigger.create())
         .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
-        .name("Attribute Operator (Agent)")
         .setParallelism(FlinkEnvUtils.getInteger(Property.AGENT_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
+        .name("Attribute Operator (Agent)")
         .uid("agent-id");
 
     DataStream<BotSignature> ipSignatureDataStream = agentIpAttributeDatastream
@@ -99,15 +91,15 @@ public class SojournerRTJobForCrossSessionDQ {
         .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
         .trigger(OnElementEarlyFiringTrigger.create())
         .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
-        .name("Attribute Operator (IP)")
         .setParallelism(FlinkEnvUtils.getInteger(Property.IP_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
+        .name("Attribute Operator (IP)")
         .uid("ip-id");
 
     // union attribute signature for broadcast
     DataStream<BotSignature> attributeSignatureDataStream = agentIpSignatureDataStream
         .union(agentSignatureDataStream)
-        .union(ipSignatureDataStream)
-        .union(guidSignatureDataStream);
+        .union(ipSignatureDataStream);
 
     // attribute signature broadcast
     BroadcastStream<BotSignature> attributeSignatureBroadcastStream =
@@ -117,8 +109,9 @@ public class SojournerRTJobForCrossSessionDQ {
     SingleOutputStreamOperator<IntermediateSession> intermediateSessionWithSignature =
         intermediateSessionDataStream
             .connect(attributeSignatureBroadcastStream)
-            .process(new CrossSessionDQBroadcastProcessFunction(OutputTagUtil.sessionOutputTag))
+            .process(new CrossSessionDQBroadcastProcessFunction())
             .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
+            .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
             .name("Signature Bot Detector")
             .uid("signature-detection-id");
 
@@ -128,6 +121,7 @@ public class SojournerRTJobForCrossSessionDQ {
                     FlinkEnvUtils.getString(Property.HDFS_PATH_SIGNATURES),
                 BotSignature.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.AGENT_IP_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("BotSignatures")
         .uid("bot-signatures-sink-id");
 
@@ -137,6 +131,7 @@ public class SojournerRTJobForCrossSessionDQ {
                 FlinkEnvUtils.getString(Property.HDFS_PATH_INTERMEDIATE_SESSION),
             IntermediateSession.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("IntermediateSession")
         .uid("intermediate-session-sink-id");
 

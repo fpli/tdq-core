@@ -8,7 +8,7 @@ import com.ebay.sojourner.flink.common.util.DataCenter;
 import java.util.Properties;
 import org.apache.kafka.common.config.SaslConfigs;
 
-public class KafkaConnectorUtils {
+public class KafkaConnectorFactory {
 
   public static Properties getKafkaCommonConfig() {
     Properties props = new Properties();

@@ -6,6 +6,7 @@ import static com.ebay.sojourner.flink.common.util.DataCenter.SLC;
 
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.BotSignature;
+import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.SessionCore;
 import com.ebay.sojourner.common.model.SojEvent;
@@ -41,6 +42,7 @@ import com.ebay.sojourner.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.rt.operators.session.DetectableSessionMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionAgg;
+import com.ebay.sojourner.rt.operators.session.UbiSessionToIntermediateSessionMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionToSessionCoreMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionWindowProcessFunction;
@@ -56,8 +58,6 @@ import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindo
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.types.Either;
-
-// TODO: will remove guid logic to batch pipeline
 
 public class SojournerRTJob {
 
@@ -85,30 +85,19 @@ public class SojournerRTJob {
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
     // 2.2 Event level bot detection via bot rule
-    DataStream<UbiEvent> ubiEventDataStreamForLVS = EventDataStreamBuilder.build(
-        rawEventDataStreamForLVS,
-        LVS,
-        FlinkEnvUtils.getInteger(Property.EVENT_PARALLELISM),
-        FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP));
-
-    DataStream<UbiEvent> ubiEventDataStreamForSLC = EventDataStreamBuilder.build(
-        rawEventDataStreamForSLC,
-        SLC,
-        FlinkEnvUtils.getInteger(Property.EVENT_PARALLELISM),
-        FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP));
-
-    DataStream<UbiEvent> ubiEventDataStreamForRNO = EventDataStreamBuilder.build(
-        rawEventDataStreamForRNO,
-        RNO,
-        FlinkEnvUtils.getInteger(Property.EVENT_PARALLELISM),
-        FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP));
+    DataStream<UbiEvent> ubiEventDataStreamForLVS = EventDataStreamBuilder
+        .build(rawEventDataStreamForLVS, LVS);
+    DataStream<UbiEvent> ubiEventDataStreamForSLC = EventDataStreamBuilder
+        .build(rawEventDataStreamForSLC, SLC);
+    DataStream<UbiEvent> ubiEventDataStreamForRNO = EventDataStreamBuilder
+        .build(rawEventDataStreamForRNO, RNO);
 
     // union ubiEvent from SLC/RNO/LVS
     DataStream<UbiEvent> ubiEventDataStream = ubiEventDataStreamForLVS
         .union(ubiEventDataStreamForSLC)
         .union(ubiEventDataStreamForRNO);
 
-    // refine windowsoperatorø
+    // refine windowsoperator
     // 3. Session Operator
     // 3.1 Session window
     // 3.2 Session indicator accumulation
@@ -148,6 +137,26 @@ public class SojournerRTJob {
             .name("UbiSession To SessionCore")
             .uid("session-enhance-id");
 
+    // ubiSession to intermediate session
+    DataStream<IntermediateSession> intermediateSessionDataStream = ubiSessionDataStream
+        .map(new UbiSessionToIntermediateSessionMapFunction())
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.SESSION_SLOT_SHARE_GROUP))
+        .name("IntermediateSession For Cross Session DQ")
+        .uid("intermediate-session-enhance-id");
+
+    // intermediate session sink
+    intermediateSessionDataStream
+        .addSink(KafkaProducerFactory.getProducer(
+            FlinkEnvUtils.getString(Property.KAFKA_TOPIC_INTERMEDIATE_SESSION),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_RNO),
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION),
+            IntermediateSession.class))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.SESSION_SLOT_SHARE_GROUP))
+        .name("IntermediateSession")
+        .uid("intermediate-session-sink-id");
+
     // 4. Attribute Operator
     // 4.1 Sliding window
     // 4.2 Attribute indicator accumulation
@@ -162,18 +171,6 @@ public class SojournerRTJob {
             .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
             .name("Attribute Operator (Agent+IP Pre-Aggregation)")
             .uid("pre-agent-ip-id");
-
-    /*
-    DataStream<BotSignature> guidSignatureDataStream = sessionCoreDataStream
-        .keyBy("guid")
-        .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
-        .trigger(OnElementEarlyFiringTrigger.create())
-        .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Property.GUID_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
-        .name("Attribute Operator (GUID)")
-        .uid("guid-id");
-        */
 
     DataStream<BotSignature> agentIpSignatureDataStream = agentIpAttributeDatastream
         .keyBy("agent", "clientIp")
@@ -210,7 +207,6 @@ public class SojournerRTJob {
     DataStream<BotSignature> attributeSignatureDataStream = agentIpSignatureDataStream
         .union(agentSignatureDataStream)
         .union(ipSignatureDataStream);
-    // .union(guidSignatureDataStream);
 
     // attribute signature broadcast
     BroadcastStream<BotSignature> attributeSignatureBroadcastStream = attributeSignatureDataStream
@@ -322,15 +318,6 @@ public class SojournerRTJob {
         .uid("event-metrics-id");
 
     // metrics collector for signature generation or expiration
-    /*
-    guidSignatureDataStream
-        .process(new GuidMetricsCollectorProcessFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Property.GUID_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
-        .name("Guid Metrics Collector")
-        .uid("guid-metrics-id");
-        */
-
     agentIpSignatureDataStream
         .process(new AgentIpMetricsCollectorProcessFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Property.AGENT_IP_PARALLELISM))
@@ -370,13 +357,6 @@ public class SojournerRTJob {
         Constants.IP,
         FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP),
         FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SIGNATURE_IP));
-
-    /*
-    SignatureUtils.buildSignatureKafkaSink(guidSignatureDataStream,
-        FlinkEnvUtils.getString(Property.BEHAVIOR_TOTAL_NEW_TOPIC_SIGNATURE_GUID),
-        Constants.GUID,
-        FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SIGNATURE_GUID));
-        */
 
     // late event sink
     latedStream

@@ -14,17 +14,10 @@ import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.util.Collector;
-import org.apache.flink.util.OutputTag;
 
 @Slf4j
 public class CrossSessionDQBroadcastProcessFunction extends
     BroadcastProcessFunction<IntermediateSession, BotSignature, IntermediateSession> {
-
-  private OutputTag outputTag = null;
-
-  public CrossSessionDQBroadcastProcessFunction(OutputTag sessionOutputTag) {
-    outputTag = sessionOutputTag;
-  }
 
   @Override
   public void processElement(IntermediateSession intermediateSession,
@@ -53,6 +46,7 @@ public class CrossSessionDQBroadcastProcessFunction extends
         .md522Long(TransformUtil.getMD5(intermediateSession.getUserAgent()));
     Map<String, Map<Integer, Long[]>> agentSignature = attributeSignature.get("agent");
     String agent = long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1];
+
     if (agentSignature.containsKey(agent)) {
       for (Map.Entry<Integer, Long[]> agentBotFlagMap :
           agentSignature.get(agent).entrySet()) {
@@ -66,6 +60,7 @@ public class CrossSessionDQBroadcastProcessFunction extends
     }
 
     // agentIp
+
     Map<String, Map<Integer, Long[]>> agentIpSignature = attributeSignature.get("agentIp");
     String agentIp =
         long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1] + Constants.FIELD_DELIM + (
@@ -111,7 +106,7 @@ public class CrossSessionDQBroadcastProcessFunction extends
         && intermediateSession.getBotFlagList().contains(224)) {
       intermediateSession.getBotFlagList().add(211);
     }
-    context.output(outputTag, intermediateSession);
+    out.collect(intermediateSession);
 
   }
 
@@ -136,20 +131,23 @@ public class CrossSessionDQBroadcastProcessFunction extends
     generationTime = attributeSignature.getGenerationTime();
 
     if ("agent".equals(attributeSignature.getType())) {
-      signatureId = attributeSignature.getUserAgent().getAgentHash1() + Constants.FIELD_DELIM
-          + attributeSignature.getUserAgent().getAgentHash2();
+      signatureId =
+          attributeSignature.getUserAgent().getAgentHash1() + Constants.FIELD_DELIM
+              + attributeSignature
+              .getUserAgent().getAgentHash2();
 
     } else if ("agentIp".equals(attributeSignature.getType())) {
-      signatureId = attributeSignature.getUserAgent().getAgentHash1() + Constants.FIELD_DELIM
-          + attributeSignature.getUserAgent().getAgentHash2() + Constants.FIELD_DELIM
-          + attributeSignature.getIp();
+      signatureId =
+          attributeSignature.getUserAgent().getAgentHash1() + Constants.FIELD_DELIM
+              + attributeSignature
+              .getUserAgent().getAgentHash2() + Constants.FIELD_DELIM + attributeSignature.getIp();
 
     } else if ("ip".equals(attributeSignature.getType())) {
       signatureId = attributeSignature.getIp().toString();
-    } else if ("guid".equals(attributeSignature.getType())) {
-      signatureId =
-          attributeSignature.getGuid().getGuid1() + Constants.FIELD_DELIM + attributeSignature
-              .getGuid().getGuid2();
+    }
+
+    if (signature == null) {
+      signature = new ConcurrentHashMap<>();
     }
 
     if (isGeneration) {

@@ -20,10 +20,10 @@ flink:
       agent-ip: 50
       ip: 50
       guid: 50
-      broadcast: 200
+      broadcast: 300
 
 
 hdfs:
   path:
     intermediate-session: /cross_session
-    signatures: /signatures
+    signatures: /signatures_test

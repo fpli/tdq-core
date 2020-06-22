@@ -217,6 +217,7 @@ public class Property {
   public static final String METRICS_PARALLELISM = "flink.app.parallelism.metrics";
 
   public static final String DEFAULT_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.default";
+  public static final String SOURCE_EVENT_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event";
   public static final String SOURCE_EVENT_LVS_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event-lvs";
   public static final String SOURCE_EVENT_SLC_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event-slc";
   public static final String SOURCE_EVENT_RNO_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event-rno";
@@ -251,7 +252,6 @@ public class Property {
 
   // ------------------------- batch pipeline common property ---------------------------
   // parallelism config
-  public static final String SOURCE_DEFAULT_PARALLELISM = "flink.app.parallelism.source.default";
   public static final String SINK_HDFS_PARALLELISM = "flink.app.parallelism.sink.hdfs";
   public static final String SINK_KAFKA_PARALLELISM = "flink.app.parallelism.sink.kafka";
 
@@ -263,6 +263,7 @@ public class Property {
   // kafka producer
   public static final String KAFKA_TOPIC_SESSION_BOT = "kafka.producer.topic.session.bot";
   public static final String KAFKA_TOPIC_SESSION_NON_BOT = "kafka.producer.topic.session.non-bot";
+  public static final String KAFKA_TOPIC_INTERMEDIATE_SESSION = "kafka.producer.topic.intermediate-session";
   public static final String KAFKA_TOPIC_EVENT_BOT = "kafka.producer.topic.event.bot";
   public static final String KAFKA_TOPIC_EVENT_NON_BOT = "kafka.producer.topic.event.non-bot";
   public static final String KAFKA_TOPIC_SIGNATURE_AGENT_IP = "kafka.producer.topic.signature.agent-ip";
