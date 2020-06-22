@@ -20,7 +20,6 @@ public class ScsCntForBot6Indicator<Source, Target> extends AbstractIndicator<So
           (AgentIpAttributeAccumulator) target;
       agentIpAttributeAccumulator.getAgentIpAttribute().clear();
       agentIpAttributeAccumulator.getAgentIpAttribute().clear(BotRules.SCS_ON_AGENT);
-      agentIpAttributeAccumulator.getAgentIpAttribute().setIpCount(0);
     }
   }
 
@@ -49,8 +48,8 @@ public class ScsCntForBot6Indicator<Source, Target> extends AbstractIndicator<So
 
       if (!SessionCoreHelper.isNonIframRdtCountZero(sessionCore)
           && !isIpBlank(sessionCore.getIp())
-          && agentIpAttributeAccumulator.getAgentIpAttribute().getIpCount() <= 0) {
-        agentIpAttributeAccumulator.getAgentIpAttribute().setIpCount(1);
+          && agentIpAttributeAccumulator.getAgentIpAttribute().getIpSet().size() <= 0) {
+        agentIpAttributeAccumulator.getAgentIpAttribute().getIpSet().add(sessionCore.getIp());
       }
     } else {
       AgentIpAttribute agentIpAttribute = (AgentIpAttribute) source;

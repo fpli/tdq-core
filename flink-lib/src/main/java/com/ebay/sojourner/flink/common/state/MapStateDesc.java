@@ -8,11 +8,11 @@ import org.apache.flink.api.common.typeinfo.TypeInformation;
 
 public class MapStateDesc {
 
-  public static final MapStateDescriptor<String, Map<String, Map<Integer, Long>>>
+  public static final MapStateDescriptor<String, Map<String, Map<Integer, Long[]>>>
       attributeSignatureDesc =
       new MapStateDescriptor<>(
           "broadcast-attributeSignature-state",
           BasicTypeInfo.STRING_TYPE_INFO,
-          TypeInformation.of(new TypeHint<Map<String, Map<Integer, Long>>>() {
+          TypeInformation.of(new TypeHint<Map<String, Map<Integer, Long[]>>>() {
           }));
 }

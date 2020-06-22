@@ -38,7 +38,7 @@ public class GuidWindowProcessFunction extends
 
       out.collect(new BotSignature(signatureId, null, null, guid,
           new ArrayList<>(botFlagList),
-          windowEndTime, false));
+          windowEndTime, false, 3, windowEndTime));
 
     } else if (context.currentWatermark() < context.window().maxTimestamp()
         && signatureStates.containsValue(1)
@@ -49,7 +49,7 @@ public class GuidWindowProcessFunction extends
 
       out.collect(new BotSignature(signatureId, null, null, guid,
           new ArrayList<>(newGenerateSignatures),
-          windowEndTime, true));
+          windowEndTime, true, 1, windowEndTime));
     }
   }
 

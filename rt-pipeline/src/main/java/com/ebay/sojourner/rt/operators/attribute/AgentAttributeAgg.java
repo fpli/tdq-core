@@ -5,12 +5,12 @@ import com.ebay.sojourner.business.ubd.indicators.AgentIndicators;
 import com.ebay.sojourner.common.model.AgentAttribute;
 import com.ebay.sojourner.common.model.AgentAttributeAccumulator;
 import com.ebay.sojourner.common.model.AgentIpAttribute;
+import com.ebay.sojourner.common.model.SignatureInfo;
 import com.ebay.sojourner.rt.common.util.SignatureUtils;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.flink.api.common.functions.AggregateFunction;
 
 @Slf4j
@@ -48,15 +48,13 @@ public class AgentAttributeAgg implements
     }
 
     Set<Integer> agentBotFlag = null;
-    Map<Integer, Integer> signatureStatus = agentAttributeAccumulator.getSignatureStatus();
+    Map<Integer, SignatureInfo> signatureStatus = agentAttributeAccumulator.getSignatureStatus();
 
     try {
-      if (signatureStatus.containsValue(0) || signatureStatus.containsValue(1)) {
-        agentBotFlag = AgentSignatureBotDetector.getInstance().getBotFlagList(agentAttribute);
-        if (CollectionUtils.isNotEmpty(agentBotFlag)) {
-          SignatureUtils.updateSignatureStatus(signatureStatus, agentBotFlag);
-        }
-      }
+      //      if (signatureStatus.containsValue(0) || signatureStatus.containsValue(1)) {
+      agentBotFlag = AgentSignatureBotDetector.getInstance().getBotFlagList(agentAttribute);
+      SignatureUtils.updateSignatureStatus(signatureStatus, agentBotFlag);
+      //      }
     } catch (IOException | InterruptedException e) {
       log.error("start get agent botFlagList failed", e);
     }

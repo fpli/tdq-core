@@ -85,7 +85,21 @@
                  "null",
                  "boolean"
                ]
-             }
-
+             },
+         {
+                        "name": "category",
+                        "type": [
+                          "null",
+                          "int"
+                        ]
+                      }
+,
+         {
+                        "name": "generationTime",
+                        "type": [
+                          "null",
+                          "long"
+                        ]
+                      }
   ]
 }

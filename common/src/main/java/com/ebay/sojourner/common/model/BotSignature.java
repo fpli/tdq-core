@@ -27,8 +27,10 @@ public class BotSignature extends org.apache.avro.specific.SpecificRecordBase im
           + "\"type\":\"long\"}]}],\"default\":null},{\"name\":\"botFlags\",\"type\":[\"null\","
           + "{\"type\":\"array\",\"items\":\"int\"}],\"default\":null},"
           + "{\"name\":\"expirationTime\",\"type\":[\"null\",\"long\"]},"
-          + "{\"name\":\"isGeneration\",\"type\":[\"null\",\"boolean\"]}]}");
-  private static final long serialVersionUID = 7248162896052453962L;
+          + "{\"name\":\"isGeneration\",\"type\":[\"null\",\"boolean\"]},{\"name\":\"category\","
+          + "\"type\":[\"null\",\"int\"]},{\"name\":\"generationTime\",\"type\":[\"null\","
+          + "\"long\"]}]}");
+  private static final long serialVersionUID = 7913047988375141742L;
   private static SpecificData MODEL$ = new SpecificData();
   private static final BinaryMessageEncoder<BotSignature> ENCODER =
       new BinaryMessageEncoder<BotSignature>(MODEL$, SCHEMA$);
@@ -54,6 +56,10 @@ public class BotSignature extends org.apache.avro.specific.SpecificRecordBase im
   public java.lang.Long expirationTime;
   @Deprecated
   public java.lang.Boolean isGeneration;
+  @Deprecated
+  public java.lang.Integer category;
+  @Deprecated
+  public java.lang.Long generationTime;
   /**
    * Default constructor.  Note that this does not initialize fields to their default values from
    * the schema.  If that is desired then one should use <code>newBuilder()</code>.
@@ -70,11 +76,13 @@ public class BotSignature extends org.apache.avro.specific.SpecificRecordBase im
    * @param botFlags The new value for botFlags
    * @param expirationTime The new value for expirationTime
    * @param isGeneration The new value for isGeneration
+   * @param category The new value for category
+   * @param generationTime The new value for generationTime
    */
   public BotSignature(java.lang.String type, com.ebay.sojourner.common.model.AgentHash userAgent,
       java.lang.Integer ip, com.ebay.sojourner.common.model.Guid guid,
       java.util.List<java.lang.Integer> botFlags, java.lang.Long expirationTime,
-      java.lang.Boolean isGeneration) {
+      java.lang.Boolean isGeneration, java.lang.Integer category, java.lang.Long generationTime) {
     this.type = type;
     this.userAgent = userAgent;
     this.ip = ip;
@@ -82,6 +90,8 @@ public class BotSignature extends org.apache.avro.specific.SpecificRecordBase im
     this.botFlags = botFlags;
     this.expirationTime = expirationTime;
     this.isGeneration = isGeneration;
+    this.category = category;
+    this.generationTime = generationTime;
   }
 
   public static org.apache.avro.Schema getClassSchema() {
@@ -172,6 +182,10 @@ public class BotSignature extends org.apache.avro.specific.SpecificRecordBase im
         return expirationTime;
       case 6:
         return isGeneration;
+      case 7:
+        return category;
+      case 8:
+        return generationTime;
       default:
         throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
@@ -201,6 +215,12 @@ public class BotSignature extends org.apache.avro.specific.SpecificRecordBase im
         break;
       case 6:
         isGeneration = (java.lang.Boolean) value$;
+        break;
+      case 7:
+        category = (java.lang.Integer) value$;
+        break;
+      case 8:
+        generationTime = (java.lang.Long) value$;
         break;
       default:
         throw new org.apache.avro.AvroRuntimeException("Bad index");
@@ -333,6 +353,42 @@ public class BotSignature extends org.apache.avro.specific.SpecificRecordBase im
     this.isGeneration = value;
   }
 
+  /**
+   * Gets the value of the 'category' field.
+   *
+   * @return The value of the 'category' field.
+   */
+  public java.lang.Integer getCategory() {
+    return category;
+  }
+
+  /**
+   * Sets the value of the 'category' field.
+   *
+   * @param value the value to set.
+   */
+  public void setCategory(java.lang.Integer value) {
+    this.category = value;
+  }
+
+  /**
+   * Gets the value of the 'generationTime' field.
+   *
+   * @return The value of the 'generationTime' field.
+   */
+  public java.lang.Long getGenerationTime() {
+    return generationTime;
+  }
+
+  /**
+   * Sets the value of the 'generationTime' field.
+   *
+   * @param value the value to set.
+   */
+  public void setGenerationTime(java.lang.Long value) {
+    this.generationTime = value;
+  }
+
   @Override
   public void writeExternal(java.io.ObjectOutput out)
       throws java.io.IOException {
@@ -361,6 +417,8 @@ public class BotSignature extends org.apache.avro.specific.SpecificRecordBase im
     private java.util.List<java.lang.Integer> botFlags;
     private java.lang.Long expirationTime;
     private java.lang.Boolean isGeneration;
+    private java.lang.Integer category;
+    private java.lang.Long generationTime;
 
     /**
      * Creates a new Builder
@@ -411,6 +469,14 @@ public class BotSignature extends org.apache.avro.specific.SpecificRecordBase im
         this.isGeneration = data().deepCopy(fields()[6].schema(), other.isGeneration);
         fieldSetFlags()[6] = true;
       }
+      if (isValidValue(fields()[7], other.category)) {
+        this.category = data().deepCopy(fields()[7].schema(), other.category);
+        fieldSetFlags()[7] = true;
+      }
+      if (isValidValue(fields()[8], other.generationTime)) {
+        this.generationTime = data().deepCopy(fields()[8].schema(), other.generationTime);
+        fieldSetFlags()[8] = true;
+      }
     }
 
     /**
@@ -449,6 +515,14 @@ public class BotSignature extends org.apache.avro.specific.SpecificRecordBase im
       if (isValidValue(fields()[6], other.isGeneration)) {
         this.isGeneration = data().deepCopy(fields()[6].schema(), other.isGeneration);
         fieldSetFlags()[6] = true;
+      }
+      if (isValidValue(fields()[7], other.category)) {
+        this.category = data().deepCopy(fields()[7].schema(), other.category);
+        fieldSetFlags()[7] = true;
+      }
+      if (isValidValue(fields()[8], other.generationTime)) {
+        this.generationTime = data().deepCopy(fields()[8].schema(), other.generationTime);
+        fieldSetFlags()[8] = true;
       }
     }
 
@@ -836,6 +910,94 @@ public class BotSignature extends org.apache.avro.specific.SpecificRecordBase im
       return this;
     }
 
+    /**
+     * Gets the value of the 'category' field.
+     *
+     * @return The value.
+     */
+    public java.lang.Integer getCategory() {
+      return category;
+    }
+
+    /**
+     * Sets the value of the 'category' field.
+     *
+     * @param value The value of 'category'.
+     * @return This builder.
+     */
+    public com.ebay.sojourner.common.model.BotSignature.Builder setCategory(
+        java.lang.Integer value) {
+      validate(fields()[7], value);
+      this.category = value;
+      fieldSetFlags()[7] = true;
+      return this;
+    }
+
+    /**
+     * Checks whether the 'category' field has been set.
+     *
+     * @return True if the 'category' field has been set, false otherwise.
+     */
+    public boolean hasCategory() {
+      return fieldSetFlags()[7];
+    }
+
+
+    /**
+     * Clears the value of the 'category' field.
+     *
+     * @return This builder.
+     */
+    public com.ebay.sojourner.common.model.BotSignature.Builder clearCategory() {
+      category = null;
+      fieldSetFlags()[7] = false;
+      return this;
+    }
+
+    /**
+     * Gets the value of the 'generationTime' field.
+     *
+     * @return The value.
+     */
+    public java.lang.Long getGenerationTime() {
+      return generationTime;
+    }
+
+    /**
+     * Sets the value of the 'generationTime' field.
+     *
+     * @param value The value of 'generationTime'.
+     * @return This builder.
+     */
+    public com.ebay.sojourner.common.model.BotSignature.Builder setGenerationTime(
+        java.lang.Long value) {
+      validate(fields()[8], value);
+      this.generationTime = value;
+      fieldSetFlags()[8] = true;
+      return this;
+    }
+
+    /**
+     * Checks whether the 'generationTime' field has been set.
+     *
+     * @return True if the 'generationTime' field has been set, false otherwise.
+     */
+    public boolean hasGenerationTime() {
+      return fieldSetFlags()[8];
+    }
+
+
+    /**
+     * Clears the value of the 'generationTime' field.
+     *
+     * @return This builder.
+     */
+    public com.ebay.sojourner.common.model.BotSignature.Builder clearGenerationTime() {
+      generationTime = null;
+      fieldSetFlags()[8] = false;
+      return this;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public BotSignature build() {
@@ -861,6 +1023,10 @@ public class BotSignature extends org.apache.avro.specific.SpecificRecordBase im
             fieldSetFlags()[5] ? this.expirationTime : (java.lang.Long) defaultValue(fields()[5]);
         record.isGeneration =
             fieldSetFlags()[6] ? this.isGeneration : (java.lang.Boolean) defaultValue(fields()[6]);
+        record.category =
+            fieldSetFlags()[7] ? this.category : (java.lang.Integer) defaultValue(fields()[7]);
+        record.generationTime =
+            fieldSetFlags()[8] ? this.generationTime : (java.lang.Long) defaultValue(fields()[8]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);

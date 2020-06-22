@@ -4,10 +4,9 @@ import com.ebay.sojourner.common.model.AgentAttribute;
 import com.ebay.sojourner.common.model.AgentAttributeAccumulator;
 import com.ebay.sojourner.common.model.AgentHash;
 import com.ebay.sojourner.common.model.BotSignature;
-import com.ebay.sojourner.rt.common.util.SignatureUtils;
+import com.ebay.sojourner.common.model.SignatureInfo;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Set;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
@@ -25,29 +24,36 @@ public class AgentWindowProcessFunction extends
 
     AgentAttributeAccumulator agentAttributeAccumulator = elements.iterator().next();
     AgentAttribute agentAttribute = agentAttributeAccumulator.getAgentAttribute();
-    Map<Integer, Integer> signatureStates = agentAttributeAccumulator.getSignatureStatus();
-    Set<Integer> botFlagList = agentAttribute.getBotFlagList();
+    Map<Integer, SignatureInfo> signatureStates = agentAttributeAccumulator.getSignatureStatus();
     AgentHash agent = agentAttribute.getAgent();
     long windowEndTime = context.window().maxTimestamp();
 
-    if (context.currentWatermark() >= context.window().maxTimestamp()
-        && botFlagList != null
-        && botFlagList.size() > 0) {
-
+    if (context.currentWatermark() >= context.window().maxTimestamp()) {
+      sendSignatures(agent, signatureStates, out, context);
       out.collect(new BotSignature(signatureId, agent, null, null,
-          new ArrayList<>(botFlagList),
-          windowEndTime, false));
+          new ArrayList<>(signatureStates.keySet()),
+          windowEndTime, false, 3, windowEndTime));
 
-    } else if (context.currentWatermark() < context.window().maxTimestamp()
-        && signatureStates.containsValue(1)
-        && botFlagList != null
-        && botFlagList.size() > 0) {
+    } else if (context.currentWatermark() < context.window().maxTimestamp()) {
 
-      Set<Integer> newGenerateStates = SignatureUtils.generateNewSignature(signatureStates);
+      sendSignatures(agent, signatureStates, out, context);
+      //      Set<Integer> newGenerateStates = SignatureUtils.generateNewSignature(signatureStates);
+      //
+      //      out.collect(new BotSignature(signatureId, agent, null, null,
+      //          new ArrayList<>(newGenerateStates),
+      //          windowEndTime, true,));
+    }
+  }
 
-      out.collect(new BotSignature(signatureId, agent, null, null,
-          new ArrayList<>(newGenerateStates),
-          windowEndTime, true));
+  private void sendSignatures(AgentHash agent, Map<Integer, SignatureInfo> signatureStates,
+      Collector<BotSignature> out, Context context) {
+    for (Map.Entry<Integer, SignatureInfo> entry : signatureStates.entrySet()) {
+      if (!entry.getValue().isSent()) {
+        out.collect(new BotSignature(signatureId, agent, null, null,
+            new ArrayList<>(entry.getKey()),
+            context.window().maxTimestamp(), true, entry.getValue().getType(),
+            context.currentWatermark()));
+      }
     }
   }
 

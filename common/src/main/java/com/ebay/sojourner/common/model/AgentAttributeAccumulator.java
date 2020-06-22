@@ -8,12 +8,10 @@ import lombok.Data;
 public class AgentAttributeAccumulator {
 
   private AgentAttribute agentAttribute;
-  private Map<Integer, Integer> signatureStatus = new HashMap<>();
+  private Map<Integer, SignatureInfo> signatureStatus ;
 
   public AgentAttributeAccumulator() {
     this.agentAttribute = new AgentAttribute();
-    signatureStatus.put(6, 0);
-    signatureStatus.put(220, 0);
-    signatureStatus.put(221, 0);
+    this.signatureStatus = new HashMap<>();
   }
 }

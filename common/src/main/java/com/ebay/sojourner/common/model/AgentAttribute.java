@@ -1,6 +1,7 @@
 package com.ebay.sojourner.common.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.Data;
@@ -10,7 +11,7 @@ public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable
 
   private AgentHash agent;
   private int scsCount;
-  private int ipCount;
+  private Set<Integer> ipSet = new HashSet<>();
   private int totalSessionCnt = 0;
   private int nocguidSessionCnt = 0;
   private int spsSessionCnt = 0;
@@ -27,11 +28,12 @@ public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable
   public void feed(AgentIpAttribute agentIpAttribute, int botFlag) {
     switch (botFlag) {
       case 6: {
-        ipCount += agentIpAttribute.getIpCount();
+        if(ipSet.size()<=20) {
+          ipSet.addAll(agentIpAttribute.getIpSet());
+        }
         if (scsCount < 0) {
           return;
         }
-
         if (agentIpAttribute.getScsCountForBot6() < 0) {
           scsCount = -1;
         } else {
@@ -60,7 +62,7 @@ public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable
   public void clear() {
     agent = null;
     scsCount = 0;
-    ipCount = 0;
+    ipSet.clear();
     totalSessionCnt = 0;
     nocguidSessionCnt = 0;
     spsSessionCnt = 0;
@@ -74,7 +76,7 @@ public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable
   public void clear(int botFlag) {
     agent = null;
     scsCount = 0;
-    ipCount = 0;
+    ipSet.clear();
   }
 
   //    public static void main(String[] args) {

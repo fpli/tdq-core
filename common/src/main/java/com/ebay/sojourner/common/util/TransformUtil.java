@@ -192,6 +192,8 @@ public class TransformUtil {
   }
 
   public static void main(String[] args) {
-
+    String agent="GingerClient/2.9.7-RELEASE";
+    System.out.println(TransformUtil.md522Long(TransformUtil.getMD5(agent))[0]);
+    System.out.println(TransformUtil.md522Long(TransformUtil.getMD5(agent))[1]);
   }
 }

@@ -1,6 +1,7 @@
 package com.ebay.sojourner.rt.common.util;
 
 import com.ebay.sojourner.common.model.BotSignature;
+import com.ebay.sojourner.common.model.SignatureInfo;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
@@ -8,7 +9,6 @@ import com.ebay.sojourner.flink.connectors.kafka.KafkaProducerFactory;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.flink.metrics.Counter;
 import org.apache.flink.streaming.api.datastream.DataStream;
 
@@ -20,9 +20,8 @@ public class SignatureUtils {
 
     if (signatureStates.size() > 0) {
       for (Map.Entry<Integer, Integer> signatureState : signatureStates.entrySet()) {
-        if (signatureState.getValue() == 1) {
-          newGenerateSignatures.add(signatureState.getKey());
-        }
+        newGenerateSignatures.add(signatureState.getKey());
+
       }
     }
 
@@ -30,11 +29,8 @@ public class SignatureUtils {
   }
 
   public static Set<Integer> setBotFlags(Set<Integer> sourceSet, Set<Integer> targetSet) {
-
-    if (CollectionUtils.isNotEmpty(sourceSet)) {
-      targetSet.addAll(sourceSet);
-    }
-
+    targetSet.clear();
+    targetSet.addAll(sourceSet);
     return targetSet;
   }
 
@@ -69,20 +65,32 @@ public class SignatureUtils {
 
   }
 
-  public static void updateSignatureStatus(Map<Integer, Integer> signatureStatus,
+  public static void updateSignatureStatus(Map<Integer, SignatureInfo> signatureStatus,
       Set<Integer> botFlags) {
 
-    for (Integer botFlag : botFlags) {
-      if (signatureStatus.containsKey(botFlag)) {
-        switch (signatureStatus.get(botFlag)) {
-          case 0:
-            signatureStatus.put(botFlag, 1);
-            break;
-          case 1:
-            signatureStatus.put(botFlag, 2);
-            break;
+    for (Map.Entry<Integer, SignatureInfo> entry : signatureStatus.entrySet()) {
+      if (!entry.getValue().isSent()) {
+        entry.getValue().setSent(true);
+        signatureStatus.put(entry.getKey(), entry.getValue());
+      }
+      if (!botFlags.contains(entry.getKey())) {
+        if (entry.getValue().getType() == 1) {
+          entry.getValue().setType(2);
+          entry.getValue().setSent(false);
+          signatureStatus.put(entry.getKey(), entry.getValue());
         }
       }
+    }
+    SignatureInfo signatureInfo;
+    for (Integer botFlag : botFlags) {
+      if (!signatureStatus.containsKey(botFlag)) {
+        signatureInfo = new SignatureInfo();
+        signatureInfo.setType(1);
+        signatureInfo.setSent(false);
+        signatureStatus.put(botFlag, signatureInfo);
+      }
+
+
     }
   }
 }

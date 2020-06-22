@@ -27,7 +27,7 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
 
   // For Bot6
   private int scsCountForBot6 = 0;
-  private int ipCount = 0;
+  private Set<Integer> ipSet = new HashSet<>();
 
   // For Bot7
   private int scsCountForBot7 = 0;
@@ -183,9 +183,9 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
         break;
       case 6: {
         scsCountForBot6 += 1;
-        if (SessionCoreHelper.getExInternalIp(sessionCore) != null) {
-          ipCount = 1;
-        }
+        //        if (SessionCoreHelper.getExInternalIp(sessionCore) != null) {
+        //          ipCount = 1;
+        //        }
         break;
       }
       case 7:
@@ -215,11 +215,12 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
         break;
       }
       case 6: {
-        if (ipCount > 0 || (agentIpAttribute.getIpCount() > 0)) {
-          ipCount = 1;
-        } else {
-          ipCount = 0;
-        }
+        //         if (ipCount > 0 || (agentIpAttribute.getIpCount() > 0)) {
+        //          ipCount = 1;
+        //        } else {
+        //          ipCount = 0;
+        //        }
+        ipSet.addAll(agentIpAttribute.getIpSet());
         if (scsCountForBot6 < 0) {
           break;
         } else if (agentIpAttribute.getScsCountForBot6() < 0) {
@@ -363,7 +364,7 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
     scsCountForBot6 = 0;
     scsCountForBot7 = 0;
     scsCountForBot8 = 0;
-    ipCount = 0;
+    ipSet.clear();
     bbcCount = 0;
     totalSessionCnt = 0;
     nocguidSessionCnt = 0;
@@ -399,7 +400,7 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
         break;
       case 6:
         scsCountForBot6 = 0;
-        ipCount = 0;
+        ipSet.clear();
         break;
       case 7:
         scsCountForBot7 = 0;

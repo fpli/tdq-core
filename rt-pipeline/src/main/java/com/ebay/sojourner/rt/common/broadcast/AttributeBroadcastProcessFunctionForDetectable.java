@@ -46,7 +46,7 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
   public void processElement(Either<UbiEvent, UbiSession> signatureDetectable,
       ReadOnlyContext context, Collector<UbiEvent> out) throws Exception {
 
-    ReadOnlyBroadcastState<String, Map<String, Map<Integer, Long>>> attributeSignature =
+    ReadOnlyBroadcastState<String, Map<String, Map<Integer, Long[]>>> attributeSignature =
         context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
 
     if (signatureDetectable.isLeft()) {
@@ -55,24 +55,32 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
       // ip
       String ip = TransformUtil.ipToInt(ubiEvent.getClientIP()) == null ? "0"
           : TransformUtil.ipToInt(ubiEvent.getClientIP()).toString();
-      Map<String, Map<Integer, Long>> ipSignature = attributeSignature.get("ip");
+      Map<String, Map<Integer, Long[]>> ipSignature = attributeSignature.get("ip");
       if (ipSignature != null && ipSignature.size() > 0 && ipSignature.containsKey(ip)) {
-        for (Map.Entry<Integer, Long> ipBotFlagMap :
+        for (Map.Entry<Integer, Long[]> ipBotFlagMap :
             ipSignature.get(ip).entrySet()) {
-          ubiEvent.getBotFlags().add(ipBotFlagMap.getKey());
+          Long[] duration = ipBotFlagMap.getValue();
+          if (ubiEvent.getEventTimestamp() > duration[0]
+              && ubiEvent.getEventTimestamp() < duration[1]) {
+            ubiEvent.getBotFlags().add(ipBotFlagMap.getKey());
+          }
         }
       }
 
       // agent
       long[] long4AgentHash = TransformUtil
           .md522Long(com.ebay.sojourner.common.util.TransformUtil.getMD5(ubiEvent.getAgentInfo()));
-      Map<String, Map<Integer, Long>> agentSignature = attributeSignature.get("agent");
+      Map<String, Map<Integer, Long[]>> agentSignature = attributeSignature.get("agent");
       String agent = long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1];
       if (agentSignature != null && agentSignature.size() > 0
           && agentSignature.containsKey(agent)) {
-        for (Map.Entry<Integer, Long> agentBotFlagMap :
+        for (Map.Entry<Integer, Long[]> agentBotFlagMap :
             agentSignature.get(agent).entrySet()) {
-          ubiEvent.getBotFlags().add(agentBotFlagMap.getKey());
+          Long[] duration = agentBotFlagMap.getValue();
+          if (ubiEvent.getEventTimestamp() > duration[0]
+              && ubiEvent.getEventTimestamp() < duration[1]) {
+            ubiEvent.getBotFlags().add(agentBotFlagMap.getKey());
+          }
         }
       }
 
@@ -81,12 +89,16 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
           long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1] + Constants.FIELD_DELIM + (
               TransformUtil.ipToInt(ubiEvent.getClientIP()) == null ? "0"
                   : TransformUtil.ipToInt(ubiEvent.getClientIP()).toString());
-      Map<String, Map<Integer, Long>> agentIpSignature = attributeSignature.get("agentIp");
+      Map<String, Map<Integer, Long[]>> agentIpSignature = attributeSignature.get("agentIp");
       if (agentIpSignature != null && agentIpSignature.size() > 0
           && agentIpSignature.containsKey(agentIp)) {
-        for (Map.Entry<Integer, Long> agentIpBotFlagMap :
+        for (Map.Entry<Integer, Long[]> agentIpBotFlagMap :
             agentIpSignature.get(agentIp).entrySet()) {
-          ubiEvent.getBotFlags().add(agentIpBotFlagMap.getKey());
+          Long[] duration = agentIpBotFlagMap.getValue();
+          if (ubiEvent.getEventTimestamp() > duration[0]
+              && ubiEvent.getEventTimestamp() < duration[1]) {
+            ubiEvent.getBotFlags().add(agentIpBotFlagMap.getKey());
+          }
         }
       }
 
@@ -128,11 +140,15 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
       // ip
       String ip = TransformUtil.ipToInt(ubiSession.getIp()) == null ? "0"
           : TransformUtil.ipToInt(ubiSession.getIp()).toString();
-      Map<String, Map<Integer, Long>> ipSignature = attributeSignature.get("ip");
+      Map<String, Map<Integer, Long[]>> ipSignature = attributeSignature.get("ip");
       if (ipSignature != null && ipSignature.size() > 0 && ipSignature.containsKey(ip)) {
-        for (Map.Entry<Integer, Long> ipBotFlagMap :
+        for (Map.Entry<Integer, Long[]> ipBotFlagMap :
             ipSignature.get(ip).entrySet()) {
-          ubiSession.getBotFlagList().add(ipBotFlagMap.getKey());
+          Long[] duration = ipBotFlagMap.getValue();
+          if (ubiSession.getAbsStartTimestamp() > duration[0]
+              && ubiSession.getAbsStartTimestamp() < duration[1]) {
+            ubiSession.getBotFlagList().add(ipBotFlagMap.getKey());
+          }
         }
       }
 
@@ -140,13 +156,17 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
       long[] long4AgentHash = TransformUtil
           .md522Long(
               com.ebay.sojourner.common.util.TransformUtil.getMD5(ubiSession.getAgentInfo()));
-      Map<String, Map<Integer, Long>> agentSignature = attributeSignature.get("agent");
+      Map<String, Map<Integer, Long[]>> agentSignature = attributeSignature.get("agent");
       String agent = long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1];
       if (agentSignature != null && agentSignature.size() > 0
           && agentSignature.containsKey(agent)) {
-        for (Map.Entry<Integer, Long> agentBotFlagMap :
+        for (Map.Entry<Integer, Long[]> agentBotFlagMap :
             agentSignature.get(agent).entrySet()) {
-          ubiSession.getBotFlagList().add(agentBotFlagMap.getKey());
+          Long[] duration = agentBotFlagMap.getValue();
+          if (ubiSession.getAbsStartTimestamp() > duration[0]
+              && ubiSession.getAbsStartTimestamp() < duration[1]) {
+            ubiSession.getBotFlagList().add(agentBotFlagMap.getKey());
+          }
         }
       }
 
@@ -155,12 +175,16 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
           long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1] + Constants.FIELD_DELIM + (
               TransformUtil.ipToInt(ubiSession.getIp()) == null ? "0"
                   : TransformUtil.ipToInt(ubiSession.getIp()).toString());
-      Map<String, Map<Integer, Long>> agentIpSignature = attributeSignature.get("agentIp");
+      Map<String, Map<Integer, Long[]>> agentIpSignature = attributeSignature.get("agentIp");
       if (agentIpSignature != null && agentIpSignature.size() > 0
           && agentIpSignature.containsKey(agentIp)) {
-        for (Map.Entry<Integer, Long> agentIpBotFlagMap :
+        for (Map.Entry<Integer, Long[]> agentIpBotFlagMap :
             agentIpSignature.get(agentIp).entrySet()) {
-          ubiSession.getBotFlagList().add(agentIpBotFlagMap.getKey());
+          Long[] duration = agentIpBotFlagMap.getValue();
+          if (ubiSession.getAbsStartTimestamp() > duration[0]
+              && ubiSession.getAbsStartTimestamp() < duration[1]) {
+            ubiSession.getBotFlagList().add(agentIpBotFlagMap.getKey());
+          }
         }
       }
 
@@ -204,18 +228,21 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
   public void processBroadcastElement(BotSignature attributeSignature, Context context,
       Collector<UbiEvent> out) throws Exception {
 
-    BroadcastState<String, Map<String, Map<Integer, Long>>> attributeBroadcastStatus =
+    BroadcastState<String, Map<String, Map<Integer, Long[]>>> attributeBroadcastStatus =
         context.getBroadcastState(MapStateDesc.attributeSignatureDesc);
 
     List<Integer> botFlags = attributeSignature.getBotFlags();
     String signatureId = null;
     Long expirationTime = null;
     Boolean isGeneration = null;
-    Map<String, Map<Integer, Long>> signature =
+    int category = 0;
+    Long generationTime = null;
+    Map<String, Map<Integer, Long[]>> signature =
         attributeBroadcastStatus.get(attributeSignature.getType());
     expirationTime = attributeSignature.getExpirationTime();
     isGeneration = attributeSignature.getIsGeneration();
-
+    category = attributeSignature.getCategory();
+    generationTime = attributeSignature.getGenerationTime();
     if ("agent".equals(attributeSignature.getType())) {
       signatureId =
           attributeSignature.getUserAgent().getAgentHash1() + Constants.FIELD_DELIM
@@ -231,7 +258,7 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
     } else if ("ip".equals(attributeSignature.getType())) {
       signatureId = attributeSignature.getIp().toString();
     }
-    /*
+    /* remove guid corss session botdetection
     else if ("guid".equals(attributeSignature.getType())) {
       signatureId =
           attributeSignature.getGuid().getGuid1() + Constants.FIELD_DELIM + attributeSignature
@@ -246,24 +273,38 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
     if (isGeneration) {
       for (int botFlag : botFlags) {
         if (signature.get(signatureId) != null) {
-          if (signature.get(signatureId).containsKey(botFlag)) {
-            if (expirationTime > signature.get(signatureId).get(botFlag)) {
-              signature.get(signatureId).put(botFlag, expirationTime);
+          if (signature.get(signatureId).containsKey(botFlag) && category == 2) {
+            //            if (expirationTime > signature.get(signatureId).get(botFlag)) {
+            //              signature.get(signatureId).put(botFlag, expirationTime);
+            //            }
+            Long[] durationOld = signature.get(signatureId).get(botFlag);
+            durationOld[1] = generationTime;
+            signature.get(signatureId).put(botFlag, durationOld);
+          } else if (!signature.get(signatureId).containsKey(botFlag) && category == 1) {
+            Long[] duration = {generationTime, expirationTime};
+            signature.get(signatureId).put(botFlag, duration);
+          } else if (signature.get(signatureId).containsKey(botFlag) && category == 1) {
+            Long[] durationOld = signature.get(signatureId).get(botFlag);
+            if (durationOld[0] > generationTime) {
+              durationOld[0] = generationTime;
             }
-          } else {
-            signature.get(signatureId).put(botFlag, expirationTime);
+            if (durationOld[1] < expirationTime) {
+              durationOld[1] = expirationTime;
+            }
+            signature.get(signatureId).put(botFlag, durationOld);
           }
         } else {
-          Map<Integer, Long> newBotFlagStatus = new ConcurrentHashMap<>();
-          newBotFlagStatus.put(botFlag, expirationTime);
+          Map<Integer, Long[]> newBotFlagStatus = new ConcurrentHashMap<>();
+          Long[] duration = {generationTime, expirationTime};
+          newBotFlagStatus.put(botFlag, duration);
           signature.put(signatureId, newBotFlagStatus);
-          if (signatureId.contains("ip")) {
+          if (attributeSignature.getType().contains("ip")) {
             ipIncCounter.inc();
             ipCounter.inc();
-          } else if (signatureId.contains("agent")) {
+          } else if (attributeSignature.getType().contains("agent")) {
             agentIncCounter.inc();
             agentCounter.inc();
-          } else if (signatureId.contains("agentIp")) {
+          } else if (attributeSignature.getType().contains("agentIp")) {
             agentIpIncCounter.inc();
             agentIpCounter.inc();
           }
@@ -276,20 +317,20 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
         }
       }
     } else {
-      Map<Integer, Long> signatureBotFlagStatus = signature.get(signatureId);
+      Map<Integer, Long[]> signatureBotFlagStatus = signature.get(signatureId);
       if (signatureBotFlagStatus != null) {
         for (int botFlag : botFlags) {
           if (signatureBotFlagStatus.containsKey(botFlag)) {
-            if (expirationTime > signatureBotFlagStatus.get(botFlag)) {
+            if (expirationTime >= signatureBotFlagStatus.get(botFlag)[1]) {
               signatureBotFlagStatus.remove(botFlag);
               if (signatureBotFlagStatus.size() == 0) {
-                if (signatureId.contains("ip")) {
+                if (attributeSignature.getType().contains("ip")) {
                   ipDecCounter.inc();
                   ipCounter.dec();
-                } else if (signatureId.contains("agent")) {
+                } else if (attributeSignature.getType().contains("agent")) {
                   agentDecCounter.inc();
                   agentCounter.dec();
-                } else if (signatureId.contains("agentIp")) {
+                } else if (attributeSignature.getType().contains("agentIp")) {
                   agentIpDecCounter.inc();
                   agentIpCounter.dec();
                 }
