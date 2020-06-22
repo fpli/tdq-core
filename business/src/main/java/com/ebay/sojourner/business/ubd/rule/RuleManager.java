@@ -1,8 +1,17 @@
 package com.ebay.sojourner.business.ubd.rule;
 
+import static com.ebay.sojourner.common.util.Property.ZOOKEEPER_BASE_SLEEP_TIME_MS;
+import static com.ebay.sojourner.common.util.Property.ZOOKEEPER_CONNECTION_TIMEOUT_MS;
+import static com.ebay.sojourner.common.util.Property.ZOOKEEPER_MAX_RETRIES;
+import static com.ebay.sojourner.common.util.Property.ZOOKEEPER_NAMESPACE;
+import static com.ebay.sojourner.common.util.Property.ZOOKEEPER_SERVER;
+import static com.ebay.sojourner.common.util.Property.ZOOKEEPER_SESSION_TIMEOUT_MS;
+
+import com.ebay.sojourner.common.env.EnvironmentUtils;
 import com.ebay.sojourner.common.model.rule.RuleChangeEvent;
 import com.ebay.sojourner.common.model.rule.RuleDefinition;
 import com.ebay.sojourner.common.zookeeper.ZkClient;
+import com.ebay.sojourner.common.zookeeper.ZkConfig;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.time.LocalDateTime;
@@ -23,11 +32,10 @@ import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent.Type;
 public class RuleManager {
 
   private static final RuleManager INSTANCE = new RuleManager();
-  private final RuleFetcher ruleFetcher = new RuleFetcher();
-  // private final ZkClient zkClient;
-  private final ExecutorService zkExecutor = Executors.newSingleThreadExecutor();
-  private final ScheduledExecutorService schedulingExecutor =
-      Executors.newSingleThreadScheduledExecutor();
+  private RuleFetcher ruleFetcher;
+  private ZkClient zkClient;
+  private ExecutorService zkExecutor;
+  private ScheduledExecutorService schedulingExecutor;
   private final List<RuleChangeEventListener<RuleChangeEvent>> listeners = Lists.newLinkedList();
 
   private static final String ZK_NODE_PATH = "/rule/publish/notification";
@@ -36,26 +44,31 @@ public class RuleManager {
   private Set<RuleDefinition> ruleDefinitions = Sets.newHashSet();
 
   private RuleManager() {
-    // initRules();
+    final Boolean ZK_ENABLE = EnvironmentUtils.getBoolean("zookeeper.enable");
+    if (ZK_ENABLE) {
+      ruleFetcher = new RuleFetcher();
+      zkExecutor = Executors.newSingleThreadExecutor();
+      schedulingExecutor = Executors.newSingleThreadScheduledExecutor();
 
-    // 1. init zk listener
-    /*
-    zkClient = new ZkClient(
-        ZkConfig.builder()
-            .server(EnvironmentUtils.get(ZOOKEEPER_SERVER))
-            .baseSleepTimeMs(EnvironmentUtils.getInteger(ZOOKEEPER_BASE_SLEEP_TIME_MS))
-            .maxRetries(EnvironmentUtils.getInteger(ZOOKEEPER_MAX_RETRIES))
-            .connectionTimeoutMs(EnvironmentUtils.getInteger(ZOOKEEPER_CONNECTION_TIMEOUT_MS))
-            .sessionTimeoutMs(EnvironmentUtils.getInteger(ZOOKEEPER_SESSION_TIMEOUT_MS))
-            .namespace(EnvironmentUtils.get(ZOOKEEPER_NAMESPACE))
-            .build()
-    );
-    */
+      initRules();
 
-    // initZkListener(zkClient, zkExecutor);
+      // 1. init zk listener
+      zkClient = new ZkClient(
+          ZkConfig.builder()
+              .server(EnvironmentUtils.get(ZOOKEEPER_SERVER))
+              .baseSleepTimeMs(EnvironmentUtils.getInteger(ZOOKEEPER_BASE_SLEEP_TIME_MS))
+              .maxRetries(EnvironmentUtils.getInteger(ZOOKEEPER_MAX_RETRIES))
+              .connectionTimeoutMs(EnvironmentUtils.getInteger(ZOOKEEPER_CONNECTION_TIMEOUT_MS))
+              .sessionTimeoutMs(EnvironmentUtils.getInteger(ZOOKEEPER_SESSION_TIMEOUT_MS))
+              .namespace(EnvironmentUtils.get(ZOOKEEPER_NAMESPACE))
+              .build()
+      );
 
-    // 2. init scheduling
-    // initScheduler(schedulingExecutor, 60L * 60 * 6, 60L * 60 * 6);
+      initZkListener(zkClient, zkExecutor);
+
+      // 2. init scheduling
+      initScheduler(schedulingExecutor, 60L * 60 * 6, 60L * 60 * 6);
+    }
   }
 
   public static RuleManager getInstance() {
@@ -103,7 +116,7 @@ public class RuleManager {
     log.info("Init rules count: {}", this.ruleDefinitions.size());
   }
 
-  private void initZkListener(ZkClient zkClient, ExecutorService zkExecutor)    {
+  private void initZkListener(ZkClient zkClient, ExecutorService zkExecutor) {
     CuratorFramework client = zkClient.getClient();
     PathChildrenCache cache = new PathChildrenCache(client, ZK_NODE_PATH, true);
     // add listener
@@ -144,9 +157,15 @@ public class RuleManager {
   }
 
   public void close() {
-    // zkClient.close();
-    zkExecutor.shutdown();
-    schedulingExecutor.shutdown();
+    if (zkClient != null) {
+      zkClient.close();
+    }
+    if (zkExecutor != null) {
+      zkExecutor.shutdown();
+    }
+    if (schedulingExecutor != null) {
+      schedulingExecutor.shutdown();
+    }
   }
 
 }

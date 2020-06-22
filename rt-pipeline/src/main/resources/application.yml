@@ -116,6 +116,7 @@ rheos:
       env: production
 
 zookeeper:
+  enable: false
   sessionTimeoutMs: 15000
   connectionTimeoutMs: 5000
   maxRetries: 3
