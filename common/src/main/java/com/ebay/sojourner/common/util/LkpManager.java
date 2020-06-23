@@ -250,7 +250,7 @@ public class LkpManager {
           }
         }
       }
-      mpxMap=mpxMapMid;
+      mpxMap = mpxMapMid;
     }
   }
 
@@ -279,11 +279,14 @@ public class LkpManager {
       instream = fileSystem.open(path);
     } catch (Exception e) {
       log.warn("Load file failed from [{}], will try to load from classpath: {}", path, resource);
+      System.out.println(String.format("load from hdfs: %s failed, load from classpath:%s", path,
+          resource));
       loadLkpFromHDFS = false;
       try {
         instream = getStreamFromClasspath(resource);
       } catch (FileNotFoundException ex) {
         log.error("Cannot find file {} from HDFS and classpath.", resource);
+        System.out.println(String.format("Cannot find file {} from HDFS and classpath.", resource));
       }
     }
     return instream;
