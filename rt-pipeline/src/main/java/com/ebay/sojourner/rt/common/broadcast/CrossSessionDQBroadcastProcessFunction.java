@@ -30,7 +30,7 @@ public class CrossSessionDQBroadcastProcessFunction extends
     String ip = TransformUtil.ipToInt(intermediateSession.getIp()) == null ? "0"
         : TransformUtil.ipToInt(intermediateSession.getIp()).toString();
     Map<String, Map<Integer, Long[]>> ipSignature = attributeSignature.get("ip");
-    if (ipSignature.containsKey(ip)) {
+    if (ipSignature != null && ipSignature.containsKey(ip)) {
       for (Map.Entry<Integer, Long[]> ipBotFlagMap :
           ipSignature.get(ip).entrySet()) {
         Long[] duration = ipBotFlagMap.getValue();
@@ -47,7 +47,7 @@ public class CrossSessionDQBroadcastProcessFunction extends
     Map<String, Map<Integer, Long[]>> agentSignature = attributeSignature.get("agent");
     String agent = long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1];
 
-    if (agentSignature.containsKey(agent)) {
+    if (agentSignature != null && agentSignature.containsKey(agent)) {
       for (Map.Entry<Integer, Long[]> agentBotFlagMap :
           agentSignature.get(agent).entrySet()) {
 
@@ -66,7 +66,7 @@ public class CrossSessionDQBroadcastProcessFunction extends
         long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1] + Constants.FIELD_DELIM + (
             TransformUtil.ipToInt(intermediateSession.getIp()) == null ? "0"
                 : TransformUtil.ipToInt(intermediateSession.getIp()).toString());
-    if (agentIpSignature.containsKey(agentIp)) {
+    if (agentIpSignature != null && agentIpSignature.containsKey(agentIp)) {
       for (Map.Entry<Integer, Long[]> agentIpBotFlagMap :
           agentIpSignature.get(agentIp).entrySet()) {
 

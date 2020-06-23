@@ -4,6 +4,7 @@ import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.common.util.SojTimestamp;
 import com.ebay.sojourner.common.util.TransformUtil;
 import com.ebay.sojourner.common.util.UbiSessionHelper;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
@@ -60,8 +61,10 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
         for (Map.Entry<Integer, Long[]> ipBotFlagMap :
             ipSignature.get(ip).entrySet()) {
           Long[] duration = ipBotFlagMap.getValue();
-          if (ubiEvent.getEventTimestamp() > duration[0]
-              && ubiEvent.getEventTimestamp() < duration[1]) {
+          if (SojTimestamp.getSojTimestampToUnixTimestamp(ubiEvent.getEventTimestamp())
+              > duration[0]
+              && SojTimestamp.getSojTimestampToUnixTimestamp(ubiEvent.getEventTimestamp())
+              < duration[1]) {
             ubiEvent.getBotFlags().add(ipBotFlagMap.getKey());
           }
         }
@@ -77,8 +80,10 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
         for (Map.Entry<Integer, Long[]> agentBotFlagMap :
             agentSignature.get(agent).entrySet()) {
           Long[] duration = agentBotFlagMap.getValue();
-          if (ubiEvent.getEventTimestamp() > duration[0]
-              && ubiEvent.getEventTimestamp() < duration[1]) {
+          if (SojTimestamp.getSojTimestampToUnixTimestamp(ubiEvent.getEventTimestamp())
+              > duration[0]
+              && SojTimestamp.getSojTimestampToUnixTimestamp(ubiEvent.getEventTimestamp())
+              < duration[1]) {
             ubiEvent.getBotFlags().add(agentBotFlagMap.getKey());
           }
         }
@@ -95,8 +100,10 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
         for (Map.Entry<Integer, Long[]> agentIpBotFlagMap :
             agentIpSignature.get(agentIp).entrySet()) {
           Long[] duration = agentIpBotFlagMap.getValue();
-          if (ubiEvent.getEventTimestamp() > duration[0]
-              && ubiEvent.getEventTimestamp() < duration[1]) {
+          if (SojTimestamp.getSojTimestampToUnixTimestamp(ubiEvent.getEventTimestamp())
+              > duration[0]
+              && SojTimestamp.getSojTimestampToUnixTimestamp(ubiEvent.getEventTimestamp())
+              < duration[1]) {
             ubiEvent.getBotFlags().add(agentIpBotFlagMap.getKey());
           }
         }
@@ -145,8 +152,10 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
         for (Map.Entry<Integer, Long[]> ipBotFlagMap :
             ipSignature.get(ip).entrySet()) {
           Long[] duration = ipBotFlagMap.getValue();
-          if (ubiSession.getAbsStartTimestamp() > duration[0]
-              && ubiSession.getAbsStartTimestamp() < duration[1]) {
+          if (SojTimestamp.getSojTimestampToUnixTimestamp(ubiSession.getAbsStartTimestamp())
+              > duration[0]
+              && SojTimestamp.getSojTimestampToUnixTimestamp(ubiSession.getAbsStartTimestamp())
+              < duration[1]) {
             ubiSession.getBotFlagList().add(ipBotFlagMap.getKey());
           }
         }
@@ -163,8 +172,10 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
         for (Map.Entry<Integer, Long[]> agentBotFlagMap :
             agentSignature.get(agent).entrySet()) {
           Long[] duration = agentBotFlagMap.getValue();
-          if (ubiSession.getAbsStartTimestamp() > duration[0]
-              && ubiSession.getAbsStartTimestamp() < duration[1]) {
+          if (SojTimestamp.getSojTimestampToUnixTimestamp(ubiSession.getAbsStartTimestamp())
+              > duration[0]
+              && SojTimestamp.getSojTimestampToUnixTimestamp(ubiSession.getAbsStartTimestamp())
+              < duration[1]) {
             ubiSession.getBotFlagList().add(agentBotFlagMap.getKey());
           }
         }
@@ -181,8 +192,10 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
         for (Map.Entry<Integer, Long[]> agentIpBotFlagMap :
             agentIpSignature.get(agentIp).entrySet()) {
           Long[] duration = agentIpBotFlagMap.getValue();
-          if (ubiSession.getAbsStartTimestamp() > duration[0]
-              && ubiSession.getAbsStartTimestamp() < duration[1]) {
+          if (SojTimestamp.getSojTimestampToUnixTimestamp(ubiSession.getAbsStartTimestamp())
+              > duration[0]
+              && SojTimestamp.getSojTimestampToUnixTimestamp(ubiSession.getAbsStartTimestamp())
+              < duration[1]) {
             ubiSession.getBotFlagList().add(agentIpBotFlagMap.getKey());
           }
         }
