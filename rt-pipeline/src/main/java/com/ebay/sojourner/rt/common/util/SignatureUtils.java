@@ -73,6 +73,7 @@ public class SignatureUtils {
         entry.getValue().setSent(true);
         signatureStatus.put(entry.getKey(), entry.getValue());
       }
+
       if (!botFlags.contains(entry.getKey())) {
         if (entry.getValue().getType() == 1) {
           entry.getValue().setType(2);
@@ -81,6 +82,7 @@ public class SignatureUtils {
         }
       }
     }
+
     SignatureInfo signatureInfo;
     for (Integer botFlag : botFlags) {
       if (!signatureStatus.containsKey(botFlag)) {
@@ -89,8 +91,6 @@ public class SignatureUtils {
         signatureInfo.setSent(false);
         signatureStatus.put(botFlag, signatureInfo);
       }
-
-
     }
   }
 }

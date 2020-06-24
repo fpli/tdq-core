@@ -1,8 +1,8 @@
 kafka:
   consumer:
     stream: behavior.total.new
-    topic: behavior.total.new.session.fordq
-    group-id: sojourner-pathfinder-cross-session-dq
+    topic: behavior.total.new.sample.session.fordq
+    group-id: sojourner-pathfinder-sample-session-dq
     bootstrap-servers:
       rno:
         - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
@@ -14,13 +14,13 @@ kafka:
 flink:
   app:
     parallelism:
-      source: 100
-      pre-agent-ip: 100
-      agent: 50
-      agent-ip: 50
-      ip: 50
+      source: 50
+      pre-agent-ip: 50
+      agent: 30
+      agent-ip: 30
+      ip: 30
       guid: 50
-      broadcast: 300
+      broadcast: 100
 
 
 hdfs:

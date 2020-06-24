@@ -1,10 +1,7 @@
-
 flink:
   app:
     name:
-      full-pipeline: Sojourner lkpamanger
-      data-quality: Sojourner RT DQ Pipeline
-      hot-deploy: Sojourner RT Hot Deploy Pipeline
+      full-pipeline: Sojourner LkpManager Test
     parallelism:
       source: 100
       event: 100

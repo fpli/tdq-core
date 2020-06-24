@@ -277,19 +277,17 @@ public class LkpManager {
     try {
       initFs();
       instream = fileSystem.open(path);
-      System.out.println(String.format("load from hdfs: %s successed", path));
+      log.info(String.format("load from hdfs: %s successed", path));
     } catch (Exception e) {
       log.warn("Load file failed from [{}], will try to load from classpath: {}", path, resource);
-      System.out.println(String.format("load from hdfs: %s failed, load from classpath:%s", path,
+      log.info(String.format("load from hdfs: %s failed, load from classpath:%s", path,
           resource));
-      System.out.println(e.getMessage());
       loadLkpFromHDFS = false;
       try {
         instream = getStreamFromClasspath(resource);
       } catch (FileNotFoundException ex) {
         log.error("Cannot find file {} from HDFS and classpath.", resource);
-        System.out.println(String.format("Cannot find file {} from HDFS and classpath.", resource));
-        System.out.println(e.getMessage());
+        log.info(String.format("Cannot find file {} from HDFS and classpath.", resource));
       }
     }
     return instream;
