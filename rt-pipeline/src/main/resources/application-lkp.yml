@@ -1,0 +1,17 @@
+
+flink:
+  app:
+    name:
+      full-pipeline: Sojourner lkpamanger
+      data-quality: Sojourner RT DQ Pipeline
+      hot-deploy: Sojourner RT Hot Deploy Pipeline
+    parallelism:
+      source: 100
+      event: 100
+      pre-agent-ip: 100
+      agent-ip: 50
+      agent: 50
+      ip: 50
+      guid: 100
+      broadcast: 200
+      metrics: 200

@@ -2,7 +2,7 @@ kafka:
   consumer:
     stream: behavior.pathfinder
     topic: behavior.pathfinder.events.total
-    group-id: sojourner-pathfinder-consumer
+    group-id: sojourner-pathfinder-consumer-test
     bootstrap-servers:
       rno:
         - rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
