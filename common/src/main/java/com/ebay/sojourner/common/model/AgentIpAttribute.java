@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 import lombok.Data;
 import org.apache.datasketches.hll.HllSketch;
 import org.apache.datasketches.hll.TgtHllType;
@@ -60,7 +59,7 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
   private int siteCnt = 0;
   private int newGuidCnt = 0;
   //    private int guidCnt = 0;
-  private Set<Guid> cguidSet = new CopyOnWriteArraySet<>();
+  private Set<Guid> cguidSet = new HashSet<>();
   //   private Set<Guid> guidSet = new CopyOnWriteArraySet<Guid>();
   //  private HllSketch guidSet = new HllSketch(20, TgtHllType.HLL_8);
   private byte[] hllSketch;

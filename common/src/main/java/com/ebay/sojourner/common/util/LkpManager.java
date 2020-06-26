@@ -225,6 +225,9 @@ public class LkpManager {
         if (StringUtils.isNotBlank(pageFmlyPair)) {
           String[] values = pageFmlyPair.split(LKP_FILED_DELIMITER, pageFmlyNames.length + 1);
           Integer pageId = StringUtils.isEmpty(values[0]) ? null : Integer.valueOf(values[0]);
+          if(values==null||values.length!=3){
+            log.error("refreshPageFmlys error ========:"+pageFmlyPair);
+          }
           pageFmlyNames[0] = StringUtils.isEmpty(values[1]) ? null : values[1];
           pageFmlyNames[1] = StringUtils.isEmpty(values[2]) ? null : values[2];
           pageFmlyMapMid.put(pageId, pageFmlyNames);
@@ -241,7 +244,12 @@ public class LkpManager {
       String mpxRotations = getLkpFileContent(property);
       for (String mpx : mpxRotations.split(LKP_RECORD_DELIMITER)) {
         String[] values = mpx.split(LKP_FILED_DELIMITER);
+        //        log.error("check mpx==========:"+mpx);
         // Keep the null judgment also for session metrics first finding flag
+        //        error mpx
+        if(values==null||values.length!=2){
+          log.error("refreshMpxRotetion error ========:"+mpx);
+        }
         if (values[0] != null && values[1] != null) {
           try {
             mpxMapMid.put(Long.parseLong(values[0].trim()), values[1].trim());
@@ -289,6 +297,9 @@ public class LkpManager {
         log.error("Cannot find file {} from HDFS and classpath.", resource);
         log.info(String.format("Cannot find file {} from HDFS and classpath.", resource));
       }
+      finally {
+        closeFS();
+      }
     }
     return instream;
   }
@@ -332,6 +343,7 @@ public class LkpManager {
   }
 
   public void closeFS() {
+
     if (fileSystem != null) {
       try {
         fileSystem.close();
@@ -345,7 +357,9 @@ public class LkpManager {
 
   private void initFs() throws IOException, IllegalArgumentException {
     if (fileSystem == null) {
+
       Configuration configuration = new Configuration();
+      configuration.setBoolean("fs.hdfs.impl.disable.cache", true);
       fileSystem = FileSystem.newInstance(configuration);
       loadLkpFromHDFS = true;
     }
