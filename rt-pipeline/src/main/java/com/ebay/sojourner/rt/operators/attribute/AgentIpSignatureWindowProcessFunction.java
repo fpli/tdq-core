@@ -6,6 +6,7 @@ import com.ebay.sojourner.common.model.AgentIpAttributeAccumulator;
 import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.SignatureInfo;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import org.apache.flink.api.java.tuple.Tuple;
@@ -30,7 +31,7 @@ public class AgentIpSignatureWindowProcessFunction extends
     AgentHash agent = agentIpAttribute.getAgent();
     Integer clientIp = agentIpAttribute.getClientIp();
     long windowEndTime = context.window().maxTimestamp();
-    if (context.currentWatermark() >= context.window().maxTimestamp()) {
+    if (context.currentWatermark() >= context.window().maxTimestamp()&&signatureStates.size()>0) {
       sendSignatures(agent, clientIp, signatureStates, out, context);
       out.collect(new BotSignature(signatureId, agent, clientIp, null,
           new ArrayList<>(signatureStates.keySet()),
@@ -55,7 +56,7 @@ public class AgentIpSignatureWindowProcessFunction extends
     for (Map.Entry<Integer, SignatureInfo> entry : signatureStates.entrySet()) {
       if (!entry.getValue().isSent()) {
         out.collect(new BotSignature(signatureId, agent, clientIp, null,
-            new ArrayList<>(entry.getKey()),
+            new ArrayList<>(Arrays.asList(entry.getKey())),
             context.window().maxTimestamp(), true, entry.getValue().getType(),
             context.currentWatermark()));
       }

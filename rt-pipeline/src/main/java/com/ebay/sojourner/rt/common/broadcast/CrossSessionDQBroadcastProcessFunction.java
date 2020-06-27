@@ -3,6 +3,7 @@ package com.ebay.sojourner.rt.common.broadcast;
 import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.common.util.SojTimestamp;
 import com.ebay.sojourner.common.util.TransformUtil;
 import com.ebay.sojourner.common.util.UbiSessionHelper;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
@@ -34,8 +35,12 @@ public class CrossSessionDQBroadcastProcessFunction extends
       for (Map.Entry<Integer, Long[]> ipBotFlagMap :
           ipSignature.get(ip).entrySet()) {
         Long[] duration = ipBotFlagMap.getValue();
-        if (intermediateSession.getAbsStartTimestamp() > duration[0]
-            && intermediateSession.getAbsStartTimestamp() < duration[1]) {
+
+        if (SojTimestamp.getSojTimestampToUnixTimestamp(intermediateSession.getAbsStartTimestamp())
+            > duration[0]
+            &&
+            SojTimestamp.getSojTimestampToUnixTimestamp(intermediateSession.getAbsStartTimestamp())
+                < duration[1]) {
           intermediateSession.getBotFlagList().add(ipBotFlagMap.getKey());
         }
       }
@@ -52,8 +57,11 @@ public class CrossSessionDQBroadcastProcessFunction extends
           agentSignature.get(agent).entrySet()) {
 
         Long[] duration = agentBotFlagMap.getValue();
-        if (intermediateSession.getAbsStartTimestamp() > duration[0]
-            && intermediateSession.getAbsStartTimestamp() < duration[1]) {
+        if (SojTimestamp.getSojTimestampToUnixTimestamp(intermediateSession.getAbsStartTimestamp())
+            > duration[0]
+            &&
+            SojTimestamp.getSojTimestampToUnixTimestamp(intermediateSession.getAbsStartTimestamp())
+                < duration[1]) {
           intermediateSession.getBotFlagList().add(agentBotFlagMap.getKey());
         }
       }
@@ -71,8 +79,11 @@ public class CrossSessionDQBroadcastProcessFunction extends
           agentIpSignature.get(agentIp).entrySet()) {
 
         Long[] duration = agentIpBotFlagMap.getValue();
-        if (intermediateSession.getAbsStartTimestamp() > duration[0]
-            && intermediateSession.getAbsStartTimestamp() < duration[1]) {
+        if (SojTimestamp.getSojTimestampToUnixTimestamp(intermediateSession.getAbsStartTimestamp())
+            > duration[0]
+            &&
+            SojTimestamp.getSojTimestampToUnixTimestamp(intermediateSession.getAbsStartTimestamp())
+                < duration[1]) {
           intermediateSession.getBotFlagList().add(agentIpBotFlagMap.getKey());
         }
       }

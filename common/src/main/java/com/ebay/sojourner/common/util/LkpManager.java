@@ -225,8 +225,8 @@ public class LkpManager {
         if (StringUtils.isNotBlank(pageFmlyPair)) {
           String[] values = pageFmlyPair.split(LKP_FILED_DELIMITER, pageFmlyNames.length + 1);
           Integer pageId = StringUtils.isEmpty(values[0]) ? null : Integer.valueOf(values[0]);
-          if(values==null||values.length!=3){
-            log.error("refreshPageFmlys error ========:"+pageFmlyPair);
+          if (values == null || values.length != 3) {
+            log.error("refreshPageFmlys error ========:" + pageFmlyPair);
           }
           pageFmlyNames[0] = StringUtils.isEmpty(values[1]) ? null : values[1];
           pageFmlyNames[1] = StringUtils.isEmpty(values[2]) ? null : values[2];
@@ -247,8 +247,8 @@ public class LkpManager {
         //        log.error("check mpx==========:"+mpx);
         // Keep the null judgment also for session metrics first finding flag
         //        error mpx
-        if(values==null||values.length!=2){
-          log.error("refreshMpxRotetion error ========:"+mpx);
+        if (values == null || values.length != 2) {
+          log.error("refreshMpxRotetion error ========:" + mpx);
         }
         if (values[0] != null && values[1] != null) {
           try {
@@ -276,6 +276,8 @@ public class LkpManager {
       }
     } catch (IOException e) {
       log.error("Open HDFS file {} issue:{}", filePath.getName(), ExceptionUtils.getStackTrace(e));
+    } finally {
+      closeFS();
     }
     return resultBuilder.toString().trim();
   }
@@ -297,10 +299,13 @@ public class LkpManager {
         log.error("Cannot find file {} from HDFS and classpath.", resource);
         log.info(String.format("Cannot find file {} from HDFS and classpath.", resource));
       }
-      finally {
-        closeFS();
-      }
+      //      finally {
+      //        closeFS();
+      //      }
     }
+    //    finally {
+    //      closeFS();
+    //    }
     return instream;
   }
 

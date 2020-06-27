@@ -5,6 +5,7 @@ import com.ebay.sojourner.common.model.IpAttribute;
 import com.ebay.sojourner.common.model.IpAttributeAccumulator;
 import com.ebay.sojourner.common.model.SignatureInfo;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import org.apache.flink.api.java.tuple.Tuple;
@@ -29,7 +30,7 @@ public class IpWindowProcessFunction extends
     Integer clientIp = ipAttribute.getClientIp();
     long windowEndTime = context.window().maxTimestamp();
 
-    if (context.currentWatermark() >= context.window().maxTimestamp()) {
+    if (context.currentWatermark() >= context.window().maxTimestamp()&&signatureStates.size()>0) {
       sendSignatures(clientIp, signatureStates, out, context);
       out.collect(new BotSignature(signatureId, null, clientIp, null,
           new ArrayList<>(signatureStates.keySet()),
@@ -52,7 +53,7 @@ public class IpWindowProcessFunction extends
     for (Map.Entry<Integer, SignatureInfo> entry : signatureStates.entrySet()) {
       if (!entry.getValue().isSent()) {
         out.collect(new BotSignature(signatureId, null, clientIp, null,
-            new ArrayList<>(entry.getKey()),
+            new ArrayList<>(Arrays.asList(entry.getKey())),
             context.window().maxTimestamp(), true, entry.getValue().getType(),
             context.currentWatermark()));
       }

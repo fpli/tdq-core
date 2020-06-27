@@ -3,9 +3,9 @@ flink:
     name:
       full-pipeline: Sojourner LkpManager Test
     parallelism:
-      source: 100
-      event: 100
-      pre-agent-ip: 100
+      source: 50
+      event: 50
+      pre-agent-ip: 50
       agent-ip: 50
       agent: 50
       ip: 50

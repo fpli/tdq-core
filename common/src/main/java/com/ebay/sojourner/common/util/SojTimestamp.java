@@ -65,6 +65,7 @@ public class SojTimestamp {
             + ".000"))));
 
     System.out.println(getUnixTimestamp("2020-06-17 02:59:59.000"));
+    System.out.println(getSojTimestampToUnixTimestamp(3801726833602000L));
 
   }
 }
