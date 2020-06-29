@@ -5,7 +5,7 @@ import com.ebay.sojourner.common.model.UbiSession;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.util.OutputTag;
 
-public class OutputTagUtil {
+public class OutputTagConstants {
 
   public static OutputTag<UbiSession> sessionOutputTag =
       new OutputTag<>("session-output-tag", TypeInformation.of(UbiSession.class));

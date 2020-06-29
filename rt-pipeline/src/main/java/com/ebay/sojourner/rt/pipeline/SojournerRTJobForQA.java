@@ -12,7 +12,7 @@ import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
 import com.ebay.sojourner.flink.common.util.DataCenter;
-import com.ebay.sojourner.flink.common.util.OutputTagUtil;
+import com.ebay.sojourner.flink.common.util.OutputTagConstants;
 import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaProducerFactory;
 import com.ebay.sojourner.flink.connectors.kafka.SourceDataStreamBuilder;
@@ -80,6 +80,7 @@ public class SojournerRTJobForQA {
         .map(new EventMapFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Property.EVENT_PARALLELISM))
         .name("Event Operator For lvs")
+        .disableChaining()
         .uid("event-lvs-id");
 
     // refine windowsoperator
@@ -93,13 +94,13 @@ public class SojournerRTJobForQA {
             .keyBy("guid")
             .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
             .allowedLateness(Time.minutes(1))
-            .sideOutputLateData(OutputTagUtil.lateEventOutputTag)
+            .sideOutputLateData(OutputTagConstants.lateEventOutputTag)
             .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction());
 
     WindowOperatorHelper.enrichWindowOperator(
         (OneInputTransformation) ubiSessionDataStream.getTransformation(),
         new UbiEventMapWithStateFunction(),
-        OutputTagUtil.mappedEventOutputTag);
+        OutputTagConstants.mappedEventOutputTag);
 
     ubiSessionDataStream
         .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
@@ -107,10 +108,10 @@ public class SojournerRTJobForQA {
         .uid("session-id");
 
     DataStream<UbiEvent> ubiEventWithSessionId =
-        ubiSessionDataStream.getSideOutput(OutputTagUtil.mappedEventOutputTag);
+        ubiSessionDataStream.getSideOutput(OutputTagConstants.mappedEventOutputTag);
 
     DataStream<UbiEvent> latedStream =
-        ubiSessionDataStream.getSideOutput(OutputTagUtil.lateEventOutputTag);
+        ubiSessionDataStream.getSideOutput(OutputTagConstants.lateEventOutputTag);
 
     // ubiSession to sessionCore
     DataStream<SessionCore> sessionCoreDataStream = ubiSessionDataStream
@@ -199,13 +200,14 @@ public class SojournerRTJobForQA {
     // connect ubiEvent,ubiSession DataStream and broadcast Stream
     SingleOutputStreamOperator<UbiEvent> signatureBotDetectionForEvent = detectableDataStream
         .connect(attributeSignatureBroadcastStream)
-        .process(new AttributeBroadcastProcessFunctionForDetectable(OutputTagUtil.sessionOutputTag))
+        .process(
+            new AttributeBroadcastProcessFunctionForDetectable(OutputTagConstants.sessionOutputTag))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .name("Signature Bot Detector")
         .uid("signature-detection-id");
 
     DataStream<UbiSession> signatureBotDetectionForSession =
-        signatureBotDetectionForEvent.getSideOutput(OutputTagUtil.sessionOutputTag);
+        signatureBotDetectionForEvent.getSideOutput(OutputTagConstants.sessionOutputTag);
 
     // UbiSession to SojSession
     DataStream<SojSession> sojSessionStream =

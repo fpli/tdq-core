@@ -244,9 +244,6 @@ public class LkpManager {
       String mpxRotations = getLkpFileContent(property);
       for (String mpx : mpxRotations.split(LKP_RECORD_DELIMITER)) {
         String[] values = mpx.split(LKP_FILED_DELIMITER);
-        //        log.error("check mpx==========:"+mpx);
-        // Keep the null judgment also for session metrics first finding flag
-        //        error mpx
         if (values == null || values.length != 2) {
           log.error("refreshMpxRotetion error ========:" + mpx);
         }
@@ -287,25 +284,15 @@ public class LkpManager {
     try {
       initFs();
       instream = fileSystem.open(path);
-      log.info(String.format("load from hdfs: %s successed", path));
     } catch (Exception e) {
       log.warn("Load file failed from [{}], will try to load from classpath: {}", path, resource);
-      log.info(String.format("load from hdfs: %s failed, load from classpath:%s", path,
-          resource));
       loadLkpFromHDFS = false;
       try {
         instream = getStreamFromClasspath(resource);
       } catch (FileNotFoundException ex) {
         log.error("Cannot find file {} from HDFS and classpath.", resource);
-        log.info(String.format("Cannot find file {} from HDFS and classpath.", resource));
       }
-      //      finally {
-      //        closeFS();
-      //      }
     }
-    //    finally {
-    //      closeFS();
-    //    }
     return instream;
   }
 
