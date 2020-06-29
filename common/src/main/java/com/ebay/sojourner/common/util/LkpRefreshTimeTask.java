@@ -23,6 +23,6 @@ public class LkpRefreshTimeTask extends TimerTask {
   @Override
   public void run() {
     lkpManager.refreshLkpFiles();
-    lkpManager.closeFS();
+    //    lkpManager.closeFS();
   }
 }
