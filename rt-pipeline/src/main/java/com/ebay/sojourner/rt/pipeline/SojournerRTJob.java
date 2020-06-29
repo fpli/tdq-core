@@ -17,7 +17,7 @@ import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
-import com.ebay.sojourner.flink.common.util.OutputTagUtil;
+import com.ebay.sojourner.flink.common.util.OutputTagConstants;
 import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaProducerFactory;
 import com.ebay.sojourner.flink.connectors.kafka.SourceDataStreamBuilder;
@@ -108,13 +108,13 @@ public class SojournerRTJob {
             .keyBy("guid")
             .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
             .allowedLateness(Time.minutes(3))
-            .sideOutputLateData(OutputTagUtil.lateEventOutputTag)
+            .sideOutputLateData(OutputTagConstants.lateEventOutputTag)
             .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction());
 
     WindowOperatorHelper.enrichWindowOperator(
         (OneInputTransformation) ubiSessionDataStream.getTransformation(),
         new UbiEventMapWithStateFunction(),
-        OutputTagUtil.mappedEventOutputTag);
+        OutputTagConstants.mappedEventOutputTag);
 
     ubiSessionDataStream
         .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
@@ -123,10 +123,10 @@ public class SojournerRTJob {
         .uid("session-id");
 
     DataStream<UbiEvent> ubiEventWithSessionId =
-        ubiSessionDataStream.getSideOutput(OutputTagUtil.mappedEventOutputTag);
+        ubiSessionDataStream.getSideOutput(OutputTagConstants.mappedEventOutputTag);
 
     DataStream<UbiEvent> latedStream =
-        ubiSessionDataStream.getSideOutput(OutputTagUtil.lateEventOutputTag);
+        ubiSessionDataStream.getSideOutput(OutputTagConstants.lateEventOutputTag);
 
     // ubiSession to SessionCore
     DataStream<SessionCore> sessionCoreDataStream =
@@ -235,14 +235,15 @@ public class SojournerRTJob {
     // connect ubiEvent,ubiSession DataStream and broadcast Stream
     SingleOutputStreamOperator<UbiEvent> signatureBotDetectionForEvent = detectableDataStream
         .connect(attributeSignatureBroadcastStream)
-        .process(new AttributeBroadcastProcessFunctionForDetectable(OutputTagUtil.sessionOutputTag))
+        .process(
+            new AttributeBroadcastProcessFunctionForDetectable(OutputTagConstants.sessionOutputTag))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Signature Bot Detector")
         .uid("signature-detection-id");
 
     DataStream<UbiSession> signatureBotDetectionForSession =
-        signatureBotDetectionForEvent.getSideOutput(OutputTagUtil.sessionOutputTag);
+        signatureBotDetectionForEvent.getSideOutput(OutputTagConstants.sessionOutputTag);
 
     // ubiEvent to sojEvent
     DataStream<SojEvent> sojEventWithSessionId =

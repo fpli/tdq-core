@@ -11,6 +11,7 @@ import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.accumulators.AverageAccumulator;
 import org.apache.flink.api.common.functions.RichMapFunction;
+import org.apache.flink.api.common.io.ratelimiting.GuavaFlinkConnectorRateLimiter;
 import org.apache.flink.configuration.Configuration;
 
 @Slf4j
@@ -20,10 +21,14 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
   private AbstractBotDetector<UbiEvent> eventBotDetector;
   private AverageAccumulator avgEventParserDuration = new AverageAccumulator();
   private AverageAccumulator avgBotDetectionDuration = new AverageAccumulator();
+  private GuavaFlinkConnectorRateLimiter rateLimiter = new GuavaFlinkConnectorRateLimiter();
 
   @Override
   public void open(Configuration conf) throws Exception {
     super.open(conf);
+    // set value of rate in bytes per second (0.6GB/s)
+    rateLimiter.setRate(600000000);
+    rateLimiter.open(getRuntimeContext());
     parser = new EventParser();
     eventBotDetector = BotDetectorFactory.get(Type.EVENT, RuleManager.getInstance());
 
@@ -35,6 +40,7 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
   @Override
   public UbiEvent map(RawEvent rawEvent) throws Exception {
+    rateLimiter.acquire(rawEvent.toString().length());
     UbiEvent event = new UbiEvent();
     long startTimeForEventParser = System.nanoTime();
     parser.parse(rawEvent, event);
