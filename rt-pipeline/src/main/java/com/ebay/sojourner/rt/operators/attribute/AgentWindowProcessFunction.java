@@ -8,12 +8,13 @@ import com.ebay.sojourner.common.model.SignatureInfo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
-
+@Slf4j
 public class AgentWindowProcessFunction extends
     ProcessWindowFunction<AgentAttributeAccumulator, BotSignature, Tuple, TimeWindow> {
 
@@ -34,7 +35,7 @@ public class AgentWindowProcessFunction extends
       out.collect(new BotSignature(signatureId, agent, null, null,
           new ArrayList<>(signatureStates.keySet()),
           windowEndTime, false, 3, windowEndTime));
-
+      log.info("agentAttribute: "+agentAttribute.toString());
     } else if (context.currentWatermark() < context.window().maxTimestamp()) {
 
       sendSignatures(agent, signatureStates, out, context);

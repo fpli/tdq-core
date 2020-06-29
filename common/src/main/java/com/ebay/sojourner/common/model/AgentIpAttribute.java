@@ -18,7 +18,7 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
   // Shuffle Key
   private Integer clientIp;
   private AgentHash agent;
-
+  //  private long timestamp;
   private Set<Integer> botFlagList = new LinkedHashSet<>();
 
   // For Bot5

@@ -9,9 +9,11 @@ import com.ebay.sojourner.flink.connectors.kafka.KafkaProducerFactory;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.metrics.Counter;
 import org.apache.flink.streaming.api.datastream.DataStream;
 
+@Slf4j
 public class SignatureUtils {
 
   public static Set<Integer> generateNewSignature(Map<Integer, Integer> signatureStates) {
@@ -79,6 +81,8 @@ public class SignatureUtils {
           entry.getValue().setType(2);
           entry.getValue().setSent(false);
           signatureStatus.put(entry.getKey(), entry.getValue());
+          log.info("signature retract: bot:" + entry.getKey() + " value:" + entry
+              .getValue());
         }
       }
     }

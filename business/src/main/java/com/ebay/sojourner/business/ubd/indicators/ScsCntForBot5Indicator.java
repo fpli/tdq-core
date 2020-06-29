@@ -7,7 +7,9 @@ import com.ebay.sojourner.common.model.SessionCore;
 import com.ebay.sojourner.common.util.BotFilter;
 import com.ebay.sojourner.common.util.BotRules;
 import com.ebay.sojourner.common.util.SessionCoreHelper;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ScsCntForBot5Indicator<Source, Target> extends AbstractIndicator<Source, Target> {
 
   public ScsCntForBot5Indicator(BotFilter botFilter) {
@@ -41,6 +43,7 @@ public class ScsCntForBot5Indicator<Source, Target> extends AbstractIndicator<So
                 .getAgentIpAttribute()
                 .feed(sessionCore, BotRules.SCS_ON_AGENTIP);
           } else {
+            log.error("BOT5-----singleclicksessionFlag is false:"+sessionCore);
             agentIpAttributeAccumulator
                 .getAgentIpAttribute()
                 .revert(sessionCore, BotRules.SCS_ON_AGENTIP);

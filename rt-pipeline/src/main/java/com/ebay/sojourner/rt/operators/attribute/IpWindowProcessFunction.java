@@ -8,12 +8,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
+@Slf4j
 public class IpWindowProcessFunction extends
     ProcessWindowFunction<IpAttributeAccumulator, BotSignature, Tuple, TimeWindow> {
 
@@ -35,7 +37,7 @@ public class IpWindowProcessFunction extends
       out.collect(new BotSignature(signatureId, null, clientIp, null,
           new ArrayList<>(signatureStates.keySet()),
           windowEndTime, false, 3, windowEndTime));
-
+      log.info("ipAttribute: "+ipAttribute.toString());
     } else if (context.currentWatermark() < context.window().maxTimestamp()) {
       sendSignatures(clientIp, signatureStates, out, context);
       //      Set<Integer> newGenerateSignatures = SignatureUtils.generateNewSignature
