@@ -262,7 +262,7 @@ public class LkpManager {
     }
   }
 
-  private String getLkpFileContent(String lkpType) {
+  private synchronized String getLkpFileContent(String lkpType) {
     String filename = getString(lkpType);
     Path filePath = new Path(LKP_PATH + filename);
     StringBuffer resultBuilder = new StringBuffer();
