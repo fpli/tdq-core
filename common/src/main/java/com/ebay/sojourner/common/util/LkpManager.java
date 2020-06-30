@@ -318,6 +318,7 @@ public class LkpManager {
     }
     Path path = new Path(LKP_PATH, fileName);
     try {
+      initFs();
       if (fileSystem.exists(path)) {
         FileStatus[] fileStatus = fileSystem.listStatus(path, new FileNameFilter(fileName));
         long lastModifiedTime = fileStatus[0].getModificationTime();
@@ -330,6 +331,8 @@ public class LkpManager {
       }
     } catch (IOException e) {
       e.printStackTrace();
+    } finally {
+      closeFS();
     }
     return false;
   }
