@@ -6,7 +6,7 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 
 public class KafkaSourceFunction {
 
-  public static <T> FlinkKafkaConsumer<T> buildSource(KafkaConfig config, Class<T> tClass) {
+  public static <T> FlinkKafkaConsumer<T> buildSource(KafkaConsumerConfig config, Class<T> tClass) {
 
     FlinkKafkaConsumer<T> kafkaConsumer = KafkaConsumerFactory.getConsumer(config, tClass);
 

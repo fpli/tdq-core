@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class KafkaConfig {
+public class KafkaConsumerConfig {
   private String topic;
   private String brokers;
   private String groupId;

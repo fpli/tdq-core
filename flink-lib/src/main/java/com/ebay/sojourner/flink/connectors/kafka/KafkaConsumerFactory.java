@@ -15,7 +15,7 @@ public class KafkaConsumerFactory {
 
   private static FlinkKafkaConsumer flinkKafkaConsumer;
 
-  public static <T> FlinkKafkaConsumer<T> getConsumer(KafkaConfig config, Class<T> tClass) {
+  public static <T> FlinkKafkaConsumer<T> getConsumer(KafkaConsumerConfig config, Class<T> tClass) {
 
     Properties consumerConfig = KafkaConnectorFactory.getKafkaCommonConfig();
 
@@ -42,11 +42,11 @@ public class KafkaConsumerFactory {
         || tClass.isAssignableFrom(BotSignature.class)
         || tClass.isAssignableFrom(IntermediateSession.class)) {
 
-     flinkKafkaConsumer = new FlinkKafkaConsumer(
+      flinkKafkaConsumer = new FlinkKafkaConsumer(
           config.getTopic(),
           DeserializationSchemaManager.getKeyedSchema(tClass),
           consumerConfig
-     );
+      );
 
     } else {
       flinkKafkaConsumer = new FlinkKafkaConsumer(

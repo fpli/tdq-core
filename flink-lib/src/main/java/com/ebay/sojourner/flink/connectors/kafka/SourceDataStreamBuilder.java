@@ -21,7 +21,7 @@ public class SourceDataStreamBuilder<T> {
 
   public DataStream<T> buildOfDC(DataCenter dc, String slotGroup) {
 
-    KafkaConfig kafkaConsumerConfig = KafkaConnectorFactory.getKafkaConsumerConfig(dc);
+    KafkaConsumerConfig kafkaConsumerConfig = KafkaConnectorFactory.getKafkaConsumerConfig(dc);
     return environment
         .addSource(KafkaSourceFunction.buildSource(kafkaConsumerConfig, tClass))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
