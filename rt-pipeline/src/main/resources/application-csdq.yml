@@ -25,5 +25,5 @@ flink:
 
 hdfs:
   path:
-    intermediate-session: /cross_session_1
-    signatures: /signatures_test_1
+    intermediate-session: /cross_session_2
+    signatures: /signatures_test_2

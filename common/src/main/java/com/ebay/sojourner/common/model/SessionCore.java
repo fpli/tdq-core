@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class SessionCore extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -6919290053839279157L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SessionCore\",\"namespace\":\"com.ebay.sojourner.common.model\",\"fields\":[{\"name\":\"botFlag\",\"type\":\"int\"},{\"name\":\"absEventCnt\",\"type\":\"int\"},{\"name\":\"flags\",\"type\":\"int\"},{\"name\":\"distinctGuidsForSameAgentIp\",\"type\":\"int\"},{\"name\":\"userAgent\",\"type\":[\"null\",{\"type\":\"record\",\"name\":\"AgentHash\",\"fields\":[{\"name\":\"agentHash1\",\"type\":\"long\"},{\"name\":\"agentHash2\",\"type\":\"long\"}]}],\"default\":null},{\"name\":\"ip\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"agentString\",\"type\":[\"null\",\"AgentHash\"],\"default\":null},{\"name\":\"agentStringAfterBase64\",\"type\":[\"null\",\"AgentHash\"],\"default\":null},{\"name\":\"exInternalIp\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"exInternalIpNonTrim\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"appId\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"cguid\",\"type\":[\"null\",{\"type\":\"record\",\"name\":\"Guid\",\"fields\":[{\"name\":\"guid1\",\"type\":\"long\"},{\"name\":\"guid2\",\"type\":\"long\"}]}],\"default\":null},{\"name\":\"guid\",\"type\":[\"null\",\"Guid\"],\"default\":null},{\"name\":\"validPageCnt\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"sessionStartDt\",\"type\":[\"null\",\"long\"],\"default\":null}]}");
+  private static final long serialVersionUID = -4197363230586446393L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SessionCore\",\"namespace\":\"com.ebay.sojourner.common.model\",\"fields\":[{\"name\":\"botFlag\",\"type\":\"int\"},{\"name\":\"absEventCnt\",\"type\":\"int\"},{\"name\":\"flags\",\"type\":\"int\"},{\"name\":\"distinctGuidsForSameAgentIp\",\"type\":\"int\"},{\"name\":\"userAgent\",\"type\":[\"null\",{\"type\":\"record\",\"name\":\"AgentHash\",\"fields\":[{\"name\":\"agentHash1\",\"type\":\"long\"},{\"name\":\"agentHash2\",\"type\":\"long\"}]}],\"default\":null},{\"name\":\"ip\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"agentString\",\"type\":[\"null\",\"AgentHash\"],\"default\":null},{\"name\":\"agentStringAfterBase64\",\"type\":[\"null\",\"AgentHash\"],\"default\":null},{\"name\":\"exInternalIp\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"exInternalIpNonTrim\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"appId\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"cguid\",\"type\":[\"null\",{\"type\":\"record\",\"name\":\"Guid\",\"fields\":[{\"name\":\"guid1\",\"type\":\"long\"},{\"name\":\"guid2\",\"type\":\"long\"}]}],\"default\":null},{\"name\":\"guid\",\"type\":[\"null\",\"Guid\"],\"default\":null},{\"name\":\"validPageCnt\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"sessionStartDt\",\"type\":[\"null\",\"long\"],\"default\":null},{\"name\":\"absStartTimestamp\",\"type\":[\"null\",\"long\"],\"default\":null},{\"name\":\"absEndTimestamp\",\"type\":[\"null\",\"long\"],\"default\":null}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -66,6 +66,8 @@ public class SessionCore extends org.apache.avro.specific.SpecificRecordBase imp
   @Deprecated public com.ebay.sojourner.common.model.Guid guid;
   @Deprecated public java.lang.Integer validPageCnt;
   @Deprecated public java.lang.Long sessionStartDt;
+  @Deprecated public java.lang.Long absStartTimestamp;
+  @Deprecated public java.lang.Long absEndTimestamp;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -91,8 +93,10 @@ public class SessionCore extends org.apache.avro.specific.SpecificRecordBase imp
    * @param guid The new value for guid
    * @param validPageCnt The new value for validPageCnt
    * @param sessionStartDt The new value for sessionStartDt
+   * @param absStartTimestamp The new value for absStartTimestamp
+   * @param absEndTimestamp The new value for absEndTimestamp
    */
-  public SessionCore(java.lang.Integer botFlag, java.lang.Integer absEventCnt, java.lang.Integer flags, java.lang.Integer distinctGuidsForSameAgentIp, com.ebay.sojourner.common.model.AgentHash userAgent, java.lang.Integer ip, com.ebay.sojourner.common.model.AgentHash agentString, com.ebay.sojourner.common.model.AgentHash agentStringAfterBase64, java.lang.Integer exInternalIp, java.lang.Integer exInternalIpNonTrim, java.lang.Integer appId, com.ebay.sojourner.common.model.Guid cguid, com.ebay.sojourner.common.model.Guid guid, java.lang.Integer validPageCnt, java.lang.Long sessionStartDt) {
+  public SessionCore(java.lang.Integer botFlag, java.lang.Integer absEventCnt, java.lang.Integer flags, java.lang.Integer distinctGuidsForSameAgentIp, com.ebay.sojourner.common.model.AgentHash userAgent, java.lang.Integer ip, com.ebay.sojourner.common.model.AgentHash agentString, com.ebay.sojourner.common.model.AgentHash agentStringAfterBase64, java.lang.Integer exInternalIp, java.lang.Integer exInternalIpNonTrim, java.lang.Integer appId, com.ebay.sojourner.common.model.Guid cguid, com.ebay.sojourner.common.model.Guid guid, java.lang.Integer validPageCnt, java.lang.Long sessionStartDt, java.lang.Long absStartTimestamp, java.lang.Long absEndTimestamp) {
     this.botFlag = botFlag;
     this.absEventCnt = absEventCnt;
     this.flags = flags;
@@ -108,6 +112,8 @@ public class SessionCore extends org.apache.avro.specific.SpecificRecordBase imp
     this.guid = guid;
     this.validPageCnt = validPageCnt;
     this.sessionStartDt = sessionStartDt;
+    this.absStartTimestamp = absStartTimestamp;
+    this.absEndTimestamp = absEndTimestamp;
   }
 
   public org.apache.avro.Schema getSchema() { return SCHEMA$; }
@@ -129,6 +135,8 @@ public class SessionCore extends org.apache.avro.specific.SpecificRecordBase imp
     case 12: return guid;
     case 13: return validPageCnt;
     case 14: return sessionStartDt;
+    case 15: return absStartTimestamp;
+    case 16: return absEndTimestamp;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -152,6 +160,8 @@ public class SessionCore extends org.apache.avro.specific.SpecificRecordBase imp
     case 12: guid = (com.ebay.sojourner.common.model.Guid)value$; break;
     case 13: validPageCnt = (java.lang.Integer)value$; break;
     case 14: sessionStartDt = (java.lang.Long)value$; break;
+    case 15: absStartTimestamp = (java.lang.Long)value$; break;
+    case 16: absEndTimestamp = (java.lang.Long)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -397,6 +407,38 @@ public class SessionCore extends org.apache.avro.specific.SpecificRecordBase imp
   }
 
   /**
+   * Gets the value of the 'absStartTimestamp' field.
+   * @return The value of the 'absStartTimestamp' field.
+   */
+  public java.lang.Long getAbsStartTimestamp() {
+    return absStartTimestamp;
+  }
+
+  /**
+   * Sets the value of the 'absStartTimestamp' field.
+   * @param value the value to set.
+   */
+  public void setAbsStartTimestamp(java.lang.Long value) {
+    this.absStartTimestamp = value;
+  }
+
+  /**
+   * Gets the value of the 'absEndTimestamp' field.
+   * @return The value of the 'absEndTimestamp' field.
+   */
+  public java.lang.Long getAbsEndTimestamp() {
+    return absEndTimestamp;
+  }
+
+  /**
+   * Sets the value of the 'absEndTimestamp' field.
+   * @param value the value to set.
+   */
+  public void setAbsEndTimestamp(java.lang.Long value) {
+    this.absEndTimestamp = value;
+  }
+
+  /**
    * Creates a new SessionCore RecordBuilder.
    * @return A new SessionCore RecordBuilder
    */
@@ -448,6 +490,8 @@ public class SessionCore extends org.apache.avro.specific.SpecificRecordBase imp
     private com.ebay.sojourner.common.model.Guid.Builder guidBuilder;
     private java.lang.Integer validPageCnt;
     private java.lang.Long sessionStartDt;
+    private java.lang.Long absStartTimestamp;
+    private java.lang.Long absEndTimestamp;
 
     /** Creates a new Builder */
     private Builder() {
@@ -535,6 +579,14 @@ public class SessionCore extends org.apache.avro.specific.SpecificRecordBase imp
         this.sessionStartDt = data().deepCopy(fields()[14].schema(), other.sessionStartDt);
         fieldSetFlags()[14] = true;
       }
+      if (isValidValue(fields()[15], other.absStartTimestamp)) {
+        this.absStartTimestamp = data().deepCopy(fields()[15].schema(), other.absStartTimestamp);
+        fieldSetFlags()[15] = true;
+      }
+      if (isValidValue(fields()[16], other.absEndTimestamp)) {
+        this.absEndTimestamp = data().deepCopy(fields()[16].schema(), other.absEndTimestamp);
+        fieldSetFlags()[16] = true;
+      }
     }
 
     /**
@@ -607,6 +659,14 @@ public class SessionCore extends org.apache.avro.specific.SpecificRecordBase imp
       if (isValidValue(fields()[14], other.sessionStartDt)) {
         this.sessionStartDt = data().deepCopy(fields()[14].schema(), other.sessionStartDt);
         fieldSetFlags()[14] = true;
+      }
+      if (isValidValue(fields()[15], other.absStartTimestamp)) {
+        this.absStartTimestamp = data().deepCopy(fields()[15].schema(), other.absStartTimestamp);
+        fieldSetFlags()[15] = true;
+      }
+      if (isValidValue(fields()[16], other.absEndTimestamp)) {
+        this.absEndTimestamp = data().deepCopy(fields()[16].schema(), other.absEndTimestamp);
+        fieldSetFlags()[16] = true;
       }
     }
 
@@ -1366,6 +1426,84 @@ public class SessionCore extends org.apache.avro.specific.SpecificRecordBase imp
       return this;
     }
 
+    /**
+      * Gets the value of the 'absStartTimestamp' field.
+      * @return The value.
+      */
+    public java.lang.Long getAbsStartTimestamp() {
+      return absStartTimestamp;
+    }
+
+    /**
+      * Sets the value of the 'absStartTimestamp' field.
+      * @param value The value of 'absStartTimestamp'.
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SessionCore.Builder setAbsStartTimestamp(java.lang.Long value) {
+      validate(fields()[15], value);
+      this.absStartTimestamp = value;
+      fieldSetFlags()[15] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'absStartTimestamp' field has been set.
+      * @return True if the 'absStartTimestamp' field has been set, false otherwise.
+      */
+    public boolean hasAbsStartTimestamp() {
+      return fieldSetFlags()[15];
+    }
+
+
+    /**
+      * Clears the value of the 'absStartTimestamp' field.
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SessionCore.Builder clearAbsStartTimestamp() {
+      absStartTimestamp = null;
+      fieldSetFlags()[15] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'absEndTimestamp' field.
+      * @return The value.
+      */
+    public java.lang.Long getAbsEndTimestamp() {
+      return absEndTimestamp;
+    }
+
+    /**
+      * Sets the value of the 'absEndTimestamp' field.
+      * @param value The value of 'absEndTimestamp'.
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SessionCore.Builder setAbsEndTimestamp(java.lang.Long value) {
+      validate(fields()[16], value);
+      this.absEndTimestamp = value;
+      fieldSetFlags()[16] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'absEndTimestamp' field has been set.
+      * @return True if the 'absEndTimestamp' field has been set, false otherwise.
+      */
+    public boolean hasAbsEndTimestamp() {
+      return fieldSetFlags()[16];
+    }
+
+
+    /**
+      * Clears the value of the 'absEndTimestamp' field.
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SessionCore.Builder clearAbsEndTimestamp() {
+      absEndTimestamp = null;
+      fieldSetFlags()[16] = false;
+      return this;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public SessionCore build() {
@@ -1406,6 +1544,8 @@ public class SessionCore extends org.apache.avro.specific.SpecificRecordBase imp
         }
         record.validPageCnt = fieldSetFlags()[13] ? this.validPageCnt : (java.lang.Integer) defaultValue(fields()[13]);
         record.sessionStartDt = fieldSetFlags()[14] ? this.sessionStartDt : (java.lang.Long) defaultValue(fields()[14]);
+        record.absStartTimestamp = fieldSetFlags()[15] ? this.absStartTimestamp : (java.lang.Long) defaultValue(fields()[15]);
+        record.absEndTimestamp = fieldSetFlags()[16] ? this.absEndTimestamp : (java.lang.Long) defaultValue(fields()[16]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);

@@ -104,6 +104,8 @@ public class IntermediateSessionToSessionCoreMapFunction extends
     core.setFlags(getFlags(session));
     core.setValidPageCnt(session.getValidPageCnt());
     core.setSessionStartDt(session.getSessionStartDt());
+    core.setAbsEndTimestamp(session.getAbsEndTimestamp());
+    core.setAbsStartTimestamp(session.getAbsStartTimestamp());
 
     // handle IAB
     if (session.getNonIframeRdtEventCnt() > 0 && core.getUserAgent() != null) {

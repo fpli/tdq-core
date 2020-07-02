@@ -22,11 +22,12 @@ public class AgentIpWindowProcessFunction extends
 
     AgentIpAttributeAccumulator agentIpAttributeAccumulator = elements.iterator().next();
     if (agentIpAttributeAccumulator.getAgentIpAttribute().getScsCountForBot6() < 0) {
-      log.error(
-          "agentIp windowfunction window: start" + context.window().getStart() + " end: " + context
-              .window().getEnd());
-      log.error("agentIp windowfunction scscount6<0:" + agentIpAttributeAccumulator
-          .getAgentIpAttribute());
+      //      log.error(
+      //          "agentIp windowfunction window: start" + context.window().getStart() + " end: "
+      //          + context
+      //              .window().getEnd());
+      //      log.error("agentIp windowfunction scscount6<0:" + agentIpAttributeAccumulator
+      //          .getAgentIpAttribute());
     }
     out.collect(agentIpAttributeAccumulator.getAgentIpAttribute());
   }

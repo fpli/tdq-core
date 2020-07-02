@@ -18,7 +18,7 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
   // Shuffle Key
   private Integer clientIp;
   private AgentHash agent;
-  //  private long timestamp;
+  private long timestamp;
   private Set<Integer> botFlagList = new LinkedHashSet<>();
 
   // For Bot5
@@ -74,6 +74,9 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
 
   @Override
   public void feed(SessionCore sessionCore, int botFlag) {
+    if(this.timestamp<sessionCore.getAbsStartTimestamp()){
+      this.timestamp=sessionCore.getAbsStartTimestamp();
+    }
     switch (botFlag) {
       case 211: {
         if (!hasNewBot && REF_211.contains(sessionCore.getBotFlag())) {
@@ -201,7 +204,9 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
 
 
   public void merge(AgentIpAttribute agentIpAttribute, int botFlag) {
-
+     if(this.timestamp<agentIpAttribute.getTimestamp()){
+       this.timestamp=agentIpAttribute.getTimestamp();
+     }
     switch (botFlag) {
       case 5: {
         if (scsCountForBot5 < 0) {

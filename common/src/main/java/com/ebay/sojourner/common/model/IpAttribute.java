@@ -16,6 +16,7 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
   public static final Set<Integer> pageSessionSet = new HashSet<>(Arrays.asList(2, 3, 4, 5));
   private Integer clientIp;
   private int scsCount = 0;
+  private long timestamp;
   private Set<Integer> botFlagList = new LinkedHashSet<>();
 
   // for suspected IP
@@ -28,6 +29,9 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
 
   @Override
   public void feed(AgentIpAttribute agentIpAttribute, int botFlag) {
+    if(this.timestamp<agentIpAttribute.getTimestamp()){
+      this.timestamp=agentIpAttribute.getTimestamp();
+    }
     switch (botFlag) {
       case 7: {
         if (scsCount < 0) {
@@ -62,6 +66,7 @@ public class IpAttribute implements Attribute<AgentIpAttribute>, Serializable {
     totalCnt = 0;
     isAllAgentHoper = true;
     totalCntForSec1 = 0;
+    timestamp=0L;
   }
 
   @Override
