@@ -132,6 +132,22 @@
         "long"
       ],
       "default": null
-    }
+    },
+    {
+          "name": "absStartTimestamp",
+          "type": [
+            "null",
+            "long"
+          ],
+          "default": null
+        },
+        {
+                  "name": "absEndTimestamp",
+                  "type": [
+                    "null",
+                    "long"
+                  ],
+                  "default": null
+                }
   ]
 }

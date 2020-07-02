@@ -103,7 +103,8 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
     core.setFlags(getFlags(session));
     core.setValidPageCnt(session.getValidPageCnt());
     core.setSessionStartDt(session.getSessionStartDt());
-
+    core.setAbsEndTimestamp(session.getAbsEndTimestamp());
+    core.setAbsStartTimestamp(session.getAbsStartTimestamp());
     // handle IAB
     if (session.getNonIframeRdtEventCnt() > 0 && core.getUserAgent() != null) {
       //      Boolean whether = iabCache.get(core.getUserAgent());

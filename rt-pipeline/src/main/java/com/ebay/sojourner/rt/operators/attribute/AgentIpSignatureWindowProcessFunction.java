@@ -5,6 +5,7 @@ import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.AgentIpAttributeAccumulator;
 import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.SignatureInfo;
+import com.ebay.sojourner.common.util.SojTimestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -33,15 +34,16 @@ public class AgentIpSignatureWindowProcessFunction extends
     AgentHash agent = agentIpAttribute.getAgent();
     Integer clientIp = agentIpAttribute.getClientIp();
     long windowEndTime = context.window().maxTimestamp();
+    long timestamp = SojTimestamp.getSojTimestampToUnixTimestamp(agentIpAttribute.getTimestamp());
     if (context.currentWatermark() >= context.window().maxTimestamp()&&signatureStates.size()>0) {
-      sendSignatures(agent, clientIp, signatureStates, out, context);
+      sendSignatures(agent, clientIp, timestamp,signatureStates, out, context);
       out.collect(new BotSignature(signatureId, agent, clientIp, null,
           new ArrayList<>(signatureStates.keySet()),
           windowEndTime, false, 3, windowEndTime));
-     log.info("AgentIPAttribute: "+agentIpAttribute.toString());
+    //     log.info("AgentIPAttribute: "+agentIpAttribute.toString());
     } else if (context.currentWatermark() < context.window().maxTimestamp()
     ) {
-      sendSignatures(agent, clientIp, signatureStates, out, context);
+      sendSignatures(agent, clientIp,timestamp, signatureStates, out, context);
       //      Set<Integer> newGenerateSignatures = SignatureUtils.generateNewSignature
       //      (signatureStates);
       //
@@ -53,14 +55,14 @@ public class AgentIpSignatureWindowProcessFunction extends
   }
 
   private void sendSignatures(AgentHash agent,
-      Integer clientIp, Map<Integer, SignatureInfo> signatureStates,
+      Integer clientIp,long timestamp, Map<Integer, SignatureInfo> signatureStates,
       Collector<BotSignature> out, Context context) {
     for (Map.Entry<Integer, SignatureInfo> entry : signatureStates.entrySet()) {
       if (!entry.getValue().isSent()) {
         out.collect(new BotSignature(signatureId, agent, clientIp, null,
             new ArrayList<>(Arrays.asList(entry.getKey())),
             context.window().maxTimestamp(), true, entry.getValue().getType(),
-            context.currentWatermark()));
+            timestamp));
       }
     }
   }

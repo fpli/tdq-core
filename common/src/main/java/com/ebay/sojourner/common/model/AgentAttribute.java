@@ -11,6 +11,7 @@ public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable
 
   private AgentHash agent;
   private int scsCount;
+  private long timestamp;
   private Set<Integer> ipSet = new HashSet<>();
   private int totalSessionCnt = 0;
   private int nocguidSessionCnt = 0;
@@ -26,6 +27,9 @@ public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable
 
   @Override
   public void feed(AgentIpAttribute agentIpAttribute, int botFlag) {
+    if(this.timestamp<agentIpAttribute.getTimestamp()){
+      this.timestamp=agentIpAttribute.getTimestamp();
+    }
     switch (botFlag) {
       case 6: {
         if(ipSet.size()<=20) {
@@ -70,6 +74,7 @@ public class AgentAttribute implements Attribute<AgentIpAttribute>, Serializable
     directSessionCnt = 0;
     mktgSessionCnt = 0;
     ipCountForSuspect = 0;
+    timestamp=0L;
   }
 
   @Override
