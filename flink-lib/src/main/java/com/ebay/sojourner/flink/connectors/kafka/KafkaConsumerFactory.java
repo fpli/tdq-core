@@ -57,7 +57,9 @@ public class KafkaConsumerFactory {
     }
 
     if (config.getTopic().contains("dq")) {
+      // 2020-06-29 21:10:00 Beijing
       flinkKafkaConsumer.setStartFromEarliest();
+      // flinkKafkaConsumer.setStartFromTimestamp(1593436200000L);
     } else {
       flinkKafkaConsumer.setStartFromLatest();
     }

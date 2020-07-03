@@ -13,7 +13,7 @@ kafka:
 
   producer:
     stream: behavior.total.new
-    topic: behavior.total.new.sample.session.fordq
+    topic: behavior.total.new.sample.session.dq
     bootstrap-servers:
       rno:
         - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092

@@ -1,7 +1,7 @@
 kafka:
   consumer:
     stream: behavior.total.new
-    topic: behavior.total.new.sample.session.fordq
+    topic: behavior.total.new.sample.session.dq
     group-id: sojourner-pathfinder-sample-session-dq
     bootstrap-servers:
       rno:
