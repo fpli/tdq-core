@@ -17,3 +17,4 @@ public class BotRuleForSuspectIP extends AbstractBotRule<IpAttribute> {
     return 0;
   }
 }
+

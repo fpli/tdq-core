@@ -138,6 +138,11 @@ public class UbiSession implements Serializable, Cloneable {
   private String streamId;
   private String buserId;
 
+  // for adjust useragent and ip
+  private int clickId=Integer.MAX_VALUE;
+  private int pageId =Integer.MAX_VALUE;
+  private int hashCode=Integer.MAX_VALUE;
+
   public UbiSession() {
     //        this.distinctClickIdSet = new HashSet<Integer>();
     //        this.agentSets= new HashSet<String>();
