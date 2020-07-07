@@ -23,7 +23,7 @@ public class UbiEvent implements Serializable {
   private int seqNum;
   private Long sessionStartDt;
   private Long sojDataDt;
-  private int clickId=-1;
+  private int clickId = -1;
   private int siteId = -1;
   private int version;
   private int pageId = -1;
@@ -96,7 +96,7 @@ public class UbiEvent implements Serializable {
   private boolean isReturningVisitor;
   private String streamId;
   private String buserId;
-  private Integer hashcode;
+  //    private Integer hashcode;
 
   //  private Map<String, Object> counters;
 
@@ -143,8 +143,8 @@ public class UbiEvent implements Serializable {
     int prefixLen = 0;
     if (!StringUtils.isBlank(prefix)) {
       prefixLen = prefix.length();
-    }else{
-      prefix="";
+    } else {
+      prefix = "";
     }
     StringBuilder builder = new StringBuilder(prefixLen + 16);
     builder.append(prefix);
