@@ -9,14 +9,14 @@ import org.apache.flink.api.java.typeutils.TypeExtractor;
 public class FlinkTypeCheckUtil {
 
   public static void main(String[] args) {
-    TypeInformation<UbiSession> ubiSessionTypeInformation = TypeExtractor
-        .createTypeInfo(UbiSession.class);
-    System.out.println(ubiSessionTypeInformation);
-    TypeInformation<IntermediateMetrics> intermediateMetricsTypeInformation1 = TypeInformation
-        .of(IntermediateMetrics.class);
-    System.out.println(intermediateMetricsTypeInformation1);
-    TypeInformation<UbiEvent> ubiEventTypeInformation = TypeInformation
-        .of(UbiEvent.class);
-    System.out.println(ubiEventTypeInformation);
+//    TypeInformation<UbiEvent> ubiSessionTypeInformation = TypeExtractor
+//        .createTypeInfo(UbiEvent.class);
+//    System.out.println(ubiSessionTypeInformation);
+        TypeInformation<UbiEvent> intermediateMetricsTypeInformation1 = TypeInformation
+            .of(UbiEvent.class);
+        System.out.println(intermediateMetricsTypeInformation1);
+    //    TypeInformation<UbiEvent> ubiEventTypeInformation = TypeInformation
+    //        .of(UbiEvent.class);
+    //    System.out.println(ubiEventTypeInformation);
   }
 }
