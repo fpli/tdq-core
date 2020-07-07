@@ -36,6 +36,8 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
     sessionAccumulator.getUbiSession().setInternalIp(null);
     sessionAccumulator.getUbiSession().setExternalIp(null);
     sessionAccumulator.getUbiSession().setExternalIp2(null);
+    sessionAccumulator.getUbiSession().setAgentInfo(null);
+    sessionAccumulator.getUbiSession().setClientIp(null);
   }
 
   @Override
@@ -44,6 +46,7 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
     boolean isEarlyEvent = SojEventTimeUtil
         .isEarlyEvent(event.getEventTimestamp(),
             sessionAccumulator.getUbiSession().getAbsStartTimestamp());
+    boolean isEarlyEventByMultiCols = SojEventTimeUtil.isEarlyByMultiCOls(event, ubiSession);
     boolean isEarlyValidEvent = SojEventTimeUtil
         .isEarlyEvent(event.getEventTimestamp(),
             sessionAccumulator.getUbiSession().getStartTimestamp());
@@ -51,6 +54,11 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
         .isEarlyEvent(event.getEventTimestamp(),
             sessionAccumulator.getUbiSession().getStartTimestampNOIFRAME());
     if (isEarlyEvent) {
+      if (!ubiSession.isFindFirst()) {
+        ubiSession.setAgentInfo(event.getAgentInfo());
+        ubiSession.setClientIp(event.getClientIP());
+      }
+    } else if(isEarlyEventByMultiCols){
       if (!ubiSession.isFindFirst()) {
         ubiSession.setAgentInfo(event.getAgentInfo());
         ubiSession.setClientIp(event.getClientIP());

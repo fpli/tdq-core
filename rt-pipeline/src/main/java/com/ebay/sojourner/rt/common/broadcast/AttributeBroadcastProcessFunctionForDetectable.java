@@ -282,6 +282,7 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
 
     if (signature == null) {
       signature = new ConcurrentHashMap<>();
+      attributeBroadcastStatus.put(attributeSignature.getType(),signature);
     }
     if (isGeneration) {
       for (int botFlag : botFlags) {
