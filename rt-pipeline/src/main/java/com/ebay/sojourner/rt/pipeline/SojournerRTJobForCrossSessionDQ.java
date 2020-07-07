@@ -10,7 +10,6 @@ import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
 import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
-import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.connectors.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.rt.common.broadcast.CrossSessionDQBroadcastProcessFunction;
 import com.ebay.sojourner.rt.operators.attribute.AgentAttributeAgg;
@@ -26,6 +25,7 @@ import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -45,7 +45,7 @@ public class SojournerRTJobForCrossSessionDQ {
     );
 
     DataStream<IntermediateSession> intermediateSessionDataStream = dataStreamBuilder
-        .buildOfDC(RNO,FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP));
+        .buildOfDC(RNO, FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP));
 
     // intermediateSession to sessionCore
     DataStream<SessionCore> sessionCoreDS = intermediateSessionDataStream
@@ -115,6 +115,10 @@ public class SojournerRTJobForCrossSessionDQ {
             .name("Signature Bot Detector")
             .uid("signature-detection-id");
 
+    intermediateSessionWithSignature.addSink(new DiscardingSink<>()).setParallelism(10)
+        .disableChaining();
+
+    /*
     attributeSignatureDataStream
         .addSink(HdfsConnectorFactory
             .createWithParquet(FlinkEnvUtils.getString(Property.HDFS_PATH_PARENT) +
@@ -134,7 +138,7 @@ public class SojournerRTJobForCrossSessionDQ {
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("IntermediateSession")
         .uid("intermediate-session-sink-id");
-
+        */
     // Submit this job
     FlinkEnvUtils
         .execute(executionEnvironment, FlinkEnvUtils.getString(Property.NAME_DATA_QUALITY));
