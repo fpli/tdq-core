@@ -36,7 +36,10 @@ kafka:
       request-timeout-ms: 60000
       message-key:
         session: guid
-        event: guid
+        event:
+          default: guid
+          key1: guid
+          key2: pageId
         signature:
           guid: guid
           ip: ip

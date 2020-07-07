@@ -27,30 +27,30 @@ public class KafkaConnectorFactory {
     return props;
   }
 
-  public static KafkaConfig getKafkaConsumerConfig(DataCenter dataCenter) {
+  public static KafkaConsumerConfig getKafkaConsumerConfig(DataCenter dataCenter) {
     final String topic = FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_TOPIC);
     final String groupId = FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_GROUP_ID);
 
-    KafkaConfig kafkaConfig = KafkaConfig.builder()
+    KafkaConsumerConfig kafkaConsumerConfig = KafkaConsumerConfig.builder()
         .topic(topic)
         .groupId(groupId)
         .build();
 
     switch (dataCenter) {
       case LVS:
-        kafkaConfig.setBrokers(getBrokersForDC(DataCenter.LVS));
+        kafkaConsumerConfig.setBrokers(getBrokersForDC(DataCenter.LVS));
         break;
       case RNO:
-        kafkaConfig.setBrokers(getBrokersForDC(DataCenter.RNO));
+        kafkaConsumerConfig.setBrokers(getBrokersForDC(DataCenter.RNO));
         break;
       case SLC:
-        kafkaConfig.setBrokers(getBrokersForDC(DataCenter.SLC));
+        kafkaConsumerConfig.setBrokers(getBrokersForDC(DataCenter.SLC));
         break;
       default:
         throw new IllegalStateException("Cannot find datacenter kafka bootstrap servers");
     }
 
-    return kafkaConfig;
+    return kafkaConsumerConfig;
   }
 
   private static String getBrokersForDC(DataCenter dc) {
