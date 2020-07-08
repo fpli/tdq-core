@@ -130,15 +130,11 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
       // ip
       String ip = TransformUtil.ipToInt(ubiSession.getIp()) == null ? "0"
           : TransformUtil.ipToInt(ubiSession.getIp()).toString();
-      System.out.println("ubiSession ip is:" + ip);
-      System.out.println("ubiSession absStartTimestamp is:" + ubiSession.getAbsStartTimestamp());
       Map<String, Map<Integer, Long[]>> ipSignature = attributeSignature.get("ip");
       if (ipSignature != null && ipSignature.size() > 0 && ipSignature.containsKey(ip)) {
-        System.out.println("ipSignature keys is:" + ipSignature.keySet().toString());
         for (Map.Entry<Integer, Long[]> ipBotFlagMap :
             ipSignature.get(ip).entrySet()) {
           Long[] duration = ipBotFlagMap.getValue();
-          System.out.println("ip duration is:" + duration.toString());
           if (SojTimestamp.getSojTimestampToUnixTimestamp(ubiSession.getAbsStartTimestamp())
               > duration[0]
               && SojTimestamp.getSojTimestampToUnixTimestamp(ubiSession.getAbsStartTimestamp())
@@ -151,17 +147,13 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
       // agent
       long[] long4AgentHash = TransformUtil
           .md522Long(TransformUtil.getMD5(ubiSession.getAgentInfo()));
-      System.out.println("ubiSession agent is:" + long4AgentHash.toString());
-      System.out.println("ubiSession absStartTimestamp is:" + ubiSession.getAbsStartTimestamp());
       Map<String, Map<Integer, Long[]>> agentSignature = attributeSignature.get("agent");
       String agent = long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1];
       if (agentSignature != null && agentSignature.size() > 0
           && agentSignature.containsKey(agent)) {
-        System.out.println("ipSignature keys is:" + agentSignature.keySet().toString());
         for (Map.Entry<Integer, Long[]> agentBotFlagMap :
             agentSignature.get(agent).entrySet()) {
           Long[] duration = agentBotFlagMap.getValue();
-          System.out.println("agent duration is:" + duration.toString());
           if (SojTimestamp.getSojTimestampToUnixTimestamp(ubiSession.getAbsStartTimestamp())
               > duration[0]
               && SojTimestamp.getSojTimestampToUnixTimestamp(ubiSession.getAbsStartTimestamp())
@@ -176,16 +168,12 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
           long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1] + Constants.FIELD_DELIM + (
               TransformUtil.ipToInt(ubiSession.getIp()) == null ? "0"
                   : TransformUtil.ipToInt(ubiSession.getIp()).toString());
-      System.out.println("ubiSession agent is:" + agentIp);
-      System.out.println("ubiSession absStartTimestamp is:" + ubiSession.getAbsStartTimestamp());
       Map<String, Map<Integer, Long[]>> agentIpSignature = attributeSignature.get("agentIp");
       if (agentIpSignature != null && agentIpSignature.size() > 0
           && agentIpSignature.containsKey(agentIp)) {
-        System.out.println("ipSignature keys is:" + agentIpSignature.keySet().toString());
         for (Map.Entry<Integer, Long[]> agentIpBotFlagMap :
             agentIpSignature.get(agentIp).entrySet()) {
           Long[] duration = agentIpBotFlagMap.getValue();
-          System.out.println("agent ip duration is:" + duration.toString());
           if (SojTimestamp.getSojTimestampToUnixTimestamp(ubiSession.getAbsStartTimestamp())
               > duration[0]
               && SojTimestamp.getSojTimestampToUnixTimestamp(ubiSession.getAbsStartTimestamp())

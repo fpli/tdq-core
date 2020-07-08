@@ -43,7 +43,11 @@ public class KafkaProducerFactory {
 
     producerConfig
         .put(ProducerConfig.BATCH_SIZE_CONFIG, FlinkEnvUtils.getInteger(Property.BATCH_SIZE));
+    producerConfig.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG,
+        FlinkEnvUtils.getInteger(Property.REQUEST_TIMEOUT_MS));
     producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
+    producerConfig
+        .put(ProducerConfig.RETRIES_CONFIG, FlinkEnvUtils.getInteger(Property.REQUEST_RETRIES));
 
     return producerConfig;
   }

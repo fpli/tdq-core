@@ -180,6 +180,7 @@ public class Property {
   // kafka producer
   public static final String BATCH_SIZE = "kafka.common.producer.batch-size";
   public static final String REQUEST_TIMEOUT_MS = "kafka.common.producer.request-timeout-ms";
+  public static final String REQUEST_RETRIES = "kafka.common.producer.retries";
   public static final String BEHAVIOR_MESSAGE_KEY_SESSION = "kafka.common.producer.message-key.session";
   public static final String BEHAVIOR_MESSAGE_KEY_EVENT_DEFAULT = "kafka.common.producer.message-key.event.default";
   public static final String BEHAVIOR_MESSAGE_KEY_EVENT_KEY1 = "kafka.common.producer.message-key.event.key1";

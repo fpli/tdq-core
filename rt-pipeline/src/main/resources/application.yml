@@ -32,8 +32,9 @@ kafka:
       max-partitions-fetch-bytes: 8388608
       auto-offset-reset: latest
     producer:
-      batch-size: 4096
+      batch-size: 16384
       request-timeout-ms: 60000
+      retries: 3
       message-key:
         session: guid
         event:
