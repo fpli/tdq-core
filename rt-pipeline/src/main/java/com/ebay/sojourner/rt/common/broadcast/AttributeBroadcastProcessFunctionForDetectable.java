@@ -300,10 +300,14 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
                   agentIpDecCounter.inc();
                   agentIpCounter.dec();
                 }
-                attributeBroadcastStatus.remove(signatureId);
+                signature.remove(signatureId);
               }
             }
           }
+        }
+
+        if (signature.size() == 0) {
+          attributeBroadcastStatus.get(attributeSignature.getType());
         }
       }
     }

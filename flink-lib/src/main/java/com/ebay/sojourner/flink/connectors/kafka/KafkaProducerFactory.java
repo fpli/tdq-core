@@ -48,6 +48,8 @@ public class KafkaProducerFactory {
     producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
     producerConfig
         .put(ProducerConfig.RETRIES_CONFIG, FlinkEnvUtils.getInteger(Property.REQUEST_RETRIES));
+    producerConfig
+        .put(ProducerConfig.LINGER_MS_CONFIG, FlinkEnvUtils.getInteger(Property.LINGER_MS));
 
     return producerConfig;
   }

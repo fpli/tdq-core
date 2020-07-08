@@ -69,7 +69,7 @@ public class CrossSessionDQBroadcastProcessFunction extends
     if (agentSignature != null && agentSignature.size() > 0
         && agentSignature.containsKey(agent)) {
       // System.out.println("join success");
-      // System.out.println("agentSignature keys is:" + agentSignature.keySet().toString());
+       System.out.println("agentSignature keys is:" + agentSignature.keySet().toString());
       for (Map.Entry<Integer, Long[]> agentBotFlagMap :
           agentSignature.get(agent).entrySet()) {
         Long[] duration = agentBotFlagMap.getValue();
