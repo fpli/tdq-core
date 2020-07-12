@@ -24,10 +24,10 @@ public class SojEventTimeUtil {
       if (ubiEvent.getEventTimestamp() < ubiSession.getAbsStartTimestamp()) {
         return true;
       } else if (ubiEvent.getEventTimestamp() == ubiSession.getAbsStartTimestamp()) {
-        if (ubiEvent.getClickId() != -1 && ubiEvent.getClickId() < ubiSession.getClickId()) {
+        if (ubiEvent.getClickId() < ubiSession.getClickId()) {
           return true;
         } else if (ubiEvent.getClickId() == ubiSession.getClickId()) {
-          if (ubiEvent.getPageId() != -1 && ubiEvent.getPageId() < ubiSession.getPageId()) {
+          if (ubiEvent.getPageId() < ubiSession.getPageId()) {
             return true;
           } else if (ubiEvent.getPageId() == ubiSession.getPageId()) {
             if (ubiEvent.getHashCode() < ubiSession.getHashCode()) {

@@ -14,17 +14,21 @@ public class MultiColsMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-    if (event.getClickId() != -1 && event.getClickId() < sessionAccumulator.getUbiSession()
+    if (event.getClickId() < sessionAccumulator.getUbiSession()
         .getClickId()) {
       sessionAccumulator.getUbiSession().setClickId(event.getClickId());
-    }
-    if (event.getPageId() != -1 && event.getPageId() < sessionAccumulator.getUbiSession()
-        .getPageId()) {
       sessionAccumulator.getUbiSession().setPageId(event.getPageId());
-    }
-    if (event.getHashCode() != -1 && event.getHashCode() < sessionAccumulator.getUbiSession()
-        .getHashCode()) {
       sessionAccumulator.getUbiSession().setHashCode(event.getHashCode());
+    } else if (event.getClickId() == sessionAccumulator.getUbiSession().getClickId()) {
+      if (event.getPageId() < sessionAccumulator.getUbiSession().getPageId()) {
+        sessionAccumulator.getUbiSession().setPageId(event.getPageId());
+        sessionAccumulator.getUbiSession().setHashCode(event.getHashCode());
+      } else if (event.getPageId() == sessionAccumulator.getUbiSession().getPageId()) {
+        if (event.getHashCode() < sessionAccumulator.getUbiSession().getHashCode()) {
+          sessionAccumulator.getUbiSession().setHashCode(event.getHashCode());
+        }
+      }
+
     }
   }
 

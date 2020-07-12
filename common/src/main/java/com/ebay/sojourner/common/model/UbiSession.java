@@ -185,6 +185,9 @@ public class UbiSession implements Serializable, Cloneable {
     this.oldSessionSkeySet.addAll(ubiSession.getOldSessionSkeySet());
     this.botFlagList.addAll(ubiSession.getBotFlagList());
     this.userIdSet.addAll(ubiSession.getUserIdSet());
+    if(!this.isReturningVisitor&&ubiSession.isReturningVisitor()){
+      this.isReturningVisitor=ubiSession.isReturningVisitor();
+    }
     if (this.getFirstSessionStartDt() > ubiSession.getFirstSessionStartDt()) {
       this.setFirstSessionStartDt(ubiSession.getFirstSessionStartDt());
     }

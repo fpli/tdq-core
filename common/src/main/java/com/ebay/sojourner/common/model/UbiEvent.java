@@ -23,7 +23,7 @@ public class UbiEvent implements Serializable {
   private int seqNum;
   private Long sessionStartDt;
   private Long sojDataDt;
-  private int clickId = -1;
+  private int clickId ;
   private int siteId = -1;
   private int version;
   private int pageId = -1;
@@ -96,6 +96,7 @@ public class UbiEvent implements Serializable {
   private boolean isReturningVisitor;
   private String streamId;
   private String buserId;
+  private boolean rv;
   //    private Integer hashcode;
 
   //  private Map<String, Object> counters;
