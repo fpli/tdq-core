@@ -113,7 +113,6 @@
           <groupId>org.apache.flink</groupId>
           <artifactId>flink-core</artifactId>
           <scope>compile</scope>
-          <type></type>
         </dependency>
         <dependency>
           <groupId>org.apache.flink</groupId>

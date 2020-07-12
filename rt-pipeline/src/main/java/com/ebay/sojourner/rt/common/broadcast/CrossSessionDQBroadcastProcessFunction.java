@@ -30,23 +30,13 @@ public class CrossSessionDQBroadcastProcessFunction extends
     // ip
     String ip = TransformUtil.ipToInt(intermediateSession.getIp()) == null ? "0"
         : TransformUtil.ipToInt(intermediateSession.getIp()).toString();
-    // System.out.println("intermediateSession ip is:" + ip);
-    /*
-     System.out.println(
-        "intermediateSession absStartTimestamp is:" + SojTimestamp
-            .getSojTimestampToUnixTimestamp(intermediateSession.getAbsStartTimestamp()));
-            */
+
     Map<String, Map<Integer, Long[]>> ipSignature = attributeSignature.get("ip");
     if (ipSignature != null && ipSignature.size() > 0 && ipSignature.containsKey(ip)) {
-      // System.out.println("join success");
-      // System.out.println("ipSignature keys is:" + ipSignature.keySet().toString());
+
       for (Map.Entry<Integer, Long[]> ipBotFlagMap :
           ipSignature.get(ip).entrySet()) {
         Long[] duration = ipBotFlagMap.getValue();
-        /*
-        System.out
-            .println("ip duration0 is:" + duration[0] + "," + "duration1 is:" + duration[1]);
-            */
         if (SojTimestamp.getSojTimestampToUnixTimestamp(intermediateSession.getAbsStartTimestamp())
             > duration[0]
             &&
@@ -60,23 +50,14 @@ public class CrossSessionDQBroadcastProcessFunction extends
     // agent
     long[] long4AgentHash = TransformUtil
         .md522Long(TransformUtil.getMD5(intermediateSession.getUserAgent()));
-    /*
-    System.out.println("intermediateSession agent0 is:" + long4AgentHash[0] + "," + "agent1 is:"
-        + long4AgentHash[1]);
-        */
+
     Map<String, Map<Integer, Long[]>> agentSignature = attributeSignature.get("agent");
     String agent = long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1];
     if (agentSignature != null && agentSignature.size() > 0
         && agentSignature.containsKey(agent)) {
-      // System.out.println("join success");
-      // System.out.println("agentSignature keys is:" + agentSignature.keySet().toString());
       for (Map.Entry<Integer, Long[]> agentBotFlagMap :
           agentSignature.get(agent).entrySet()) {
         Long[] duration = agentBotFlagMap.getValue();
-        /*
-        System.out
-            .println("agent duration0 is:" + duration[0] + "," + "duration1 is:" + duration[1]);
-            */
         if (SojTimestamp.getSojTimestampToUnixTimestamp(intermediateSession.getAbsStartTimestamp())
             > duration[0]
             &&
@@ -92,19 +73,27 @@ public class CrossSessionDQBroadcastProcessFunction extends
         long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1] + Constants.FIELD_DELIM + (
             TransformUtil.ipToInt(intermediateSession.getIp()) == null ? "0"
                 : TransformUtil.ipToInt(intermediateSession.getIp()).toString());
-    // System.out.println("intermediateSession agentIp is:" + agentIp);
+
     Map<String, Map<Integer, Long[]>> agentIpSignature = attributeSignature.get("agentIp");
+    System.out.println("==check bot5 and bot8 on intermediateSession ====");
+    System.out
+        .println(
+            "==agentIp signature size on intermediateSession  ====" + agentIpSignature == null ? 0 :
+                agentIpSignature.size());
     if (agentIpSignature != null && agentIpSignature.size() > 0
         && agentIpSignature.containsKey(agentIp)) {
-      // System.out.println("join success");
-      // System.out.println("agentIpSignature keys is:" + agentIpSignature.keySet().toString());
+      System.out
+          .println("==agentIp signature check on intermediateSession we checked ====" + agentIp);
+      System.out.println(
+          "==agentIp signature check on intermediateSession we checked ==== AbsStartTimestamp"
+              + SojTimestamp
+              .getSojTimestampToUnixTimestamp(intermediateSession.getAbsStartTimestamp()));
       for (Map.Entry<Integer, Long[]> agentIpBotFlagMap :
           agentIpSignature.get(agentIp).entrySet()) {
         Long[] duration = agentIpBotFlagMap.getValue();
-        /*
-        System.out
-            .println("agent ip duration0 is:" + duration[0] + "," + "duration1 is:" + duration[1]);
-            */
+        System.out.println(
+            "==agentIp signature check on ubiSession we checked ==== signature duration"
+                + duration[0] + "  " + duration[1]);
         if (SojTimestamp.getSojTimestampToUnixTimestamp(intermediateSession.getAbsStartTimestamp())
             > duration[0]
             &&
