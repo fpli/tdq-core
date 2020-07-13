@@ -25,11 +25,10 @@ kafka:
 
   common:
     consumer:
-      max-poll-records: 3000
-      receive-buffer: 8388608
-      fetch-max-bytes: 262144000
+      max-poll-records: 1000
+      fetch-max-bytes: 104857600
       fetch-max-wait-ms: 1000
-      max-partitions-fetch-bytes: 8388608
+      max-partitions-fetch-bytes: 4194304
       auto-offset-reset: latest
     producer:
       batch-size: 100000
