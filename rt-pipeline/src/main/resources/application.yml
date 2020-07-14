@@ -25,17 +25,17 @@ kafka:
 
   common:
     consumer:
-      max-poll-records: 3000
-      receive-buffer: 8388608
-      fetch-max-bytes: 262144000
+      max-poll-records: 1000
+      fetch-max-bytes: 104857600
       fetch-max-wait-ms: 1000
-      max-partitions-fetch-bytes: 8388608
+      max-partitions-fetch-bytes: 4194304
       auto-offset-reset: latest
     producer:
-      batch-size: 100000
-      linger-ms: 5
+      batch-size: 16384
+      linger-ms: 1
       request-timeout-ms: 60000
       retries: 3
+      buffer-memory: 67108864
       message-key:
         session: guid
         event:
@@ -80,14 +80,14 @@ flink:
     parallelism:
       source: 100
       event: 100
-      session: 700
+      session: 600
       pre-agent-ip: 100
       agent-ip: 50
       agent: 50
       ip: 50
       guid: 100
-      broadcast: 200
-      metrics: 200
+      broadcast: 300
+      metrics: 300
     slot-sharing-group:
       default: default
       source-event-lvs: lvs

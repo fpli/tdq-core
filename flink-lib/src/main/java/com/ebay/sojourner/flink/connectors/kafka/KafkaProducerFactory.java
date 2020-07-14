@@ -50,6 +50,8 @@ public class KafkaProducerFactory {
         .put(ProducerConfig.RETRIES_CONFIG, FlinkEnvUtils.getInteger(Property.REQUEST_RETRIES));
     producerConfig
         .put(ProducerConfig.LINGER_MS_CONFIG, FlinkEnvUtils.getInteger(Property.LINGER_MS));
+    producerConfig
+        .put(ProducerConfig.BUFFER_MEMORY_CONFIG, FlinkEnvUtils.getInteger(Property.BUFFER_MEMORY));
 
     return producerConfig;
   }

@@ -24,8 +24,6 @@ public class KafkaConsumerFactory {
 
     consumerConfig.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG,
         FlinkEnvUtils.getInteger(Property.MAX_POLL_RECORDS));
-    consumerConfig.put(ConsumerConfig.RECEIVE_BUFFER_CONFIG,
-        FlinkEnvUtils.getInteger(Property.RECEIVE_BUFFER));
     consumerConfig.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG,
         FlinkEnvUtils.getInteger(Property.FETCH_MAX_BYTES));
     consumerConfig.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG,
