@@ -32,57 +32,27 @@ public class AgentWindowProcessFunction extends
     AgentHash agent = agentAttribute.getAgent();
     long windowEndTime = context.window().maxTimestamp();
     long timestamp = SojTimestamp.getSojTimestampToUnixTimestamp(agentAttribute.getTimestamp());
+
     if (context.currentWatermark() >= context.window().maxTimestamp()
         && signatureStates.size() > 0) {
-      sendSignatures(agent, timestamp, signatureStates, out, context, agentAttribute);
+      sendSignatures(agent, timestamp, signatureStates, out, context);
       out.collect(new BotSignature(signatureId, agent, null, null,
           new ArrayList<>(signatureStates.keySet()),
           windowEndTime, false, 3, windowEndTime));
-      StringBuffer sb = new StringBuffer();
-      for (SignatureInfo signatureInfo : signatureStates.values()) {
-        sb.append(signatureInfo.toString()).append(";");
-      }
-      //      if (agent.getAgentHash1() == 4780249662515408496L
-      //          && agent.getAgentHash2() == 8995480885048214972L) {
-      //        log.info(String.format("window:[%s,%s] , waterMark:%s , category :%s ,
-      //        agentAttribute: "
-      //                + "%s",
-      //            context.window().getStart(), context.window().getEnd(), context
-      //            .currentWatermark(),
-      //            sb.toString(),
-      //            agentAttribute.toString()));
-      //      }
     } else if (context.currentWatermark() < context.window().maxTimestamp()) {
-
-      sendSignatures(agent, timestamp, signatureStates, out, context, agentAttribute);
-      //      Set<Integer> newGenerateStates = SignatureUtils.generateNewSignature(signatureStates);
-      //
-      //      out.collect(new BotSignature(signatureId, agent, null, null,
-      //          new ArrayList<>(newGenerateStates),
-      //          windowEndTime, true,));
+      sendSignatures(agent, timestamp, signatureStates, out, context);
     }
   }
 
-  private void sendSignatures(AgentHash agent,
-      long timestamp, Map<Integer, SignatureInfo> signatureStates,
-      Collector<BotSignature> out, Context context, AgentAttribute agentAttribute) {
+  private void sendSignatures(AgentHash agent, long timestamp,
+      Map<Integer, SignatureInfo> signatureStates, Collector<BotSignature> out, Context context) {
+
     for (Map.Entry<Integer, SignatureInfo> entry : signatureStates.entrySet()) {
       if (!entry.getValue().isSent()) {
-        //        if (agent.getAgentHash1() == 4780249662515408496L
-        //            && agent.getAgentHash2() == 8995480885048214972L) {
-        //          log.info(String.format("window:[%s,%s] , waterMark:%s , category :%s ,
-        //          agentAttribute: "
-        //                  + "%s",
-        //              context.window().getStart(), context.window().getEnd(), context
-        //              .currentWatermark(),
-        //              entry.getValue().toString(),
-        //                agentAttribute.toString()));
-        //        }
         out.collect(new BotSignature(signatureId, agent, null, null,
             new ArrayList<>(Arrays.asList(entry.getKey())),
             context.window().maxTimestamp(), true, entry.getValue().getType(),
             timestamp));
-
       }
     }
   }

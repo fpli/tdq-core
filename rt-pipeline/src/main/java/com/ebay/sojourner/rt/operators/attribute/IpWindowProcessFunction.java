@@ -8,7 +8,6 @@ import com.ebay.sojourner.common.util.SojTimestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
@@ -29,31 +28,24 @@ public class IpWindowProcessFunction extends
     IpAttributeAccumulator ipAttributeAccumulator = elements.iterator().next();
     IpAttribute ipAttribute = ipAttributeAccumulator.getIpAttribute();
     Map<Integer, SignatureInfo> signatureStates = ipAttributeAccumulator.getSignatureStatus();
-    Set<Integer> botFlagList = ipAttribute.getBotFlagList();
     Integer clientIp = ipAttribute.getClientIp();
     long windowEndTime = context.window().maxTimestamp();
     long timestamp = SojTimestamp.getSojTimestampToUnixTimestamp(ipAttribute.getTimestamp());
-    if (context.currentWatermark() >= context.window().maxTimestamp()&&signatureStates.size()>0) {
-      sendSignatures(clientIp,timestamp, signatureStates, out, context);
+
+    if (context.currentWatermark() >= context.window().maxTimestamp()
+        && signatureStates.size() > 0) {
+      sendSignatures(clientIp, timestamp, signatureStates, out, context);
       out.collect(new BotSignature(signatureId, null, clientIp, null,
           new ArrayList<>(signatureStates.keySet()),
           windowEndTime, false, 3, windowEndTime));
-    //      log.info("ipAttribute: "+ipAttribute.toString());
     } else if (context.currentWatermark() < context.window().maxTimestamp()) {
-      sendSignatures(clientIp,timestamp, signatureStates, out, context);
-      //      Set<Integer> newGenerateSignatures = SignatureUtils.generateNewSignature
-      //      (signatureStates);
-      //
-      //      out.collect(new BotSignature(signatureId, null, clientIp, null,
-      //          new ArrayList<>(newGenerateSignatures),
-      //          windowEndTime, true));AgentWindowProcessFunction
-
+      sendSignatures(clientIp, timestamp, signatureStates, out, context);
     }
   }
 
-  private void sendSignatures(Integer clientIp,
-      long timestamp, Map<Integer, SignatureInfo> signatureStates,
-      Collector<BotSignature> out, Context context) {
+  private void sendSignatures(Integer clientIp, long timestamp,
+      Map<Integer, SignatureInfo> signatureStates, Collector<BotSignature> out, Context context) {
+
     for (Map.Entry<Integer, SignatureInfo> entry : signatureStates.entrySet()) {
       if (!entry.getValue().isSent()) {
         out.collect(new BotSignature(signatureId, null, clientIp, null,

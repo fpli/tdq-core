@@ -281,16 +281,6 @@ public class SojournerRTJob {
         .name("SojSession")
         .uid("session-sink-id");
 
-    // kafka sink for sojevent --- 5% traffic
-    /*
-    SingleOutputStreamOperator<SojEvent> sojEventFilterStream = sojEventWithSessionId
-        .filter(new SojEventFilterFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
-        .name("SojEvent Filter")
-        .uid("sojEvent-filter-id");
-        */
-
     sojEventWithSessionId
         .addSink(KafkaProducerFactory.getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_NON_BOT),

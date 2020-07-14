@@ -94,8 +94,8 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
       Map<String, Map<Integer, Long[]>> agentIpSignature = attributeSignature.get("agentIp");
       System.out.println("==check bot5 and bot8 on ubiEvent ====");
       System.out
-          .println("==agentIp signature size on ubiEvent  ====" + agentIpSignature == null ? 0 :
-              agentIpSignature.size());
+          .println("==agentIp signature size on ubiEvent  ====" + (agentIpSignature == null ? 0 :
+              agentIpSignature.size()));
       if (agentIpSignature != null && agentIpSignature.size() > 0
           && agentIpSignature.containsKey(agentIp)) {
         System.out
@@ -184,8 +184,8 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
       Map<String, Map<Integer, Long[]>> agentIpSignature = attributeSignature.get("agentIp");
       System.out.println("==check bot5 and bot8 on ubiSession ====");
       System.out
-          .println("==agentIp signature size on ubiSession  ====" + agentIpSignature == null ? 0 :
-              agentIpSignature.size());
+          .println("==agentIp signature size on ubiSession  ====" + (agentIpSignature == null ? 0 :
+              agentIpSignature.size()));
       if (agentIpSignature != null && agentIpSignature.size() > 0
           && agentIpSignature.containsKey(agentIp)) {
         System.out.println("==agentIp signature check on ubiSession we checked ====" + agentIp);
