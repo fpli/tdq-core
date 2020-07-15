@@ -25,9 +25,9 @@ kafka:
 
   common:
     consumer:
-      max-poll-records: 2000
-      fetch-max-bytes: 209715200
-      receive-buffer: 2097152
+      max-poll-records: 1000
+      fetch-max-bytes: 104857600
+      receive-buffer: 65536
       fetch-max-wait-ms: 1000
       max-partitions-fetch-bytes: 4194304
       auto-offset-reset: latest
@@ -36,7 +36,8 @@ kafka:
       linger-ms: 1
       request-timeout-ms: 60000
       retries: 3
-      buffer-memory: 67108864
+      buffer-memory: 134217728
+      acks: 1
       message-key:
         session: guid
         event:
@@ -79,6 +80,7 @@ flink:
       data-quality: Sojourner RT DQ Pipeline
       hot-deploy: Sojourner RT Hot Deploy Pipeline
     parallelism:
+      default: 50
       source: 100
       event: 100
       session: 600
