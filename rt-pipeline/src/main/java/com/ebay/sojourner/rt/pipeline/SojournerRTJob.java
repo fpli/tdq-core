@@ -142,7 +142,7 @@ public class SojournerRTJob {
         .map(new UbiSessionToIntermediateSessionMapFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.SESSION_SLOT_SHARE_GROUP))
-        .name("IntermediateSession For Cross Session DQ")
+        .name("UbiSession To IntermediateSession")
         .uid("intermediate-session-enhance-id");
 
     // intermediate session sink

@@ -25,14 +25,18 @@ kafka:
 
   common:
     consumer:
-      max-poll-records: 1000
-      fetch-max-bytes: 104857600
-      fetch-max-wait-ms: 1000
+      max-poll-records: 3000
+      # 16MB, default value is 50MB
+      fetch-max-bytes: 16777216
+      # 128KB, default value is 64KB
+      receive-buffer: 131072
+      fetch-max-wait-ms: 100
+      # 4MB, default value is 1MB
       max-partitions-fetch-bytes: 4194304
       auto-offset-reset: latest
     producer:
-      batch-size: 16384
-      linger-ms: 1
+      batch-size: 131072
+      linger-ms: 10
       request-timeout-ms: 60000
       retries: 3
       buffer-memory: 67108864
