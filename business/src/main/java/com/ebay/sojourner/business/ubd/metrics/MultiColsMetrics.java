@@ -14,21 +14,23 @@ public class MultiColsMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-    if (event.getClickId() < sessionAccumulator.getUbiSession()
-        .getClickId()) {
-      sessionAccumulator.getUbiSession().setClickId(event.getClickId());
-      sessionAccumulator.getUbiSession().setPageId(event.getPageId());
-      sessionAccumulator.getUbiSession().setHashCode(event.getHashCode());
-    } else if (event.getClickId() == sessionAccumulator.getUbiSession().getClickId()) {
-      if (event.getPageId() < sessionAccumulator.getUbiSession().getPageId()) {
+    if(event.getEventTimestamp()==sessionAccumulator.getUbiSession().getAbsStartTimestamp()) {
+      if (event.getClickId() < sessionAccumulator.getUbiSession()
+          .getClickId()) {
+        sessionAccumulator.getUbiSession().setClickId(event.getClickId());
         sessionAccumulator.getUbiSession().setPageId(event.getPageId());
         sessionAccumulator.getUbiSession().setHashCode(event.getHashCode());
-      } else if (event.getPageId() == sessionAccumulator.getUbiSession().getPageId()) {
-        if (event.getHashCode() < sessionAccumulator.getUbiSession().getHashCode()) {
+      } else if (event.getClickId() == sessionAccumulator.getUbiSession().getClickId()) {
+        if (event.getPageId() < sessionAccumulator.getUbiSession().getPageId()) {
+          sessionAccumulator.getUbiSession().setPageId(event.getPageId());
           sessionAccumulator.getUbiSession().setHashCode(event.getHashCode());
+        } else if (event.getPageId() == sessionAccumulator.getUbiSession().getPageId()) {
+          if (event.getHashCode() < sessionAccumulator.getUbiSession().getHashCode()) {
+            sessionAccumulator.getUbiSession().setHashCode(event.getHashCode());
+          }
         }
-      }
 
+      }
     }
   }
 
