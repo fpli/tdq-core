@@ -131,7 +131,7 @@ public class SojournerRTJobForSessionDataCopy {
 
     // Submit this job
     FlinkEnvUtils
-        .execute(executionEnvironment, FlinkEnvUtils.getString(Property.NAME_DATA_QUALITY));
+        .execute(executionEnvironment, FlinkEnvUtils.getString(Property.FLINK_APP_NAME));
   }
 }
 

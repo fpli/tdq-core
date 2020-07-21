@@ -68,7 +68,7 @@ public class SojournerRTJobForHotDeploy {
         .uid("event-metrics-id");
 
     // Submit this job
-    FlinkEnvUtils.execute(executionEnvironment, FlinkEnvUtils.getString(Property.NAME_HOT_DEPLOY));
+    FlinkEnvUtils.execute(executionEnvironment, FlinkEnvUtils.getString(Property.FLINK_APP_NAME));
   }
 }
 

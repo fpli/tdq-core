@@ -166,32 +166,32 @@ public class Property {
 
   // --------------------- common config property ------------------------------
   // kafka consumer
-  public static final String MAX_POLL_RECORDS = "kafka.common.consumer.max-poll-records";
-  public static final String RECEIVE_BUFFER = "kafka.common.consumer.receive-buffer";
-  public static final String FETCH_MAX_BYTES = "kafka.common.consumer.fetch-max-bytes";
-  public static final String FETCH_MAX_WAIT_MS = "kafka.common.consumer.fetch-max-wait-ms";
-  public static final String MAX_PARTITIONS_FETCH_BYTES = "kafka.common.consumer.max-partitions-fetch-bytes";
-  public static final String AUTO_RESET_OFFSET = "kafka.common.consumer.auto-offset-reset";
+  public static final String MAX_POLL_RECORDS = "kafka.consumer.max-poll-records";
+  public static final String RECEIVE_BUFFER = "kafka.consumer.receive-buffer";
+  public static final String FETCH_MAX_BYTES = "kafka.consumer.fetch-max-bytes";
+  public static final String FETCH_MAX_WAIT_MS = "kafka.consumer.fetch-max-wait-ms";
+  public static final String MAX_PARTITIONS_FETCH_BYTES = "kafka.consumer.max-partitions-fetch-bytes";
+  public static final String AUTO_RESET_OFFSET = "kafka.consumer.auto-offset-reset";
 
   public static final String KAFKA_CONSUMER_BOOTSTRAP_SERVERS = "kafka.consumer.bootstrap-servers";
   public static final String KAFKA_CONSUMER_TOPIC = "kafka.consumer.topic";
   public static final String KAFKA_CONSUMER_GROUP_ID = "kafka.consumer.group-id";
 
   // kafka producer
-  public static final String BATCH_SIZE = "kafka.common.producer.batch-size";
-  public static final String REQUEST_TIMEOUT_MS = "kafka.common.producer.request-timeout-ms";
-  public static final String REQUEST_RETRIES = "kafka.common.producer.retries";
-  public static final String LINGER_MS = "kafka.common.producer.linger-ms";
-  public static final String BUFFER_MEMORY = "kafka.common.producer.buffer-memory";
-  public static final String ACKS = "kafka.common.producer.acks";
-  public static final String BEHAVIOR_MESSAGE_KEY_SESSION = "kafka.common.producer.message-key.session";
-  public static final String BEHAVIOR_MESSAGE_KEY_EVENT_DEFAULT = "kafka.common.producer.message-key.event.default";
-  public static final String BEHAVIOR_MESSAGE_KEY_EVENT_KEY1 = "kafka.common.producer.message-key.event.key1";
-  public static final String BEHAVIOR_MESSAGE_KEY_EVENT_KEY2 = "kafka.common.producer.message-key.event.key2";
-  public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_IP = "kafka.common.producer.message-key.signature.ip";
-  public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_GUID = "kafka.common.producer.message-key.signature.guid";
-  public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT = "kafka.common.producer.message-key.signature.agent";
-  public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT_IP = "kafka.common.producer.message-key.signature.agent-ip";
+  public static final String BATCH_SIZE = "kafka.producer.batch-size";
+  public static final String REQUEST_TIMEOUT_MS = "kafka.producer.request-timeout-ms";
+  public static final String REQUEST_RETRIES = "kafka.producer.retries";
+  public static final String LINGER_MS = "kafka.producer.linger-ms";
+  public static final String BUFFER_MEMORY = "kafka.producer.buffer-memory";
+  public static final String ACKS = "kafka.producer.acks";
+  public static final String BEHAVIOR_MESSAGE_KEY_SESSION = "kafka.producer.message-key.session";
+  public static final String BEHAVIOR_MESSAGE_KEY_EVENT_DEFAULT = "kafka.producer.message-key.event.default";
+  public static final String BEHAVIOR_MESSAGE_KEY_EVENT_KEY1 = "kafka.producer.message-key.event.key1";
+  public static final String BEHAVIOR_MESSAGE_KEY_EVENT_KEY2 = "kafka.producer.message-key.event.key2";
+  public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_IP = "kafka.producer.message-key.signature.ip";
+  public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_GUID = "kafka.producer.message-key.signature.guid";
+  public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT = "kafka.producer.message-key.signature.agent";
+  public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT_IP = "kafka.producer.message-key.signature.agent-ip";
   public static final String KAFKA_PRODUCER_BOOTSTRAP_SERVERS_RNO = "kafka.producer.bootstrap-servers.rno";
   public static final String KAFKA_PRODUCER_BOOTSTRAP_SERVERS_LVS = "kafka.producer.bootstrap-servers.lvs";
   public static final String KAFKA_PRODUCER_TOPIC = "kafka.producer.topic";
@@ -237,11 +237,7 @@ public class Property {
   public static final String GUID_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.guid";
 
   // flink - app name
-  public static final String NAME_FULL_PIPELINE = "flink.app.name.full-pipeline";
-  public static final String NAME_DATA_QUALITY = "flink.app.name.data-quality";
-  public static final String NAME_HOT_DEPLOY = "flink.app.name.hot-deploy";
-  public static final String NAME_HDFS_DUMP_PIPELINE = "flink.app.name.hdfs-dump";
-  public static final String NAME_KAFKA_DUMP_PIPELINE = "flink.app.name.kafka-dump";
+  public static final String FLINK_APP_NAME = "flink.app.name";
 
   // zookeeper
   public static final String ZOOKEEPER_SERVER = "zookeeper.server";

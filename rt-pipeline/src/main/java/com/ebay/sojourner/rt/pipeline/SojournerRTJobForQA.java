@@ -301,6 +301,6 @@ public class SojournerRTJobForQA {
 
     // Submit this job
     FlinkEnvUtils
-        .execute(executionEnvironment, FlinkEnvUtils.getString(Property.NAME_FULL_PIPELINE));
+        .execute(executionEnvironment, FlinkEnvUtils.getString(Property.FLINK_APP_NAME));
   }
 }

@@ -4,8 +4,7 @@ kafka:
 
 flink:
   app:
-    name:
-      full-pipeline: Sojourner LkpManager Test
+    name: Sojourner LkpManager Test
     parallelism:
       source: 2
       event: 2

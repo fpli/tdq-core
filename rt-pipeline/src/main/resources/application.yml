@@ -23,34 +23,15 @@ kafka:
         - rhs-swsvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
         - rhs-swsvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
 
-  common:
-    consumer:
-      max-poll-records: 3000
-      # 16MB, default value is 50MB
-      fetch-max-bytes: 16777216
-      # 128KB, default value is 64KB
-      receive-buffer: 131072
-      fetch-max-wait-ms: 100
-      # 4MB, default value is 1MB
-      max-partitions-fetch-bytes: 4194304
-      auto-offset-reset: latest
-    producer:
-      batch-size: 131072
-      linger-ms: 10
-      request-timeout-ms: 60000
-      retries: 3
-      buffer-memory: 67108864
-      message-key:
-        session: guid
-        event:
-          default: guid
-          key1: guid
-          key2: pageId
-        signature:
-          guid: guid
-          ip: ip
-          agent: userAgent
-          agent-ip: userAgent
+    max-poll-records: 3000
+    # 16MB, default value is 50MB
+    fetch-max-bytes: 16777216
+    # 128KB, default value is 64KB
+    receive-buffer: 131072
+    fetch-max-wait-ms: 100
+    # 4MB, default value is 1MB
+    max-partitions-fetch-bytes: 4194304
+    auto-offset-reset: latest
 
   producer:
     stream: behavior.total.new
@@ -74,13 +55,27 @@ kafka:
         - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
         - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
         - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
+    batch-size: 131072
+    acks: 1
+    linger-ms: 10
+    request-timeout-ms: 60000
+    retries: 3
+    buffer-memory: 67108864
+    message-key:
+      session: guid
+      event:
+        default: guid
+        key1: guid
+        key2: pageId
+      signature:
+        guid: guid
+        ip: ip
+        agent: userAgent
+        agent-ip: userAgent
 
 flink:
   app:
-    name:
-      full-pipeline: Sojourner RT Pipeline
-      data-quality: Sojourner RT DQ Pipeline
-      hot-deploy: Sojourner RT Hot Deploy Pipeline
+    name: Sojourner RT Pipeline
     parallelism:
       source: 100
       event: 100

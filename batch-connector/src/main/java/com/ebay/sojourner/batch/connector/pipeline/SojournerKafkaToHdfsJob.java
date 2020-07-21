@@ -35,6 +35,6 @@ public class SojournerKafkaToHdfsJob {
 
     // submit job
     FlinkEnvUtils
-        .execute(executionEnvironment, FlinkEnvUtils.getString(Property.NAME_HDFS_DUMP_PIPELINE));
+        .execute(executionEnvironment, FlinkEnvUtils.getString(Property.FLINK_APP_NAME));
   }
 }
