@@ -1,6 +1,6 @@
 kafka:
   consumer:
-    topic: behavior.total.new.signature.agentIp
+    topic: behavior.totalv2.signature.agentIp
     group-id: sojourner-pathfinder-agent-ip
 
 flink:
