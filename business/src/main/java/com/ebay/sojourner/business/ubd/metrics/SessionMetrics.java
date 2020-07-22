@@ -88,8 +88,8 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
     addFieldMetrics(new SearchCntMetrics());
     addFieldMetrics(new PageCntMetrics());
     addFieldMetrics(new MaxScsSeqNumMetrics());
-    addFieldMetrics(new TimestampMetrics());
     addFieldMetrics(new MultiColsMetrics());
+    addFieldMetrics(new TimestampMetrics());
     addFieldMetrics(new IsRVMetrics());
     // Put bot flag
     //        addFieldMetrics(new BotFlagMetrics());

@@ -8,7 +8,10 @@ package com.ebay.sojourner.common.model;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.SojTimestamp;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.Data;
 import lombok.Getter;
@@ -23,7 +26,7 @@ public class UbiEvent implements Serializable {
   private int seqNum;
   private Long sessionStartDt;
   private Long sojDataDt;
-  private int clickId ;
+  private int clickId;
   private int siteId = -1;
   private int version;
   private int pageId = -1;
@@ -102,15 +105,30 @@ public class UbiEvent implements Serializable {
   //  private Map<String, Object> counters;
 
   public static void main(String[] args) {
+    System.out.println(Calendar.getInstance().getTime().toLocaleString());
+    String content = "3804125462419000,3804125462436000,3804125462441000,3804125462473000,"
+        + "3804125462475000,3804125462510000,3804125462522000,3804125462624000,3804125462643000,"
+        + "3804125462667000,3804125462668000,3804125462681000,3804125462713000,3804125462715000,"
+        + "3804125462715000,3804125462719000,3804125463384000,3804125465813000,3804125465825000,"
+        + "3804125479358000,3804125479761000,3804125479816000,3804125479817000,3804125480220000,"
+        + "3804125480272000,3804125480272000,3804125480272000,3804125480298000,3804125490126000,"
+        + "3804125490242000,3804125490715000,3804125490774000,3804125490863000,3804125491267000,"
+        + "3804125491419000,3804125493428000,3804125499086000,3804125567101000,3804125567572000,"
+        + "3804125569798000";
+   List<String> list= Arrays.asList(content.split(","));
 
-    System.out.println(new UbiEvent().concatTimestamp("0174145e1540a5ed28910e02ffa7abf5",
-        3801167554921000L));
-    UbiEvent ubiEvent = new UbiEvent();
-    ubiEvent.setGuid("0174145e1540a5ed28910e02ffa7abf5");
-    ubiEvent.setEventTimestamp(3801167554921000L);
-    ubiEvent.updateSessionId();
-    System.out.println(ubiEvent.getSessionId());
-    System.out.println(1 << 4);
+   for(String timestamp:list){
+     System.out.println(timestamp);
+     System.out.println(new UbiEvent().concatTimestamp("00e1579217289371e2286600015f52de",
+         Long.valueOf(timestamp)));
+   }
+
+//    UbiEvent ubiEvent = new UbiEvent();
+//    ubiEvent.setGuid("0174145e1540a5ed28910e02ffa7abf5");
+//    ubiEvent.setEventTimestamp(3801167554921000L);
+//    ubiEvent.updateSessionId();
+//    System.out.println(ubiEvent.getSessionId());
+//    System.out.println(1 << 4);
   }
 
   public void setIsReturningVisitor(boolean returningVisitor) {

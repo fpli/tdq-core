@@ -8,6 +8,7 @@ import com.ebay.sojourner.common.util.PropertyUtils;
 import com.ebay.sojourner.common.util.SOJListGetValueByIndex;
 import com.ebay.sojourner.common.util.SojEventTimeUtil;
 import com.ebay.sojourner.common.util.UBIConfig;
+import java.util.Calendar;
 import java.util.Set;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,7 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
+
     UbiSession ubiSession = sessionAccumulator.getUbiSession();
     boolean isEarlyEvent = SojEventTimeUtil
         .isEarlyEvent(event.getEventTimestamp(),
@@ -59,14 +61,16 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
         ubiSession.setClientIp(event.getClientIP());
       }
     } else if (isEarlyEventByMultiCols) {
-      System.out.println(
-          "duplicate event==session:" + ubiSession.getGuid() + " " + ubiSession
-              .getAbsStartTimestamp() + " " + ubiSession
-              .getClickId() + " " + ubiSession.getPageId() + " " + ubiSession.getHashCode());
-      System.out.println(
-          "duplicate event==event:" + event.getGuid() + " " + event.getEventTimestamp() + " "
-              + event
-              .getClickId() + " " + event.getPageId() + " " + event.getHashCode());
+      System.out.println(Calendar.getInstance().getTime() +
+          " debug AgentIPMetrics2 duplicate event==session:" + ubiSession.getGuid() + " "
+          + ubiSession
+          .getAbsStartTimestamp() + " " + ubiSession
+          .getClickId() + " " + ubiSession.getPageId() + " " + ubiSession.getHashCode());
+      System.out.println(Calendar.getInstance().getTime() +
+          " debug AgentIPMetrics2 duplicate event==event:" + event.getGuid() + " " + event
+          .getEventTimestamp() + " "
+          + event
+          .getClickId() + " " + event.getPageId() + " " + event.getHashCode());
       if (!ubiSession.isFindFirst()) {
         ubiSession.setAgentInfo(event.getAgentInfo());
         ubiSession.setClientIp(event.getClientIP());

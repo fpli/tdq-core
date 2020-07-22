@@ -2,6 +2,7 @@ package com.ebay.sojourner.business.ubd.metrics;
 
 import com.ebay.sojourner.common.model.SessionAccumulator;
 import com.ebay.sojourner.common.model.UbiEvent;
+import java.util.Calendar;
 
 public class MultiColsMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
@@ -14,7 +15,23 @@ public class MultiColsMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-    if(event.getEventTimestamp()==sessionAccumulator.getUbiSession().getAbsStartTimestamp()) {
+    if (sessionAccumulator.getUbiSession().getAbsStartTimestamp() != null &&
+        event.getEventTimestamp() == sessionAccumulator.getUbiSession().getAbsStartTimestamp()) {
+      if (sessionAccumulator.getUbiSession().getGuid() != null) {
+        System.out.println(
+            Calendar.getInstance().getTime() + " debug MultiColsMetrics2 duplicate event==session:"
+                + sessionAccumulator.getUbiSession()
+                .getGuid() + " "
+                + sessionAccumulator.getUbiSession()
+                .getAbsStartTimestamp() + " " + sessionAccumulator.getUbiSession()
+                .getClickId() + " " + sessionAccumulator.getUbiSession().getPageId() + " "
+                + sessionAccumulator.getUbiSession().getHashCode());
+        System.out.println(Calendar.getInstance().getTime() +
+            " debug MultiColsMetrics2 duplicate event==event:" + event.getGuid() + " " + event
+            .getEventTimestamp() + " "
+            + event
+            .getClickId() + " " + event.getPageId() + " " + event.getHashCode());
+      }
       if (event.getClickId() < sessionAccumulator.getUbiSession()
           .getClickId()) {
         sessionAccumulator.getUbiSession().setClickId(event.getClickId());
@@ -31,6 +48,15 @@ public class MultiColsMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
         }
 
       }
+    } else if (sessionAccumulator.getUbiSession().getAbsStartTimestamp() == null) {
+      sessionAccumulator.getUbiSession().setClickId(event.getClickId());
+      sessionAccumulator.getUbiSession().setPageId(event.getPageId());
+      sessionAccumulator.getUbiSession().setHashCode(event.getHashCode());
+    } else if (event.getEventTimestamp() < sessionAccumulator.getUbiSession()
+        .getAbsStartTimestamp()) {
+      sessionAccumulator.getUbiSession().setClickId(event.getClickId());
+      sessionAccumulator.getUbiSession().setPageId(event.getPageId());
+      sessionAccumulator.getUbiSession().setHashCode(event.getHashCode());
     }
   }
 
