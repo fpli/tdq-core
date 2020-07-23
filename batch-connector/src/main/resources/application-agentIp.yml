@@ -5,8 +5,7 @@ kafka:
 
 flink:
   app:
-    name:
-      hdfs-dump: Sojourner AgentIp Signature HDFS Load Pipeline
+    name: Sojourner AgentIp Signature HDFS Load Pipeline
     parallelism:
       source: 20
       sink:

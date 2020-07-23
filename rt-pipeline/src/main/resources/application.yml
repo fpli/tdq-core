@@ -78,6 +78,7 @@ flink:
   app:
     name: Sojourner RT Pipeline
     parallelism:
+      default: 50
       source: 100
       event: 100
       session: 600

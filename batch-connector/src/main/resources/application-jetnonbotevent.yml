@@ -13,8 +13,7 @@ kafka:
 
 flink:
   app:
-    name:
-      hdfs-dump: Jetstream Non Bot Event HDFS Load Pipeline
+    name: Jetstream Non Bot Event HDFS Load Pipeline
     parallelism:
       source: 150
       sink:

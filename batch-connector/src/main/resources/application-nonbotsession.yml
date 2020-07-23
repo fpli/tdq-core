@@ -5,8 +5,7 @@ kafka:
 
 flink:
   app:
-    name:
-      hdfs-dump: Sojourner Non Bot Session HDFS Load Pipeline
+    name: Sojourner Non Bot Session HDFS Load Pipeline
     parallelism:
       source: 30
       sink:
