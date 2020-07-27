@@ -1,6 +1,6 @@
 kafka:
   consumer:
-    topic: behavior.totalv2.sojsession
+    topic: behavior.total.new.sojsession
     group-id: sojourner-pathfinder-session-non-bot-test
 
 flink:

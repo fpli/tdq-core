@@ -184,6 +184,7 @@ public class Property {
   public static final String LINGER_MS = "kafka.producer.linger-ms";
   public static final String BUFFER_MEMORY = "kafka.producer.buffer-memory";
   public static final String ACKS = "kafka.producer.acks";
+  public static final String COMPRESSION_TYPE = "kafka.producer.compression-type";
   public static final String BEHAVIOR_MESSAGE_KEY_SESSION = "kafka.producer.message-key.session";
   public static final String BEHAVIOR_MESSAGE_KEY_EVENT_DEFAULT = "kafka.producer.message-key.event.default";
   public static final String BEHAVIOR_MESSAGE_KEY_EVENT_KEY1 = "kafka.producer.message-key.event.key1";

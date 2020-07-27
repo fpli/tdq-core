@@ -34,34 +34,35 @@ kafka:
     auto-offset-reset: latest
 
   producer:
-    stream: behavior.totalv2
+    stream: behavior.total.new
     topic:
       session:
-        bot: behavior.totalv2.sojsession.bot
-        non-bot: behavior.totalv2.sojsession
+        bot: behavior.total.new.sojsession.bot
+        non-bot: behavior.total.new.sojsession
       event:
-        bot: behavior.totalv2.sojevent.bot
-        non-bot: behavior.totalv2.sojevent
+        bot: behavior.total.new.sojevent.bot
+        non-bot: behavior.total.new.sojevent
       signature:
-        agent-ip: behavior.totalv2.signature.agentIp
-        agent: behavior.totalv2.signature.agent
-        ip: behavior.totalv2.signature.ip
-        guid: behavior.totalv2.signature.guid
-      intermediate-session: behavior.totalv2.session.fordq
+        agent-ip: behavior.total.new.signature.agentIp
+        agent: behavior.total.new.signature.agent
+        ip: behavior.total.new.signature.ip
+        guid: behavior.total.new.signature.guid
+      intermediate-session: behavior.total.new.session.fordq
     bootstrap-servers:
       rno:
-        - rhs-fxuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.37.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
 
-    batch-size: 131072
+    batch-size: 524288
     acks: 1
-    linger-ms: 10
+    linger-ms: 50
     request-timeout-ms: 60000
-    retries: 3
-    buffer-memory: 67108864
+    retries: 30
+    buffer-memory: 268435456
+    compression-type: lz4
     message-key:
       session: guid
       event:

@@ -1,6 +1,6 @@
 kafka:
   consumer:
-    topic: behavior.totalv2.sojevent.bot
+    topic: behavior.total.new.sojevent.bot
     group-id: sojourner-pathfinder-event-bot
 
 flink:
