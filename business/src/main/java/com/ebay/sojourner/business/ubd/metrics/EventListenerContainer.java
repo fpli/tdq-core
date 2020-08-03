@@ -60,7 +60,7 @@ public class EventListenerContainer {
     addListener(new AgentStringMetrics());
     addListener(new PageIdMetrics());
     addListener(new FirstMappedUserIdMetrics());
-    addListener(new OsMetrics());
+    //    addListener(new OsMetrics());
     addListener(new BrowserMetrics());
     addListener(new DeviceMetrics());
     addListener(new AddressMetrics());

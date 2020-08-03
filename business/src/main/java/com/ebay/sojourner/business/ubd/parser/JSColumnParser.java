@@ -2,12 +2,14 @@ package com.ebay.sojourner.business.ubd.parser;
 
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.RaptorUAParser;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 public class JSColumnParser implements FieldParser<RawEvent, UbiEvent> {
 
+  public static final String DEVICE_TAG = "dn";
   private static final String DEVICE_FAMILY = "dd_d";
   private static final String DEVICE_TYPE = "dd_dc";
   private static final String BROWSER_VERSION = "dd_bv";
@@ -40,13 +42,16 @@ public class JSColumnParser implements FieldParser<RawEvent, UbiEvent> {
     Map<String, String> map = new HashMap<>();
     map.putAll(rawEvent.getSojA());
     map.putAll(rawEvent.getSojK());
-    map.putAll(rawEvent.getSojC());
-    String deviceFamily = map.get(DEVICE_FAMILY);
-    String deviceType = map.get(DEVICE_TYPE);
-    String browserVersion = map.get(BROWSER_VERSION);
-    String browserFamily = map.get(BROWSER_FAMILY);
-    String osFamily = map.get(OS_FAMILY);
-    String enrichedOsVersion = map.get(ENRICHED_OS_VERSION);
+
+    String dn = (map.get(DEVICE_TAG) == null ? null : map.get(DEVICE_TAG).toString());
+    Map<String, String> result = RaptorUAParser.getInstance()
+        .processUA(ubiEvent.getAgentInfo(), dn, false);
+    String deviceFamily = result.get(DEVICE_FAMILY);
+    String deviceType = result.get(DEVICE_TYPE);
+    String browserVersion = result.get(BROWSER_VERSION);
+    String browserFamily = result.get(BROWSER_FAMILY);
+    String osFamily = result.get(OS_FAMILY);
+    String enrichedOsVersion = result.get(ENRICHED_OS_VERSION);
     String osVersion = map.get(OS_VERSION);
     String trafficSource = map.get(TRAFFIC_SOURCE);
     String appVersion = map.get(APP_VERSION);

@@ -45,6 +45,7 @@ import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelp
 import org.apache.flink.types.Either;
 
 public class TestCpuUsageJob {
+
   public static void main(String[] args) throws Exception {
 
     // 0.0 Prepare execution environment
@@ -194,9 +195,11 @@ public class TestCpuUsageJob {
     DataStream<UbiSession> signatureBotDetectionForSession =
         signatureBotDetectionForEvent.getSideOutput(OutputTagConstants.sessionOutputTag);
 
-    signatureBotDetectionForEvent.addSink(new DiscardingSink<>()).name("event sink").uid("event-sink-id").setParallelism(7);
+    signatureBotDetectionForEvent.addSink(new DiscardingSink<>()).name("event sink")
+        .uid("event-sink-id").setParallelism(7);
 
-    signatureBotDetectionForSession.addSink(new DiscardingSink<>()).name("session sink").uid("session-sink-id").setParallelism(7);
+    signatureBotDetectionForSession.addSink(new DiscardingSink<>()).name("session sink")
+        .uid("session-sink-id").setParallelism(7);
 
     // Submit this job
     FlinkEnvUtils

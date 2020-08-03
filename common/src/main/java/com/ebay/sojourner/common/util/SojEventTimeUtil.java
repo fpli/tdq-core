@@ -27,9 +27,9 @@ public class SojEventTimeUtil {
         if (ubiEvent.getClickId() < ubiSession.getClickId()) {
           return true;
         } else if (ubiEvent.getClickId() == ubiSession.getClickId()) {
-          if (ubiEvent.getPageId() < ubiSession.getPageId()) {
+          if (ubiEvent.getPageId() < ubiSession.getPageIdForUAIP()) {
             return true;
-          } else if (ubiEvent.getPageId() == ubiSession.getPageId()) {
+          } else if (ubiEvent.getPageId() == ubiSession.getPageIdForUAIP()) {
             if (ubiEvent.getHashCode() < ubiSession.getHashCode()) {
               return true;
             } else {

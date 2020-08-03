@@ -1,9 +1,9 @@
 package com.ebay.sojourner.business.ubd.metrics;
 
-import com.ebay.sojourner.common.util.SojEventTimeUtil;
 import com.ebay.sojourner.common.model.SessionAccumulator;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
+import com.ebay.sojourner.common.util.SojEventTimeUtil;
 
 public class SiteIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, EventListener {
 
@@ -20,7 +20,8 @@ public class SiteIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
     if ((isEarlyValidEvent ? isEarlyValidEvent
         : sessionAccumulator.getUbiSession().getFirstSiteId() == Integer.MIN_VALUE)
         && !event.isIframe()
-        && !event.isRdt()) {
+        && !event.isRdt()
+        && event.getSiteId() != -1) {
       sessionAccumulator.getUbiSession().setFirstSiteId(event.getSiteId());
     }
   }

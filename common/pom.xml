@@ -83,6 +83,17 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-csv</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.ebay.platform.dds</groupId>
+      <artifactId>dds-api</artifactId>
+      <version>1.0.4-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>httpclient</artifactId>
+          <groupId>org.apache.httpcomponents</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
   </dependencies>
 
   <build>
