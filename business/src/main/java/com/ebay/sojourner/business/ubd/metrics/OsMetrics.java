@@ -5,7 +5,7 @@ import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.SojEventTimeUtil;
 
-public class OsMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, EventListener {
+public class OsMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
   @Override
   public void init() throws Exception {
@@ -20,37 +20,37 @@ public class OsMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, Ev
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) throws Exception {
-    boolean isEarlyValidEvent = SojEventTimeUtil.isEarlyEvent(event.getEventTimestamp(),
-        sessionAccumulator.getUbiSession().getStartTimestampNOIFRAMERDT());
-    if ((isEarlyValidEvent || sessionAccumulator.getUbiSession().getOsFamily() == null)
-        && !event.isIframe()
-        && !event.isRdt()) {
-      sessionAccumulator.getUbiSession().setOsFamily(event.getOsFamily());
-    }
-    if ((isEarlyValidEvent || sessionAccumulator.getUbiSession().getOsVersion() == null)
-        && !event.isIframe()
-        && !event.isRdt()) {
-      sessionAccumulator.getUbiSession().setOsVersion(event.getOsVersion());
+
+    UbiSession ubiSession = sessionAccumulator.getUbiSession();
+    if (ubiSession.getAbsEventCnt() == 1) {
+      ubiSession.setOsVersion(event.getEnrichedOsVersion());
+      ubiSession.setOsFamily(event.getOsFamily());
+    } else if (ubiSession.getAbsEventCnt() > 1) {
+      boolean isEarlyEvent = SojEventTimeUtil
+          .isEarlyEvent(event.getEventTimestamp(),
+              sessionAccumulator.getUbiSession().getAbsStartTimestamp());
+      boolean isEarlyValidEvent = SojEventTimeUtil
+          .isEarlyEvent(event.getEventTimestamp(),
+              sessionAccumulator.getUbiSession().getStartTimestamp());
+      if (isEarlyEvent) {
+        if (!ubiSession.isFindFirstForOs()) {
+          ubiSession.setOsVersion(event.getEnrichedOsVersion());
+          ubiSession.setOsFamily(event.getOsFamily());
+        }
+
+      }
+      if (isEarlyValidEvent) {
+        if (!event.isIframe() && !event.isRdt() && event.getPageId() != -1) {
+          ubiSession.setOsVersion(event.getEnrichedOsVersion());
+          ubiSession.setOsFamily(event.getOsFamily());
+          ubiSession.setFindFirstForOs(true);
+        }
+      }
     }
   }
 
   @Override
   public void end(SessionAccumulator sessionAccumulator) throws Exception {
-
-  }
-
-  @Override
-  public void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
-    if (ubiEvent.getOsFamily() != null) {
-      ubiSession.setOsFamily(ubiEvent.getOsFamily());
-    }
-    if (ubiEvent.getOsVersion() != null) {
-      ubiSession.setOsVersion(ubiEvent.getOsVersion());
-    }
-  }
-
-  @Override
-  public void onLateEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
 
   }
 }

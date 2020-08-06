@@ -88,6 +88,7 @@ public class UbiSession implements Serializable, Cloneable {
   private String agentInfo;
   private String clientIp;
   private boolean findFirst;
+  private boolean findFirstForOs;
   private String internalIp;
   private String externalIp;
   private String externalIp2;
@@ -118,6 +119,7 @@ public class UbiSession implements Serializable, Cloneable {
   private int srpCnt = 0;//from SOJEvent(_pgf in ('GR', 'GR-1') and rdt = 0 and _ifrm = false)
   private int servEventCnt = 0;//select * from SOJEvent(p is not null and rdt = 0 and _ifrm = false)
   private int searchViewPageCnt = 0;
+  private int pageId;
   private String city;
   private String region;
   private String country;
@@ -140,7 +142,7 @@ public class UbiSession implements Serializable, Cloneable {
 
   // for adjust useragent and ip
   private int clickId=Integer.MAX_VALUE;
-  private int pageId =Integer.MAX_VALUE;
+  private int pageIdForUAIP =Integer.MAX_VALUE;
   private int hashCode=Integer.MAX_VALUE;
 
   public UbiSession() {

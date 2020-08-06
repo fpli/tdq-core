@@ -65,7 +65,7 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
           " debug AgentIPMetrics2 duplicate event==session:" + ubiSession.getGuid() + " "
           + ubiSession
           .getAbsStartTimestamp() + " " + ubiSession
-          .getClickId() + " " + ubiSession.getPageId() + " " + ubiSession.getHashCode());
+          .getClickId() + " " + ubiSession.getPageIdForUAIP() + " " + ubiSession.getHashCode());
       System.out.println(Calendar.getInstance().getTime() +
           " debug AgentIPMetrics2 duplicate event==event:" + event.getGuid() + " " + event
           .getEventTimestamp() + " "

@@ -30,7 +30,7 @@ public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
 
   public void parse(RawEvent rawEvent, UbiEvent ubiEvent) {
     SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-    SimpleDateFormat formaterUtc = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    SimpleDateFormat formaterUtc = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     StringBuilder buffer = new StringBuilder();
     Long abEventTimestamp = null;
     Long eventTimestamp = null;

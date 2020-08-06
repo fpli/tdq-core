@@ -50,7 +50,7 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
     // Set abEventCnt and eventCnt both
     addFieldMetrics(new EventCntMetrics());
     addFieldMetrics(new OldSessionSkeyMetrics());
-    addFieldMetrics(new PageIdMetrics());
+
     //        addFieldMetrics(new SessionStartDtMetrics());
     //        addFieldMetrics(new TimestampMetrics());
     addFieldMetrics(new UserIdMetrics());
@@ -72,8 +72,17 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
     addFieldMetrics(new LogdnCntMetrics());
     addFieldMetrics(new HomepgCntMetrics());
     addFieldMetrics(new FirstMappedUserIdMetrics());
+
+    //jetstream sesssion metrics
     addFieldMetrics(new ServEventCntMetrics());
+    addFieldMetrics(new AsqCntMetrics());
+    addFieldMetrics(new AtcCntMetrics());
+    addFieldMetrics(new AtlCntMetrics());
+    addFieldMetrics(new BoCntMetrics());
+    addFieldMetrics(new SrpCntMetrics());
     addFieldMetrics(new OsMetrics());
+
+    addFieldMetrics(new PageIdMetrics());
     addFieldMetrics(new DeviceMetrics());
     addFieldMetrics(new BrowserMetrics());
     addFieldMetrics(new AddressMetrics());
