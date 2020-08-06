@@ -20,21 +20,7 @@ public class RawEventFilterFunction extends RichFilterFunction<RawEvent> {
     map.putAll(rawEvent.getSojA());
     map.putAll(rawEvent.getSojK());
     map.putAll(rawEvent.getSojC());
-    String applicationPayload = null;
-    String mARecString = PropertyUtils.mapToString(rawEvent.getSojA());
-    String mKRecString = PropertyUtils.mapToString(rawEvent.getSojK());
-    String mCRecString = PropertyUtils.mapToString(rawEvent.getSojC());
-    if (mARecString != null) {
-      applicationPayload = mARecString;
-    }
-    if ((applicationPayload != null) && (mKRecString != null)) {
-      applicationPayload = applicationPayload + "&" + mKRecString;
-    }
 
-    // else set C record
-    if (applicationPayload == null) {
-      applicationPayload = mCRecString;
-    }
     if (map.containsKey("g")) {
       String g = map.get("g");
       return Math.abs(g.hashCode() % 20) == 0;

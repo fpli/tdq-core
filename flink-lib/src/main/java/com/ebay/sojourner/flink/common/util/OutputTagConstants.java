@@ -1,5 +1,6 @@
 package com.ebay.sojourner.flink.common.util;
 
+import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -15,4 +16,7 @@ public class OutputTagConstants {
 
   public static OutputTag<UbiEvent> mappedEventOutputTag =
       new OutputTag<>("mapped-event-output-tag", TypeInformation.of(UbiEvent.class));
+
+  public static OutputTag<RawEvent> dataSkewOutputTag =
+      new OutputTag<>("skew-raw-event-output-tag", TypeInformation.of(RawEvent.class));
 }

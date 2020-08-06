@@ -4,8 +4,10 @@ import com.ebay.sojourner.common.env.EnvironmentUtils;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.state.StateBackendFactory;
 import com.google.common.collect.Maps;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
@@ -51,6 +53,9 @@ public class FlinkEnvUtils {
     checkpointConf.setMaxConcurrentCheckpoints(
         FlinkEnvUtils.getInteger(Property.CHECKPOINT_MAX_CONCURRENT));
 
+    checkpointConf.setTolerableCheckpointFailureNumber(
+        FlinkEnvUtils.getInteger(Property.TOLERATE_FAILURE_CHECKPOINT_NUMBER));
+
     /*
      * StateBackend
      */
@@ -80,11 +85,25 @@ public class FlinkEnvUtils {
     return Integer.valueOf(value);
   }
 
+  public static Boolean getBoolean(String key) {
+    String value = EnvironmentUtils.get(key);
+    config.put(key, value);
+    return Boolean.getBoolean(value);
+  }
+
   public static String getListString(String key) {
 
     List<String> list = EnvironmentUtils.get(key, List.class);
     String value = String.join(",", list);
     config.put(key, value);
     return value;
+  }
+
+  public static Set<String> getSet(String key) {
+
+    List<String> list = EnvironmentUtils.get(key, List.class);
+    String value = String.join(",", list);
+    config.put(key, value);
+    return new HashSet<>(list);
   }
 }

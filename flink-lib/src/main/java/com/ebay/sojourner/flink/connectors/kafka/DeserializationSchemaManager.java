@@ -3,10 +3,12 @@ package com.ebay.sojourner.flink.connectors.kafka;
 import com.ebay.sojourner.common.model.JetStreamOutputEvent;
 import com.ebay.sojourner.common.model.JetStreamOutputSession;
 import com.ebay.sojourner.common.model.PulsarEvent;
+import com.ebay.sojourner.common.model.PulsarEvents;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.SojBytesEvent;
 import com.ebay.sojourner.flink.connectors.kafka.schema.AvroKeyedDeserializationSchema;
 import com.ebay.sojourner.flink.connectors.kafka.schema.PulsarEventDeserializationSchema;
+import com.ebay.sojourner.flink.connectors.kafka.schema.PulsarEventsDeserializationSchema;
 import com.ebay.sojourner.flink.connectors.kafka.schema.RawEventDeserializationSchema;
 import com.ebay.sojourner.flink.connectors.kafka.schema.SojBytesEventDeserializationSchema;
 import com.ebay.sojourner.flink.connectors.kafka.schema.SojEventDeserializationSchema;
@@ -28,6 +30,8 @@ public class DeserializationSchemaManager {
       return new SojSessionDeserializationSchema();
     } else if (clazz.isAssignableFrom(PulsarEvent.class)) {
       return new PulsarEventDeserializationSchema();
+    } else if (clazz.isAssignableFrom(PulsarEvents.class)) {
+      return new PulsarEventsDeserializationSchema();
     }
 
     throw new IllegalStateException("Cannot find deserialization schema");

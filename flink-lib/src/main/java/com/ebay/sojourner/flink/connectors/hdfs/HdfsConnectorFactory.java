@@ -5,7 +5,7 @@ import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSin
 
 public class HdfsConnectorFactory {
 
-  public static <T> StreamingFileSink createWithParquet(String sinkPath, Class<T> sinkClass) {
+  public static <T> StreamingFileSink<T> createWithParquet(String sinkPath, Class<T> sinkClass) {
     return StreamingFileSink.forBulkFormat(
         new Path(sinkPath), RichParquetAvroWriters.forAllowNullReflectRecord(sinkClass))
         .withBucketAssigner(new DateTimeBucketAssignerForEventTime<>())

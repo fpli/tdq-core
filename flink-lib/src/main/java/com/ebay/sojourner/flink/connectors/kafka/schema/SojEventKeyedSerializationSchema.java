@@ -27,16 +27,19 @@ public class SojEventKeyedSerializationSchema<T> implements KeyedSerializationSc
   private Class<T> tClass;
   private transient Field keyField1;
   private transient Field keyField2;
+  private String delimiter = ",";
+  // private Schema schema;
   private String keyFieldStr1;
   private String keyFieldStr2;
   private transient GenericDatumWriter<T> writer;
   private transient BinaryEncoder encoder;
-  private List<Integer> intermediateBotFlagList = Arrays.asList(220,221,222,223);
+  private List<Integer> intermediateBotFlagList = Arrays.asList(220, 221, 222, 223);
 
   public SojEventKeyedSerializationSchema(Class<T> tClass, String keyField1, String keyField2) {
     this.tClass = tClass;
     this.keyFieldStr1 = keyField1;
     this.keyFieldStr2 = keyField2;
+    // this.schema = RheosSchemaUtils.getSchema("pulsar_event-dump");
   }
 
   @Override
@@ -44,7 +47,8 @@ public class SojEventKeyedSerializationSchema<T> implements KeyedSerializationSc
     ensureInitialized();
     byte[] serializedKey = new byte[0];
     try {
-      String messageKey = keyField1.get(element).toString() + keyField2.get(element).toString();
+      String messageKey =
+          keyField1.get(element).toString() + delimiter + keyField2.get(element).toString();
       serializedKey = messageKey.getBytes(CHAR_SET);
     } catch (Exception e) {
       log.error("serialize key failed", e);
@@ -92,8 +96,10 @@ public class SojEventKeyedSerializationSchema<T> implements KeyedSerializationSc
     if (writer == null) {
       if (org.apache.avro.specific.SpecificRecordBase.class.isAssignableFrom(tClass)) {
         writer = new SpecificDatumWriter<>(tClass);
+        // writer = new SpecificDatumWriter<>(schema);
       } else {
         writer = new ReflectDatumWriter<>(tClass, ReflectData.AllowNull.get());
+        // writer = new ReflectDatumWriter<>(schema, ReflectData.AllowNull.get());
       }
     }
 

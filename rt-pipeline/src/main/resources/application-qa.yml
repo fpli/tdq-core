@@ -44,6 +44,12 @@ flink:
       guid: 2
       broadcast: 2
       metrics: 2
+    data-skew:
+      is-filter: false
+      guid-list:
+        - abc
+        - def
+        - ghi
 
 rheos:
   registry-url: https://rheos-services.qa.ebay.com

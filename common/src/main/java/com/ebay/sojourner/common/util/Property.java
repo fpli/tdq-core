@@ -202,6 +202,9 @@ public class Property {
   public static final String RHEOS_CLIENT_ID = "rheos.client.id";
   public static final String RHEOS_CLIENT_IAF_SECRET = "rheos.client.iaf.secret";
   public static final String RHEOS_CLIENT_IAF_ENV = "rheos.client.iaf.env";
+  public static final String RHEOS_SCHEMA_NAME_EVENT = "rheos.schema-name.event";
+  public static final String RHEOS_SCHEMA_NAME_SESSION = "rheos.schema-name.session";
+  public static final String RHEOS_SCHEMA_NAME_ATTRIBUTE = "rheos.schema-name.attribute";
 
   // flink checkpoint
   public static final String CHECKPOINT_DATA_DIR = "flink.app.checkpoint.data-dir";
@@ -209,6 +212,7 @@ public class Property {
   public static final String CHECKPOINT_TIMEOUT_MS = "flink.app.checkpoint.timeout-ms";
   public static final String CHECKPOINT_MIN_PAUSE_BETWEEN_MS = "flink.app.checkpoint.min-pause-between-ms";
   public static final String CHECKPOINT_MAX_CONCURRENT = "flink.app.checkpoint.max-concurrent";
+  public static final String TOLERATE_FAILURE_CHECKPOINT_NUMBER = "flink.app.checkpoint.tolerate-failure-number";
 
   // flink - parallelism and slot share group
   public static final String DEFAULT_PARALLELISM = "flink.app.parallelism.default";
@@ -261,6 +265,7 @@ public class Property {
   // hdfs
   public static final String HDFS_DUMP_PATH = "hdfs.dump.path";
   public static final String HDFS_DUMP_CLASS = "hdfs.dump.class-name";
+  public static final String HDFS_DUMP_WATERMARK_PATH = "hdfs.dump.watermark-path";
 
   // ------------------------- rt pipeline property ------------------------
   // kafka producer
@@ -280,5 +285,9 @@ public class Property {
   public static final String HDFS_PATH_SESSION_NON_BOT = "hdfs.path.session.non-bot";
   public static final String HDFS_PATH_INTERMEDIATE_SESSION = "hdfs.path.intermediate-session";
   public static final String HDFS_PATH_SIGNATURES = "hdfs.path.signatures";
+
+  // data skew
+  public static final String IS_FILTER = "flink.app.data-skew.is-filter";
+  public static final String FILTER_GUID_LIST = "flink.app.data-skew.guid-list";
 
 }
