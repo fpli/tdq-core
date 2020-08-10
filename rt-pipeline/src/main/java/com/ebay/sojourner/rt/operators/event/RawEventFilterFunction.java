@@ -1,7 +1,6 @@
 package com.ebay.sojourner.rt.operators.event;
 
 import com.ebay.sojourner.common.model.RawEvent;
-import com.ebay.sojourner.common.util.PropertyUtils;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.flink.api.common.functions.RichFilterFunction;

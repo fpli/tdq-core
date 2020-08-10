@@ -152,6 +152,9 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
     // TODO will deprecated when all applied new schema
     if (genericRecord.get("TPayload") != null) {
       parseTPayload(clentData, genericRecord.get("TPayload").toString());
+    } else {
+      String tPaylload = constuctTPayload(clentData, null);
+      clentData.setTPayload(tPaylload);
     }
   }
 
@@ -301,45 +304,48 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
       tpStr.append("&").append("node_id").append("=").append(clientData.getNodeId());
       tpStr.append("&").append("REQUEST_GUID").append("=").append(clientData.getRequestGuid());
       tpStr.append("&").append("logid").append("=").append(clientData.getRlogid());
-      String calMod = getTag(decodedTPayload, "cal_mod");
-      if (calMod != null && !calMod.equals("")) {
-        tpStr.append("&").append("cal_mod").append("=").append(calMod);
+      if (decodedTPayload != null) {
+        String calMod = getTag(decodedTPayload, "cal_mod");
+        if (calMod != null && !calMod.equals("")) {
+          tpStr.append("&").append("cal_mod").append("=").append(calMod);
+        }
+        String country = getTag(decodedTPayload, "country");
+        if (country != null && !country.equals("")) {
+          tpStr.append("&").append("country").append("=").append(country);
+        }
+        String isResponseGzipped = getTag(decodedTPayload, "isResponseGzipped");
+        if (isResponseGzipped != null && !isResponseGzipped.equals("")) {
+          tpStr.append("&").append("isResponseGzipped").append("=").append(isResponseGzipped);
+        }
+        String jct = getTag(decodedTPayload, "jct");
+        if (jct != null && !jct.equals("")) {
+          tpStr.append("&").append("jct").append("=").append(jct);
+        }
+        String lang = getTag(decodedTPayload, "lang");
+        if (lang != null && !lang.equals("")) {
+          tpStr.append("&").append("lang").append("=").append(lang);
+        }
+        String ri = getTag(decodedTPayload, "ri");
+        if (ri != null && !ri.equals("")) {
+          tpStr.append("&").append("ri").append("=").append(ri);
+        }
+        String tt = getTag(decodedTPayload, "tt");
+        if (tt != null && !tt.equals("")) {
+          tpStr.append("&").append("tt").append("=").append(tt);
+        }
+        String statusCode = getTag(decodedTPayload, "statusCode");
+        if (statusCode != null && !statusCode.equals("")) {
+          tpStr.append("&").append("statusCode").append("=").append(statusCode);
+        }
       }
-      String country = getTag(decodedTPayload, "country");
-      if (country != null && !country.equals("")) {
-        tpStr.append("&").append("country").append("=").append(country);
-      }
-      String isResponseGzipped = getTag(decodedTPayload, "isResponseGzipped");
-      if (isResponseGzipped != null && !isResponseGzipped.equals("")) {
-        tpStr.append("&").append("isResponseGzipped").append("=").append(isResponseGzipped);
-      }
-      String jct = getTag(decodedTPayload, "jct");
-      if (jct != null && !jct.equals("")) {
-        tpStr.append("&").append("jct").append("=").append(jct);
-      }
-      String lang = getTag(decodedTPayload, "lang");
-      if (lang != null && !lang.equals("")) {
-        tpStr.append("&").append("lang").append("=").append(lang);
-      }
-      String ri = getTag(decodedTPayload, "ri");
-      if (ri != null && !ri.equals("")) {
-        tpStr.append("&").append("ri").append("=").append(ri);
-      }
-      String tt = getTag(decodedTPayload, "tt");
-      if (tt != null && !tt.equals("")) {
-        tpStr.append("&").append("tt").append("=").append(tt);
-      }
-      String statusCode = getTag(decodedTPayload, "statusCode");
-      if (statusCode != null && !statusCode.equals("")) {
-        tpStr.append("&").append("statusCode").append("=").append(statusCode);
-      }
-
       String transactionTPayload = URLEncoder.encode(tpStr.toString(), "UTF-8");
       return encodePayloadForSpecialCharacters(transactionTPayload);
+
     } catch (UnsupportedEncodingException e) {
       log.error("encoding failed:" + e);
     }
     return null;
+
   }
 
   public String encodePayloadForSpecialCharacters(String payLoad) {
