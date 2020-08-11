@@ -48,7 +48,7 @@ public class UbiSession implements Serializable, Cloneable {
   private int watchCoreCnt; // watchcnt in jetstream
   private int trafficSrcId;
   private Long absStartTimestamp;
-  private int absDuration;
+  private long absDuration; // change to long type to allign with jet stream 0810
   private int cobrand;
   private int firstSiteId; // siteid in jetstream
   private String firstCguid; //cguid in jetstream

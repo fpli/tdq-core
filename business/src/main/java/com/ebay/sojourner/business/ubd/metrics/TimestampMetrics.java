@@ -1,11 +1,10 @@
 package com.ebay.sojourner.business.ubd.metrics;
 
 import com.ebay.sojourner.business.ubd.parser.PageIndicator;
-import com.ebay.sojourner.common.util.IsValidIPv4;
-import com.ebay.sojourner.common.util.SOJTS2Date;
 import com.ebay.sojourner.common.model.SessionAccumulator;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.util.IntermediateLkp;
+import com.ebay.sojourner.common.util.IsValidIPv4;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.common.util.PropertyUtils;
 import com.ebay.sojourner.common.util.SojUtils;
@@ -196,7 +195,7 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     }
 
     // for NotifyView
-    if(IntermediateLkp.getInstance()
+    if (IntermediateLkp.getInstance()
         .getNotifyViewPageSet()
         .contains(event.getPageId())) {
       if (sessionAccumulator.getUbiSession().getAbsStartTimestampForNotifyView() == null) {
@@ -213,11 +212,17 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
   @Override
   public void end(SessionAccumulator sessionAccumulator) {
+
+    //allign with jetstream
+    //    sessionAccumulator
+    //        .getUbiSession()
+    //        .setSojDataDt(sessionAccumulator.getUbiSession().getAbsEndTimestamp() == null ? null :
+    //            SOJTS2Date.castSojTimestampToDate(
+    //                sessionAccumulator.getUbiSession().getAbsEndTimestamp()));
     sessionAccumulator
         .getUbiSession()
         .setSojDataDt(sessionAccumulator.getUbiSession().getAbsEndTimestamp() == null ? null :
-            SOJTS2Date.castSojTimestampToDate(
-                sessionAccumulator.getUbiSession().getAbsEndTimestamp()));
+            sessionAccumulator.getUbiSession().getAbsEndTimestamp());
     // Fix bug HDMIT-3732 to avoid integer result overflow
     int durationSec =
         (sessionAccumulator.getUbiSession().getStartTimestamp() == null
@@ -227,13 +232,23 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
                 ((sessionAccumulator.getUbiSession().getEndTimestamp()
                     - sessionAccumulator.getUbiSession().getStartTimestamp())
                     / 1000000);
-    int absDuration =
+    //allign with jetstream 0810
+    //change to long
+    //    int absDuration =
+    //        (int)
+    //            (sessionAccumulator.getUbiSession().getAbsEndTimestamp() == null
+    //                || sessionAccumulator.getUbiSession().getAbsStartTimestamp() == null
+    //                ? 0 : (sessionAccumulator.getUbiSession().getAbsEndTimestamp()
+    //                - sessionAccumulator.getUbiSession().getAbsStartTimestamp())
+    //                / 1000000);
+
+    long absDuration =
         (int)
             (sessionAccumulator.getUbiSession().getAbsEndTimestamp() == null
                 || sessionAccumulator.getUbiSession().getAbsStartTimestamp() == null
                 ? 0 : (sessionAccumulator.getUbiSession().getAbsEndTimestamp()
                 - sessionAccumulator.getUbiSession().getAbsStartTimestamp())
-                / 1000000);
+                );
     sessionAccumulator.getUbiSession().setDurationSec(durationSec);
     sessionAccumulator.getUbiSession().setAbsDuration(absDuration);
   }

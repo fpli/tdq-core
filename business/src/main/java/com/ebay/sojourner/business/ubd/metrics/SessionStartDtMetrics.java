@@ -36,13 +36,17 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
         .setSeqNum(sessionAccumulator.getUbiSession().getSeqNum() + 1);
     if (isEarlyEvent ? isEarlyEvent
         : sessionAccumulator.getUbiSession().getFirstSessionStartDt() == null) {
-      sessionAccumulator.getUbiSession().setFirstSessionStartDt(event.getSojDataDt());
+      //allign with jetstream 0810
+      //      sessionAccumulator.getUbiSession().setFirstSessionStartDt(event.getSojDataDt());
+      sessionAccumulator.getUbiSession().setFirstSessionStartDt(event.getEventTimestamp());
     }
     if (!event.isIframe()
         && !event.isRdt()
         && (isEarlyValidEvent ? isEarlyValidEvent
         : sessionAccumulator.getUbiSession().getSessionStartDt() == null)) {
-      sessionAccumulator.getUbiSession().setSessionStartDt(event.getSojDataDt());
+      //allign with jetstream 0810
+      //      sessionAccumulator.getUbiSession().setSessionStartDt(event.getSojDataDt());
+      sessionAccumulator.getUbiSession().setSessionStartDt(event.getEventTimestamp());
     }
     if (isEarlyEvent) {
       long sessionSkey = event.getEventTimestamp() / Constants.SESSION_KEY_DIVISION;

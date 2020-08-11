@@ -23,6 +23,9 @@ public class PageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
     boolean isEarlyValidEvent = SojEventTimeUtil
         .isEarlyEvent(event.getEventTimestamp(),
             sessionAccumulator.getUbiSession().getStartTimestamp());
+    boolean isEarlyEvent = SojEventTimeUtil
+        .isEarlyEvent(event.getEventTimestamp(),
+            sessionAccumulator.getUbiSession().getAbsStartTimestamp());
     boolean isLateEvent = SojEventTimeUtil
         .isLateEvent(event.getEventTimestamp(),
             sessionAccumulator.getUbiSession().getAbsEndTimestamp());
@@ -44,8 +47,7 @@ public class PageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
         }
       }
     }
-    if (isLateEvent) {
-
+    if (isEarlyEvent) {
       sessionAccumulator.getUbiSession().setPageId(event.getPageId());
 
     }
