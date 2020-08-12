@@ -31,6 +31,7 @@ public class SojournerKafkaToHdfsJob {
         .addSink(HdfsConnectorFactory.createWithParquet(hdfsPath, deserializeClass))
         .setParallelism(sinkParallelNum)
         .name(String.format("Hdfs Sink To Location: %s", hdfsPath))
+        // .name(String.format("Hdfs Sink To Location: %s", hdfsPath.substring(29)))
         .uid("sink-id");
 
     // submit job

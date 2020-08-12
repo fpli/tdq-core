@@ -29,5 +29,10 @@ public class SourceDataStreamBuilder<T> {
         .name(String.format("Rheos Kafka Consumer From DC: %s, Topic: %s",
             dc, kafkaConsumerConfig.getTopic()))
         .uid(String.format("source-%s-%s-id", dc, kafkaConsumerConfig.getTopic()));
+    /*
+        .name(String.format("Kafka Consumer From DC: %s, Topic: %s",
+        dc, kafkaConsumerConfig.getTopic()))
+        .uid(String.format("source-%s-id", dc));
+        */
   }
 }

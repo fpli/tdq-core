@@ -14,4 +14,5 @@ flink:
 hdfs:
   dump:
     path: hdfs://apollo-rno/sys/soj/ubd/events/type=bot
-    class-name: com.ebay.sojourner.common.model.SojEvent
+    watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/events/type=bot
+#    class-name: com.ebay.sojourner.common.model.SojEvent

@@ -1,7 +1,7 @@
 kafka:
   consumer:
     topic: behavior.total.new.sojsession.bot
-    group-id: sojourner-pathfinder-session-bot
+    group-id: sojourner-pathfinder-session-bot-test
 
 flink:
   app:
@@ -13,5 +13,6 @@ flink:
 
 hdfs:
   dump:
-    path: hdfs://apollo-rno/sys/soj/ubd/sessions/type=bot
+    path: viewfs://hercules-lvs/sys/soj/ubd/cross_session
+    watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/sessions/type=bot
     class-name: com.ebay.sojourner.common.model.SojSession

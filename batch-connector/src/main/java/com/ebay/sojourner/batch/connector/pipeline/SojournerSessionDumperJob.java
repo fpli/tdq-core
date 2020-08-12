@@ -2,8 +2,9 @@ package com.ebay.sojourner.batch.connector.pipeline;
 
 import static com.ebay.sojourner.flink.common.util.DataCenter.RNO;
 
-import com.ebay.sojourner.batch.connector.common.ExtractSessionWatermarkProcessFunction;
+import com.ebay.sojourner.batch.connector.common.watermark.ExtractSessionWatermarkProcessFunction;
 import com.ebay.sojourner.common.model.SojSession;
+import com.ebay.sojourner.common.model.SojWatermark;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
@@ -25,7 +26,7 @@ public class SojournerSessionDumperJob {
     DataStream<SojSession> sourceDataStream = dataStreamBuilder.buildOfDC(RNO);
 
     // extract timestamp
-    DataStream<Long> sojSessionWatermarkStream = sourceDataStream
+    DataStream<SojWatermark> sojSessionWatermarkStream = sourceDataStream
         .process(new ExtractSessionWatermarkProcessFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .name("sojSession timestamp extract")
@@ -34,7 +35,7 @@ public class SojournerSessionDumperJob {
     // sink timestamp to hdfs
     sojSessionWatermarkStream
         .addSink(HdfsConnectorFactory.createWithParquet(
-            FlinkEnvUtils.getString(Property.HDFS_DUMP_WATERMARK_PATH), Long.class))
+            FlinkEnvUtils.getString(Property.HDFS_DUMP_WATERMARK_PATH), SojWatermark.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .name(String.format("Hdfs Sink To Location: %s",
             FlinkEnvUtils.getString(Property.HDFS_DUMP_WATERMARK_PATH)))
