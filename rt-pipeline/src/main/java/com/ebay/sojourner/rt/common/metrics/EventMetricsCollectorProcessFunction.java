@@ -55,7 +55,7 @@ public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEve
 
     eventTotalCounter.inc();
     Set<Long> dynamicRuleIdNewSet = RuleManager
-        .getInstance().getRuleDefinitions()
+        .getInstance().getEventRuleDefinitions()// FIXME: redesign this
         .stream()
         .map(RuleDefinition::getBizId)
         .collect(Collectors.toSet());

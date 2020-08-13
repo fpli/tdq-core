@@ -26,7 +26,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class SessionBotDetector implements BotDetector<UbiSession> {
 
   private static volatile SessionBotDetector sessionBotDetector;
-  private static List<Long> dynamicRuleIdList = new CopyOnWriteArrayList<>();
   private Set<Rule> botRules = new CopyOnWriteArraySet<>();
   private BotFilter filter = null;
 
@@ -36,10 +35,6 @@ public class SessionBotDetector implements BotDetector<UbiSession> {
     for (Rule rule : botRules) {
       rule.init();
     }
-  }
-
-  public static List<Long> dynamicRuleIdList() {
-    return dynamicRuleIdList;
   }
 
   public static SessionBotDetector getInstance() {
@@ -67,7 +62,6 @@ public class SessionBotDetector implements BotDetector<UbiSession> {
         if (!filter.filter(ubiSession, botRule)) {
           botRuleList.add(botRule);
         }
-
       }
     }
     return botRuleList;

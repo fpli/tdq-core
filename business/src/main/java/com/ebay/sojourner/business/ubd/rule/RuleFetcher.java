@@ -35,35 +35,19 @@ public class RuleFetcher {
     try {
       Request request = RestClientUtils
           .buildRequest(FETCH_ALL_RULES_URL);
-      log.info("Fetching rules url is {}", FETCH_ALL_RULES_URL);
+      log.info("Fetching rules, url: {}", FETCH_ALL_RULES_URL);
       Response response = client.newCall(request).execute();
       ruleDefinitionList = objectMapper
           .reader()
           .forType(new TypeReference<List<RuleDefinition>>() {
           })
           .readValue(response.body().string());
-      log.info("Fetched Rule List = " + ruleDefinitionList);
+      log.info("Fetched rule count: {}", ruleDefinitionList.size());
     } catch (IOException e) {
-      log.error("fetch all published rule failed", e);
+      log.error("Failed to fetch published rules.", e);
     }
 
     return ruleDefinitionList;
-  }
-
-  public RuleDefinition fetchRuleById(String id) {
-    RuleDefinition ruleDefinition = null;
-    try {
-      Request request = RestClientUtils
-          .buildRequest(FETCH_RULE_URL_PREFIX + id);
-      Response response = client.newCall(request).execute();
-      String responseBody = response.body().string();
-      ruleDefinition = objectMapper.readValue(responseBody, RuleDefinition.class);
-      log.info("Fetched Rule = " + ruleDefinition);
-    } catch (IOException e) {
-      log.error("fetch specified rule failed", e);
-    }
-
-    return ruleDefinition;
   }
 
 }

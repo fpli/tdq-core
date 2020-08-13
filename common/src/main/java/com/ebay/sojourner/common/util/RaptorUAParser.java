@@ -32,7 +32,7 @@ public class RaptorUAParser extends AbstractUAParser {
   private static final int CACHE_SIZE = 50000;
   private static String consumerAppName = "PulsarStreamConsumer";
   private static volatile RaptorUAParser raptorUAParser = new RaptorUAParser(EnvironmentUtils.get(
-      "env"));
+      "ua-parser-env"));
   private DeviceInfoProvider deviceInfoProviderInstance;
   private ScheduledExecutorService timer = Executors.newScheduledThreadPool(1);
   private HashFunction hashFunc = Hashing.murmur3_128(2147368987);
@@ -50,7 +50,7 @@ public class RaptorUAParser extends AbstractUAParser {
       synchronized (RaptorUAParser.class) {
         if (raptorUAParser == null) {
           raptorUAParser = new RaptorUAParser(EnvironmentUtils.get(
-              "env"));
+              "ua-parser-env"));
         }
       }
     }

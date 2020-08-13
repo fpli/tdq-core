@@ -65,3 +65,5 @@ zookeeper:
 
 rest-client:
   rest-server: https://sojubdportalservice.vip.qa.ebay.com
+
+ua-parser-env: dev
