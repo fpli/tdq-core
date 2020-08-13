@@ -14,9 +14,6 @@
   <artifactId>sojourner-rt-pipeline</artifactId>
   <packaging>jar</packaging>
 
-  <properties>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>com.ebay.sojourner</groupId>
@@ -143,6 +140,12 @@
           <groupId>com.ebay.platform.dds</groupId>
           <artifactId>dds-api</artifactId>
           <version>1.0.4-SNAPSHOT</version>
+          <exclusions>
+            <exclusion>
+              <artifactId>*</artifactId>
+              <groupId>org.slf4j</groupId>
+            </exclusion>
+          </exclusions>
         </dependency>
       </dependencies>
     </profile>
