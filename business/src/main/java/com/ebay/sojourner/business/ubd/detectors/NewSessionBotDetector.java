@@ -21,7 +21,8 @@ public class NewSessionBotDetector implements
 
 
   @Override
-  public Set<Integer> getBotFlagList(UbiSession ubiSession) throws IOException, InterruptedException {
+  public Set<Integer> getBotFlagList(UbiSession ubiSession)
+      throws IOException, InterruptedException {
     botFlags.clear();
     for (SQLSessionRule rule : sqlSessionRules) {
       int flag = rule.execute(ubiSession);

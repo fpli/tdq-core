@@ -31,7 +31,8 @@ public class SQLSessionRule extends AbstractSQLRule<UbiSession, ReflectiveUbiSes
     return new ReflectiveUbiSessionDataSource();
   }
 
-  public class ReflectiveUbiSessionDataSource implements SingleRecordDataSource<ReflectiveUbiSession> {
+  public class ReflectiveUbiSessionDataSource implements
+      SingleRecordDataSource<ReflectiveUbiSession> {
 
     public ReflectiveUbiSession[] idl_session = new ReflectiveUbiSession[1];
 
