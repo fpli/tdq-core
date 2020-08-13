@@ -1,8 +1,6 @@
 package com.ebay.sojourner.rt.operators.event;
 
-import com.ebay.sojourner.business.ubd.detectors.AbstractBotDetector;
-import com.ebay.sojourner.business.ubd.detectors.BotDetectorFactory;
-import com.ebay.sojourner.business.ubd.detectors.BotDetectorFactory.Type;
+import com.ebay.sojourner.business.ubd.detectors.EventBotDetector;
 import com.ebay.sojourner.business.ubd.parser.EventParser;
 import com.ebay.sojourner.business.ubd.rule.RuleManager;
 import com.ebay.sojourner.common.model.RawEvent;
@@ -17,19 +15,15 @@ import org.apache.flink.configuration.Configuration;
 public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
   private EventParser parser;
-  private AbstractBotDetector<UbiEvent> eventBotDetector;
+  private EventBotDetector eventBotDetector;
   private AverageAccumulator avgEventParserDuration = new AverageAccumulator();
   private AverageAccumulator avgBotDetectionDuration = new AverageAccumulator();
-  // private GuavaFlinkConnectorRateLimiter rateLimiter = new GuavaFlinkConnectorRateLimiter();
 
   @Override
   public void open(Configuration conf) throws Exception {
     super.open(conf);
-    // set value of rate in bytes per second (0.55GB/s)
-    // rateLimiter.setRate(600000000);
-    // rateLimiter.open(getRuntimeContext());
     parser = new EventParser();
-    eventBotDetector = BotDetectorFactory.get(Type.EVENT, RuleManager.getInstance());
+    eventBotDetector = new EventBotDetector();
 
     getRuntimeContext()
         .addAccumulator("Average Duration of Event Parsing", avgEventParserDuration);
@@ -39,7 +33,6 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
   @Override
   public UbiEvent map(RawEvent rawEvent) throws Exception {
-    // rateLimiter.acquire(rawEvent.toString().length());
     UbiEvent event = new UbiEvent();
     long startTimeForEventParser = System.nanoTime();
     parser.parse(rawEvent, event);

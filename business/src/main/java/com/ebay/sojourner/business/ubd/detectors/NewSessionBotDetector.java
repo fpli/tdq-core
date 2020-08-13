@@ -2,36 +2,30 @@ package com.ebay.sojourner.business.ubd.detectors;
 
 import com.ebay.sojourner.business.ubd.rule.RuleChangeEventListener;
 import com.ebay.sojourner.business.ubd.rule.RuleManager;
-import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.model.rule.RuleCategory;
 import com.ebay.sojourner.common.model.rule.RuleChangeEvent;
 import com.ebay.sojourner.common.model.rule.RuleDefinition;
-import com.ebay.sojourner.dsl.sql.SQLEventRule;
+import com.ebay.sojourner.dsl.sql.SQLSessionRule;
+import java.io.IOException;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
-public class EventBotDetector implements
-    BotDetector<UbiEvent>, RuleChangeEventListener<RuleChangeEvent> {
+public class NewSessionBotDetector implements
+    BotDetector<UbiSession>, RuleChangeEventListener<RuleChangeEvent> {
 
-  private List<SQLEventRule> sqlRules = new LinkedList<>();
+  private List<SQLSessionRule> sqlSessionRules;
   private final Set<Integer> botFlags = new HashSet<>();
 
-  public EventBotDetector() {
-    RuleManager ruleManager = RuleManager.getInstance();
-    ruleManager.addListener(this);
-    this.initBotRules();
-  }
 
   @Override
-  public Set<Integer> getBotFlagList(UbiEvent ubiEvent) {
+  public Set<Integer> getBotFlagList(UbiSession ubiSession)
+      throws IOException, InterruptedException {
     botFlags.clear();
-    for (SQLEventRule rule : sqlRules) {
-      int flag = rule.execute(ubiEvent);
+    for (SQLSessionRule rule : sqlSessionRules) {
+      int flag = rule.execute(ubiSession);
       if (flag > 0) {
         botFlags.add(flag);
       }
@@ -43,22 +37,22 @@ public class EventBotDetector implements
   @Override
   public void initBotRules() {
     RuleManager ruleManager = RuleManager.getInstance();
-    Set<RuleDefinition> rules = ruleManager.getEventRuleDefinitions();
+    Set<RuleDefinition> rules = ruleManager.getSessionRuleDefinitions();
 
-    sqlRules = rules.stream()
-        .map(SQLEventRule::new)
+    sqlSessionRules = rules.stream()
+        .map(SQLSessionRule::new)
         .collect(Collectors.toList());
   }
 
   @Override
   public void onChange(RuleChangeEvent ruleChangeEvent) {
-    sqlRules = ruleChangeEvent.getRules().stream()
-        .map(SQLEventRule::new)
+    sqlSessionRules = ruleChangeEvent.getRules().stream()
+        .map(SQLSessionRule::new)
         .collect(Collectors.toList());
   }
 
   @Override
   public RuleCategory category() {
-    return RuleCategory.EVENT;
+    return RuleCategory.SESSION;
   }
 }

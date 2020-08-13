@@ -1,6 +1,5 @@
 package com.ebay.sojourner.business.ubd.detectors;
 
-import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.business.ubd.rule.BotRule1;
 import com.ebay.sojourner.business.ubd.rule.BotRule10;
 import com.ebay.sojourner.business.ubd.rule.BotRule11;
@@ -13,20 +12,18 @@ import com.ebay.sojourner.business.ubd.rule.BotRule207;
 import com.ebay.sojourner.business.ubd.rule.BotRule212;
 import com.ebay.sojourner.business.ubd.rule.BotRule215;
 import com.ebay.sojourner.business.ubd.rule.BotRule9;
+import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.model.rule.Rule;
 import com.ebay.sojourner.common.util.BotFilter;
 import com.ebay.sojourner.common.util.UbiBotFilter;
 import java.io.IOException;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class SessionBotDetector implements BotDetector<UbiSession> {
 
   private static volatile SessionBotDetector sessionBotDetector;
-  private static List<Long> dynamicRuleIdList = new CopyOnWriteArrayList<>();
   private Set<Rule> botRules = new CopyOnWriteArraySet<>();
   private BotFilter filter = null;
 
@@ -36,10 +33,6 @@ public class SessionBotDetector implements BotDetector<UbiSession> {
     for (Rule rule : botRules) {
       rule.init();
     }
-  }
-
-  public static List<Long> dynamicRuleIdList() {
-    return dynamicRuleIdList;
   }
 
   public static SessionBotDetector getInstance() {
@@ -67,7 +60,6 @@ public class SessionBotDetector implements BotDetector<UbiSession> {
         if (!filter.filter(ubiSession, botRule)) {
           botRuleList.add(botRule);
         }
-
       }
     }
     return botRuleList;

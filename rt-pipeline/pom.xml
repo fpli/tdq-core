@@ -139,6 +139,11 @@
           <artifactId>flink-statebackend-rocksdb_${scala.binary.version}</artifactId>
           <scope>compile</scope>
         </dependency>
+        <dependency>
+          <groupId>com.ebay.platform.dds</groupId>
+          <artifactId>dds-api</artifactId>
+          <version>1.0.4-SNAPSHOT</version>
+        </dependency>
       </dependencies>
     </profile>
   </profiles>

@@ -1,8 +1,6 @@
 package com.ebay.sojourner.rt.pipeline;
 
 import static com.ebay.sojourner.flink.common.util.DataCenter.LVS;
-import static com.ebay.sojourner.flink.common.util.DataCenter.RNO;
-import static com.ebay.sojourner.flink.common.util.DataCenter.SLC;
 
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
@@ -32,17 +30,7 @@ public class SojournerRTJobForHotDeploy {
         executionEnvironment, RawEvent.class
     );
 
-    DataStream<RawEvent> rawEventDataStreamForRNO = dataStreamBuilder
-        .buildOfDC(RNO, FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP));
-    DataStream<RawEvent> rawEventDataStreamForSLC = dataStreamBuilder
-        .buildOfDC(SLC, FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP));
-    DataStream<RawEvent> rawEventDataStreamForLVS = dataStreamBuilder
-        .buildOfDC(LVS, FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP));
-
-    // union three DC data
-    DataStream<RawEvent> rawEventDataStream = rawEventDataStreamForRNO
-        .union(rawEventDataStreamForLVS)
-        .union(rawEventDataStreamForSLC);
+    DataStream<RawEvent> rawEventDataStream = dataStreamBuilder.buildOfDC(LVS);
 
     // filter 5% throughput group by guid for reduce kafka consumer lag
     DataStream<RawEvent> filteredRawEvent = rawEventDataStream
