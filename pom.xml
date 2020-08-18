@@ -524,7 +524,7 @@
       <url>http://ebaycentral.qa.ebay.com/content/repositories/releases/</url>
     </repository>
     <repository>
-      <id>ebaycentral-snapshots</id>
+      <id>ebaycentral-snapshots</id>x
       <url>http://ebaycentral.qa.ebay.com/content/repositories/snapshots/</url>
     </repository>
     <repository>
@@ -585,7 +585,16 @@
       </properties>
     </profile>
   </profiles>
-
+  <distributionManagement>
+    <repository>
+      <id>ebay-data-releases</id>
+      <url>http://nxrepository.corp.ebay.com/nexus/content/repositories/ebay.data.releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>ebay-data-snapshots</id>
+      <url>http://nxrepository.corp.ebay.com/nexus/content/repositories/ebay.data.snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
   <build>
     <pluginManagement>
       <plugins>
@@ -678,6 +687,11 @@
             <tarLongFileMode>posix</tarLongFileMode>
           </configuration>
         </plugin>
+      <!--        <plugin>-->
+      <!--          <groupId>org.apache.maven.plugins</groupId>-->
+      <!--          <artifactId>maven-deploy-plugin</artifactId>-->
+      <!--          <version>3.1.0</version>-->
+      <!--        </plugin>-->
 
         <!--job-uploader-maven-plugin-->
         <plugin>
