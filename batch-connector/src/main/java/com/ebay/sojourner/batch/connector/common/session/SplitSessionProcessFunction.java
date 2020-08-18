@@ -13,6 +13,7 @@ import org.apache.flink.util.OutputTag;
 public class SplitSessionProcessFunction extends ProcessFunction<SojSession, SojSession> {
 
   private static final String DATE_FORMAT = "yyyyMMdd";
+  private static final String DEFAULT_DATE = "19700101";
   private DateTimeFormatter dateTimeFormatter;
   private OutputTag outputTag;
 
@@ -50,7 +51,7 @@ public class SplitSessionProcessFunction extends ProcessFunction<SojSession, Soj
       String defaultTsStr = dateTimeFormatter.format(Instant.ofEpochMilli(time));
       return defaultTsStr.substring(0, 8);
     } else {
-      throw new IllegalArgumentException("the timestamp is illegal: " + time);
+      return DEFAULT_DATE;
     }
   }
 
