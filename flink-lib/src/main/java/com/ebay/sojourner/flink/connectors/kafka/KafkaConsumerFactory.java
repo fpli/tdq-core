@@ -61,7 +61,7 @@ public class KafkaConsumerFactory {
       flinkKafkaConsumer.setStartFromEarliest();
       // flinkKafkaConsumer.setStartFromTimestamp(1593436200000L);
     } else {
-      flinkKafkaConsumer.setStartFromLatest();
+      flinkKafkaConsumer.setStartFromEarliest();
     }
 
     return flinkKafkaConsumer;

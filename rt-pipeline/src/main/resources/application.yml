@@ -2,7 +2,7 @@ kafka:
   consumer:
     stream: behavior.pathfinder
     topic: behavior.pathfinder.events.total
-    group-id: sojourner-pathfinder-consumer
+    group-id: sojourner-realtime-rno
     bootstrap-servers:
       rno:
         - rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
@@ -33,28 +33,50 @@ kafka:
     max-partitions-fetch-bytes: 10485760
     auto-offset-reset: latest
 
+#  producer:
+#    stream: behavior.total.new
+#    topic:
+#      session:
+#        bot: behavior.total.new.sojsession.bot
+#        non-bot: behavior.total.new.sojsession
+#      event:
+#        bot: behavior.total.new.sojevent.bot
+#        non-bot: behavior.total.new.sojevent
+#      signature:
+#        agent-ip: behavior.total.new.signature.agentIp
+#        agent: behavior.total.new.signature.agent
+#        ip: behavior.total.new.signature.ip
+#        guid: behavior.total.new.signature.guid
+#      intermediate-session: behavior.total.new.session.fordq
+#    bootstrap-servers:
+#      rno:
+#        - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+#        - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+#        - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+#        - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
+#        - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
   producer:
-    stream: behavior.total.new
+    stream: behavior.totalv2
     topic:
       session:
-        bot: behavior.total.new.sojsession.bot
-        non-bot: behavior.total.new.sojsession
+        bot: behavior.totalv2.sojsession-bot
+        non-bot: behavior.totalv2.sojsession-nonbot
       event:
-        bot: behavior.total.new.sojevent.bot
-        non-bot: behavior.total.new.sojevent
+        bot: behavior.totalv2.sojevent-bot
+        non-bot: behavior.totalv2.sojevent-nonbot
       signature:
-        agent-ip: behavior.total.new.signature.agentIp
-        agent: behavior.total.new.signature.agent
-        ip: behavior.total.new.signature.ip
-        guid: behavior.total.new.signature.guid
-      intermediate-session: behavior.total.new.session.fordq
+        agent-ip: behavior.totalv2.signature.agentIp
+        agent: behavior.totalv2.signature.agent
+        ip: behavior.totalv2.signature.ip
+        guid: behavior.totalv2.signature.guid
+      intermediate-session: behavior.totalv2.session.fordq
     bootstrap-servers:
       rno:
-        - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
-        - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
-        - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
-        - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
-        - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-fxuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.37.tess.io:9092
+        - rhs-fxuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.37.tess.io:9092
+        - rhs-fxuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.37.tess.io:9092
+        - rhs-fxuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.37.tess.io:9092
+        - rhs-fxuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.37.tess.io:9092
 
     batch-size: 524288
     acks: 1

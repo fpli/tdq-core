@@ -264,6 +264,8 @@ public class Property {
 
   // hdfs
   public static final String HDFS_DUMP_PATH = "hdfs.dump.path";
+  public static final String HDFS_SAME_DAY_SESSION_DUMP_PATH = "hdfs.dump.path.same-day";
+  public static final String HDFS_CROSS_DAY_SESSION_DUMP_PATH = "hdfs.dump.path.cross-day";
   public static final String HDFS_DUMP_CLASS = "hdfs.dump.class-name";
   public static final String HDFS_DUMP_WATERMARK_PATH = "hdfs.dump.watermark-path";
 

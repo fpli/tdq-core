@@ -2,7 +2,7 @@ package com.ebay.sojourner.batch.connector.pipeline;
 
 import static com.ebay.sojourner.flink.common.util.DataCenter.RNO;
 
-import com.ebay.sojourner.batch.connector.common.watermark.ExtractEventWatermarkProcessFunction;
+import com.ebay.sojourner.batch.connector.common.event.ExtractEventWatermarkProcessFunction;
 import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojWatermark;
 import com.ebay.sojourner.common.util.Property;

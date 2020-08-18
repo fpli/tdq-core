@@ -1,13 +1,14 @@
-package com.ebay.sojourner.batch.connector.common.watermark;
+package com.ebay.sojourner.batch.connector.common.session;
 
-import com.ebay.sojourner.common.model.SojEvent;
+import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.model.SojWatermark;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.util.Collector;
 
-public class ExtractEventWatermarkProcessFunction extends ProcessFunction<SojEvent, SojWatermark> {
+public class ExtractSessionWatermarkProcessFunction extends
+    ProcessFunction<SojSession, SojWatermark> {
 
   private AtomicInteger atomicInteger;
 
@@ -18,7 +19,7 @@ public class ExtractEventWatermarkProcessFunction extends ProcessFunction<SojEve
   }
 
   @Override
-  public void processElement(SojEvent value, Context ctx, Collector<SojWatermark> out)
+  public void processElement(SojSession value, Context ctx, Collector<SojWatermark> out)
       throws Exception {
 
     int andIncrement = atomicInteger.getAndIncrement();
@@ -26,4 +27,10 @@ public class ExtractEventWatermarkProcessFunction extends ProcessFunction<SojEve
       out.collect(new SojWatermark(ctx.timestamp()));
     }
   }
+
+  @Override
+  public void close() throws Exception {
+    super.close();
+  }
+
 }

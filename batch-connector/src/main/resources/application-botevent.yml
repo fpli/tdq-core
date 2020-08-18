@@ -1,15 +1,15 @@
 kafka:
   consumer:
-    topic: behavior.total.new.sojevent.bot
-    group-id: sojourner-pathfinder-event-bot
+    topic: behavior.totalv2.sojevent-bot
+    group-id: sojourner-dumper-rno
 
 flink:
   app:
     name: Sojourner Bot Event HDFS Load Pipeline
     parallelism:
-      source: 150
+      source: 50
       sink:
-        hdfs: 150
+        hdfs: 50
 
 hdfs:
   dump:
