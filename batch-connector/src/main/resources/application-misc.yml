@@ -1,0 +1,25 @@
+kafka:
+  consumer:
+    stream: misc.ssl
+    topic: misc.ssl.validation
+    group-id: sojourner-misc-dumper
+    bootstrap-servers:
+      rno:
+        - rhs-dyrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
+        - rhs-dyrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
+        - rhs-dyrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
+        - rhs-dyrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
+        - rhs-dyrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
+
+flink:
+  app:
+    name: Sojourner Misc HDFS Load Pipeline
+    parallelism:
+      source: 50
+      sink:
+        hdfs: 50
+
+hdfs:
+  dump:
+    path: hdfs://apollo-rno/sys/soj/ubd/misc/
+    class-name: com.ebay.sojourner.common.model.MiscEvent

@@ -4,6 +4,7 @@ import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.JetStreamOutputEvent;
 import com.ebay.sojourner.common.model.JetStreamOutputSession;
+import com.ebay.sojourner.common.model.MiscEvent;
 import com.ebay.sojourner.common.model.PulsarEvent;
 import com.ebay.sojourner.common.model.PulsarEvents;
 import com.ebay.sojourner.common.model.RawEvent;
@@ -43,8 +44,10 @@ public class TimestampFieldExtractor {
     } else if (t instanceof PulsarEvents) {
       PulsarEvents pulsarEvents = (PulsarEvents) t;
       return pulsarEvents.getEventCreateTimestamp();
-    }
-    else {
+    } else if (t instanceof MiscEvent) {
+      MiscEvent miscEvent = (MiscEvent) t;
+      return miscEvent.getEventCreateTimestamp();
+    } else {
       throw new IllegalStateException("Cannot extract timestamp filed for generate watermark");
     }
   }

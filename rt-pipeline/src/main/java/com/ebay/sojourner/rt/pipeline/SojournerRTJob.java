@@ -6,7 +6,6 @@ import static com.ebay.sojourner.flink.common.util.DataCenter.SLC;
 
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.BotSignature;
-import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.SessionCore;
 import com.ebay.sojourner.common.model.SojEvent;
@@ -42,7 +41,6 @@ import com.ebay.sojourner.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.rt.operators.session.DetectableSessionMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionAgg;
-import com.ebay.sojourner.rt.operators.session.UbiSessionToIntermediateSessionMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionToSessionCoreMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionWindowProcessFunction;
