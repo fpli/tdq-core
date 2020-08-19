@@ -1,7 +1,7 @@
 kafka:
   consumer:
     topic: behavior.totalv2.sojsession
-    group-id: sojourner-dumper-rno
+    group-id: sojourner-total-dumper-rno
 
 flink:
   app:

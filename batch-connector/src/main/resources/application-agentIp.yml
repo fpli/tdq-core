@@ -3,7 +3,7 @@ kafka:
 #    topic: behavior.total.new.signature.agentIp
 #    group-id: sojourner-pathfinder-agent-ip
     topic: behavior.totalv2.signature.agent-ip
-    group-id: sojourner-dumper-rno
+    group-id: sojourner-total-dumper-rno
 
 flink:
   app:

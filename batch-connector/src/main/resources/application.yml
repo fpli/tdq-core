@@ -12,7 +12,7 @@ kafka:
 #        - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
     stream: behavior.totalv2
     topic: behavior.totalv2.sojevent-nonbot
-    group-id: sojourner-dumper-rno
+    group-id: sojourner-total-dumper-rno
     bootstrap-servers:
       rno:
          - rhs-fxuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.37.tess.io:9092
