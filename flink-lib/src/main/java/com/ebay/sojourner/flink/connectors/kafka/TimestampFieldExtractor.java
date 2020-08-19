@@ -21,7 +21,7 @@ public class TimestampFieldExtractor {
       return rawEvent.getRheosHeader().getEventCreateTimestamp();
     } else if (t instanceof SojSession) {
       SojSession sojSession = (SojSession) t;
-      return SojTimestamp.getSojTimestampToUnixTimestamp(sojSession.getAbsStartTimestamp());
+      return SojTimestamp.getSojTimestampToUnixTimestamp(sojSession.getSessionStartDt());
     } else if (t instanceof SojEvent) {
       SojEvent sojEvent = (SojEvent) t;
       return sojEvent.getGenerateTime();
