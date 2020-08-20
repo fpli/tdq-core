@@ -14,7 +14,7 @@ flink:
 hdfs:
   dump:
     path:
-      same-day: viewfs://apollo-rno/sys/soj/ubd/sessions/category=sameday/type=bot
-      cross-day: viewfs://apollo-rno/sys/soj/ubd/sessions/category=crossday/type=bot
+      same-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=sameday/type=bot
+      cross-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=crossday/type=bot
     watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/sessions/type=bot
 #    class-name: com.ebay.sojourner.common.model.SojSession
