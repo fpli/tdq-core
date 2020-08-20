@@ -524,7 +524,7 @@
       <url>http://ebaycentral.qa.ebay.com/content/repositories/releases/</url>
     </repository>
     <repository>
-      <id>ebaycentral-snapshots</id>x
+      <id>ebaycentral-snapshots</id>
       <url>http://ebaycentral.qa.ebay.com/content/repositories/snapshots/</url>
     </repository>
     <repository>
