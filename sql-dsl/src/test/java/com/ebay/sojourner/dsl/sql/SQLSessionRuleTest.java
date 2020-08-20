@@ -8,25 +8,40 @@ import org.junit.Test;
 
 public class SQLSessionRuleTest {
 
-  private RuleDefinition getRuleDef() {
+  private RuleDefinition getRuleDef(String sql) {
     RuleDefinition ruleDefinition = new RuleDefinition();
     ruleDefinition.setBizId(1L);
     ruleDefinition.setCategory("SESSION");
-    ruleDefinition.setContent("SELECT 1 as bot FROM soj.idl_session WHERE agentInfo = 'bot'");
+    ruleDefinition.setContent(sql);
     return ruleDefinition;
   }
 
 
   @Test
-  public void testRuleExecute() throws Exception {
-    SQLSessionRule rule = new SQLSessionRule(getRuleDef());
+  public void testRegex() throws Exception {
+    String sql = "SELECT 1 as bot FROM soj.idl_session WHERE agentInfo LIKE '%bot[a-z]%'";
+    SQLSessionRule rule = new SQLSessionRule(getRuleDef(sql));
 
     UbiSession ubiSession = new UbiSession();
-    ubiSession.setAgentInfo("bot");
+    ubiSession.setAgentInfo("Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)");
 
     Integer result = rule.execute(ubiSession);
 
     assertEquals(1, result);
+  }
+
+  @Test
+  public void testUdf() throws Exception {
+    String sql = "SELECT square(viewCnt) FROM soj.idl_session";
+
+    SQLSessionRule rule = new SQLSessionRule(getRuleDef(sql));
+
+    UbiSession ubiSession = new UbiSession();
+    ubiSession.setViewCnt(2);
+
+    Integer result = rule.execute(ubiSession);
+
+    assertEquals(4, result);
   }
 
 

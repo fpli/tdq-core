@@ -26,6 +26,7 @@ public class RuleManager {
   private ExecutorService zkExecutor;
   private ScheduledExecutorService schedulingExecutor;
   private final List<RuleChangeEventListener<RuleChangeEvent>> listeners = Lists.newLinkedList();
+  public boolean isInitDone = false;
 
   @Getter
   private Set<RuleDefinition> eventRuleDefinitions = Sets.newHashSet();
@@ -86,27 +87,6 @@ public class RuleManager {
 
   public void addListener(RuleChangeEventListener<RuleChangeEvent> listener) {
     this.listeners.add(listener);
-    RuleChangeEvent ruleChangeEvent = new RuleChangeEvent();
-    ruleChangeEvent.setLocalDateTime(LocalDateTime.now());
-
-    RuleCategory category = listener.category();
-
-    switch (category) {
-      case EVENT:
-        ruleChangeEvent.setRules(this.eventRuleDefinitions);
-        break;
-      case SESSION:
-        ruleChangeEvent.setRules(this.sessionRuleDefinitions);
-        break;
-      case ATTRIBUTE:
-        ruleChangeEvent.setRules(this.attributeRuleDefinitions);
-        break;
-      default:
-        throw new IllegalStateException("Cannot find RuleCategory");
-    }
-
-    // invoke onChange right away
-    listener.onChange(ruleChangeEvent);
   }
 
   private void notifyListeners(RuleCategory category) {
@@ -152,8 +132,9 @@ public class RuleManager {
   public void initRules() {
     log.info("Init all rules");
     List<RuleDefinition> ruleDefinitionList = ruleFetcher.fetchAllRules();
-
     loadRuleDef(ruleDefinitionList);
+    log.info("Init rules done.");
+    isInitDone = true;
   }
 
   private void loadRuleDef(List<RuleDefinition> ruleDefinitionList) {

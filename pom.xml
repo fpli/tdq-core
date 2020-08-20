@@ -381,6 +381,7 @@
         <groupId>io.flinkspector</groupId>
         <artifactId>flinkspector-datastream_2.11</artifactId>
         <version>0.9.3</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.hamcrest</groupId>

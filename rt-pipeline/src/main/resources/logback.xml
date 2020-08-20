@@ -5,7 +5,7 @@
 
   <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <Pattern>%d{HH:mm:ss.SSS} [%.-15t] %-5level %logger{40} - %msg%n</Pattern>
+      <Pattern>%date{ISO8601} [%.-15t] %-5level %logger{40} - %msg%n</Pattern>
     </encoder>
   </appender>
 
@@ -13,7 +13,7 @@
   <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>${log.path}</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>sojourner-app-%d{yyyy-MM-dd}.log</fileNamePattern>
+      <fileNamePattern>${log.path}/sojourner-app-%d{yyyy-MM-dd}.log</fileNamePattern>
       <maxHistory>30</maxHistory>
       <totalSizeCap>1GB</totalSizeCap>
     </rollingPolicy>

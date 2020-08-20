@@ -2,6 +2,7 @@ package com.ebay.sojourner.dsl.sql;
 
 import com.ebay.sojourner.common.model.rule.RuleDefinition;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import org.apache.calcite.adapter.enumerable.EnumerableConvention;
 import org.apache.calcite.adapter.enumerable.EnumerableInterpretable;
@@ -12,7 +13,9 @@ import org.apache.calcite.linq4j.Enumerable;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.runtime.Bindable;
+import org.apache.calcite.schema.ScalarFunction;
 import org.apache.calcite.schema.SchemaPlus;
+import org.apache.calcite.schema.impl.ScalarFunctionImpl;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParser;
 import org.apache.calcite.sql.parser.SqlParser.ConfigBuilder;
@@ -22,6 +25,8 @@ import org.apache.calcite.tools.Planner;
 import org.apache.calcite.tools.Programs;
 
 public abstract class AbstractSQLRule<T, R, OUT> implements SQLRule<T, OUT> {
+
+  protected final String ROOT_SCHEMA = "soj";
 
   protected RuleDefinition rule;
   protected SojDataContext dataContext;
@@ -38,7 +43,22 @@ public abstract class AbstractSQLRule<T, R, OUT> implements SQLRule<T, OUT> {
 
     dataSource = this.getDataSource();
     // Add data source
-    rootSchema.add("soj", new ReflectiveSchema(dataSource));
+    rootSchema.add(ROOT_SCHEMA, new ReflectiveSchema(dataSource));
+
+
+    // Add functions
+    boolean upCase = false;
+    Class clazz = UdfManager.class;
+    for (Map.Entry<String, ScalarFunction> entry : ScalarFunctionImpl.createAll(clazz).entries()) {
+      String name = entry.getKey();
+      if (upCase) {
+        name = name.toUpperCase(Locale.ROOT);
+      }
+      rootSchema.add(name, entry.getValue());
+    }
+
+    rootSchema.add("square", ScalarFunctionImpl.create(UdfManager.SquareFunction.class, "eval"));
+
 
     // Create planner
     ConfigBuilder parserConfigBuilder = SqlParser.configBuilder().setCaseSensitive(false);
