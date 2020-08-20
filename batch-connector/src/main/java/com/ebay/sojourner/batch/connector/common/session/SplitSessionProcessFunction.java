@@ -33,7 +33,8 @@ public class SplitSessionProcessFunction extends ProcessFunction<SojSession, Soj
 
     Long sessionEndTimestamp = SojTimestamp
         .getSojTimestampToUnixTimestamp(sojSession.getAbsEndTimestamp());
-    Long sessionStartDt = sojSession.getSessionStartDt();
+    Long sessionStartDt = SojTimestamp
+        .getSojTimestampToUnixTimestamp(sojSession.getSessionStartDt());
 
     String sessionEndTimeString = transferLongToDateString(sessionEndTimestamp);
     String sessionStartTimeString = transferLongToDateString(sessionStartDt);
