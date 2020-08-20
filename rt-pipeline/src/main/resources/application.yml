@@ -65,7 +65,7 @@ kafka:
         bot: behavior.totalv2.sojevent-bot
         non-bot: behavior.totalv2.sojevent-nonbot
       signature:
-        agent-ip: behavior.totalv2.signature.agentIp
+        agent-ip: behavior.totalv2.signature.agent-ip
         agent: behavior.totalv2.signature.agent
         ip: behavior.totalv2.signature.ip
         guid: behavior.totalv2.signature.guid
