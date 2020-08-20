@@ -7,18 +7,26 @@ import com.ebay.sojourner.common.model.rule.RuleCategory;
 import com.ebay.sojourner.common.model.rule.RuleChangeEvent;
 import com.ebay.sojourner.common.model.rule.RuleDefinition;
 import com.ebay.sojourner.dsl.sql.SQLSessionRule;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class NewSessionBotDetector implements
     BotDetector<UbiSession>, RuleChangeEventListener<RuleChangeEvent> {
 
-  private List<SQLSessionRule> sqlSessionRules;
-  private final Set<Integer> botFlags = new HashSet<>();
+  private List<SQLSessionRule> sqlSessionRules = Lists.newArrayList();
+  private final Set<Integer> botFlags = Sets.newHashSet();
 
+  public NewSessionBotDetector() {
+    RuleManager ruleManager = RuleManager.getInstance();
+    ruleManager.addListener(this);
+    this.initBotRules();
+  }
 
   @Override
   public Set<Integer> getBotFlagList(UbiSession ubiSession)
@@ -46,7 +54,9 @@ public class NewSessionBotDetector implements
 
   @Override
   public void onChange(RuleChangeEvent ruleChangeEvent) {
-    sqlSessionRules = ruleChangeEvent.getRules().stream()
+    log.info("Session sql rule changed, change event: {}", ruleChangeEvent);
+    sqlSessionRules = ruleChangeEvent.getRules()
+        .stream()
         .map(SQLSessionRule::new)
         .collect(Collectors.toList());
   }
