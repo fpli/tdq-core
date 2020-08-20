@@ -2,7 +2,7 @@ kafka:
   consumer:
     stream: behavior.total
     topic: behavior.total.sojevent.total
-    group-id: sojourner-jetstream-event-non-bot
+    group-id: sojourner-jetstream-event-non-bot-rno
     bootstrap-servers:
       rno:
         - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092

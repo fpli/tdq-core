@@ -108,7 +108,6 @@ public class PulsarEventDeserializationSchema implements DeserializationSchema<P
     }
   }
 
-
   private Long getLong(Object o) {
     if (StringUtils.isEmpty(getString(o))) {
       return null;

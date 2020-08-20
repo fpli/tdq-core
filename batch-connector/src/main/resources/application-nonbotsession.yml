@@ -1,18 +1,20 @@
 kafka:
   consumer:
-    topic: behavior.total.new.sojsession
-    group-id: sojourner-pathfinder-session-non-bot-test
+    topic: behavior.totalv2.sojsession-nonbot
+    group-id: sojourner-total-dumper-rno
 
 flink:
   app:
     name: Sojourner Non Bot Session HDFS Load Pipeline
     parallelism:
-      source: 30
+      source: 15
       sink:
-        hdfs: 30
+        hdfs: 15
 
 hdfs:
   dump:
-    path: hdfs://apollo-rno/sys/soj/ubd/sessions/type=nonbot
+    path:
+      same-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=sameday/type=nonbot
+      cross-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=crossday/type=nonbot
     watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/sessions/type=nonbot
 #    class-name: com.ebay.sojourner.common.model.SojSession

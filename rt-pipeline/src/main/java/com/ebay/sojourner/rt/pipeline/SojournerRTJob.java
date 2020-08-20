@@ -6,7 +6,6 @@ import static com.ebay.sojourner.flink.common.util.DataCenter.SLC;
 
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.BotSignature;
-import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.SessionCore;
 import com.ebay.sojourner.common.model.SojEvent;
@@ -42,7 +41,6 @@ import com.ebay.sojourner.rt.operators.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.rt.operators.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.rt.operators.session.DetectableSessionMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionAgg;
-import com.ebay.sojourner.rt.operators.session.UbiSessionToIntermediateSessionMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionToSessionCoreMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionToSojSessionMapFunction;
 import com.ebay.sojourner.rt.operators.session.UbiSessionWindowProcessFunction;
@@ -136,26 +134,6 @@ public class SojournerRTJob {
             .slotSharingGroup(FlinkEnvUtils.getString(Property.SESSION_SLOT_SHARE_GROUP))
             .name("UbiSession To SessionCore")
             .uid("session-enhance-id");
-
-    // ubiSession to intermediate session
-    DataStream<IntermediateSession> intermediateSessionDataStream = ubiSessionDataStream
-        .map(new UbiSessionToIntermediateSessionMapFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.SESSION_SLOT_SHARE_GROUP))
-        .name("UbiSession To IntermediateSession")
-        .uid("intermediate-session-enhance-id");
-
-    // intermediate session sink
-    intermediateSessionDataStream
-        .addSink(KafkaProducerFactory.getProducer(
-            FlinkEnvUtils.getString(Property.KAFKA_TOPIC_INTERMEDIATE_SESSION),
-            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_RNO),
-            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION),
-            IntermediateSession.class))
-        .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.SESSION_SLOT_SHARE_GROUP))
-        .name("IntermediateSession")
-        .uid("intermediate-session-sink-id");
 
     // 4. Attribute Operator
     // 4.1 Sliding window

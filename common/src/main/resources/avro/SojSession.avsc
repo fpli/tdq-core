@@ -223,7 +223,7 @@
       "name": "absDuration",
       "type": [
         "null",
-        "long"
+        "int"
       ],
       "doc": "from ubisession absDuration"
     },

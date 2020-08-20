@@ -242,12 +242,15 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     //                - sessionAccumulator.getUbiSession().getAbsStartTimestamp())
     //                / 1000000);
 
-    long absDuration =
+
+    int absDuration =
         (int)
             (sessionAccumulator.getUbiSession().getAbsEndTimestamp() == null
                 || sessionAccumulator.getUbiSession().getAbsStartTimestamp() == null
                 ? 0 : (sessionAccumulator.getUbiSession().getAbsEndTimestamp()
-                - sessionAccumulator.getUbiSession().getAbsStartTimestamp())
+                - sessionAccumulator.getUbiSession().getAbsStartTimestamp()>Integer.MAX_VALUE?
+                Integer.MAX_VALUE:(sessionAccumulator.getUbiSession().getAbsEndTimestamp()
+                - sessionAccumulator.getUbiSession().getAbsStartTimestamp()))
                 );
     sessionAccumulator.getUbiSession().setDurationSec(durationSec);
     sessionAccumulator.getUbiSession().setAbsDuration(absDuration);

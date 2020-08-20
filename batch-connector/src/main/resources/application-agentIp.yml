@@ -1,15 +1,17 @@
 kafka:
   consumer:
-    topic: behavior.total.new.signature.agentIp
-    group-id: sojourner-pathfinder-agent-ip
+#    topic: behavior.total.new.signature.agentIp
+#    group-id: sojourner-pathfinder-agent-ip
+    topic: behavior.totalv2.signature.agent-ip
+    group-id: sojourner-total-dumper-rno
 
 flink:
   app:
     name: Sojourner AgentIp Signature HDFS Load Pipeline
     parallelism:
-      source: 20
+      source: 10
       sink:
-        hdfs: 20
+        hdfs: 10
 
 hdfs:
   dump:
