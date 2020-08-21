@@ -45,7 +45,6 @@ public abstract class AbstractSQLRule<T, R, OUT> implements SQLRule<T, OUT> {
     // Add data source
     rootSchema.add(ROOT_SCHEMA, new ReflectiveSchema(dataSource));
 
-
     // Add functions
     boolean upCase = false;
     Class clazz = UdfManager.class;
@@ -58,7 +57,6 @@ public abstract class AbstractSQLRule<T, R, OUT> implements SQLRule<T, OUT> {
     }
 
     rootSchema.add("square", ScalarFunctionImpl.create(UdfManager.SquareFunction.class, "eval"));
-
 
     // Create planner
     ConfigBuilder parserConfigBuilder = SqlParser.configBuilder().setCaseSensitive(false);

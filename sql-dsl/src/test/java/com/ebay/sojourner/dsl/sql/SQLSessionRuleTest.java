@@ -19,7 +19,8 @@ public class SQLSessionRuleTest {
 
   @Test
   public void testRegex() throws Exception {
-    String sql = "SELECT 1 as bot FROM soj.idl_session WHERE agentInfo LIKE '%bot[a-z]%'";
+    String sql = "SELECT 1 as bot FROM soj.idl_session " +
+        "WHERE lower(agentInfo) SIMILAR TO '.*bot[^a-z0-9\\_-].*|.*bot|.*spider.*|.*crawl.*|.*ktxn.*' ESCAPE '\\'";
     SQLSessionRule rule = new SQLSessionRule(getRuleDef(sql));
 
     UbiSession ubiSession = new UbiSession();
@@ -43,6 +44,5 @@ public class SQLSessionRuleTest {
 
     assertEquals(4, result);
   }
-
 
 }
