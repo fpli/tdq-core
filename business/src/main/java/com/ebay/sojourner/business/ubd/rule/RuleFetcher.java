@@ -6,8 +6,6 @@ import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.common.util.RestClientUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
-import java.io.IOException;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -29,24 +27,16 @@ public class RuleFetcher {
     this.objectMapper = new ObjectMapper();
   }
 
-  public List<RuleDefinition> fetchAllRules() {
-    List<RuleDefinition> ruleDefinitionList = Lists.newArrayList();
-
-    try {
-      Request request = RestClientUtils
-          .buildRequest(FETCH_ALL_RULES_URL);
-      log.info("Fetching rules, url: {}", FETCH_ALL_RULES_URL);
-      Response response = client.newCall(request).execute();
-      ruleDefinitionList = objectMapper
-          .reader()
-          .forType(new TypeReference<List<RuleDefinition>>() {
-          })
-          .readValue(response.body().string());
-      log.info("Fetched rule count: {}", ruleDefinitionList.size());
-    } catch (IOException e) {
-      log.error("Failed to fetch published rules.", e);
-    }
-
+  public List<RuleDefinition> fetchAllRules() throws Exception {
+    Request request = RestClientUtils
+        .buildRequest(FETCH_ALL_RULES_URL);
+    log.info("Fetching rules, url: {}", FETCH_ALL_RULES_URL);
+    Response response = client.newCall(request).execute();
+    List<RuleDefinition> ruleDefinitionList = objectMapper
+        .reader()
+        .forType(new TypeReference<List<RuleDefinition>>() {})
+        .readValue(response.body().string());
+    log.info("Fetched rule count: {}", ruleDefinitionList.size());
     return ruleDefinitionList;
   }
 

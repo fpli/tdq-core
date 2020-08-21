@@ -69,6 +69,7 @@ public class RuleManager {
 
     // default hot deploy is disabled
     if (HOT_DEPLOY) {
+      log.info("Rule hot deployment enabled.");
       ruleFetcher = new RuleFetcher();
       zkExecutor = Executors.newSingleThreadExecutor();
       schedulingExecutor = Executors.newSingleThreadScheduledExecutor();
@@ -109,7 +110,8 @@ public class RuleManager {
     }
 
     for (RuleChangeEventListener<RuleChangeEvent> listener : listeners) {
-      if (listener.category() != null && listener.category().equals(category)) {
+      if (listener.category() != null && listener.category()
+          .equals(category)) {
         listener.onChange(ruleChangeEvent);
       }
     }
@@ -130,21 +132,29 @@ public class RuleManager {
   }
 
   public void initRules() {
-    log.info("Init all rules");
-    List<RuleDefinition> ruleDefinitionList = ruleFetcher.fetchAllRules();
-    loadRuleDef(ruleDefinitionList);
-    log.info("Init rules done.");
-    isInitDone = true;
+    try {
+      log.info("Init all rules");
+      List<RuleDefinition> ruleDefinitionList = ruleFetcher.fetchAllRules();
+      loadRuleDef(ruleDefinitionList);
+      log.info("Init rules done.");
+      isInitDone = true;
+    } catch (Throwable e) {
+      log.error("Cannot init rules", e);
+      throw new RuntimeException("Cannot init rules");
+    }
   }
 
   private void loadRuleDef(List<RuleDefinition> ruleDefinitionList) {
     if (CollectionUtils.isNotEmpty(ruleDefinitionList)) {
       for (RuleDefinition ruleDefinition : ruleDefinitionList) {
-        if (ruleDefinition.getCategory().equalsIgnoreCase("event")) {
+        if (ruleDefinition.getCategory()
+            .equalsIgnoreCase("event")) {
           eventRuleDefinitions.add(ruleDefinition);
-        } else if (ruleDefinition.getCategory().equalsIgnoreCase("session")) {
+        } else if (ruleDefinition.getCategory()
+            .equalsIgnoreCase("session")) {
           sessionRuleDefinitions.add(ruleDefinition);
-        } else if (ruleDefinition.getCategory().equalsIgnoreCase("attribute")) {
+        } else if (ruleDefinition.getCategory()
+            .equalsIgnoreCase("attribute")) {
           attributeRuleDefinitions.add(ruleDefinition);
         }
       }
@@ -187,37 +197,45 @@ public class RuleManager {
                              Long initDelayInSeconds, Long delayInSeconds) {
     schedulingExecutor.scheduleWithFixedDelay(() -> {
       log.info("Scheduled to update all rules");
-      Set<RuleDefinition> rules = Sets.newHashSet(ruleFetcher.fetchAllRules());
+      Set<RuleDefinition> rules = null;
 
-      if (CollectionUtils.isNotEmpty(rules)) {
-        Set<RuleDefinition> newEventRules = rules.stream()
-            .filter(r -> r.getCategory().equalsIgnoreCase("event"))
-            .collect(Collectors.toSet());
-        if (ruleHasChanges(eventRuleDefinitions, newEventRules)) {
-          this.eventRuleDefinitions = newEventRules;
-          notifyListeners(RuleCategory.EVENT);
+      try {
+        rules = Sets.newHashSet(ruleFetcher.fetchAllRules());
+        if (CollectionUtils.isNotEmpty(rules)) {
+          Set<RuleDefinition> newEventRules = rules.stream()
+              .filter(r -> r.getCategory()
+                  .equalsIgnoreCase("event"))
+              .collect(Collectors.toSet());
+          if (ruleHasChanges(eventRuleDefinitions, newEventRules)) {
+            this.eventRuleDefinitions = newEventRules;
+            notifyListeners(RuleCategory.EVENT);
+          }
+
+          Set<RuleDefinition> newSessionRules = rules.stream()
+              .filter(r -> r.getCategory()
+                  .equalsIgnoreCase("session"))
+              .collect(Collectors.toSet());
+          if (ruleHasChanges(sessionRuleDefinitions, newSessionRules)) {
+            this.sessionRuleDefinitions = newSessionRules;
+            notifyListeners(RuleCategory.SESSION);
+          }
+
+          Set<RuleDefinition> newAttributeRules = rules.stream()
+              .filter(r -> r.getCategory()
+                  .equalsIgnoreCase("attribute"))
+              .collect(Collectors.toSet());
+          if (ruleHasChanges(attributeRuleDefinitions, newAttributeRules)) {
+            this.attributeRuleDefinitions = newAttributeRules;
+            notifyListeners(RuleCategory.ATTRIBUTE);
+          }
+
+        } else {
+          log.info("No rules returned.");
         }
 
-        Set<RuleDefinition> newSessionRules = rules.stream()
-            .filter(r -> r.getCategory().equalsIgnoreCase("session"))
-            .collect(Collectors.toSet());
-        if (ruleHasChanges(sessionRuleDefinitions, newSessionRules)) {
-          this.sessionRuleDefinitions = newSessionRules;
-          notifyListeners(RuleCategory.SESSION);
-        }
-
-        Set<RuleDefinition> newAttributeRules = rules.stream()
-            .filter(r -> r.getCategory().equalsIgnoreCase("attribute"))
-            .collect(Collectors.toSet());
-        if (ruleHasChanges(attributeRuleDefinitions, newAttributeRules)) {
-          this.attributeRuleDefinitions = newAttributeRules;
-          notifyListeners(RuleCategory.ATTRIBUTE);
-        }
-
-      } else {
-        log.info("No rules returned.");
+      } catch (Exception e) {
+        log.error("Cannot update rules", e);
       }
-
     }, initDelayInSeconds, delayInSeconds, TimeUnit.SECONDS);
   }
 
