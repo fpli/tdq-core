@@ -61,5 +61,8 @@ under the License.
     files="src/main/java/com/ebay/sojourner/rt/operators/session/AgentIpFilterFunction.java"/>
   <suppress checks="NewlineAtEndOfFile" files=".java" />
   <suppress checks="NewlineAtEndOfFile" files=".properties" />
-  <suppress files="[\\/]src/test/java/com/ebay/sojourner/business/ubd[\\/]" checks="[a-zA-Z0-9]*"/>
+
+  <!-- Local test job  -->
+  <suppress checks=".*"
+    files="src/main/java/com/ebay/sojourner/rt/pipeline/.*Local.java$"/>
 </suppressions>
