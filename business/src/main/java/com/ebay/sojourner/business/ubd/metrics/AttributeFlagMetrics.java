@@ -1,9 +1,10 @@
 package com.ebay.sojourner.business.ubd.metrics;
 
-import com.ebay.sojourner.common.util.ByteArrayToNum;
 import com.ebay.sojourner.common.model.Attributes;
 import com.ebay.sojourner.common.model.SessionAccumulator;
 import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.util.ByteArrayToNum;
+import com.ebay.sojourner.common.util.SOJTS2Date;
 import org.apache.commons.lang3.StringUtils;
 
 public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
@@ -31,13 +32,17 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
 
     if (eventDate == null) {
       eventDate = DEFAULTDATE;
+    } else {
+      eventDate = SOJTS2Date.castSojTimestampToDate(eventDate);
     }
     String applicationPayload = event.getApplicationPayload();
     String webServer = event.getWebServer();
     String referrer = event.getReferrer();
     Integer pageId = event.getPageId();
     String userId = event.getUserId();
-
+    Long firstSessionStartDT =
+        SOJTS2Date
+            .castSojTimestampToDate(sessionAccumulator.getUbiSession().getFirstSessionStartDt());
     // replace null with default value
     if (applicationPayload == null) {
       applicationPayload = "";
@@ -59,7 +64,7 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
 
     // attribute flag 10
     if (sessionAccumulator.getUbiSession().getAttributeFlags()[10] == 0
-        && !eventDate.equals(sessionAccumulator.getUbiSession().getFirstSessionStartDt())) {
+        && !eventDate.equals(firstSessionStartDT)) {
       sessionAccumulator.getUbiSession().getAttributeFlags()[10] = 1;
     }
 
