@@ -26,7 +26,7 @@ public class MiscEventDeserializationSchema implements DeserializationSchema<Mis
     String requestCorrelationId = getString(genericRecord.get("requestCorrelationId"));
     String cguid = getString(genericRecord.get("cguid"));
     String sid = getString(genericRecord.get("sid"));
-    int pageId = getInteger(genericRecord.get("pageId"));
+    Integer pageId = getInteger(genericRecord.get("pageId"));
     String pageName = getString(genericRecord.get("pageName"));
     String pageFamily = getString(genericRecord.get("pageFamily"));
     String eventFamily = getString(genericRecord.get("eventFamily"));
@@ -38,8 +38,8 @@ public class MiscEventDeserializationSchema implements DeserializationSchema<Mis
     String seqNum = getString(genericRecord.get("seqNum"));
     String ciid = getString(genericRecord.get("ciid"));
     String siid = getString(genericRecord.get("siid"));
-    int rdt = getInteger(genericRecord.get("rdt"));
-    int regu = getInteger(genericRecord.get("regu"));
+    Integer rdt = getInteger(genericRecord.get("rdt"));
+    Integer regu = getInteger(genericRecord.get("regu"));
     Boolean iframe = getBoolean(genericRecord.get("iframe"));
     String refererHash = getString(genericRecord.get("refererHash"));
     String sqr = getString(genericRecord.get("sqr"));
@@ -48,7 +48,7 @@ public class MiscEventDeserializationSchema implements DeserializationSchema<Mis
     String urlQueryString = getString(genericRecord.get("urlQueryString"));
     String webServer = getString(genericRecord.get("webServer"));
     String cookies = getString(genericRecord.get("cookies"));
-    int bot = getInteger(genericRecord.get("bot"));
+    Integer bot = getInteger(genericRecord.get("bot"));
     String clientIP = getString(genericRecord.get("clientIP"));
     String remoteIP = getString(genericRecord.get("remoteIP"));
     String agentInfo = getString(genericRecord.get("agentInfo"));

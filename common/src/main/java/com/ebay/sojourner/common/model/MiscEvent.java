@@ -9,12 +9,12 @@ public class MiscEvent {
 
   private long eventCreateTimestamp;
   private String guid;
-  private long eventTimestamp;
-  private long eventCaptureTime;
+  private Long eventTimestamp;
+  private Long eventCaptureTime;
   private String requestCorrelationId;
   private String cguid;
   private String sid;
-  private int pageId;
+  private Integer pageId;
   private String pageName;
   private String pageFamily;
   private String eventFamily;
@@ -26,8 +26,8 @@ public class MiscEvent {
   private String seqNum;
   private String ciid;
   private String siid;
-  private int rdt;
-  private int regu;
+  private Integer rdt;
+  private Integer regu;
   private Boolean iframe;
   private String refererHash;
   private String sqr;
@@ -36,7 +36,7 @@ public class MiscEvent {
   private String urlQueryString;
   private String webServer;
   private String cookies;
-  private int bot;
+  private Integer bot;
   private String clientIP;
   private String remoteIP;
   private String agentInfo;
