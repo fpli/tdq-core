@@ -18,7 +18,7 @@ public class TimestampFieldExtractor {
 
     if (t instanceof RawEvent) {
       RawEvent rawEvent = (RawEvent) t;
-      return rawEvent.getEventTimestamp();
+      return SojTimestamp.getSojTimestampToUnixTimestamp(rawEvent.getEventTimestamp());
       //      return rawEvent.getRheosHeader().getEventCreateTimestamp(); change to real event
       //      generate time from tracking
 
