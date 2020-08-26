@@ -19,6 +19,7 @@ public class RawEvent implements Serializable {
   private Map<String, String> sojC;
   private ClientData clientData;
   private long ingestTime;
+  private Long eventTimestamp;
 
   @Override
   public String toString() {

@@ -4,27 +4,49 @@ import com.ebay.sojourner.common.model.ClientData;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.RheosHeader;
 import com.ebay.sojourner.common.util.CalTimeOfDay;
+import com.ebay.sojourner.common.util.PropertyUtils;
+import com.ebay.sojourner.common.util.SOJNVL;
+import com.ebay.sojourner.common.util.SOJTS2Date;
+import com.ebay.sojourner.common.util.SOJURLDecodeEscape;
 import com.ebay.sojourner.flink.connectors.kafka.RheosEventSerdeFactory;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 @Slf4j
 public class RawEventDeserializationSchema implements DeserializationSchema<RawEvent> {
 
   private static final String TAG_ITEMIDS = "!itemIds";
   private static final String TAG_TRKP = "trkp";
+  private static final long UPPERLIMITMICRO = 1 * 60 * 1000000L; // 2 minutes
+  private static final long LOWERLIMITMICRO = -30 * 60 * 1000000L; // 31 minutes
+  private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
+  // time zone is GMT-7
+  private static final TimeZone timeZone = TimeZone.getTimeZone("GMT-7");
+  private static final String P_TAG = "p";
+  private static final TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
   private static String[] tagsToEncode = new String[]{TAG_ITEMIDS, TAG_TRKP};
+  private DateTimeFormatter formaterUtc = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT).withZone(
+      DateTimeZone.forTimeZone(utcTimeZone));
+  private DateTimeFormatter formater = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT).withZone(
+      DateTimeZone.forTimeZone(timeZone));
 
   @Override
   public RawEvent deserialize(byte[] message) throws IOException {
@@ -80,7 +102,10 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
     GenericRecord genericClientData = (GenericRecord) genericRecord.get("clientData");
     ClientData clientData = new ClientData();
     parseClientData(clientData, genericClientData);
-    return new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData, ingestTime);
+    RawEvent rawEvent = new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData,
+        ingestTime, null);
+    parseEventtimeStamp(rawEvent);
+    return rawEvent;
   }
 
   private void parseClientData(ClientData clentData, GenericRecord genericRecord) {
@@ -369,6 +394,116 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
     CalTimeOfDay calTimeOfDay = new CalTimeOfDay(time);
     return calTimeOfDay.toString();
 
+  }
+
+  private void parseEventtimeStamp(RawEvent rawEvent) {
+    StringBuilder buffer = new StringBuilder();
+    Long abEventTimestamp = null;
+    Long eventTimestamp = null;
+    Long interval = null;
+    //    String applicationPayload = ubiEvent.getApplicationPayload();
+    String mtstsString = null;
+    String pageId = null;
+    Map<String, String> map = new HashMap<>();
+    map.putAll(rawEvent.getSojA());
+    map.putAll(rawEvent.getSojK());
+    map.putAll(rawEvent.getSojC());
+    String applicationPayload = null;
+    String mARecString = PropertyUtils.mapToString(rawEvent.getSojA());
+    String mKRecString = PropertyUtils.mapToString(rawEvent.getSojK());
+    String mCRecString = PropertyUtils.mapToString(rawEvent.getSojC());
+    if (mARecString != null) {
+      applicationPayload = mARecString;
+    }
+    if ((applicationPayload != null) && (mKRecString != null)) {
+      applicationPayload = applicationPayload + "&" + mKRecString;
+    }
+
+    // else set C record
+    if (applicationPayload == null) {
+      applicationPayload = mCRecString;
+    }
+    // abEventTimestamp = rawEvent.getAbEventTimestamp();
+    // for cal2.0 abeventtimestamp format change(from soj timestamp to EPOCH timestamp)
+    String tstamp = rawEvent.getClientData().getTStamp();
+    if (tstamp != null) {
+      try {
+        abEventTimestamp = Long.valueOf(rawEvent.getClientData().getTStamp());
+        abEventTimestamp = SOJTS2Date.getSojTimestamp(abEventTimestamp);
+      } catch (NumberFormatException e) {
+        Long origEventTimeStamp = rawEvent.getRheosHeader().getEventCreateTimestamp();
+        if (origEventTimeStamp != null) {
+          abEventTimestamp = SOJTS2Date.getSojTimestamp(origEventTimeStamp);
+        }
+      }
+    } else {
+      Long origEventTimeStamp = rawEvent.getRheosHeader().getEventCreateTimestamp();
+      if (origEventTimeStamp != null) {
+        abEventTimestamp = SOJTS2Date.getSojTimestamp(origEventTimeStamp);
+      }
+    }
+
+    if (StringUtils.isNotBlank(map.get(P_TAG))) {
+      pageId = map.get(P_TAG);
+    }
+
+    if (pageId != null && !pageId.equals("5660")) {
+      if (!StringUtils.isBlank(applicationPayload)) {
+        // get mtsts from payload
+        mtstsString =
+            SOJURLDecodeEscape.decodeEscapes(
+                SOJNVL.getTagValue(applicationPayload, "mtsts"), '%');
+
+        // compare ab_event_timestamp and mtsts
+        if (!StringUtils.isBlank(mtstsString) && mtstsString.trim().length() >= 21) {
+          buffer
+              .append(mtstsString, 0, 10)
+              .append(" ")
+              .append(mtstsString, 11, 19)
+              .append(".")
+              .append(mtstsString.substring(20));
+          mtstsString = buffer.toString();
+          buffer.setLength(0);
+          try {
+            if (mtstsString.endsWith("Z")) {
+              mtstsString = mtstsString.replaceAll("T", " ")
+                  .replaceAll("Z", "");
+              eventTimestamp =
+                  SOJTS2Date.getSojTimestamp(formaterUtc.parseDateTime(mtstsString).getMillis());
+            } else {
+              eventTimestamp = SOJTS2Date
+                  .getSojTimestamp(formater.parseDateTime(mtstsString).getMillis());
+            }
+            interval = getMicroSecondInterval(eventTimestamp, abEventTimestamp);
+            if (interval > UPPERLIMITMICRO || interval < LOWERLIMITMICRO) {
+              eventTimestamp = abEventTimestamp;
+            }
+          } catch (Exception e) {
+            log.error("Invalid mtsts: " + mtstsString);
+            eventTimestamp = abEventTimestamp;
+          }
+        } else {
+          eventTimestamp = abEventTimestamp;
+        }
+      } else {
+        eventTimestamp = abEventTimestamp;
+      }
+    } else {
+      eventTimestamp = abEventTimestamp;
+    }
+    rawEvent.setEventTimestamp(eventTimestamp);
+  }
+
+  // ignore second during comparing
+  private Long getMicroSecondInterval(Long microts1, Long microts2) throws ParseException {
+    Long v1, v2;
+    SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    SimpleDateFormat formater1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    formater.setTimeZone(timeZone);
+    formater1.setTimeZone(timeZone);
+    v1 = formater.parse(formater.format(new java.sql.Date(microts1 / 1000))).getTime();
+    v2 = formater.parse(formater.format(new java.sql.Date(microts2 / 1000))).getTime();
+    return (v1 - v2) * 1000;
   }
 
   private String getString(Object o) {
