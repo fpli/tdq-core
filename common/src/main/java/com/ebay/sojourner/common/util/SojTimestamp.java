@@ -44,14 +44,10 @@ public class SojTimestamp {
     return res;
   }
 
-  public static String getUnixTimestamp(String s) {
-    String res;
-    //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-    //        sdf.setTimeZone(TimeZone.getTimeZone("GMT-7"));
+  public static Long getUnixTimestamp(String s) {
     Date date = formatter.parseDateTime(s.substring(0, 23)).toDate();
     long ts = date.getTime();
-    res = String.valueOf(ts);
-    return res;
+    return ts;
   }
 
   public static Long getSojTimestampToUnixTimestamp(Long s) {
