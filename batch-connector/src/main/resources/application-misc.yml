@@ -21,5 +21,5 @@ flink:
 
 hdfs:
   dump:
-    path: hdfs://apollo-rno/sys/soj/ubd/misc/
+    path: hdfs://apollo-rno/sys/soj/ubd/misc_test/
     class-name: com.ebay.sojourner.common.model.MiscEvent
