@@ -43,9 +43,9 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
   private static final String P_TAG = "p";
   private static final TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
   private static String[] tagsToEncode = new String[]{TAG_ITEMIDS, TAG_TRKP};
-  private DateTimeFormatter formaterUtc = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT).withZone(
+  private transient DateTimeFormatter formaterUtc = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT).withZone(
       DateTimeZone.forTimeZone(utcTimeZone));
-  private DateTimeFormatter formater = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT).withZone(
+  private transient DateTimeFormatter formater = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT).withZone(
       DateTimeZone.forTimeZone(timeZone));
 
   @Override
