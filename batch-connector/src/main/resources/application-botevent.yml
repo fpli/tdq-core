@@ -1,7 +1,6 @@
 kafka:
   consumer:
     topic: behavior.totalv2.sojevent-bot
-    group-id: sojourner-total-dumper-rno
 
 flink:
   app:
@@ -15,4 +14,3 @@ hdfs:
   dump:
     path: hdfs://apollo-rno/sys/soj/ubd/events/type=bot
     watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/events/type=bot
-#    class-name: com.ebay.sojourner.common.model.SojEvent

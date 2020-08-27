@@ -74,7 +74,6 @@ hdfs:
   dump:
     path: hdfs://apollo-rno/sys/soj/ubd/events/type=nonbot
     watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/events/type=nonbot
-#    class-name: com.ebay.sojourner.common.model.SojEvent
 
 zookeeper:
   sessionTimeoutMs: 15000

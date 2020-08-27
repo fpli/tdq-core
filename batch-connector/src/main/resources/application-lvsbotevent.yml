@@ -2,6 +2,13 @@ kafka:
   consumer:
     topic: behavior.totalv2.sojevent-bot
     group-id: sojourner-total-dumper-lvs
+    bootstrap-servers:
+      lvs:
+        - rhs-ravvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
+        - rhs-ravvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
+        - rhs-ravvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
+        - rhs-ravvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
+        - rhs-ravvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
 
 flink:
   app:
@@ -15,4 +22,3 @@ hdfs:
   dump:
     path: hdfs://hercules/sys/soj/ubd/events/type=bot
     watermark-path: hdfs://hercules/sys/soj/ubd/watermark/events/type=bot
-#    class-name: com.ebay.sojourner.common.model.SojEvent

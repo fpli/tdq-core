@@ -14,7 +14,6 @@ public class KafkaConnectorFactory {
     Properties props = new Properties();
     props.put("sasl.mechanism", "IAF");
     props.put("security.protocol", "SASL_PLAINTEXT");
-    // props.put("security.protocol", "SASL_SSL");
 
     final String saslJaasConfig =
         String.format(
@@ -25,7 +24,6 @@ public class KafkaConnectorFactory {
             FlinkEnvUtils.getString(Property.RHEOS_CLIENT_IAF_ENV));
 
     props.put(SaslConfigs.SASL_JAAS_CONFIG, saslJaasConfig);
-    // props.put(SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG, "");
     return props;
   }
 

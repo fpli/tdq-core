@@ -1,7 +1,6 @@
 kafka:
   consumer:
     topic: behavior.totalv2.sojsession-nonbot
-    group-id: sojourner-total-dumper-rno
 
 flink:
   app:
@@ -17,4 +16,3 @@ hdfs:
       same-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=sameday/type=nonbot
       cross-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=crossday/type=nonbot
     watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/sessions/type=nonbot
-#    class-name: com.ebay.sojourner.common.model.SojSession

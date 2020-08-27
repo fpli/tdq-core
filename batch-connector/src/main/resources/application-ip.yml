@@ -1,7 +1,6 @@
 kafka:
   consumer:
     topic: behavior.totalv2.signature.ip
-    group-id: sojourner-total-dumper-rno
 
 flink:
   app:
