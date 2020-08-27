@@ -18,13 +18,13 @@ public class TimestampFieldExtractor {
 
     if (t instanceof RawEvent) {
       RawEvent rawEvent = (RawEvent) t;
-      return rawEvent.getEventTimestamp();
+      return SojTimestamp.getSojTimestampToUnixTimestamp(rawEvent.getEventTimestamp());
     } else if (t instanceof SojSession) {
       SojSession sojSession = (SojSession) t;
       return SojTimestamp.getSojTimestampToUnixTimestamp(sojSession.getSessionStartDt());
     } else if (t instanceof SojEvent) {
       SojEvent sojEvent = (SojEvent) t;
-      return sojEvent.getGenerateTime();
+      return SojTimestamp.getUnixTimestamp(sojEvent.getEventTimestamp());
     } else if (t instanceof JetStreamOutputEvent) {
       JetStreamOutputEvent jetStreamOutputEvent = (JetStreamOutputEvent) t;
       return jetStreamOutputEvent.getEventCreateTimestamp();

@@ -29,6 +29,87 @@ public class UbiSessionWindowProcessFunction
     this.outputTag = outputTag;
   }
 
+  private static void outputSession(UbiSession ubiSessionTmp,
+      Collector<UbiSession> out) {
+    UbiSession ubiSession = new UbiSession();
+    ubiSession.setGuid(ubiSessionTmp.getGuid());
+    ubiSession.setAgentString(ubiSessionTmp.getAgentString());
+    ubiSession.setSessionId(ubiSessionTmp.getSessionId());
+    ubiSession.setSessionSkey(ubiSessionTmp.getSessionSkey());
+    ubiSession.setIp(ubiSessionTmp.getIp());
+    ubiSession.setUserAgent(ubiSessionTmp.getUserAgent());
+    ubiSession.setExInternalIp(ubiSessionTmp.getExInternalIp());
+    ubiSession.setSojDataDt(ubiSessionTmp.getSojDataDt());
+    ubiSession.setSessionStartDt(ubiSessionTmp.getSessionStartDt());
+    ubiSession.setAgentCnt(ubiSessionTmp.getAgentCnt());
+    ubiSession.setStartTimestamp(ubiSessionTmp.getStartTimestamp());
+    ubiSession.setEndTimestamp(ubiSessionTmp.getEndTimestamp());
+    ubiSession.setAbsStartTimestamp(ubiSessionTmp.getAbsStartTimestamp());
+    ubiSession.setAbsEndTimestamp(ubiSessionTmp.getAbsEndTimestamp());
+    ubiSession.setClientIp(ubiSessionTmp.getClientIp());
+    ubiSession.setInternalIp(ubiSessionTmp.getInternalIp());
+    ubiSession.setSingleClickSessionFlag(
+        ubiSessionTmp.getSingleClickSessionFlag());
+    ubiSession.setBotFlagList(ubiSessionTmp.getBotFlagList());
+    ubiSession.setNonIframeRdtEventCnt(
+        ubiSessionTmp.getNonIframeRdtEventCnt());
+    ubiSession.setSessionReferrer(ubiSessionTmp.getSessionReferrer());
+    ubiSession.setBotFlag(ubiSessionTmp.getBotFlag());
+    ubiSession.setVersion(ubiSessionTmp.getVersion());
+    ubiSession.setFirstUserId(ubiSessionTmp.getFirstUserId());
+    ubiSession.setSiteFlags(ubiSessionTmp.getSiteFlags());
+    ubiSession.setAttrFlags(ubiSessionTmp.getAttrFlags());
+    ubiSession.setBotFlags(ubiSessionTmp.getBotFlags());
+    ubiSession.setFindingFlags(ubiSessionTmp.getFindingFlags());
+    ubiSession.setStartPageId(ubiSessionTmp.getStartPageId());
+    ubiSession.setEndPageId(ubiSessionTmp.getEndPageId());
+    ubiSession.setDurationSec(ubiSessionTmp.getDurationSec());
+    ubiSession.setEventCnt(ubiSessionTmp.getEventCnt());
+    ubiSession.setAbsEventCnt(ubiSessionTmp.getAbsEventCnt());
+    ubiSession.setViCoreCnt(ubiSessionTmp.getViCoreCnt());
+    ubiSession.setBidCoreCnt(ubiSessionTmp.getBidCoreCnt());
+    ubiSession.setBinCoreCnt(ubiSessionTmp.getBinCoreCnt());
+    ubiSession.setWatchCoreCnt(ubiSessionTmp.getWatchCoreCnt());
+    ubiSession.setTrafficSrcId(ubiSessionTmp.getTrafficSrcId());
+    ubiSession.setAbsDuration(ubiSessionTmp.getAbsDuration());
+    ubiSession.setCobrand(ubiSessionTmp.getCobrand());
+    ubiSession.setFirstAppId(ubiSessionTmp.getFirstAppId());
+    ubiSession.setFirstSiteId(ubiSessionTmp.getFirstSiteId());
+    ubiSession.setFirstCguid(ubiSessionTmp.getFirstCguid());
+    ubiSession.setFirstMappedUserId(ubiSessionTmp.getFirstMappedUserId());
+    ubiSession.setHomepageCnt(ubiSessionTmp.getHomepageCnt());
+    ubiSession.setGr1Cnt(ubiSessionTmp.getGr1Cnt());
+    ubiSession.setGrCnt(ubiSessionTmp.getGrCnt());
+    ubiSession.setMyebayCnt(ubiSessionTmp.getMyebayCnt());
+    ubiSession.setSigninPageCnt(ubiSessionTmp.getSigninPageCnt());
+    ubiSession.setAsqCnt(ubiSessionTmp.getAsqCnt());
+    ubiSession.setAtcCnt(ubiSessionTmp.getAtcCnt());
+    ubiSession.setAtlCnt(ubiSessionTmp.getAtlCnt());
+    ubiSession.setBoCnt(ubiSessionTmp.getBoCnt());
+    ubiSession.setSrpCnt(ubiSessionTmp.getSrpCnt());
+    ubiSession.setServEventCnt(ubiSessionTmp.getServEventCnt());
+    ubiSession.setSearchViewPageCnt(ubiSessionTmp.getSearchViewPageCnt());
+    ubiSession.setCity(ubiSessionTmp.getCity());
+    ubiSession.setRegion(ubiSessionTmp.getRegion());
+    ubiSession.setCountry(ubiSessionTmp.getCountry());
+    ubiSession.setContinent(ubiSessionTmp.getContinent());
+    ubiSession.setBrowserFamily(ubiSessionTmp.getBrowserFamily());
+    ubiSession.setBrowserVersion(ubiSessionTmp.getBrowserVersion());
+    ubiSession.setDeviceFamily(ubiSessionTmp.getDeviceFamily());
+    ubiSession.setDeviceClass(ubiSessionTmp.getDeviceClass());
+    ubiSession.setOsFamily(ubiSessionTmp.getOsFamily());
+    ubiSession.setOsVersion(ubiSessionTmp.getOsVersion());
+    ubiSession.setStartResourceId(ubiSessionTmp.getStartResourceId());
+    ubiSession.setEndResourceId(ubiSessionTmp.getEndResourceId());
+    ubiSession.setIsReturningVisitor(ubiSessionTmp.isReturningVisitor());
+    ubiSession.setLineSpeed(ubiSessionTmp.getLineSpeed());
+    ubiSession.setPulsarEventCnt(ubiSessionTmp.getPulsarEventCnt());
+    ubiSession.setSessionEndDt(ubiSessionTmp.getSessionEndDt());
+    ubiSession.setStreamId(ubiSessionTmp.getStreamId());
+    ubiSession.setBuserId(ubiSessionTmp.getBuserId());
+    out.collect(ubiSession);
+  }
+
   @Override
   public void process(
       Tuple tuple,
@@ -39,89 +120,21 @@ public class UbiSessionWindowProcessFunction
     if (sessionMetrics == null) {
       sessionMetrics = SessionMetrics.getInstance();
     }
-
     SessionAccumulator sessionAccumulator = elements.iterator().next();
-    endSessionEvent(sessionAccumulator);
-    Set<Integer> botFlagList = sessionEndBotDetector
-        .getBotFlagList(sessionAccumulator.getUbiSession());
-    sessionAccumulator.getUbiSession().getBotFlagList().addAll(botFlagList);
-    UbiSession ubiSession = new UbiSession();
-    ubiSession.setGuid(sessionAccumulator.getUbiSession().getGuid());
-    ubiSession.setAgentString(sessionAccumulator.getUbiSession().getAgentString());
-    ubiSession.setSessionId(sessionAccumulator.getUbiSession().getSessionId());
-    ubiSession.setSessionSkey(sessionAccumulator.getUbiSession().getSessionSkey());
-    ubiSession.setIp(sessionAccumulator.getUbiSession().getIp());
-    ubiSession.setUserAgent(sessionAccumulator.getUbiSession().getUserAgent());
-    ubiSession.setExInternalIp(sessionAccumulator.getUbiSession().getExInternalIp());
-    ubiSession.setSojDataDt(sessionAccumulator.getUbiSession().getSojDataDt());
-    ubiSession.setSessionStartDt(sessionAccumulator.getUbiSession().getSessionStartDt());
-    ubiSession.setAgentCnt(sessionAccumulator.getUbiSession().getAgentCnt());
-    ubiSession.setStartTimestamp(sessionAccumulator.getUbiSession().getStartTimestamp());
-    ubiSession.setEndTimestamp(sessionAccumulator.getUbiSession().getEndTimestamp());
-    ubiSession.setAbsStartTimestamp(sessionAccumulator.getUbiSession().getAbsStartTimestamp());
-    ubiSession.setAbsEndTimestamp(sessionAccumulator.getUbiSession().getAbsEndTimestamp());
-    ubiSession.setClientIp(sessionAccumulator.getUbiSession().getClientIp());
-    ubiSession.setInternalIp(sessionAccumulator.getUbiSession().getInternalIp());
-    ubiSession.setSingleClickSessionFlag(
-        sessionAccumulator.getUbiSession().getSingleClickSessionFlag());
-    ubiSession.setBotFlagList(sessionAccumulator.getUbiSession().getBotFlagList());
-    ubiSession.setNonIframeRdtEventCnt(
-        sessionAccumulator.getUbiSession().getNonIframeRdtEventCnt());
-    ubiSession.setSessionReferrer(sessionAccumulator.getUbiSession().getSessionReferrer());
-    ubiSession.setBotFlag(sessionAccumulator.getUbiSession().getBotFlag());
-    ubiSession.setVersion(sessionAccumulator.getUbiSession().getVersion());
-    ubiSession.setFirstUserId(sessionAccumulator.getUbiSession().getFirstUserId());
-    ubiSession.setSiteFlags(sessionAccumulator.getUbiSession().getSiteFlags());
-    ubiSession.setAttrFlags(sessionAccumulator.getUbiSession().getAttrFlags());
-    ubiSession.setBotFlags(sessionAccumulator.getUbiSession().getBotFlags());
-    ubiSession.setFindingFlags(sessionAccumulator.getUbiSession().getFindingFlags());
-    ubiSession.setStartPageId(sessionAccumulator.getUbiSession().getStartPageId());
-    ubiSession.setEndPageId(sessionAccumulator.getUbiSession().getEndPageId());
-    ubiSession.setDurationSec(sessionAccumulator.getUbiSession().getDurationSec());
-    ubiSession.setEventCnt(sessionAccumulator.getUbiSession().getEventCnt());
-    ubiSession.setAbsEventCnt(sessionAccumulator.getUbiSession().getAbsEventCnt());
-    ubiSession.setViCoreCnt(sessionAccumulator.getUbiSession().getViCoreCnt());
-    ubiSession.setBidCoreCnt(sessionAccumulator.getUbiSession().getBidCoreCnt());
-    ubiSession.setBinCoreCnt(sessionAccumulator.getUbiSession().getBinCoreCnt());
-    ubiSession.setWatchCoreCnt(sessionAccumulator.getUbiSession().getWatchCoreCnt());
-    ubiSession.setTrafficSrcId(sessionAccumulator.getUbiSession().getTrafficSrcId());
-    ubiSession.setAbsDuration(sessionAccumulator.getUbiSession().getAbsDuration());
-    ubiSession.setCobrand(sessionAccumulator.getUbiSession().getCobrand());
-    ubiSession.setFirstAppId(sessionAccumulator.getUbiSession().getFirstAppId());
-    ubiSession.setFirstSiteId(sessionAccumulator.getUbiSession().getFirstSiteId());
-    ubiSession.setFirstCguid(sessionAccumulator.getUbiSession().getFirstCguid());
-    ubiSession.setFirstMappedUserId(sessionAccumulator.getUbiSession().getFirstMappedUserId());
-    ubiSession.setHomepageCnt(sessionAccumulator.getUbiSession().getHomepageCnt());
-    ubiSession.setGr1Cnt(sessionAccumulator.getUbiSession().getGr1Cnt());
-    ubiSession.setGrCnt(sessionAccumulator.getUbiSession().getGrCnt());
-    ubiSession.setMyebayCnt(sessionAccumulator.getUbiSession().getMyebayCnt());
-    ubiSession.setSigninPageCnt(sessionAccumulator.getUbiSession().getSigninPageCnt());
-    ubiSession.setAsqCnt(sessionAccumulator.getUbiSession().getAsqCnt());
-    ubiSession.setAtcCnt(sessionAccumulator.getUbiSession().getAtcCnt());
-    ubiSession.setAtlCnt(sessionAccumulator.getUbiSession().getAtlCnt());
-    ubiSession.setBoCnt(sessionAccumulator.getUbiSession().getBoCnt());
-    ubiSession.setSrpCnt(sessionAccumulator.getUbiSession().getSrpCnt());
-    ubiSession.setServEventCnt(sessionAccumulator.getUbiSession().getServEventCnt());
-    ubiSession.setSearchViewPageCnt(sessionAccumulator.getUbiSession().getSearchViewPageCnt());
-    ubiSession.setCity(sessionAccumulator.getUbiSession().getCity());
-    ubiSession.setRegion(sessionAccumulator.getUbiSession().getRegion());
-    ubiSession.setCountry(sessionAccumulator.getUbiSession().getCountry());
-    ubiSession.setContinent(sessionAccumulator.getUbiSession().getContinent());
-    ubiSession.setBrowserFamily(sessionAccumulator.getUbiSession().getBrowserFamily());
-    ubiSession.setBrowserVersion(sessionAccumulator.getUbiSession().getBrowserVersion());
-    ubiSession.setDeviceFamily(sessionAccumulator.getUbiSession().getDeviceFamily());
-    ubiSession.setDeviceClass(sessionAccumulator.getUbiSession().getDeviceClass());
-    ubiSession.setOsFamily(sessionAccumulator.getUbiSession().getOsFamily());
-    ubiSession.setOsVersion(sessionAccumulator.getUbiSession().getOsVersion());
-    ubiSession.setStartResourceId(sessionAccumulator.getUbiSession().getStartResourceId());
-    ubiSession.setEndResourceId(sessionAccumulator.getUbiSession().getEndResourceId());
-    ubiSession.setIsReturningVisitor(sessionAccumulator.getUbiSession().isReturningVisitor());
-    ubiSession.setLineSpeed(sessionAccumulator.getUbiSession().getLineSpeed());
-    ubiSession.setPulsarEventCnt(sessionAccumulator.getUbiSession().getPulsarEventCnt());
-    ubiSession.setSessionEndDt(sessionAccumulator.getUbiSession().getSessionEndDt());
-    ubiSession.setStreamId(sessionAccumulator.getUbiSession().getStreamId());
-    ubiSession.setBuserId(sessionAccumulator.getUbiSession().getBuserId());
-    out.collect(ubiSession);
+    if (context.currentWatermark() >= context.window().maxTimestamp()) {
+      endSessionEvent(sessionAccumulator);
+      Set<Integer> botFlagList = sessionEndBotDetector
+          .getBotFlagList(sessionAccumulator.getUbiSession());
+      sessionAccumulator.getUbiSession().getBotFlagList().addAll(botFlagList);
+      outputSession(sessionAccumulator.getUbiSession(), out);
+    } else if (sessionAccumulator.getUbiSessionSplit() != null) {
+      endSessionEvent(sessionAccumulator);
+      Set<Integer> botFlagList = sessionEndBotDetector
+          .getBotFlagList(sessionAccumulator.getUbiSessionSplit());
+      sessionAccumulator.getUbiSessionSplit().getBotFlagList().addAll(botFlagList);
+      outputSession(sessionAccumulator.getUbiSessionSplit(), out);
+    }
+
   }
 
   private void endSessionEvent(SessionAccumulator sessionAccumulator) throws Exception {

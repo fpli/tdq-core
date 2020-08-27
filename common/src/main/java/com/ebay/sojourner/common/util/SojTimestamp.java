@@ -13,7 +13,7 @@ public class SojTimestamp {
 
   public static final long OFFSET = 2208963600000000L;
   public static final int MILLI2MICRO = 1000;
-  private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
+  private static final String DEFAULT_DATE_FORMAT = "yyyy/MM/dd HH:mm:ss.SSS";
   private static final String DEFAULT_DATE_FORMAT2 = "yyyy-MM-dd";
   private static DateTimeFormatter formatter = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
       .withZone(
@@ -44,14 +44,10 @@ public class SojTimestamp {
     return res;
   }
 
-  public static String getUnixTimestamp(String s) {
-    String res;
-    //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-    //        sdf.setTimeZone(TimeZone.getTimeZone("GMT-7"));
+  public static Long getUnixTimestamp(String s) {
     Date date = formatter.parseDateTime(s.substring(0, 23)).toDate();
     long ts = date.getTime();
-    res = String.valueOf(ts);
-    return res;
+    return ts;
   }
 
   public static Long getSojTimestampToUnixTimestamp(Long s) {
@@ -62,9 +58,8 @@ public class SojTimestamp {
   public static void main(String[] args) {
     System.out
         .println(
-            getSojTimestampToUnixTimestamp(Long.valueOf(getSojTimestamp("2020-05-10 12:01:01"
-                + ".000"))));
-
+            getSojTimestampToUnixTimestamp(Long.valueOf(
+                getSojTimestamp("2020/08/22 23:59:11.865"))));
     System.out.println(getUnixTimestamp("2020-06-17 02:59:59.000"));
     System.out.println(getSojTimestampToUnixTimestamp(3801622085446000L));
     //    System.out.println(getUnixTimestamp("2020-06-17 02:59:59.000"));
