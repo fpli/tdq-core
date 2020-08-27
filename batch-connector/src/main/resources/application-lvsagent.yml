@@ -1,0 +1,19 @@
+kafka:
+  consumer:
+    #    topic: behavior.total.new.signature.agent
+    #    group-id: sojourner-pathfinder-agent
+    topic: behavior.totalv2.signature.agent
+    group-id: sojourner-total-dumper-lvs
+
+flink:
+  app:
+    name: Sojourner Agent Signature HDFS Load Pipeline
+    parallelism:
+      source: 10
+      sink:
+        hdfs: 10
+
+hdfs:
+  dump:
+    path: hdfs://hercules/sys/soj/ubd/signatures/type=agent
+    class-name: com.ebay.sojourner.common.model.BotSignature

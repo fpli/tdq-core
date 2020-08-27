@@ -1,0 +1,18 @@
+kafka:
+  consumer:
+    topic: behavior.totalv2.sojevent-bot
+    group-id: sojourner-total-dumper-lvs
+
+flink:
+  app:
+    name: Sojourner Bot Event HDFS Load Pipeline
+    parallelism:
+      source: 50
+      sink:
+        hdfs: 50
+
+hdfs:
+  dump:
+    path: hdfs://hercules/sys/soj/ubd/events/type=bot
+    watermark-path: hdfs://hercules/sys/soj/ubd/watermark/events/type=bot
+#    class-name: com.ebay.sojourner.common.model.SojEvent

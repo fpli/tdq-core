@@ -1,0 +1,20 @@
+kafka:
+  consumer:
+    topic: behavior.totalv2.sojsession-bot
+    group-id: sojourner-total-dumper-lvs
+
+flink:
+  app:
+    name: Sojourner Bot Session HDFS Load Pipeline
+    parallelism:
+      source: 20
+      sink:
+        hdfs: 20
+
+hdfs:
+  dump:
+    path:
+      same-day: hdfs://hercules/sys/soj/ubd/sessions/category=sameday/type=bot
+      cross-day: hdfs://hercules/sys/soj/ubd/sessions/category=crossday/type=bot
+    watermark-path: hdfs://hercules/sys/soj/ubd/watermark/sessions/type=bot
+#    class-name: com.ebay.sojourner.common.model.SojSession
