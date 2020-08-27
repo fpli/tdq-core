@@ -2,14 +2,14 @@ kafka:
   consumer:
     stream: behavior.totalv2
     topic: behavior.totalv2.sojevent-nonbot
-    group-id: sojourner-total-dumper-rno
+    group-id: sojourner-total-dumper-lvs
     bootstrap-servers:
-      rno:
-         - rhs-fxuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.37.tess.io:9092
-         - rhs-fxuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.37.tess.io:9092
-         - rhs-fxuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.37.tess.io:9092
-         - rhs-fxuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.37.tess.io:9092
-         - rhs-fxuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.37.tess.io:9092
+      lvs:
+        - rhs-ravvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
+        - rhs-ravvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
+        - rhs-ravvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
+        - rhs-ravvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
+        - rhs-ravvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
 
     max-poll-records: 3000
     # 16MB, default value is 50MB
@@ -72,8 +72,8 @@ rheos:
 
 hdfs:
   dump:
-    path: hdfs://apollo-rno/sys/soj/ubd/events/type=nonbot
-    watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/events/type=nonbot
+    path: hdfs://hercules/sys/soj/ubd/events/type=nonbot
+    watermark-path: hdfs://hercules/sys/soj/ubd/watermark/events/type=nonbot
 #    class-name: com.ebay.sojourner.common.model.SojEvent
 
 zookeeper:
