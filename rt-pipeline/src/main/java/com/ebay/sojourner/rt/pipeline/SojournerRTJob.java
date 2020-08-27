@@ -106,6 +106,7 @@ public class SojournerRTJob {
             .keyBy("guid")
             .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
             .allowedLateness(Time.minutes(3))
+            .trigger(OnElementEarlyFiringTrigger.create())
             .sideOutputLateData(OutputTagConstants.lateEventOutputTag)
             .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction());
 

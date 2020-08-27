@@ -85,6 +85,15 @@ public class UBIConfig {
     }
   }
 
+  public static Long getLong(String key) {
+    Object o = getRawValue(key);
+    if (o == null) {
+      return null;
+    } else {
+      return Long.valueOf(o.toString());
+    }
+  }
+
   public static Boolean getBooleanOrDefault(String key, Boolean defaultBoolean) {
     Object o = getRawValue(key);
     if (o == null) {
