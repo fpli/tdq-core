@@ -41,7 +41,7 @@ public class UbiSessionAgg
     }
     if (accumulator.getUbiSession().getAbsStartTimestamp() != null
         && value.getEventTimestamp() != null && (
-        value.getEventTimestamp() - accumulator.getUbiSession().getAbsStartTimestamp() > UBIConfig
+        value.getEventTimestamp() - accumulator.getUbiSession().getAbsStartTimestamp() >= UBIConfig
             .getLong(Property.SESSION_MAX_DURATION) * SOJTS2Date.MILLI2MICRO)) {
       try {
         SessionMetrics.getInstance().end(accumulator);

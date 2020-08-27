@@ -58,13 +58,8 @@ public class SojTimestamp {
   public static void main(String[] args) {
     System.out
         .println(
-<<<<<<< HEAD
             getSojTimestampToUnixTimestamp(Long.valueOf(
                 getSojTimestamp("2020/08/22 23:59:11.865"))));
-=======
-            getSojTimestampToUnixTimestamp(Long.valueOf(getSojTimestamp("2020/08/22 23:59:11.865"))));
->>>>>>> 36048a51... fix not serializeble issue and convert to  unix time
-
     System.out.println(getUnixTimestamp("2020-06-17 02:59:59.000"));
     System.out.println(getSojTimestampToUnixTimestamp(3801622085446000L));
     //    System.out.println(getUnixTimestamp("2020-06-17 02:59:59.000"));
