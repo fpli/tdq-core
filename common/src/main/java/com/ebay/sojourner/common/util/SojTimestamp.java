@@ -54,18 +54,25 @@ public class SojTimestamp {
     long ts = (s - OFFSET) / MILLI2MICRO;
     return ts;
   }
-
+  public static String getDateStrWithUnixTimestamp(long ts) {
+    try {
+      return formatter2.print(ts);
+    } catch (Exception e) {
+      return null;
+    }
+  }
   public static void main(String[] args) {
     System.out
         .println(
             getSojTimestampToUnixTimestamp(Long.valueOf(
                 getSojTimestamp("2020/08/22 23:59:11.865"))));
-    System.out.println(getUnixTimestamp("2020-06-17 02:59:59.000"));
+    System.out.println(getUnixTimestamp("2020/06/17 02:59:59.000"));
     System.out.println(getSojTimestampToUnixTimestamp(3801622085446000L));
     //    System.out.println(getUnixTimestamp("2020-06-17 02:59:59.000"));
     System.out.println(getSojTimestampToUnixTimestamp(3807074683982000L));//1598111083982
 
     System.out.println(getSojTimestampToUnixTimestamp(3807076484397000L));//
+    System.out.println(getDateStrWithUnixTimestamp(1598111083982L));
 
   }
 }

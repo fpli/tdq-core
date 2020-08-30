@@ -30,7 +30,7 @@ public class UbiSessionWindowProcessFunction
   }
 
   private static void outputSession(UbiSession ubiSessionTmp,
-      Collector<UbiSession> out) {
+      Collector<UbiSession> out, boolean isOpen) {
     UbiSession ubiSession = new UbiSession();
     ubiSession.setGuid(ubiSessionTmp.getGuid());
     ubiSession.setAgentString(ubiSessionTmp.getAgentString());
@@ -107,6 +107,7 @@ public class UbiSessionWindowProcessFunction
     ubiSession.setSessionEndDt(ubiSessionTmp.getSessionEndDt());
     ubiSession.setStreamId(ubiSessionTmp.getStreamId());
     ubiSession.setBuserId(ubiSessionTmp.getBuserId());
+    ubiSession.setOpenEmit(isOpen);
     out.collect(ubiSession);
   }
 
@@ -126,13 +127,15 @@ public class UbiSessionWindowProcessFunction
       Set<Integer> botFlagList = sessionEndBotDetector
           .getBotFlagList(sessionAccumulator.getUbiSession());
       sessionAccumulator.getUbiSession().getBotFlagList().addAll(botFlagList);
-      outputSession(sessionAccumulator.getUbiSession(), out);
+      outputSession(sessionAccumulator.getUbiSession(), out, false);
     } else if (sessionAccumulator.getUbiSessionSplit() != null) {
       endSessionEvent(sessionAccumulator);
       Set<Integer> botFlagList = sessionEndBotDetector
           .getBotFlagList(sessionAccumulator.getUbiSessionSplit());
       sessionAccumulator.getUbiSessionSplit().getBotFlagList().addAll(botFlagList);
-      outputSession(sessionAccumulator.getUbiSessionSplit(), out);
+      outputSession(sessionAccumulator.getUbiSessionSplit(), out, false);
+    } else {
+      outputSession(sessionAccumulator.getUbiSession(), out, true);
     }
 
   }

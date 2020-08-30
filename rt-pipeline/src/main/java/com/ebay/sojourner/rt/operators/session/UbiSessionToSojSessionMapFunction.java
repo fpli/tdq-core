@@ -80,6 +80,7 @@ public class UbiSessionToSojSessionMapFunction extends RichMapFunction<UbiSessio
     sojSession.setStartResourceId(ubiSession.getStartResourceId());
     sojSession.setStreamId(ubiSession.getStreamId());
     sojSession.setBuserId(ubiSession.getBuserId());
+    sojSession.setIsOpen(ubiSession.isOpenEmit());
     return sojSession;
   }
 }

@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class SojSession extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 9137125554793857374L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SojSession\",\"namespace\":\"com.ebay.sojourner.common.model\",\"fields\":[{\"name\":\"guid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession guid\"},{\"name\":\"sessionReferrer\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession sessionReferrer\"},{\"name\":\"siteFlags\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession siteFlags\"},{\"name\":\"attrFlags\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession attrFlags\"},{\"name\":\"version\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession version\"},{\"name\":\"botFlags\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession botFlags\"},{\"name\":\"ip\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession ip\"},{\"name\":\"userAgent\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession userAgent\"},{\"name\":\"findingFlags\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession findingFlags\"},{\"name\":\"startPageId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession startPageId\"},{\"name\":\"endPageId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession endPageId\"},{\"name\":\"botFlag\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession botFlag\"},{\"name\":\"durationSec\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession durationSec\"},{\"name\":\"firstUserId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession firstUserId\"},{\"name\":\"eventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession eventCnt\"},{\"name\":\"trafficSrcId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession trafficSrcId\"},{\"name\":\"viCoreCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession viCoreCnt\"},{\"name\":\"bidCoreCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession bidCoreCnt\"},{\"name\":\"binCoreCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession binCoreCnt\"},{\"name\":\"watchCoreCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession watchCoreCnt\"},{\"name\":\"homepageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession homepageCnt\"},{\"name\":\"firstSiteId\",\"type\":[\"null\",\"int\"],\"doc\":\"fron ubisession firstSiteId\"},{\"name\":\"firstCguid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"fron ubisession firstCguid\"},{\"name\":\"cobrand\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession cobrand\"},{\"name\":\"startTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession startTimestamp\"},{\"name\":\"firstMappedUserId\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession firstMappedUserId\"},{\"name\":\"firstAppId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession firstAppId\"},{\"name\":\"absDuration\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession absDuration\"},{\"name\":\"grCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession grCnt\"},{\"name\":\"gr1Cnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession gr1Cnt\"},{\"name\":\"myebayCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession myebayCnt\"},{\"name\":\"absStartTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession absStartTimestamp\"},{\"name\":\"signinPageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession signinPageCnt\"},{\"name\":\"nonIframeRdtEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession nonIframeRdtEventCnt\"},{\"name\":\"botFlagList\",\"type\":[\"null\",{\"type\":\"array\",\"items\":\"int\"}],\"default\":null},{\"name\":\"absEndTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession absEndTimestamp\"},{\"name\":\"endTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession endTimestamp\"},{\"name\":\"sojDataDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sojDataDt\"},{\"name\":\"sessionId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession sessionId\"},{\"name\":\"sessionSkey\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sessionSkey\"},{\"name\":\"sessionStartDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sessionStartDt\"},{\"name\":\"firstSessionStartDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession firstSessionStartDt\"},{\"name\":\"sessionEndDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sessionEndDt\"},{\"name\":\"absEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession absEventCnt\"},{\"name\":\"singleClickSessionFlag\",\"type\":[\"null\",\"boolean\"],\"doc\":\"from ubisession singleClickSessionFlag\"},{\"name\":\"asqCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession asqCnt\"},{\"name\":\"atcCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession atcCnt\"},{\"name\":\"atlCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession atlCnt\"},{\"name\":\"boCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession boCnt\"},{\"name\":\"srpCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession srpCnt\"},{\"name\":\"servEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession servEventCnt\"},{\"name\":\"searchViewPageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession searchViewPageCnt\"},{\"name\":\"browserFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession browserFamily\"},{\"name\":\"browserVersion\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession browserVersion\"},{\"name\":\"city\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession city\"},{\"name\":\"region\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession region\"},{\"name\":\"country\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession country\"},{\"name\":\"continent\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession continent\"},{\"name\":\"deviceClass\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession deviceClass\"},{\"name\":\"deviceFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession deviceFamily\"},{\"name\":\"endResourceId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession endResourceId\"},{\"name\":\"startResourceId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession startResourceId\"},{\"name\":\"isReturningVisitor\",\"type\":[\"null\",\"boolean\"],\"doc\":\"from ubisession isReturningVisitor\"},{\"name\":\"lineSpeed\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession lineSpeed\"},{\"name\":\"osFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession osFamily\"},{\"name\":\"osVersion\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession osVersion\"},{\"name\":\"pulsarEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession pulsarEventCnt\"},{\"name\":\"streamId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession streamId\"},{\"name\":\"buserId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession buserId\"}]}");
+  private static final long serialVersionUID = -7462152822714229924L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SojSession\",\"namespace\":\"com.ebay.sojourner.common.model\",\"fields\":[{\"name\":\"guid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession guid\"},{\"name\":\"sessionReferrer\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession sessionReferrer\"},{\"name\":\"siteFlags\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession siteFlags\"},{\"name\":\"attrFlags\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession attrFlags\"},{\"name\":\"version\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession version\"},{\"name\":\"botFlags\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession botFlags\"},{\"name\":\"ip\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession ip\"},{\"name\":\"userAgent\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession userAgent\"},{\"name\":\"findingFlags\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession findingFlags\"},{\"name\":\"startPageId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession startPageId\"},{\"name\":\"endPageId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession endPageId\"},{\"name\":\"botFlag\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession botFlag\"},{\"name\":\"durationSec\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession durationSec\"},{\"name\":\"firstUserId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession firstUserId\"},{\"name\":\"eventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession eventCnt\"},{\"name\":\"trafficSrcId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession trafficSrcId\"},{\"name\":\"viCoreCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession viCoreCnt\"},{\"name\":\"bidCoreCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession bidCoreCnt\"},{\"name\":\"binCoreCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession binCoreCnt\"},{\"name\":\"watchCoreCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession watchCoreCnt\"},{\"name\":\"homepageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession homepageCnt\"},{\"name\":\"firstSiteId\",\"type\":[\"null\",\"int\"],\"doc\":\"fron ubisession firstSiteId\"},{\"name\":\"firstCguid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"fron ubisession firstCguid\"},{\"name\":\"cobrand\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession cobrand\"},{\"name\":\"startTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession startTimestamp\"},{\"name\":\"firstMappedUserId\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession firstMappedUserId\"},{\"name\":\"firstAppId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession firstAppId\"},{\"name\":\"absDuration\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession absDuration\"},{\"name\":\"grCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession grCnt\"},{\"name\":\"gr1Cnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession gr1Cnt\"},{\"name\":\"myebayCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession myebayCnt\"},{\"name\":\"absStartTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession absStartTimestamp\"},{\"name\":\"signinPageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession signinPageCnt\"},{\"name\":\"nonIframeRdtEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession nonIframeRdtEventCnt\"},{\"name\":\"botFlagList\",\"type\":[\"null\",{\"type\":\"array\",\"items\":\"int\"}],\"default\":null},{\"name\":\"absEndTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession absEndTimestamp\"},{\"name\":\"endTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession endTimestamp\"},{\"name\":\"sojDataDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sojDataDt\"},{\"name\":\"sessionId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession sessionId\"},{\"name\":\"sessionSkey\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sessionSkey\"},{\"name\":\"sessionStartDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sessionStartDt\"},{\"name\":\"firstSessionStartDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession firstSessionStartDt\"},{\"name\":\"sessionEndDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sessionEndDt\"},{\"name\":\"absEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession absEventCnt\"},{\"name\":\"singleClickSessionFlag\",\"type\":[\"null\",\"boolean\"],\"doc\":\"from ubisession singleClickSessionFlag\"},{\"name\":\"asqCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession asqCnt\"},{\"name\":\"atcCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession atcCnt\"},{\"name\":\"atlCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession atlCnt\"},{\"name\":\"boCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession boCnt\"},{\"name\":\"srpCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession srpCnt\"},{\"name\":\"servEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession servEventCnt\"},{\"name\":\"searchViewPageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession searchViewPageCnt\"},{\"name\":\"browserFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession browserFamily\"},{\"name\":\"browserVersion\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession browserVersion\"},{\"name\":\"city\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession city\"},{\"name\":\"region\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession region\"},{\"name\":\"country\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession country\"},{\"name\":\"continent\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession continent\"},{\"name\":\"deviceClass\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession deviceClass\"},{\"name\":\"deviceFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession deviceFamily\"},{\"name\":\"endResourceId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession endResourceId\"},{\"name\":\"startResourceId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession startResourceId\"},{\"name\":\"isReturningVisitor\",\"type\":[\"null\",\"boolean\"],\"doc\":\"from ubisession isReturningVisitor\"},{\"name\":\"lineSpeed\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession lineSpeed\"},{\"name\":\"osFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession osFamily\"},{\"name\":\"osVersion\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession osVersion\"},{\"name\":\"pulsarEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession pulsarEventCnt\"},{\"name\":\"streamId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession streamId\"},{\"name\":\"buserId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession buserId\"},{\"name\":\"isOpen\",\"type\":[\"null\",\"boolean\"],\"doc\":\"to identify open or end\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -188,6 +188,8 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
   @Deprecated public java.lang.String streamId;
   /** from ubisession buserId */
   @Deprecated public java.lang.String buserId;
+  /** to identify open or end */
+  @Deprecated public java.lang.Boolean isOpen;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -267,8 +269,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
    * @param pulsarEventCnt from ubisession pulsarEventCnt
    * @param streamId from ubisession streamId
    * @param buserId from ubisession buserId
+   * @param isOpen to identify open or end
    */
-  public SojSession(java.lang.String guid, java.lang.String sessionReferrer, java.lang.Long siteFlags, java.lang.Integer attrFlags, java.lang.Integer version, java.lang.Integer botFlags, java.lang.String ip, java.lang.String userAgent, java.lang.Long findingFlags, java.lang.Integer startPageId, java.lang.Integer endPageId, java.lang.Integer botFlag, java.lang.Integer durationSec, java.lang.String firstUserId, java.lang.Integer eventCnt, java.lang.Integer trafficSrcId, java.lang.Integer viCoreCnt, java.lang.Integer bidCoreCnt, java.lang.Integer binCoreCnt, java.lang.Integer watchCoreCnt, java.lang.Integer homepageCnt, java.lang.Integer firstSiteId, java.lang.String firstCguid, java.lang.Integer cobrand, java.lang.Long startTimestamp, java.lang.Long firstMappedUserId, java.lang.Integer firstAppId, java.lang.Integer absDuration, java.lang.Integer grCnt, java.lang.Integer gr1Cnt, java.lang.Integer myebayCnt, java.lang.Long absStartTimestamp, java.lang.Integer signinPageCnt, java.lang.Integer nonIframeRdtEventCnt, java.util.List<java.lang.Integer> botFlagList, java.lang.Long absEndTimestamp, java.lang.Long endTimestamp, java.lang.Long sojDataDt, java.lang.String sessionId, java.lang.Long sessionSkey, java.lang.Long sessionStartDt, java.lang.Long firstSessionStartDt, java.lang.Long sessionEndDt, java.lang.Integer absEventCnt, java.lang.Boolean singleClickSessionFlag, java.lang.Integer asqCnt, java.lang.Integer atcCnt, java.lang.Integer atlCnt, java.lang.Integer boCnt, java.lang.Integer srpCnt, java.lang.Integer servEventCnt, java.lang.Integer searchViewPageCnt, java.lang.String browserFamily, java.lang.String browserVersion, java.lang.String city, java.lang.String region, java.lang.String country, java.lang.String continent, java.lang.String deviceClass, java.lang.String deviceFamily, java.lang.Integer endResourceId, java.lang.Integer startResourceId, java.lang.Boolean isReturningVisitor, java.lang.String lineSpeed, java.lang.String osFamily, java.lang.String osVersion, java.lang.Integer pulsarEventCnt, java.lang.String streamId, java.lang.String buserId) {
+  public SojSession(java.lang.String guid, java.lang.String sessionReferrer, java.lang.Long siteFlags, java.lang.Integer attrFlags, java.lang.Integer version, java.lang.Integer botFlags, java.lang.String ip, java.lang.String userAgent, java.lang.Long findingFlags, java.lang.Integer startPageId, java.lang.Integer endPageId, java.lang.Integer botFlag, java.lang.Integer durationSec, java.lang.String firstUserId, java.lang.Integer eventCnt, java.lang.Integer trafficSrcId, java.lang.Integer viCoreCnt, java.lang.Integer bidCoreCnt, java.lang.Integer binCoreCnt, java.lang.Integer watchCoreCnt, java.lang.Integer homepageCnt, java.lang.Integer firstSiteId, java.lang.String firstCguid, java.lang.Integer cobrand, java.lang.Long startTimestamp, java.lang.Long firstMappedUserId, java.lang.Integer firstAppId, java.lang.Integer absDuration, java.lang.Integer grCnt, java.lang.Integer gr1Cnt, java.lang.Integer myebayCnt, java.lang.Long absStartTimestamp, java.lang.Integer signinPageCnt, java.lang.Integer nonIframeRdtEventCnt, java.util.List<java.lang.Integer> botFlagList, java.lang.Long absEndTimestamp, java.lang.Long endTimestamp, java.lang.Long sojDataDt, java.lang.String sessionId, java.lang.Long sessionSkey, java.lang.Long sessionStartDt, java.lang.Long firstSessionStartDt, java.lang.Long sessionEndDt, java.lang.Integer absEventCnt, java.lang.Boolean singleClickSessionFlag, java.lang.Integer asqCnt, java.lang.Integer atcCnt, java.lang.Integer atlCnt, java.lang.Integer boCnt, java.lang.Integer srpCnt, java.lang.Integer servEventCnt, java.lang.Integer searchViewPageCnt, java.lang.String browserFamily, java.lang.String browserVersion, java.lang.String city, java.lang.String region, java.lang.String country, java.lang.String continent, java.lang.String deviceClass, java.lang.String deviceFamily, java.lang.Integer endResourceId, java.lang.Integer startResourceId, java.lang.Boolean isReturningVisitor, java.lang.String lineSpeed, java.lang.String osFamily, java.lang.String osVersion, java.lang.Integer pulsarEventCnt, java.lang.String streamId, java.lang.String buserId, java.lang.Boolean isOpen) {
     this.guid = guid;
     this.sessionReferrer = sessionReferrer;
     this.siteFlags = siteFlags;
@@ -338,6 +341,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
     this.pulsarEventCnt = pulsarEventCnt;
     this.streamId = streamId;
     this.buserId = buserId;
+    this.isOpen = isOpen;
   }
 
   public org.apache.avro.Schema getSchema() { return SCHEMA$; }
@@ -413,6 +417,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
     case 66: return pulsarEventCnt;
     case 67: return streamId;
     case 68: return buserId;
+    case 69: return isOpen;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -490,6 +495,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
     case 66: pulsarEventCnt = (java.lang.Integer)value$; break;
     case 67: streamId = (java.lang.String)value$; break;
     case 68: buserId = (java.lang.String)value$; break;
+    case 69: isOpen = (java.lang.Boolean)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -1667,6 +1673,23 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
   }
 
   /**
+   * Gets the value of the 'isOpen' field.
+   * @return to identify open or end
+   */
+  public java.lang.Boolean getIsOpen() {
+    return isOpen;
+  }
+
+  /**
+   * Sets the value of the 'isOpen' field.
+   * to identify open or end
+   * @param value the value to set.
+   */
+  public void setIsOpen(java.lang.Boolean value) {
+    this.isOpen = value;
+  }
+
+  /**
    * Creates a new SojSession RecordBuilder.
    * @return A new SojSession RecordBuilder
    */
@@ -1835,6 +1858,8 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
     private java.lang.String streamId;
     /** from ubisession buserId */
     private java.lang.String buserId;
+    /** to identify open or end */
+    private java.lang.Boolean isOpen;
 
     /** Creates a new Builder */
     private Builder() {
@@ -2123,6 +2148,10 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
         this.buserId = data().deepCopy(fields()[68].schema(), other.buserId);
         fieldSetFlags()[68] = true;
       }
+      if (isValidValue(fields()[69], other.isOpen)) {
+        this.isOpen = data().deepCopy(fields()[69].schema(), other.isOpen);
+        fieldSetFlags()[69] = true;
+      }
     }
 
     /**
@@ -2406,6 +2435,10 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       if (isValidValue(fields()[68], other.buserId)) {
         this.buserId = data().deepCopy(fields()[68].schema(), other.buserId);
         fieldSetFlags()[68] = true;
+      }
+      if (isValidValue(fields()[69], other.isOpen)) {
+        this.isOpen = data().deepCopy(fields()[69].schema(), other.isOpen);
+        fieldSetFlags()[69] = true;
       }
     }
 
@@ -5372,6 +5405,49 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       return this;
     }
 
+    /**
+      * Gets the value of the 'isOpen' field.
+      * to identify open or end
+      * @return The value.
+      */
+    public java.lang.Boolean getIsOpen() {
+      return isOpen;
+    }
+
+    /**
+      * Sets the value of the 'isOpen' field.
+      * to identify open or end
+      * @param value The value of 'isOpen'.
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SojSession.Builder setIsOpen(java.lang.Boolean value) {
+      validate(fields()[69], value);
+      this.isOpen = value;
+      fieldSetFlags()[69] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'isOpen' field has been set.
+      * to identify open or end
+      * @return True if the 'isOpen' field has been set, false otherwise.
+      */
+    public boolean hasIsOpen() {
+      return fieldSetFlags()[69];
+    }
+
+
+    /**
+      * Clears the value of the 'isOpen' field.
+      * to identify open or end
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SojSession.Builder clearIsOpen() {
+      isOpen = null;
+      fieldSetFlags()[69] = false;
+      return this;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public SojSession build() {
@@ -5446,6 +5522,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
         record.pulsarEventCnt = fieldSetFlags()[66] ? this.pulsarEventCnt : (java.lang.Integer) defaultValue(fields()[66]);
         record.streamId = fieldSetFlags()[67] ? this.streamId : (java.lang.String) defaultValue(fields()[67]);
         record.buserId = fieldSetFlags()[68] ? this.buserId : (java.lang.String) defaultValue(fields()[68]);
+        record.isOpen = fieldSetFlags()[69] ? this.isOpen : (java.lang.Boolean) defaultValue(fields()[69]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
