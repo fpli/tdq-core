@@ -650,7 +650,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.0.0-M4</version>
+          <version>3.0.0-M5</version>
           <configuration>
             <includes>
               <include>**/Test*.java</include>
@@ -659,19 +659,10 @@
               <include>**/*TestCase.java</include>
               <include>**/*Suite.java</include>
             </includes>
-            <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
-            <environmentVariables>
-            </environmentVariables>
-            <systemProperties>
-              <log4j.configuration>file:src/test/resources/log4j.properties</log4j.configuration>
-              <java.awt.headless>true</java.awt.headless>
-              <java.io.tmpdir>${project.build.directory}/tmp</java.io.tmpdir>
-            </systemProperties>
             <failIfNoTests>false</failIfNoTests>
-            <forkMode>always</forkMode>
-            <!--                        <forkCount>2C</forkCount>-->
-            <!--                        <reuseForks>false</reuseForks>-->
-            <!--                        <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>-->
+            <!--<forkCount>2C</forkCount>-->
+            <!--<reuseForks>false</reuseForks>-->
+            <!--<argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>-->
           </configuration>
         </plugin>
 
@@ -721,6 +712,11 @@
             </execution>
           </executions>
         </plugin>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>3.7.0.1746</version>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -745,6 +741,10 @@
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
       </plugin>
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+      </plugin>
     </plugins>
   </build>
 
@@ -753,7 +753,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>3.0.0-M4</version>
+        <version>3.0.0-M5</version>
       </plugin>
     </plugins>
   </reporting>
