@@ -69,7 +69,8 @@ public class OnElementEarlyFiringTrigger<W extends Window> extends Trigger<Objec
       ReducingState<Long> lastTiemstampState = ctx.getPartitionedState(lastTimestampStateDesc);
       String lastDateStr = SojTimestamp.getDateStrWithUnixTimestamp(lastTiemstampState.get());
       String currentDateStr = SojTimestamp.getDateStrWithUnixTimestamp(time);
-      if (!currentDateStr.equals(lastDateStr)) {
+      if (lastTiemstampState.get() != null && lastTiemstampState.get() < time && !currentDateStr
+          .equals(lastDateStr)) {
         lastTiemstampState.clear();
         lastTiemstampState.add(time);
         return TriggerResult.FIRE;
