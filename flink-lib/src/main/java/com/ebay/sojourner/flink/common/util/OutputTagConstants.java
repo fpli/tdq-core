@@ -27,4 +27,7 @@ public class OutputTagConstants {
 
   public static OutputTag<SojSession> crossDaySessionOutputTag =
       new OutputTag<>("cross-day-session-output-tag", TypeInformation.of(SojSession.class));
+
+  public static OutputTag<SojSession> openSessionOutputTag =
+      new OutputTag<>("open-session-output-tag", TypeInformation.of(SojSession.class));
 }

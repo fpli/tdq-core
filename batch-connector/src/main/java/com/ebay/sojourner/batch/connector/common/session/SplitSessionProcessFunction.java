@@ -15,10 +15,12 @@ public class SplitSessionProcessFunction extends ProcessFunction<SojSession, Soj
   private static final String DATE_FORMAT = "yyyyMMdd";
   private static final String DEFAULT_DATE = "19700101";
   private DateTimeFormatter dateTimeFormatter;
-  private OutputTag outputTag;
+  private OutputTag crossDayOutputTag;
+  private OutputTag openOutputTag;
 
-  public SplitSessionProcessFunction(OutputTag outputTag) {
-    this.outputTag = outputTag;
+  public SplitSessionProcessFunction(OutputTag crossDayOutputTag, OutputTag openOutputTag) {
+    this.crossDayOutputTag = crossDayOutputTag;
+    this.openOutputTag = openOutputTag;
   }
 
   @Override
@@ -39,10 +41,12 @@ public class SplitSessionProcessFunction extends ProcessFunction<SojSession, Soj
     String sessionEndTimeString = transferLongToDateString(sessionEndTimestamp);
     String sessionStartTimeString = transferLongToDateString(sessionStartDt);
 
-    if (sessionStartTimeString.equals(sessionEndTimeString)) {
+    if (sojSession.getIsOpen()) {
+      context.output(openOutputTag, sojSession);
+    } else if (sessionStartTimeString.equals(sessionEndTimeString)) {
       out.collect(sojSession);
     } else {
-      context.output(outputTag, sojSession);
+      context.output(crossDayOutputTag, sojSession);
     }
   }
 
