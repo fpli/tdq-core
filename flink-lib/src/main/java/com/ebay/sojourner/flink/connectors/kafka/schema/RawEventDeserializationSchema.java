@@ -44,10 +44,10 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
   private static final TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
   private static String[] tagsToEncode = new String[]{TAG_ITEMIDS, TAG_TRKP};
 
-  private transient DateTimeFormatter formaterUtc = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
+  private static DateTimeFormatter formaterUtc = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
       .withZone(
           DateTimeZone.forTimeZone(utcTimeZone));
-  private transient DateTimeFormatter formater = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
+  private static DateTimeFormatter formater = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
       .withZone(
           DateTimeZone.forTimeZone(timeZone));
 
@@ -400,6 +400,16 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
   }
 
   private void parseEventtimeStamp(RawEvent rawEvent) {
+    //    if (formaterUtc == null) {
+    //      formaterUtc = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
+    //          .withZone(
+    //              DateTimeZone.forTimeZone(utcTimeZone));
+    //    }
+    //    if (formater == null) {
+    //      formater = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
+    //          .withZone(
+    //              DateTimeZone.forTimeZone(timeZone));
+    //    }
     StringBuilder buffer = new StringBuilder();
     Long abEventTimestamp = null;
     Long eventTimestamp = null;
@@ -468,7 +478,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
           mtstsString = buffer.toString();
           buffer.setLength(0);
           try {
-            if (mtstsString.endsWith("Z")) {
+            if (mtstsString.endsWith("Z") || mtstsString.contains("T")) {
               mtstsString = mtstsString.replaceAll("T", " ")
                   .replaceAll("Z", "");
               eventTimestamp =
@@ -482,7 +492,9 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
               eventTimestamp = abEventTimestamp;
             }
           } catch (Exception e) {
-            log.error("Invalid mtsts: " + mtstsString);
+            log.error("Invalid mtsts: " + mtstsString + " abEventTimestamp: " + abEventTimestamp
+                + " eventTimestamp:" + eventTimestamp);
+            log.error("TimeStamp Parse error:", e);
             eventTimestamp = abEventTimestamp;
           }
         } else {

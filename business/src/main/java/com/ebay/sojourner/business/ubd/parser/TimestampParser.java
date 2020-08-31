@@ -25,21 +25,27 @@ public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
   private static final TimeZone timeZone = TimeZone.getTimeZone("GMT-7");
   private static final String P_TAG = "p";
   private static final TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
-  private DateTimeFormatter formaterUtc = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT).withZone(
+  private static DateTimeFormatter formater =
+      DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT).withZone(
+          DateTimeZone.forTimeZone(timeZone));
+  private static DateTimeFormatter formaterUtc =
+      DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT).withZone(
       DateTimeZone.forTimeZone(utcTimeZone));
-  private DateTimeFormatter formater = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT).withZone(
-      DateTimeZone.forTimeZone(timeZone));
 
   public static void main(String[] args) throws ParseException {
     DateTimeFormatter formaterUtcTest =
         DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT).withZone(
             DateTimeZone.forTimeZone(utcTimeZone));
-    String mtstsString = "2020-08-13T09:45:47.079Z";
-    mtstsString = mtstsString.replaceAll("T", " ")
-        .replaceAll("Z", "");
+    String mtstsString = "2020-08-31 13:28:48.586";
+    //    mtstsString = mtstsString.replaceAll("T", " ")
+    //        .replaceAll("Z", "");
     System.out.println(mtstsString);
     System.out.println(
-        SOJTS2Date.getSojTimestamp(formaterUtcTest.parseDateTime(mtstsString).getMillis()));
+        SOJTS2Date.getSojTimestamp(formaterUtc.parseDateTime(mtstsString).getMillis()));
+    System.out.println(SOJTS2Date.getSojTimestamp(formater.parseDateTime(mtstsString).getMillis()));
+    System.out.println(getMicroSecondInterval(
+       Long.valueOf(SOJTS2Date.getSojTimestamp(formater.parseDateTime(mtstsString).getMillis())),
+        Long.valueOf(SOJTS2Date.getSojTimestamp(formater.parseDateTime(mtstsString).getMillis()))));
   }
 
   public void parse(RawEvent rawEvent, UbiEvent ubiEvent) {
@@ -136,7 +142,7 @@ public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
   }
 
   // ignore second during comparing
-  Long getMicroSecondInterval(Long microts1, Long microts2) throws ParseException {
+  private static Long getMicroSecondInterval(Long microts1, Long microts2) throws ParseException {
     Long v1, v2;
     SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     SimpleDateFormat formater1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
