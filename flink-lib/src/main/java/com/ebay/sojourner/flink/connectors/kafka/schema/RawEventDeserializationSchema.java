@@ -42,14 +42,14 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
   private static final TimeZone timeZone = TimeZone.getTimeZone("GMT-7");
   private static final String P_TAG = "p";
   private static final TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
-  private static String[] tagsToEncode = new String[]{TAG_ITEMIDS, TAG_TRKP};
-
-  private transient DateTimeFormatter formaterUtc = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
-      .withZone(
-          DateTimeZone.forTimeZone(utcTimeZone));
-  private transient DateTimeFormatter formater = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
+  private static final DateTimeFormatter formaterUtc =
+      DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
+          .withZone(
+              DateTimeZone.forTimeZone(utcTimeZone));
+  private static final DateTimeFormatter formater = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
       .withZone(
           DateTimeZone.forTimeZone(timeZone));
+  private static String[] tagsToEncode = new String[]{TAG_ITEMIDS, TAG_TRKP};
 
   @Override
   public RawEvent deserialize(byte[] message) throws IOException {
@@ -107,7 +107,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
     parseClientData(clientData, genericClientData);
     RawEvent rawEvent = new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData,
         ingestTime, null);
-    parseEventtimeStamp(rawEvent);
+    parseEventTimestamp(rawEvent);
     return rawEvent;
   }
 
@@ -399,7 +399,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
 
   }
 
-  private void parseEventtimeStamp(RawEvent rawEvent) {
+  private void parseEventTimestamp(RawEvent rawEvent) {
     StringBuilder buffer = new StringBuilder();
     Long abEventTimestamp = null;
     Long eventTimestamp = null;
@@ -468,7 +468,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
           mtstsString = buffer.toString();
           buffer.setLength(0);
           try {
-            if (mtstsString.endsWith("Z")) {
+            if (mtstsString.endsWith("Z") || mtstsString.contains("T")) {
               mtstsString = mtstsString.replaceAll("T", " ")
                   .replaceAll("Z", "");
               eventTimestamp =
