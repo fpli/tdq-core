@@ -16,9 +16,6 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class UbiSessionHelper {
 
-  public static final long MINUS_GUID_MIN_MS =
-      180000L; // 417mins - 7hours = -3mins = -180000ms; UNIX.
-  public static final long PLUS_GUID_MAX_MS = 300000L; // 425mins - 7hours = 5mins = 300000ms;
   public static final float DEFAULT_LOAD_FACTOR = .75F;
   public static final int IAB_MAX_CAPACITY =
       100 * 1024; // 250 * 1024 * 1024 = 250m - refer io.sort.mb (default spill size)
@@ -184,9 +181,9 @@ public class UbiSessionHelper {
     try {
       if (startTimestamp != null) {
         long guidTimestamp = GUID2Date.getTimestamp(guid);
-        long startTimestampInUnix = SOJTS2Date.getUnixTimestamp(startTimestamp);
-        long minTimestamp = startTimestampInUnix - MINUS_GUID_MIN_MS;
-        long maxTimestamp = startTimestampInUnix + PLUS_GUID_MAX_MS;
+        long startTimestampInUnix = SojTimestamp.getUnixTimestamp(startTimestamp);
+        long minTimestamp = startTimestampInUnix - Constants.MINUS_GUID_MIN_MS;
+        long maxTimestamp = startTimestampInUnix + Constants.PLUS_GUID_MAX_MS;
         if (guidTimestamp >= minTimestamp && guidTimestamp <= maxTimestamp) {
           return true;
         }

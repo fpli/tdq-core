@@ -150,16 +150,16 @@ public class UBIConfig {
     // Set session properties
     setLong(
         Property.EVENT_WAITING_PERIOD,
-        Long.parseLong(getUBIProperty(Property.EVENT_WAITING_PERIOD)) * SOJTS2Date.MILLI2MICRO);
+        Long.parseLong(getUBIProperty(Property.EVENT_WAITING_PERIOD)) * Constants.MILLI2MICRO);
     setLong(
         Property.SESSION_IDLE_TIMEOUT,
-        Long.parseLong(getUBIProperty(Property.SESSION_IDLE_TIMEOUT)) * SOJTS2Date.MILLI2MICRO);
+        Long.parseLong(getUBIProperty(Property.SESSION_IDLE_TIMEOUT)) * Constants.MILLI2MICRO);
     setLong(
         Property.SESSION_MAX_DURATION,
-        Long.parseLong(getUBIProperty(Property.SESSION_MAX_DURATION)) * SOJTS2Date.MILLI2MICRO);
+        Long.parseLong(getUBIProperty(Property.SESSION_MAX_DURATION)) * Constants.MILLI2MICRO);
     setLong(
         Property.EVENT_DELAY_THRESHOLD,
-        Long.parseLong(getUBIProperty(Property.EVENT_DELAY_THRESHOLD)) * SOJTS2Date.MILLI2MICRO);
+        Long.parseLong(getUBIProperty(Property.EVENT_DELAY_THRESHOLD)) * Constants.MILLI2MICRO);
     // Set event properties
     setLong(
         Property.EVENT_POOL_THRESHOLD, Long.valueOf(getUBIProperty(Property.EVENT_POOL_THRESHOLD)));

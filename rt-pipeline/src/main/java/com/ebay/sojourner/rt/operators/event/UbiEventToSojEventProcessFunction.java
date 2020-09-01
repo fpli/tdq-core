@@ -2,7 +2,7 @@ package com.ebay.sojourner.rt.operators.event;
 
 import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
-import com.ebay.sojourner.common.util.SOJTS2Date;
+import com.ebay.sojourner.common.util.SojTimestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -53,7 +53,7 @@ public class UbiEventToSojEventProcessFunction extends ProcessFunction<UbiEvent,
     sojEvent.setEventAttr(ubiEvent.getEventAttr());
     sojEvent.setEventCnt(ubiEvent.getEventCnt());
     sojEvent.setEventFamily(ubiEvent.getEventFamily());
-    sojEvent.setEventTimestamp(SOJTS2Date.getDateStrWithMillis(ubiEvent.getEventTimestamp()));
+    sojEvent.setEventTimestamp(SojTimestamp.getDateStrWithMillis(ubiEvent.getEventTimestamp()));
     sojEvent.setFlags(ubiEvent.getFlags());
     sojEvent.setForwardedFor(ubiEvent.getForwardedFor());
     sojEvent.setGenerateTime(ubiEvent.getGenerateTime());
@@ -82,8 +82,8 @@ public class UbiEventToSojEventProcessFunction extends ProcessFunction<UbiEvent,
     sojEvent.setSessionSkey(ubiEvent.getSessionSkey());
     sojEvent.setSessionId(ubiEvent.getSessionId());
     sojEvent.setSessionStartDt(ubiEvent.getSessionStartDt() == null ? null
-        : SOJTS2Date.getDateStr(ubiEvent.getSessionStartDt()));
-    sojEvent.setSojDataDt(SOJTS2Date.getDateStr(ubiEvent.getSojDataDt()));
+        : SojTimestamp.getDateStr(ubiEvent.getSessionStartDt()));
+    sojEvent.setSojDataDt(SojTimestamp.getDateStr(ubiEvent.getSojDataDt()));
     sojEvent.setSessionStartTime(ubiEvent.getSessionStartTime());
     sojEvent.setSid(ubiEvent.getSid());
     sojEvent.setSiteId(ubiEvent.getSiteId());

@@ -4,10 +4,11 @@ import com.ebay.sojourner.common.model.ClientData;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.RheosHeader;
 import com.ebay.sojourner.common.util.CalTimeOfDay;
+import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.PropertyUtils;
 import com.ebay.sojourner.common.util.SOJNVL;
-import com.ebay.sojourner.common.util.SOJTS2Date;
 import com.ebay.sojourner.common.util.SOJURLDecodeEscape;
+import com.ebay.sojourner.common.util.SojTimestamp;
 import com.ebay.sojourner.flink.connectors.kafka.RheosEventSerdeFactory;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.IOException;
@@ -15,11 +16,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
@@ -33,23 +32,19 @@ import org.joda.time.format.DateTimeFormatter;
 @Slf4j
 public class RawEventDeserializationSchema implements DeserializationSchema<RawEvent> {
 
-  private static final String TAG_ITEMIDS = "!itemIds";
-  private static final String TAG_TRKP = "trkp";
-  private static final long UPPERLIMITMICRO = 1 * 60 * 1000000L; // 2 minutes
-  private static final long LOWERLIMITMICRO = -30 * 60 * 1000000L; // 31 minutes
-  private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
-  // time zone is GMT-7
-  private static final TimeZone timeZone = TimeZone.getTimeZone("GMT-7");
-  private static final String P_TAG = "p";
-  private static final TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
   private static final DateTimeFormatter formaterUtc =
-      DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
+      DateTimeFormat.forPattern(Constants.DEFAULT_TIMESTAMP_FORMAT)
           .withZone(
-              DateTimeZone.forTimeZone(utcTimeZone));
-  private static final DateTimeFormatter formater = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
+              DateTimeZone.forTimeZone(Constants.UTC_TIMEZONE));
+  private static final DateTimeFormatter formater = DateTimeFormat.forPattern(
+      Constants.DEFAULT_TIMESTAMP_FORMAT)
       .withZone(
-          DateTimeZone.forTimeZone(timeZone));
-  private static String[] tagsToEncode = new String[]{TAG_ITEMIDS, TAG_TRKP};
+          DateTimeZone.forTimeZone(Constants.PST_TIMEZONE));
+  private static final DateTimeFormatter dateMinsFormatter = DateTimeFormat.forPattern(
+      Constants.DEFAULT_DATE_MINS_FORMAT)
+      .withZone(
+          DateTimeZone.forTimeZone(Constants.PST_TIMEZONE));
+  private static String[] tagsToEncode = new String[]{Constants.TAG_ITEMIDS, Constants.TAG_TRKP};
 
   @Override
   public RawEvent deserialize(byte[] message) throws IOException {
@@ -442,22 +437,22 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
     if (tstamp != null) {
       try {
         abEventTimestamp = Long.valueOf(rawEvent.getClientData().getTStamp());
-        abEventTimestamp = SOJTS2Date.getSojTimestamp(abEventTimestamp);
+        abEventTimestamp = SojTimestamp.getSojTimestamp(abEventTimestamp);
       } catch (NumberFormatException e) {
         Long origEventTimeStamp = rawEvent.getRheosHeader().getEventCreateTimestamp();
         if (origEventTimeStamp != null) {
-          abEventTimestamp = SOJTS2Date.getSojTimestamp(origEventTimeStamp);
+          abEventTimestamp = SojTimestamp.getSojTimestamp(origEventTimeStamp);
         }
       }
     } else {
       Long origEventTimeStamp = rawEvent.getRheosHeader().getEventCreateTimestamp();
       if (origEventTimeStamp != null) {
-        abEventTimestamp = SOJTS2Date.getSojTimestamp(origEventTimeStamp);
+        abEventTimestamp = SojTimestamp.getSojTimestamp(origEventTimeStamp);
       }
     }
 
-    if (StringUtils.isNotBlank(map.get(P_TAG))) {
-      pageId = map.get(P_TAG);
+    if (StringUtils.isNotBlank(map.get(Constants.P_TAG))) {
+      pageId = map.get(Constants.P_TAG);
     }
 
     if (pageId != null && !pageId.equals("5660")) {
@@ -465,7 +460,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
         // get mtsts from payload
         mtstsString =
             SOJURLDecodeEscape.decodeEscapes(
-                SOJNVL.getTagValue(applicationPayload, "mtsts"), '%');
+                SOJNVL.getTagValue(applicationPayload, Constants.TAG_MTSTS), '%');
 
         // compare ab_event_timestamp and mtsts
         if (!StringUtils.isBlank(mtstsString) && mtstsString.trim().length() >= 21) {
@@ -482,13 +477,13 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
               mtstsString = mtstsString.replaceAll("T", " ")
                   .replaceAll("Z", "");
               eventTimestamp =
-                  SOJTS2Date.getSojTimestamp(formaterUtc.parseDateTime(mtstsString).getMillis());
+                  SojTimestamp.getSojTimestamp(formaterUtc.parseDateTime(mtstsString).getMillis());
             } else {
-              eventTimestamp = SOJTS2Date
+              eventTimestamp = SojTimestamp
                   .getSojTimestamp(formater.parseDateTime(mtstsString).getMillis());
             }
             interval = getMicroSecondInterval(eventTimestamp, abEventTimestamp);
-            if (interval > UPPERLIMITMICRO || interval < LOWERLIMITMICRO) {
+            if (interval > Constants.UPPERLIMITMICRO || interval < Constants.LOWERLIMITMICRO) {
               eventTimestamp = abEventTimestamp;
             }
           } catch (Exception e) {
@@ -512,12 +507,8 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
   // ignore second during comparing
   private Long getMicroSecondInterval(Long microts1, Long microts2) throws ParseException {
     Long v1, v2;
-    SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    SimpleDateFormat formater1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    formater.setTimeZone(timeZone);
-    formater1.setTimeZone(timeZone);
-    v1 = formater.parse(formater.format(new java.sql.Date(microts1 / 1000))).getTime();
-    v2 = formater.parse(formater.format(new java.sql.Date(microts2 / 1000))).getTime();
+    v1 = dateMinsFormatter.parseDateTime(dateMinsFormatter.print(microts1 / 1000)).getMillis();
+    v2 = dateMinsFormatter.parseDateTime(dateMinsFormatter.print(microts2 / 1000)).getMillis();
     return (v1 - v2) * 1000;
   }
 

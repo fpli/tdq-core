@@ -8,7 +8,9 @@ import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.util.SojTimestamp;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class TimestampFieldExtractor {
 
   public static <T> long getField(T t) {
@@ -18,7 +20,14 @@ public class TimestampFieldExtractor {
       return SojTimestamp.getSojTimestampToUnixTimestamp(rawEvent.getEventTimestamp());
     } else if (t instanceof SojSession) {
       SojSession sojSession = (SojSession) t;
-      return SojTimestamp.getSojTimestampToUnixTimestamp(sojSession.getSessionStartDt());
+      try {
+        return SojTimestamp.getSojTimestampToUnixTimestamp(sojSession.getSessionStartDt());
+      } catch (Exception e) {
+        log.warn("failed session record: ", sojSession.toString());
+        log.warn("parse sessionstartdt failed: ", e);
+        return System.currentTimeMillis();
+      }
+
     } else if (t instanceof SojEvent) {
       SojEvent sojEvent = (SojEvent) t;
       return SojTimestamp.getUnixTimestamp(sojEvent.getEventTimestamp());

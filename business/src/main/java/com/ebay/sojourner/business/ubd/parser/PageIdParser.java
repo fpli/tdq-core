@@ -1,5 +1,6 @@
 package com.ebay.sojourner.business.ubd.parser;
 
+import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.IntegerField;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
@@ -11,8 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 @Slf4j
 public class PageIdParser implements FieldParser<RawEvent, UbiEvent> {
 
-  private static final String P_TAG = "p";
-
   public void parse(RawEvent event, UbiEvent ubiEvent) {
     try {
       Map<String, String> map = new HashMap<>();
@@ -20,8 +19,8 @@ public class PageIdParser implements FieldParser<RawEvent, UbiEvent> {
       map.putAll(event.getSojK());
       map.putAll(event.getSojC());
       String pageid = null;
-      if (StringUtils.isNotBlank(map.get(P_TAG))) {
-        pageid = map.get(P_TAG);
+      if (StringUtils.isNotBlank(map.get(Constants.P_TAG))) {
+        pageid = map.get(Constants.P_TAG);
       }
       String value = IntegerField.parse(pageid);
       if (ubiEvent.getGuid() != null && StringUtils.isNotBlank(pageid)) {
