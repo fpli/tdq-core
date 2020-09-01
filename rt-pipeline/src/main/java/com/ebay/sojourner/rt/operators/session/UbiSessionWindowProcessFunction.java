@@ -4,6 +4,7 @@ import com.ebay.sojourner.business.ubd.detectors.SessionEndBotDetector;
 import com.ebay.sojourner.business.ubd.metrics.SessionMetrics;
 import com.ebay.sojourner.common.model.SessionAccumulator;
 import com.ebay.sojourner.common.model.UbiSession;
+import com.ebay.sojourner.common.util.SojTimestamp;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.java.tuple.Tuple;
@@ -135,7 +136,19 @@ public class UbiSessionWindowProcessFunction
       sessionAccumulator.getUbiSessionSplit().getBotFlagList().addAll(botFlagList);
       outputSession(sessionAccumulator.getUbiSessionSplit(), out, false);
     } else {
-      outputSession(sessionAccumulator.getUbiSession(), out, true);
+      long absStartDate = SojTimestamp
+          .castSojTimestampToDate(sessionAccumulator.getUbiSession().getAbsStartTimestamp());
+      long absEndDate =
+          SojTimestamp
+              .castSojTimestampToDate(sessionAccumulator.getUbiSession().getAbsEndTimestamp());
+      if (absStartDate != absEndDate) {
+        endSessionEvent(sessionAccumulator);
+        Set<Integer> botFlagList = sessionEndBotDetector
+            .getBotFlagList(sessionAccumulator.getUbiSessionSplit());
+        sessionAccumulator.getUbiSessionSplit().getBotFlagList().addAll(botFlagList);
+        outputSession(sessionAccumulator.getUbiSession(), out, true);
+      }
+
     }
 
   }
