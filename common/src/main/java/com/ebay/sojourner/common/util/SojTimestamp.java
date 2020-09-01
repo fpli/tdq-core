@@ -56,11 +56,7 @@ public class SojTimestamp {
     long ts = (s - Constants.OFFSET) / Constants.MILLI2MICRO;
     return ts;
   }
-<<<<<<< HEAD
-  public static String getDateStrWithUnixTimestamp(long ts) {
-    try {
-      return formatter2.print(ts);
-=======
+
   /**
    * Get Sojourner default Calendar for being used.
    */
@@ -112,13 +108,18 @@ public class SojTimestamp {
   public static Date getDate(long ts) {
     try {
       return new Date((ts - Constants.OFFSET) / Constants.MILLI2MICRO);
->>>>>>> 3e00cfad... centralize constants and fix timestamp format issue
     } catch (Exception e) {
       return null;
     }
   }
-<<<<<<< HEAD
-=======
+
+  public static String getDateStrWithUnixTimestamp(long ts) {
+    try {
+      return dateTimeFormatter.print(ts);
+    } catch (Exception e) {
+      return null;
+    }
+  }
 
   public static String normalized(String ts) {
     try {
@@ -129,29 +130,20 @@ public class SojTimestamp {
       throw new RuntimeException("normalized timestamp failed", e);
     }
   }
->>>>>>> 3e00cfad... centralize constants and fix timestamp format issue
+
   public static void main(String[] args) {
     System.out
         .println(
             getSojTimestampToUnixTimestamp(Long.valueOf(
-<<<<<<< HEAD
-                getSojTimestamp("2020/08/22 23:59:11.865"))));
-    System.out.println(getUnixTimestamp("2020/06/17 02:59:59.000"));
-=======
                 getSojTimestamp("2020-08-22 23:59:11.865"))));
     System.out.println(getUnixTimestamp("2020-06-17 02:59:59.000"));
->>>>>>> 3e00cfad... centralize constants and fix timestamp format issue
     System.out.println(getSojTimestampToUnixTimestamp(3801622085446000L));
     //    System.out.println(getUnixTimestamp("2020-06-17 02:59:59.000"));
     System.out.println(getSojTimestampToUnixTimestamp(3807074683982000L));//1598111083982
 
     System.out.println(getSojTimestampToUnixTimestamp(3807076484397000L));//
-<<<<<<< HEAD
-    System.out.println(getDateStrWithUnixTimestamp(1598111083982L));
-
-=======
     System.out.println(getDateStr(3807076484397000L));
     System.out.println(getDateStrWithMillis(3807076484397000L));
->>>>>>> 3e00cfad... centralize constants and fix timestamp format issue
+    System.out.println(getDateStrWithUnixTimestamp(1598111083982L));
   }
 }
