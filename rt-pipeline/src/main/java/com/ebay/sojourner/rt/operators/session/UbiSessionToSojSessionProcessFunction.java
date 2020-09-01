@@ -104,9 +104,9 @@ public class UbiSessionToSojSessionProcessFunction extends ProcessFunction<UbiSe
     // split bot session and nonbot session
     if (sojSession.getBotFlagList().size() == 0 || CollectionUtils
         .subtract(sojSession.getBotFlagList(), intermediateBotFlagList).size() == 0) {
-      context.output(outputTag, sojSession);
-    } else {
       out.collect(sojSession);
+    } else {
+      context.output(outputTag, sojSession);
     }
   }
 

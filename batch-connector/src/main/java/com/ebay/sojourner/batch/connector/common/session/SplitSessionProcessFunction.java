@@ -5,11 +5,13 @@ import com.ebay.sojourner.common.util.SojTimestamp;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 
+@Slf4j
 public class SplitSessionProcessFunction extends ProcessFunction<SojSession, SojSession> {
 
   private static final String DATE_FORMAT = "yyyyMMdd";
@@ -33,10 +35,18 @@ public class SplitSessionProcessFunction extends ProcessFunction<SojSession, Soj
   public void processElement(SojSession sojSession, Context context, Collector<SojSession> out)
       throws Exception {
 
-    Long sessionEndTimestamp = SojTimestamp
-        .getSojTimestampToUnixTimestamp(sojSession.getAbsEndTimestamp());
-    Long sessionStartDt = SojTimestamp
-        .getSojTimestampToUnixTimestamp(sojSession.getSessionStartDt());
+    Long sessionEndTimestamp = System.currentTimeMillis();
+    Long sessionStartDt = System.currentTimeMillis();
+
+    try {
+      sessionEndTimestamp = SojTimestamp
+          .getSojTimestampToUnixTimestamp(sojSession.getAbsEndTimestamp());
+      sessionStartDt = SojTimestamp
+          .getSojTimestampToUnixTimestamp(sojSession.getSessionStartDt());
+    } catch (Exception e) {
+      log.warn("session end time is null: " + sessionEndTimestamp);
+      log.warn("session start time is null: " + sessionStartDt);
+    }
 
     String sessionEndTimeString = transferLongToDateString(sessionEndTimestamp);
     String sessionStartTimeString = transferLongToDateString(sessionStartDt);

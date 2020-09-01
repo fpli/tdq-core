@@ -46,7 +46,8 @@ public class OpenSessionFiringTrigger<W extends Window> extends Trigger<Object, 
       return TriggerResult.FIRE;
     } else {
       ReducingState<Long> lastTiemstampState = ctx.getPartitionedState(lastTimestampStateDesc);
-      String lastDateStr = SojTimestamp.getDateStrWithUnixTimestamp(lastTiemstampState.get());
+      String lastDateStr = SojTimestamp.getDateStrWithUnixTimestamp(
+          lastTiemstampState.get() == null ? 0L : lastTiemstampState.get());
       String currentDateStr = SojTimestamp.getDateStrWithUnixTimestamp(timestamp);
       if (lastTiemstampState.get() != null && lastTiemstampState.get() < timestamp
           && !currentDateStr.equals(lastDateStr)) {
@@ -68,7 +69,8 @@ public class OpenSessionFiringTrigger<W extends Window> extends Trigger<Object, 
       return TriggerResult.FIRE;
     } else {
       ReducingState<Long> lastTiemstampState = ctx.getPartitionedState(lastTimestampStateDesc);
-      String lastDateStr = SojTimestamp.getDateStrWithUnixTimestamp(lastTiemstampState.get());
+      String lastDateStr = SojTimestamp.getDateStrWithUnixTimestamp(
+          lastTiemstampState.get() == null ? 0L : lastTiemstampState.get());
       String currentDateStr = SojTimestamp.getDateStrWithUnixTimestamp(time);
       if (lastTiemstampState.get() != null && lastTiemstampState.get() < time && !currentDateStr
           .equals(lastDateStr)) {
