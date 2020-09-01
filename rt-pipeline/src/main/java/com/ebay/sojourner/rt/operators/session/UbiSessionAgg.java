@@ -5,8 +5,8 @@ import com.ebay.sojourner.business.ubd.metrics.SessionMetrics;
 import com.ebay.sojourner.common.model.SessionAccumulator;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
+import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.common.util.SOJTS2Date;
 import com.ebay.sojourner.common.util.UBIConfig;
 import java.io.IOException;
 import java.util.Set;
@@ -16,8 +16,6 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 @Slf4j
 public class UbiSessionAgg
     implements AggregateFunction<UbiEvent, SessionAccumulator, SessionAccumulator> {
-
-  private static final int MICRO_SECONDS = 1000 * 1000;
 
   @Override
   public SessionAccumulator createAccumulator() {
@@ -42,7 +40,7 @@ public class UbiSessionAgg
     if (accumulator.getUbiSession().getAbsStartTimestamp() != null
         && value.getEventTimestamp() != null && (
         value.getEventTimestamp() - accumulator.getUbiSession().getAbsStartTimestamp() >= UBIConfig
-            .getLong(Property.SESSION_MAX_DURATION) * SOJTS2Date.MILLI2MICRO)) {
+            .getLong(Property.SESSION_MAX_DURATION) * Constants.MILLI2MICRO)) {
       try {
         SessionMetrics.getInstance().end(accumulator);
       } catch (Exception e) {

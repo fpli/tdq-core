@@ -6,12 +6,13 @@ import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.SessionCore;
 import com.ebay.sojourner.common.util.Base64Ebay;
 import com.ebay.sojourner.common.util.BitUtils;
+import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.GUID2Date;
 import com.ebay.sojourner.common.util.LkpManager;
 import com.ebay.sojourner.common.util.MiscUtil;
-import com.ebay.sojourner.common.util.SOJTS2Date;
 import com.ebay.sojourner.common.util.SessionCoreHelper;
 import com.ebay.sojourner.common.util.SessionFlags;
+import com.ebay.sojourner.common.util.SojTimestamp;
 import com.ebay.sojourner.common.util.TransformUtil;
 import com.ebay.sojourner.common.util.UbiLookups;
 import org.apache.commons.lang3.StringUtils;
@@ -21,23 +22,6 @@ import org.apache.flink.configuration.Configuration;
 public class IntermediateSessionToSessionCoreMapFunction extends
     RichMapFunction<IntermediateSession,
         SessionCore> {
-
-  public static final int DEFAULT_MAX_CAPACITY = 262144000; // 250 * 1024 * 1024 = 250m - refer
-  // io.sort.mb (default spill size)
-  public static final int DEFAULT_INITIAL_CAPACITY = 16777216; // 16 * 1024 * 1024 = 16m
-  public static final float DEFAULT_LOAD_FACTOR = .75F;
-
-  public static final int IAB_MAX_CAPACITY =
-      100 * 1024; // 250 * 1024 * 1024 = 250m - refer io.sort.mb (default spill size)
-  public static final int IAB_INITIAL_CAPACITY = 10 * 1024; // 16 * 1024 * 1024 = 16m
-
-  public static final int BASE64_MAX_CAPACITY =
-      100 * 1024; // 250 * 1024 * 1024 = 250m - refer io.sort.mb (default spill size)
-  public static final int BASE64_INITIAL_CAPACITY = 10 * 1024; // 16 * 1024 * 1024 = 16m
-
-  public static final long MINUS_GUID_MIN_MS = 180000L; // 417mins - 7hours = -3mins = -180000ms;
-  // UNIX.
-  public static final long PLUS_GUID_MAX_MS = 300000L; // 425mins - 7hours = 5mins = 300000ms;
 
   protected static boolean checkIabAgent(String agent) {
     if (StringUtils.isNotBlank(agent)) {
@@ -153,7 +137,7 @@ public class IntermediateSessionToSessionCoreMapFunction extends
 
     // TODO to match the incorrect old logic , just for 'data quality'
     AgentHash agentString = SessionCoreHelper.getAgentString(core);
-    if (agentString.getAgentHash1()!=0L&&agentString.getAgentHash2()!=0L) {
+    if (agentString.getAgentHash1() != 0L && agentString.getAgentHash2() != 0L) {
       //      Boolean equal = base64Cache.get(agentString);
       //      String agentStrAfterBase64 = null;
       //      if (equal == null) {
@@ -253,9 +237,9 @@ public class IntermediateSessionToSessionCoreMapFunction extends
     try {
       if (startTimestamp != null) {
         long guidTimestamp = GUID2Date.getTimestamp(guid);
-        long startTimestampInUnix = SOJTS2Date.getUnixTimestamp(startTimestamp);
-        long minTimestamp = startTimestampInUnix - MINUS_GUID_MIN_MS;
-        long maxTimestamp = startTimestampInUnix + PLUS_GUID_MAX_MS;
+        long startTimestampInUnix = SojTimestamp.getUnixTimestamp(startTimestamp);
+        long minTimestamp = startTimestampInUnix - Constants.MINUS_GUID_MIN_MS;
+        long maxTimestamp = startTimestampInUnix + Constants.PLUS_GUID_MAX_MS;
         if (guidTimestamp >= minTimestamp && guidTimestamp <= maxTimestamp) {
           return true;
         }
