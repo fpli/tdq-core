@@ -99,9 +99,9 @@ public class UbiEventToSojEventProcessFunction extends ProcessFunction<UbiEvent,
     // split bot event and nonbot event
     if (sojEvent.getBotFlags().size() == 0 || CollectionUtils
         .subtract(sojEvent.getBotFlags(), intermediateBotFlagList).size() == 0) {
-      out.collect(sojEvent);
-    } else {
       context.output(outputTag, sojEvent);
+    } else {
+      out.collect(sojEvent);
     }
   }
 

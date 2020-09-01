@@ -25,6 +25,9 @@ public class OutputTagConstants {
   public static OutputTag<SojEvent> botEventOutputTag =
       new OutputTag<>("bot-event-output-tag", TypeInformation.of(SojEvent.class));
 
+  public static OutputTag<SojSession> botSessionOutputTag =
+      new OutputTag<>("bot-session-output-tag", TypeInformation.of(SojSession.class));
+
   public static OutputTag<SojSession> crossDaySessionOutputTag =
       new OutputTag<>("cross-day-session-output-tag", TypeInformation.of(SojSession.class));
 

@@ -102,7 +102,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
     parseClientData(clientData, genericClientData);
     RawEvent rawEvent = new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData,
         ingestTime, null);
-    parseEventtimeStamp(rawEvent);
+    parseEventTimestamp(rawEvent);
     return rawEvent;
   }
 
@@ -394,17 +394,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
 
   }
 
-  private void parseEventtimeStamp(RawEvent rawEvent) {
-    //    if (formaterUtc == null) {
-    //      formaterUtc = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
-    //          .withZone(
-    //              DateTimeZone.forTimeZone(utcTimeZone));
-    //    }
-    //    if (formater == null) {
-    //      formater = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
-    //          .withZone(
-    //              DateTimeZone.forTimeZone(timeZone));
-    //    }
+  private void parseEventTimestamp(RawEvent rawEvent) {
     StringBuilder buffer = new StringBuilder();
     Long abEventTimestamp = null;
     Long eventTimestamp = null;
@@ -487,9 +477,7 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
               eventTimestamp = abEventTimestamp;
             }
           } catch (Exception e) {
-            log.error("Invalid mtsts: " + mtstsString + " abEventTimestamp: " + abEventTimestamp
-                + " eventTimestamp:" + eventTimestamp);
-            log.error("TimeStamp Parse error:", e);
+            log.error("Invalid mtsts: " + mtstsString);
             eventTimestamp = abEventTimestamp;
           }
         } else {
