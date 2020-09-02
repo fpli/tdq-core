@@ -144,8 +144,8 @@ public class UbiSessionWindowProcessFunction
       if (absStartDate != absEndDate) {
         endSessionEvent(sessionAccumulator);
         Set<Integer> botFlagList = sessionEndBotDetector
-            .getBotFlagList(sessionAccumulator.getUbiSessionSplit());
-        sessionAccumulator.getUbiSessionSplit().getBotFlagList().addAll(botFlagList);
+            .getBotFlagList(sessionAccumulator.getUbiSession());
+        sessionAccumulator.getUbiSession().getBotFlagList().addAll(botFlagList);
         outputSession(sessionAccumulator.getUbiSession(), out, true);
       }
 
