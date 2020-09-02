@@ -63,7 +63,9 @@ public class Constants {
   // the offset align with UTC-
   public static final long OFFSET = 2208963600000000L; // 25567L *24 * 3600 * 1000 * 1000 - 7 *
   // 3600 * 1000 * 1000;
-  public static final long MILSECOFDAY = 86400000000L; // 24 * 3600 * 1000 * 1000
+  public static final long MICROECOFDAY = 86400000000L; // 24 * 3600 * 1000 * 1000
+  public static final long MILSECOFDAY = 86400000L; // 24 * 3600 * 1000 * 1000
+  public static final long MILSECOFDAYMINUS1 = 86400000L-1L; // 24 * 3600 * 1000 * 1000
   public static final int MILLI2MICRO = 1000;
 
   public static final long UPPERLIMITMICRO = 1 * 60 * 1000000L; // 2 minutes

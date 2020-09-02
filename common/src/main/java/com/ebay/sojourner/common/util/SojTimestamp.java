@@ -80,7 +80,11 @@ public class SojTimestamp {
   }
 
   public static long castSojTimestampToDate(long microseconds) {
-    return microseconds - (microseconds % Constants.MILSECOFDAY);
+    return microseconds - (microseconds % Constants.MICROECOFDAY);
+  }
+
+  public static long castUnixTimestampToDateMINS1(long millSeconds) {
+    return millSeconds - (millSeconds % Constants.MILSECOFDAY)+Constants.MILSECOFDAYMINUS1;
   }
 
   public static long getUnixDate(long microseconds) {

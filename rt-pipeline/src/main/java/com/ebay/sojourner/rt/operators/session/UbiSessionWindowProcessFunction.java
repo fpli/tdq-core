@@ -7,6 +7,8 @@ import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.SojTimestamp;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.typeutils.base.LongSerializer;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
@@ -19,6 +21,8 @@ public class UbiSessionWindowProcessFunction
     extends ProcessWindowFunction<SessionAccumulator, UbiSession, Tuple, TimeWindow> {
 
   private static SessionMetrics sessionMetrics;
+  private final ValueStateDescriptor<Long> lastTimestampStateDesc =
+      new ValueStateDescriptor<>("lastTimestamp", LongSerializer.INSTANCE);
   private OutputTag outputTag = null;
   private SessionEndBotDetector sessionEndBotDetector;
 
@@ -141,7 +145,10 @@ public class UbiSessionWindowProcessFunction
       long absEndDate =
           SojTimestamp
               .castSojTimestampToDate(sessionAccumulator.getUbiSession().getAbsEndTimestamp());
-      if (absStartDate != absEndDate) {
+      long timerMills = SojTimestamp
+          .castUnixTimestampToDateMINS1(sessionAccumulator.getUbiSession().getAbsEndTimestamp());
+      long currentWaterMark = context.currentWatermark();
+      if (absStartDate != absEndDate || currentWaterMark > timerMills) {
         endSessionEvent(sessionAccumulator);
         Set<Integer> botFlagList = sessionEndBotDetector
             .getBotFlagList(sessionAccumulator.getUbiSession());
@@ -150,6 +157,7 @@ public class UbiSessionWindowProcessFunction
       }
 
     }
+
 
   }
 
