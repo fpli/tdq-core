@@ -8,10 +8,10 @@
     SessionAccumulator:
       ubiSession:
         siidCnt: 0
-        isRefererNull: true
+        refererNull: true
         siidCnt2: 0
   expect:
     UbiSession:
       siidCnt: 1
       siidCnt2: 1
-      isRefererNull: false
+      refererNull: false

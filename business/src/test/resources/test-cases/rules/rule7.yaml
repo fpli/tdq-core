@@ -20,4 +20,4 @@
     IpAttribute:
       scsCount: 2
       totalCnt: 21
-  expectResult: 7
+  expectResult: 0

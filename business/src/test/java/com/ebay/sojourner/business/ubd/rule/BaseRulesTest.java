@@ -1,7 +1,5 @@
 package com.ebay.sojourner.business.ubd.rule;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ebay.sojourner.common.model.rule.Rule;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -34,7 +32,7 @@ public class BaseRulesTest<T> {
       rulesTestCase = new RulesTestCase();
       rulesInput = new RulesTestInputObjects();
       String typeName = jsonNode.get(caseNum).get("type").asText();
-      Class<?> clazz = Class.forName("com.ebay.sojourner.ubd.common.model." + typeName);
+      Class<?> clazz = Class.forName("com.ebay.sojourner.common.model." + typeName);
       Object inputObjectValue =
           objectMapper.treeToValue(jsonNode.get(caseNum).get("input").get(typeName), clazz);
       Field inputObjectType =

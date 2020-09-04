@@ -3,7 +3,9 @@ package com.ebay.sojourner.business.ubd.metrics;
 import com.ebay.sojourner.common.model.SessionAccumulator;
 import com.ebay.sojourner.common.model.UbiEvent;
 import java.util.Calendar;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class MultiColsMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
   @Override
@@ -18,7 +20,7 @@ public class MultiColsMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     if (sessionAccumulator.getUbiSession().getAbsStartTimestamp() != null &&
         event.getEventTimestamp() == sessionAccumulator.getUbiSession().getAbsStartTimestamp()) {
       if (sessionAccumulator.getUbiSession().getGuid() != null) {
-        System.out.println(
+        log.debug(
             Calendar.getInstance().getTime() + " debug MultiColsMetrics2 duplicate event==session:"
                 + sessionAccumulator.getUbiSession()
                 .getGuid() + " "
@@ -26,7 +28,7 @@ public class MultiColsMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
                 .getAbsStartTimestamp() + " " + sessionAccumulator.getUbiSession()
                 .getClickId() + " " + sessionAccumulator.getUbiSession().getPageIdForUAIP() + " "
                 + sessionAccumulator.getUbiSession().getHashCode());
-        System.out.println(Calendar.getInstance().getTime() +
+        log.debug(Calendar.getInstance().getTime() +
             " debug MultiColsMetrics2 duplicate event==event:" + event.getGuid() + " " + event
             .getEventTimestamp() + " "
             + event
@@ -69,5 +71,4 @@ public class MultiColsMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
   public void init() throws Exception {
     // nothing to do
   }
-
 }

@@ -10,9 +10,11 @@ import java.util.Collection;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+@Disabled
 public class SiteFlagMetricsTest extends BaseMetricsTest {
 
   private SiteFlagMetrics siteFlagMetrics;

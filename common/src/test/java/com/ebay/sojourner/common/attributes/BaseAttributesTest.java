@@ -41,7 +41,7 @@ public class BaseAttributesTest<T> {
       JsonNode node = jsonNode.get(caseNum);
       JsonNode inputNode = node.get("input");
       String typeName = node.get("type").asText();
-      Class<?> clazz = Class.forName("com.ebay.sojourner.ubd.common.model." + typeName);
+      Class<?> clazz = Class.forName("com.ebay.sojourner.common.model." + typeName);
       Object inputObjectValue = objectMapper.treeToValue(inputNode.get(typeName), clazz);
       Field inputObjectType =
           attributesInput
@@ -50,7 +50,6 @@ public class BaseAttributesTest<T> {
       inputObjectType.setAccessible(true);
       inputObjectType.set(attributesInput, inputObjectValue);
       attributesInput.setBotFlag(inputNode.get("botFlag").asInt());
-      attributesInput.setNeeded(inputNode.get("needed").asBoolean());
 
       attributesTestCase.setInput(attributesInput);
       attributesTestCase.setName(node.get("name").asText());

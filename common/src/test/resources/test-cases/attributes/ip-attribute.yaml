@@ -8,9 +8,8 @@
       validPageCnt: 4
       isAllAgentHoper: false
     botFlag: 210
-    needed: true
   expectResult:
-    totalCnt: 11
+    totalCnt: 5
     totalCntForSec1: 5
     isAllAgentHoper: false
 
@@ -22,7 +21,6 @@
       scsCountForBot7: 1
       validPageCnt: 4
     botFlag: 7
-    needed: true
   expectResult:
     scsCount: 1
 
@@ -34,7 +32,6 @@
       totalCntForSec1: 5
       homePageCnt: 4
     botFlag: 210
-    needed: true
   expectResult:
     totalCnt: 4
     totalCntForSec1: 5
@@ -49,7 +46,6 @@
       familyViCnt: 6
       signinCnt: 6
     botFlag: 210
-    needed: true
   expectResult:
     totalCnt: 6
     totalCntForSec1: 5
@@ -63,7 +59,6 @@
       totalCntForSec1: 5
       newGuidCnt: 12
     botFlag: 210
-    needed: true
   expectResult:
     totalCnt: 12
     totalCntForSec1: 5
@@ -79,7 +74,6 @@
       guidSet:
         - 1
     botFlag: 210
-    needed: true
   expectResult:
     totalCnt: 21
     totalCntForSec1: 5
@@ -93,7 +87,6 @@
       totalCntForSec1: 5
       noUidCnt: 51
     botFlag: 210
-    needed: true
   expectResult:
     totalCnt: 51
     totalCntForSec1: 5
@@ -108,27 +101,7 @@
       familyViCnt: 100
       noUidCnt: 51
     botFlag: 210
-    needed: true
   expectResult:
     totalCnt: 101
-    totalCntForSec1: 5
-    isAllAgentHoper: true
-
-- name: botFlag210_sessionCntGt200
-  type: AgentIpAttribute
-  input:
-    AgentIpAttribute:
-      totalCnt: 201
-      totalCntForSec1: 5
-      noUidCnt: 51
-      cguidSet:
-        - 1
-        - 2
-        - 3
-        - 4
-    botFlag: 210
-    needed: true
-  expectResult:
-    totalCnt: 201
     totalCntForSec1: 5
     isAllAgentHoper: true

@@ -10,4 +10,4 @@
   input:
     AgentIpAttribute:
       scsCountForBot5: 50
-  expectResult: 5
+  expectResult: 0

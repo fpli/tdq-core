@@ -1,34 +1,34 @@
 - name: case1
-  type: UbiEvent
+  type: UbiSession
   input:
-    UbiEvent:
+    UbiSession:
       agentInfo: Chrome
   expectResult: 0
 
 - name: case2
-  type: UbiEvent
+  type: UbiSession
   input:
-    UbiEvent:
+    UbiSession:
       agentInfo: I am a bot
   expectResult: 1
 
 - name: case3
-  type: UbiEvent
+  type: UbiSession
   input:
-    UbiEvent:
+    UbiSession:
       agentInfo: I am a spider
   expectResult: 1
 
 - name: case4
-  type: UbiEvent
+  type: UbiSession
   input:
-    UbiEvent:
+    UbiSession:
       agentInfo: I am a crawl
   expectResult: 1
 
 - name: case5
-  type: UbiEvent
+  type: UbiSession
   input:
-    UbiEvent:
+    UbiSession:
       agentInfo: I am a ktxn
   expectResult: 1

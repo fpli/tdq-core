@@ -1,0 +1,211 @@
+#- name: bot5
+#  type: IntermediateSession
+#  input:
+#    IntermediateSession:
+#      firstCguid:
+#      validPageCnt: 1
+#      firstUserId:
+#      trafficSrcId: 1
+#      exInternalIp: 10.101.1.13
+#      ip: 10.101.1.14
+#      homepageCnt: 1
+#      familyViCnt: 1
+#      signinPageCnt: 1
+#      cobrand: 6
+#      guid: 123
+#      startTimestamp: 123456789
+#      agentCnt: 2
+#    botFlag: 5
+#    needed: true
+#  expectResult:
+#    totalSessionCnt: 1
+#    nocguidSessionCnt: 1
+#    spsSessionCnt: 1
+#    nouidSessionCnt: 1
+#    directSessionCnt: 1
+#    mktgSessionCnt: 0
+#    ipCountForSuspect: 1
+#    ipCount: 1
+#    totalCnt: 1
+#    consistent: true
+#    validPageCnt: 1
+#    maxValidPageCnt: 1
+#    homePageCnt: 1
+#    familyViCnt: 1
+#    signinCnt: 1
+#    noUidCnt: 1
+#    directCnt: 1
+#    siteCnt: 1
+#    newGuidCnt: 0
+#    guidSet:
+#      - 123
+#    cguidSet:
+#    isAllAgentHoper: true
+#    scsCountForBot5: 1
+#
+#- name: bot6
+#  type: IntermediateSession
+#  input:
+#    IntermediateSession:
+#      firstCguid:
+#      validPageCnt: 1
+#      firstUserId:
+#      trafficSrcId: 1
+#      exInternalIp: 10.101.1.13
+#      ip: 10.101.1.14
+#      homepageCnt: 1
+#      familyViCnt: 1
+#      signinPageCnt: 1
+#      cobrand: 6
+#      guid: 123
+#      startTimestamp: 123456789
+#      agentCnt: 2
+#    botFlag: 6
+#    needed: true
+#  expectResult:
+#    totalSessionCnt: 1
+#    nocguidSessionCnt: 1
+#    spsSessionCnt: 1
+#    nouidSessionCnt: 1
+#    directSessionCnt: 1
+#    mktgSessionCnt: 0
+#    ipCountForSuspect: 1
+#    ipCount: 1
+#    totalCnt: 1
+#    consistent: true
+#    validPageCnt: 1
+#    maxValidPageCnt: 1
+#    homePageCnt: 1
+#    familyViCnt: 1
+#    signinCnt: 1
+#    noUidCnt: 1
+#    directCnt: 1
+#    siteCnt: 1
+#    newGuidCnt: 0
+#    guidSet:
+#      - 123
+#    cguidSet:
+#    isAllAgentHoper: true
+#    scsCountForBot6: 1
+#
+#- name: bot7
+#  type: IntermediateSession
+#  input:
+#    IntermediateSession:
+#      firstCguid:
+#      validPageCnt: 1
+#      firstUserId:
+#      trafficSrcId: 1
+#      exInternalIp: 10.101.1.13
+#      ip: 10.101.1.14
+#      homepageCnt: 1
+#      familyViCnt: 1
+#      signinPageCnt: 1
+#      cobrand: 6
+#      guid: 123
+#      startTimestamp: 123456789
+#      agentCnt: 2
+#    botFlag: 7
+#    needed: true
+#  expectResult:
+#    totalSessionCnt: 1
+#    nocguidSessionCnt: 1
+#    spsSessionCnt: 1
+#    nouidSessionCnt: 1
+#    directSessionCnt: 1
+#    mktgSessionCnt: 0
+#    ipCountForSuspect: 1
+#    ipCount: 1
+#    totalCnt: 1
+#    consistent: true
+#    validPageCnt: 1
+#    maxValidPageCnt: 1
+#    homePageCnt: 1
+#    familyViCnt: 1
+#    signinCnt: 1
+#    noUidCnt: 1
+#    directCnt: 1
+#    siteCnt: 1
+#    newGuidCnt: 0
+#    guidSet:
+#      - 123
+#    cguidSet:
+#    isAllAgentHoper: true
+#    scsCountForBot7: 1
+#
+#- name: bot8
+#  type: IntermediateSession
+#  input:
+#    IntermediateSession:
+#      firstCguid:
+#      validPageCnt: 1
+#      firstUserId:
+#      trafficSrcId: 1
+#      exInternalIp: 10.101.1.13
+#      ip: 10.101.1.14
+#      homepageCnt: 1
+#      familyViCnt: 1
+#      signinPageCnt: 1
+#      cobrand: 6
+#      guid: 123
+#      startTimestamp: 123456789
+#      agentCnt: 2
+#    botFlag: 8
+#    needed: true
+#  expectResult:
+#    totalSessionCnt: 1
+#    nocguidSessionCnt: 1
+#    spsSessionCnt: 1
+#    nouidSessionCnt: 1
+#    directSessionCnt: 1
+#    mktgSessionCnt: 0
+#    ipCountForSuspect: 1
+#    ipCount: 1
+#    totalCnt: 1
+#    consistent: true
+#    validPageCnt: 1
+#    maxValidPageCnt: 1
+#    homePageCnt: 1
+#    familyViCnt: 1
+#    signinCnt: 1
+#    noUidCnt: 1
+#    directCnt: 1
+#    siteCnt: 1
+#    newGuidCnt: 0
+#    guidSet:
+#      - 123
+#    cguidSet:
+#    isAllAgentHoper: true
+#    scsCountForBot8: 1
+
+- name: bot8
+  type: SessionCore
+  input:
+    SessionCore:
+      absStartTimestamp: 1234567891234
+    botFlag: 8
+  expectResult:
+    totalSessionCnt: 1
+    nocguidSessionCnt: 1
+    spsSessionCnt: 1
+    nouidSessionCnt: 1
+    directSessionCnt: 1
+    mktgSessionCnt: 0
+    ipCountForSuspect: 1
+    ipCount: 1
+    totalCnt: 1
+    consistent: true
+    validPageCnt: 1
+    maxValidPageCnt: 1
+    homePageCnt: 1
+    familyViCnt: 1
+    signinCnt: 1
+    noUidCnt: 1
+    directCnt: 1
+    siteCnt: 1
+    newGuidCnt: 0
+    guidSet:
+      - 123
+    cguidSet:
+    isAllAgentHoper: true
+    scsCountForBot8: 1
