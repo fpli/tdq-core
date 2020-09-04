@@ -16,7 +16,7 @@ public class PassnightTrigger
 
   private static final long serialVersionUID = 1L;
   private final ReducingStateDescriptor<Long> lastTimestampStateDesc =
-      new ReducingStateDescriptor<>("lastTimestamp", new maximum(), LongSerializer.INSTANCE);
+      new ReducingStateDescriptor<>("lastTimestamp", new minum(), LongSerializer.INSTANCE);
 
   private PassnightTrigger() {
   }
@@ -31,8 +31,9 @@ public class PassnightTrigger
 
     ReducingState<Long> lastTiemstampState = ctx.getPartitionedState(lastTimestampStateDesc);
     if (lastTiemstampState.get() == null) {
-      lastTiemstampState.add(timestamp);
+
       long timerMills = SojTimestamp.castUnixTimestampToDateMINS1(timestamp);
+      lastTiemstampState.add(timerMills);
       ctx.registerEventTimeTimer(timerMills);
       return TriggerResult.CONTINUE;
     } else {
@@ -55,14 +56,6 @@ public class PassnightTrigger
 
   @Override
   public TriggerResult onEventTime(long time, TimeWindow window, TriggerContext ctx) {
-    try {
-      ReducingState<Long> lastTiemstampState = ctx.getPartitionedState(lastTimestampStateDesc);
-      lastTiemstampState.clear();
-      long timerMills = SojTimestamp.castUnixTimestampToDateMINS1(ctx.getCurrentWatermark());
-      lastTiemstampState.add(timerMills);
-    } catch (Exception e) {
-      log.error("PassnightTrigger onEventTime error", e);
-    }
     return TriggerResult.FIRE;
   }
 
@@ -74,6 +67,7 @@ public class PassnightTrigger
 
   @Override
   public void clear(TimeWindow window, TriggerContext ctx) throws Exception {
+    ReducingState<Long> lastTiemstampState = ctx.getPartitionedState(lastTimestampStateDesc);
     ctx.deleteEventTimeTimer(window.maxTimestamp());
     ctx.getPartitionedState(lastTimestampStateDesc).clear();
   }
@@ -108,13 +102,13 @@ public class PassnightTrigger
     return "PassnightTrigger()";
   }
 
-  private static class maximum implements ReduceFunction<Long> {
+  private static class minum implements ReduceFunction<Long> {
 
     private static final long serialVersionUID = 1L;
 
     @Override
     public Long reduce(Long value1, Long value2) throws Exception {
-      return Math.max(value1, value2);
+      return Math.min(value1, value2);
     }
 
   }
