@@ -1,48 +1,26 @@
 package com.ebay.sojourner.business.ubd.parser;
 
-import com.ebay.sojourner.common.model.RawEvent;
-import com.ebay.sojourner.common.model.UbiEvent;
-import com.ebay.sojourner.business.ubd.util.LoadRawEventAndExpect;
-import com.ebay.sojourner.business.ubd.util.ParserConstants;
-import com.ebay.sojourner.business.ubd.util.VaildateResult;
-import com.ebay.sojourner.business.ubd.util.YamlUtil;
-import java.util.HashMap;
-import java.util.Map;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.util.Collection;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 
 @Slf4j
-public class AgentInfoParserTest {
+public class AgentInfoParserTest extends BaseParsersTest {
 
-  private static UbiEvent ubiEvent = null;
-  private static String parser = null;
-  private static String caseItem = null;
-  private static AgentInfoParser agentInfoParser = null;
-  private static HashMap<String, Object> map = null;
+  private AgentInfoParser agentInfoParser;
+  private JsonNode yaml;
 
-  @BeforeAll
-  public static void initParser() {
-    parser = ParserConstants.AGENTINFO;
-    map = YamlUtil.getInstance().loadFileMap(ParserConstants.FILEPATH);
+  @BeforeEach
+  public void setup() throws Exception {
+    agentInfoParser = new AgentInfoParser();
+    yaml = loadTestCasesYaml("AgentInfoParserTest.yaml");
   }
 
-  @Test
-  public void testAgentInfoParser() {
-    agentInfoParser = new AgentInfoParser();
-    ubiEvent = new UbiEvent();
-    caseItem = ParserConstants.CASE1;
-
-    try {
-      HashMap<RawEvent, Object> rawEventAndExpectResult =
-          LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
-      for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-        agentInfoParser.parse(entry.getKey(), ubiEvent);
-        System.out.println(
-            VaildateResult.validateString(entry.getValue(), ubiEvent.getAgentInfo()));
-      }
-    } catch (Exception e) {
-      log.error("agent test fail!!!");
-    }
+  @TestFactory
+  public Collection<DynamicTest> dynamicTests() throws Exception {
+    return generateDynamicTests(yaml, agentInfoParser);
   }
 }

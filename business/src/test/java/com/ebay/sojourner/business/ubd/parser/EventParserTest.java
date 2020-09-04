@@ -10,6 +10,6 @@ class EventParserTest {
   @Test
   void test_eventParser() throws Exception {
     eventParser = new EventParser();
-    Assertions.assertThat(eventParser.fieldParsers.size()).isEqualTo(27);
+    Assertions.assertThat(eventParser.fieldParsers.size()).isEqualTo(29);
   }
 }

@@ -5,10 +5,9 @@
       ipCount: 0
       scsCountForBot6: -1
     botFlag: 6
-    needed: true
   expectResult:
     scsCount: -1
-    ipCount: 0
+    ipCountForSuspect: 0
 
 - name: bot6_scsCount_gt_0
   type: AgentIpAttribute
@@ -17,10 +16,9 @@
       ipCount: 1
       scsCountForBot6: 1
     botFlag: 6
-    needed: true
   expectResult:
     scsCount: 1
-    ipCount: 1
+    ipCountForSuspect: 1
 
 - name: bot202
   type: AgentIpAttribute
@@ -34,7 +32,6 @@
       mktgSessionCnt: 1
       ipCountForSuspect: 1
     botFlag: 202
-    needed: true
   expectResult:
     totalSessionCnt: 1
     nocguidSessionCnt: 1
