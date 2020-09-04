@@ -15,8 +15,8 @@ public class PassnightTrigger
     extends Trigger<Object, TimeWindow> {
 
   private static final long serialVersionUID = 1L;
-  private final ReducingStateDescriptor<Long> lastTimestampStateDesc =
-      new ReducingStateDescriptor<>("lastTimestamp", new minum(), LongSerializer.INSTANCE);
+  private final ReducingStateDescriptor<Long> minTimestampStateDesc =
+      new ReducingStateDescriptor<>("minmunTimestamp", new minum(), LongSerializer.INSTANCE);
 
   private PassnightTrigger() {
   }
@@ -29,28 +29,11 @@ public class PassnightTrigger
   public TriggerResult onElement(Object element, long timestamp, TimeWindow window,
       TriggerContext ctx) throws Exception {
 
-    ReducingState<Long> lastTiemstampState = ctx.getPartitionedState(lastTimestampStateDesc);
-    if (lastTiemstampState.get() == null) {
-
-      long timerMills = SojTimestamp.castUnixTimestampToDateMINS1(timestamp);
-      lastTiemstampState.add(timerMills);
-      ctx.registerEventTimeTimer(timerMills);
-      return TriggerResult.CONTINUE;
-    } else {
-      String lastDateStr = SojTimestamp.getDateStrWithUnixTimestamp(
-          lastTiemstampState.get());
-      String currentDateStr = SojTimestamp.getDateStrWithUnixTimestamp(timestamp);
-      if (lastTiemstampState.get() < timestamp
-          && !currentDateStr.equals(lastDateStr)) {
-        lastTiemstampState.clear();
-        long timerMills = SojTimestamp.castUnixTimestampToDateMINS1(timestamp);
-        lastTiemstampState.add(timerMills);
-        ctx.registerEventTimeTimer(timerMills);
-        return TriggerResult.FIRE;
-      } else {
-        return TriggerResult.CONTINUE;
-      }
-    }
+    ReducingState<Long> minTiemstampState = ctx.getPartitionedState(minTimestampStateDesc);
+    long timerMills = SojTimestamp.castUnixTimestampToDateMINS1(timestamp);
+    minTiemstampState.add(timerMills);
+    ctx.registerEventTimeTimer(minTiemstampState.get());
+    return TriggerResult.CONTINUE;
 
   }
 
@@ -67,9 +50,9 @@ public class PassnightTrigger
 
   @Override
   public void clear(TimeWindow window, TriggerContext ctx) throws Exception {
-    ReducingState<Long> lastTiemstampState = ctx.getPartitionedState(lastTimestampStateDesc);
-    ctx.deleteEventTimeTimer(window.maxTimestamp());
-    ctx.getPartitionedState(lastTimestampStateDesc).clear();
+    ReducingState<Long> minTiemstampState = ctx.getPartitionedState(minTimestampStateDesc);
+    ctx.deleteEventTimeTimer(minTiemstampState.get());
+    ctx.getPartitionedState(minTimestampStateDesc).clear();
   }
 
   @Override
@@ -80,21 +63,13 @@ public class PassnightTrigger
   @Override
   public void onMerge(TimeWindow window,
       OnMergeContext ctx) {
-    ReducingState<Long> lastTiemstampState = ctx.getPartitionedState(lastTimestampStateDesc);
+    ctx.mergePartitionedState(minTimestampStateDesc);
     try {
-      if (lastTiemstampState.get() != null) {
-        long timerMills = lastTiemstampState.get();
-        long currentWaterMark = ctx.getCurrentWatermark();
-        if (currentWaterMark > timerMills) {
-          lastTiemstampState.clear();
-          timerMills = SojTimestamp.castUnixTimestampToDateMINS1(currentWaterMark);
-          lastTiemstampState.add(timerMills);
-        }
-      }
+      ReducingState<Long> minTiemstampState = ctx.getPartitionedState(minTimestampStateDesc);
+      ctx.registerEventTimeTimer(minTiemstampState.get());
     } catch (Exception e) {
-      log.error("PassnightTrigger onMerge issue:", e);
+      log.error("Passnight onMerge issue", e);
     }
-    ctx.mergePartitionedState(lastTimestampStateDesc);
   }
 
   @Override
