@@ -7,7 +7,6 @@ import com.ebay.sojourner.common.model.AgentAttributeAccumulator;
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.SignatureInfo;
 import com.ebay.sojourner.rt.common.util.SignatureUtils;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +54,7 @@ public class AgentAttributeAgg implements
       agentBotFlag = AgentSignatureBotDetector.getInstance().getBotFlagList(agentAttribute);
       SignatureUtils.updateSignatureStatus(signatureStatus, agentBotFlag);
       //      }
-    } catch (IOException | InterruptedException e) {
+    } catch (Exception e) {
       log.error("start get agent botFlagList failed", e);
     }
 

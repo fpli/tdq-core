@@ -2,7 +2,6 @@ package com.ebay.sojourner.dsl.sql;
 
 import com.ebay.sojourner.common.model.rule.RuleDefinition;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.Map;
 import org.apache.calcite.adapter.enumerable.EnumerableConvention;
 import org.apache.calcite.adapter.enumerable.EnumerableInterpretable;
@@ -46,13 +45,9 @@ public abstract class AbstractSQLRule<T, R, OUT> implements SQLRule<T, OUT> {
     rootSchema.add(ROOT_SCHEMA, new ReflectiveSchema(dataSource));
 
     // Add functions
-    boolean upCase = false;
     Class clazz = UdfManager.class;
     for (Map.Entry<String, ScalarFunction> entry : ScalarFunctionImpl.createAll(clazz).entries()) {
       String name = entry.getKey();
-      if (upCase) {
-        name = name.toUpperCase(Locale.ROOT);
-      }
       rootSchema.add(name, entry.getValue());
     }
 

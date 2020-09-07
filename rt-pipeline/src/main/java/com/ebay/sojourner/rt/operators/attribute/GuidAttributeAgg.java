@@ -6,7 +6,6 @@ import com.ebay.sojourner.common.model.GuidAttribute;
 import com.ebay.sojourner.common.model.GuidAttributeAccumulator;
 import com.ebay.sojourner.common.model.SessionCore;
 import com.ebay.sojourner.rt.common.util.SignatureUtils;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -65,7 +64,7 @@ public class GuidAttributeAgg implements
         }
       }
 
-    } catch (IOException | InterruptedException e) {
+    } catch (Exception e) {
       log.error("star get guid botFlagList failed", e);
     }
 

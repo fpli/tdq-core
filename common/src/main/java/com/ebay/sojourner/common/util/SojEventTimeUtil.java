@@ -23,7 +23,7 @@ public class SojEventTimeUtil {
       }
       if (ubiEvent.getEventTimestamp() < ubiSession.getAbsStartTimestamp()) {
         return true;
-      } else if (ubiEvent.getEventTimestamp() == ubiSession.getAbsStartTimestamp()) {
+      } else if (ubiEvent.getEventTimestamp().equals(ubiSession.getAbsStartTimestamp())) {
         if (ubiEvent.getClickId() < ubiSession.getClickId()) {
           return true;
         } else if (ubiEvent.getClickId() == ubiSession.getClickId()) {

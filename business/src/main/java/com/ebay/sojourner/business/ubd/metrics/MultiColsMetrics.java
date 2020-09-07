@@ -18,7 +18,8 @@ public class MultiColsMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
     if (sessionAccumulator.getUbiSession().getAbsStartTimestamp() != null &&
-        event.getEventTimestamp() == sessionAccumulator.getUbiSession().getAbsStartTimestamp()) {
+        event.getEventTimestamp()
+            .equals(sessionAccumulator.getUbiSession().getAbsStartTimestamp())) {
       if (sessionAccumulator.getUbiSession().getGuid() != null) {
         log.debug(
             Calendar.getInstance().getTime() + " debug MultiColsMetrics2 duplicate event==session:"
