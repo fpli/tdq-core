@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.ebay.sojourner</groupId>
     <artifactId>sojourner-parent</artifactId>
-    <version>${global.version}</version>
+    <version>1.0.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
@@ -84,11 +84,6 @@
       <plugin>
         <groupId>io.ebay.rheos.streaming</groupId>
         <artifactId>job-uploader-maven-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

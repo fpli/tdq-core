@@ -7,7 +7,7 @@
   <parent>
     <artifactId>sojourner-parent</artifactId>
     <groupId>com.ebay.sojourner</groupId>
-    <version>${global.version}</version>
+    <version>1.0.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 

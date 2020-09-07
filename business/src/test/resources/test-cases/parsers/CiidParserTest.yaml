@@ -1,0 +1,51 @@
+- name: test1
+  inputs:
+    RawEvent:
+      sojA:
+        flgs: ""
+      sojK:
+        ciid: "ebay"
+      sojC:
+        c: ""
+  expect:
+    UbiEvent:
+      currentImprId: 11712121
+
+- name: test2
+  inputs:
+    RawEvent:
+      sojA:
+        flgs: ""
+      sojK:
+        ciid: "ebay%"
+      sojC:
+        c: ""
+  expect:
+    UbiEvent:
+      currentImprId:
+
+- name: test3
+  inputs:
+    RawEvent:
+      sojA:
+        flgs: ""
+      sojK:
+        ciid: "%bay"
+      sojC:
+        c: abc_&*
+  expect:
+    UbiEvent:
+      currentImprId:
+
+- name: test4
+  inputs:
+    RawEvent:
+      sojA:
+        flgs: ""
+      sojK:
+        ciid: "e%ay"
+      sojC:
+        c: abc
+  expect:
+    UbiEvent:
+      currentImprId: 44153

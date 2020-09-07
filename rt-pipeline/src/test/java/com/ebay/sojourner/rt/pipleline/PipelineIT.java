@@ -41,7 +41,7 @@ import org.apache.flink.util.OutputTag;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-public class IntegrationTest {
+public class PipelineIT {
 
   @ClassRule
   public static MiniClusterWithClientResource flinkCluster =

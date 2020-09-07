@@ -53,9 +53,9 @@ class SuspectAgentIndicatorTest {
   @Test
   void test_feed_AgentIpAttribute() throws Exception {
     AgentIpAttribute agentIpAttribute = new AgentIpAttribute();
-    SuspectAgentIndicator<AgentIpAttribute, AgentAttributeAccumulator> suspectAgentIndicator =
+    SuspectAgentIndicator<AgentIpAttribute, AgentIpAttributeAccumulator> suspectAgentIndicator =
         new SuspectAgentIndicator<>(mockBotFilter);
-    suspectAgentIndicator.feed(agentIpAttribute, agentAttributeAccumulator);
+    suspectAgentIndicator.feed(agentIpAttribute, agentIpAttributeAccumulator);
   }
 
   @Test
@@ -64,7 +64,7 @@ class SuspectAgentIndicatorTest {
     SuspectAgentIndicator<IntermediateSession, AgentIpAttributeAccumulator> suspectAgentIndicator =
         new SuspectAgentIndicator<>(mockBotFilter);
     boolean result = suspectAgentIndicator.filter(intermediateSession, agentIpAttributeAccumulator);
-    Assertions.assertThat(result).isTrue();
+    Assertions.assertThat(result).isFalse();
   }
 
   @Test
@@ -74,7 +74,7 @@ class SuspectAgentIndicatorTest {
         new SuspectAgentIndicator<>(mockBotFilter);
     intermediateSession.setUserAgent(null);
     boolean result = suspectAgentIndicator.filter(intermediateSession, agentIpAttributeAccumulator);
-    Assertions.assertThat(result).isTrue();
+    Assertions.assertThat(result).isFalse();
   }
 
   @Test

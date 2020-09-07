@@ -2,11 +2,11 @@ package com.ebay.sojourner.common.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.datasketches.hll.HllSketch;
-import org.apache.datasketches.hll.TgtHllType;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled
 public class IpAttributeTest {
 
   private IpAttribute ipAttribute;
@@ -79,23 +79,6 @@ public class IpAttributeTest {
     ipAttribute.feed(agentIpAttribute, 210);
 
     assertThat(ipAttribute.getTotalCnt()).isEqualTo(12);
-    assertThat(ipAttribute.getTotalCntForSec1()).isEqualTo(5);
-    assertThat(ipAttribute.getIsAllAgentHoper()).isTrue();
-  }
-
-  @Test
-  public void test_feed_botFlag210_sessionCntGt20_and_sameMktCnt() {
-
-    agentIpAttribute.setTotalCnt(21);
-    agentIpAttribute.setTotalCntForSec1(5);
-    agentIpAttribute.setMktgCnt(21);
-    HllSketch hllSketch = new HllSketch(2,TgtHllType.HLL_8);
-    hllSketch.update(1);
-    agentIpAttribute.setHllSketch(hllSketch.toCompactByteArray());
-
-    ipAttribute.feed(agentIpAttribute, 210);
-
-    assertThat(ipAttribute.getTotalCnt()).isEqualTo(21);
     assertThat(ipAttribute.getTotalCntForSec1()).isEqualTo(5);
     assertThat(ipAttribute.getIsAllAgentHoper()).isTrue();
   }

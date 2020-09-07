@@ -9,8 +9,10 @@ import java.util.Iterator;
 import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled
 public class AttributeFlagMetricsTest {
 
   private SessionAccumulator sessionAccumulator;

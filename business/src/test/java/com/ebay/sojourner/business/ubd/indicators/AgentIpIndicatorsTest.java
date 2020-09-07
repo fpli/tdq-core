@@ -8,6 +8,6 @@ class AgentIpIndicatorsTest {
   @Test
   void test_getInstance() {
     AgentIpIndicators agentIpIndicators = AgentIpIndicators.getInstance();
-    Assertions.assertThat(agentIpIndicators.indicators.size()).isEqualTo(6);
+    Assertions.assertThat(agentIpIndicators.indicators.size()).isEqualTo(7);
   }
 }

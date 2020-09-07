@@ -8,9 +8,9 @@ import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.common.util.UBIConfig;
-import java.io.IOException;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.flink.api.common.functions.AggregateFunction;
 
 @Slf4j
@@ -80,16 +80,16 @@ public class UbiSessionAgg
     try {
       sessionBotFlagSetDetect = SessionBotDetector.getInstance()
           .getBotFlagList(accumulator.getUbiSession());
-    } catch (IOException | InterruptedException e) {
+    } catch (Exception e) {
       log.error("start get session botFlagList failed", e);
     }
 
     Set<Integer> sessionBotFlagSet = accumulator.getUbiSession().getBotFlagList();
-    if (eventBotFlagSet != null && eventBotFlagSet.size() > 0
+    if (CollectionUtils.isNotEmpty(eventBotFlagSet)
         && !sessionBotFlagSet.containsAll(eventBotFlagSet)) {
       sessionBotFlagSet.addAll(eventBotFlagSet);
     }
-    if (sessionBotFlagSetDetect != null && sessionBotFlagSetDetect.size() > 0) {
+    if (eventBotFlagSet != null && CollectionUtils.isNotEmpty(sessionBotFlagSetDetect)) {
       sessionBotFlagSet.addAll(sessionBotFlagSetDetect);
       eventBotFlagSet.addAll(sessionBotFlagSetDetect);
     }

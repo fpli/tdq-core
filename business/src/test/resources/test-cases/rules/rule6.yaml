@@ -20,4 +20,4 @@
     AgentAttribute:
       scsCount: 51
       ipCount: 21
-  expectResult: 0
+  expectResult: 6

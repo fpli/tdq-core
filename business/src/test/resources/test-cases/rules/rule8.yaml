@@ -12,4 +12,4 @@
     AgentIpAttribute:
       scsCountForBot8: 0
       bbcCount: 6
-  expectResult: 8
+  expectResult: 0

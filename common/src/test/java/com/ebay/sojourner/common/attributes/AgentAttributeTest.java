@@ -7,9 +7,11 @@ import java.util.Collection;
 import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+@Disabled
 public class AgentAttributeTest extends BaseAttributesTest<AgentIpAttribute> {
 
   private AgentAttribute agentAttribute;

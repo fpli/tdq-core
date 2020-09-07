@@ -7,7 +7,6 @@ import com.ebay.sojourner.common.model.IpAttribute;
 import com.ebay.sojourner.common.model.IpAttributeAccumulator;
 import com.ebay.sojourner.common.model.SignatureInfo;
 import com.ebay.sojourner.rt.common.util.SignatureUtils;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +56,7 @@ public class IpAttributeAgg implements
       SignatureUtils.updateSignatureStatus(signatureStatus, ipBotFlag);
       //        }
       //      }
-    } catch (IOException | InterruptedException e) {
+    } catch (Exception e) {
       log.error("start get ip botFlagList failed", e);
     }
 

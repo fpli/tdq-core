@@ -5,7 +5,7 @@
 
   <groupId>com.ebay.sojourner</groupId>
   <artifactId>sojourner-parent</artifactId>
-  <version>${global.version}</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Sojourner - Parent</name>
@@ -17,7 +17,6 @@
     <module>flink-lib</module>
     <module>business</module>
     <module>sql-dsl</module>
-    <!--    <module>rule-test</module>-->
   </modules>
 
   <properties>
@@ -26,7 +25,6 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <scala.binary.version>2.11</scala.binary.version>
-    <scala.complete.version>${scala.binary.version}.8</scala.complete.version>
     <maven.version>3.6.3</maven.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -576,13 +574,18 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
-        <sonar.jdbc.url>
-          jdbc:mysql://10.148.184.105:3306/sonar?useUnicode=true&amp;characterEncoding=utf8
-        </sonar.jdbc.url>
-        <sonar.jdbc.driver>com.mysql.jdbc.Driver</sonar.jdbc.driver>
-        <sonar.jdbc.username>sonar</sonar.jdbc.username>
-        <sonar.jdbc.password>sonar</sonar.jdbc.password>
-        <sonar.host.url>http://10.148.184.105:9000</sonar.host.url>
+        <sonar.host.url>
+          http://sonar.soj-ops-ns.svc.53.tess.io/
+        </sonar.host.url>
+        <sonar.projectKey>
+          sojourner-core
+        </sonar.projectKey>
+        <sonar.moduleKey>
+          ${project.groupId}:${project.artifactId}
+        </sonar.moduleKey>
+        <sonar.login>
+          edf22899669152e3564a64906f8e0f473002136e
+        </sonar.login>
       </properties>
     </profile>
   </profiles>
@@ -650,7 +653,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.0.0-M4</version>
+          <version>3.0.0-M5</version>
           <configuration>
             <includes>
               <include>**/Test*.java</include>
@@ -659,19 +662,10 @@
               <include>**/*TestCase.java</include>
               <include>**/*Suite.java</include>
             </includes>
-            <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
-            <environmentVariables>
-            </environmentVariables>
-            <systemProperties>
-              <log4j.configuration>file:src/test/resources/log4j.properties</log4j.configuration>
-              <java.awt.headless>true</java.awt.headless>
-              <java.io.tmpdir>${project.build.directory}/tmp</java.io.tmpdir>
-            </systemProperties>
             <failIfNoTests>false</failIfNoTests>
-            <forkMode>always</forkMode>
-            <!--                        <forkCount>2C</forkCount>-->
-            <!--                        <reuseForks>false</reuseForks>-->
-            <!--                        <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>-->
+            <!--<forkCount>2C</forkCount>-->
+            <!--<reuseForks>false</reuseForks>-->
+            <!--<argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>-->
           </configuration>
         </plugin>
 
@@ -688,11 +682,6 @@
             <tarLongFileMode>posix</tarLongFileMode>
           </configuration>
         </plugin>
-      <!--        <plugin>-->
-      <!--          <groupId>org.apache.maven.plugins</groupId>-->
-      <!--          <artifactId>maven-deploy-plugin</artifactId>-->
-      <!--          <version>3.1.0</version>-->
-      <!--        </plugin>-->
 
         <!--job-uploader-maven-plugin-->
         <plugin>
@@ -721,6 +710,19 @@
             </execution>
           </executions>
         </plugin>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>3.7.0.1746</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>2.8.1</version>
+          <configuration>
+            <generateBackupPoms>false</generateBackupPoms>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -745,6 +747,14 @@
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
       </plugin>
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+      </plugin>
     </plugins>
   </build>
 
@@ -753,7 +763,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>3.0.0-M4</version>
+        <version>3.0.0-M5</version>
       </plugin>
     </plugins>
   </reporting>

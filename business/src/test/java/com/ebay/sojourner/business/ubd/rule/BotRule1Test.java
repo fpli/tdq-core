@@ -1,13 +1,13 @@
 package com.ebay.sojourner.business.ubd.rule;
 
-import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.model.UbiSession;
 import java.util.Collection;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-public class BotRule1Test extends BaseRulesTest<UbiEvent> {
+public class BotRule1Test extends BaseRulesTest<UbiSession> {
 
   private BotRule1 botRule1;
   private List<RulesTestCase> rulesTestCaseList;
@@ -20,7 +20,6 @@ public class BotRule1Test extends BaseRulesTest<UbiEvent> {
 
   @TestFactory
   public Collection<DynamicTest> dynamicTests() {
-    //    return generateDynamicTests(rulesTestCaseList, botRule1);
-    return null;
+    return generateDynamicTests(rulesTestCaseList, botRule1);
   }
 }
