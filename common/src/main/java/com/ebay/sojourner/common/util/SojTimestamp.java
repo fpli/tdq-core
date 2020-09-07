@@ -84,12 +84,20 @@ public class SojTimestamp {
   }
 
   public static long castUnixTimestampToDateMINS1(long millSeconds) {
-    return millSeconds - (millSeconds % Constants.MILSECOFDAY)+Constants.MILSECOFDAYMINUS1;
+    return castUnixTimestampToDate(millSeconds) + Constants.MILSECOFDAYMINUS1;
   }
 
-  public static long getUnixDate(long microseconds) {
+  public static long castUnixTimestampToDate(long millSeconds) {
+    return getUnixTimestamp(castSojTimestampToDate(getSojTimestamp(millSeconds)));
+  }
+
+  public static long getUnixDateFromSOjTimestamp(long microseconds) {
     microseconds = castSojTimestampToDate(microseconds);
     return getUnixTimestamp(microseconds);
+  }
+
+  public static long getUnixDateFromUnixTimestamp(long microseconds) {
+    return castUnixTimestampToDate(microseconds);
   }
 
   public static String getDateStrWithMillis(long ts) {
@@ -146,8 +154,10 @@ public class SojTimestamp {
     System.out.println(getSojTimestampToUnixTimestamp(3807074683982000L));//1598111083982
 
     System.out.println(getSojTimestampToUnixTimestamp(3807076484397000L));//
-    System.out.println(getDateStr(3807076484397000L));
-    System.out.println(getDateStrWithMillis(3807076484397000L));
-    System.out.println(getDateStrWithUnixTimestamp(1598111083982L));
+    System.out.println(getUnixDateFromSOjTimestamp(3807074683982000L));
+    System.out.println(getUnixDateFromUnixTimestamp(1598111083000L));
+    System.out.println(castUnixTimestampToDateMINS1(1598111083982L));
+    long a = getUnixDateFromSOjTimestamp(3807074683982000L) == 1598079600000L ? 0 : 1;
+    System.out.println(a);
   }
 }

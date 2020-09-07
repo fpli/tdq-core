@@ -7,9 +7,10 @@ import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.SojTimestamp;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.flink.api.common.state.ValueState;
-import org.apache.flink.api.common.state.ValueStateDescriptor;
-import org.apache.flink.api.common.typeutils.base.BooleanSerializer;
+import org.apache.flink.api.common.state.MapState;
+import org.apache.flink.api.common.state.MapStateDescriptor;
+import org.apache.flink.api.common.typeutils.base.LongSerializer;
+import org.apache.flink.api.common.typeutils.base.StringSerializer;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
@@ -21,9 +22,10 @@ import org.apache.flink.util.OutputTag;
 public class UbiSessionWindowProcessFunction
     extends ProcessWindowFunction<SessionAccumulator, UbiSession, Tuple, TimeWindow> {
 
-  private static SessionMetrics sessionMetrics;
-  private final ValueStateDescriptor<Boolean> isEmitStateDescriptor =
-      new ValueStateDescriptor<>("lastTimestamp", BooleanSerializer.INSTANCE);
+  private static final MapStateDescriptor<String, Long> lastTimestampStateDescriptor =
+      new MapStateDescriptor<String, Long>("lastTimestamp",
+          StringSerializer.INSTANCE, LongSerializer.INSTANCE);
+
   private OutputTag outputTag = null;
   private SessionEndBotDetector sessionEndBotDetector;
 
@@ -36,7 +38,7 @@ public class UbiSessionWindowProcessFunction
   }
 
   private static void outputSession(UbiSession ubiSessionTmp,
-      Collector<UbiSession> out, boolean isOpen) {
+      Collector<UbiSession> out, boolean isOpen, String type) {
     UbiSession ubiSession = new UbiSession();
     ubiSession.setGuid(ubiSessionTmp.getGuid());
     ubiSession.setAgentString(ubiSessionTmp.getAgentString());
@@ -111,7 +113,7 @@ public class UbiSessionWindowProcessFunction
     ubiSession.setLineSpeed(ubiSessionTmp.getLineSpeed());
     ubiSession.setPulsarEventCnt(ubiSessionTmp.getPulsarEventCnt());
     ubiSession.setSessionEndDt(ubiSessionTmp.getSessionEndDt());
-    ubiSession.setStreamId(ubiSessionTmp.getStreamId());
+    ubiSession.setStreamId(type);
     ubiSession.setBuserId(ubiSessionTmp.getBuserId());
     ubiSession.setOpenEmit(isOpen);
     out.collect(ubiSession);
@@ -124,60 +126,87 @@ public class UbiSessionWindowProcessFunction
       Iterable<SessionAccumulator> elements,
       Collector<UbiSession> out)
       throws Exception {
-    if (sessionMetrics == null) {
-      sessionMetrics = SessionMetrics.getInstance();
-    }
     SessionAccumulator sessionAccumulator = elements.iterator().next();
     if (context.currentWatermark() >= context.window().maxTimestamp()) {
       endSessionEvent(sessionAccumulator);
       Set<Integer> botFlagList = sessionEndBotDetector
           .getBotFlagList(sessionAccumulator.getUbiSession());
       sessionAccumulator.getUbiSession().getBotFlagList().addAll(botFlagList);
-      outputSession(sessionAccumulator.getUbiSession(), out, false);
+      outputSession(sessionAccumulator.getUbiSession(), out, false, "0");
     } else if (sessionAccumulator.getUbiSessionSplit() != null) {
       endSessionEvent(sessionAccumulator);
       Set<Integer> botFlagList = sessionEndBotDetector
           .getBotFlagList(sessionAccumulator.getUbiSessionSplit());
       sessionAccumulator.getUbiSessionSplit().getBotFlagList().addAll(botFlagList);
-      outputSession(sessionAccumulator.getUbiSessionSplit(), out, false);
+      outputSession(sessionAccumulator.getUbiSessionSplit(), out, false, "0");
     } else {
       long absStartDate = SojTimestamp
-          .castSojTimestampToDate(sessionAccumulator.getUbiSession().getAbsStartTimestamp());
+          .getUnixDateFromSOjTimestamp(sessionAccumulator.getUbiSession().getAbsStartTimestamp());
       long absEndDate =
           SojTimestamp
-              .castSojTimestampToDate(sessionAccumulator.getUbiSession().getAbsEndTimestamp());
-      long timerMills = SojTimestamp
-          .castUnixTimestampToDateMINS1(sessionAccumulator.getUbiSession().getAbsEndTimestamp());
-      long currentWaterMark = context.currentWatermark();
-      ValueState<Boolean> isEmitState = this.getRuntimeContext().getState(isEmitStateDescriptor)
-      if (isEmitState.value() == null || !isEmitState.value()) {
-        if (absStartDate != absEndDate || currentWaterMark > timerMills) {
-          endSessionEvent(sessionAccumulator);
-          Set<Integer> botFlagList = sessionEndBotDetector
-              .getBotFlagList(sessionAccumulator.getUbiSession());
-          sessionAccumulator.getUbiSession().getBotFlagList().addAll(botFlagList);
-          outputSession(sessionAccumulator.getUbiSession(), out, true);
-          isEmitState.update(true);
-        }
+              .getUnixDateFromSOjTimestamp(sessionAccumulator.getUbiSession().getAbsEndTimestamp());
+      long currentWaterMark = SojTimestamp.getUnixDateFromUnixTimestamp(context.currentWatermark());
+      //      String absStartDateStr = SojTimestamp.getDateStrWithUnixTimestamp(absStartDate);
+      //      String absEndDateStr = SojTimestamp.getDateStrWithUnixTimestamp(absEndDate);
+      //      String currentWaterMarkStr = SojTimestamp.getDateStrWithUnixTimestamp
+      //      (currentWaterMark);
+      MapState<String, Long> lastTimestampState =
+          context.globalState().getMapState(lastTimestampStateDescriptor);
+      Long lastTimstamp =
+          lastTimestampState.get(sessionAccumulator.getUbiSession().getGuid()) == null
+              ? absStartDate :
+              lastTimestampState.get(sessionAccumulator.getUbiSession().getGuid());
+
+      if (lastTimstamp < absEndDate) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("=============Senario 1============ ");
+        sb.append(" GUID： " + sessionAccumulator.getUbiSession().getGuid());
+        sb.append(
+            " getAbsEndTimestamp：" + sessionAccumulator.getUbiSession().getAbsEndTimestamp());
+        sb.append(
+            " getAbsStartTimestamp: " + sessionAccumulator.getUbiSession().getAbsStartTimestamp());
+        sb.append(" absStartDate：" + absStartDate);
+        sb.append(" lastTimstamp: " + lastTimstamp);
+        sb.append(" absEndDate: " + absEndDate);
+        sb.append(" type: " + 1);
+        endSessionEvent(sessionAccumulator);
+        Set<Integer> botFlagList = sessionEndBotDetector
+            .getBotFlagList(sessionAccumulator.getUbiSession());
+        sessionAccumulator.getUbiSession().getBotFlagList().addAll(botFlagList);
+        outputSession(sessionAccumulator.getUbiSession(), out, true, sb.toString());
+        lastTimestampState.put(sessionAccumulator.getUbiSession().getGuid(), absEndDate);
+      } else if (currentWaterMark > absEndDate && currentWaterMark > lastTimstamp) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("=============Senario 2============ ");
+        sb.append(" GUID： " + sessionAccumulator.getUbiSession().getGuid());
+        sb.append(" currentWaterMark before ：" + context.currentWatermark());
+        sb.append(" currentWaterMark：" + currentWaterMark);
+        sb.append(" lastTimstamp: " + lastTimstamp);
+        sb.append(" absEndDate: " + absEndDate);
+        sb.append(" type: " + 2);
+        endSessionEvent(sessionAccumulator);
+        Set<Integer> botFlagList = sessionEndBotDetector
+            .getBotFlagList(sessionAccumulator.getUbiSession());
+        sessionAccumulator.getUbiSession().getBotFlagList().addAll(botFlagList);
+        outputSession(sessionAccumulator.getUbiSession(), out, true, sb.toString());
+        lastTimestampState.put(sessionAccumulator.getUbiSession().getGuid(), currentWaterMark);
       }
+
     }
   }
 
   private void endSessionEvent(SessionAccumulator sessionAccumulator) throws Exception {
-    sessionMetrics.end(sessionAccumulator);
+    SessionMetrics.getInstance().end(sessionAccumulator);
   }
 
   @Override
   public void open(Configuration conf) throws Exception {
     super.open(conf);
     sessionEndBotDetector = SessionEndBotDetector.getInstance();
-
   }
 
   @Override
   public void clear(Context context) throws Exception {
-    this.getRuntimeContext().getState(isEmitStateDescriptor).clear();
+    context.globalState().getMapState(lastTimestampStateDescriptor).clear();
   }
-
-}
 }
