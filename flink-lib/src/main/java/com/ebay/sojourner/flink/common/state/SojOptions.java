@@ -36,7 +36,7 @@ public class SojOptions implements OptionsFactory {
         .setTableFormatConfig(
             new BlockBasedTableConfig()
                 // default: 8 MB
-                .setBlockCacheSize(64 * 1024 * 1024)
+                .setBlockCacheSize(64 * 1024 * 1024L)
                 .setFilter(new BloomFilter())
                 // default: cache_index_and_filter_blocks=false
                 .setCacheIndexAndFilterBlocks(true)
@@ -48,7 +48,7 @@ public class SojOptions implements OptionsFactory {
         // default: level0_file_num_compaction_trigger=4
         .setLevel0FileNumCompactionTrigger(10)
         // default: write_buffer_size=67108864
-        .setWriteBufferSize(64 * 1024 * 1024)
+        .setWriteBufferSize(64 * 1024 * 1024L)
         // default: max_write_buffer_number=2
         .setMaxWriteBufferNumber(4)
         // default: min_write_buffer_number_to_merge=1

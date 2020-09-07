@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UbiLookups {
 
   public static final String LKP_RECORD_DELIMITER = "\177";
-  private static UbiLookups ubiLookups;
+  private static volatile UbiLookups ubiLookups;
   private final Set<Integer> mktgTrafficSrcIds;
   private final Set<Integer> nonbrowserCobrands;
   private final BotAgentMatcher agentMatcher;

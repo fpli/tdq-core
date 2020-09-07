@@ -53,15 +53,15 @@ public class UbiSessionHelper {
   }
 
   public static boolean isHomePage(IntermediateSession session) {
-    return session.getValidPageCnt() == session.getHomepageCnt();
+    return session.getValidPageCnt().equals(session.getHomepageCnt());
   }
 
   public static boolean isFamilyVi(IntermediateSession session) {
-    return session.getValidPageCnt() == session.getFamilyViCnt();
+    return session.getValidPageCnt().equals(session.getFamilyViCnt());
   }
 
   public static boolean isSignIn(IntermediateSession session) {
-    return session.getValidPageCnt() == session.getSigninPageCnt();
+    return session.getValidPageCnt().equals(session.getSigninPageCnt());
   }
 
   public static boolean isNoUid(IntermediateSession session) {

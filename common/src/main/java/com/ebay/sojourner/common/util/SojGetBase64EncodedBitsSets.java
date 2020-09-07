@@ -64,7 +64,7 @@ public class SojGetBase64EncodedBitsSets {
 
       if (return_val == 1) {
 
-        if (result == "") {
+        if (result.equals("")) {
           result_len = 0;
         } else {
           result_len = result.length();
@@ -101,7 +101,7 @@ public class SojGetBase64EncodedBitsSets {
       }
     }
 
-    if (result == "") {
+    if (result.equals("")) {
       return null;
     } else {
       return result;
