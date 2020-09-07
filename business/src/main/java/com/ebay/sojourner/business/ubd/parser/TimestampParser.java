@@ -46,7 +46,7 @@ public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
     ubiEvent.setGenerateTime(rawEvent.getRheosHeader().getEventCreateTimestamp());
     ubiEvent.setOldSessionSkey(null);
   }
-
+  
   @Override
   public void init() throws Exception {
   }

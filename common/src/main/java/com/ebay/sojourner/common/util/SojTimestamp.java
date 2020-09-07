@@ -159,5 +159,6 @@ public class SojTimestamp {
     System.out.println(castUnixTimestampToDateMINS1(1598111083982L));
     long a = getUnixDateFromSOjTimestamp(3807074683982000L) == 1598079600000L ? 0 : 1;
     System.out.println(a);
+
   }
 }
