@@ -19,6 +19,7 @@ public class OpenSessionFiringTrigger<W extends Window> extends Trigger<Object, 
   private OpenSessionFiringTrigger() {
     triggers.add(countTrigger);
     triggers.add(eventTimeTrigger);
+    triggers.add(passnightTrigger);
   }
 
   public static <W extends Window> OpenSessionFiringTrigger<W> create() {

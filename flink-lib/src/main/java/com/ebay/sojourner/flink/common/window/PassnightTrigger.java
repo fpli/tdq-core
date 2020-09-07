@@ -51,7 +51,9 @@ public class PassnightTrigger
   @Override
   public void clear(TimeWindow window, TriggerContext ctx) throws Exception {
     ReducingState<Long> minTiemstampState = ctx.getPartitionedState(minTimestampStateDesc);
-    ctx.deleteEventTimeTimer(minTiemstampState.get());
+    if(minTiemstampState.get()!=null) {
+      ctx.deleteEventTimeTimer(minTiemstampState.get());
+    }
     ctx.getPartitionedState(minTimestampStateDesc).clear();
   }
 
