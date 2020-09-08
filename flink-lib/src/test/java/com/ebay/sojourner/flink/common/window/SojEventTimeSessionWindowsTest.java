@@ -314,6 +314,54 @@ public class SojEventTimeSessionWindowsTest {
     Assert.assertEquals(1, session6.getSum());
   }
 
+  @Test
+  public void testInvalidSessionGap_Zero() {
+    List<TestEvent> events = new ArrayList<>();
+    try {
+      runTemplate(events, SojEventTimeSessionWindows
+          .withGapAndMaxDuration(Time.milliseconds(0L), Time.milliseconds(15L)));
+      Assert.fail();
+    } catch (IllegalArgumentException e) {
+      Assert.assertTrue(e.getMessage().equals("Session timeout must be larger than 0."));
+    }
+  }
+
+  @Test
+  public void testInvalidSessionGap_Negative() {
+    List<TestEvent> events = new ArrayList<>();
+    try {
+      runTemplate(events, SojEventTimeSessionWindows
+          .withGapAndMaxDuration(Time.milliseconds(-1L), Time.milliseconds(15L)));
+      Assert.fail();
+    } catch (IllegalArgumentException e) {
+      Assert.assertTrue(e.getMessage().equals("Session timeout must be larger than 0."));
+    }
+  }
+
+  @Test
+  public void testInvalidSessionMaxDuration_Zero() {
+    List<TestEvent> events = new ArrayList<>();
+    try {
+      runTemplate(events, SojEventTimeSessionWindows
+          .withGapAndMaxDuration(Time.milliseconds(8L), Time.milliseconds(0L)));
+      Assert.fail();
+    } catch (IllegalArgumentException e) {
+      Assert.assertTrue(e.getMessage().equals("Session max duration must be larger than 0."));
+    }
+  }
+
+  @Test
+  public void testInvalidSessionMaxDuration_Negative() {
+    List<TestEvent> events = new ArrayList<>();
+    try {
+      runTemplate(events, SojEventTimeSessionWindows
+          .withGapAndMaxDuration(Time.milliseconds(8L), Time.milliseconds(-1L)));
+      Assert.fail();
+    } catch (IllegalArgumentException e) {
+      Assert.assertTrue(e.getMessage().equals("Session max duration must be larger than 0."));
+    }
+  }
+
   public void runTemplate(List<TestEvent> events, WindowAssigner windowAssigner) {
     try {
       StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
