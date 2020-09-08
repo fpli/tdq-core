@@ -34,6 +34,7 @@ public class UbiSessionAgg
   @Override
   public SessionAccumulator add(UbiEvent value, SessionAccumulator accumulator) {
     Set<Integer> eventBotFlagSet = value.getBotFlags();
+
     if (accumulator.getUbiSessionSplit() != null) {
       accumulator.setUbiSessionSplit(null);
     }
@@ -60,6 +61,17 @@ public class UbiSessionAgg
       log.error("start session metrics collection failed", e);
     }
 
+    //    long absStartDate = SOJTS2Date
+    //        .castSojTimestampToDate(accumulator.getUbiSession().getAbsStartTimestamp());
+    //    long absEndDate =
+    //        SOJTS2Date.castSojTimestampToDate(accumulator.getUbiSession().getAbsEndTimestamp());
+    //    if (absEndDate != absEndDate) {
+    //      if (accumulator.getUbiSession().getOpenEmit() == 0) {
+    //        accumulator.getUbiSession().setOpenEmit(1);
+    //      } else if (accumulator.getUbiSession().getOpenEmit() == 1) {
+    //        accumulator.getUbiSession().setOpenEmit(2);
+    //      }
+    //    }
     if (accumulator.getUbiSession().getGuid() == null) {
       accumulator.getUbiSession().setGuid(value.getGuid());
     }

@@ -42,12 +42,11 @@ kafka:
       event:
         bot: behavior.totalv2.sojevent-bot
         non-bot: behavior.totalv2.sojevent-nonbot
+        late: behavior.totalv2.sojevent-late
       signature:
         agent-ip: behavior.totalv2.signature.agent-ip
         agent: behavior.totalv2.signature.agent
         ip: behavior.totalv2.signature.ip
-        guid: behavior.totalv2.signature.guid
-      intermediate-session: behavior.totalv2.session.fordq
     bootstrap-servers:
       rno:
         - rhs-fxuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.37.tess.io:9092

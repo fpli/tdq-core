@@ -56,6 +56,7 @@ public class SojTimestamp {
     long ts = (s - Constants.OFFSET) / Constants.MILLI2MICRO;
     return ts;
   }
+
   /**
    * Get Sojourner default Calendar for being used.
    */
@@ -79,12 +80,24 @@ public class SojTimestamp {
   }
 
   public static long castSojTimestampToDate(long microseconds) {
-    return microseconds - (microseconds % Constants.MILSECOFDAY);
+    return microseconds - (microseconds % Constants.MICROECOFDAY);
   }
 
-  public static long getUnixDate(long microseconds) {
+  public static long castUnixTimestampToDateMINS1(long millSeconds) {
+    return castUnixTimestampToDate(millSeconds) + Constants.MILSECOFDAYMINUS1;
+  }
+
+  public static long castUnixTimestampToDate(long millSeconds) {
+    return getUnixTimestamp(castSojTimestampToDate(getSojTimestamp(millSeconds)));
+  }
+
+  public static long getUnixDateFromSOjTimestamp(long microseconds) {
     microseconds = castSojTimestampToDate(microseconds);
     return getUnixTimestamp(microseconds);
+  }
+
+  public static long getUnixDateFromUnixTimestamp(long microseconds) {
+    return castUnixTimestampToDate(microseconds);
   }
 
   public static String getDateStrWithMillis(long ts) {
@@ -112,6 +125,14 @@ public class SojTimestamp {
     }
   }
 
+  public static String getDateStrWithUnixTimestamp(long ts) {
+    try {
+      return dateTimeFormatter.print(ts);
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
   public static String normalized(String ts) {
     try {
       long timestamp = Long.valueOf(ts.trim());
@@ -121,6 +142,7 @@ public class SojTimestamp {
       throw new RuntimeException("normalized timestamp failed", e);
     }
   }
+
   public static void main(String[] args) {
     System.out
         .println(
@@ -132,7 +154,11 @@ public class SojTimestamp {
     System.out.println(getSojTimestampToUnixTimestamp(3807074683982000L));//1598111083982
 
     System.out.println(getSojTimestampToUnixTimestamp(3807076484397000L));//
-    System.out.println(getDateStr(3807076484397000L));
-    System.out.println(getDateStrWithMillis(3807076484397000L));
+    System.out.println(getUnixDateFromSOjTimestamp(3808339083290000L));
+    System.out.println(getUnixDateFromUnixTimestamp(1598111083000L));
+    System.out.println(castUnixTimestampToDateMINS1(1598111083982L));
+    long a = getUnixDateFromSOjTimestamp(3807074683982000L) == 1598079600000L ? 0 : 1;
+    System.out.println(a);
+
   }
 }

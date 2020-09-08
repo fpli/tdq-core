@@ -139,11 +139,12 @@ public class UbiSession implements Serializable, Cloneable {
   private long sessionEndDt;
   private String streamId;
   private String buserId;
+  private boolean openEmit = false;
 
   // for adjust useragent and ip
-  private int clickId=Integer.MAX_VALUE;
-  private int pageIdForUAIP =Integer.MAX_VALUE;
-  private int hashCode=Integer.MAX_VALUE;
+  private int clickId = Integer.MAX_VALUE;
+  private int pageIdForUAIP = Integer.MAX_VALUE;
+  private int hashCode = Integer.MAX_VALUE;
 
   public UbiSession() {
     //        this.distinctClickIdSet = new HashSet<Integer>();
@@ -187,8 +188,8 @@ public class UbiSession implements Serializable, Cloneable {
     this.oldSessionSkeySet.addAll(ubiSession.getOldSessionSkeySet());
     this.botFlagList.addAll(ubiSession.getBotFlagList());
     this.userIdSet.addAll(ubiSession.getUserIdSet());
-    if(!this.isReturningVisitor&&ubiSession.isReturningVisitor()){
-      this.isReturningVisitor=ubiSession.isReturningVisitor();
+    if (!this.isReturningVisitor && ubiSession.isReturningVisitor()) {
+      this.isReturningVisitor = ubiSession.isReturningVisitor();
     }
     if (this.getFirstSessionStartDt() > ubiSession.getFirstSessionStartDt()) {
       this.setFirstSessionStartDt(ubiSession.getFirstSessionStartDt());

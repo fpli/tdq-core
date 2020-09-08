@@ -63,12 +63,14 @@ public class Constants {
   // the offset align with UTC-
   public static final long OFFSET = 2208963600000000L; // 25567L *24 * 3600 * 1000 * 1000 - 7 *
   // 3600 * 1000 * 1000;
-  public static final long MILSECOFDAY = 86400000000L; // 24 * 3600 * 1000 * 1000
+  public static final long MICROECOFDAY = 86400000000L; // 24 * 3600 * 1000 * 1000
+  public static final long MILSECOFDAY = 86400000L; // 24 * 3600 * 1000 * 1000
+  public static final long MILSECOFDAYMINUS1 = 86400000L - 1L; // 24 * 3600 * 1000 * 1000
   public static final int MILLI2MICRO = 1000;
 
   public static final long UPPERLIMITMICRO = 1 * 60 * 1000000L; // 2 minutes
   public static final long LOWERLIMITMICRO = -30 * 60 * 1000000L; // 31 minutes
-  public static final TimeZone UTC_TIMEZONE= TimeZone.getTimeZone("UTC");
+  public static final TimeZone UTC_TIMEZONE = TimeZone.getTimeZone("UTC");
   public static final TimeZone PST_TIMEZONE = TimeZone.getTimeZone("GMT-7");
   public static final long MINUS_GUID_MIN_MS = 180000L; // 417mins - 7hours = -3mins = -180000ms;
   // UNIX.
@@ -78,7 +80,7 @@ public class Constants {
   public static final String P_TAG = "p";
   public static final String TAG_ITEMIDS = "!itemIds";
   public static final String TAG_TRKP = "trkp";
-  public static final String TAG_MTSTS="mtsts";
+  public static final String TAG_MTSTS = "mtsts";
 
 }
 

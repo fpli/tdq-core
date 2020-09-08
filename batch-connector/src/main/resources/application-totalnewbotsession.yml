@@ -1,0 +1,28 @@
+kafka:
+  consumer:
+    stream: behavior.total.new
+    topic: behavior.total.new.sojsession.bot
+    group-id: sojourner-total-dumper-test
+    bootstrap-servers:
+      rno:
+        - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
+
+flink:
+  app:
+    name: Sojourner Bot Session HDFS Load Pipeline
+    parallelism:
+      source: 20
+      sink:
+        hdfs: 20
+
+hdfs:
+  dump:
+    path:
+      open: hdfs://apollo-rno/sys/soj/ubd/test/sessions/category=open/type=bot
+      same-day: hdfs://apollo-rno/sys/soj/ubd/test/sessions/category=sameday/type=bot
+      cross-day: hdfs://apollo-rno/sys/soj/ubd/test/sessions/category=crossday/type=bot
+    watermark-path: hdfs://apollo-rno/sys/soj/ubd/test/watermark/sessions/type=bot
