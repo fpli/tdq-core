@@ -1,8 +1,10 @@
 package com.ebay.sojourner.flink.connectors.kafka;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.windowing.time.Time;
 
+@Slf4j
 public class SojBoundedOutOfOrderlessTimestampExtractor<T> extends
     BoundedOutOfOrdernessTimestampExtractor<T> {
 
@@ -16,7 +18,14 @@ public class SojBoundedOutOfOrderlessTimestampExtractor<T> extends
   @Override
   public long extractTimestamp(T t) {
 
-    long filed = TimestampFieldExtractor.getField(t);
-    return filed;
+    long field = System.currentTimeMillis();
+
+    try {
+       field = TimestampFieldExtractor.getField(t);
+    } catch (Exception e) {
+      log.warn("extract timestamp failed" + field);
+    }
+
+    return field;
   }
 }

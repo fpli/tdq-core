@@ -16,6 +16,7 @@ import org.joda.time.format.DateTimeFormatter;
 public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
 
   private static final Logger log = Logger.getLogger(TimestampParser.class);
+
   private static final DateTimeFormatter dateMinsFormatter = DateTimeFormat.forPattern(
       Constants.DEFAULT_DATE_MINS_FORMAT)
       .withZone(
@@ -45,7 +46,6 @@ public class TimestampParser implements FieldParser<RawEvent, UbiEvent> {
     ubiEvent.setGenerateTime(rawEvent.getRheosHeader().getEventCreateTimestamp());
     ubiEvent.setOldSessionSkey(null);
   }
-
 
   @Override
   public void init() throws Exception {

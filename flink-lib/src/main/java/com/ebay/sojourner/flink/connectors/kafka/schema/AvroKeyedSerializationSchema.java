@@ -1,21 +1,14 @@
 package com.ebay.sojourner.flink.connectors.kafka.schema;
 
-import com.ebay.sojourner.common.model.SojSession;
-import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.io.BinaryEncoder;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.reflect.ReflectData;
 import org.apache.avro.reflect.ReflectDatumWriter;
 import org.apache.avro.specific.SpecificDatumWriter;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.flink.streaming.util.serialization.KeyedSerializationSchema;
 
 public class AvroKeyedSerializationSchema<T> implements KeyedSerializationSchema<T> {
@@ -27,7 +20,6 @@ public class AvroKeyedSerializationSchema<T> implements KeyedSerializationSchema
   private String keyFieldStr;
   private transient GenericDatumWriter<T> writer;
   private transient BinaryEncoder encoder;
-  private List<Integer> intermediateBotFlagList = Arrays.asList(220,221,222,223);
 
   public AvroKeyedSerializationSchema(Class<T> avroType, String keyField) {
     this.avroType = avroType;
@@ -66,23 +58,6 @@ public class AvroKeyedSerializationSchema<T> implements KeyedSerializationSchema
 
   @Override
   public String getTargetTopic(T element) {
-
-    if (element instanceof SojSession) {
-
-      SojSession sojSession = (SojSession) element;
-      int size = sojSession.getBotFlagList().size();
-      List<Integer> botFlags = sojSession.getBotFlagList();
-      Collection<Integer> subtract = CollectionUtils.subtract(botFlags, intermediateBotFlagList);
-
-      if (size == 0) {
-        return null;
-      } else if (subtract.size() == 0) {
-        return null;
-      } else {
-        return FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SESSION_BOT);
-      }
-    }
-
     return null;
   }
 

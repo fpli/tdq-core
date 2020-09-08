@@ -1,14 +1,8 @@
 package com.ebay.sojourner.flink.connectors.kafka.schema;
 
-import com.ebay.sojourner.common.model.SojEvent;
-import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.io.BinaryEncoder;
@@ -16,7 +10,6 @@ import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.reflect.ReflectData;
 import org.apache.avro.reflect.ReflectDatumWriter;
 import org.apache.avro.specific.SpecificDatumWriter;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.flink.streaming.util.serialization.KeyedSerializationSchema;
 
 @Slf4j
@@ -33,7 +26,6 @@ public class SojEventKeyedSerializationSchema<T> implements KeyedSerializationSc
   private String keyFieldStr2;
   private transient GenericDatumWriter<T> writer;
   private transient BinaryEncoder encoder;
-  private List<Integer> intermediateBotFlagList = Arrays.asList(220, 221, 222, 223);
 
   public SojEventKeyedSerializationSchema(Class<T> tClass, String keyField1, String keyField2) {
     this.tClass = tClass;
@@ -76,19 +68,7 @@ public class SojEventKeyedSerializationSchema<T> implements KeyedSerializationSc
 
   @Override
   public String getTargetTopic(T element) {
-
-    SojEvent sojEvent = (SojEvent) element;
-    int size = sojEvent.getBotFlags().size();
-    List<Integer> botFlags = sojEvent.getBotFlags();
-    Collection<Integer> subtract = CollectionUtils.subtract(botFlags, intermediateBotFlagList);
-
-    if (size == 0) {
-      return null;
-    } else if (subtract.size() == 0) {
-      return null;
-    } else {
-      return FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_BOT);
-    }
+    return null;
   }
 
   private void ensureInitialized() {

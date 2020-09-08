@@ -176,6 +176,7 @@ public class Property {
   public static final String KAFKA_CONSUMER_BOOTSTRAP_SERVERS = "kafka.consumer.bootstrap-servers";
   public static final String KAFKA_CONSUMER_TOPIC = "kafka.consumer.topic";
   public static final String KAFKA_CONSUMER_GROUP_ID = "kafka.consumer.group-id";
+  public static final String KAFKA_CONSUMER_DATA_CENTER = "kafka.consumer.data-center";
 
   // kafka producer
   public static final String BATCH_SIZE = "kafka.producer.batch-size";
@@ -195,6 +196,7 @@ public class Property {
   public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT_IP = "kafka.producer.message-key.signature.agent-ip";
   public static final String KAFKA_PRODUCER_BOOTSTRAP_SERVERS_RNO = "kafka.producer.bootstrap-servers.rno";
   public static final String KAFKA_PRODUCER_BOOTSTRAP_SERVERS_LVS = "kafka.producer.bootstrap-servers.lvs";
+  public static final String KAFKA_PRODUCER_BOOTSTRAP_SERVERS = "kafka.producer.bootstrap-servers";
   public static final String KAFKA_PRODUCER_TOPIC = "kafka.producer.topic";
 
   // rheos
@@ -266,6 +268,7 @@ public class Property {
   public static final String HDFS_DUMP_PATH = "hdfs.dump.path";
   public static final String HDFS_SAME_DAY_SESSION_DUMP_PATH = "hdfs.dump.path.same-day";
   public static final String HDFS_CROSS_DAY_SESSION_DUMP_PATH = "hdfs.dump.path.cross-day";
+  public static final String HDFS_OPEN_SESSION_DUMP_PATH = "hdfs.dump.path.open";
   public static final String HDFS_DUMP_CLASS = "hdfs.dump.class-name";
   public static final String HDFS_DUMP_WATERMARK_PATH = "hdfs.dump.watermark-path";
 
@@ -276,6 +279,7 @@ public class Property {
   public static final String KAFKA_TOPIC_INTERMEDIATE_SESSION = "kafka.producer.topic.intermediate-session";
   public static final String KAFKA_TOPIC_EVENT_BOT = "kafka.producer.topic.event.bot";
   public static final String KAFKA_TOPIC_EVENT_NON_BOT = "kafka.producer.topic.event.non-bot";
+  public static final String KAFKA_TOPIC_EVENT_LATE = "kafka.producer.topic.event.late";
   public static final String KAFKA_TOPIC_SIGNATURE_AGENT_IP = "kafka.producer.topic.signature.agent-ip";
   public static final String KAFKA_TOPIC_SIGNATURE_AGENT = "kafka.producer.topic.signature.agent";
   public static final String KAFKA_TOPIC_SIGNATURE_IP = "kafka.producer.topic.signature.ip";

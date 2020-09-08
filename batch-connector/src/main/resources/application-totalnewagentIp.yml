@@ -1,0 +1,25 @@
+kafka:
+  consumer:
+    stream: behavior.total.new
+    topic: behavior.total.new.signature.agentIp
+    group-id: sojourner-total-dumper-test
+    bootstrap-servers:
+      rno:
+        - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
+        - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
+
+flink:
+  app:
+    name: Sojourner AgentIp Signature HDFS Load Pipeline
+    parallelism:
+      source: 10
+      sink:
+        hdfs: 10
+
+hdfs:
+  dump:
+    path: hdfs://apollo-rno/sys/soj/ubd/test/signatures/type=agentIp
+    class-name: com.ebay.sojourner.common.model.BotSignature

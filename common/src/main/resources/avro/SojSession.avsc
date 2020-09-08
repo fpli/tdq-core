@@ -557,6 +557,14 @@
         "string"
       ],
       "doc": "from ubisession buserId"
-    }
+    },
+         {
+           "name": "isOpen",
+           "type": [
+             "null",
+             "boolean"
+           ],
+           "doc": "to identify open or end"
+         }
   ]
 }

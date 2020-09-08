@@ -23,7 +23,9 @@ public class TimestampFieldExtractor {
       try {
         return SojTimestamp.getSojTimestampToUnixTimestamp(sojSession.getSessionStartDt());
       } catch (Exception e) {
-        log.warn("failed session record: ", sojSession.toString());
+        log.warn(
+            "failed session record: " + sojSession.toString() + "; guid: " + sojSession.getGuid()
+                + "; sessionskey: " + sojSession.getSessionSkey());
         log.warn("parse sessionstartdt failed: ", e);
         return System.currentTimeMillis();
       }

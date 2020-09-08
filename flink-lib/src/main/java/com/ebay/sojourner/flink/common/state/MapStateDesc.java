@@ -15,4 +15,5 @@ public class MapStateDesc {
           BasicTypeInfo.STRING_TYPE_INFO,
           TypeInformation.of(new TypeHint<Map<String, Map<Integer, Long[]>>>() {
           }));
+
 }
