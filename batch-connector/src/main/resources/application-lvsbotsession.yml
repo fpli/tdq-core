@@ -22,6 +22,7 @@ flink:
 hdfs:
   dump:
     path:
+      open: hdfs://hercules/sys/soj/ubd/sessions/category=open/type=bot
       same-day: hdfs://hercules/sys/soj/ubd/sessions/category=sameday/type=bot
       cross-day: hdfs://hercules/sys/soj/ubd/sessions/category=crossday/type=bot
     watermark-path: hdfs://hercules/sys/soj/ubd/watermark/sessions/type=bot
