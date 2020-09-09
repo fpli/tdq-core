@@ -1,23 +1,19 @@
 package com.ebay.sojourner.business.ubd.detectors;
 
-import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.business.ubd.rule.BotRule206;
 import com.ebay.sojourner.business.ubd.rule.BotRule208;
+import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.model.rule.Rule;
 import com.ebay.sojourner.common.util.BotFilter;
 import com.ebay.sojourner.common.util.UbiBotFilter;
 import java.io.IOException;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 public class SessionEndBotDetector implements BotDetector<UbiSession> {
 
   private static volatile SessionEndBotDetector sessionEndBotDetector;
-  private static List<Long> dynamicRuleIdList = new CopyOnWriteArrayList<>();
-  private Set<Rule> botRules = new CopyOnWriteArraySet<>();
+  private Set<Rule> botRules = new HashSet<>();
   private BotFilter filter = null;
 
   private SessionEndBotDetector() {
@@ -26,10 +22,6 @@ public class SessionEndBotDetector implements BotDetector<UbiSession> {
     for (Rule rule : botRules) {
       rule.init();
     }
-  }
-
-  public static List<Long> dynamicRuleIdList() {
-    return dynamicRuleIdList;
   }
 
   public static SessionEndBotDetector getInstance() {
@@ -43,14 +35,10 @@ public class SessionEndBotDetector implements BotDetector<UbiSession> {
     return sessionEndBotDetector;
   }
 
-  public Set<Rule> rules() {
-    return this.botRules;
-  }
-
   @Override
   public Set<Integer> getBotFlagList(UbiSession ubiSession)
       throws IOException, InterruptedException {
-    Set<Integer> botRuleList = new LinkedHashSet<Integer>(botRules.size());
+    Set<Integer> botRuleList = new HashSet<>();
     for (Rule rule : botRules) {
       Integer botRule = rule.getBotFlag(ubiSession);
       if (botRule != null && botRule != 0) {
@@ -66,6 +54,5 @@ public class SessionEndBotDetector implements BotDetector<UbiSession> {
   public void initBotRules() {
     botRules.add(new BotRule206());
     botRules.add(new BotRule208());
-
   }
 }

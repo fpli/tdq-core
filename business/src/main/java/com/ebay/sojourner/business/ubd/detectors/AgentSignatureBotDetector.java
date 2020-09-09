@@ -6,27 +6,18 @@ import com.ebay.sojourner.common.model.AgentAttribute;
 import com.ebay.sojourner.common.model.rule.Rule;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 public class AgentSignatureBotDetector implements BotDetector<AgentAttribute> {
 
   private static volatile AgentSignatureBotDetector agentIpSignatureBotDetector;
-  private static List<Long> dynamicRuleIdList = new CopyOnWriteArrayList<>();
-  private Set<Rule> botRules = new CopyOnWriteArraySet<>();
+  private Set<Rule> botRules = new HashSet<>();
 
   private AgentSignatureBotDetector() {
-
     initBotRules();
     for (Rule rule : botRules) {
       rule.init();
     }
-  }
-
-  public static List<Long> dynamicRuleIdList() {
-    return dynamicRuleIdList;
   }
 
   public static AgentSignatureBotDetector getInstance() {
@@ -40,14 +31,10 @@ public class AgentSignatureBotDetector implements BotDetector<AgentAttribute> {
     return agentIpSignatureBotDetector;
   }
 
-  public Set<Rule> rules() {
-    return this.botRules;
-  }
-
   @Override
   public Set<Integer> getBotFlagList(AgentAttribute agentAttribute)
       throws IOException, InterruptedException {
-    Set<Integer> botflagSet = new HashSet<Integer>();
+    Set<Integer> botflagSet = new HashSet<>();
     if (agentAttribute != null) {
       for (Rule rule : botRules) {
         int botFlag = rule.getBotFlag(agentAttribute);
@@ -56,7 +43,6 @@ public class AgentSignatureBotDetector implements BotDetector<AgentAttribute> {
         }
       }
     }
-
     return botflagSet;
   }
 
@@ -64,6 +50,5 @@ public class AgentSignatureBotDetector implements BotDetector<AgentAttribute> {
   public void initBotRules() {
     botRules.add(new BotRule6());
     botRules.add(new BotRuleForSuspectAgent());
-    //    botRules.add(new BotRuleForDeclarativeAgent());
   }
 }
