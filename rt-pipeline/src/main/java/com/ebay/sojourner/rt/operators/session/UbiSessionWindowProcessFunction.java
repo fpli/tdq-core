@@ -133,7 +133,6 @@ public class UbiSessionWindowProcessFunction
       sessionAccumulator.getUbiSession().getBotFlagList().addAll(botFlagList);
       outputSession(sessionAccumulator.getUbiSession(), out, false);
     } else if (sessionAccumulator.getUbiSessionSplit() != null) {
-      endSessionEvent(sessionAccumulator);
       Set<Integer> botFlagList = sessionEndBotDetector
           .getBotFlagList(sessionAccumulator.getUbiSessionSplit());
       sessionAccumulator.getUbiSessionSplit().getBotFlagList().addAll(botFlagList);
