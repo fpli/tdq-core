@@ -14,7 +14,7 @@ public class KafkaSourceFunction {
       return kafkaConsumer;
     } else {
       kafkaConsumer.assignTimestampsAndWatermarks(
-          new SojBoundedOutOfOrderlessTimestampExtractor(Time.seconds(10)));
+          new SojBoundedOutOfOrderlessTimestampExtractor(Time.minutes(3)));
     }
 
     return kafkaConsumer;
