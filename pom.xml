@@ -48,7 +48,7 @@
     <okhttp3.version>4.4.1</okhttp3.version>
     <curator.version>4.2.0</curator.version>
     <zookeeper.version>3.4.14</zookeeper.version>
-    <jacoco.plugin.version>0.8.6-SNAPSHOT</jacoco.plugin.version>
+    <jacoco.plugin.version>0.8.5</jacoco.plugin.version>
     <compiler.plugin.version>3.8.1</compiler.plugin.version>
     <surefire.plugin.version>3.0.0-M5</surefire.plugin.version>
   </properties>
