@@ -1,6 +1,6 @@
-package com.ebay.sojourner.batch.connector.pipeline;
+package com.ebay.sojourner.dumper.pipeline;
 
-import com.ebay.sojourner.batch.connector.common.event.ExtractEventWatermarkProcessFunction;
+import com.ebay.sojourner.dumper.common.event.ExtractEventWatermarkProcessFunction;
 import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojWatermark;
 import com.ebay.sojourner.common.util.Property;
