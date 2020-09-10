@@ -17,8 +17,10 @@ import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
 import com.ebay.sojourner.flink.common.util.OutputTagConstants;
+import com.ebay.sojourner.flink.common.window.CompositeTrigger;
+import com.ebay.sojourner.flink.common.window.MidnightOpenSessionTrigger;
 import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
-import com.ebay.sojourner.flink.common.window.OpenSessionFiringTrigger;
+import com.ebay.sojourner.flink.common.window.SojEventTimeSessionWindows;
 import com.ebay.sojourner.flink.connectors.kafka.KafkaProducerFactory;
 import com.ebay.sojourner.flink.connectors.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
@@ -51,10 +53,10 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.transformations.OneInputTransformation;
-import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.api.windowing.triggers.EventTimeTrigger;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.types.Either;
 
@@ -105,9 +107,11 @@ public class SojournerRTJob {
     SingleOutputStreamOperator<UbiSession> ubiSessionDataStream =
         ubiEventDataStream
             .keyBy("guid")
-            .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-            .allowedLateness(Time.minutes(3))
-            .trigger(OpenSessionFiringTrigger.create())
+            .window(SojEventTimeSessionWindows.withGapAndMaxDuration(Time.minutes(30),
+                Time.hours(24)))
+            .trigger(CompositeTrigger.Builder.create().trigger(EventTimeTrigger.create())
+                .trigger(MidnightOpenSessionTrigger
+                    .of(Time.hours(7))).build())
             .sideOutputLateData(OutputTagConstants.lateEventOutputTag)
             .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction());
 
