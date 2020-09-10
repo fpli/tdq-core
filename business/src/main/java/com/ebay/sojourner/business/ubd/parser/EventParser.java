@@ -15,6 +15,8 @@ public class EventParser extends RecordParser<RawEvent, UbiEvent> {
     if (this.fieldParsers.isEmpty()) {
       // Keep insert order to reuse existed field normalization result
       addFieldParser(new IdentityParser());
+      // icf
+      addFieldParser(new IcfParser());
       addFieldParser(new TimestampParser());
       addFieldParser(new CiidParser());
       addFieldParser(new ClickIdParser());
@@ -42,9 +44,6 @@ public class EventParser extends RecordParser<RawEvent, UbiEvent> {
       // new metrics
       addFieldParser(new CobrandParser());
       addFieldParser(new PartialValidPageParser());
-      // icf
-      addFieldParser(new IcfParser());
-
       // Jetstream columns
       addFieldParser(new JSColumnParser());
       addFieldParser(new HashCodeParser());

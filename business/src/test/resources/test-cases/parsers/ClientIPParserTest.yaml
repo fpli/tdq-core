@@ -1,0 +1,59 @@
+- name: test1
+  inputs:
+    RawEvent:
+      clientData:
+        remoteIP: 127.0.0.1
+        ForwardFor: 192.168.137.111
+  expect:
+    UbiEvent:
+      clientIP: 127.0.0.1
+
+- name: test2
+  inputs:
+    RawEvent:
+      clientData:
+        remoteIP: 127.0
+        ForwardFor: 192.168.137.111
+  expect:
+    UbiEvent:
+      clientIP:
+
+- name: test3
+  inputs:
+    RawEvent:
+      clientData:
+        remoteIP: 127.0.0.0.1
+        ForwardFor: 192.168.137.111
+  expect:
+    UbiEvent:
+      clientIP:
+
+- name: test4
+  inputs:
+    RawEvent:
+      clientData:
+        remoteIP: 127.0.0.0.1
+        ForwardFor: 256.168.137.111
+  expect:
+    UbiEvent:
+      clientIP:
+
+- name: test5
+  inputs:
+    RawEvent:
+      clientData:
+        remoteIP: 256.0.0.1
+        ForwardFor: 256.168.137.111
+  expect:
+    UbiEvent:
+      clientIP:
+
+- name: test6
+  inputs:
+    RawEvent:
+      clientData:
+        remoteIP:
+        ForwardFor: 256.168.137.111
+  expect:
+    UbiEvent:
+      clientIP:

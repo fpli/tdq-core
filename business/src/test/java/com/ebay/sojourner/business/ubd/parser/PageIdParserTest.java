@@ -1,97 +1,24 @@
 package com.ebay.sojourner.business.ubd.parser;
 
-import com.ebay.sojourner.common.model.RawEvent;
-import com.ebay.sojourner.common.model.UbiEvent;
-import com.ebay.sojourner.business.ubd.util.LoadRawEventAndExpect;
-import com.ebay.sojourner.business.ubd.util.ParserConstants;
-import com.ebay.sojourner.business.ubd.util.VaildateResult;
-import com.ebay.sojourner.business.ubd.util.YamlUtil;
-import java.util.HashMap;
-import java.util.Map;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.util.Collection;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 
-public class PageIdParserTest {
+public class PageIdParserTest extends BaseParsersTest {
 
-  private static UbiEvent ubiEvent = null;
-  private static String parser = null;
-  private static String caseItem = null;
-  private static PageIdParser pageIdParser = null;
-  private static HashMap<String, Object> map = null;
+  private PageIdParser pageIdParser;
+  private JsonNode yaml;
 
-  @BeforeAll
-  public static void initParser() {
-    parser = ParserConstants.PAGEID;
-    map = YamlUtil.getInstance().loadFileMap(ParserConstants.FILEPATH);
+  @BeforeEach
+  public void setup() throws Exception {
+    pageIdParser = new PageIdParser();
+    yaml = loadTestCasesYaml("PageIdParserTest.yaml");
   }
 
-  @Test
-  public void testPageIdParser1() {
-    pageIdParser = new PageIdParser();
-    ubiEvent = new UbiEvent();
-    caseItem = ParserConstants.CASE1;
-
-    HashMap<RawEvent, Object> rawEventAndExpectResult =
-        LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
-    for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-      pageIdParser.parse(entry.getKey(), ubiEvent);
-      System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPageId()));
-    }
-  }
-
-  @Test
-  public void testPageIdParser2() {
-    pageIdParser = new PageIdParser();
-    ubiEvent = new UbiEvent();
-    caseItem = ParserConstants.CASE2;
-
-    HashMap<RawEvent, Object> rawEventAndExpectResult =
-        LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
-    for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-      pageIdParser.parse(entry.getKey(), ubiEvent);
-      System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPageId()));
-    }
-  }
-
-  @Test
-  public void testPageIdParser3() {
-    pageIdParser = new PageIdParser();
-    ubiEvent = new UbiEvent();
-    caseItem = ParserConstants.CASE3;
-
-    HashMap<RawEvent, Object> rawEventAndExpectResult =
-        LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
-    for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-      pageIdParser.parse(entry.getKey(), ubiEvent);
-      System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPageId()));
-    }
-  }
-
-  @Test
-  public void testPageIdParser4() {
-    pageIdParser = new PageIdParser();
-    ubiEvent = new UbiEvent();
-    caseItem = ParserConstants.CASE4;
-
-    HashMap<RawEvent, Object> rawEventAndExpectResult =
-        LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
-    for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-      pageIdParser.parse(entry.getKey(), ubiEvent);
-      System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPageId()));
-    }
-  }
-
-  @Test
-  public void testPageIdParser5() {
-    pageIdParser = new PageIdParser();
-    ubiEvent = new UbiEvent();
-    caseItem = ParserConstants.CASE5;
-
-    HashMap<RawEvent, Object> rawEventAndExpectResult =
-        LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
-    for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-      pageIdParser.parse(entry.getKey(), ubiEvent);
-      System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getPageId()));
-    }
+  @TestFactory
+  public Collection<DynamicTest> dynamicTests() throws Exception {
+    return generateDynamicTests(yaml, pageIdParser);
   }
 }

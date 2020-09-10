@@ -2,25 +2,23 @@ package com.ebay.sojourner.business.ubd.parser;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.Collection;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-@Slf4j
-public class ClickIdParserTest extends BaseParsersTest {
+public class RvParserTest extends BaseParsersTest {
 
-  private ClickIdParser clickIdParser;
+  private RvParser rvParser;
   private JsonNode yaml;
 
   @BeforeEach
   public void setup() throws Exception {
-    clickIdParser = new ClickIdParser();
-    yaml = loadTestCasesYaml("ClickIdParserTest.yaml");
+    rvParser = new RvParser();
+    yaml = loadTestCasesYaml("RvParserTest.yaml");
   }
 
   @TestFactory
   public Collection<DynamicTest> dynamicTests() throws Exception {
-    return generateDynamicTests(yaml, clickIdParser);
+    return generateDynamicTests(yaml, rvParser);
   }
 }

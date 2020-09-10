@@ -1,0 +1,37 @@
+- name: test1
+  inputs:
+    RawEvent:
+      sojA:
+        flgs: ""
+      sojK:
+        ciid: ""
+      sojC:
+        p: abc
+  expect:
+    UbiEvent:
+      pageId: -1
+
+- name: test2
+  inputs:
+    RawEvent:
+      sojA:
+        flgs: ""
+      sojK:
+        ciid: ""
+      sojC:
+        p: "123"
+  expect:
+    UbiEvent:
+      pageId: -1
+
+- name: test3
+  inputs:
+    RawEvent:
+      sojA:
+        flgs: ""
+      sojK:
+        q: ""
+      sojC:
+        a: -abc_&89
+  expect:
+    UbiEvent:

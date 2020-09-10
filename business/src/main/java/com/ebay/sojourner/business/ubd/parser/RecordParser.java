@@ -1,13 +1,14 @@
 package com.ebay.sojourner.business.ubd.parser;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author kofeng
  */
 public abstract class RecordParser<Source, Target> implements Parser<Source, Target> {
 
-  protected LinkedHashSet<FieldParser<Source, Target>> fieldParsers = new LinkedHashSet<>();
+  protected List<FieldParser<Source, Target>> fieldParsers = new ArrayList<>();
 
   public abstract void initFieldParsers();
 
