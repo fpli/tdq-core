@@ -1,4 +1,4 @@
-package com.ebay.sojourner.batch.connector.pipeline;
+package com.ebay.sojourner.dumper.pipeline;
 
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;

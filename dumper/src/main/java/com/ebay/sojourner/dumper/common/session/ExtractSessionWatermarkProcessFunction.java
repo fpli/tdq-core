@@ -1,4 +1,4 @@
-package com.ebay.sojourner.batch.connector.common.session;
+package com.ebay.sojourner.dumper.common.session;
 
 import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.model.SojWatermark;
