@@ -14,7 +14,7 @@
   <modules>
     <module>common</module>
     <module>rt-pipeline</module>
-    <module>batch-connector</module>
+    <module>dumper</module>
     <module>flink-lib</module>
     <module>business</module>
     <module>sql-dsl</module>
@@ -48,13 +48,14 @@
     <okhttp3.version>4.4.1</okhttp3.version>
     <curator.version>4.2.0</curator.version>
     <zookeeper.version>3.4.14</zookeeper.version>
-    <jacoco.version>0.8.5</jacoco.version>
-    <CodeCacheSize>512m</CodeCacheSize>
+    <jacoco.plugin.version>0.8.6-SNAPSHOT</jacoco.plugin.version>
+    <compiler.plugin.version>3.8.1</compiler.plugin.version>
+    <surefire.plugin.version>3.0.0-M5</surefire.plugin.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
-      <!--  Common    -->
+      <!--  Common  -->
       <dependency>
         <groupId>org.apache.datasketches</groupId>
         <artifactId>datasketches-java</artifactId>
@@ -432,19 +433,6 @@
         <scope>test</scope>
       </dependency>
 
-      <!-- jacoco dependencies -->
-      <dependency>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>${jacoco.version}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>xml-apis</groupId>
-            <artifactId>xml-apis</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-
       <!-- joda time -->
       <dependency>
         <groupId>joda-time</groupId>
@@ -544,12 +532,26 @@
         <enabled>true</enabled>
       </snapshots>
     </repository>
+    <repository>
+      <id>sonatype</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
   </repositories>
 
   <pluginRepositories>
     <pluginRepository>
       <id>ebaycentral-corp-snapshots</id>
       <url>http://ebaycentral.corp.ebay.com/content/repositories/snapshots/</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>sonatype</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </pluginRepository>
   </pluginRepositories>
 
@@ -592,13 +594,14 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.1</version>
+          <version>${compiler.plugin.version}</version>
           <configuration>
             <source>${java.version}</source>
             <target>${java.version}</target>
           </configuration>
         </plugin>
 
+        <!--  Checkstyle plugin  -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
@@ -628,7 +631,7 @@
           </configuration>
         </plugin>
 
-        <!--  Spotbugs for code statistics analysis      -->
+        <!--  Spotbugs for code statistics analysis  -->
         <plugin>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-maven-plugin</artifactId>
@@ -639,7 +642,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.0.0-M5</version>
+          <version>${surefire.plugin.version}</version>
           <configuration>
             <includes>
               <include>**/Test*.java</include>
@@ -652,6 +655,9 @@
             <!--<forkCount>2C</forkCount>-->
             <!--<reuseForks>false</reuseForks>-->
             <!--<argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>-->
+            <systemPropertyVariables>
+              <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
+            </systemPropertyVariables>
           </configuration>
         </plugin>
 
@@ -675,20 +681,32 @@
           <artifactId>job-uploader-maven-plugin</artifactId>
           <version>1.0-SNAPSHOT</version>
         </plugin>
-
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>${jacoco.version}</version>
+          <version>${jacoco.plugin.version}</version>
           <executions>
             <execution>
+              <id>pre-unit-test</id>
               <goals>
                 <goal>prepare-agent</goal>
               </goals>
+              <configuration>
+                <append>true</append>
+              </configuration>
             </execution>
-            <!-- attached to Maven test phase -->
             <execution>
-              <id>report</id>
+              <id>pre-integration-test</id>
+              <goals>
+                <goal>prepare-agent-integration</goal>
+              </goals>
+              <configuration>
+                <append>true</append>
+              </configuration>
+            </execution>
+            <execution>
+              <id>default-report</id>
+              <!-- attached to Maven test phase -->
               <phase>test</phase>
               <goals>
                 <goal>report</goal>
@@ -749,7 +767,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>3.0.0-M5</version>
+        <version>${surefire.plugin.version}</version>
       </plugin>
     </plugins>
   </reporting>
