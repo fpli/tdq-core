@@ -12,9 +12,9 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>sojourner-batch-connector</artifactId>
+  <artifactId>sojourner-dumper</artifactId>
   <packaging>jar</packaging>
-  <name>Sojourner - Batch Connector</name>
+  <name>Sojourner - Dumper</name>
 
   <dependencies>
     <dependency>
