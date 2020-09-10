@@ -1,7 +1,7 @@
-package com.ebay.sojourner.batch.connector.pipeline;
+package com.ebay.sojourner.dumper.pipeline;
 
-import com.ebay.sojourner.batch.connector.common.session.ExtractSessionWatermarkProcessFunction;
-import com.ebay.sojourner.batch.connector.common.session.SplitSessionProcessFunction;
+import com.ebay.sojourner.dumper.common.session.ExtractSessionWatermarkProcessFunction;
+import com.ebay.sojourner.dumper.common.session.SplitSessionProcessFunction;
 import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.model.SojWatermark;
 import com.ebay.sojourner.common.util.Property;

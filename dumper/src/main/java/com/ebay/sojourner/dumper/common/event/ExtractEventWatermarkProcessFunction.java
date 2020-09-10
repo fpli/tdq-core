@@ -1,4 +1,4 @@
-package com.ebay.sojourner.batch.connector.common.event;
+package com.ebay.sojourner.dumper.common.event;
 
 import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojWatermark;
