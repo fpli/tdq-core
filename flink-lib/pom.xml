@@ -99,8 +99,8 @@
 
     <dependency>
       <groupId>org.apache.flink</groupId>
-      <artifactId>flink-test-utils_2.11</artifactId>
-      <version>${flink.version}</version>
+      <artifactId>flink-test-utils_${scala.binary.version}</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

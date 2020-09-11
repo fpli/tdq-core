@@ -376,12 +376,7 @@
       </dependency>
 
       <!-- Test Dependencies -->
-      <dependency>
-        <groupId>io.flinkspector</groupId>
-        <artifactId>flinkspector-datastream_2.11</artifactId>
-        <version>0.9.3</version>
-        <scope>test</scope>
-      </dependency>
+      <!--  Mockito  -->
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
@@ -394,6 +389,7 @@
         <version>${mockito.version}</version>
         <scope>test</scope>
       </dependency>
+      <!--  PowerMock  -->
       <dependency>
         <groupId>org.powermock</groupId>
         <artifactId>powermock-module-junit4</artifactId>
@@ -406,14 +402,7 @@
         <version>${powermock.version}</version>
         <scope>test</scope>
       </dependency>
-      <dependency>
-        <groupId>org.apache.flink</groupId>
-        <artifactId>flink-test-utils_${scala.binary.version}</artifactId>
-        <version>${flink.version}</version>
-        <scope>test</scope>
-      </dependency>
-
-      <!-- junit 5 -->
+      <!-- Junit 5 -->
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-engine</artifactId>
@@ -421,8 +410,22 @@
         <scope>test</scope>
       </dependency>
       <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>${junit-jupiter.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <!--  For legacy Junit4 tests  -->
+      <dependency>
         <groupId>org.junit.vintage</groupId>
         <artifactId>junit-vintage-engine</artifactId>
+        <version>${junit-jupiter.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <!--  For JUnit5 parametrized tests  -->
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-params</artifactId>
         <version>${junit-jupiter.version}</version>
         <scope>test</scope>
       </dependency>
@@ -432,10 +435,17 @@
         <version>${assertj.version}</version>
         <scope>test</scope>
       </dependency>
+      <!--  Flink Test Frameworks  -->
       <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-params</artifactId>
-        <version>${junit-jupiter.version}</version>
+        <groupId>org.apache.flink</groupId>
+        <artifactId>flink-test-utils_${scala.binary.version}</artifactId>
+        <version>${flink.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.flinkspector</groupId>
+        <artifactId>flinkspector-datastream_2.11</artifactId>
+        <version>0.9.3</version>
         <scope>test</scope>
       </dependency>
 
@@ -466,14 +476,22 @@
       <artifactId>lombok</artifactId>
     </dependency>
 
-    <!-- Test Dependencies -->
+    <!-- Test Dependencies for all submodules -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.junit.vintage</groupId>
       <artifactId>junit-vintage-engine</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
@@ -494,6 +512,14 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
+    </dependency>
+    <dependency>
+      <!--  must be on the classpath for Offline Instrumentation -->
+      <groupId>org.jacoco</groupId>
+      <artifactId>org.jacoco.agent</artifactId>
+      <classifier>runtime</classifier>
+      <version>${jacoco.plugin.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -691,28 +717,27 @@
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
           <version>${jacoco.plugin.version}</version>
+          <!--
+              We have to use Offline Instrumentation as the on-the-fly instrumentation is not
+              compatible with PowerMock. See detail in link:
+              https://github.com/powermock/powermock/wiki/Code-coverage-with-JaCoCo
+          -->
           <executions>
             <execution>
-              <id>pre-unit-test</id>
+              <id>default-instrument</id>
               <goals>
-                <goal>prepare-agent</goal>
+                <goal>instrument</goal>
               </goals>
-              <configuration>
-                <append>true</append>
-              </configuration>
             </execution>
             <execution>
-              <id>pre-integration-test</id>
+              <id>default-restore-instrumented-classes</id>
+              <phase>test</phase>
               <goals>
-                <goal>prepare-agent-integration</goal>
+                <goal>restore-instrumented-classes</goal>
               </goals>
-              <configuration>
-                <append>true</append>
-              </configuration>
             </execution>
             <execution>
               <id>default-report</id>
-              <!-- attached to Maven test phase -->
               <phase>test</phase>
               <goals>
                 <goal>report</goal>
