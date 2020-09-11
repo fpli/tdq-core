@@ -6,10 +6,10 @@
       sojK:
         ciid: ""
       sojC:
-        c: abc"
+        t: abc
   expect:
     UbiEvent:
-      clickId: 0
+      siteId: 0
 
 - name: test2
   inputs:
@@ -19,10 +19,10 @@
       sojK:
         ciid: ""
       sojC:
-        c: "123"
+        t: "123"
   expect:
     UbiEvent:
-      clickId: 123
+      siteId: 123
 
 - name: test3
   inputs:
@@ -32,10 +32,10 @@
       sojK:
         q: ""
       sojC:
-        c: abc_&*
+        t: abc_&*
   expect:
     UbiEvent:
-      clickId: 0
+      siteId: 0
 
 - name: test4
   inputs:
@@ -45,10 +45,10 @@
       sojK:
         q: ""
       sojC:
-        c: abc_&*8
+        t: abc_&*8
   expect:
     UbiEvent:
-      clickId: 8
+      siteId: 8
 
 - name: test5
   inputs:
@@ -58,12 +58,12 @@
       sojK:
         q: ""
       sojC:
-        c: -abc_&89
+        t: -abc_&89
   expect:
     UbiEvent:
-      clickId: -89
+      siteId: -89
 
-- name: test6
+- name: test5
   inputs:
     RawEvent:
       sojA:
@@ -71,19 +71,6 @@
       sojK:
         q: ""
       sojC:
-        a: -abc_&89
+        t:
   expect:
     UbiEvent:
-
-- name: test7
-  inputs:
-    RawEvent:
-      sojA:
-        flgs: ""
-      sojK:
-        q: ""
-      sojC:
-        c: 65589
-  expect:
-    UbiEvent:
-      clickId: 53

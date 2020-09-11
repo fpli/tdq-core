@@ -2,54 +2,36 @@ package com.ebay.sojourner.business.ubd.parser;
 
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
-import com.ebay.sojourner.business.ubd.util.LoadRawEventAndExpect;
-import com.ebay.sojourner.business.ubd.util.ParserConstants;
-import com.ebay.sojourner.business.ubd.util.VaildateResult;
-import com.ebay.sojourner.business.ubd.util.YamlUtil;
-import java.util.HashMap;
-import java.util.Map;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class ReguParserTest {
 
-  private static UbiEvent ubiEvent = null;
-  private static String parser = null;
-  private static String caseItem = null;
-  private static ReguParser reguParser = null;
-  private static HashMap<String, Object> map = null;
+  private UbiEvent ubiEvent;
+  private ReguParser reguParser;
+  private RawEvent rawEvent;
 
-  @BeforeAll
-  public static void initParser() {
-    parser = ParserConstants.REGU;
-    map = YamlUtil.getInstance().loadFileMap(ParserConstants.FILEPATH);
+  @BeforeEach
+  public void setup() {
+    reguParser = new ReguParser();
+    ubiEvent = new UbiEvent();
+    rawEvent = new RawEvent();
   }
 
   @Test
-  public void testReguParser1() {
-    reguParser = new ReguParser();
-    ubiEvent = new UbiEvent();
-    caseItem = ParserConstants.CASE1;
-
-    HashMap<RawEvent, Object> rawEventAndExpectResult =
-        LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
-    for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-      reguParser.parse(entry.getKey(), ubiEvent);
-      System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getRegu()));
-    }
+  @DisplayName("applicationPayload is not null and regu is null")
+  public void test1() {
+    reguParser.parse(rawEvent, ubiEvent);
+    Assertions.assertEquals(0, ubiEvent.getRegu());
   }
 
   @Test
-  public void testReguParser2() {
-    reguParser = new ReguParser();
-    ubiEvent = new UbiEvent();
-    caseItem = ParserConstants.CASE2;
-
-    HashMap<RawEvent, Object> rawEventAndExpectResult =
-        LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
-    for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-      reguParser.parse(entry.getKey(), ubiEvent);
-      System.out.println(VaildateResult.validateInteger(entry.getValue(), ubiEvent.getRegu()));
-    }
+  @DisplayName("applicationPayload is not null and regu is not null")
+  public void test2() {
+    ubiEvent.setApplicationPayload("regU=1");
+    reguParser.parse(rawEvent, ubiEvent);
+    Assertions.assertEquals(1, ubiEvent.getRegu());
   }
 }

@@ -1,0 +1,25 @@
+- name: test1
+  inputs:
+    RawEvent:
+      sojA:
+        cflgs: "cflgs"
+      sojK:
+        q: "hayun"
+      sojC:
+        t: haxi
+  expect:
+    UbiEvent:
+      rv: true
+
+- name: test2
+  inputs:
+    RawEvent:
+      sojA:
+        cflgs:
+      sojK:
+        q: "hayun"
+      sojC:
+        t: haxi
+  expect:
+    UbiEvent:
+      rv: true

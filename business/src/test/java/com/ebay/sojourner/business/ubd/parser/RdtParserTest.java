@@ -1,72 +1,45 @@
 package com.ebay.sojourner.business.ubd.parser;
 
-import com.ebay.sojourner.business.ubd.util.LoadRawEventAndExpect;
-import com.ebay.sojourner.business.ubd.util.ParserConstants;
-import com.ebay.sojourner.business.ubd.util.VaildateResult;
-import com.ebay.sojourner.business.ubd.util.YamlUtil;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
-import java.util.HashMap;
-import java.util.Map;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class RdtParserTest {
 
-  private static UbiEvent ubiEvent = null;
-  private static String parser = null;
-  private static String caseItem = null;
-  private static RdtParser rdtParser = null;
-  private static HashMap<String, Object> map = null;
+  private UbiEvent ubiEvent;
+  private RdtParser rdtParser;
+  private RawEvent rawEvent;
 
-  @BeforeAll
-  public static void initParser() {
-    parser = ParserConstants.RDT;
-    map = YamlUtil.getInstance().loadFileMap(ParserConstants.FILEPATH);
+  @BeforeEach
+  public void setup() {
+    rdtParser = new RdtParser();
+    ubiEvent = new UbiEvent();
+    rawEvent = new RawEvent();
   }
 
   @Test
-  public void testRdtParser1() {
-    rdtParser = new RdtParser();
-    ubiEvent = new UbiEvent();
-    caseItem = ParserConstants.CASE1;
-
-    HashMap<RawEvent, Object> rawEventAndExpectResult =
-        LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
-    for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-      rdtParser.parse(entry.getKey(), ubiEvent);
-      System.out.println(
-          VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isRdt())));
-    }
+  @DisplayName("applicationPayload is null")
+  public void test1() {
+    rdtParser.parse(rawEvent, ubiEvent);
+    Assertions.assertEquals(false, ubiEvent.isRdt());
   }
 
   @Test
-  public void testRdtParser2() {
-    rdtParser = new RdtParser();
-    ubiEvent = new UbiEvent();
-    caseItem = ParserConstants.CASE2;
-
-    HashMap<RawEvent, Object> rawEventAndExpectResult =
-        LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
-    for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-      rdtParser.parse(entry.getKey(), ubiEvent);
-      System.out.println(
-          VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isRdt())));
-    }
+  @DisplayName("applicationPayload is not null and rdt equals 0")
+  public void test2() {
+    ubiEvent.setApplicationPayload("rdt=0");
+    rdtParser.parse(rawEvent, ubiEvent);
+    Assertions.assertEquals(false, ubiEvent.isRdt());
   }
 
   @Test
-  public void testRdtParser3() {
-    rdtParser = new RdtParser();
-    ubiEvent = new UbiEvent();
-    caseItem = ParserConstants.CASE3;
-
-    HashMap<RawEvent, Object> rawEventAndExpectResult =
-        LoadRawEventAndExpect.getRawEventAndExpect(map, parser, caseItem);
-    for (Map.Entry<RawEvent, Object> entry : rawEventAndExpectResult.entrySet()) {
-      rdtParser.parse(entry.getKey(), ubiEvent);
-      System.out.println(
-          VaildateResult.validateString(entry.getValue(), String.valueOf(ubiEvent.isRdt())));
-    }
+  @DisplayName("applicationPayload is not null and rdt not equals 0")
+  public void test3() {
+    ubiEvent.setApplicationPayload("rdt=1");
+    rdtParser.parse(rawEvent, ubiEvent);
+    Assertions.assertEquals(true, ubiEvent.isRdt());
   }
 }
