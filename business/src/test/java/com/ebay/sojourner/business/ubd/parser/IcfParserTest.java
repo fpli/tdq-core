@@ -30,7 +30,7 @@ public class IcfParserTest {
 
   @Test
   @DisplayName("applicationPayload is null and icf is null")
-  public void test1() throws Exception {
+  public void test_applicationPayload_is_null() throws Exception {
     rawEvent.setSojA(sojA);
     rawEvent.setSojC(sojC);
     rawEvent.setSojK(sojK);
@@ -40,7 +40,7 @@ public class IcfParserTest {
 
   @Test
   @DisplayName("applicationPayload is not null and icf is null")
-  public void test2() throws Exception {
+  public void test_icf_is_null() throws Exception {
     sojA.put("icf", " ");
     rawEvent.setSojA(sojA);
     rawEvent.setSojC(sojC);
@@ -51,7 +51,7 @@ public class IcfParserTest {
 
   @Test
   @DisplayName("applicationPayload is not null and icf is not null")
-  public void test3() throws Exception {
+  public void test_icf_is_not_null() throws Exception {
     sojA.put("icf", "0");
     rawEvent.setSojA(sojA);
     rawEvent.setSojC(sojC);
