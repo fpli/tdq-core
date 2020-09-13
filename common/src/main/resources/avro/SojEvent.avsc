@@ -38,14 +38,14 @@
       "name": "sessionStartDt",
       "type": [
         "null",
-        "string"
+        "long"
       ]
     },
     {
       "name": "sojDataDt",
       "type": [
         "null",
-        "string"
+        "long"
       ]
     },
     {
@@ -94,7 +94,7 @@
       "name": "eventTimestamp",
       "type": [
         "null",
-        "string"
+        "long"
       ],
       "doc": "dataClassification=Internal|isEncrypted=false|description=map from timestamp, publish time"
     },
@@ -181,7 +181,7 @@
       "name": "clickId",
       "type": [
         "null",
-        "int"
+        "string"
       ],
       "doc": "dataClassification=Internal|isEncrypted=false|description=Click Id, map from tag c"
     },
@@ -189,7 +189,7 @@
       "name": "siteId",
       "type": [
         "null",
-        "int"
+        "string"
       ],
       "doc": "dataClassification=Internal|isEncrypted=false|description=Site ID, map from tag t"
     },
@@ -301,7 +301,7 @@
       "name": "iframe",
       "type": [
         "null",
-        "int"
+        "boolean"
       ],
       "doc": "dataClassification=Internal|isEncrypted=false|description=map from tag _ifrm"
     },
@@ -325,7 +325,7 @@
       "name": "itemId",
       "type": [
         "null",
-        "long"
+        "string"
       ],
       "doc": "dataClassification=Internal|isEncrypted=false|description=map from tag itm/item"
     },
@@ -442,7 +442,7 @@
       "name": "cobrand",
       "type": [
         "null",
-        "int"
+        "string"
       ],
       "doc": "dataClassification=Internal|isEncrypted=false|description=map from cbrnd"
     },
