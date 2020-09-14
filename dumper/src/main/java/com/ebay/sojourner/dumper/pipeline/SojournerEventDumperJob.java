@@ -1,9 +1,9 @@
 package com.ebay.sojourner.dumper.pipeline;
 
-import com.ebay.sojourner.dumper.common.event.ExtractEventWatermarkProcessFunction;
 import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojWatermark;
 import com.ebay.sojourner.common.util.Property;
+import com.ebay.sojourner.dumper.common.ExtractWatermarkProcessFunction;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.util.DataCenter;
 import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
@@ -28,7 +28,8 @@ public class SojournerEventDumperJob {
 
     // extract timestamp
     DataStream<SojWatermark> sojEventWatermarkStream = sourceDataStream
-        .process(new ExtractEventWatermarkProcessFunction())
+        .process(new ExtractWatermarkProcessFunction<>(
+            FlinkEnvUtils.getString(Property.FLINK_APP_METRIC_NAME)))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .name("sojEvent timestamp extract")
         .uid("extract-timestamp-id");

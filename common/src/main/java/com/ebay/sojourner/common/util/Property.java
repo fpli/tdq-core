@@ -246,6 +246,9 @@ public class Property {
   // flink - app name
   public static final String FLINK_APP_NAME = "flink.app.name";
 
+  // flink - metric name
+  public static final String FLINK_APP_METRIC_NAME = "flink.app.metric.watermark-process-progress";
+
   // zookeeper
   public static final String ZOOKEEPER_SERVER = "zookeeper.server";
   public static final String ZOOKEEPER_SESSION_TIMEOUT_MS = "zookeeper.sessionTimeoutMs";

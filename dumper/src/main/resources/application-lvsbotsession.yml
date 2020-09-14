@@ -18,6 +18,8 @@ flink:
       source: 20
       sink:
         hdfs: 20
+    metric:
+      watermark-process-progress: sojourner-ubd-bot-session-watermark-delay-time
 
 hdfs:
   dump:

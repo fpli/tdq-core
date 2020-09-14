@@ -1,4 +1,4 @@
-package com.ebay.sojourner.dumper.common.session;
+package com.ebay.sojourner.dumper.common;
 
 import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.util.SojTimestamp;
