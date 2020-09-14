@@ -19,7 +19,7 @@ flink:
       sink:
         hdfs: 15
     metric:
-      name: sojourner-ubd-nonbot-session-watermark-delay-time
+      watermark-process-progress: sojourner-ubd-nonbot-session-watermark-delay-time
 
 hdfs:
   dump:
