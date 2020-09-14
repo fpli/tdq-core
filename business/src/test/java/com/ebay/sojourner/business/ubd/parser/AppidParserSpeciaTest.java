@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class AppidParserSpeciaTest {
@@ -51,19 +50,17 @@ public class AppidParserSpeciaTest {
   }
 
   @Test
-  @DisplayName("applicationPayload is not int type")
-  public void test1() {
+  public void test_applicationPayload_is_number() {
 
-    ubiEvent.setApplicationPayload("app=ebay");
+    ubiEvent.setApplicationPayload("app=123");
     appIdParser.parse(rawEvent, ubiEvent);
-    Assertions.assertNull(ubiEvent.getAppId());
+    Assertions.assertEquals(123, ubiEvent.getAppId());
   }
 
   @Test
-  @DisplayName("applicationPayload is blank")
-  public void test2() {
+  public void test_applicationPayload_is_not_number() {
 
-    ubiEvent.setApplicationPayload("app= ");
+    ubiEvent.setApplicationPayload("app=ebay");
     appIdParser.parse(rawEvent, ubiEvent);
     Assertions.assertNull(ubiEvent.getAppId());
   }

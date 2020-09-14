@@ -83,7 +83,7 @@
       sojK:
         q: ""
       sojC:
-        c: 65589
+        c: 65535
   expect:
     UbiEvent:
-      clickId: 53
+      clickId: -1
