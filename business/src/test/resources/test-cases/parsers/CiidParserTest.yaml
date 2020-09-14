@@ -49,3 +49,15 @@
   expect:
     UbiEvent:
       currentImprId: 44153
+
+- name: test_ciid_is_blank
+  inputs:
+    RawEvent:
+      sojA:
+        flgs: ""
+      sojK:
+        ciid: " "
+      sojC:
+        c: abc
+  expect:
+    UbiEvent:

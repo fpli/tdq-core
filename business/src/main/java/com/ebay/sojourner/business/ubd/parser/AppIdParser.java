@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 @Slf4j
 public class AppIdParser implements FieldParser<RawEvent, UbiEvent> {
@@ -48,7 +49,7 @@ public class AppIdParser implements FieldParser<RawEvent, UbiEvent> {
     } else if (pattern7.matcher(agentInfo).matches()) {
       appid = "2571";
     } else if (SOJNVL.getTagValue(applicationPayload, APPID) != null
-        && isInteger(SOJNVL.getTagValue(applicationPayload, APPID))) {
+        && NumberUtils.isNumber(SOJNVL.getTagValue(applicationPayload, APPID))) {
       appid = SOJNVL.getTagValue(applicationPayload, APPID);
     }
     try {
@@ -57,18 +58,6 @@ public class AppIdParser implements FieldParser<RawEvent, UbiEvent> {
       }
     } catch (NumberFormatException e) {
       log.warn("Parsing appId failed, format incorrect: " + appid);
-    }
-  }
-
-  private Boolean isInteger(String str) {
-    if (str == null) {
-      return false;
-    }
-    try {
-      Integer.valueOf(str);
-      return true;
-    } catch (Exception e) {
-      return false;
     }
   }
 

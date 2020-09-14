@@ -1,36 +1,37 @@
-package com.ebay.sojourner.dumper.common.session;
+package com.ebay.sojourner.dumper.common;
 
-import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.model.SojWatermark;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.util.Collector;
 
-public class ExtractSessionWatermarkProcessFunction extends
-    ProcessFunction<SojSession, SojWatermark> {
+public class ExtractWatermarkProcessFunction<T> extends ProcessFunction<T, SojWatermark> {
 
   private AtomicInteger atomicInteger;
+  private transient Long watermarkDelayTime;
+  private String metricName;
+
+  public ExtractWatermarkProcessFunction(String metricName) {
+    this.metricName = metricName;
+  }
 
   @Override
   public void open(Configuration parameters) throws Exception {
     super.open(parameters);
     atomicInteger = new AtomicInteger(0);
+    getRuntimeContext().getMetricGroup()
+        .gauge(metricName, () -> watermarkDelayTime);
   }
 
   @Override
-  public void processElement(SojSession value, Context ctx, Collector<SojWatermark> out)
+  public void processElement(T value, Context ctx, Collector<SojWatermark> out)
       throws Exception {
 
+    watermarkDelayTime = System.currentTimeMillis() - ctx.timestamp();
     int andIncrement = atomicInteger.getAndIncrement();
     if (andIncrement % 1000 == 0) {
       out.collect(new SojWatermark(ctx.timestamp()));
     }
   }
-
-  @Override
-  public void close() throws Exception {
-    super.close();
-  }
-
 }

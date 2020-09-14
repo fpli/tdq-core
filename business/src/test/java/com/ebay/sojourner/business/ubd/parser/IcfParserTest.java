@@ -59,4 +59,23 @@ public class IcfParserTest {
     icfParser.parse(rawEvent, ubiEvent);
     Assertions.assertEquals(0, ubiEvent.getIcfBinary());
   }
+
+  @Test
+  public void test_sojA_and_sojK_is_null() throws Exception {
+    sojC.put("icf", "0");
+    rawEvent.setSojA(sojA);
+    rawEvent.setSojC(sojC);
+    rawEvent.setSojK(sojK);
+    icfParser.parse(rawEvent, ubiEvent);
+    Assertions.assertEquals(0, ubiEvent.getIcfBinary());
+  }
+
+  @Test
+  public void test_sojA_and_sojK_and_sojC_is_null() throws Exception {
+    rawEvent.setSojA(sojA);
+    rawEvent.setSojC(sojC);
+    rawEvent.setSojK(sojK);
+    icfParser.parse(rawEvent, ubiEvent);
+    Assertions.assertEquals(0, ubiEvent.getIcfBinary());
+  }
 }
