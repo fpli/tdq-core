@@ -10,7 +10,7 @@ flink:
       sink:
         hdfs: 20
     metric:
-      name: sojourner-ubd-bot-session-watermark-delay-time
+      watermark-process-progress: sojourner-ubd-bot-session-watermark-delay-time
 
 hdfs:
   dump:

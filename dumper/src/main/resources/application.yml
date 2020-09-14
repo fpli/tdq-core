@@ -63,7 +63,7 @@ flink:
       max-concurrent: 1
       tolerate-failure-number: 3
     metric:
-      name: sojourner-ubd-nonbot-event-watermark-delay-time
+      watermark-process-progress: sojourner-ubd-nonbot-event-watermark-delay-time
 
 rheos:
   registry-url: https://rheos-services.stratus.ebay.com
