@@ -21,7 +21,7 @@ public class TimestampFieldExtractor {
     } else if (t instanceof SojSession) {
       SojSession sojSession = (SojSession) t;
       try {
-        return SojTimestamp.getSojTimestampToUnixTimestamp(sojSession.getSessionStartDt());
+        return SojTimestamp.getSojTimestampToUnixTimestamp(sojSession.getAbsEndTimestamp());
       } catch (Exception e) {
         log.warn(
             "failed session record: " + sojSession.toString() + "; guid: " + sojSession.getGuid()

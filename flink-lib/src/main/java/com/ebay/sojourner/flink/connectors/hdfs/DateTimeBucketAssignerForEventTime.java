@@ -1,5 +1,7 @@
 package com.ebay.sojourner.flink.connectors.hdfs;
 
+import com.ebay.sojourner.common.model.SojSession;
+import com.ebay.sojourner.common.util.SojTimestamp;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -39,10 +41,21 @@ public class DateTimeBucketAssignerForEventTime<IN> implements BucketAssigner<IN
 
   @Override
   public String getBucketId(IN element, BucketAssigner.Context context) {
+
+    String defaultTsStr;
+
     if (dateTimeFormatter == null) {
       dateTimeFormatter = DateTimeFormatter.ofPattern(formatString).withZone(zoneId);
     }
-    String defaultTsStr = dateTimeFormatter.format(Instant.ofEpochMilli(context.timestamp()));
+
+    if (element instanceof SojSession) {
+      SojSession sojSession = (SojSession) element;
+      defaultTsStr = dateTimeFormatter.format(Instant.ofEpochMilli(
+          SojTimestamp.getSojTimestampToUnixTimestamp(sojSession.getSessionStartDt())));
+    } else {
+      defaultTsStr = dateTimeFormatter.format(Instant.ofEpochMilli(context.timestamp()));
+    }
+
     StringBuilder customTsBuilder = new StringBuilder();
     customTsBuilder
         .append("dt=").append(defaultTsStr.substring(0, 8))
