@@ -4,10 +4,8 @@ import com.ebay.sojourner.business.ubd.detectors.SessionEndBotDetector;
 import com.ebay.sojourner.business.ubd.metrics.SessionMetrics;
 import com.ebay.sojourner.common.model.SessionAccumulator;
 import com.ebay.sojourner.common.model.UbiSession;
-import com.ebay.sojourner.common.util.SojTimestamp;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.common.typeutils.base.LongSerializer;
 import org.apache.flink.api.java.tuple.Tuple;
@@ -132,44 +130,12 @@ public class UbiSessionWindowProcessFunction
           .getBotFlagList(sessionAccumulator.getUbiSession());
       sessionAccumulator.getUbiSession().getBotFlagList().addAll(botFlagList);
       outputSession(sessionAccumulator.getUbiSession(), out, false);
-    } else if (sessionAccumulator.getUbiSessionSplit() != null) {
-      Set<Integer> botFlagList = sessionEndBotDetector
-          .getBotFlagList(sessionAccumulator.getUbiSessionSplit());
-      sessionAccumulator.getUbiSessionSplit().getBotFlagList().addAll(botFlagList);
-      outputSession(sessionAccumulator.getUbiSessionSplit(), out, false);
     } else {
-      long absStartDate = SojTimestamp
-          .getUnixDateFromSOjTimestamp(sessionAccumulator.getUbiSession().getAbsStartTimestamp());
-      long absEndDate =
-          SojTimestamp
-              .getUnixDateFromSOjTimestamp(sessionAccumulator.getUbiSession().getAbsEndTimestamp());
-      long currentWaterMark = SojTimestamp.getUnixDateFromUnixTimestamp(context.currentWatermark());
-      ValueState<Long> lastTimestampState =
-          context.globalState().getState(lastTimestampStateDescriptor);
-      Long lastTimstamp =
-          lastTimestampState.value() == null
-              ? 0L :
-              lastTimestampState.value();
-
-      if (lastTimstamp < absEndDate && absEndDate > absStartDate) {
-        endSessionEvent(sessionAccumulator);
-        Set<Integer> botFlagList = sessionEndBotDetector
-            .getBotFlagList(sessionAccumulator.getUbiSession());
-        sessionAccumulator.getUbiSession().getBotFlagList().addAll(botFlagList);
-        outputSession(sessionAccumulator.getUbiSession(), out, true);
-        lastTimestampState.update(absEndDate);
-
-      } else if (currentWaterMark > absEndDate && currentWaterMark > lastTimstamp
-          && currentWaterMark > absStartDate) {
-        endSessionEvent(sessionAccumulator);
-        Set<Integer> botFlagList = sessionEndBotDetector
-            .getBotFlagList(sessionAccumulator.getUbiSession());
-        sessionAccumulator.getUbiSession().getBotFlagList().addAll(botFlagList);
-        outputSession(sessionAccumulator.getUbiSession(), out, true);
-        lastTimestampState.update(currentWaterMark);
-      }
-
-
+      endSessionEvent(sessionAccumulator);
+      Set<Integer> botFlagList = sessionEndBotDetector
+          .getBotFlagList(sessionAccumulator.getUbiSession());
+      sessionAccumulator.getUbiSession().getBotFlagList().addAll(botFlagList);
+      outputSession(sessionAccumulator.getUbiSession(), out, true);
     }
   }
 
