@@ -3,8 +3,8 @@ package com.ebay.sojourner.dumper.pipeline;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.util.DataCenter;
-import com.ebay.sojourner.flink.connectors.hdfs.HdfsConnectorFactory;
-import com.ebay.sojourner.flink.connectors.kafka.SourceDataStreamBuilder;
+import com.ebay.sojourner.flink.connector.hdfs.HdfsConnectorFactory;
+import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 

@@ -7,9 +7,9 @@ import static com.ebay.sojourner.flink.common.util.DataCenter.SLC;
 import com.ebay.sojourner.common.model.SojBytesEvent;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
-import com.ebay.sojourner.flink.connectors.kafka.KafkaProducerFactory;
-import com.ebay.sojourner.flink.connectors.kafka.SourceDataStreamBuilder;
-import com.ebay.sojourner.rt.operators.event.SojBytesEventFilterFunction;
+import com.ebay.sojourner.flink.connector.kafka.KafkaProducerFactory;
+import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
+import com.ebay.sojourner.rt.operator.event.SojBytesEventFilterFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 

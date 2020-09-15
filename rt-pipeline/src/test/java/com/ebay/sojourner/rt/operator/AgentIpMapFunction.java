@@ -1,6 +1,6 @@
 package com.ebay.sojourner.rt.operator;
 
-import com.ebay.sojourner.business.ubd.detectors.AgentIpSignatureBotDetector;
+import com.ebay.sojourner.business.ubd.detector.AgentIpSignatureBotDetector;
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.AgentIpSignature;
 import java.util.Set;
