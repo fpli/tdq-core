@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.BinaryDecoder;
 import org.apache.avro.io.BinaryEncoder;
@@ -14,6 +15,7 @@ import org.apache.avro.reflect.ReflectDatumReader;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.commons.collections.CollectionUtils;
 
+@Slf4j
 public class RheosAvroKafkaSerializer<T> implements RheosKafkaSerializer<T> {
 
   private ThreadLocal<BinaryDecoder> decoderHolder = new ThreadLocal<BinaryDecoder>();
@@ -24,20 +26,33 @@ public class RheosAvroKafkaSerializer<T> implements RheosKafkaSerializer<T> {
   public RheosAvroKafkaSerializer(SchemaFactory schemaFactory,
       SojSerializationSchema sojSerializationSchema) {
     this.schemaFactory = schemaFactory;
-    this.sojSerializationSchema=sojSerializationSchema;
+    this.sojSerializationSchema = sojSerializationSchema;
   }
 
   @Override
   public byte[] encodeKey(T data, List<String> keyList) {
+    StringBuilder stringBuilder = new StringBuilder();
     if (data == null || CollectionUtils.isEmpty(keyList)) {
       return null;
     } else {
+      Field field = null;
+      for (String keyName : keyList) {
+        try {
+          field = data.getClass().getDeclaredField(keyName);
+          field.setAccessible(true);
+          Object value = field.get(data);
+          stringBuilder.append(value)
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+          log.error("get field error:",e );
+        }
+
+      }
       SpecificRecordBase sb = (SpecificRecordBase) data;
       sb.getSchema().getField()
       List<Field> list = Collections.arrayToList(data.getClass().get());
-
+      data.getClass().getDeclaredField()
       for (Field field : list) {
-        field.
+        field.get()
       }
 
     }
