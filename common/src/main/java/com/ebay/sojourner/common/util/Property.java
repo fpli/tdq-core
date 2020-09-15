@@ -196,6 +196,8 @@ public class Property {
   public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT_IP = "kafka.producer.message-key.signature.agent-ip";
   public static final String KAFKA_PRODUCER_BOOTSTRAP_SERVERS = "kafka.producer.bootstrap-servers";
   public static final String KAFKA_PRODUCER_TOPIC = "kafka.producer.topic";
+  public static final String KAFKA_PRODUCER_SUBJECT_SOJEVENT = "kafka.producer.subject.event";
+  public static final String KAFKA_PRODUCER_SUBJECT_SOJSESSION = "kafka.producer.subject.session";
 
   // rheos
   public static final String RHEOS_KAFKA_REGISTRY_URL = "rheos.registry-url";
