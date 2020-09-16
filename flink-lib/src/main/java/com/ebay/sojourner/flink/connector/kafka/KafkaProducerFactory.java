@@ -3,7 +3,6 @@ package com.ebay.sojourner.flink.connector.kafka;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connector.kafka.schema.AvroKeyedSerializationSchema;
-import com.ebay.sojourner.flink.connector.kafka.schema.SojBytesEventSerializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.SojEventKeyedSerializationSchema;
 import java.util.Optional;
 import java.util.Properties;
@@ -17,14 +16,9 @@ public class KafkaProducerFactory {
 
     Properties producerConfig = getKafkaProducerConfig(brokers);
 
-    if (tClass == null && messagekey == null) {
-      return new FlinkKafkaProducer<>(topic, new SojBytesEventSerializationSchema<>(),
-          producerConfig, Optional.of(new SojKafkaPartitioner<>()));
-    } else {
-      return new FlinkKafkaProducer<>(topic,
-          new AvroKeyedSerializationSchema<>(tClass, messagekey), producerConfig,
-          Optional.of(new SojKafkaPartitioner<>()));
-    }
+    return new FlinkKafkaProducer<>(topic,
+        new AvroKeyedSerializationSchema<>(tClass, messagekey), producerConfig,
+        Optional.of(new SojKafkaPartitioner<>()));
   }
 
   public static <T> FlinkKafkaProducer<T> getProducer(String topic, String brokers,

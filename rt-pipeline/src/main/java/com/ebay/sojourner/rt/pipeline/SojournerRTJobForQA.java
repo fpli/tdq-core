@@ -13,14 +13,16 @@ import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
 import com.ebay.sojourner.flink.common.util.DataCenter;
 import com.ebay.sojourner.flink.common.util.OutputTagConstants;
+import com.ebay.sojourner.flink.common.window.CompositeTrigger;
+import com.ebay.sojourner.flink.common.window.MidnightOpenSessionTrigger;
 import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
+import com.ebay.sojourner.flink.common.window.SojEventTimeSessionWindows;
 import com.ebay.sojourner.flink.connector.kafka.KafkaProducerFactory;
 import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.rt.common.broadcast.AttributeBroadcastProcessFunctionForDetectable;
 import com.ebay.sojourner.rt.common.metrics.AgentIpMetricsCollectorProcessFunction;
 import com.ebay.sojourner.rt.common.metrics.AgentMetricsCollectorProcessFunction;
 import com.ebay.sojourner.rt.common.metrics.EventMetricsCollectorProcessFunction;
-import com.ebay.sojourner.rt.common.metrics.GuidMetricsCollectorProcessFunction;
 import com.ebay.sojourner.rt.common.metrics.IpMetricsCollectorProcessFunction;
 import com.ebay.sojourner.rt.common.metrics.PipelineMetricsCollectorProcessFunction;
 import com.ebay.sojourner.rt.operator.attribute.AgentAttributeAgg;
@@ -29,18 +31,16 @@ import com.ebay.sojourner.rt.operator.attribute.AgentIpAttributeAggSliding;
 import com.ebay.sojourner.rt.operator.attribute.AgentIpSignatureWindowProcessFunction;
 import com.ebay.sojourner.rt.operator.attribute.AgentIpWindowProcessFunction;
 import com.ebay.sojourner.rt.operator.attribute.AgentWindowProcessFunction;
-import com.ebay.sojourner.rt.operator.attribute.GuidAttributeAgg;
-import com.ebay.sojourner.rt.operator.attribute.GuidWindowProcessFunction;
 import com.ebay.sojourner.rt.operator.attribute.IpAttributeAgg;
 import com.ebay.sojourner.rt.operator.attribute.IpWindowProcessFunction;
 import com.ebay.sojourner.rt.operator.event.DetectableEventMapFunction;
 import com.ebay.sojourner.rt.operator.event.EventMapFunction;
 import com.ebay.sojourner.rt.operator.event.UbiEventMapWithStateFunction;
-import com.ebay.sojourner.rt.operator.event.UbiEventToSojEventMapFunction;
+import com.ebay.sojourner.rt.operator.event.UbiEventToSojEventProcessFunction;
 import com.ebay.sojourner.rt.operator.session.DetectableSessionMapFunction;
 import com.ebay.sojourner.rt.operator.session.UbiSessionAgg;
 import com.ebay.sojourner.rt.operator.session.UbiSessionToSessionCoreMapFunction;
-import com.ebay.sojourner.rt.operator.session.UbiSessionToSojSessionMapFunction;
+import com.ebay.sojourner.rt.operator.session.UbiSessionToSojSessionProcessFunction;
 import com.ebay.sojourner.rt.operator.session.UbiSessionWindowProcessFunction;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -48,10 +48,10 @@ import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
 import org.apache.flink.streaming.api.transformations.OneInputTransformation;
-import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.api.windowing.triggers.EventTimeTrigger;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.types.Either;
 
@@ -92,8 +92,11 @@ public class SojournerRTJobForQA {
     SingleOutputStreamOperator<UbiSession> ubiSessionDataStream =
         ubiEventDataStream
             .keyBy("guid")
-            .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-            .allowedLateness(Time.minutes(1))
+            .window(SojEventTimeSessionWindows.withGapAndMaxDuration(Time.minutes(30),
+                Time.hours(24)))
+            .trigger(CompositeTrigger.Builder.create().trigger(EventTimeTrigger.create())
+                .trigger(MidnightOpenSessionTrigger
+                    .of(Time.hours(7))).build())
             .sideOutputLateData(OutputTagConstants.lateEventOutputTag)
             .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction());
 
@@ -134,15 +137,6 @@ public class SojournerRTJobForQA {
             .name("Attribute Operator (Agent+IP Pre-Aggregation)")
             .uid("pre-agent-ip-id");
 
-    DataStream<BotSignature> guidSignatureDataStream = sessionCoreDataStream
-        .keyBy("guid")
-        .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
-        .trigger(OnElementEarlyFiringTrigger.create())
-        .aggregate(new GuidAttributeAgg(), new GuidWindowProcessFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Property.GUID_PARALLELISM))
-        .name("Attribute Operator (GUID)")
-        .uid("guid-id");
-
     DataStream<BotSignature> agentIpSignatureDataStream = agentIpAttributeDatastream
         .keyBy("agent", "clientIp")
         .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
@@ -174,8 +168,7 @@ public class SojournerRTJobForQA {
     // union attribute signature for broadcast
     DataStream<BotSignature> attributeSignatureDataStream = agentIpSignatureDataStream
         .union(agentSignatureDataStream)
-        .union(ipSignatureDataStream)
-        .union(guidSignatureDataStream);
+        .union(ipSignatureDataStream);
 
     // attribute signature broadcast
     BroadcastStream<BotSignature> attributeSignatureBroadcastStream =
@@ -209,21 +202,28 @@ public class SojournerRTJobForQA {
     DataStream<UbiSession> signatureBotDetectionForSession =
         signatureBotDetectionForEvent.getSideOutput(OutputTagConstants.sessionOutputTag);
 
-    // UbiSession to SojSession
-    DataStream<SojSession> sojSessionStream =
+    // UbiEvent to SojEvent
+    SingleOutputStreamOperator<SojEvent> sojEventWithSessionId =
+        signatureBotDetectionForEvent
+            .process(new UbiEventToSojEventProcessFunction(OutputTagConstants.botEventOutputTag))
+            .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
+            .name("UbiEvent to SojEvent")
+            .uid("event-transform-id");
+
+    DataStream<SojEvent> botSojEventStream = sojEventWithSessionId
+        .getSideOutput(OutputTagConstants.botEventOutputTag);
+
+    // ubiSession to sojSession
+    SingleOutputStreamOperator<SojSession> sojSessionStream =
         signatureBotDetectionForSession
-            .map(new UbiSessionToSojSessionMapFunction())
+            .process(
+                new UbiSessionToSojSessionProcessFunction(OutputTagConstants.botSessionOutputTag))
             .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
             .name("UbiSession to SojSession")
             .uid("session-transform-id");
 
-    // UbiEvent to SojEvent
-    DataStream<SojEvent> sojEventWithSessionId =
-        signatureBotDetectionForEvent
-            .map(new UbiEventToSojEventMapFunction())
-            .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
-            .name("UbiEvent to SojEvent")
-            .uid("event-transform-id");
+    DataStream<SojSession> botSojSessionStream = sojSessionStream
+        .getSideOutput(OutputTagConstants.botSessionOutputTag);
 
     // 5. Load data to file system for batch processing
     // 5.1 IP Signature
@@ -231,7 +231,7 @@ public class SojournerRTJobForQA {
     // 5.3 Events (with session ID & bot flags)
     // 5.4 Events late
 
-    // kafka sink for session
+    // kafka sink for bot and nonbot sojsession
     sojSessionStream.addSink(KafkaProducerFactory
         .getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SESSION_NON_BOT),
@@ -241,7 +241,16 @@ public class SojournerRTJobForQA {
         .name("SojSession")
         .uid("session-sink-id");
 
-    // kafka sink for event
+    botSojSessionStream.addSink(KafkaProducerFactory
+        .getProducer(
+            FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SESSION_BOT),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_LVS),
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION), SojSession.class))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
+        .name("Bot SojSession")
+        .uid("bot-session-sink-id");
+
+    // kafka sink for bot and nonbot sojevent
     sojEventWithSessionId.addSink(KafkaProducerFactory
         .getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_NON_BOT),
@@ -252,6 +261,17 @@ public class SojournerRTJobForQA {
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .name("SojEvent")
         .uid("event-sink-id");
+
+    botSojEventStream.addSink(KafkaProducerFactory
+        .getProducer(
+            FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_BOT),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_LVS),
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY1),
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY2),
+            SojEvent.class))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
+        .name("Bot SojEvent")
+        .uid("bot-event-sink-id");
 
     // metrics collector for end to end
     signatureBotDetectionForEvent
@@ -266,13 +286,6 @@ public class SojournerRTJobForQA {
         .setParallelism(FlinkEnvUtils.getInteger(Property.METRICS_PARALLELISM))
         .name("Event Metrics Collector")
         .uid("event-metrics-id");
-
-    // metrics collector for signature generation or expiration
-    guidSignatureDataStream
-        .process(new GuidMetricsCollectorProcessFunction())
-        .setParallelism(FlinkEnvUtils.getInteger(Property.GUID_PARALLELISM))
-        .name("Guid Metrics Collector")
-        .uid("guid-metrics-id");
 
     agentIpSignatureDataStream
         .process(new AgentIpMetricsCollectorProcessFunction())

@@ -1,7 +1,6 @@
 package com.ebay.sojourner.flink.connector.kafka;
 
 import com.ebay.sojourner.common.model.BotSignature;
-import com.ebay.sojourner.common.model.IntermediateSession;
 import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.util.Property;
@@ -39,8 +38,7 @@ public class KafkaConsumerFactory {
 
     if (tClass.isAssignableFrom(SojEvent.class)
         || tClass.isAssignableFrom(SojSession.class)
-        || tClass.isAssignableFrom(BotSignature.class)
-        || tClass.isAssignableFrom(IntermediateSession.class)) {
+        || tClass.isAssignableFrom(BotSignature.class)) {
 
       flinkKafkaConsumer = new FlinkKafkaConsumer(
           config.getTopic(),

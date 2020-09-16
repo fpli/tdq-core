@@ -31,7 +31,6 @@ public class SojEventKeyedSerializationSchema<T> implements KeyedSerializationSc
     this.tClass = tClass;
     this.keyFieldStr1 = keyField1;
     this.keyFieldStr2 = keyField2;
-    // this.schema = RheosSchemaUtils.getSchema("pulsar_event-dump");
   }
 
   @Override
