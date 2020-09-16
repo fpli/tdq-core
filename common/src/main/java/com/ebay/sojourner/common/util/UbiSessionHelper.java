@@ -194,21 +194,6 @@ public class UbiSessionHelper {
     return false;
   }
 
-  public static void main(String[] args) {
-    String agent =
-        "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534+ (KHTML, like Gecko) BingPreview/1"
-            + ".0b";
-    ;
-    if (StringUtils.isNotBlank(agent)) {
-      for (String iabAgentReg : LkpManager.getInstance().getIabAgentRegs()) {
-        if (agent.toLowerCase().contains(iabAgentReg)) {
-          System.out.println(true);
-          ;
-        }
-      }
-    }
-  }
-
   public boolean isIabAgent(UbiSession session) throws InterruptedException {
     if (session.getNonIframeRdtEventCnt() > 0 && (session.getUserAgent() != null
         || session.getAgentInfo() != null)) {

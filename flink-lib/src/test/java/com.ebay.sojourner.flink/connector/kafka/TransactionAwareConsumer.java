@@ -26,6 +26,5 @@ public class TransactionAwareConsumer {
     KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerProps);
     consumer.subscribe(Collections.singleton("test"));
     ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(3).toMillis());
-    System.out.println(records.count());
   }
 }

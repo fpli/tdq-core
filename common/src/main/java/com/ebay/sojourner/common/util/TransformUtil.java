@@ -4,12 +4,11 @@ import java.net.InetAddress;
 import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 
+@Slf4j
 public class TransformUtil {
-
-  private static final Logger LOGGER = Logger.getLogger(TransformUtil.class);
 
   private static final Map<Character, Integer> dict = new HashMap<Character, Integer>();
   private static final Map<Integer, Character> reDict = new HashMap<Integer, Character>();
@@ -129,7 +128,7 @@ public class TransformUtil {
       byte[] buff = md.digest(input);
       md5str = bytesToHex(buff);
     } catch (Exception e) {
-      LOGGER.error(e);
+      log.error(e.getMessage(), e);
     }
     return md5str;
   }
@@ -189,11 +188,5 @@ public class TransformUtil {
     } else {
       return l.toString();
     }
-  }
-
-  public static void main(String[] args) {
-    String agent="GingerClient/2.9.7-RELEASE";
-    System.out.println(TransformUtil.md522Long(TransformUtil.getMD5(agent))[0]);
-    System.out.println(TransformUtil.md522Long(TransformUtil.getMD5(agent))[1]);
   }
 }

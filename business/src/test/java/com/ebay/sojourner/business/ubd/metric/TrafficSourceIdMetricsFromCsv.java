@@ -40,8 +40,6 @@ public class TrafficSourceIdMetricsFromCsv {
   public void test_TrafficSourceMetric() throws Exception {
 
     for (CSVRecord record : records) {
-      // System.out.println(record.get("currentimprid"));
-
       UbiEvent ubiEvent = new UbiEvent();
 
       ubiEvent.setGuid(record.get("guid"));

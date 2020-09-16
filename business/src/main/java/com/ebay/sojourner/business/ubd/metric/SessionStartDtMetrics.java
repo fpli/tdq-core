@@ -87,14 +87,8 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
   public void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
     ubiSession.setFirstSessionStartDt(ubiEvent.getSojDataDt());
     long sessionSkey = ubiEvent.getEventTimestamp() / Constants.SESSION_KEY_DIVISION;
-    //  System.out.println("===========onEarlyEventChange ==========");
-    //  System.out.println("event guid:"+ubiEvent.getGuid());
-    //  System.out.println("event sessionId:"+ubiEvent.getSessionId());
-    // System.out.println("before update session sessionskey:"+ubiSession.getSessionSkey());
     ubiSession.setSessionSkey(sessionSkey);
     ubiEvent.setSessionSkey(sessionSkey);
-    //  System.out.println("after update session sessionskey:"+ubiSession.getSessionSkey());
-
   }
 
   @Override

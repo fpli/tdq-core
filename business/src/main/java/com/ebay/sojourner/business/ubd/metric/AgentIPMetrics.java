@@ -61,12 +61,12 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
         ubiSession.setClientIp(event.getClientIP());
       }
     } else if (isEarlyEventByMultiCols) {
-      System.out.println(Calendar.getInstance().getTime() +
+      log.debug(Calendar.getInstance().getTime() +
           " debug AgentIPMetrics2 duplicate event==session:" + ubiSession.getGuid() + " "
           + ubiSession
           .getAbsStartTimestamp() + " " + ubiSession
           .getClickId() + " " + ubiSession.getPageIdForUAIP() + " " + ubiSession.getHashCode());
-      System.out.println(Calendar.getInstance().getTime() +
+      log.debug(Calendar.getInstance().getTime() +
           " debug AgentIPMetrics2 duplicate event==event:" + event.getGuid() + " " + event
           .getEventTimestamp() + " "
           + event

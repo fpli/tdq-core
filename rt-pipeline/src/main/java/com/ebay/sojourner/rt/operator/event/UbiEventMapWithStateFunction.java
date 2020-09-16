@@ -4,8 +4,10 @@ import com.ebay.sojourner.common.model.SessionAccumulator;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.util.Constants;
 import java.util.Calendar;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.streaming.runtime.operators.windowing.MapWithStateFunction;
 
+@Slf4j
 public class UbiEventMapWithStateFunction
     implements MapWithStateFunction<UbiEvent, SessionAccumulator, UbiEvent> {
 
@@ -29,7 +31,7 @@ public class UbiEventMapWithStateFunction
       sessionAccumulator.getUbiSession().setVersion(Constants.SESSION_VERSION);
     }
     if (!value.getSessionId().equals(sessionAccumulator.getUbiSession().getSessionId())) {
-      System.out.println(Calendar.getInstance().getTime().toLocaleString() +
+      log.debug(Calendar.getInstance().getTime().toLocaleString() +
           System.currentTimeMillis() + "unmatched sessionid between event and session: "
           + "event==" +
           value.getGuid() + " " + value.getSessionSkey() + " " + value.getSessionId()
