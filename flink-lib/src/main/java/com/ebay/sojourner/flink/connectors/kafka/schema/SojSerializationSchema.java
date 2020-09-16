@@ -2,16 +2,12 @@ package com.ebay.sojourner.flink.connectors.kafka.schema;
 
 import io.ebay.rheos.schema.avro.SchemaRegistryAwareAvroSerializerHelper;
 import io.jsonwebtoken.lang.Collections;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 import javax.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericRecord;
-import org.apache.avro.io.EncoderFactory;
-import org.apache.avro.specific.SpecificRecord;
 import org.apache.flink.streaming.connectors.kafka.KafkaSerializationSchema;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
@@ -19,53 +15,57 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 public class SojSerializationSchema<T> implements
     KafkaSerializationSchema<T> {
 
-  private List key = null;
+  private List<String> keys = null;
   private Schema schema;
   private SchemaRegistryAwareAvroSerializerHelper<GenericRecord> serializerHelper;
-  public SojSerializationSchema(String subjetName, Schema schema,
+  private Properties producerConfig;
+  private RheosAvroKafkaSerializer<T> rheosAvroKafkaSerializer;
+  private String subject;
+  private String topic;
+
+  public SojSerializationSchema(String topic, String subjetName,
       Properties producerConfig, String... keys) {
-    key = Collections.arrayToList(keys);
+    this.subject = subjetName;
+    this.topic = topic;
+    this.keys = Collections.arrayToList(keys);
     serializerHelper = new SchemaRegistryAwareAvroSerializerHelper(
         producerConfig, GenericRecord.class);
+    this.producerConfig = producerConfig;
+    rheosAvroKafkaSerializer = new RheosAvroKafkaSerializer(this);
+    loadSchema(subjetName);
   }
 
   @Override
   public ProducerRecord<byte[], byte[]> serialize(T element, @Nullable Long timestamp) {
-    return null;
+    return new ProducerRecord(topic, serializeKey(element),
+        serializeValue(element));
   }
 
-  public byte[] serializeKey(T element) {
-    ensureInitialized();
-    byte[] serializedKey = new byte[0];
-    try {
-      serializedKey = keyField.get(element).toString().getBytes(CHAR_SET);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return serializedKey;
+  private byte[] serializeKey(T element) {
+
+    return rheosAvroKafkaSerializer.encodeKey(element, keys);
   }
 
-  public byte[] serializeValue(T element) {
-    ensureInitialized();
-
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    encoder = EncoderFactory.get().binaryEncoder(out, null);
-    byte[] serializedValue = null;
-    try {
-      writer.write(element, encoder);
-      encoder.flush();
-      serializedValue = out.toByteArray();
-      out.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return serializedValue;
+  private byte[] serializeValue(T element) {
+    return rheosAvroKafkaSerializer.encodeData(element);
   }
 
-  private void loadSchema(String subjectName){
+  private void loadSchema(String subjectName) {
     serializerHelper.reload(subjectName);
     Schema dataSchema = serializerHelper.getSchema(subjectName);
-    serializer.setSchema(dataSchema);
+    this.schema = dataSchema;
     log.info("load schema.");
+  }
+
+  public SchemaRegistryAwareAvroSerializerHelper getSerializerHelper() {
+    return serializerHelper;
+  }
+
+  public String getSubject() {
+    return subject;
+  }
+
+  public Properties getProducerConfig(){
+    return producerConfig;
   }
 }

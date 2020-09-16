@@ -108,7 +108,7 @@
       "doc": "from ubisession durationSec"
     },
     {
-      "name": "firstUserId",
+      "name": "userId",
       "type": [
         "null",
         "string"
@@ -132,7 +132,7 @@
       "doc": "from ubisession trafficSrcId"
     },
     {
-      "name": "viCoreCnt",
+      "name": "viCnt",
       "type": [
         "null",
         "int"
@@ -140,7 +140,7 @@
       "doc": "from ubisession viCoreCnt"
     },
     {
-      "name": "bidCoreCnt",
+      "name": "bidCnt",
       "type": [
         "null",
         "int"
@@ -148,7 +148,7 @@
       "doc": "from ubisession bidCoreCnt"
     },
     {
-      "name": "binCoreCnt",
+      "name": "binCnt",
       "type": [
         "null",
         "int"
@@ -156,7 +156,7 @@
       "doc": "from ubisession binCoreCnt"
     },
     {
-      "name": "watchCoreCnt",
+      "name": "watchCnt",
       "type": [
         "null",
         "int"
@@ -172,7 +172,7 @@
       "doc": "from ubisession homepageCnt"
     },
     {
-      "name": "firstSiteId",
+      "name": "siteId",
       "type": [
         "null",
         "int"
@@ -180,7 +180,7 @@
       "doc": "fron ubisession firstSiteId"
     },
     {
-      "name": "firstCguid",
+      "name": "cguid",
       "type": [
         "null",
         "string"
@@ -212,7 +212,7 @@
       "doc": "from ubisession firstMappedUserId"
     },
     {
-      "name": "firstAppId",
+      "name": "appId",
       "type": [
         "null",
         "int"
