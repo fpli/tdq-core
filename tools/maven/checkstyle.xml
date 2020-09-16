@@ -161,5 +161,10 @@
       <property name="message" value="Avoid throwing error in application code."/>
     </module>
 
+    <module name="Regexp">
+      <property name="format" value="System\.out\.println"/>
+      <property name="illegalPattern" value="true"/>
+      <property name="ignoreComments" value="true"/>
+    </module>
   </module>
 </module>
