@@ -1,7 +1,7 @@
 package com.ebay.sojourner.rt.operator.attribute;
 
-import com.ebay.sojourner.business.ubd.detector.AgentSignatureBotDetector;
-import com.ebay.sojourner.business.ubd.indicator.AgentIndicators;
+import com.ebay.sojourner.business.detector.AgentSignatureBotDetector;
+import com.ebay.sojourner.business.indicator.AgentIndicators;
 import com.ebay.sojourner.common.model.AgentAttribute;
 import com.ebay.sojourner.common.model.AgentAttributeAccumulator;
 import com.ebay.sojourner.common.model.AgentIpAttribute;

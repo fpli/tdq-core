@@ -1,7 +1,7 @@
 package com.ebay.sojourner.rt.operator.attribute;
 
-import com.ebay.sojourner.business.ubd.detector.GuidSignatureBotDetector;
-import com.ebay.sojourner.business.ubd.indicator.GuidIndicators;
+import com.ebay.sojourner.business.detector.GuidSignatureBotDetector;
+import com.ebay.sojourner.business.indicator.GuidIndicators;
 import com.ebay.sojourner.common.model.GuidAttribute;
 import com.ebay.sojourner.common.model.GuidAttributeAccumulator;
 import com.ebay.sojourner.common.model.SessionCore;

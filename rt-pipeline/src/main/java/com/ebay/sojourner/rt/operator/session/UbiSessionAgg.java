@@ -1,7 +1,7 @@
 package com.ebay.sojourner.rt.operator.session;
 
-import com.ebay.sojourner.business.ubd.detector.SessionBotDetector;
-import com.ebay.sojourner.business.ubd.metric.SessionMetrics;
+import com.ebay.sojourner.business.detector.SessionBotDetector;
+import com.ebay.sojourner.business.metric.SessionMetrics;
 import com.ebay.sojourner.common.model.SessionAccumulator;
 import com.ebay.sojourner.common.model.UbiEvent;
 import java.util.Set;
