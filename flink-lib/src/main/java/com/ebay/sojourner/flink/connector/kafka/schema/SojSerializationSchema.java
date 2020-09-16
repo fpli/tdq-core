@@ -1,5 +1,6 @@
-package com.ebay.sojourner.flink.connectors.kafka.schema;
+package com.ebay.sojourner.flink.connector.kafka.schema;
 
+import com.ebay.sojourner.flink.connector.kafka.RheosAvroKafkaSerializer;
 import io.ebay.rheos.schema.avro.SchemaRegistryAwareAvroSerializerHelper;
 import io.jsonwebtoken.lang.Collections;
 import java.util.List;

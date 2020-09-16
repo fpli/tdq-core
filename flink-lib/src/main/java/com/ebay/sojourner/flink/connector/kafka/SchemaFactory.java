@@ -1,4 +1,4 @@
-package com.ebay.sojourner.flink.connectors.kafka.schema;
+package com.ebay.sojourner.flink.connector.kafka;
 
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;

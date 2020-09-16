@@ -1,6 +1,7 @@
-package com.ebay.sojourner.flink.connectors.kafka.schema;
+package com.ebay.sojourner.flink.connector.kafka;
 
 import com.ebay.sojourner.common.util.Property;
+import com.ebay.sojourner.flink.connector.kafka.schema.SojSerializationSchema;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
