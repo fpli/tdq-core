@@ -60,7 +60,6 @@ public class KafkaConsumerFactory {
         RoundRobinAssignor.class.getName());
     consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
         FlinkEnvUtils.getString(Property.AUTO_RESET_OFFSET));
-
     return consumerConfig;
   }
 }
