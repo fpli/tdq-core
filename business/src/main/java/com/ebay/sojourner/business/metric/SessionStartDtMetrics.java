@@ -34,16 +34,13 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
     sessionAccumulator
         .getUbiSession()
         .setSeqNum(sessionAccumulator.getUbiSession().getSeqNum() + 1);
-    if (isEarlyEvent ? isEarlyEvent
-        : sessionAccumulator.getUbiSession().getFirstSessionStartDt() == null) {
+    if (isEarlyEvent || sessionAccumulator.getUbiSession().getFirstSessionStartDt() == null) {
       //allign with jetstream 0810
       //      sessionAccumulator.getUbiSession().setFirstSessionStartDt(event.getSojDataDt());
       sessionAccumulator.getUbiSession().setFirstSessionStartDt(event.getEventTimestamp());
     }
-    if (!event.isIframe()
-        && !event.isRdt()
-        && (isEarlyValidEvent ? isEarlyValidEvent
-        : sessionAccumulator.getUbiSession().getSessionStartDt() == null)) {
+    if (!event.isIframe() && !event.isRdt()
+        && (isEarlyValidEvent || sessionAccumulator.getUbiSession().getSessionStartDt() == null)) {
       //allign with jetstream 0810
       //      sessionAccumulator.getUbiSession().setSessionStartDt(event.getSojDataDt());
       sessionAccumulator.getUbiSession().setSessionStartDt(event.getEventTimestamp());
@@ -68,8 +65,8 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
     }
 
     event.setSessionStartDt(
-        sessionAccumulator.getUbiSession().getSessionStartDt() == null ? sessionAccumulator
-            .getUbiSession().getFirstSessionStartDt()
+        sessionAccumulator.getUbiSession().getSessionStartDt() == null ?
+            sessionAccumulator.getUbiSession().getFirstSessionStartDt()
             : sessionAccumulator.getUbiSession().getSessionStartDt());
     event.setSeqNum(sessionAccumulator.getUbiSession().getSeqNum());
   }

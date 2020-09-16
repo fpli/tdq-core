@@ -221,8 +221,7 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     //                sessionAccumulator.getUbiSession().getAbsEndTimestamp()));
     sessionAccumulator
         .getUbiSession()
-        .setSojDataDt(sessionAccumulator.getUbiSession().getAbsEndTimestamp() == null ? null :
-            sessionAccumulator.getUbiSession().getAbsEndTimestamp());
+        .setSojDataDt(sessionAccumulator.getUbiSession().getAbsEndTimestamp());
     // Fix bug HDMIT-3732 to avoid integer result overflow
     int durationSec =
         (sessionAccumulator.getUbiSession().getStartTimestamp() == null

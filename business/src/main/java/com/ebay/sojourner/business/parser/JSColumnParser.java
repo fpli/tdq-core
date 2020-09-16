@@ -43,7 +43,7 @@ public class JSColumnParser implements FieldParser<RawEvent, UbiEvent> {
     map.putAll(rawEvent.getSojA());
     map.putAll(rawEvent.getSojK());
 
-    String dn = (map.get(DEVICE_TAG) == null ? null : map.get(DEVICE_TAG).toString());
+    String dn = map.get(DEVICE_TAG);
     Map<String, String> result = RaptorUAParser.getInstance()
         .processUA(ubiEvent.getAgentInfo(), dn, false);
     String deviceFamily = result.get(DEVICE_FAMILY);
