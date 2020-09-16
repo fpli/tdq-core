@@ -92,30 +92,11 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
               TransformUtil.ipToInt(ubiEvent.getClientIP()) == null ? "0"
                   : TransformUtil.ipToInt(ubiEvent.getClientIP()).toString());
       Map<String, Map<Integer, Long[]>> agentIpSignature = attributeSignature.get("agentIp");
-      /*
-      System.out.println("==check bot5 and bot8 on ubiEvent ====");
-      System.out
-          .println("==agentIp signature size on ubiEvent  ====" + (agentIpSignature == null ? 0 :
-              agentIpSignature.size()));
-              */
       if (agentIpSignature != null && agentIpSignature.size() > 0
           && agentIpSignature.containsKey(agentIp)) {
-        /*
-        System.out
-            .println("==agentIp signature checked success  on ubievent we checked ====" + agentIp);
-        System.out.println(
-            "==agentIp signature check on ubievent we checked ==== eventtimestamp" + SojTimestamp
-                .getSojTimestampToUnixTimestamp(ubiEvent.getEventTimestamp()));
-                */
-
         for (Map.Entry<Integer, Long[]> agentIpBotFlagMap :
             agentIpSignature.get(agentIp).entrySet()) {
           Long[] duration = agentIpBotFlagMap.getValue();
-          /*
-          System.out.println(
-              "==agentIp signature check on ubievent we checked ==== signature duration"
-                  + duration[0] + "  " + duration[1]);
-                  */
           if (SojTimestamp.getSojTimestampToUnixTimestamp(ubiEvent.getEventTimestamp())
               > duration[0]
               && SojTimestamp.getSojTimestampToUnixTimestamp(ubiEvent.getEventTimestamp())
@@ -188,29 +169,11 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
               TransformUtil.ipToInt(ubiSession.getIp()) == null ? "0"
                   : TransformUtil.ipToInt(ubiSession.getIp()).toString());
       Map<String, Map<Integer, Long[]>> agentIpSignature = attributeSignature.get("agentIp");
-      /*
-      System.out.println("==check bot5 and bot8 on ubiSession ====");
-      System.out
-          .println("==agentIp signature size on ubiSession  ====" + (agentIpSignature == null ? 0 :
-              agentIpSignature.size()));
-              */
       if (agentIpSignature != null && agentIpSignature.size() > 0
           && agentIpSignature.containsKey(agentIp)) {
-        /*
-        System.out.println("==agentIp signature check on ubiSession we checked ====" + agentIp);
-        System.out.println(
-            "==agentIp signature check on ubiSession we checked ==== AbsStartTimestamp"
-                + SojTimestamp
-                .getSojTimestampToUnixTimestamp(ubiSession.getAbsStartTimestamp()));
-                */
         for (Map.Entry<Integer, Long[]> agentIpBotFlagMap :
             agentIpSignature.get(agentIp).entrySet()) {
           Long[] duration = agentIpBotFlagMap.getValue();
-          /*
-          System.out.println(
-              "==agentIp signature check on ubiSession we checked ==== signature duration"
-                  + duration[0] + "  " + duration[1]);
-                  */
           if (SojTimestamp.getSojTimestampToUnixTimestamp(ubiSession.getAbsStartTimestamp())
               > duration[0]
               && SojTimestamp.getSojTimestampToUnixTimestamp(ubiSession.getAbsStartTimestamp())

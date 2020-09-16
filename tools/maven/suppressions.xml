@@ -57,8 +57,6 @@ under the License.
     files="/src/main/java/com/ebay/sojourner/common/model/Guid.java"/>
   <suppress checks=".*"
     files="/src/main/java/com/ebay/sojourner/common/util/Property.java"/>
-  <suppress checks=".*"
-    files="src/main/java/com/ebay/sojourner/rt/operators/session/AgentIpFilterFunction.java"/>
   <suppress checks="NewlineAtEndOfFile" files=".java" />
   <suppress checks="NewlineAtEndOfFile" files=".properties" />
 

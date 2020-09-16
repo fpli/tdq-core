@@ -14,9 +14,4 @@ public class RawEventGenerator {
     ObjectMapper objectMapper = new ObjectMapper();
     return objectMapper.readValue(resourceAsStream, new TypeReference<List<RawEvent>>() {});
   }
-
-  public static void main(String[] args) throws IOException {
-
-    System.out.println(getRawEventList("/SourceData.json").size());
-  }
 }

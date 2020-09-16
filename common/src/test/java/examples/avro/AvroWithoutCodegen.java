@@ -46,7 +46,6 @@ public class AvroWithoutCodegen {
         // allocating and garbage collecting many objects for files with
         // many items.
         user = dataFileReader.next(user);
-        System.out.println(user);
       }
     } catch (Exception e) {
       e.printStackTrace();

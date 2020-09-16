@@ -42,7 +42,6 @@ public class BroadcastStateExample {
     matches.print();
 
     // execute program
-    System.out.println(env.getExecutionPlan());
     env.execute("Broadcast State Example");
   }
 }

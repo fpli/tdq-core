@@ -18,7 +18,6 @@ public class ValidateReport {
   public static void main(String[] args) throws SQLException {
     HiveJDBClient client = new HiveJDBClient();
     ResultSet resultSet = client.exeSQL(summary.get("UBI_SESSION_SAMPLE"));
-    System.out.println(toJson(resultSet));
   }
 
   public static String toJson(ResultSet rs) throws SQLException {

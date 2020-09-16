@@ -60,8 +60,4 @@ public class SOJExtractNVP {
     }
     return null;
   }
-
-  public static void main(String[] args) throws Exception {
-    System.out.println("params = " + getTagValue("h8=d3&h4=d9&", "h4", "&", "="));
-  }
 }

@@ -142,23 +142,4 @@ public class SojTimestamp {
       throw new RuntimeException("normalized timestamp failed", e);
     }
   }
-
-  public static void main(String[] args) {
-    System.out
-        .println(
-            getSojTimestampToUnixTimestamp(Long.valueOf(
-                getSojTimestamp("2020-08-22 23:59:11.865"))));
-    System.out.println(getUnixTimestamp("2020-06-17 02:59:59.000"));
-    System.out.println(getSojTimestampToUnixTimestamp(3801622085446000L));
-    //    System.out.println(getUnixTimestamp("2020-06-17 02:59:59.000"));
-    System.out.println(getSojTimestampToUnixTimestamp(3807074683982000L));//1598111083982
-
-    System.out.println(getSojTimestampToUnixTimestamp(3807076484397000L));//
-    System.out.println(getUnixDateFromSOjTimestamp(3808339083290000L));
-    System.out.println(getUnixDateFromUnixTimestamp(1598111083000L));
-    System.out.println(castUnixTimestampToDateMINS1(1598111083982L));
-    long a = getUnixDateFromSOjTimestamp(3807074683982000L) == 1598079600000L ? 0 : 1;
-    System.out.println(a);
-
-  }
 }

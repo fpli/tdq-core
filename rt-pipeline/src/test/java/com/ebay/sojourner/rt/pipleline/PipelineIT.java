@@ -8,15 +8,15 @@ import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.SessionCore;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
-import com.ebay.sojourner.rt.operators.event.UbiEventMapWithStateFunction;
-import com.ebay.sojourner.rt.operators.session.UbiSessionAgg;
-import com.ebay.sojourner.rt.operators.session.UbiSessionWindowProcessFunction;
+import com.ebay.sojourner.rt.operator.event.UbiEventMapWithStateFunction;
+import com.ebay.sojourner.rt.operator.session.UbiSessionAgg;
+import com.ebay.sojourner.rt.operator.session.UbiSessionWindowProcessFunction;
 import com.ebay.sojourner.rt.util.RawEventGenerator;
 import com.ebay.sojourner.rt.operator.AgentIpMapFunction;
-import com.ebay.sojourner.rt.operators.attribute.AgentIpAttributeAgg;
-import com.ebay.sojourner.rt.operators.attribute.AgentIpWindowProcessFunction;
-import com.ebay.sojourner.rt.operators.event.EventMapFunction;
-import com.ebay.sojourner.rt.operators.session.UbiSessionToSessionCoreMapFunction;
+import com.ebay.sojourner.rt.operator.attribute.AgentIpAttributeAgg;
+import com.ebay.sojourner.rt.operator.attribute.AgentIpWindowProcessFunction;
+import com.ebay.sojourner.rt.operator.event.EventMapFunction;
+import com.ebay.sojourner.rt.operator.session.UbiSessionToSessionCoreMapFunction;
 import com.ebay.sojourner.rt.util.ResultGenerator;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,6 @@ public class PipelineIT {
   @Test
   public void testIncrementPipeline() throws Exception {
     StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-    System.out.println("main thread id:" + Thread.currentThread().getId());
     // configure your test environment
     env.setParallelism(1);
     env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
@@ -212,9 +211,6 @@ public class PipelineIT {
 
     List<UbiSession> ubiSessions = ResultGenerator.getUbiSessionList("/ExpectedData.json");
 
-    for (UbiSession ubisession : CollectSink.values) {
-      //            System.out.println(JSON.toJSONString(ubisession));
-    }
     // verify your results
     assertTrue(CollectSink.values.containsAll(ubiSessions));
   }
@@ -240,7 +236,6 @@ public class PipelineIT {
       long idx = 1;
 
       while (isRunning) {
-        System.out.println("source thread id:" + Thread.currentThread().getId());
         List<RawEvent> rawEvents = RawEventGenerator.getRawEventList("/SourceData.json" + idx);
         for (RawEvent rawEvent : rawEvents) {
           ctx.collect(rawEvent);
