@@ -1,14 +1,19 @@
 package com.ebay.sojourner.flink.connectors.kafka.schema;
 
+import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericDatumWriter;
-import org.apache.avro.generic.GenericRecord;
-import org.apache.avro.specific.SpecificDatumReader;
-import org.apache.avro.specific.SpecificRecord;
 
-public interface SchemaFactory<T> {
+public interface SchemaFactory {
+
   String getSchemaContent(String content);
+
+  GenericDatumWriter<GenericData.Record> getWriter();
+
+  GenericDatumReader<GenericData.Record> getReader();
+
+  Schema getSchema();
+
   void setSchema(String content);
-  GenericDatumWriter<T> getWriter();
-  GenericDatumReader<T> getReader();
 }

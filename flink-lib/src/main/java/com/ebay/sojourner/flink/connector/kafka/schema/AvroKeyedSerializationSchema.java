@@ -9,7 +9,6 @@ import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.reflect.ReflectData;
 import org.apache.avro.reflect.ReflectDatumWriter;
 import org.apache.avro.specific.SpecificDatumWriter;
-import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.flink.streaming.util.serialization.KeyedSerializationSchema;
 
 public class AvroKeyedSerializationSchema<T> implements KeyedSerializationSchema<T> {
@@ -65,9 +64,6 @@ public class AvroKeyedSerializationSchema<T> implements KeyedSerializationSchema
   private void ensureInitialized() {
     if (writer == null) {
       if (org.apache.avro.specific.SpecificRecordBase.class.isAssignableFrom(avroType)) {
-        SpecificRecordBase.class.newInstance().getSchema()
-        SpecificRecordBase sb = ((SpecificRecordBase)avroType.newInstance()).getSchema();
-
         writer = new SpecificDatumWriter<>(avroType);
       } else {
         writer = new ReflectDatumWriter<>(avroType, ReflectData.AllowNull.get());
