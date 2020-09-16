@@ -1,4 +1,4 @@
-package com.ebay.sojourner.flink.connectors.kafka.schema;
+package com.ebay.sojourner.flink.connector.kafka;
 
 import java.util.HashMap;
 import java.util.Map;
