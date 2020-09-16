@@ -48,28 +48,7 @@ public class KafkaProducerFactory {
 
     return getProducer(topic, brokers, subject, null, messageKey);
   }
-
-  public static <T> FlinkKafkaProducer<T> getProducer(String topic, String brokers,
-      String messagekey, String subject) {
-
-    Properties producerConfig = getKafkaProducerConfig(brokers);
-
-    if (tClass == null && messagekey == null) {
-      return new FlinkKafkaProducer<>(topic, new SojBytesEventSerializationSchema<>(),
-          producerConfig, Optional.of(new SojKafkaPartitioner<>()));
-    } else {
-      return new FlinkKafkaProducer<>(topic,
-          new AvroKeyedSerializationSchema<>(tClass, messagekey), producerConfig,
-          Optional.of(new SojKafkaPartitioner<>()));
-    }
-  }
-
-  public static <T> FlinkKafkaProducer<T> getProducer(String topic, String brokers,
-      String key1, String key2, Class<T> tClass) {
-
-    return getProducer(topic, brokers, null, tClass, key1, key2);
-  }
-
+  
   public static <T> FlinkKafkaProducer<T> getProducer(String topic, String brokers,
       String messageKey, Class<T> tClass) {
 
