@@ -114,10 +114,7 @@ public class RheosAvroKafkaSerializer<T> implements RheosKafkaSerializer<T> {
       } catch (NoSuchFieldException | IllegalAccessException e) {
         e.printStackTrace();
       }
-
     }
     return record;
   }
-
-
 }

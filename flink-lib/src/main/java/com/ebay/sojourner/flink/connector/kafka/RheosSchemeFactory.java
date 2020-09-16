@@ -34,6 +34,7 @@ public class RheosSchemeFactory implements SchemaFactory {
 
   @Override
   public void setSchema(String content) {
+
     String schemaContent = getSchemaContent(content);
     Holder _holder = new Holder(schemaContent);
     holder = _holder;
@@ -48,6 +49,7 @@ public class RheosSchemeFactory implements SchemaFactory {
     private Schema schema = null;
 
     public Holder(String content) {
+
       schema = new Schema.Parser().parse(content);
       writer = new GenericDatumWriter<GenericData.Record>(schema);
       reader = new GenericDatumReader<GenericData.Record>(schema) {
@@ -56,8 +58,8 @@ public class RheosSchemeFactory implements SchemaFactory {
         protected Class findStringClass(Schema schema) {
           return String.class;
         }
-
       };
+
       for (Schema.Field field : schema.getFields()) {
         fields.put(field.name(), field.schema());
       }

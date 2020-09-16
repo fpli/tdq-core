@@ -16,6 +16,7 @@ public class RheosEventSerdeFactory {
   private static GenericRecordDomainDataDecoder rheosEventDeserializer;
 
   public static RheosEventDeserializer getRheosEventHeaderDeserializer() {
+
     if (rheosEventHeaderDeserializer == null) {
       rheosEventHeaderDeserializer = new RheosEventDeserializer();
     }
@@ -23,12 +24,14 @@ public class RheosEventSerdeFactory {
   }
 
   public static GenericRecordDomainDataDecoder getRheosEventDeserializer() {
+
     if (rheosEventDeserializer == null) {
       Map<String, Object> config = new HashMap<>();
       config.put(StreamConnectorConfig.RHEOS_SERVICES_URLS, RHEOS_SERVICES_URL);
       rheosEventDeserializer = new GenericRecordDomainDataDecoder(config);
       // rheosEventDeserializer = new GenericRecordDomainDataDecoder(RheosSchemaUtils.getConfig());
     }
+
     return rheosEventDeserializer;
   }
 }

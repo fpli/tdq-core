@@ -2,6 +2,7 @@ package com.ebay.sojourner.flink.connector.kafka;
 
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
+import com.ebay.sojourner.flink.connector.kafka.schema.AvroKeyedSerializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.SojEventKeyedSerializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.SojSerializationSchema;
 import java.util.Optional;
@@ -18,9 +19,17 @@ public class KafkaProducerFactory {
     Properties producerConfig = getKafkaProducerConfig(brokers);
 
     if (subject == null) {
-      return new FlinkKafkaProducer<>(topic,
-          new SojEventKeyedSerializationSchema<>(tClass, messageKey), producerConfig,
-          Optional.of(new SojKafkaPartitioner<>()));
+      if (messageKey.length > 1) {
+        return new FlinkKafkaProducer<>(topic,
+            new SojEventKeyedSerializationSchema<>(tClass, messageKey), producerConfig,
+            Optional.of(new SojKafkaPartitioner<>()));
+      } else if (messageKey.length == 1) {
+        return new FlinkKafkaProducer<>(topic,
+            new AvroKeyedSerializationSchema<>(tClass, messageKey[0]), producerConfig,
+            Optional.of(new SojKafkaPartitioner<>()));
+      } else {
+        throw new IllegalStateException("kafka message key length less 1");
+      }
     } else {
       return new FlinkKafkaProducer(topic,
           new SojSerializationSchema(topic, subject,
@@ -31,22 +40,25 @@ public class KafkaProducerFactory {
 
   public static <T> FlinkKafkaProducer<T> getProducer(String topic, String brokers) {
 
-    Properties producerConfig = getKafkaProducerConfig(brokers);
     return getProducer(topic, brokers, null, (Class<T>) null, null);
   }
 
   public static <T> FlinkKafkaProducer<T> getProducer(String topic, String brokers,
       String subject, String... messageKey) {
 
-    Properties producerConfig = getKafkaProducerConfig(brokers);
     return getProducer(topic, brokers, subject, null, messageKey);
   }
 
   public static <T> FlinkKafkaProducer<T> getProducer(String topic, String brokers,
       String key1, String key2, Class<T> tClass) {
 
-    Properties producerConfig = getKafkaProducerConfig(brokers);
     return getProducer(topic, brokers, null, tClass, key1, key2);
+  }
+
+  public static <T> FlinkKafkaProducer<T> getProducer(String topic, String brokers,
+      String messageKey, Class<T> tClass) {
+
+    return getProducer(topic, brokers, null, tClass, messageKey);
   }
 
   private static Properties getKafkaProducerConfig(String brokers) {
