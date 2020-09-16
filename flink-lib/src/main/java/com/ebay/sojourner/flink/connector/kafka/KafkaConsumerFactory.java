@@ -64,6 +64,5 @@ public class KafkaConsumerFactory {
     }
 
     return flinkKafkaConsumer;
-
   }
 }
