@@ -43,7 +43,6 @@ public class ScsCntForBot5Indicator<Source, Target> extends AbstractIndicator<So
                 .getAgentIpAttribute()
                 .feed(sessionCore, BotRules.SCS_ON_AGENTIP);
           } else {
-            //            log.error("BOT5-----singleclicksessionFlag is false:"+sessionCore);
             agentIpAttributeAccumulator
                 .getAgentIpAttribute()
                 .revert(sessionCore, BotRules.SCS_ON_AGENTIP);

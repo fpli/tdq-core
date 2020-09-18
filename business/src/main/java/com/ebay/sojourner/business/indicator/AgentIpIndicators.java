@@ -37,11 +37,11 @@ public class AgentIpIndicators
   @Override
   public void initIndicators() {
     addIndicators(new ScsCntForBot5Indicator<>(botFilter));
-    addIndicators(new ScsCntForBot6Indicator<>(botFilter));
-    addIndicators(new ScsCntForBot7Indicator<>(botFilter));
+    addIndicators(new ScsCntForBot6Indicator(botFilter));
+    addIndicators(new ScsCntForBot7Indicator(botFilter));
     addIndicators(new ScsCntForBot8Indicator<>(botFilter));
-    addIndicators(new SuspectAgentIndicator<>(botFilter));
-    addIndicators(new SuspectIPIndicator<>(botFilter));
-    addIndicators(new NewBotIndicator<>(botFilter));
+    addIndicators(new SuspectAgentIndicator(botFilter));
+    addIndicators(new SuspectIPIndicator(botFilter));
+    addIndicators(new NewBotIndicator(botFilter));
   }
 }
