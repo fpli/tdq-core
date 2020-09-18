@@ -53,7 +53,7 @@ public class SojUtils {
         ubiEvent.getClientData() == null ? null : ubiEvent.getClientData().toString());
     sojEvent.setBrowserFamily(ubiEvent.getBrowserFamily());
     sojEvent.setBrowserVersion(ubiEvent.getBrowserVersion());
-    sojEvent.setClickId(String.valueOf(ubiEvent.getClickId()));
+    sojEvent.setClickId(ubiEvent.getClickId()==-1?null:String.valueOf(ubiEvent.getClickId()));
     sojEvent.setClientIP(ubiEvent.getClientIP());
     sojEvent.setCobrand(String.valueOf(ubiEvent.getCobrand()));
     sojEvent.setCookies(ubiEvent.getCookies());
@@ -79,7 +79,7 @@ public class SojUtils {
     sojEvent.setOsFamily(ubiEvent.getOsFamily());
     sojEvent.setOsVersion(ubiEvent.getOsVersion());
     sojEvent.setPageFamily(ubiEvent.getPageFamily());
-    sojEvent.setPageId(ubiEvent.getPageId());
+    sojEvent.setPageId(ubiEvent.getPageId()==-1?null:ubiEvent.getPageId());
     sojEvent.setPageName(ubiEvent.getPageName());
     sojEvent.setAgentInfo(ubiEvent.getAgentInfo());
     sojEvent.setPartialValidPage(ubiEvent.isPartialValidPage());
@@ -99,7 +99,7 @@ public class SojUtils {
     sojEvent.setSojDataDt(ubiEvent.getSojDataDt());
     sojEvent.setSessionStartTime(ubiEvent.getSessionStartTime());
     sojEvent.setSid(ubiEvent.getSid());
-    sojEvent.setSiteId(String.valueOf(ubiEvent.getSiteId()));
+    sojEvent.setSiteId(ubiEvent.getSiteId()==-1?null:String.valueOf(ubiEvent.getSiteId()));
     sojEvent.setSourceImprId(ubiEvent.getSourceImprId());
     sojEvent.setSqr(ubiEvent.getSqr());
     sojEvent.setStaticPageType(ubiEvent.getStaticPageType());
@@ -147,7 +147,7 @@ public class SojUtils {
     sojSession.setAbsDuration(ubiSession.getAbsDuration());
     sojSession.setCobrand(ubiSession.getCobrand());
     sojSession.setAppId(ubiSession.getFirstAppId());
-    sojSession.setSiteId(ubiSession.getFirstSiteId());
+    sojSession.setSiteId(ubiSession.getFirstSiteId()==Integer.MIN_VALUE?null:ubiSession.getFirstSiteId());
     sojSession.setCguid(ubiSession.getFirstCguid());
     sojSession.setFirstMappedUserId(ubiSession.getFirstMappedUserId());
     sojSession.setHomepageCnt(ubiSession.getHomepageCnt());
