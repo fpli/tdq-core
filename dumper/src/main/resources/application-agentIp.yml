@@ -1,10 +1,11 @@
 kafka:
   consumer:
-    topic: behavior.totalv2.signature.agent-ip
+    topic:
+      - behavior.totalv2.signature.agent-ip
 
 flink:
   app:
-    name: Sojourner AgentIp Signature HDFS Load Pipeline
+    name: Sojourner RNO AgentIp Signature HDFS Load Pipeline
     parallelism:
       source: 10
       sink:

@@ -194,8 +194,6 @@ public class Property {
   public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_GUID = "kafka.producer.message-key.signature.guid";
   public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT = "kafka.producer.message-key.signature.agent";
   public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT_IP = "kafka.producer.message-key.signature.agent-ip";
-  public static final String KAFKA_PRODUCER_BOOTSTRAP_SERVERS_RNO = "kafka.producer.bootstrap-servers.rno";
-  public static final String KAFKA_PRODUCER_BOOTSTRAP_SERVERS_LVS = "kafka.producer.bootstrap-servers.lvs";
   public static final String KAFKA_PRODUCER_BOOTSTRAP_SERVERS = "kafka.producer.bootstrap-servers";
   public static final String KAFKA_PRODUCER_TOPIC = "kafka.producer.topic";
 

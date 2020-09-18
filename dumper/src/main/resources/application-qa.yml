@@ -1,8 +1,10 @@
 kafka:
   consumer:
     stream: behavior-trafficjam
-    topic: behavior.trafficjam.event
-    group-id: sojourner-pathfinder-event-non-bot-qa
+    topic:
+      - behavior.trafficjam.event
+    group-id:
+    lvs: sojourner-pathfinder-event-non-bot-qa
     bootstrap-servers:
       lvs:
         - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092

@@ -1,8 +1,10 @@
 kafka:
   consumer:
     stream: behavior.pulsar
-    topic: behavior.pulsar.sojsession.sessionend
-    group-id: sojourner-jetstream-session-non-bot-rno
+    topic:
+      - behavior.pulsar.sojsession.sessionend
+    group-id:
+      rno: sojourner-jetstream-session-non-bot-rno
     bootstrap-servers:
       rno:
         - rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092

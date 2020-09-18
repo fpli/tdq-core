@@ -1,8 +1,10 @@
 kafka:
   consumer:
     data-center: LVS
-    topic: behavior.totalv2.sojevent-bot
-    group-id: sojourner-total-dumper-lvs
+    topic:
+      - behavior.totalv2.sojevent-bot
+    group-id:
+      lvs: sojourner-total-dumper-lvs
     bootstrap-servers:
       lvs:
         - rhs-ravvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
@@ -13,7 +15,7 @@ kafka:
 
 flink:
   app:
-    name: Sojourner Bot Event HDFS Load Pipeline
+    name: Sojourner LVS Bot Event HDFS Load Pipeline
     parallelism:
       source: 50
       sink:
