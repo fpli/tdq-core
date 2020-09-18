@@ -12,9 +12,38 @@ import org.apache.kafka.clients.consumer.RoundRobinAssignor;
 
 public class KafkaConsumerFactory {
 
-  private static FlinkKafkaConsumer flinkKafkaConsumer;
-
   public static <T> FlinkKafkaConsumer<T> getConsumer(KafkaConsumerConfig config, Class<T> tClass) {
+
+    return buildFlinkKafkaConsumer(config, tClass);
+  }
+
+  private static <T> FlinkKafkaConsumer<T> buildFlinkKafkaConsumer(
+      KafkaConsumerConfig config, Class<T> tClass) {
+
+    FlinkKafkaConsumer flinkKafkaConsumer;
+    Properties commonConfig = buildKafkaCommonConfig(config);
+
+    if (tClass.isAssignableFrom(SojEvent.class)
+        || tClass.isAssignableFrom(SojSession.class)
+        || tClass.isAssignableFrom(BotSignature.class)) {
+
+      flinkKafkaConsumer = new FlinkKafkaConsumer<>(
+          config.getTopicList(),
+          DeserializationSchemaManager.getKeyedSchema(tClass),
+          commonConfig);
+    } else {
+
+      flinkKafkaConsumer = new FlinkKafkaConsumer<>(
+          config.getTopicList(),
+          DeserializationSchemaManager.getSchema(tClass),
+          commonConfig);
+    }
+
+    flinkKafkaConsumer.setStartFromLatest();
+    return flinkKafkaConsumer;
+  }
+
+  private static Properties buildKafkaCommonConfig(KafkaConsumerConfig config) {
 
     Properties consumerConfig = KafkaConnectorFactory.getKafkaCommonConfig();
 
@@ -36,34 +65,6 @@ public class KafkaConsumerFactory {
     consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
         FlinkEnvUtils.getString(Property.AUTO_RESET_OFFSET));
 
-    if (tClass.isAssignableFrom(SojEvent.class)
-        || tClass.isAssignableFrom(SojSession.class)
-        || tClass.isAssignableFrom(BotSignature.class)) {
-
-      flinkKafkaConsumer = new FlinkKafkaConsumer(
-          config.getTopic(),
-          DeserializationSchemaManager.getKeyedSchema(tClass),
-          consumerConfig
-      );
-
-    } else {
-      flinkKafkaConsumer = new FlinkKafkaConsumer(
-          config.getTopic(),
-          DeserializationSchemaManager.getSchema(tClass),
-          consumerConfig
-      );
-    }
-
-    if (config.getTopic().contains("dq")) {
-      // 2020-06-29 21:10:00 Beijing
-      flinkKafkaConsumer.setStartFromEarliest();
-      // flinkKafkaConsumer.setStartFromTimestamp(1593436200000L);
-    } else {
-      flinkKafkaConsumer.setStartFromLatest();
-      // flinkKafkaConsumer.setStartFromTimestamp(1599374683000L);
-    }
-
-    return flinkKafkaConsumer;
-
+    return consumerConfig;
   }
 }

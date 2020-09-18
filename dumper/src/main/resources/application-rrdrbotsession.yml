@@ -1,0 +1,22 @@
+kafka:
+  consumer:
+    topic:
+      - behavior.totalv2.sojsession-bot-lvs
+
+flink:
+  app:
+    name: Sojourner RNO Bot Session HDFS Load Pipeline
+    parallelism:
+      source: 20
+      sink:
+        hdfs: 20
+    metric:
+      watermark-process-progress: sojourner-ubd-bot-session-watermark-delay-time
+
+hdfs:
+  dump:
+    path:
+      open: hdfs://apollo-rno/sys/soj/ubd/sessions/category=open/type=bot
+      same-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=sameday/type=bot
+      cross-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=crossday/type=bot
+    watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/sessions/type=bot

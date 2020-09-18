@@ -22,9 +22,8 @@ kafka:
         agent-ip: behavior.trafficjam.agent.ip
         agent: behavior.trafficjam.agent
         ip: behavior.trafficjam.ip
-        guid: behavior.trafficjam.guid
     bootstrap-servers:
-      lvs:
+      default:
         - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
         - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
         - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092

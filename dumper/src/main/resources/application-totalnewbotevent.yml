@@ -1,8 +1,10 @@
 kafka:
   consumer:
     stream: behavior.total.new
-    topic: behavior.total.new.sojevent.bot
-    group-id: sojourner-total-dumper-test
+    topic:
+      - behavior.total.new.sojevent.bot
+    group-id:
+      rno: sojourner-total-dumper-test
     bootstrap-servers:
       rno:
         - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
@@ -13,7 +15,7 @@ kafka:
 
 flink:
   app:
-    name: Sojourner Bot Event HDFS Load Pipeline
+    name: Sojourner TEST Bot Event HDFS Load Pipeline
     parallelism:
       source: 50
       sink:

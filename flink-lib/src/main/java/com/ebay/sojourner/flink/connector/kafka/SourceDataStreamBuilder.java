@@ -27,8 +27,8 @@ public class SourceDataStreamBuilder<T> {
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .slotSharingGroup(slotGroup)
         .name(String.format("Rheos Kafka Consumer From DC: %s, Topic: %s",
-            dc, kafkaConsumerConfig.getTopic()))
-        .uid(String.format("source-%s-%s-id", dc, kafkaConsumerConfig.getTopic()));
+            dc, kafkaConsumerConfig.getTopicList().get(0)))
+        .uid(String.format("source-%s-%s-id", dc, kafkaConsumerConfig.getTopicList().get(0)));
     /*
         .name(String.format("Kafka Consumer From DC: %s, Topic: %s",
         dc, kafkaConsumerConfig.getTopic()))

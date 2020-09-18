@@ -17,7 +17,7 @@ kafka:
         agent: behavior.total.new.signature.agent
         ip: behavior.total.new.signature.ip
     bootstrap-servers:
-      rno:
+      default:
         - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
         - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
         - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092

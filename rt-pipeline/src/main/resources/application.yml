@@ -1,7 +1,16 @@
+# case1
+# rt pipeline normal case
+# kafka source(pathfinder) -> flink cluster (rno) -> kafka sink (rno)
+
+# case2
+# sojourner-realtime-rno upgrade or system patch, we need switch rt pipeline to dr cluster(lvs)
+# kafka source(pathfinder) -> flink cluster (lvs) -> kafka sink (rno)
+
 kafka:
   consumer:
     stream: behavior.pathfinder
-    topic: behavior.pathfinder.events.total
+    topic:
+      - behavior.pathfinder.events.total
     group-id: sojourner-pathfinder-realtime-rno
     bootstrap-servers:
       rno:
@@ -48,7 +57,7 @@ kafka:
         agent: behavior.totalv2.signature.agent
         ip: behavior.totalv2.signature.ip
     bootstrap-servers:
-      rno:
+      default:
         - rhs-fxuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.37.tess.io:9092
         - rhs-fxuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.37.tess.io:9092
         - rhs-fxuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.37.tess.io:9092
