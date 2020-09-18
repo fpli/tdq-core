@@ -212,6 +212,9 @@ public class UbiSession implements Serializable, Cloneable {
     } else if (ubiSession.getAbsStartTimestamp() != null && this.getAbsStartTimestamp() > ubiSession
         .getAbsStartTimestamp()) {
       this.setAbsStartTimestamp(ubiSession.getAbsStartTimestamp());
+      this.setSessionId(ubiSession.getSessionId());
+      this.setSessionSkey(ubiSession.getSessionSkey());
+      this.setSessionStartDt(ubiSession.getSessionStartDt());
     }
     if (this.getAbsEndTimestamp() == null && ubiSession.getAbsEndTimestamp() != null) {
       this.setAbsEndTimestamp(ubiSession.getAbsEndTimestamp());
