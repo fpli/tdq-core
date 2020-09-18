@@ -102,8 +102,8 @@ public class SojSessionDeserializationSchema implements DeserializationSchema<So
 
     return new SojSession(guid, sessionReferrer, siteFlags, attrFlags, version, botFlags, ip,
         userAgent, findingFlags, startPageId, endPageId, botFlag, durationSec, userId, eventCnt,
-        trafficSrcId, viCnt, bidCnt, binCnt, watchCnt, homepageCnt, siteId, cguid
-        , cobrand, startTimestamp, firstMappedUserId, appId, absDuration, grCnt, gr1Cnt, myebayCnt,
+        trafficSrcId, viCnt, bidCnt, binCnt, watchCnt, homepageCnt, siteId, cguid, cobrand,
+        startTimestamp, firstMappedUserId, appId, absDuration, grCnt, gr1Cnt, myebayCnt,
         absStartTimestamp, signinPageCnt, nonIframeRdtEventCnt, botFlagList, absEndTimestamp,
         endTimestamp, sojDataDt, sessionId, sessionSkey, sessionStartDt, firstSessionStartDt,
         sessionEndDt, absEventCnt, singleClickSessionFlag, asqCnt, atcCnt, atlCnt, boCnt, srpCnt,

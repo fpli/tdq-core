@@ -43,7 +43,8 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
     core.setAbsEventCnt(session.getAbsEventCnt());
 
     if (!StringUtils.isBlank(session.getUserAgent())) {
-      long[] long4AgentHash = TypeTransformUtil.md522Long(TypeTransformUtil.getMD5(session.getUserAgent()));
+      long[] long4AgentHash = TypeTransformUtil
+          .md522Long(TypeTransformUtil.getMD5(session.getUserAgent()));
       AgentHash agentHash = new AgentHash();
       agentHash.setAgentHash1(long4AgentHash[0]);
       agentHash.setAgentHash2(long4AgentHash[1]);
@@ -154,7 +155,8 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
           agentStrAfterBase64 = Base64Ebay.decodeUTF8(agentBase64);
         }
 
-        long[] long4AgentHash = TypeTransformUtil.md522Long(TypeTransformUtil.getMD5(agentStrAfterBase64));
+        long[] long4AgentHash = TypeTransformUtil
+            .md522Long(TypeTransformUtil.getMD5(agentStrAfterBase64));
         agentAfterBase64 = new AgentHash();
         agentAfterBase64.setAgentHash1(long4AgentHash[0]);
         agentAfterBase64.setAgentHash2(long4AgentHash[1]);
