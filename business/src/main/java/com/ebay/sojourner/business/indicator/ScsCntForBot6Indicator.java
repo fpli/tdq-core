@@ -1,6 +1,5 @@
 package com.ebay.sojourner.business.indicator;
 
-import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.AgentIpAttributeAccumulator;
 import com.ebay.sojourner.common.model.SessionCore;
 import com.ebay.sojourner.common.util.BotFilter;
@@ -9,76 +8,61 @@ import com.ebay.sojourner.common.util.SessionCoreHelper;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ScsCntForBot6Indicator<Source, Target> extends AbstractIndicator<Source, Target> {
+public class ScsCntForBot6Indicator extends
+    AbstractIndicator<SessionCore, AgentIpAttributeAccumulator> {
 
   public ScsCntForBot6Indicator(BotFilter botFilter) {
     this.botFilter = botFilter;
   }
 
   @Override
-  public void start(Target target) throws Exception {
-    if (target instanceof AgentIpAttributeAccumulator) {
-      AgentIpAttributeAccumulator agentIpAttributeAccumulator =
-          (AgentIpAttributeAccumulator) target;
-      agentIpAttributeAccumulator.getAgentIpAttribute().clear();
-      agentIpAttributeAccumulator.getAgentIpAttribute().clear(BotRules.SCS_ON_AGENT);
-    }
+  public void start(AgentIpAttributeAccumulator agentIpAttributeAccumulator) throws Exception {
+    agentIpAttributeAccumulator.getAgentIpAttribute().clear();
   }
 
   @Override
-  public void feed(Source source, Target target) throws Exception {
-
-    if (source instanceof SessionCore) {
-      SessionCore sessionCore = (SessionCore) source;
-      AgentIpAttributeAccumulator agentIpAttributeAccumulator =
-          (AgentIpAttributeAccumulator) target;
-      if (agentIpAttributeAccumulator.getAgentIpAttribute().getScsCountForBot6() < 0) {
-        return;
-      } else {
-        if (isValid(sessionCore)) {
-          if (SessionCoreHelper.isSingleClickSession(sessionCore)) {
-            agentIpAttributeAccumulator
-                .getAgentIpAttribute()
-                .feed(sessionCore, BotRules.SCS_ON_AGENT);
-          } else {
-            //            log.error("BOT6-----singleclicksessionFlag is false:"+sessionCore);
-            agentIpAttributeAccumulator
-                .getAgentIpAttribute()
-                .revert(sessionCore, BotRules.SCS_ON_AGENT);
-          }
+  public void feed(SessionCore sessionCore,
+                   AgentIpAttributeAccumulator agentIpAttributeAccumulator) throws Exception {
+    if (agentIpAttributeAccumulator.getAgentIpAttribute().getScsCountForBot6() < 0) {
+      return;
+    } else {
+      if (isValid(sessionCore)) {
+        if (SessionCoreHelper.isSingleClickSession(sessionCore)) {
+          agentIpAttributeAccumulator
+              .getAgentIpAttribute()
+              .feed(sessionCore, BotRules.SCS_ON_AGENT);
+        } else {
+          agentIpAttributeAccumulator
+              .getAgentIpAttribute()
+              .revert(sessionCore, BotRules.SCS_ON_AGENT);
         }
       }
+    }
 
-      if (!SessionCoreHelper.isNonIframRdtCountZero(sessionCore)
-          && !isIpBlank(sessionCore.getIp())
-          && agentIpAttributeAccumulator.getAgentIpAttribute().getIpSet().size() <= 0) {
-        agentIpAttributeAccumulator.getAgentIpAttribute().getIpSet().add(sessionCore.getIp());
-      }
-    } else {
-      AgentIpAttribute agentIpAttribute = (AgentIpAttribute) source;
-      AgentIpAttributeAccumulator agentIpAttributeAccumulator =
-          (AgentIpAttributeAccumulator) target;
-      agentIpAttributeAccumulator
-          .getAgentIpAttribute()
-          .merge(agentIpAttribute, BotRules.SCS_ON_AGENT);
+    if (!SessionCoreHelper.isNonIframRdtCountZero(sessionCore)
+        && !isIpBlank(sessionCore.getIp())
+        && agentIpAttributeAccumulator.getAgentIpAttribute().getIpSet().size() <= 0) {
+
+      agentIpAttributeAccumulator.getAgentIpAttribute()
+          .getIpSet()
+          .add(sessionCore.getIp());
     }
   }
 
   @Override
-  public boolean filter(Source source, Target target) throws Exception {
-    if (source instanceof SessionCore) {
-      SessionCore sessionCore = (SessionCore) source;
-      int targetFlag = BotRules.SCS_ON_AGENT;
-      if (botFilter.filter(sessionCore, targetFlag)) {
-        return true;
-      }
-      if (sessionCore.getBotFlag() > 0 && sessionCore.getBotFlag() < 200) {
-        return true;
-      }
-      return sessionCore.getUserAgent() == null || (sessionCore.getUserAgent().getAgentHash1() == 0L
-          && sessionCore.getUserAgent().getAgentHash2() == 0L);
+  public boolean filter(SessionCore sessionCore,
+                        AgentIpAttributeAccumulator agentIpAttributeAccumulator) throws Exception {
+    int targetFlag = BotRules.SCS_ON_AGENT;
+    if (botFilter.filter(sessionCore, targetFlag)) {
+      return true;
     }
-    return false;
+    if (sessionCore.getBotFlag() > 0 && sessionCore.getBotFlag() < 200) {
+      return true;
+    }
+
+    return sessionCore.getUserAgent() == null
+        || (sessionCore.getUserAgent().getAgentHash1() == 0L
+            && sessionCore.getUserAgent().getAgentHash2() == 0L);
   }
 
   private boolean isValid(SessionCore sessionCore) {

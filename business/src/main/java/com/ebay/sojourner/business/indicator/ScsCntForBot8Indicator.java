@@ -20,7 +20,6 @@ public class ScsCntForBot8Indicator<Source, Target> extends AbstractIndicator<So
       AgentIpAttributeAccumulator agentIpAttributeAccumulator =
           (AgentIpAttributeAccumulator) target;
       agentIpAttributeAccumulator.getAgentIpAttribute().clear();
-      agentIpAttributeAccumulator.getAgentIpAttribute().clear(BotRules.SCS_CONFIRM_ON_AGENTIP);
     } else if (target instanceof IpAttributeAccumulator) {
       IpAttributeAccumulator ipAttributeAccumulator = (IpAttributeAccumulator) target;
       ipAttributeAccumulator.getIpAttribute().clear();

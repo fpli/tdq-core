@@ -35,7 +35,7 @@ public class IpIndicators extends AttributeIndicators<AgentIpAttribute, IpAttrib
 
   @Override
   public void initIndicators() {
-    addIndicators(new ScsCntForBot7IPIndicator<>(botFilter));
-    addIndicators(new SuspectIPIPIndicator<>(botFilter));
+    addIndicators(new ScsCntForBot7IPIndicator(botFilter));
+    addIndicators(new SuspectIPIPIndicator(botFilter));
   }
 }
