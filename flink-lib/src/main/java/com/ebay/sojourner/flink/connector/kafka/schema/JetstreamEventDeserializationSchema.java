@@ -9,7 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 
-public class JetstreamEventDeserializationSchema implements DeserializationSchema<JetStreamOutputEvent> {
+public class JetstreamEventDeserializationSchema implements
+    DeserializationSchema<JetStreamOutputEvent> {
 
   @Override
   public JetStreamOutputEvent deserialize(byte[] message) throws IOException {
