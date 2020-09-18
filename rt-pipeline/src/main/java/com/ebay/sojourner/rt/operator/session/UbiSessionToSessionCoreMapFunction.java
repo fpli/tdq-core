@@ -13,7 +13,7 @@ import com.ebay.sojourner.common.util.MiscUtil;
 import com.ebay.sojourner.common.util.SessionCoreHelper;
 import com.ebay.sojourner.common.util.SessionFlags;
 import com.ebay.sojourner.common.util.SojTimestamp;
-import com.ebay.sojourner.common.util.TransformUtil;
+import com.ebay.sojourner.common.util.TypeTransformUtil;
 import com.ebay.sojourner.common.util.UbiLookups;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.functions.RichMapFunction;
@@ -43,7 +43,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
     core.setAbsEventCnt(session.getAbsEventCnt());
 
     if (!StringUtils.isBlank(session.getUserAgent())) {
-      long[] long4AgentHash = TransformUtil.md522Long(TransformUtil.getMD5(session.getUserAgent()));
+      long[] long4AgentHash = TypeTransformUtil.md522Long(TypeTransformUtil.getMD5(session.getUserAgent()));
       AgentHash agentHash = new AgentHash();
       agentHash.setAgentHash1(long4AgentHash[0]);
       agentHash.setAgentHash2(long4AgentHash[1]);
@@ -54,11 +54,11 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
       agentHash.setAgentHash2(0L);
       core.setUserAgent(agentHash);
     }
-    core.setIp(TransformUtil.ipToInt(session.getIp()) == null ? 0
-        : TransformUtil.ipToInt(session.getIp()));
+    core.setIp(TypeTransformUtil.ipToInt(session.getIp()) == null ? 0
+        : TypeTransformUtil.ipToInt(session.getIp()));
     core.setBotFlag(session.getBotFlag());
     if (session.getFirstCguid() != null) {
-      long[] long4Cguid = TransformUtil.md522Long(session.getFirstCguid());
+      long[] long4Cguid = TypeTransformUtil.md522Long(session.getFirstCguid());
       Guid cguid = new Guid();
       cguid.setGuid1(long4Cguid[0]);
       cguid.setGuid2(long4Cguid[1]);
@@ -71,7 +71,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
     }
 
     if (session.getGuid() != null) {
-      long[] long4Cguid = TransformUtil.md522Long(session.getGuid());
+      long[] long4Cguid = TypeTransformUtil.md522Long(session.getGuid());
       Guid guid = new Guid();
       guid.setGuid1(long4Cguid[0]);
       guid.setGuid2(long4Cguid[1]);
@@ -106,7 +106,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
     if (BitUtils.isBitSet(core.getFlags(), SessionFlags.AGENT_STRING_DIFF) && !StringUtils
         .isBlank(session.getAgentString())) {
       long[] long4AgentHash =
-          TransformUtil.md522Long(TransformUtil.getMD5(session.getAgentString()));
+          TypeTransformUtil.md522Long(TypeTransformUtil.getMD5(session.getAgentString()));
       AgentHash agentHash = new AgentHash();
       agentHash.setAgentHash1(long4AgentHash[0]);
       agentHash.setAgentHash2(long4AgentHash[1]);
@@ -121,7 +121,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
 
     if (!MiscUtil.objEquals(session.getIp(), session.getExInternalIp())) {
       core.setFlags(BitUtils.setBit(core.getFlags(), SessionFlags.EXINTERNALIP_NONTRIMED_DIFF));
-      core.setExInternalIpNonTrim(TransformUtil.ipToInt(session.getExInternalIp()));
+      core.setExInternalIpNonTrim(TypeTransformUtil.ipToInt(session.getExInternalIp()));
     }
 
     String eiipTrimed = null;
@@ -130,7 +130,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
     }
     if (!MiscUtil.objEquals(session.getIp(), eiipTrimed)) {
       core.setFlags(BitUtils.setBit(core.getFlags(), SessionFlags.EXINTERNALIP_DIFF));
-      core.setExInternalIp(TransformUtil.ipToInt(eiipTrimed));
+      core.setExInternalIp(TypeTransformUtil.ipToInt(eiipTrimed));
     }
 
     // TODO to match the incorrect old logic , just for 'data quality'
@@ -154,7 +154,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
           agentStrAfterBase64 = Base64Ebay.decodeUTF8(agentBase64);
         }
 
-        long[] long4AgentHash = TransformUtil.md522Long(TransformUtil.getMD5(agentStrAfterBase64));
+        long[] long4AgentHash = TypeTransformUtil.md522Long(TypeTransformUtil.getMD5(agentStrAfterBase64));
         agentAfterBase64 = new AgentHash();
         agentAfterBase64.setAgentHash1(long4AgentHash[0]);
         agentAfterBase64.setAgentHash2(long4AgentHash[1]);
