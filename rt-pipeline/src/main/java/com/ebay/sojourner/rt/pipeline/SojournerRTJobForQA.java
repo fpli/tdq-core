@@ -235,7 +235,7 @@ public class SojournerRTJobForQA {
     sojSessionStream.addSink(KafkaProducerFactory
         .getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SESSION_NON_BOT),
-            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_DEFAULT),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS),
             FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION), SojSession.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .name("SojSession")
@@ -244,7 +244,7 @@ public class SojournerRTJobForQA {
     botSojSessionStream.addSink(KafkaProducerFactory
         .getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SESSION_BOT),
-            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_DEFAULT),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS),
             FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION), SojSession.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .name("Bot SojSession")
@@ -254,7 +254,7 @@ public class SojournerRTJobForQA {
     sojEventWithSessionId.addSink(KafkaProducerFactory
         .getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_NON_BOT),
-            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_DEFAULT),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS),
             FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY1),
             FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY2),
             SojEvent.class))
@@ -265,7 +265,7 @@ public class SojournerRTJobForQA {
     botSojEventStream.addSink(KafkaProducerFactory
         .getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_BOT),
-            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS_DEFAULT),
+            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS),
             FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY1),
             FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY2),
             SojEvent.class))

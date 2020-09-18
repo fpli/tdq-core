@@ -1,6 +1,7 @@
 kafka:
   consumer:
-    group-id: sojourner-pathfinder-consumer-qa
+    group-id:
+      lvs: sojourner-pathfinder-consumer-qa
     bootstrap-servers:
       lvs:
         - rhs-vvrvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
@@ -23,12 +24,11 @@ kafka:
         agent: behavior.trafficjam.agent
         ip: behavior.trafficjam.ip
     bootstrap-servers:
-      default:
-        - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
-        - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
-        - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
-        - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
-        - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
+      - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
+      - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
+      - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
+      - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
+      - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
 
 flink:
   app:

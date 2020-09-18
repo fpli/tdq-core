@@ -5,6 +5,7 @@ import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.util.DataCenter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
@@ -27,7 +28,7 @@ public class SourceDataStreamBuilder<T> {
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .slotSharingGroup(slotGroup)
         .name(String.format("Rheos Kafka Consumer From DC: %s, Topic: %s",
-            dc, kafkaConsumerConfig.getTopicList().get(0)))
+            dc, StringUtils.join(kafkaConsumerConfig.getTopicList(), ",")))
         .uid(String.format("source-%s-%s-id", dc, kafkaConsumerConfig.getTopicList().get(0)));
     /*
         .name(String.format("Kafka Consumer From DC: %s, Topic: %s",

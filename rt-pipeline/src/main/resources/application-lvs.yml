@@ -8,7 +8,10 @@
 
 kafka:
   consumer:
-    group-id: sojourner-pathfinder-realtime-test
+    group-id:
+      rno: sojourner-pathfinder-realtime-rno
+      lvs: sojourner-pathfinder-realtime-rno
+      slc: sojourner-pathfinder-realtime-rno
 
   producer:
     stream: behavior.totalv2
@@ -25,9 +28,8 @@ kafka:
         agent: behavior.totalv2.signature.agent-lvs
         ip: behavior.totalv2.signature.ip-lvs
     bootstrap-servers:
-      default:
-        - rhs-ravvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-ravvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-ravvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-ravvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-ravvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
+      - rhs-ravvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
+      - rhs-ravvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
+      - rhs-ravvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
+      - rhs-ravvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
+      - rhs-ravvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
