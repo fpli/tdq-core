@@ -1,8 +1,6 @@
 package com.ebay.sojourner.flink.connector.kafka;
 
 import com.ebay.sojourner.common.model.BotSignature;
-import com.ebay.sojourner.common.model.SojEvent;
-import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import java.util.Properties;
@@ -36,9 +34,7 @@ public class KafkaConsumerFactory {
     consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
         FlinkEnvUtils.getString(Property.AUTO_RESET_OFFSET));
 
-    if (tClass.isAssignableFrom(SojEvent.class)
-        || tClass.isAssignableFrom(SojSession.class)
-        || tClass.isAssignableFrom(BotSignature.class)) {
+    if (tClass.isAssignableFrom(BotSignature.class)) {
 
       flinkKafkaConsumer = new FlinkKafkaConsumer(
           config.getTopic(),

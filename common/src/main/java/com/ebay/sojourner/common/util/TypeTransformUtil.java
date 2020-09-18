@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
-public class TransformUtil {
+public class TypeTransformUtil {
 
   private static final Map<Character, Integer> dict = new HashMap<Character, Integer>();
   private static final Map<Integer, Character> reDict = new HashMap<Integer, Character>();
@@ -188,5 +188,34 @@ public class TransformUtil {
     } else {
       return l.toString();
     }
+  }
+
+  public static Integer getInteger(Object o) {
+    if (StringUtils.isEmpty(getString(o))) {
+      return null;
+    } else {
+      return Integer.valueOf(getString(o));
+    }
+  }
+
+  public static boolean getBoolean(Object o) {
+    if (StringUtils.isEmpty(getString(o))) {
+      return false;
+    } else {
+      return Boolean.valueOf(getString(o));
+    }
+  }
+
+
+  public static Long getLong(Object o) {
+    if (StringUtils.isEmpty(getString(o))) {
+      return null;
+    } else {
+      return Long.valueOf(getString(o));
+    }
+  }
+
+  public static String getString(Object o) {
+    return (o != null && !"null".equals(o.toString())) ? o.toString() : null;
   }
 }

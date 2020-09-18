@@ -2,7 +2,7 @@ package com.ebay.sojourner.business.rule;
 
 import com.ebay.sojourner.common.model.IpAttribute;
 import com.ebay.sojourner.common.util.BotHostMatcher;
-import com.ebay.sojourner.common.util.TransformUtil;
+import com.ebay.sojourner.common.util.TypeTransformUtil;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -33,7 +33,7 @@ public class BotRuleForDeclarativeHostTest {
     IpAttribute ipAttribute = new IpAttribute();
     ipAttribute.setIsAllAgentHoper(true);
     ipAttribute.setTotalCnt(301);
-    ipAttribute.setClientIp(TransformUtil.ipToInt(ip));
+    ipAttribute.setClientIp(TypeTransformUtil.ipToInt(ip));
     PowerMockito.when(botHostMatcher.isBotIp(ip)).thenReturn(true);
 
     int botFlag = botRuleForDeclarativeHost.getBotFlag(ipAttribute);
@@ -47,7 +47,7 @@ public class BotRuleForDeclarativeHostTest {
     IpAttribute ipAttribute = new IpAttribute();
     ipAttribute.setIsAllAgentHoper(true);
     ipAttribute.setTotalCnt(300);
-    ipAttribute.setClientIp(TransformUtil.ipToInt(ip));
+    ipAttribute.setClientIp(TypeTransformUtil.ipToInt(ip));
 
     int botFlag = botRuleForDeclarativeHost.getBotFlag(ipAttribute);
     Assertions.assertThat(botFlag).isEqualTo(0);

@@ -5,7 +5,7 @@ import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.SojTimestamp;
-import com.ebay.sojourner.common.util.TransformUtil;
+import com.ebay.sojourner.common.util.TypeTransformUtil;
 import com.ebay.sojourner.common.util.UbiSessionHelper;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
 import java.util.List;
@@ -51,8 +51,8 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
       UbiEvent ubiEvent = signatureDetectable.left();
 
       // ip
-      String ip = TransformUtil.ipToInt(ubiEvent.getClientIP()) == null ? "0"
-          : TransformUtil.ipToInt(ubiEvent.getClientIP()).toString();
+      String ip = TypeTransformUtil.ipToInt(ubiEvent.getClientIP()) == null ? "0"
+          : TypeTransformUtil.ipToInt(ubiEvent.getClientIP()).toString();
       Map<String, Map<Integer, Long[]>> ipSignature = attributeSignature.get("ip");
       if (ipSignature != null && ipSignature.size() > 0 && ipSignature.containsKey(ip)) {
         for (Map.Entry<Integer, Long[]> ipBotFlagMap :
@@ -68,8 +68,8 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
       }
 
       // agent
-      long[] long4AgentHash = TransformUtil
-          .md522Long(TransformUtil.getMD5(ubiEvent.getAgentInfo()));
+      long[] long4AgentHash = TypeTransformUtil
+          .md522Long(TypeTransformUtil.getMD5(ubiEvent.getAgentInfo()));
       Map<String, Map<Integer, Long[]>> agentSignature = attributeSignature.get("agent");
       String agent = long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1];
       if (agentSignature != null && agentSignature.size() > 0
@@ -89,8 +89,8 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
       // agentIp
       String agentIp =
           long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1] + Constants.FIELD_DELIM + (
-              TransformUtil.ipToInt(ubiEvent.getClientIP()) == null ? "0"
-                  : TransformUtil.ipToInt(ubiEvent.getClientIP()).toString());
+              TypeTransformUtil.ipToInt(ubiEvent.getClientIP()) == null ? "0"
+                  : TypeTransformUtil.ipToInt(ubiEvent.getClientIP()).toString());
       Map<String, Map<Integer, Long[]>> agentIpSignature = attributeSignature.get("agentIp");
       if (agentIpSignature != null && agentIpSignature.size() > 0
           && agentIpSignature.containsKey(agentIp)) {
@@ -128,8 +128,8 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
       UbiSession ubiSession = signatureDetectable.right();
 
       // ip
-      String ip = TransformUtil.ipToInt(ubiSession.getIp()) == null ? "0"
-          : TransformUtil.ipToInt(ubiSession.getIp()).toString();
+      String ip = TypeTransformUtil.ipToInt(ubiSession.getIp()) == null ? "0"
+          : TypeTransformUtil.ipToInt(ubiSession.getIp()).toString();
       Map<String, Map<Integer, Long[]>> ipSignature = attributeSignature.get("ip");
       if (ipSignature != null && ipSignature.size() > 0 && ipSignature.containsKey(ip)) {
         for (Map.Entry<Integer, Long[]> ipBotFlagMap :
@@ -145,8 +145,8 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
       }
 
       // agent
-      long[] long4AgentHash = TransformUtil
-          .md522Long(TransformUtil.getMD5(ubiSession.getUserAgent()));
+      long[] long4AgentHash = TypeTransformUtil
+          .md522Long(TypeTransformUtil.getMD5(ubiSession.getUserAgent()));
       Map<String, Map<Integer, Long[]>> agentSignature = attributeSignature.get("agent");
       String agent = long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1];
       if (agentSignature != null && agentSignature.size() > 0
@@ -166,8 +166,8 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
       // agentIp
       String agentIp =
           long4AgentHash[0] + Constants.FIELD_DELIM + long4AgentHash[1] + Constants.FIELD_DELIM + (
-              TransformUtil.ipToInt(ubiSession.getIp()) == null ? "0"
-                  : TransformUtil.ipToInt(ubiSession.getIp()).toString());
+              TypeTransformUtil.ipToInt(ubiSession.getIp()) == null ? "0"
+                  : TypeTransformUtil.ipToInt(ubiSession.getIp()).toString());
       Map<String, Map<Integer, Long[]>> agentIpSignature = attributeSignature.get("agentIp");
       if (agentIpSignature != null && agentIpSignature.size() > 0
           && agentIpSignature.containsKey(agentIp)) {

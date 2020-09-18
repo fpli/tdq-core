@@ -32,7 +32,7 @@ public class UbiSessionHelper {
       throws IOException, InterruptedException {
     String userAgent =
         String.valueOf(
-            TransformUtil.recoveryMD5(agentAttribute.getAgent().getAgentHash1().longValue(),
+            TypeTransformUtil.recoveryMD5(agentAttribute.getAgent().getAgentHash1().longValue(),
                 agentAttribute.getAgent().getAgentHash2().longValue()));
     return StringUtils.isNotBlank(userAgent)
         && UbiLookups.getInstance().getAgentMatcher().match(userAgent);
