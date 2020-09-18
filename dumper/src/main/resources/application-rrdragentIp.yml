@@ -1,0 +1,17 @@
+kafka:
+  consumer:
+    topic:
+      - behavior.totalv2.signature.agent-ip-lvs
+
+flink:
+  app:
+    name: Sojourner RNO Agent Ip Signature HDFS Load Pipeline
+    parallelism:
+      source: 10
+      sink:
+        hdfs: 10
+
+hdfs:
+  dump:
+    path: hdfs://apollo-rno/sys/soj/ubd/signatures/type=agentIp
+    class-name: com.ebay.sojourner.common.model.BotSignature

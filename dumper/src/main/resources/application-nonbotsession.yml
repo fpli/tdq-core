@@ -1,10 +1,11 @@
 kafka:
   consumer:
-    topic: behavior.totalv2.sojsession-nonbot
+    topic:
+      - behavior.totalv2.sojsession-nonbot
 
 flink:
   app:
-    name: Sojourner Non Bot Session HDFS Load Pipeline
+    name: Sojourner RNO Non Bot Session HDFS Load Pipeline
     parallelism:
       source: 15
       sink:

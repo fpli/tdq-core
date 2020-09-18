@@ -1,6 +1,9 @@
 kafka:
   consumer:
-    group-id: sojourner-pathfinder-realtime-test
+    group-id:
+      rno: sojourner-pathfinder-realtime-test
+      lvs: sojourner-pathfinder-realtime-test
+      slc: sojourner-pathfinder-realtime-test
 
   producer:
     stream: behavior.total.new
@@ -17,12 +20,11 @@ kafka:
         agent: behavior.total.new.signature.agent
         ip: behavior.total.new.signature.ip
     bootstrap-servers:
-      rno:
-        - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
-        - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
-        - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
-        - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
-        - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
+      - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
+      - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
+      - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+      - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
+      - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
 
 hdfs:
   path:

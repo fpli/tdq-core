@@ -2,15 +2,17 @@ kafka:
   consumer:
     stream: behavior.totalv2
     data-center: RNO
-    topic: behavior.totalv2.sojevent-nonbot
-    group-id: sojourner-total-dumper-rno
+    topic:
+      - behavior.totalv2.sojevent-nonbot
+    group-id:
+      rno: sojourner-total-dumper-rno
     bootstrap-servers:
       rno:
-         - rhs-fxuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.37.tess.io:9092
-         - rhs-fxuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.37.tess.io:9092
-         - rhs-fxuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.37.tess.io:9092
-         - rhs-fxuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.37.tess.io:9092
-         - rhs-fxuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.37.tess.io:9092
+        - rhs-fxuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.37.tess.io:9092
+        - rhs-fxuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.37.tess.io:9092
+        - rhs-fxuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.37.tess.io:9092
+        - rhs-fxuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.37.tess.io:9092
+        - rhs-fxuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.37.tess.io:9092
 
     max-poll-records: 3000
     # 16MB, default value is 50MB
@@ -49,7 +51,7 @@ kafka:
 
 flink:
   app:
-    name: Sojourner Non Bot Event HDFS Load Pipeline
+    name: Sojourner RNO Non Bot Event HDFS Load Pipeline
     parallelism:
       source: 150
       sink:

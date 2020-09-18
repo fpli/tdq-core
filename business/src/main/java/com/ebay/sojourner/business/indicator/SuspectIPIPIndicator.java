@@ -5,29 +5,28 @@ import com.ebay.sojourner.common.model.IpAttributeAccumulator;
 import com.ebay.sojourner.common.util.BotFilter;
 import com.ebay.sojourner.common.util.BotRules;
 
-public class SuspectIPIPIndicator<Source, Target> extends AbstractIndicator<Source, Target> {
+public class SuspectIPIPIndicator extends
+    AbstractIndicator<AgentIpAttribute, IpAttributeAccumulator> {
 
   public SuspectIPIPIndicator(BotFilter botFilter) {
     this.botFilter = botFilter;
   }
 
   @Override
-  public void start(Target target) throws Exception {
-      IpAttributeAccumulator ipAttributeAccumulator = (IpAttributeAccumulator) target;
+  public void start(IpAttributeAccumulator ipAttributeAccumulator) throws Exception {
       ipAttributeAccumulator.getIpAttribute().clear();
   }
 
   @Override
-  public void feed(Source source, Target target) throws Exception {
-      AgentIpAttribute agentIpAttribute = (AgentIpAttribute) source;
-      IpAttributeAccumulator ipAttributeAccumulator = (IpAttributeAccumulator) target;
+  public void feed(AgentIpAttribute agentIpAttribute,
+                   IpAttributeAccumulator ipAttributeAccumulator) throws Exception {
       ipAttributeAccumulator
           .getIpAttribute()
           .feed(agentIpAttribute, BotRules.SUSPECTED_IP_ON_AGENT);
   }
 
   @Override
-  public boolean filter(Source source, Target target) throws Exception {
+  public boolean filter(AgentIpAttribute source, IpAttributeAccumulator target) throws Exception {
     return false;
   }
 }

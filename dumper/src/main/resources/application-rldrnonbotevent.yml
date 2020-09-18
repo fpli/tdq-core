@@ -1,0 +1,16 @@
+kafka:
+  consumer:
+    data-center: RNO
+    topic:
+      - behavior.totalv2.sojevent-nonbot-lvs
+    group-id:
+      lvs: sojourner-total-dumper-lvs
+
+flink:
+  app:
+    name: Sojourner LVS Non Bot Event HDFS Load Pipeline
+
+hdfs:
+  dump:
+    path: hdfs://hercules/sys/soj/ubd/events/type=nonbot
+    watermark-path: hdfs://hercules/sys/soj/ubd/watermark/events/type=nonbot

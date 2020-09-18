@@ -1,91 +1,64 @@
 package com.ebay.sojourner.business.indicator;
 
-import static org.mockito.MockitoAnnotations.initMocks;
-import static org.powermock.api.mockito.PowerMockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import com.ebay.sojourner.common.model.AgentAttributeAccumulator;
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.AgentIpAttributeAccumulator;
 import com.ebay.sojourner.common.model.SessionCore;
+import com.ebay.sojourner.common.util.BotRules;
 import com.ebay.sojourner.common.util.UbiBotFilter;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
-@Disabled
 class SuspectAgentIndicatorTest {
 
+  SuspectAgentIndicator suspectAgentIndicator;
+
   AgentIpAttributeAccumulator agentIpAttributeAccumulator;
-  AgentAttributeAccumulator agentAttributeAccumulator;
   SessionCore sessionCore;
-  @Mock
-  UbiBotFilter mockBotFilter;
+  UbiBotFilter mockBotFilter = mock(UbiBotFilter.class);
+  AgentIpAttribute mockAgentIpAttribute = mock(AgentIpAttribute.class);
 
   @BeforeEach
   void setup() {
-    initMocks(this);
+    suspectAgentIndicator = new SuspectAgentIndicator(mockBotFilter);
     agentIpAttributeAccumulator = new AgentIpAttributeAccumulator();
-    agentAttributeAccumulator = new AgentAttributeAccumulator();
+    agentIpAttributeAccumulator.setAgentIpAttribute(mockAgentIpAttribute);
     sessionCore = new SessionCore();
   }
 
   @Test
-  void test_start_AgentIpAttributeAccumulator() throws Exception {
-    SuspectAgentIndicator<SessionCore, AgentIpAttributeAccumulator> suspectAgentIndicator =
-        new SuspectAgentIndicator<>(mockBotFilter);
+  void test_start() throws Exception {
+    doNothing().when(mockAgentIpAttribute).clear(BotRules.DECLARED_AGENT);
     suspectAgentIndicator.start(agentIpAttributeAccumulator);
+    verify(mockAgentIpAttribute, times(1)).clear(BotRules.DECLARED_AGENT);
   }
 
   @Test
-  void test_start_AgentAttributeAccumulator() throws Exception {
-    SuspectAgentIndicator<SessionCore, AgentAttributeAccumulator> suspectAgentIndicator =
-        new SuspectAgentIndicator<>(mockBotFilter);
-    suspectAgentIndicator.start(agentAttributeAccumulator);
-  }
-
-  @Test
-  void test_feed_UbiSession() throws Exception {
-    SuspectAgentIndicator<SessionCore, AgentIpAttributeAccumulator> suspectAgentIndicator =
-        new SuspectAgentIndicator<>(mockBotFilter);
+  void test_feed() throws Exception {
+    doNothing().when(mockAgentIpAttribute).feed(sessionCore, BotRules.DECLARED_AGENT);
     suspectAgentIndicator.feed(sessionCore, agentIpAttributeAccumulator);
+    verify(mockAgentIpAttribute, times(1)).feed(sessionCore, BotRules.DECLARED_AGENT);
   }
 
   @Test
-  void test_feed_AgentIpAttribute() throws Exception {
-    AgentIpAttribute agentIpAttribute = new AgentIpAttribute();
-    SuspectAgentIndicator<AgentIpAttribute, AgentIpAttributeAccumulator> suspectAgentIndicator =
-        new SuspectAgentIndicator<>(mockBotFilter);
-    suspectAgentIndicator.feed(agentIpAttribute, agentIpAttributeAccumulator);
-  }
-
-  @Test
-  void test_filter_botFilter_pass() throws Exception {
-    when(mockBotFilter.filter(sessionCore, 202)).thenReturn(true);
-    SuspectAgentIndicator<SessionCore, AgentIpAttributeAccumulator> suspectAgentIndicator =
-        new SuspectAgentIndicator<>(mockBotFilter);
+  void test_filter_botFilter_true() throws Exception {
+    when(mockBotFilter.filter(any(), any())).thenReturn(true);
     boolean result = suspectAgentIndicator.filter(sessionCore, agentIpAttributeAccumulator);
-    Assertions.assertThat(result).isFalse();
+    Assertions.assertThat(result).isTrue();
   }
 
   @Test
   void test_filter_botFilter_false() throws Exception {
-    when(mockBotFilter.filter(sessionCore, 202)).thenReturn(false);
-    SuspectAgentIndicator<SessionCore, AgentIpAttributeAccumulator> suspectAgentIndicator =
-        new SuspectAgentIndicator<>(mockBotFilter);
+    when(mockBotFilter.filter(any(), any())).thenReturn(false);
     sessionCore.setUserAgent(null);
     boolean result = suspectAgentIndicator.filter(sessionCore, agentIpAttributeAccumulator);
-    Assertions.assertThat(result).isFalse();
-  }
-
-  @Test
-  void test_filter_notUbiSession() throws Exception {
-    AgentIpAttribute agentIpAttribute = new AgentIpAttribute();
-    SuspectAgentIndicator<AgentIpAttribute, AgentAttributeAccumulator> suspectAgentIndicator =
-        new SuspectAgentIndicator<>(mockBotFilter);
-    boolean result = suspectAgentIndicator.filter(agentIpAttribute, agentAttributeAccumulator);
-    Assertions.assertThat(result).isFalse();
+    Assertions.assertThat(result).isTrue();
   }
 }

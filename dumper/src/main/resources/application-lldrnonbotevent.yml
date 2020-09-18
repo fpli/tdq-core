@@ -1,0 +1,23 @@
+kafka:
+  consumer:
+    data-center: LVS
+    topic:
+      - behavior.totalv2.sojevent-nonbot-lvs
+    group-id:
+      lvs: sojourner-total-dumper-lvs
+    bootstrap-servers:
+      lvs:
+        - rhs-ravvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
+        - rhs-ravvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
+        - rhs-ravvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
+        - rhs-ravvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
+        - rhs-ravvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
+
+flink:
+  app:
+    name: Sojourner LVS Non Bot Event HDFS Load Pipeline
+
+hdfs:
+  dump:
+    path: hdfs://hercules/sys/soj/ubd/events/type=nonbot
+    watermark-path: hdfs://hercules/sys/soj/ubd/watermark/events/type=nonbot
