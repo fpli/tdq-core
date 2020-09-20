@@ -8,7 +8,7 @@ import org.yaml.snakeyaml.Yaml;
 public class Rules {
 
   private static Map<String, String> rules =
-      new Yaml().loadAs(Rules.class.getResourceAsStream("/rules.yaml"), HashMap.class);
+      new Yaml().loadAs(Rules.class.getResourceAsStream("/icf-rules.yaml"), HashMap.class);
 
 
   public static final String ICF_RULE_1_STR = rules.get("ICF_RULE_1_STR");

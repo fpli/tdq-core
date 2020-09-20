@@ -1,8 +1,10 @@
 package com.ebay.sojourner.dsl.sql;
 
 import com.ebay.sojourner.common.model.rule.RuleDefinition;
+import com.google.common.collect.ImmutableCollection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import org.apache.calcite.adapter.enumerable.EnumerableConvention;
 import org.apache.calcite.adapter.enumerable.EnumerableInterpretable;
 import org.apache.calcite.adapter.enumerable.EnumerableRel;
@@ -44,14 +46,14 @@ public abstract class AbstractSQLRule<T, R, OUT> implements SQLRule<T, OUT> {
     // Add data source
     rootSchema.add(ROOT_SCHEMA, new ReflectiveSchema(dataSource));
 
-    // Add functions
-    Class clazz = UdfManager.class;
-    for (Map.Entry<String, ScalarFunction> entry : ScalarFunctionImpl.createAll(clazz).entries()) {
+    // Add udf
+    Class<UdfManager> udfManager = UdfManager.class;
+    ImmutableCollection<Entry<String, ScalarFunction>> entries =
+        ScalarFunctionImpl.createAll(udfManager).entries();
+    for (Map.Entry<String, ScalarFunction> entry : entries) {
       String name = entry.getKey();
       rootSchema.add(name, entry.getValue());
     }
-
-    rootSchema.add("square", ScalarFunctionImpl.create(UdfManager.SquareFunction.class, "eval"));
 
     // Create planner
     ConfigBuilder parserConfigBuilder = SqlParser.configBuilder().setCaseSensitive(false);

@@ -31,18 +31,4 @@ public class SQLSessionRuleTest {
     assertEquals(1, result);
   }
 
-  @Test
-  public void testUdf() throws Exception {
-    String sql = "SELECT square(viewCnt) FROM soj.idl_session";
-
-    SQLSessionRule rule = new SQLSessionRule(getRuleDef(sql));
-
-    UbiSession ubiSession = new UbiSession();
-    ubiSession.setViewCnt(2);
-
-    Integer result = rule.execute(ubiSession);
-
-    assertEquals(4, result);
-  }
-
 }
