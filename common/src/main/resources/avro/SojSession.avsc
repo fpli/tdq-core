@@ -575,13 +575,13 @@
           "doc": "map from rf"
         },
          {
-                  "name": "pageId",
-                  "type": [
-                    "null",
-                    "int"
-                  ],
-                  "doc": "map from p"
-                },
+          "name": "pageId",
+          "type": [
+            "null",
+            "int"
+          ],
+          "doc": "map from p"
+        },
     {
       "name": "buserId",
       "type": [

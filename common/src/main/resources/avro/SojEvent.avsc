@@ -495,27 +495,24 @@
       "doc": "dataClassification=Internal|isEncrypted=false|description=map from dd_osv"
     },
     {
-      "name": "applicationPayload",
-      "type": [
-        "null",
-        "string"
-      ]
-    },
-    {
-      "name": "rlogid",
-      "type": [
-        "null",
-        "string"
-      ],
-      "doc": "CAL request log id"
-    },
-    {
-      "name": "clientData",
-      "type": [
-        "null",
-        "string"
-      ],
-      "doc": "Includes ForwardFor, ContentLength, Script, Server, Encoding, TMachine, TStamp, TName, TStatus, TDuration, TPayload"
-    }
+        "name" : "applicationPayload",
+        "type" : {
+          "type" : "map",
+          "values" : "string"
+        }
+      }, {
+        "name" : "rlogid",
+        "type" : [ "null", "string" ],
+        "doc" : "CAL request log id",
+        "default" : null,
+        "avro.java.string" : "String"
+      }, {
+        "name" : "clientData",
+        "type" : {
+          "type" : "map",
+          "values" : "string"
+        },
+        "doc" : "Includes ForwardFor, ContentLength, Script, Server, Encoding, TMachine, TStamp, TName, TStatus, TDuration, TPayload"
+      }
   ]
 }

@@ -1,5 +1,6 @@
 package com.ebay.sojourner.flink.connector.kafka.schema;
 
+import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.connector.kafka.RheosAvroKafkaSerializer;
 import io.ebay.rheos.schema.avro.SchemaRegistryAwareAvroSerializerHelper;
 import io.jsonwebtoken.lang.Collections;
@@ -7,7 +8,6 @@ import java.util.List;
 import java.util.Properties;
 import javax.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.flink.streaming.connectors.kafka.KafkaSerializationSchema;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -16,11 +16,10 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 public class SojSerializationSchema<T> implements
     KafkaSerializationSchema<T> {
 
-  private List<String> keys = null;
-  private Schema schema;
-  private SchemaRegistryAwareAvroSerializerHelper<GenericRecord> serializerHelper;
+  private List<String> keys;
+  private transient SchemaRegistryAwareAvroSerializerHelper<GenericRecord> serializerHelper;
   private Properties producerConfig;
-  private RheosAvroKafkaSerializer<T> rheosAvroKafkaSerializer;
+  private transient RheosAvroKafkaSerializer<T> rheosAvroKafkaSerializer;
   private String subject;
   private String topic;
 
@@ -29,11 +28,8 @@ public class SojSerializationSchema<T> implements
     this.subject = subjetName;
     this.topic = topic;
     this.keys = Collections.arrayToList(keys);
-    serializerHelper = new SchemaRegistryAwareAvroSerializerHelper(
-        producerConfig, GenericRecord.class);
     this.producerConfig = producerConfig;
-    rheosAvroKafkaSerializer = new RheosAvroKafkaSerializer(this);
-    loadSchema(subjetName);
+
   }
 
   @Override
@@ -43,22 +39,22 @@ public class SojSerializationSchema<T> implements
   }
 
   private byte[] serializeKey(T element) {
-
+    init();
     return rheosAvroKafkaSerializer.encodeKey(element, keys);
   }
 
   private byte[] serializeValue(T element) {
+    init();
     return rheosAvroKafkaSerializer.encodeData(element);
   }
 
   private void loadSchema(String subjectName) {
+    init();
     serializerHelper.reload(subjectName);
-    Schema dataSchema = serializerHelper.getSchema(subjectName);
-    this.schema = dataSchema;
-    log.info("load schema.");
   }
 
   public SchemaRegistryAwareAvroSerializerHelper getSerializerHelper() {
+    init();
     return serializerHelper;
   }
 
@@ -66,7 +62,22 @@ public class SojSerializationSchema<T> implements
     return subject;
   }
 
-  public Properties getProducerConfig(){
+  public Properties getProducerConfig() {
     return producerConfig;
+  }
+
+  private void init() {
+    if (serializerHelper == null) {
+      serializerHelper = new SchemaRegistryAwareAvroSerializerHelper(
+          producerConfig, GenericRecord.class);
+      loadSchema(subject);
+    }
+    if (rheosAvroKafkaSerializer == null) {
+      rheosAvroKafkaSerializer =
+          new RheosAvroKafkaSerializer(serializerHelper.getSchema(subject),
+              serializerHelper.getSchemaId(subject), producerConfig.getProperty(
+              Property.PRODUCER_ID
+          ));
+    }
   }
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
@@ -103,5 +104,22 @@ public class PropertyUtils {
       sb.deleteCharAt(sb.length() - 1);
     }
     return sb.toString();
+  }
+
+  public static Map stringToMap(String sojStr) {
+    if (StringUtils.isEmpty(sojStr)) {
+      return null;
+    }
+    Map<String, String> sojMap = new HashMap<>();
+    String[] keyValues = sojStr.split("&");
+    if (keyValues != null && keyValues.length > 0) {
+      for (String keyValue : keyValues) {
+        String[] keyValuePair = keyValue.split("=");
+        if (keyValuePair != null && keyValuePair.length > 0) {
+          sojMap.put(keyValuePair[0], keyValuePair.length == 2 ? keyValuePair[1] : "");
+        }
+      }
+    }
+    return sojMap;
   }
 }

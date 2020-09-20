@@ -42,18 +42,19 @@ public class SojUtils {
         && !IntermediateLkp.getInstance().getScPageSet2().contains(pageId);
   }
 
-  public static SojEvent convertUbiEvent2SojEvent(UbiEvent ubiEvent){
+  public static SojEvent convertUbiEvent2SojEvent(UbiEvent ubiEvent) {
     SojEvent sojEvent = new SojEvent();
     sojEvent.setGuid(ubiEvent.getGuid());
     sojEvent.setAppId(ubiEvent.getAppId());
-    sojEvent.setApplicationPayload(ubiEvent.getApplicationPayload());
+    sojEvent.setApplicationPayload(PropertyUtils.stringToMap(ubiEvent.getApplicationPayload()));
     sojEvent.setAppVersion(ubiEvent.getAppVersion());
     sojEvent.setBotFlags(new ArrayList<>(ubiEvent.getBotFlags()));
     sojEvent.setClientData(
-        ubiEvent.getClientData() == null ? null : ubiEvent.getClientData().toString());
+        ubiEvent.getClientData() == null ? null :
+            PropertyUtils.stringToMap(ubiEvent.getClientData().toString()));
     sojEvent.setBrowserFamily(ubiEvent.getBrowserFamily());
     sojEvent.setBrowserVersion(ubiEvent.getBrowserVersion());
-    sojEvent.setClickId(ubiEvent.getClickId()==-1?null:String.valueOf(ubiEvent.getClickId()));
+    sojEvent.setClickId(ubiEvent.getClickId() == -1 ? null : String.valueOf(ubiEvent.getClickId()));
     sojEvent.setClientIP(ubiEvent.getClientIP());
     sojEvent.setCobrand(String.valueOf(ubiEvent.getCobrand()));
     sojEvent.setCookies(ubiEvent.getCookies());
@@ -74,12 +75,12 @@ public class SojUtils {
     sojEvent.setIcfBinary(ubiEvent.getIcfBinary());
     sojEvent.setIframe(ubiEvent.isIframe());
     sojEvent.setIngestTime(ubiEvent.getIngestTime());
-    sojEvent.setItemId(ubiEvent.getItemId()==null? null:String.valueOf(ubiEvent.getItemId()));
+    sojEvent.setItemId(ubiEvent.getItemId() == null ? null : String.valueOf(ubiEvent.getItemId()));
     sojEvent.setOldSessionSkey(ubiEvent.getOldSessionSkey());
     sojEvent.setOsFamily(ubiEvent.getOsFamily());
     sojEvent.setOsVersion(ubiEvent.getOsVersion());
     sojEvent.setPageFamily(ubiEvent.getPageFamily());
-    sojEvent.setPageId(ubiEvent.getPageId()==-1?null:ubiEvent.getPageId());
+    sojEvent.setPageId(ubiEvent.getPageId() == -1 ? null : ubiEvent.getPageId());
     sojEvent.setPageName(ubiEvent.getPageName());
     sojEvent.setAgentInfo(ubiEvent.getAgentInfo());
     sojEvent.setPartialValidPage(ubiEvent.isPartialValidPage());
@@ -99,7 +100,7 @@ public class SojUtils {
     sojEvent.setSojDataDt(ubiEvent.getSojDataDt());
     sojEvent.setSessionStartTime(ubiEvent.getSessionStartTime());
     sojEvent.setSid(ubiEvent.getSid());
-    sojEvent.setSiteId(ubiEvent.getSiteId()==-1?null:String.valueOf(ubiEvent.getSiteId()));
+    sojEvent.setSiteId(ubiEvent.getSiteId() == -1 ? null : String.valueOf(ubiEvent.getSiteId()));
     sojEvent.setSourceImprId(ubiEvent.getSourceImprId());
     sojEvent.setSqr(ubiEvent.getSqr());
     sojEvent.setStaticPageType(ubiEvent.getStaticPageType());
@@ -111,7 +112,7 @@ public class SojUtils {
     return sojEvent;
   }
 
-  public static SojSession convertUbiSession2SojSession(UbiSession ubiSession){
+  public static SojSession convertUbiSession2SojSession(UbiSession ubiSession) {
     SojSession sojSession = new SojSession();
     sojSession.setGuid(ubiSession.getGuid());
     sojSession.setSessionId(ubiSession.getSessionId());
@@ -147,7 +148,8 @@ public class SojUtils {
     sojSession.setAbsDuration(ubiSession.getAbsDuration());
     sojSession.setCobrand(ubiSession.getCobrand());
     sojSession.setAppId(ubiSession.getFirstAppId());
-    sojSession.setSiteId(ubiSession.getFirstSiteId()==Integer.MIN_VALUE?null:ubiSession.getFirstSiteId());
+    sojSession.setSiteId(
+        ubiSession.getFirstSiteId() == Integer.MIN_VALUE ? null : ubiSession.getFirstSiteId());
     sojSession.setCguid(ubiSession.getFirstCguid());
     sojSession.setFirstMappedUserId(ubiSession.getFirstMappedUserId());
     sojSession.setHomepageCnt(ubiSession.getHomepageCnt());
