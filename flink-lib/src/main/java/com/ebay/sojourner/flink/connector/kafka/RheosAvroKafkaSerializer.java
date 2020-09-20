@@ -1,6 +1,5 @@
 package com.ebay.sojourner.flink.connector.kafka;
 
-import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.connector.kafka.schema.SojSerializationSchema;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.ByteArrayOutputStream;
@@ -10,9 +9,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
-import org.apache.avro.generic.GenericData.Record;
 import org.apache.avro.generic.GenericRecord;
-import org.apache.avro.io.BinaryDecoder;
 import org.apache.avro.io.BinaryEncoder;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.commons.collections.CollectionUtils;
@@ -23,15 +20,18 @@ import org.apache.commons.lang3.StringUtils;
 public class RheosAvroKafkaSerializer<T> implements RheosKafkaSerializer<T> {
 
   private static final String FIELD_DELIM = ",";
-  private ThreadLocal<BinaryDecoder> decoderHolder = new ThreadLocal<BinaryDecoder>();
-  private ThreadLocal<BinaryEncoder> encoderHolder = new ThreadLocal<BinaryEncoder>();
+  private static int schemaId;
+  private static String producerId;
+  private transient BinaryEncoder encoder;
   private SchemaFactory schemaFactory;
   private SojSerializationSchema sojSerializationSchema;
 
   public RheosAvroKafkaSerializer(
-      SojSerializationSchema sojSerializationSchema) {
+      Schema schema, int schemaId, String producerId) {
     this.schemaFactory = new RheosSchemeFactory();
-    this.sojSerializationSchema = sojSerializationSchema;
+    this.schemaId = schemaId;
+    this.producerId = producerId;
+    schemaFactory.setSchema(schema);
   }
 
   @Override
@@ -65,54 +65,47 @@ public class RheosAvroKafkaSerializer<T> implements RheosKafkaSerializer<T> {
 
     GenericRecord genericRecord = constructREvent(data);
     ByteArrayOutputStream out = new ByteArrayOutputStream();
-    BinaryEncoder reusedEncoder = encoderHolder.get();
-    BinaryEncoder directBinaryEncoder = EncoderFactory
-        .get().directBinaryEncoder(out, reusedEncoder);
-    if (reusedEncoder == null) {
-      encoderHolder.set(directBinaryEncoder);
-    }
+    encoder = EncoderFactory.get().binaryEncoder(out, null);
+    byte[] serializedValue = null;
     try {
-      schemaFactory.getWriter()
-          .write((Record) genericRecord, directBinaryEncoder);
+      schemaFactory.getWriter().write(genericRecord, encoder);
+      encoder.flush();
+      serializedValue = out.toByteArray();
+      out.close();
     } catch (IOException e) {
-      throw new IllegalArgumentException(
-          "Can not encodeMessage the event to avro format: " + data, e);
+      e.printStackTrace();
     }
-    return out.toByteArray();
+    return serializedValue;
 
   }
 
   private RheosEvent constructREvent(T data) {
-    GenericRecord record = null;
-    if (org.apache.avro.specific.SpecificRecordBase.class.isAssignableFrom(data.getClass())) {
-      record = (GenericRecord) data;
-    } else {
-      record = constructGenericRecord(data);
-    }
+    GenericRecord record = constructGenericRecord(data);
     long createTimestamp = System.currentTimeMillis();
     RheosEvent rheosEvent = new RheosEvent(record);
     rheosEvent.setEventCreateTimestamp(createTimestamp);
     rheosEvent.setEventSentTimestamp(System.currentTimeMillis());
     rheosEvent
-        .setProducerId(
-            sojSerializationSchema.getProducerConfig().getProperty(Property.PRODUCER_ID));
-    rheosEvent.setSchemaId(sojSerializationSchema.getSerializerHelper()
-        .getSchemaId(sojSerializationSchema.getSubject()));
+        .setProducerId(this.producerId);
+    rheosEvent.setSchemaId(this.schemaId);
     return rheosEvent;
   }
 
   private GenericRecord constructGenericRecord(T data) {
-    Schema schema = schemaFactory.getSchema();
     GenericData.Record record = new GenericData.Record(schemaFactory.getSchema());
-    List<Schema.Field> fields = schema.getFields();
-    for (Schema.Field field : fields) {
+    Field[] columns = data.getClass().getDeclaredFields();
+    for (Field column : columns) {
       try {
-        Field column = data.getClass().getDeclaredField(field.name());
         column.setAccessible(true);
         Object value = column.get(data);
-        record.put(field.name(), value);
-      } catch (NoSuchFieldException | IllegalAccessException e) {
-        e.printStackTrace();
+        Object valueValid = schemaFactory.validateField(column.getName(), value);
+        if (valueValid == null) {
+          continue;
+        }
+        record.put(column.getName(), valueValid);
+
+      } catch (IllegalAccessException e) {
+        log.error("constructGenericRecord Error：", e);
       }
     }
     return record;

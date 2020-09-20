@@ -46,6 +46,7 @@ kafka:
     auto-offset-reset: latest
 
   producer:
+    producerId: sojourner-test
     stream: behavior.totalv2
     topic:
       session:

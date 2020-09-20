@@ -209,6 +209,7 @@ public class Property {
   public static final String RHEOS_SCHEMA_NAME_SESSION = "rheos.schema-name.session";
   public static final String RHEOS_SCHEMA_NAME_ATTRIBUTE = "rheos.schema-name.attribute";
 
+
   // flink checkpoint
   public static final String CHECKPOINT_DATA_DIR = "flink.app.checkpoint.data-dir";
   public static final String CHECKPOINT_INTERVAL_MS = "flink.app.checkpoint.interval-ms";

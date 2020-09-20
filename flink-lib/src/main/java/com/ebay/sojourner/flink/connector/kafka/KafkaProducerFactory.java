@@ -5,6 +5,7 @@ import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connector.kafka.schema.AvroKeyedSerializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.SojEventKeyedSerializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.SojSerializationSchema;
+import io.ebay.rheos.kafka.client.StreamConnectorConfig;
 import java.util.Optional;
 import java.util.Properties;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
@@ -75,7 +76,8 @@ public class KafkaProducerFactory {
         FlinkEnvUtils.getString(Property.COMPRESSION_TYPE));
     producerConfig.put(Property.PRODUCER_ID,
         FlinkEnvUtils.getString(Property.PRODUCER_ID));
-
+    producerConfig.put(StreamConnectorConfig.RHEOS_SERVICES_URLS, FlinkEnvUtils
+        .getString(Property.RHEOS_KAFKA_REGISTRY_URL));
     return producerConfig;
   }
 }
