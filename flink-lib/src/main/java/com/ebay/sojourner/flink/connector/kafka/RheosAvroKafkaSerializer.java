@@ -1,6 +1,5 @@
 package com.ebay.sojourner.flink.connector.kafka;
 
-import com.ebay.sojourner.flink.connector.kafka.schema.SojSerializationSchema;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -24,7 +23,6 @@ public class RheosAvroKafkaSerializer<T> implements RheosKafkaSerializer<T> {
   private String producerId;
   private transient BinaryEncoder encoder;
   private SchemaFactory schemaFactory;
-  private SojSerializationSchema sojSerializationSchema;
 
   public RheosAvroKafkaSerializer(
       Schema schema, int schemaId, String producerId) {
