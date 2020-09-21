@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class SojSession extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -7462152822714229924L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SojSession\",\"namespace\":\"com.ebay.sojourner.common.model\",\"fields\":[{\"name\":\"guid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession guid\"},{\"name\":\"sessionReferrer\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession sessionReferrer\"},{\"name\":\"siteFlags\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession siteFlags\"},{\"name\":\"attrFlags\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession attrFlags\"},{\"name\":\"version\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession version\"},{\"name\":\"botFlags\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession botFlags\"},{\"name\":\"ip\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession ip\"},{\"name\":\"userAgent\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession userAgent\"},{\"name\":\"findingFlags\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession findingFlags\"},{\"name\":\"startPageId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession startPageId\"},{\"name\":\"endPageId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession endPageId\"},{\"name\":\"botFlag\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession botFlag\"},{\"name\":\"durationSec\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession durationSec\"},{\"name\":\"firstUserId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession firstUserId\"},{\"name\":\"eventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession eventCnt\"},{\"name\":\"trafficSrcId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession trafficSrcId\"},{\"name\":\"viCoreCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession viCoreCnt\"},{\"name\":\"bidCoreCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession bidCoreCnt\"},{\"name\":\"binCoreCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession binCoreCnt\"},{\"name\":\"watchCoreCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession watchCoreCnt\"},{\"name\":\"homepageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession homepageCnt\"},{\"name\":\"firstSiteId\",\"type\":[\"null\",\"int\"],\"doc\":\"fron ubisession firstSiteId\"},{\"name\":\"firstCguid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"fron ubisession firstCguid\"},{\"name\":\"cobrand\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession cobrand\"},{\"name\":\"startTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession startTimestamp\"},{\"name\":\"firstMappedUserId\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession firstMappedUserId\"},{\"name\":\"firstAppId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession firstAppId\"},{\"name\":\"absDuration\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession absDuration\"},{\"name\":\"grCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession grCnt\"},{\"name\":\"gr1Cnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession gr1Cnt\"},{\"name\":\"myebayCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession myebayCnt\"},{\"name\":\"absStartTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession absStartTimestamp\"},{\"name\":\"signinPageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession signinPageCnt\"},{\"name\":\"nonIframeRdtEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession nonIframeRdtEventCnt\"},{\"name\":\"botFlagList\",\"type\":[\"null\",{\"type\":\"array\",\"items\":\"int\"}],\"default\":null},{\"name\":\"absEndTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession absEndTimestamp\"},{\"name\":\"endTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession endTimestamp\"},{\"name\":\"sojDataDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sojDataDt\"},{\"name\":\"sessionId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession sessionId\"},{\"name\":\"sessionSkey\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sessionSkey\"},{\"name\":\"sessionStartDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sessionStartDt\"},{\"name\":\"firstSessionStartDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession firstSessionStartDt\"},{\"name\":\"sessionEndDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sessionEndDt\"},{\"name\":\"absEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession absEventCnt\"},{\"name\":\"singleClickSessionFlag\",\"type\":[\"null\",\"boolean\"],\"doc\":\"from ubisession singleClickSessionFlag\"},{\"name\":\"asqCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession asqCnt\"},{\"name\":\"atcCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession atcCnt\"},{\"name\":\"atlCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession atlCnt\"},{\"name\":\"boCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession boCnt\"},{\"name\":\"srpCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession srpCnt\"},{\"name\":\"servEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession servEventCnt\"},{\"name\":\"searchViewPageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession searchViewPageCnt\"},{\"name\":\"browserFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession browserFamily\"},{\"name\":\"browserVersion\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession browserVersion\"},{\"name\":\"city\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession city\"},{\"name\":\"region\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession region\"},{\"name\":\"country\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession country\"},{\"name\":\"continent\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession continent\"},{\"name\":\"deviceClass\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession deviceClass\"},{\"name\":\"deviceFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession deviceFamily\"},{\"name\":\"endResourceId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession endResourceId\"},{\"name\":\"startResourceId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession startResourceId\"},{\"name\":\"isReturningVisitor\",\"type\":[\"null\",\"boolean\"],\"doc\":\"from ubisession isReturningVisitor\"},{\"name\":\"lineSpeed\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession lineSpeed\"},{\"name\":\"osFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession osFamily\"},{\"name\":\"osVersion\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession osVersion\"},{\"name\":\"pulsarEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession pulsarEventCnt\"},{\"name\":\"streamId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession streamId\"},{\"name\":\"buserId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession buserId\"},{\"name\":\"isOpen\",\"type\":[\"null\",\"boolean\"],\"doc\":\"to identify open or end\"}]}");
+  private static final long serialVersionUID = -2140311230495266098L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SojSession\",\"namespace\":\"com.ebay.sojourner.common.model\",\"fields\":[{\"name\":\"guid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession guid\"},{\"name\":\"sessionReferrer\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession sessionReferrer\"},{\"name\":\"siteFlags\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession siteFlags\"},{\"name\":\"attrFlags\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession attrFlags\"},{\"name\":\"version\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession version\"},{\"name\":\"botFlags\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession botFlags\"},{\"name\":\"ipv4\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession ip\"},{\"name\":\"userAgent\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession userAgent\"},{\"name\":\"findingFlags\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession findingFlags\"},{\"name\":\"startPageId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession startPageId\"},{\"name\":\"endPageId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession endPageId\"},{\"name\":\"botFlag\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession botFlag\"},{\"name\":\"durationSec\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession durationSec\"},{\"name\":\"userId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession firstUserId\"},{\"name\":\"eventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession eventCnt\"},{\"name\":\"trafficSrcId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession trafficSrcId\"},{\"name\":\"viCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession viCoreCnt\"},{\"name\":\"bidCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession bidCoreCnt\"},{\"name\":\"binCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession binCoreCnt\"},{\"name\":\"watchCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession watchCoreCnt\"},{\"name\":\"homepageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession homepageCnt\"},{\"name\":\"siteId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"fron ubisession firstSiteId\"},{\"name\":\"firstSiteId\",\"type\":[\"null\",\"int\"],\"doc\":\"fron ubisession firstSiteId\"},{\"name\":\"cguid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"fron ubisession firstCguid\"},{\"name\":\"cobrand\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession cobrand\"},{\"name\":\"startTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession startTimestamp\"},{\"name\":\"firstMappedUserId\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession firstMappedUserId\"},{\"name\":\"appId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession firstAppId\"},{\"name\":\"absDuration\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession absDuration\"},{\"name\":\"grCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession grCnt\"},{\"name\":\"gr1Cnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession gr1Cnt\"},{\"name\":\"myebayCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession myebayCnt\"},{\"name\":\"absStartTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession absStartTimestamp\"},{\"name\":\"signinPageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession signinPageCnt\"},{\"name\":\"nonIframeRdtEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession nonIframeRdtEventCnt\"},{\"name\":\"botFlagList\",\"type\":[\"null\",{\"type\":\"array\",\"items\":\"int\"}],\"default\":null},{\"name\":\"absEndTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession absEndTimestamp\"},{\"name\":\"endTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession endTimestamp\"},{\"name\":\"sojDataDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sojDataDt\"},{\"name\":\"sessionId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession sessionId\"},{\"name\":\"sessionSkey\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sessionSkey\"},{\"name\":\"sessionStartDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sessionStartDt\"},{\"name\":\"firstSessionStartDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession firstSessionStartDt\"},{\"name\":\"sessionEndDt\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sessionEndDt\"},{\"name\":\"absEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession absEventCnt\"},{\"name\":\"singleClickSessionFlag\",\"type\":[\"null\",\"boolean\"],\"doc\":\"from ubisession singleClickSessionFlag\"},{\"name\":\"asqCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession asqCnt\"},{\"name\":\"atcCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession atcCnt\"},{\"name\":\"atlCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession atlCnt\"},{\"name\":\"boCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession boCnt\"},{\"name\":\"srpCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession srpCnt\"},{\"name\":\"servEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession servEventCnt\"},{\"name\":\"searchViewPageCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession searchViewPageCnt\"},{\"name\":\"browserFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession browserFamily\"},{\"name\":\"browserVersion\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession browserVersion\"},{\"name\":\"city\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession city\"},{\"name\":\"region\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession region\"},{\"name\":\"country\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession country\"},{\"name\":\"continent\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession continent\"},{\"name\":\"deviceClass\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession deviceClass\"},{\"name\":\"deviceFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession deviceFamily\"},{\"name\":\"endResourceId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession endResourceId\"},{\"name\":\"startResourceId\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession startResourceId\"},{\"name\":\"isReturningVisitor\",\"type\":[\"null\",\"boolean\"],\"doc\":\"from ubisession isReturningVisitor\"},{\"name\":\"lineSpeed\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession lineSpeed\"},{\"name\":\"osFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession osFamily\"},{\"name\":\"osVersion\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession osVersion\"},{\"name\":\"pulsarEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession pulsarEventCnt\"},{\"name\":\"sojEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession sojEventCnt\"},{\"name\":\"streamId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession streamId\"},{\"name\":\"viewEventCnt\",\"type\":[\"null\",\"int\"],\"doc\":\"from ubisession viewct\"},{\"name\":\"referer\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"map from rf\"},{\"name\":\"pageId\",\"type\":[\"null\",\"int\"],\"doc\":\"map from p\"},{\"name\":\"buserId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"from ubisession buserId\"},{\"name\":\"oldsessionskey\",\"type\":[\"null\",\"long\"],\"doc\":\"from ubisession sessionSkey\"},{\"name\":\"isOpen\",\"type\":[\"null\",\"boolean\"],\"doc\":\"to identify open or end\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -64,7 +64,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
   /** from ubisession botFlags */
   @Deprecated public java.lang.Integer botFlags;
   /** from ubisession ip */
-  @Deprecated public java.lang.String ip;
+  @Deprecated public java.lang.String ipv4;
   /** from ubisession userAgent */
   @Deprecated public java.lang.String userAgent;
   /** from ubisession findingFlags */
@@ -78,25 +78,27 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
   /** from ubisession durationSec */
   @Deprecated public java.lang.Integer durationSec;
   /** from ubisession firstUserId */
-  @Deprecated public java.lang.String firstUserId;
+  @Deprecated public java.lang.String userId;
   /** from ubisession eventCnt */
   @Deprecated public java.lang.Integer eventCnt;
   /** from ubisession trafficSrcId */
   @Deprecated public java.lang.Integer trafficSrcId;
   /** from ubisession viCoreCnt */
-  @Deprecated public java.lang.Integer viCoreCnt;
+  @Deprecated public java.lang.Integer viCnt;
   /** from ubisession bidCoreCnt */
-  @Deprecated public java.lang.Integer bidCoreCnt;
+  @Deprecated public java.lang.Integer bidCnt;
   /** from ubisession binCoreCnt */
-  @Deprecated public java.lang.Integer binCoreCnt;
+  @Deprecated public java.lang.Integer binCnt;
   /** from ubisession watchCoreCnt */
-  @Deprecated public java.lang.Integer watchCoreCnt;
+  @Deprecated public java.lang.Integer watchCnt;
   /** from ubisession homepageCnt */
   @Deprecated public java.lang.Integer homepageCnt;
   /** fron ubisession firstSiteId */
+  @Deprecated public java.lang.String siteId;
+  /** fron ubisession firstSiteId */
   @Deprecated public java.lang.Integer firstSiteId;
   /** fron ubisession firstCguid */
-  @Deprecated public java.lang.String firstCguid;
+  @Deprecated public java.lang.String cguid;
   /** from ubisession cobrand */
   @Deprecated public java.lang.Integer cobrand;
   /** from ubisession startTimestamp */
@@ -104,9 +106,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
   /** from ubisession firstMappedUserId */
   @Deprecated public java.lang.Long firstMappedUserId;
   /** from ubisession firstAppId */
-  @Deprecated public java.lang.Integer firstAppId;
+  @Deprecated public java.lang.Integer appId;
   /** from ubisession absDuration */
-  @Deprecated public java.lang.Integer absDuration;
+  @Deprecated public java.lang.Long absDuration;
   /** from ubisession grCnt */
   @Deprecated public java.lang.Integer grCnt;
   /** from ubisession gr1Cnt */
@@ -184,10 +186,20 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
   @Deprecated public java.lang.String osVersion;
   /** from ubisession pulsarEventCnt */
   @Deprecated public java.lang.Integer pulsarEventCnt;
+  /** from ubisession sojEventCnt */
+  @Deprecated public java.lang.Integer sojEventCnt;
   /** from ubisession streamId */
   @Deprecated public java.lang.String streamId;
+  /** from ubisession viewct */
+  @Deprecated public java.lang.Integer viewEventCnt;
+  /** map from rf */
+  @Deprecated public java.lang.String referer;
+  /** map from p */
+  @Deprecated public java.lang.Integer pageId;
   /** from ubisession buserId */
   @Deprecated public java.lang.String buserId;
+  /** from ubisession sessionSkey */
+  @Deprecated public java.lang.Long oldsessionskey;
   /** to identify open or end */
   @Deprecated public java.lang.Boolean isOpen;
 
@@ -206,27 +218,28 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
    * @param attrFlags from ubisession attrFlags
    * @param version from ubisession version
    * @param botFlags from ubisession botFlags
-   * @param ip from ubisession ip
+   * @param ipv4 from ubisession ip
    * @param userAgent from ubisession userAgent
    * @param findingFlags from ubisession findingFlags
    * @param startPageId from ubisession startPageId
    * @param endPageId from ubisession endPageId
    * @param botFlag from ubisession botFlag
    * @param durationSec from ubisession durationSec
-   * @param firstUserId from ubisession firstUserId
+   * @param userId from ubisession firstUserId
    * @param eventCnt from ubisession eventCnt
    * @param trafficSrcId from ubisession trafficSrcId
-   * @param viCoreCnt from ubisession viCoreCnt
-   * @param bidCoreCnt from ubisession bidCoreCnt
-   * @param binCoreCnt from ubisession binCoreCnt
-   * @param watchCoreCnt from ubisession watchCoreCnt
+   * @param viCnt from ubisession viCoreCnt
+   * @param bidCnt from ubisession bidCoreCnt
+   * @param binCnt from ubisession binCoreCnt
+   * @param watchCnt from ubisession watchCoreCnt
    * @param homepageCnt from ubisession homepageCnt
+   * @param siteId fron ubisession firstSiteId
    * @param firstSiteId fron ubisession firstSiteId
-   * @param firstCguid fron ubisession firstCguid
+   * @param cguid fron ubisession firstCguid
    * @param cobrand from ubisession cobrand
    * @param startTimestamp from ubisession startTimestamp
    * @param firstMappedUserId from ubisession firstMappedUserId
-   * @param firstAppId from ubisession firstAppId
+   * @param appId from ubisession firstAppId
    * @param absDuration from ubisession absDuration
    * @param grCnt from ubisession grCnt
    * @param gr1Cnt from ubisession gr1Cnt
@@ -267,38 +280,44 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
    * @param osFamily from ubisession osFamily
    * @param osVersion from ubisession osVersion
    * @param pulsarEventCnt from ubisession pulsarEventCnt
+   * @param sojEventCnt from ubisession sojEventCnt
    * @param streamId from ubisession streamId
+   * @param viewEventCnt from ubisession viewct
+   * @param referer map from rf
+   * @param pageId map from p
    * @param buserId from ubisession buserId
+   * @param oldsessionskey from ubisession sessionSkey
    * @param isOpen to identify open or end
    */
-  public SojSession(java.lang.String guid, java.lang.String sessionReferrer, java.lang.Long siteFlags, java.lang.Integer attrFlags, java.lang.Integer version, java.lang.Integer botFlags, java.lang.String ip, java.lang.String userAgent, java.lang.Long findingFlags, java.lang.Integer startPageId, java.lang.Integer endPageId, java.lang.Integer botFlag, java.lang.Integer durationSec, java.lang.String firstUserId, java.lang.Integer eventCnt, java.lang.Integer trafficSrcId, java.lang.Integer viCoreCnt, java.lang.Integer bidCoreCnt, java.lang.Integer binCoreCnt, java.lang.Integer watchCoreCnt, java.lang.Integer homepageCnt, java.lang.Integer firstSiteId, java.lang.String firstCguid, java.lang.Integer cobrand, java.lang.Long startTimestamp, java.lang.Long firstMappedUserId, java.lang.Integer firstAppId, java.lang.Integer absDuration, java.lang.Integer grCnt, java.lang.Integer gr1Cnt, java.lang.Integer myebayCnt, java.lang.Long absStartTimestamp, java.lang.Integer signinPageCnt, java.lang.Integer nonIframeRdtEventCnt, java.util.List<java.lang.Integer> botFlagList, java.lang.Long absEndTimestamp, java.lang.Long endTimestamp, java.lang.Long sojDataDt, java.lang.String sessionId, java.lang.Long sessionSkey, java.lang.Long sessionStartDt, java.lang.Long firstSessionStartDt, java.lang.Long sessionEndDt, java.lang.Integer absEventCnt, java.lang.Boolean singleClickSessionFlag, java.lang.Integer asqCnt, java.lang.Integer atcCnt, java.lang.Integer atlCnt, java.lang.Integer boCnt, java.lang.Integer srpCnt, java.lang.Integer servEventCnt, java.lang.Integer searchViewPageCnt, java.lang.String browserFamily, java.lang.String browserVersion, java.lang.String city, java.lang.String region, java.lang.String country, java.lang.String continent, java.lang.String deviceClass, java.lang.String deviceFamily, java.lang.Integer endResourceId, java.lang.Integer startResourceId, java.lang.Boolean isReturningVisitor, java.lang.String lineSpeed, java.lang.String osFamily, java.lang.String osVersion, java.lang.Integer pulsarEventCnt, java.lang.String streamId, java.lang.String buserId, java.lang.Boolean isOpen) {
+  public SojSession(java.lang.String guid, java.lang.String sessionReferrer, java.lang.Long siteFlags, java.lang.Integer attrFlags, java.lang.Integer version, java.lang.Integer botFlags, java.lang.String ipv4, java.lang.String userAgent, java.lang.Long findingFlags, java.lang.Integer startPageId, java.lang.Integer endPageId, java.lang.Integer botFlag, java.lang.Integer durationSec, java.lang.String userId, java.lang.Integer eventCnt, java.lang.Integer trafficSrcId, java.lang.Integer viCnt, java.lang.Integer bidCnt, java.lang.Integer binCnt, java.lang.Integer watchCnt, java.lang.Integer homepageCnt, java.lang.String siteId, java.lang.Integer firstSiteId, java.lang.String cguid, java.lang.Integer cobrand, java.lang.Long startTimestamp, java.lang.Long firstMappedUserId, java.lang.Integer appId, java.lang.Long absDuration, java.lang.Integer grCnt, java.lang.Integer gr1Cnt, java.lang.Integer myebayCnt, java.lang.Long absStartTimestamp, java.lang.Integer signinPageCnt, java.lang.Integer nonIframeRdtEventCnt, java.util.List<java.lang.Integer> botFlagList, java.lang.Long absEndTimestamp, java.lang.Long endTimestamp, java.lang.Long sojDataDt, java.lang.String sessionId, java.lang.Long sessionSkey, java.lang.Long sessionStartDt, java.lang.Long firstSessionStartDt, java.lang.Long sessionEndDt, java.lang.Integer absEventCnt, java.lang.Boolean singleClickSessionFlag, java.lang.Integer asqCnt, java.lang.Integer atcCnt, java.lang.Integer atlCnt, java.lang.Integer boCnt, java.lang.Integer srpCnt, java.lang.Integer servEventCnt, java.lang.Integer searchViewPageCnt, java.lang.String browserFamily, java.lang.String browserVersion, java.lang.String city, java.lang.String region, java.lang.String country, java.lang.String continent, java.lang.String deviceClass, java.lang.String deviceFamily, java.lang.Integer endResourceId, java.lang.Integer startResourceId, java.lang.Boolean isReturningVisitor, java.lang.String lineSpeed, java.lang.String osFamily, java.lang.String osVersion, java.lang.Integer pulsarEventCnt, java.lang.Integer sojEventCnt, java.lang.String streamId, java.lang.Integer viewEventCnt, java.lang.String referer, java.lang.Integer pageId, java.lang.String buserId, java.lang.Long oldsessionskey, java.lang.Boolean isOpen) {
     this.guid = guid;
     this.sessionReferrer = sessionReferrer;
     this.siteFlags = siteFlags;
     this.attrFlags = attrFlags;
     this.version = version;
     this.botFlags = botFlags;
-    this.ip = ip;
+    this.ipv4 = ipv4;
     this.userAgent = userAgent;
     this.findingFlags = findingFlags;
     this.startPageId = startPageId;
     this.endPageId = endPageId;
     this.botFlag = botFlag;
     this.durationSec = durationSec;
-    this.firstUserId = firstUserId;
+    this.userId = userId;
     this.eventCnt = eventCnt;
     this.trafficSrcId = trafficSrcId;
-    this.viCoreCnt = viCoreCnt;
-    this.bidCoreCnt = bidCoreCnt;
-    this.binCoreCnt = binCoreCnt;
-    this.watchCoreCnt = watchCoreCnt;
+    this.viCnt = viCnt;
+    this.bidCnt = bidCnt;
+    this.binCnt = binCnt;
+    this.watchCnt = watchCnt;
     this.homepageCnt = homepageCnt;
+    this.siteId = siteId;
     this.firstSiteId = firstSiteId;
-    this.firstCguid = firstCguid;
+    this.cguid = cguid;
     this.cobrand = cobrand;
     this.startTimestamp = startTimestamp;
     this.firstMappedUserId = firstMappedUserId;
-    this.firstAppId = firstAppId;
+    this.appId = appId;
     this.absDuration = absDuration;
     this.grCnt = grCnt;
     this.gr1Cnt = gr1Cnt;
@@ -339,8 +358,13 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
     this.osFamily = osFamily;
     this.osVersion = osVersion;
     this.pulsarEventCnt = pulsarEventCnt;
+    this.sojEventCnt = sojEventCnt;
     this.streamId = streamId;
+    this.viewEventCnt = viewEventCnt;
+    this.referer = referer;
+    this.pageId = pageId;
     this.buserId = buserId;
+    this.oldsessionskey = oldsessionskey;
     this.isOpen = isOpen;
   }
 
@@ -354,70 +378,76 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
     case 3: return attrFlags;
     case 4: return version;
     case 5: return botFlags;
-    case 6: return ip;
+    case 6: return ipv4;
     case 7: return userAgent;
     case 8: return findingFlags;
     case 9: return startPageId;
     case 10: return endPageId;
     case 11: return botFlag;
     case 12: return durationSec;
-    case 13: return firstUserId;
+    case 13: return userId;
     case 14: return eventCnt;
     case 15: return trafficSrcId;
-    case 16: return viCoreCnt;
-    case 17: return bidCoreCnt;
-    case 18: return binCoreCnt;
-    case 19: return watchCoreCnt;
+    case 16: return viCnt;
+    case 17: return bidCnt;
+    case 18: return binCnt;
+    case 19: return watchCnt;
     case 20: return homepageCnt;
-    case 21: return firstSiteId;
-    case 22: return firstCguid;
-    case 23: return cobrand;
-    case 24: return startTimestamp;
-    case 25: return firstMappedUserId;
-    case 26: return firstAppId;
-    case 27: return absDuration;
-    case 28: return grCnt;
-    case 29: return gr1Cnt;
-    case 30: return myebayCnt;
-    case 31: return absStartTimestamp;
-    case 32: return signinPageCnt;
-    case 33: return nonIframeRdtEventCnt;
-    case 34: return botFlagList;
-    case 35: return absEndTimestamp;
-    case 36: return endTimestamp;
-    case 37: return sojDataDt;
-    case 38: return sessionId;
-    case 39: return sessionSkey;
-    case 40: return sessionStartDt;
-    case 41: return firstSessionStartDt;
-    case 42: return sessionEndDt;
-    case 43: return absEventCnt;
-    case 44: return singleClickSessionFlag;
-    case 45: return asqCnt;
-    case 46: return atcCnt;
-    case 47: return atlCnt;
-    case 48: return boCnt;
-    case 49: return srpCnt;
-    case 50: return servEventCnt;
-    case 51: return searchViewPageCnt;
-    case 52: return browserFamily;
-    case 53: return browserVersion;
-    case 54: return city;
-    case 55: return region;
-    case 56: return country;
-    case 57: return continent;
-    case 58: return deviceClass;
-    case 59: return deviceFamily;
-    case 60: return endResourceId;
-    case 61: return startResourceId;
-    case 62: return isReturningVisitor;
-    case 63: return lineSpeed;
-    case 64: return osFamily;
-    case 65: return osVersion;
-    case 66: return pulsarEventCnt;
-    case 67: return streamId;
-    case 68: return buserId;
-    case 69: return isOpen;
+    case 21: return siteId;
+    case 22: return firstSiteId;
+    case 23: return cguid;
+    case 24: return cobrand;
+    case 25: return startTimestamp;
+    case 26: return firstMappedUserId;
+    case 27: return appId;
+    case 28: return absDuration;
+    case 29: return grCnt;
+    case 30: return gr1Cnt;
+    case 31: return myebayCnt;
+    case 32: return absStartTimestamp;
+    case 33: return signinPageCnt;
+    case 34: return nonIframeRdtEventCnt;
+    case 35: return botFlagList;
+    case 36: return absEndTimestamp;
+    case 37: return endTimestamp;
+    case 38: return sojDataDt;
+    case 39: return sessionId;
+    case 40: return sessionSkey;
+    case 41: return sessionStartDt;
+    case 42: return firstSessionStartDt;
+    case 43: return sessionEndDt;
+    case 44: return absEventCnt;
+    case 45: return singleClickSessionFlag;
+    case 46: return asqCnt;
+    case 47: return atcCnt;
+    case 48: return atlCnt;
+    case 49: return boCnt;
+    case 50: return srpCnt;
+    case 51: return servEventCnt;
+    case 52: return searchViewPageCnt;
+    case 53: return browserFamily;
+    case 54: return browserVersion;
+    case 55: return city;
+    case 56: return region;
+    case 57: return country;
+    case 58: return continent;
+    case 59: return deviceClass;
+    case 60: return deviceFamily;
+    case 61: return endResourceId;
+    case 62: return startResourceId;
+    case 63: return isReturningVisitor;
+    case 64: return lineSpeed;
+    case 65: return osFamily;
+    case 66: return osVersion;
+    case 67: return pulsarEventCnt;
+    case 68: return sojEventCnt;
+    case 69: return streamId;
+    case 70: return viewEventCnt;
+    case 71: return referer;
+    case 72: return pageId;
+    case 73: return buserId;
+    case 74: return oldsessionskey;
+    case 75: return isOpen;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -432,70 +462,76 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
     case 3: attrFlags = (java.lang.Integer)value$; break;
     case 4: version = (java.lang.Integer)value$; break;
     case 5: botFlags = (java.lang.Integer)value$; break;
-    case 6: ip = (java.lang.String)value$; break;
+    case 6: ipv4 = (java.lang.String)value$; break;
     case 7: userAgent = (java.lang.String)value$; break;
     case 8: findingFlags = (java.lang.Long)value$; break;
     case 9: startPageId = (java.lang.Integer)value$; break;
     case 10: endPageId = (java.lang.Integer)value$; break;
     case 11: botFlag = (java.lang.Integer)value$; break;
     case 12: durationSec = (java.lang.Integer)value$; break;
-    case 13: firstUserId = (java.lang.String)value$; break;
+    case 13: userId = (java.lang.String)value$; break;
     case 14: eventCnt = (java.lang.Integer)value$; break;
     case 15: trafficSrcId = (java.lang.Integer)value$; break;
-    case 16: viCoreCnt = (java.lang.Integer)value$; break;
-    case 17: bidCoreCnt = (java.lang.Integer)value$; break;
-    case 18: binCoreCnt = (java.lang.Integer)value$; break;
-    case 19: watchCoreCnt = (java.lang.Integer)value$; break;
+    case 16: viCnt = (java.lang.Integer)value$; break;
+    case 17: bidCnt = (java.lang.Integer)value$; break;
+    case 18: binCnt = (java.lang.Integer)value$; break;
+    case 19: watchCnt = (java.lang.Integer)value$; break;
     case 20: homepageCnt = (java.lang.Integer)value$; break;
-    case 21: firstSiteId = (java.lang.Integer)value$; break;
-    case 22: firstCguid = (java.lang.String)value$; break;
-    case 23: cobrand = (java.lang.Integer)value$; break;
-    case 24: startTimestamp = (java.lang.Long)value$; break;
-    case 25: firstMappedUserId = (java.lang.Long)value$; break;
-    case 26: firstAppId = (java.lang.Integer)value$; break;
-    case 27: absDuration = (java.lang.Integer)value$; break;
-    case 28: grCnt = (java.lang.Integer)value$; break;
-    case 29: gr1Cnt = (java.lang.Integer)value$; break;
-    case 30: myebayCnt = (java.lang.Integer)value$; break;
-    case 31: absStartTimestamp = (java.lang.Long)value$; break;
-    case 32: signinPageCnt = (java.lang.Integer)value$; break;
-    case 33: nonIframeRdtEventCnt = (java.lang.Integer)value$; break;
-    case 34: botFlagList = (java.util.List<java.lang.Integer>)value$; break;
-    case 35: absEndTimestamp = (java.lang.Long)value$; break;
-    case 36: endTimestamp = (java.lang.Long)value$; break;
-    case 37: sojDataDt = (java.lang.Long)value$; break;
-    case 38: sessionId = (java.lang.String)value$; break;
-    case 39: sessionSkey = (java.lang.Long)value$; break;
-    case 40: sessionStartDt = (java.lang.Long)value$; break;
-    case 41: firstSessionStartDt = (java.lang.Long)value$; break;
-    case 42: sessionEndDt = (java.lang.Long)value$; break;
-    case 43: absEventCnt = (java.lang.Integer)value$; break;
-    case 44: singleClickSessionFlag = (java.lang.Boolean)value$; break;
-    case 45: asqCnt = (java.lang.Integer)value$; break;
-    case 46: atcCnt = (java.lang.Integer)value$; break;
-    case 47: atlCnt = (java.lang.Integer)value$; break;
-    case 48: boCnt = (java.lang.Integer)value$; break;
-    case 49: srpCnt = (java.lang.Integer)value$; break;
-    case 50: servEventCnt = (java.lang.Integer)value$; break;
-    case 51: searchViewPageCnt = (java.lang.Integer)value$; break;
-    case 52: browserFamily = (java.lang.String)value$; break;
-    case 53: browserVersion = (java.lang.String)value$; break;
-    case 54: city = (java.lang.String)value$; break;
-    case 55: region = (java.lang.String)value$; break;
-    case 56: country = (java.lang.String)value$; break;
-    case 57: continent = (java.lang.String)value$; break;
-    case 58: deviceClass = (java.lang.String)value$; break;
-    case 59: deviceFamily = (java.lang.String)value$; break;
-    case 60: endResourceId = (java.lang.Integer)value$; break;
-    case 61: startResourceId = (java.lang.Integer)value$; break;
-    case 62: isReturningVisitor = (java.lang.Boolean)value$; break;
-    case 63: lineSpeed = (java.lang.String)value$; break;
-    case 64: osFamily = (java.lang.String)value$; break;
-    case 65: osVersion = (java.lang.String)value$; break;
-    case 66: pulsarEventCnt = (java.lang.Integer)value$; break;
-    case 67: streamId = (java.lang.String)value$; break;
-    case 68: buserId = (java.lang.String)value$; break;
-    case 69: isOpen = (java.lang.Boolean)value$; break;
+    case 21: siteId = (java.lang.String)value$; break;
+    case 22: firstSiteId = (java.lang.Integer)value$; break;
+    case 23: cguid = (java.lang.String)value$; break;
+    case 24: cobrand = (java.lang.Integer)value$; break;
+    case 25: startTimestamp = (java.lang.Long)value$; break;
+    case 26: firstMappedUserId = (java.lang.Long)value$; break;
+    case 27: appId = (java.lang.Integer)value$; break;
+    case 28: absDuration = (java.lang.Long)value$; break;
+    case 29: grCnt = (java.lang.Integer)value$; break;
+    case 30: gr1Cnt = (java.lang.Integer)value$; break;
+    case 31: myebayCnt = (java.lang.Integer)value$; break;
+    case 32: absStartTimestamp = (java.lang.Long)value$; break;
+    case 33: signinPageCnt = (java.lang.Integer)value$; break;
+    case 34: nonIframeRdtEventCnt = (java.lang.Integer)value$; break;
+    case 35: botFlagList = (java.util.List<java.lang.Integer>)value$; break;
+    case 36: absEndTimestamp = (java.lang.Long)value$; break;
+    case 37: endTimestamp = (java.lang.Long)value$; break;
+    case 38: sojDataDt = (java.lang.Long)value$; break;
+    case 39: sessionId = (java.lang.String)value$; break;
+    case 40: sessionSkey = (java.lang.Long)value$; break;
+    case 41: sessionStartDt = (java.lang.Long)value$; break;
+    case 42: firstSessionStartDt = (java.lang.Long)value$; break;
+    case 43: sessionEndDt = (java.lang.Long)value$; break;
+    case 44: absEventCnt = (java.lang.Integer)value$; break;
+    case 45: singleClickSessionFlag = (java.lang.Boolean)value$; break;
+    case 46: asqCnt = (java.lang.Integer)value$; break;
+    case 47: atcCnt = (java.lang.Integer)value$; break;
+    case 48: atlCnt = (java.lang.Integer)value$; break;
+    case 49: boCnt = (java.lang.Integer)value$; break;
+    case 50: srpCnt = (java.lang.Integer)value$; break;
+    case 51: servEventCnt = (java.lang.Integer)value$; break;
+    case 52: searchViewPageCnt = (java.lang.Integer)value$; break;
+    case 53: browserFamily = (java.lang.String)value$; break;
+    case 54: browserVersion = (java.lang.String)value$; break;
+    case 55: city = (java.lang.String)value$; break;
+    case 56: region = (java.lang.String)value$; break;
+    case 57: country = (java.lang.String)value$; break;
+    case 58: continent = (java.lang.String)value$; break;
+    case 59: deviceClass = (java.lang.String)value$; break;
+    case 60: deviceFamily = (java.lang.String)value$; break;
+    case 61: endResourceId = (java.lang.Integer)value$; break;
+    case 62: startResourceId = (java.lang.Integer)value$; break;
+    case 63: isReturningVisitor = (java.lang.Boolean)value$; break;
+    case 64: lineSpeed = (java.lang.String)value$; break;
+    case 65: osFamily = (java.lang.String)value$; break;
+    case 66: osVersion = (java.lang.String)value$; break;
+    case 67: pulsarEventCnt = (java.lang.Integer)value$; break;
+    case 68: sojEventCnt = (java.lang.Integer)value$; break;
+    case 69: streamId = (java.lang.String)value$; break;
+    case 70: viewEventCnt = (java.lang.Integer)value$; break;
+    case 71: referer = (java.lang.String)value$; break;
+    case 72: pageId = (java.lang.Integer)value$; break;
+    case 73: buserId = (java.lang.String)value$; break;
+    case 74: oldsessionskey = (java.lang.Long)value$; break;
+    case 75: isOpen = (java.lang.Boolean)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -603,20 +639,20 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
   }
 
   /**
-   * Gets the value of the 'ip' field.
+   * Gets the value of the 'ipv4' field.
    * @return from ubisession ip
    */
-  public java.lang.String getIp() {
-    return ip;
+  public java.lang.String getIpv4() {
+    return ipv4;
   }
 
   /**
-   * Sets the value of the 'ip' field.
+   * Sets the value of the 'ipv4' field.
    * from ubisession ip
    * @param value the value to set.
    */
-  public void setIp(java.lang.String value) {
-    this.ip = value;
+  public void setIpv4(java.lang.String value) {
+    this.ipv4 = value;
   }
 
   /**
@@ -722,20 +758,20 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
   }
 
   /**
-   * Gets the value of the 'firstUserId' field.
+   * Gets the value of the 'userId' field.
    * @return from ubisession firstUserId
    */
-  public java.lang.String getFirstUserId() {
-    return firstUserId;
+  public java.lang.String getUserId() {
+    return userId;
   }
 
   /**
-   * Sets the value of the 'firstUserId' field.
+   * Sets the value of the 'userId' field.
    * from ubisession firstUserId
    * @param value the value to set.
    */
-  public void setFirstUserId(java.lang.String value) {
-    this.firstUserId = value;
+  public void setUserId(java.lang.String value) {
+    this.userId = value;
   }
 
   /**
@@ -773,71 +809,71 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
   }
 
   /**
-   * Gets the value of the 'viCoreCnt' field.
+   * Gets the value of the 'viCnt' field.
    * @return from ubisession viCoreCnt
    */
-  public java.lang.Integer getViCoreCnt() {
-    return viCoreCnt;
+  public java.lang.Integer getViCnt() {
+    return viCnt;
   }
 
   /**
-   * Sets the value of the 'viCoreCnt' field.
+   * Sets the value of the 'viCnt' field.
    * from ubisession viCoreCnt
    * @param value the value to set.
    */
-  public void setViCoreCnt(java.lang.Integer value) {
-    this.viCoreCnt = value;
+  public void setViCnt(java.lang.Integer value) {
+    this.viCnt = value;
   }
 
   /**
-   * Gets the value of the 'bidCoreCnt' field.
+   * Gets the value of the 'bidCnt' field.
    * @return from ubisession bidCoreCnt
    */
-  public java.lang.Integer getBidCoreCnt() {
-    return bidCoreCnt;
+  public java.lang.Integer getBidCnt() {
+    return bidCnt;
   }
 
   /**
-   * Sets the value of the 'bidCoreCnt' field.
+   * Sets the value of the 'bidCnt' field.
    * from ubisession bidCoreCnt
    * @param value the value to set.
    */
-  public void setBidCoreCnt(java.lang.Integer value) {
-    this.bidCoreCnt = value;
+  public void setBidCnt(java.lang.Integer value) {
+    this.bidCnt = value;
   }
 
   /**
-   * Gets the value of the 'binCoreCnt' field.
+   * Gets the value of the 'binCnt' field.
    * @return from ubisession binCoreCnt
    */
-  public java.lang.Integer getBinCoreCnt() {
-    return binCoreCnt;
+  public java.lang.Integer getBinCnt() {
+    return binCnt;
   }
 
   /**
-   * Sets the value of the 'binCoreCnt' field.
+   * Sets the value of the 'binCnt' field.
    * from ubisession binCoreCnt
    * @param value the value to set.
    */
-  public void setBinCoreCnt(java.lang.Integer value) {
-    this.binCoreCnt = value;
+  public void setBinCnt(java.lang.Integer value) {
+    this.binCnt = value;
   }
 
   /**
-   * Gets the value of the 'watchCoreCnt' field.
+   * Gets the value of the 'watchCnt' field.
    * @return from ubisession watchCoreCnt
    */
-  public java.lang.Integer getWatchCoreCnt() {
-    return watchCoreCnt;
+  public java.lang.Integer getWatchCnt() {
+    return watchCnt;
   }
 
   /**
-   * Sets the value of the 'watchCoreCnt' field.
+   * Sets the value of the 'watchCnt' field.
    * from ubisession watchCoreCnt
    * @param value the value to set.
    */
-  public void setWatchCoreCnt(java.lang.Integer value) {
-    this.watchCoreCnt = value;
+  public void setWatchCnt(java.lang.Integer value) {
+    this.watchCnt = value;
   }
 
   /**
@@ -858,6 +894,23 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
   }
 
   /**
+   * Gets the value of the 'siteId' field.
+   * @return fron ubisession firstSiteId
+   */
+  public java.lang.String getSiteId() {
+    return siteId;
+  }
+
+  /**
+   * Sets the value of the 'siteId' field.
+   * fron ubisession firstSiteId
+   * @param value the value to set.
+   */
+  public void setSiteId(java.lang.String value) {
+    this.siteId = value;
+  }
+
+  /**
    * Gets the value of the 'firstSiteId' field.
    * @return fron ubisession firstSiteId
    */
@@ -875,20 +928,20 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
   }
 
   /**
-   * Gets the value of the 'firstCguid' field.
+   * Gets the value of the 'cguid' field.
    * @return fron ubisession firstCguid
    */
-  public java.lang.String getFirstCguid() {
-    return firstCguid;
+  public java.lang.String getCguid() {
+    return cguid;
   }
 
   /**
-   * Sets the value of the 'firstCguid' field.
+   * Sets the value of the 'cguid' field.
    * fron ubisession firstCguid
    * @param value the value to set.
    */
-  public void setFirstCguid(java.lang.String value) {
-    this.firstCguid = value;
+  public void setCguid(java.lang.String value) {
+    this.cguid = value;
   }
 
   /**
@@ -943,27 +996,27 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
   }
 
   /**
-   * Gets the value of the 'firstAppId' field.
+   * Gets the value of the 'appId' field.
    * @return from ubisession firstAppId
    */
-  public java.lang.Integer getFirstAppId() {
-    return firstAppId;
+  public java.lang.Integer getAppId() {
+    return appId;
   }
 
   /**
-   * Sets the value of the 'firstAppId' field.
+   * Sets the value of the 'appId' field.
    * from ubisession firstAppId
    * @param value the value to set.
    */
-  public void setFirstAppId(java.lang.Integer value) {
-    this.firstAppId = value;
+  public void setAppId(java.lang.Integer value) {
+    this.appId = value;
   }
 
   /**
    * Gets the value of the 'absDuration' field.
    * @return from ubisession absDuration
    */
-  public java.lang.Integer getAbsDuration() {
+  public java.lang.Long getAbsDuration() {
     return absDuration;
   }
 
@@ -972,7 +1025,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
    * from ubisession absDuration
    * @param value the value to set.
    */
-  public void setAbsDuration(java.lang.Integer value) {
+  public void setAbsDuration(java.lang.Long value) {
     this.absDuration = value;
   }
 
@@ -1639,6 +1692,23 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
   }
 
   /**
+   * Gets the value of the 'sojEventCnt' field.
+   * @return from ubisession sojEventCnt
+   */
+  public java.lang.Integer getSojEventCnt() {
+    return sojEventCnt;
+  }
+
+  /**
+   * Sets the value of the 'sojEventCnt' field.
+   * from ubisession sojEventCnt
+   * @param value the value to set.
+   */
+  public void setSojEventCnt(java.lang.Integer value) {
+    this.sojEventCnt = value;
+  }
+
+  /**
    * Gets the value of the 'streamId' field.
    * @return from ubisession streamId
    */
@@ -1656,6 +1726,57 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
   }
 
   /**
+   * Gets the value of the 'viewEventCnt' field.
+   * @return from ubisession viewct
+   */
+  public java.lang.Integer getViewEventCnt() {
+    return viewEventCnt;
+  }
+
+  /**
+   * Sets the value of the 'viewEventCnt' field.
+   * from ubisession viewct
+   * @param value the value to set.
+   */
+  public void setViewEventCnt(java.lang.Integer value) {
+    this.viewEventCnt = value;
+  }
+
+  /**
+   * Gets the value of the 'referer' field.
+   * @return map from rf
+   */
+  public java.lang.String getReferer() {
+    return referer;
+  }
+
+  /**
+   * Sets the value of the 'referer' field.
+   * map from rf
+   * @param value the value to set.
+   */
+  public void setReferer(java.lang.String value) {
+    this.referer = value;
+  }
+
+  /**
+   * Gets the value of the 'pageId' field.
+   * @return map from p
+   */
+  public java.lang.Integer getPageId() {
+    return pageId;
+  }
+
+  /**
+   * Sets the value of the 'pageId' field.
+   * map from p
+   * @param value the value to set.
+   */
+  public void setPageId(java.lang.Integer value) {
+    this.pageId = value;
+  }
+
+  /**
    * Gets the value of the 'buserId' field.
    * @return from ubisession buserId
    */
@@ -1670,6 +1791,23 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
    */
   public void setBuserId(java.lang.String value) {
     this.buserId = value;
+  }
+
+  /**
+   * Gets the value of the 'oldsessionskey' field.
+   * @return from ubisession sessionSkey
+   */
+  public java.lang.Long getOldsessionskey() {
+    return oldsessionskey;
+  }
+
+  /**
+   * Sets the value of the 'oldsessionskey' field.
+   * from ubisession sessionSkey
+   * @param value the value to set.
+   */
+  public void setOldsessionskey(java.lang.Long value) {
+    this.oldsessionskey = value;
   }
 
   /**
@@ -1734,7 +1872,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
     /** from ubisession botFlags */
     private java.lang.Integer botFlags;
     /** from ubisession ip */
-    private java.lang.String ip;
+    private java.lang.String ipv4;
     /** from ubisession userAgent */
     private java.lang.String userAgent;
     /** from ubisession findingFlags */
@@ -1748,25 +1886,27 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
     /** from ubisession durationSec */
     private java.lang.Integer durationSec;
     /** from ubisession firstUserId */
-    private java.lang.String firstUserId;
+    private java.lang.String userId;
     /** from ubisession eventCnt */
     private java.lang.Integer eventCnt;
     /** from ubisession trafficSrcId */
     private java.lang.Integer trafficSrcId;
     /** from ubisession viCoreCnt */
-    private java.lang.Integer viCoreCnt;
+    private java.lang.Integer viCnt;
     /** from ubisession bidCoreCnt */
-    private java.lang.Integer bidCoreCnt;
+    private java.lang.Integer bidCnt;
     /** from ubisession binCoreCnt */
-    private java.lang.Integer binCoreCnt;
+    private java.lang.Integer binCnt;
     /** from ubisession watchCoreCnt */
-    private java.lang.Integer watchCoreCnt;
+    private java.lang.Integer watchCnt;
     /** from ubisession homepageCnt */
     private java.lang.Integer homepageCnt;
     /** fron ubisession firstSiteId */
+    private java.lang.String siteId;
+    /** fron ubisession firstSiteId */
     private java.lang.Integer firstSiteId;
     /** fron ubisession firstCguid */
-    private java.lang.String firstCguid;
+    private java.lang.String cguid;
     /** from ubisession cobrand */
     private java.lang.Integer cobrand;
     /** from ubisession startTimestamp */
@@ -1774,9 +1914,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
     /** from ubisession firstMappedUserId */
     private java.lang.Long firstMappedUserId;
     /** from ubisession firstAppId */
-    private java.lang.Integer firstAppId;
+    private java.lang.Integer appId;
     /** from ubisession absDuration */
-    private java.lang.Integer absDuration;
+    private java.lang.Long absDuration;
     /** from ubisession grCnt */
     private java.lang.Integer grCnt;
     /** from ubisession gr1Cnt */
@@ -1854,10 +1994,20 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
     private java.lang.String osVersion;
     /** from ubisession pulsarEventCnt */
     private java.lang.Integer pulsarEventCnt;
+    /** from ubisession sojEventCnt */
+    private java.lang.Integer sojEventCnt;
     /** from ubisession streamId */
     private java.lang.String streamId;
+    /** from ubisession viewct */
+    private java.lang.Integer viewEventCnt;
+    /** map from rf */
+    private java.lang.String referer;
+    /** map from p */
+    private java.lang.Integer pageId;
     /** from ubisession buserId */
     private java.lang.String buserId;
+    /** from ubisession sessionSkey */
+    private java.lang.Long oldsessionskey;
     /** to identify open or end */
     private java.lang.Boolean isOpen;
 
@@ -1896,8 +2046,8 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
         this.botFlags = data().deepCopy(fields()[5].schema(), other.botFlags);
         fieldSetFlags()[5] = true;
       }
-      if (isValidValue(fields()[6], other.ip)) {
-        this.ip = data().deepCopy(fields()[6].schema(), other.ip);
+      if (isValidValue(fields()[6], other.ipv4)) {
+        this.ipv4 = data().deepCopy(fields()[6].schema(), other.ipv4);
         fieldSetFlags()[6] = true;
       }
       if (isValidValue(fields()[7], other.userAgent)) {
@@ -1924,8 +2074,8 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
         this.durationSec = data().deepCopy(fields()[12].schema(), other.durationSec);
         fieldSetFlags()[12] = true;
       }
-      if (isValidValue(fields()[13], other.firstUserId)) {
-        this.firstUserId = data().deepCopy(fields()[13].schema(), other.firstUserId);
+      if (isValidValue(fields()[13], other.userId)) {
+        this.userId = data().deepCopy(fields()[13].schema(), other.userId);
         fieldSetFlags()[13] = true;
       }
       if (isValidValue(fields()[14], other.eventCnt)) {
@@ -1936,221 +2086,245 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
         this.trafficSrcId = data().deepCopy(fields()[15].schema(), other.trafficSrcId);
         fieldSetFlags()[15] = true;
       }
-      if (isValidValue(fields()[16], other.viCoreCnt)) {
-        this.viCoreCnt = data().deepCopy(fields()[16].schema(), other.viCoreCnt);
+      if (isValidValue(fields()[16], other.viCnt)) {
+        this.viCnt = data().deepCopy(fields()[16].schema(), other.viCnt);
         fieldSetFlags()[16] = true;
       }
-      if (isValidValue(fields()[17], other.bidCoreCnt)) {
-        this.bidCoreCnt = data().deepCopy(fields()[17].schema(), other.bidCoreCnt);
+      if (isValidValue(fields()[17], other.bidCnt)) {
+        this.bidCnt = data().deepCopy(fields()[17].schema(), other.bidCnt);
         fieldSetFlags()[17] = true;
       }
-      if (isValidValue(fields()[18], other.binCoreCnt)) {
-        this.binCoreCnt = data().deepCopy(fields()[18].schema(), other.binCoreCnt);
+      if (isValidValue(fields()[18], other.binCnt)) {
+        this.binCnt = data().deepCopy(fields()[18].schema(), other.binCnt);
         fieldSetFlags()[18] = true;
       }
-      if (isValidValue(fields()[19], other.watchCoreCnt)) {
-        this.watchCoreCnt = data().deepCopy(fields()[19].schema(), other.watchCoreCnt);
+      if (isValidValue(fields()[19], other.watchCnt)) {
+        this.watchCnt = data().deepCopy(fields()[19].schema(), other.watchCnt);
         fieldSetFlags()[19] = true;
       }
       if (isValidValue(fields()[20], other.homepageCnt)) {
         this.homepageCnt = data().deepCopy(fields()[20].schema(), other.homepageCnt);
         fieldSetFlags()[20] = true;
       }
-      if (isValidValue(fields()[21], other.firstSiteId)) {
-        this.firstSiteId = data().deepCopy(fields()[21].schema(), other.firstSiteId);
+      if (isValidValue(fields()[21], other.siteId)) {
+        this.siteId = data().deepCopy(fields()[21].schema(), other.siteId);
         fieldSetFlags()[21] = true;
       }
-      if (isValidValue(fields()[22], other.firstCguid)) {
-        this.firstCguid = data().deepCopy(fields()[22].schema(), other.firstCguid);
+      if (isValidValue(fields()[22], other.firstSiteId)) {
+        this.firstSiteId = data().deepCopy(fields()[22].schema(), other.firstSiteId);
         fieldSetFlags()[22] = true;
       }
-      if (isValidValue(fields()[23], other.cobrand)) {
-        this.cobrand = data().deepCopy(fields()[23].schema(), other.cobrand);
+      if (isValidValue(fields()[23], other.cguid)) {
+        this.cguid = data().deepCopy(fields()[23].schema(), other.cguid);
         fieldSetFlags()[23] = true;
       }
-      if (isValidValue(fields()[24], other.startTimestamp)) {
-        this.startTimestamp = data().deepCopy(fields()[24].schema(), other.startTimestamp);
+      if (isValidValue(fields()[24], other.cobrand)) {
+        this.cobrand = data().deepCopy(fields()[24].schema(), other.cobrand);
         fieldSetFlags()[24] = true;
       }
-      if (isValidValue(fields()[25], other.firstMappedUserId)) {
-        this.firstMappedUserId = data().deepCopy(fields()[25].schema(), other.firstMappedUserId);
+      if (isValidValue(fields()[25], other.startTimestamp)) {
+        this.startTimestamp = data().deepCopy(fields()[25].schema(), other.startTimestamp);
         fieldSetFlags()[25] = true;
       }
-      if (isValidValue(fields()[26], other.firstAppId)) {
-        this.firstAppId = data().deepCopy(fields()[26].schema(), other.firstAppId);
+      if (isValidValue(fields()[26], other.firstMappedUserId)) {
+        this.firstMappedUserId = data().deepCopy(fields()[26].schema(), other.firstMappedUserId);
         fieldSetFlags()[26] = true;
       }
-      if (isValidValue(fields()[27], other.absDuration)) {
-        this.absDuration = data().deepCopy(fields()[27].schema(), other.absDuration);
+      if (isValidValue(fields()[27], other.appId)) {
+        this.appId = data().deepCopy(fields()[27].schema(), other.appId);
         fieldSetFlags()[27] = true;
       }
-      if (isValidValue(fields()[28], other.grCnt)) {
-        this.grCnt = data().deepCopy(fields()[28].schema(), other.grCnt);
+      if (isValidValue(fields()[28], other.absDuration)) {
+        this.absDuration = data().deepCopy(fields()[28].schema(), other.absDuration);
         fieldSetFlags()[28] = true;
       }
-      if (isValidValue(fields()[29], other.gr1Cnt)) {
-        this.gr1Cnt = data().deepCopy(fields()[29].schema(), other.gr1Cnt);
+      if (isValidValue(fields()[29], other.grCnt)) {
+        this.grCnt = data().deepCopy(fields()[29].schema(), other.grCnt);
         fieldSetFlags()[29] = true;
       }
-      if (isValidValue(fields()[30], other.myebayCnt)) {
-        this.myebayCnt = data().deepCopy(fields()[30].schema(), other.myebayCnt);
+      if (isValidValue(fields()[30], other.gr1Cnt)) {
+        this.gr1Cnt = data().deepCopy(fields()[30].schema(), other.gr1Cnt);
         fieldSetFlags()[30] = true;
       }
-      if (isValidValue(fields()[31], other.absStartTimestamp)) {
-        this.absStartTimestamp = data().deepCopy(fields()[31].schema(), other.absStartTimestamp);
+      if (isValidValue(fields()[31], other.myebayCnt)) {
+        this.myebayCnt = data().deepCopy(fields()[31].schema(), other.myebayCnt);
         fieldSetFlags()[31] = true;
       }
-      if (isValidValue(fields()[32], other.signinPageCnt)) {
-        this.signinPageCnt = data().deepCopy(fields()[32].schema(), other.signinPageCnt);
+      if (isValidValue(fields()[32], other.absStartTimestamp)) {
+        this.absStartTimestamp = data().deepCopy(fields()[32].schema(), other.absStartTimestamp);
         fieldSetFlags()[32] = true;
       }
-      if (isValidValue(fields()[33], other.nonIframeRdtEventCnt)) {
-        this.nonIframeRdtEventCnt = data().deepCopy(fields()[33].schema(), other.nonIframeRdtEventCnt);
+      if (isValidValue(fields()[33], other.signinPageCnt)) {
+        this.signinPageCnt = data().deepCopy(fields()[33].schema(), other.signinPageCnt);
         fieldSetFlags()[33] = true;
       }
-      if (isValidValue(fields()[34], other.botFlagList)) {
-        this.botFlagList = data().deepCopy(fields()[34].schema(), other.botFlagList);
+      if (isValidValue(fields()[34], other.nonIframeRdtEventCnt)) {
+        this.nonIframeRdtEventCnt = data().deepCopy(fields()[34].schema(), other.nonIframeRdtEventCnt);
         fieldSetFlags()[34] = true;
       }
-      if (isValidValue(fields()[35], other.absEndTimestamp)) {
-        this.absEndTimestamp = data().deepCopy(fields()[35].schema(), other.absEndTimestamp);
+      if (isValidValue(fields()[35], other.botFlagList)) {
+        this.botFlagList = data().deepCopy(fields()[35].schema(), other.botFlagList);
         fieldSetFlags()[35] = true;
       }
-      if (isValidValue(fields()[36], other.endTimestamp)) {
-        this.endTimestamp = data().deepCopy(fields()[36].schema(), other.endTimestamp);
+      if (isValidValue(fields()[36], other.absEndTimestamp)) {
+        this.absEndTimestamp = data().deepCopy(fields()[36].schema(), other.absEndTimestamp);
         fieldSetFlags()[36] = true;
       }
-      if (isValidValue(fields()[37], other.sojDataDt)) {
-        this.sojDataDt = data().deepCopy(fields()[37].schema(), other.sojDataDt);
+      if (isValidValue(fields()[37], other.endTimestamp)) {
+        this.endTimestamp = data().deepCopy(fields()[37].schema(), other.endTimestamp);
         fieldSetFlags()[37] = true;
       }
-      if (isValidValue(fields()[38], other.sessionId)) {
-        this.sessionId = data().deepCopy(fields()[38].schema(), other.sessionId);
+      if (isValidValue(fields()[38], other.sojDataDt)) {
+        this.sojDataDt = data().deepCopy(fields()[38].schema(), other.sojDataDt);
         fieldSetFlags()[38] = true;
       }
-      if (isValidValue(fields()[39], other.sessionSkey)) {
-        this.sessionSkey = data().deepCopy(fields()[39].schema(), other.sessionSkey);
+      if (isValidValue(fields()[39], other.sessionId)) {
+        this.sessionId = data().deepCopy(fields()[39].schema(), other.sessionId);
         fieldSetFlags()[39] = true;
       }
-      if (isValidValue(fields()[40], other.sessionStartDt)) {
-        this.sessionStartDt = data().deepCopy(fields()[40].schema(), other.sessionStartDt);
+      if (isValidValue(fields()[40], other.sessionSkey)) {
+        this.sessionSkey = data().deepCopy(fields()[40].schema(), other.sessionSkey);
         fieldSetFlags()[40] = true;
       }
-      if (isValidValue(fields()[41], other.firstSessionStartDt)) {
-        this.firstSessionStartDt = data().deepCopy(fields()[41].schema(), other.firstSessionStartDt);
+      if (isValidValue(fields()[41], other.sessionStartDt)) {
+        this.sessionStartDt = data().deepCopy(fields()[41].schema(), other.sessionStartDt);
         fieldSetFlags()[41] = true;
       }
-      if (isValidValue(fields()[42], other.sessionEndDt)) {
-        this.sessionEndDt = data().deepCopy(fields()[42].schema(), other.sessionEndDt);
+      if (isValidValue(fields()[42], other.firstSessionStartDt)) {
+        this.firstSessionStartDt = data().deepCopy(fields()[42].schema(), other.firstSessionStartDt);
         fieldSetFlags()[42] = true;
       }
-      if (isValidValue(fields()[43], other.absEventCnt)) {
-        this.absEventCnt = data().deepCopy(fields()[43].schema(), other.absEventCnt);
+      if (isValidValue(fields()[43], other.sessionEndDt)) {
+        this.sessionEndDt = data().deepCopy(fields()[43].schema(), other.sessionEndDt);
         fieldSetFlags()[43] = true;
       }
-      if (isValidValue(fields()[44], other.singleClickSessionFlag)) {
-        this.singleClickSessionFlag = data().deepCopy(fields()[44].schema(), other.singleClickSessionFlag);
+      if (isValidValue(fields()[44], other.absEventCnt)) {
+        this.absEventCnt = data().deepCopy(fields()[44].schema(), other.absEventCnt);
         fieldSetFlags()[44] = true;
       }
-      if (isValidValue(fields()[45], other.asqCnt)) {
-        this.asqCnt = data().deepCopy(fields()[45].schema(), other.asqCnt);
+      if (isValidValue(fields()[45], other.singleClickSessionFlag)) {
+        this.singleClickSessionFlag = data().deepCopy(fields()[45].schema(), other.singleClickSessionFlag);
         fieldSetFlags()[45] = true;
       }
-      if (isValidValue(fields()[46], other.atcCnt)) {
-        this.atcCnt = data().deepCopy(fields()[46].schema(), other.atcCnt);
+      if (isValidValue(fields()[46], other.asqCnt)) {
+        this.asqCnt = data().deepCopy(fields()[46].schema(), other.asqCnt);
         fieldSetFlags()[46] = true;
       }
-      if (isValidValue(fields()[47], other.atlCnt)) {
-        this.atlCnt = data().deepCopy(fields()[47].schema(), other.atlCnt);
+      if (isValidValue(fields()[47], other.atcCnt)) {
+        this.atcCnt = data().deepCopy(fields()[47].schema(), other.atcCnt);
         fieldSetFlags()[47] = true;
       }
-      if (isValidValue(fields()[48], other.boCnt)) {
-        this.boCnt = data().deepCopy(fields()[48].schema(), other.boCnt);
+      if (isValidValue(fields()[48], other.atlCnt)) {
+        this.atlCnt = data().deepCopy(fields()[48].schema(), other.atlCnt);
         fieldSetFlags()[48] = true;
       }
-      if (isValidValue(fields()[49], other.srpCnt)) {
-        this.srpCnt = data().deepCopy(fields()[49].schema(), other.srpCnt);
+      if (isValidValue(fields()[49], other.boCnt)) {
+        this.boCnt = data().deepCopy(fields()[49].schema(), other.boCnt);
         fieldSetFlags()[49] = true;
       }
-      if (isValidValue(fields()[50], other.servEventCnt)) {
-        this.servEventCnt = data().deepCopy(fields()[50].schema(), other.servEventCnt);
+      if (isValidValue(fields()[50], other.srpCnt)) {
+        this.srpCnt = data().deepCopy(fields()[50].schema(), other.srpCnt);
         fieldSetFlags()[50] = true;
       }
-      if (isValidValue(fields()[51], other.searchViewPageCnt)) {
-        this.searchViewPageCnt = data().deepCopy(fields()[51].schema(), other.searchViewPageCnt);
+      if (isValidValue(fields()[51], other.servEventCnt)) {
+        this.servEventCnt = data().deepCopy(fields()[51].schema(), other.servEventCnt);
         fieldSetFlags()[51] = true;
       }
-      if (isValidValue(fields()[52], other.browserFamily)) {
-        this.browserFamily = data().deepCopy(fields()[52].schema(), other.browserFamily);
+      if (isValidValue(fields()[52], other.searchViewPageCnt)) {
+        this.searchViewPageCnt = data().deepCopy(fields()[52].schema(), other.searchViewPageCnt);
         fieldSetFlags()[52] = true;
       }
-      if (isValidValue(fields()[53], other.browserVersion)) {
-        this.browserVersion = data().deepCopy(fields()[53].schema(), other.browserVersion);
+      if (isValidValue(fields()[53], other.browserFamily)) {
+        this.browserFamily = data().deepCopy(fields()[53].schema(), other.browserFamily);
         fieldSetFlags()[53] = true;
       }
-      if (isValidValue(fields()[54], other.city)) {
-        this.city = data().deepCopy(fields()[54].schema(), other.city);
+      if (isValidValue(fields()[54], other.browserVersion)) {
+        this.browserVersion = data().deepCopy(fields()[54].schema(), other.browserVersion);
         fieldSetFlags()[54] = true;
       }
-      if (isValidValue(fields()[55], other.region)) {
-        this.region = data().deepCopy(fields()[55].schema(), other.region);
+      if (isValidValue(fields()[55], other.city)) {
+        this.city = data().deepCopy(fields()[55].schema(), other.city);
         fieldSetFlags()[55] = true;
       }
-      if (isValidValue(fields()[56], other.country)) {
-        this.country = data().deepCopy(fields()[56].schema(), other.country);
+      if (isValidValue(fields()[56], other.region)) {
+        this.region = data().deepCopy(fields()[56].schema(), other.region);
         fieldSetFlags()[56] = true;
       }
-      if (isValidValue(fields()[57], other.continent)) {
-        this.continent = data().deepCopy(fields()[57].schema(), other.continent);
+      if (isValidValue(fields()[57], other.country)) {
+        this.country = data().deepCopy(fields()[57].schema(), other.country);
         fieldSetFlags()[57] = true;
       }
-      if (isValidValue(fields()[58], other.deviceClass)) {
-        this.deviceClass = data().deepCopy(fields()[58].schema(), other.deviceClass);
+      if (isValidValue(fields()[58], other.continent)) {
+        this.continent = data().deepCopy(fields()[58].schema(), other.continent);
         fieldSetFlags()[58] = true;
       }
-      if (isValidValue(fields()[59], other.deviceFamily)) {
-        this.deviceFamily = data().deepCopy(fields()[59].schema(), other.deviceFamily);
+      if (isValidValue(fields()[59], other.deviceClass)) {
+        this.deviceClass = data().deepCopy(fields()[59].schema(), other.deviceClass);
         fieldSetFlags()[59] = true;
       }
-      if (isValidValue(fields()[60], other.endResourceId)) {
-        this.endResourceId = data().deepCopy(fields()[60].schema(), other.endResourceId);
+      if (isValidValue(fields()[60], other.deviceFamily)) {
+        this.deviceFamily = data().deepCopy(fields()[60].schema(), other.deviceFamily);
         fieldSetFlags()[60] = true;
       }
-      if (isValidValue(fields()[61], other.startResourceId)) {
-        this.startResourceId = data().deepCopy(fields()[61].schema(), other.startResourceId);
+      if (isValidValue(fields()[61], other.endResourceId)) {
+        this.endResourceId = data().deepCopy(fields()[61].schema(), other.endResourceId);
         fieldSetFlags()[61] = true;
       }
-      if (isValidValue(fields()[62], other.isReturningVisitor)) {
-        this.isReturningVisitor = data().deepCopy(fields()[62].schema(), other.isReturningVisitor);
+      if (isValidValue(fields()[62], other.startResourceId)) {
+        this.startResourceId = data().deepCopy(fields()[62].schema(), other.startResourceId);
         fieldSetFlags()[62] = true;
       }
-      if (isValidValue(fields()[63], other.lineSpeed)) {
-        this.lineSpeed = data().deepCopy(fields()[63].schema(), other.lineSpeed);
+      if (isValidValue(fields()[63], other.isReturningVisitor)) {
+        this.isReturningVisitor = data().deepCopy(fields()[63].schema(), other.isReturningVisitor);
         fieldSetFlags()[63] = true;
       }
-      if (isValidValue(fields()[64], other.osFamily)) {
-        this.osFamily = data().deepCopy(fields()[64].schema(), other.osFamily);
+      if (isValidValue(fields()[64], other.lineSpeed)) {
+        this.lineSpeed = data().deepCopy(fields()[64].schema(), other.lineSpeed);
         fieldSetFlags()[64] = true;
       }
-      if (isValidValue(fields()[65], other.osVersion)) {
-        this.osVersion = data().deepCopy(fields()[65].schema(), other.osVersion);
+      if (isValidValue(fields()[65], other.osFamily)) {
+        this.osFamily = data().deepCopy(fields()[65].schema(), other.osFamily);
         fieldSetFlags()[65] = true;
       }
-      if (isValidValue(fields()[66], other.pulsarEventCnt)) {
-        this.pulsarEventCnt = data().deepCopy(fields()[66].schema(), other.pulsarEventCnt);
+      if (isValidValue(fields()[66], other.osVersion)) {
+        this.osVersion = data().deepCopy(fields()[66].schema(), other.osVersion);
         fieldSetFlags()[66] = true;
       }
-      if (isValidValue(fields()[67], other.streamId)) {
-        this.streamId = data().deepCopy(fields()[67].schema(), other.streamId);
+      if (isValidValue(fields()[67], other.pulsarEventCnt)) {
+        this.pulsarEventCnt = data().deepCopy(fields()[67].schema(), other.pulsarEventCnt);
         fieldSetFlags()[67] = true;
       }
-      if (isValidValue(fields()[68], other.buserId)) {
-        this.buserId = data().deepCopy(fields()[68].schema(), other.buserId);
+      if (isValidValue(fields()[68], other.sojEventCnt)) {
+        this.sojEventCnt = data().deepCopy(fields()[68].schema(), other.sojEventCnt);
         fieldSetFlags()[68] = true;
       }
-      if (isValidValue(fields()[69], other.isOpen)) {
-        this.isOpen = data().deepCopy(fields()[69].schema(), other.isOpen);
+      if (isValidValue(fields()[69], other.streamId)) {
+        this.streamId = data().deepCopy(fields()[69].schema(), other.streamId);
         fieldSetFlags()[69] = true;
+      }
+      if (isValidValue(fields()[70], other.viewEventCnt)) {
+        this.viewEventCnt = data().deepCopy(fields()[70].schema(), other.viewEventCnt);
+        fieldSetFlags()[70] = true;
+      }
+      if (isValidValue(fields()[71], other.referer)) {
+        this.referer = data().deepCopy(fields()[71].schema(), other.referer);
+        fieldSetFlags()[71] = true;
+      }
+      if (isValidValue(fields()[72], other.pageId)) {
+        this.pageId = data().deepCopy(fields()[72].schema(), other.pageId);
+        fieldSetFlags()[72] = true;
+      }
+      if (isValidValue(fields()[73], other.buserId)) {
+        this.buserId = data().deepCopy(fields()[73].schema(), other.buserId);
+        fieldSetFlags()[73] = true;
+      }
+      if (isValidValue(fields()[74], other.oldsessionskey)) {
+        this.oldsessionskey = data().deepCopy(fields()[74].schema(), other.oldsessionskey);
+        fieldSetFlags()[74] = true;
+      }
+      if (isValidValue(fields()[75], other.isOpen)) {
+        this.isOpen = data().deepCopy(fields()[75].schema(), other.isOpen);
+        fieldSetFlags()[75] = true;
       }
     }
 
@@ -2184,8 +2358,8 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
         this.botFlags = data().deepCopy(fields()[5].schema(), other.botFlags);
         fieldSetFlags()[5] = true;
       }
-      if (isValidValue(fields()[6], other.ip)) {
-        this.ip = data().deepCopy(fields()[6].schema(), other.ip);
+      if (isValidValue(fields()[6], other.ipv4)) {
+        this.ipv4 = data().deepCopy(fields()[6].schema(), other.ipv4);
         fieldSetFlags()[6] = true;
       }
       if (isValidValue(fields()[7], other.userAgent)) {
@@ -2212,8 +2386,8 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
         this.durationSec = data().deepCopy(fields()[12].schema(), other.durationSec);
         fieldSetFlags()[12] = true;
       }
-      if (isValidValue(fields()[13], other.firstUserId)) {
-        this.firstUserId = data().deepCopy(fields()[13].schema(), other.firstUserId);
+      if (isValidValue(fields()[13], other.userId)) {
+        this.userId = data().deepCopy(fields()[13].schema(), other.userId);
         fieldSetFlags()[13] = true;
       }
       if (isValidValue(fields()[14], other.eventCnt)) {
@@ -2224,221 +2398,245 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
         this.trafficSrcId = data().deepCopy(fields()[15].schema(), other.trafficSrcId);
         fieldSetFlags()[15] = true;
       }
-      if (isValidValue(fields()[16], other.viCoreCnt)) {
-        this.viCoreCnt = data().deepCopy(fields()[16].schema(), other.viCoreCnt);
+      if (isValidValue(fields()[16], other.viCnt)) {
+        this.viCnt = data().deepCopy(fields()[16].schema(), other.viCnt);
         fieldSetFlags()[16] = true;
       }
-      if (isValidValue(fields()[17], other.bidCoreCnt)) {
-        this.bidCoreCnt = data().deepCopy(fields()[17].schema(), other.bidCoreCnt);
+      if (isValidValue(fields()[17], other.bidCnt)) {
+        this.bidCnt = data().deepCopy(fields()[17].schema(), other.bidCnt);
         fieldSetFlags()[17] = true;
       }
-      if (isValidValue(fields()[18], other.binCoreCnt)) {
-        this.binCoreCnt = data().deepCopy(fields()[18].schema(), other.binCoreCnt);
+      if (isValidValue(fields()[18], other.binCnt)) {
+        this.binCnt = data().deepCopy(fields()[18].schema(), other.binCnt);
         fieldSetFlags()[18] = true;
       }
-      if (isValidValue(fields()[19], other.watchCoreCnt)) {
-        this.watchCoreCnt = data().deepCopy(fields()[19].schema(), other.watchCoreCnt);
+      if (isValidValue(fields()[19], other.watchCnt)) {
+        this.watchCnt = data().deepCopy(fields()[19].schema(), other.watchCnt);
         fieldSetFlags()[19] = true;
       }
       if (isValidValue(fields()[20], other.homepageCnt)) {
         this.homepageCnt = data().deepCopy(fields()[20].schema(), other.homepageCnt);
         fieldSetFlags()[20] = true;
       }
-      if (isValidValue(fields()[21], other.firstSiteId)) {
-        this.firstSiteId = data().deepCopy(fields()[21].schema(), other.firstSiteId);
+      if (isValidValue(fields()[21], other.siteId)) {
+        this.siteId = data().deepCopy(fields()[21].schema(), other.siteId);
         fieldSetFlags()[21] = true;
       }
-      if (isValidValue(fields()[22], other.firstCguid)) {
-        this.firstCguid = data().deepCopy(fields()[22].schema(), other.firstCguid);
+      if (isValidValue(fields()[22], other.firstSiteId)) {
+        this.firstSiteId = data().deepCopy(fields()[22].schema(), other.firstSiteId);
         fieldSetFlags()[22] = true;
       }
-      if (isValidValue(fields()[23], other.cobrand)) {
-        this.cobrand = data().deepCopy(fields()[23].schema(), other.cobrand);
+      if (isValidValue(fields()[23], other.cguid)) {
+        this.cguid = data().deepCopy(fields()[23].schema(), other.cguid);
         fieldSetFlags()[23] = true;
       }
-      if (isValidValue(fields()[24], other.startTimestamp)) {
-        this.startTimestamp = data().deepCopy(fields()[24].schema(), other.startTimestamp);
+      if (isValidValue(fields()[24], other.cobrand)) {
+        this.cobrand = data().deepCopy(fields()[24].schema(), other.cobrand);
         fieldSetFlags()[24] = true;
       }
-      if (isValidValue(fields()[25], other.firstMappedUserId)) {
-        this.firstMappedUserId = data().deepCopy(fields()[25].schema(), other.firstMappedUserId);
+      if (isValidValue(fields()[25], other.startTimestamp)) {
+        this.startTimestamp = data().deepCopy(fields()[25].schema(), other.startTimestamp);
         fieldSetFlags()[25] = true;
       }
-      if (isValidValue(fields()[26], other.firstAppId)) {
-        this.firstAppId = data().deepCopy(fields()[26].schema(), other.firstAppId);
+      if (isValidValue(fields()[26], other.firstMappedUserId)) {
+        this.firstMappedUserId = data().deepCopy(fields()[26].schema(), other.firstMappedUserId);
         fieldSetFlags()[26] = true;
       }
-      if (isValidValue(fields()[27], other.absDuration)) {
-        this.absDuration = data().deepCopy(fields()[27].schema(), other.absDuration);
+      if (isValidValue(fields()[27], other.appId)) {
+        this.appId = data().deepCopy(fields()[27].schema(), other.appId);
         fieldSetFlags()[27] = true;
       }
-      if (isValidValue(fields()[28], other.grCnt)) {
-        this.grCnt = data().deepCopy(fields()[28].schema(), other.grCnt);
+      if (isValidValue(fields()[28], other.absDuration)) {
+        this.absDuration = data().deepCopy(fields()[28].schema(), other.absDuration);
         fieldSetFlags()[28] = true;
       }
-      if (isValidValue(fields()[29], other.gr1Cnt)) {
-        this.gr1Cnt = data().deepCopy(fields()[29].schema(), other.gr1Cnt);
+      if (isValidValue(fields()[29], other.grCnt)) {
+        this.grCnt = data().deepCopy(fields()[29].schema(), other.grCnt);
         fieldSetFlags()[29] = true;
       }
-      if (isValidValue(fields()[30], other.myebayCnt)) {
-        this.myebayCnt = data().deepCopy(fields()[30].schema(), other.myebayCnt);
+      if (isValidValue(fields()[30], other.gr1Cnt)) {
+        this.gr1Cnt = data().deepCopy(fields()[30].schema(), other.gr1Cnt);
         fieldSetFlags()[30] = true;
       }
-      if (isValidValue(fields()[31], other.absStartTimestamp)) {
-        this.absStartTimestamp = data().deepCopy(fields()[31].schema(), other.absStartTimestamp);
+      if (isValidValue(fields()[31], other.myebayCnt)) {
+        this.myebayCnt = data().deepCopy(fields()[31].schema(), other.myebayCnt);
         fieldSetFlags()[31] = true;
       }
-      if (isValidValue(fields()[32], other.signinPageCnt)) {
-        this.signinPageCnt = data().deepCopy(fields()[32].schema(), other.signinPageCnt);
+      if (isValidValue(fields()[32], other.absStartTimestamp)) {
+        this.absStartTimestamp = data().deepCopy(fields()[32].schema(), other.absStartTimestamp);
         fieldSetFlags()[32] = true;
       }
-      if (isValidValue(fields()[33], other.nonIframeRdtEventCnt)) {
-        this.nonIframeRdtEventCnt = data().deepCopy(fields()[33].schema(), other.nonIframeRdtEventCnt);
+      if (isValidValue(fields()[33], other.signinPageCnt)) {
+        this.signinPageCnt = data().deepCopy(fields()[33].schema(), other.signinPageCnt);
         fieldSetFlags()[33] = true;
       }
-      if (isValidValue(fields()[34], other.botFlagList)) {
-        this.botFlagList = data().deepCopy(fields()[34].schema(), other.botFlagList);
+      if (isValidValue(fields()[34], other.nonIframeRdtEventCnt)) {
+        this.nonIframeRdtEventCnt = data().deepCopy(fields()[34].schema(), other.nonIframeRdtEventCnt);
         fieldSetFlags()[34] = true;
       }
-      if (isValidValue(fields()[35], other.absEndTimestamp)) {
-        this.absEndTimestamp = data().deepCopy(fields()[35].schema(), other.absEndTimestamp);
+      if (isValidValue(fields()[35], other.botFlagList)) {
+        this.botFlagList = data().deepCopy(fields()[35].schema(), other.botFlagList);
         fieldSetFlags()[35] = true;
       }
-      if (isValidValue(fields()[36], other.endTimestamp)) {
-        this.endTimestamp = data().deepCopy(fields()[36].schema(), other.endTimestamp);
+      if (isValidValue(fields()[36], other.absEndTimestamp)) {
+        this.absEndTimestamp = data().deepCopy(fields()[36].schema(), other.absEndTimestamp);
         fieldSetFlags()[36] = true;
       }
-      if (isValidValue(fields()[37], other.sojDataDt)) {
-        this.sojDataDt = data().deepCopy(fields()[37].schema(), other.sojDataDt);
+      if (isValidValue(fields()[37], other.endTimestamp)) {
+        this.endTimestamp = data().deepCopy(fields()[37].schema(), other.endTimestamp);
         fieldSetFlags()[37] = true;
       }
-      if (isValidValue(fields()[38], other.sessionId)) {
-        this.sessionId = data().deepCopy(fields()[38].schema(), other.sessionId);
+      if (isValidValue(fields()[38], other.sojDataDt)) {
+        this.sojDataDt = data().deepCopy(fields()[38].schema(), other.sojDataDt);
         fieldSetFlags()[38] = true;
       }
-      if (isValidValue(fields()[39], other.sessionSkey)) {
-        this.sessionSkey = data().deepCopy(fields()[39].schema(), other.sessionSkey);
+      if (isValidValue(fields()[39], other.sessionId)) {
+        this.sessionId = data().deepCopy(fields()[39].schema(), other.sessionId);
         fieldSetFlags()[39] = true;
       }
-      if (isValidValue(fields()[40], other.sessionStartDt)) {
-        this.sessionStartDt = data().deepCopy(fields()[40].schema(), other.sessionStartDt);
+      if (isValidValue(fields()[40], other.sessionSkey)) {
+        this.sessionSkey = data().deepCopy(fields()[40].schema(), other.sessionSkey);
         fieldSetFlags()[40] = true;
       }
-      if (isValidValue(fields()[41], other.firstSessionStartDt)) {
-        this.firstSessionStartDt = data().deepCopy(fields()[41].schema(), other.firstSessionStartDt);
+      if (isValidValue(fields()[41], other.sessionStartDt)) {
+        this.sessionStartDt = data().deepCopy(fields()[41].schema(), other.sessionStartDt);
         fieldSetFlags()[41] = true;
       }
-      if (isValidValue(fields()[42], other.sessionEndDt)) {
-        this.sessionEndDt = data().deepCopy(fields()[42].schema(), other.sessionEndDt);
+      if (isValidValue(fields()[42], other.firstSessionStartDt)) {
+        this.firstSessionStartDt = data().deepCopy(fields()[42].schema(), other.firstSessionStartDt);
         fieldSetFlags()[42] = true;
       }
-      if (isValidValue(fields()[43], other.absEventCnt)) {
-        this.absEventCnt = data().deepCopy(fields()[43].schema(), other.absEventCnt);
+      if (isValidValue(fields()[43], other.sessionEndDt)) {
+        this.sessionEndDt = data().deepCopy(fields()[43].schema(), other.sessionEndDt);
         fieldSetFlags()[43] = true;
       }
-      if (isValidValue(fields()[44], other.singleClickSessionFlag)) {
-        this.singleClickSessionFlag = data().deepCopy(fields()[44].schema(), other.singleClickSessionFlag);
+      if (isValidValue(fields()[44], other.absEventCnt)) {
+        this.absEventCnt = data().deepCopy(fields()[44].schema(), other.absEventCnt);
         fieldSetFlags()[44] = true;
       }
-      if (isValidValue(fields()[45], other.asqCnt)) {
-        this.asqCnt = data().deepCopy(fields()[45].schema(), other.asqCnt);
+      if (isValidValue(fields()[45], other.singleClickSessionFlag)) {
+        this.singleClickSessionFlag = data().deepCopy(fields()[45].schema(), other.singleClickSessionFlag);
         fieldSetFlags()[45] = true;
       }
-      if (isValidValue(fields()[46], other.atcCnt)) {
-        this.atcCnt = data().deepCopy(fields()[46].schema(), other.atcCnt);
+      if (isValidValue(fields()[46], other.asqCnt)) {
+        this.asqCnt = data().deepCopy(fields()[46].schema(), other.asqCnt);
         fieldSetFlags()[46] = true;
       }
-      if (isValidValue(fields()[47], other.atlCnt)) {
-        this.atlCnt = data().deepCopy(fields()[47].schema(), other.atlCnt);
+      if (isValidValue(fields()[47], other.atcCnt)) {
+        this.atcCnt = data().deepCopy(fields()[47].schema(), other.atcCnt);
         fieldSetFlags()[47] = true;
       }
-      if (isValidValue(fields()[48], other.boCnt)) {
-        this.boCnt = data().deepCopy(fields()[48].schema(), other.boCnt);
+      if (isValidValue(fields()[48], other.atlCnt)) {
+        this.atlCnt = data().deepCopy(fields()[48].schema(), other.atlCnt);
         fieldSetFlags()[48] = true;
       }
-      if (isValidValue(fields()[49], other.srpCnt)) {
-        this.srpCnt = data().deepCopy(fields()[49].schema(), other.srpCnt);
+      if (isValidValue(fields()[49], other.boCnt)) {
+        this.boCnt = data().deepCopy(fields()[49].schema(), other.boCnt);
         fieldSetFlags()[49] = true;
       }
-      if (isValidValue(fields()[50], other.servEventCnt)) {
-        this.servEventCnt = data().deepCopy(fields()[50].schema(), other.servEventCnt);
+      if (isValidValue(fields()[50], other.srpCnt)) {
+        this.srpCnt = data().deepCopy(fields()[50].schema(), other.srpCnt);
         fieldSetFlags()[50] = true;
       }
-      if (isValidValue(fields()[51], other.searchViewPageCnt)) {
-        this.searchViewPageCnt = data().deepCopy(fields()[51].schema(), other.searchViewPageCnt);
+      if (isValidValue(fields()[51], other.servEventCnt)) {
+        this.servEventCnt = data().deepCopy(fields()[51].schema(), other.servEventCnt);
         fieldSetFlags()[51] = true;
       }
-      if (isValidValue(fields()[52], other.browserFamily)) {
-        this.browserFamily = data().deepCopy(fields()[52].schema(), other.browserFamily);
+      if (isValidValue(fields()[52], other.searchViewPageCnt)) {
+        this.searchViewPageCnt = data().deepCopy(fields()[52].schema(), other.searchViewPageCnt);
         fieldSetFlags()[52] = true;
       }
-      if (isValidValue(fields()[53], other.browserVersion)) {
-        this.browserVersion = data().deepCopy(fields()[53].schema(), other.browserVersion);
+      if (isValidValue(fields()[53], other.browserFamily)) {
+        this.browserFamily = data().deepCopy(fields()[53].schema(), other.browserFamily);
         fieldSetFlags()[53] = true;
       }
-      if (isValidValue(fields()[54], other.city)) {
-        this.city = data().deepCopy(fields()[54].schema(), other.city);
+      if (isValidValue(fields()[54], other.browserVersion)) {
+        this.browserVersion = data().deepCopy(fields()[54].schema(), other.browserVersion);
         fieldSetFlags()[54] = true;
       }
-      if (isValidValue(fields()[55], other.region)) {
-        this.region = data().deepCopy(fields()[55].schema(), other.region);
+      if (isValidValue(fields()[55], other.city)) {
+        this.city = data().deepCopy(fields()[55].schema(), other.city);
         fieldSetFlags()[55] = true;
       }
-      if (isValidValue(fields()[56], other.country)) {
-        this.country = data().deepCopy(fields()[56].schema(), other.country);
+      if (isValidValue(fields()[56], other.region)) {
+        this.region = data().deepCopy(fields()[56].schema(), other.region);
         fieldSetFlags()[56] = true;
       }
-      if (isValidValue(fields()[57], other.continent)) {
-        this.continent = data().deepCopy(fields()[57].schema(), other.continent);
+      if (isValidValue(fields()[57], other.country)) {
+        this.country = data().deepCopy(fields()[57].schema(), other.country);
         fieldSetFlags()[57] = true;
       }
-      if (isValidValue(fields()[58], other.deviceClass)) {
-        this.deviceClass = data().deepCopy(fields()[58].schema(), other.deviceClass);
+      if (isValidValue(fields()[58], other.continent)) {
+        this.continent = data().deepCopy(fields()[58].schema(), other.continent);
         fieldSetFlags()[58] = true;
       }
-      if (isValidValue(fields()[59], other.deviceFamily)) {
-        this.deviceFamily = data().deepCopy(fields()[59].schema(), other.deviceFamily);
+      if (isValidValue(fields()[59], other.deviceClass)) {
+        this.deviceClass = data().deepCopy(fields()[59].schema(), other.deviceClass);
         fieldSetFlags()[59] = true;
       }
-      if (isValidValue(fields()[60], other.endResourceId)) {
-        this.endResourceId = data().deepCopy(fields()[60].schema(), other.endResourceId);
+      if (isValidValue(fields()[60], other.deviceFamily)) {
+        this.deviceFamily = data().deepCopy(fields()[60].schema(), other.deviceFamily);
         fieldSetFlags()[60] = true;
       }
-      if (isValidValue(fields()[61], other.startResourceId)) {
-        this.startResourceId = data().deepCopy(fields()[61].schema(), other.startResourceId);
+      if (isValidValue(fields()[61], other.endResourceId)) {
+        this.endResourceId = data().deepCopy(fields()[61].schema(), other.endResourceId);
         fieldSetFlags()[61] = true;
       }
-      if (isValidValue(fields()[62], other.isReturningVisitor)) {
-        this.isReturningVisitor = data().deepCopy(fields()[62].schema(), other.isReturningVisitor);
+      if (isValidValue(fields()[62], other.startResourceId)) {
+        this.startResourceId = data().deepCopy(fields()[62].schema(), other.startResourceId);
         fieldSetFlags()[62] = true;
       }
-      if (isValidValue(fields()[63], other.lineSpeed)) {
-        this.lineSpeed = data().deepCopy(fields()[63].schema(), other.lineSpeed);
+      if (isValidValue(fields()[63], other.isReturningVisitor)) {
+        this.isReturningVisitor = data().deepCopy(fields()[63].schema(), other.isReturningVisitor);
         fieldSetFlags()[63] = true;
       }
-      if (isValidValue(fields()[64], other.osFamily)) {
-        this.osFamily = data().deepCopy(fields()[64].schema(), other.osFamily);
+      if (isValidValue(fields()[64], other.lineSpeed)) {
+        this.lineSpeed = data().deepCopy(fields()[64].schema(), other.lineSpeed);
         fieldSetFlags()[64] = true;
       }
-      if (isValidValue(fields()[65], other.osVersion)) {
-        this.osVersion = data().deepCopy(fields()[65].schema(), other.osVersion);
+      if (isValidValue(fields()[65], other.osFamily)) {
+        this.osFamily = data().deepCopy(fields()[65].schema(), other.osFamily);
         fieldSetFlags()[65] = true;
       }
-      if (isValidValue(fields()[66], other.pulsarEventCnt)) {
-        this.pulsarEventCnt = data().deepCopy(fields()[66].schema(), other.pulsarEventCnt);
+      if (isValidValue(fields()[66], other.osVersion)) {
+        this.osVersion = data().deepCopy(fields()[66].schema(), other.osVersion);
         fieldSetFlags()[66] = true;
       }
-      if (isValidValue(fields()[67], other.streamId)) {
-        this.streamId = data().deepCopy(fields()[67].schema(), other.streamId);
+      if (isValidValue(fields()[67], other.pulsarEventCnt)) {
+        this.pulsarEventCnt = data().deepCopy(fields()[67].schema(), other.pulsarEventCnt);
         fieldSetFlags()[67] = true;
       }
-      if (isValidValue(fields()[68], other.buserId)) {
-        this.buserId = data().deepCopy(fields()[68].schema(), other.buserId);
+      if (isValidValue(fields()[68], other.sojEventCnt)) {
+        this.sojEventCnt = data().deepCopy(fields()[68].schema(), other.sojEventCnt);
         fieldSetFlags()[68] = true;
       }
-      if (isValidValue(fields()[69], other.isOpen)) {
-        this.isOpen = data().deepCopy(fields()[69].schema(), other.isOpen);
+      if (isValidValue(fields()[69], other.streamId)) {
+        this.streamId = data().deepCopy(fields()[69].schema(), other.streamId);
         fieldSetFlags()[69] = true;
+      }
+      if (isValidValue(fields()[70], other.viewEventCnt)) {
+        this.viewEventCnt = data().deepCopy(fields()[70].schema(), other.viewEventCnt);
+        fieldSetFlags()[70] = true;
+      }
+      if (isValidValue(fields()[71], other.referer)) {
+        this.referer = data().deepCopy(fields()[71].schema(), other.referer);
+        fieldSetFlags()[71] = true;
+      }
+      if (isValidValue(fields()[72], other.pageId)) {
+        this.pageId = data().deepCopy(fields()[72].schema(), other.pageId);
+        fieldSetFlags()[72] = true;
+      }
+      if (isValidValue(fields()[73], other.buserId)) {
+        this.buserId = data().deepCopy(fields()[73].schema(), other.buserId);
+        fieldSetFlags()[73] = true;
+      }
+      if (isValidValue(fields()[74], other.oldsessionskey)) {
+        this.oldsessionskey = data().deepCopy(fields()[74].schema(), other.oldsessionskey);
+        fieldSetFlags()[74] = true;
+      }
+      if (isValidValue(fields()[75], other.isOpen)) {
+        this.isOpen = data().deepCopy(fields()[75].schema(), other.isOpen);
+        fieldSetFlags()[75] = true;
       }
     }
 
@@ -2701,44 +2899,44 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
     }
 
     /**
-      * Gets the value of the 'ip' field.
+      * Gets the value of the 'ipv4' field.
       * from ubisession ip
       * @return The value.
       */
-    public java.lang.String getIp() {
-      return ip;
+    public java.lang.String getIpv4() {
+      return ipv4;
     }
 
     /**
-      * Sets the value of the 'ip' field.
+      * Sets the value of the 'ipv4' field.
       * from ubisession ip
-      * @param value The value of 'ip'.
+      * @param value The value of 'ipv4'.
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder setIp(java.lang.String value) {
+    public com.ebay.sojourner.common.model.SojSession.Builder setIpv4(java.lang.String value) {
       validate(fields()[6], value);
-      this.ip = value;
+      this.ipv4 = value;
       fieldSetFlags()[6] = true;
       return this;
     }
 
     /**
-      * Checks whether the 'ip' field has been set.
+      * Checks whether the 'ipv4' field has been set.
       * from ubisession ip
-      * @return True if the 'ip' field has been set, false otherwise.
+      * @return True if the 'ipv4' field has been set, false otherwise.
       */
-    public boolean hasIp() {
+    public boolean hasIpv4() {
       return fieldSetFlags()[6];
     }
 
 
     /**
-      * Clears the value of the 'ip' field.
+      * Clears the value of the 'ipv4' field.
       * from ubisession ip
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder clearIp() {
-      ip = null;
+    public com.ebay.sojourner.common.model.SojSession.Builder clearIpv4() {
+      ipv4 = null;
       fieldSetFlags()[6] = false;
       return this;
     }
@@ -3002,44 +3200,44 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
     }
 
     /**
-      * Gets the value of the 'firstUserId' field.
+      * Gets the value of the 'userId' field.
       * from ubisession firstUserId
       * @return The value.
       */
-    public java.lang.String getFirstUserId() {
-      return firstUserId;
+    public java.lang.String getUserId() {
+      return userId;
     }
 
     /**
-      * Sets the value of the 'firstUserId' field.
+      * Sets the value of the 'userId' field.
       * from ubisession firstUserId
-      * @param value The value of 'firstUserId'.
+      * @param value The value of 'userId'.
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder setFirstUserId(java.lang.String value) {
+    public com.ebay.sojourner.common.model.SojSession.Builder setUserId(java.lang.String value) {
       validate(fields()[13], value);
-      this.firstUserId = value;
+      this.userId = value;
       fieldSetFlags()[13] = true;
       return this;
     }
 
     /**
-      * Checks whether the 'firstUserId' field has been set.
+      * Checks whether the 'userId' field has been set.
       * from ubisession firstUserId
-      * @return True if the 'firstUserId' field has been set, false otherwise.
+      * @return True if the 'userId' field has been set, false otherwise.
       */
-    public boolean hasFirstUserId() {
+    public boolean hasUserId() {
       return fieldSetFlags()[13];
     }
 
 
     /**
-      * Clears the value of the 'firstUserId' field.
+      * Clears the value of the 'userId' field.
       * from ubisession firstUserId
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder clearFirstUserId() {
-      firstUserId = null;
+    public com.ebay.sojourner.common.model.SojSession.Builder clearUserId() {
+      userId = null;
       fieldSetFlags()[13] = false;
       return this;
     }
@@ -3131,173 +3329,173 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
     }
 
     /**
-      * Gets the value of the 'viCoreCnt' field.
+      * Gets the value of the 'viCnt' field.
       * from ubisession viCoreCnt
       * @return The value.
       */
-    public java.lang.Integer getViCoreCnt() {
-      return viCoreCnt;
+    public java.lang.Integer getViCnt() {
+      return viCnt;
     }
 
     /**
-      * Sets the value of the 'viCoreCnt' field.
+      * Sets the value of the 'viCnt' field.
       * from ubisession viCoreCnt
-      * @param value The value of 'viCoreCnt'.
+      * @param value The value of 'viCnt'.
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder setViCoreCnt(java.lang.Integer value) {
+    public com.ebay.sojourner.common.model.SojSession.Builder setViCnt(java.lang.Integer value) {
       validate(fields()[16], value);
-      this.viCoreCnt = value;
+      this.viCnt = value;
       fieldSetFlags()[16] = true;
       return this;
     }
 
     /**
-      * Checks whether the 'viCoreCnt' field has been set.
+      * Checks whether the 'viCnt' field has been set.
       * from ubisession viCoreCnt
-      * @return True if the 'viCoreCnt' field has been set, false otherwise.
+      * @return True if the 'viCnt' field has been set, false otherwise.
       */
-    public boolean hasViCoreCnt() {
+    public boolean hasViCnt() {
       return fieldSetFlags()[16];
     }
 
 
     /**
-      * Clears the value of the 'viCoreCnt' field.
+      * Clears the value of the 'viCnt' field.
       * from ubisession viCoreCnt
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder clearViCoreCnt() {
-      viCoreCnt = null;
+    public com.ebay.sojourner.common.model.SojSession.Builder clearViCnt() {
+      viCnt = null;
       fieldSetFlags()[16] = false;
       return this;
     }
 
     /**
-      * Gets the value of the 'bidCoreCnt' field.
+      * Gets the value of the 'bidCnt' field.
       * from ubisession bidCoreCnt
       * @return The value.
       */
-    public java.lang.Integer getBidCoreCnt() {
-      return bidCoreCnt;
+    public java.lang.Integer getBidCnt() {
+      return bidCnt;
     }
 
     /**
-      * Sets the value of the 'bidCoreCnt' field.
+      * Sets the value of the 'bidCnt' field.
       * from ubisession bidCoreCnt
-      * @param value The value of 'bidCoreCnt'.
+      * @param value The value of 'bidCnt'.
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder setBidCoreCnt(java.lang.Integer value) {
+    public com.ebay.sojourner.common.model.SojSession.Builder setBidCnt(java.lang.Integer value) {
       validate(fields()[17], value);
-      this.bidCoreCnt = value;
+      this.bidCnt = value;
       fieldSetFlags()[17] = true;
       return this;
     }
 
     /**
-      * Checks whether the 'bidCoreCnt' field has been set.
+      * Checks whether the 'bidCnt' field has been set.
       * from ubisession bidCoreCnt
-      * @return True if the 'bidCoreCnt' field has been set, false otherwise.
+      * @return True if the 'bidCnt' field has been set, false otherwise.
       */
-    public boolean hasBidCoreCnt() {
+    public boolean hasBidCnt() {
       return fieldSetFlags()[17];
     }
 
 
     /**
-      * Clears the value of the 'bidCoreCnt' field.
+      * Clears the value of the 'bidCnt' field.
       * from ubisession bidCoreCnt
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder clearBidCoreCnt() {
-      bidCoreCnt = null;
+    public com.ebay.sojourner.common.model.SojSession.Builder clearBidCnt() {
+      bidCnt = null;
       fieldSetFlags()[17] = false;
       return this;
     }
 
     /**
-      * Gets the value of the 'binCoreCnt' field.
+      * Gets the value of the 'binCnt' field.
       * from ubisession binCoreCnt
       * @return The value.
       */
-    public java.lang.Integer getBinCoreCnt() {
-      return binCoreCnt;
+    public java.lang.Integer getBinCnt() {
+      return binCnt;
     }
 
     /**
-      * Sets the value of the 'binCoreCnt' field.
+      * Sets the value of the 'binCnt' field.
       * from ubisession binCoreCnt
-      * @param value The value of 'binCoreCnt'.
+      * @param value The value of 'binCnt'.
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder setBinCoreCnt(java.lang.Integer value) {
+    public com.ebay.sojourner.common.model.SojSession.Builder setBinCnt(java.lang.Integer value) {
       validate(fields()[18], value);
-      this.binCoreCnt = value;
+      this.binCnt = value;
       fieldSetFlags()[18] = true;
       return this;
     }
 
     /**
-      * Checks whether the 'binCoreCnt' field has been set.
+      * Checks whether the 'binCnt' field has been set.
       * from ubisession binCoreCnt
-      * @return True if the 'binCoreCnt' field has been set, false otherwise.
+      * @return True if the 'binCnt' field has been set, false otherwise.
       */
-    public boolean hasBinCoreCnt() {
+    public boolean hasBinCnt() {
       return fieldSetFlags()[18];
     }
 
 
     /**
-      * Clears the value of the 'binCoreCnt' field.
+      * Clears the value of the 'binCnt' field.
       * from ubisession binCoreCnt
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder clearBinCoreCnt() {
-      binCoreCnt = null;
+    public com.ebay.sojourner.common.model.SojSession.Builder clearBinCnt() {
+      binCnt = null;
       fieldSetFlags()[18] = false;
       return this;
     }
 
     /**
-      * Gets the value of the 'watchCoreCnt' field.
+      * Gets the value of the 'watchCnt' field.
       * from ubisession watchCoreCnt
       * @return The value.
       */
-    public java.lang.Integer getWatchCoreCnt() {
-      return watchCoreCnt;
+    public java.lang.Integer getWatchCnt() {
+      return watchCnt;
     }
 
     /**
-      * Sets the value of the 'watchCoreCnt' field.
+      * Sets the value of the 'watchCnt' field.
       * from ubisession watchCoreCnt
-      * @param value The value of 'watchCoreCnt'.
+      * @param value The value of 'watchCnt'.
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder setWatchCoreCnt(java.lang.Integer value) {
+    public com.ebay.sojourner.common.model.SojSession.Builder setWatchCnt(java.lang.Integer value) {
       validate(fields()[19], value);
-      this.watchCoreCnt = value;
+      this.watchCnt = value;
       fieldSetFlags()[19] = true;
       return this;
     }
 
     /**
-      * Checks whether the 'watchCoreCnt' field has been set.
+      * Checks whether the 'watchCnt' field has been set.
       * from ubisession watchCoreCnt
-      * @return True if the 'watchCoreCnt' field has been set, false otherwise.
+      * @return True if the 'watchCnt' field has been set, false otherwise.
       */
-    public boolean hasWatchCoreCnt() {
+    public boolean hasWatchCnt() {
       return fieldSetFlags()[19];
     }
 
 
     /**
-      * Clears the value of the 'watchCoreCnt' field.
+      * Clears the value of the 'watchCnt' field.
       * from ubisession watchCoreCnt
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder clearWatchCoreCnt() {
-      watchCoreCnt = null;
+    public com.ebay.sojourner.common.model.SojSession.Builder clearWatchCnt() {
+      watchCnt = null;
       fieldSetFlags()[19] = false;
       return this;
     }
@@ -3346,6 +3544,49 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
     }
 
     /**
+      * Gets the value of the 'siteId' field.
+      * fron ubisession firstSiteId
+      * @return The value.
+      */
+    public java.lang.String getSiteId() {
+      return siteId;
+    }
+
+    /**
+      * Sets the value of the 'siteId' field.
+      * fron ubisession firstSiteId
+      * @param value The value of 'siteId'.
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SojSession.Builder setSiteId(java.lang.String value) {
+      validate(fields()[21], value);
+      this.siteId = value;
+      fieldSetFlags()[21] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'siteId' field has been set.
+      * fron ubisession firstSiteId
+      * @return True if the 'siteId' field has been set, false otherwise.
+      */
+    public boolean hasSiteId() {
+      return fieldSetFlags()[21];
+    }
+
+
+    /**
+      * Clears the value of the 'siteId' field.
+      * fron ubisession firstSiteId
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SojSession.Builder clearSiteId() {
+      siteId = null;
+      fieldSetFlags()[21] = false;
+      return this;
+    }
+
+    /**
       * Gets the value of the 'firstSiteId' field.
       * fron ubisession firstSiteId
       * @return The value.
@@ -3361,9 +3602,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setFirstSiteId(java.lang.Integer value) {
-      validate(fields()[21], value);
+      validate(fields()[22], value);
       this.firstSiteId = value;
-      fieldSetFlags()[21] = true;
+      fieldSetFlags()[22] = true;
       return this;
     }
 
@@ -3373,7 +3614,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'firstSiteId' field has been set, false otherwise.
       */
     public boolean hasFirstSiteId() {
-      return fieldSetFlags()[21];
+      return fieldSetFlags()[22];
     }
 
 
@@ -3384,50 +3625,50 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearFirstSiteId() {
       firstSiteId = null;
-      fieldSetFlags()[21] = false;
+      fieldSetFlags()[22] = false;
       return this;
     }
 
     /**
-      * Gets the value of the 'firstCguid' field.
+      * Gets the value of the 'cguid' field.
       * fron ubisession firstCguid
       * @return The value.
       */
-    public java.lang.String getFirstCguid() {
-      return firstCguid;
+    public java.lang.String getCguid() {
+      return cguid;
     }
 
     /**
-      * Sets the value of the 'firstCguid' field.
+      * Sets the value of the 'cguid' field.
       * fron ubisession firstCguid
-      * @param value The value of 'firstCguid'.
+      * @param value The value of 'cguid'.
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder setFirstCguid(java.lang.String value) {
-      validate(fields()[22], value);
-      this.firstCguid = value;
-      fieldSetFlags()[22] = true;
+    public com.ebay.sojourner.common.model.SojSession.Builder setCguid(java.lang.String value) {
+      validate(fields()[23], value);
+      this.cguid = value;
+      fieldSetFlags()[23] = true;
       return this;
     }
 
     /**
-      * Checks whether the 'firstCguid' field has been set.
+      * Checks whether the 'cguid' field has been set.
       * fron ubisession firstCguid
-      * @return True if the 'firstCguid' field has been set, false otherwise.
+      * @return True if the 'cguid' field has been set, false otherwise.
       */
-    public boolean hasFirstCguid() {
-      return fieldSetFlags()[22];
+    public boolean hasCguid() {
+      return fieldSetFlags()[23];
     }
 
 
     /**
-      * Clears the value of the 'firstCguid' field.
+      * Clears the value of the 'cguid' field.
       * fron ubisession firstCguid
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder clearFirstCguid() {
-      firstCguid = null;
-      fieldSetFlags()[22] = false;
+    public com.ebay.sojourner.common.model.SojSession.Builder clearCguid() {
+      cguid = null;
+      fieldSetFlags()[23] = false;
       return this;
     }
 
@@ -3447,9 +3688,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setCobrand(java.lang.Integer value) {
-      validate(fields()[23], value);
+      validate(fields()[24], value);
       this.cobrand = value;
-      fieldSetFlags()[23] = true;
+      fieldSetFlags()[24] = true;
       return this;
     }
 
@@ -3459,7 +3700,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'cobrand' field has been set, false otherwise.
       */
     public boolean hasCobrand() {
-      return fieldSetFlags()[23];
+      return fieldSetFlags()[24];
     }
 
 
@@ -3470,7 +3711,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearCobrand() {
       cobrand = null;
-      fieldSetFlags()[23] = false;
+      fieldSetFlags()[24] = false;
       return this;
     }
 
@@ -3490,9 +3731,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setStartTimestamp(java.lang.Long value) {
-      validate(fields()[24], value);
+      validate(fields()[25], value);
       this.startTimestamp = value;
-      fieldSetFlags()[24] = true;
+      fieldSetFlags()[25] = true;
       return this;
     }
 
@@ -3502,7 +3743,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'startTimestamp' field has been set, false otherwise.
       */
     public boolean hasStartTimestamp() {
-      return fieldSetFlags()[24];
+      return fieldSetFlags()[25];
     }
 
 
@@ -3513,7 +3754,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearStartTimestamp() {
       startTimestamp = null;
-      fieldSetFlags()[24] = false;
+      fieldSetFlags()[25] = false;
       return this;
     }
 
@@ -3533,9 +3774,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setFirstMappedUserId(java.lang.Long value) {
-      validate(fields()[25], value);
+      validate(fields()[26], value);
       this.firstMappedUserId = value;
-      fieldSetFlags()[25] = true;
+      fieldSetFlags()[26] = true;
       return this;
     }
 
@@ -3545,7 +3786,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'firstMappedUserId' field has been set, false otherwise.
       */
     public boolean hasFirstMappedUserId() {
-      return fieldSetFlags()[25];
+      return fieldSetFlags()[26];
     }
 
 
@@ -3556,50 +3797,50 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearFirstMappedUserId() {
       firstMappedUserId = null;
-      fieldSetFlags()[25] = false;
+      fieldSetFlags()[26] = false;
       return this;
     }
 
     /**
-      * Gets the value of the 'firstAppId' field.
+      * Gets the value of the 'appId' field.
       * from ubisession firstAppId
       * @return The value.
       */
-    public java.lang.Integer getFirstAppId() {
-      return firstAppId;
+    public java.lang.Integer getAppId() {
+      return appId;
     }
 
     /**
-      * Sets the value of the 'firstAppId' field.
+      * Sets the value of the 'appId' field.
       * from ubisession firstAppId
-      * @param value The value of 'firstAppId'.
+      * @param value The value of 'appId'.
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder setFirstAppId(java.lang.Integer value) {
-      validate(fields()[26], value);
-      this.firstAppId = value;
-      fieldSetFlags()[26] = true;
+    public com.ebay.sojourner.common.model.SojSession.Builder setAppId(java.lang.Integer value) {
+      validate(fields()[27], value);
+      this.appId = value;
+      fieldSetFlags()[27] = true;
       return this;
     }
 
     /**
-      * Checks whether the 'firstAppId' field has been set.
+      * Checks whether the 'appId' field has been set.
       * from ubisession firstAppId
-      * @return True if the 'firstAppId' field has been set, false otherwise.
+      * @return True if the 'appId' field has been set, false otherwise.
       */
-    public boolean hasFirstAppId() {
-      return fieldSetFlags()[26];
+    public boolean hasAppId() {
+      return fieldSetFlags()[27];
     }
 
 
     /**
-      * Clears the value of the 'firstAppId' field.
+      * Clears the value of the 'appId' field.
       * from ubisession firstAppId
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder clearFirstAppId() {
-      firstAppId = null;
-      fieldSetFlags()[26] = false;
+    public com.ebay.sojourner.common.model.SojSession.Builder clearAppId() {
+      appId = null;
+      fieldSetFlags()[27] = false;
       return this;
     }
 
@@ -3608,7 +3849,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * from ubisession absDuration
       * @return The value.
       */
-    public java.lang.Integer getAbsDuration() {
+    public java.lang.Long getAbsDuration() {
       return absDuration;
     }
 
@@ -3618,10 +3859,10 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @param value The value of 'absDuration'.
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojSession.Builder setAbsDuration(java.lang.Integer value) {
-      validate(fields()[27], value);
+    public com.ebay.sojourner.common.model.SojSession.Builder setAbsDuration(java.lang.Long value) {
+      validate(fields()[28], value);
       this.absDuration = value;
-      fieldSetFlags()[27] = true;
+      fieldSetFlags()[28] = true;
       return this;
     }
 
@@ -3631,7 +3872,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'absDuration' field has been set, false otherwise.
       */
     public boolean hasAbsDuration() {
-      return fieldSetFlags()[27];
+      return fieldSetFlags()[28];
     }
 
 
@@ -3642,7 +3883,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearAbsDuration() {
       absDuration = null;
-      fieldSetFlags()[27] = false;
+      fieldSetFlags()[28] = false;
       return this;
     }
 
@@ -3662,9 +3903,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setGrCnt(java.lang.Integer value) {
-      validate(fields()[28], value);
+      validate(fields()[29], value);
       this.grCnt = value;
-      fieldSetFlags()[28] = true;
+      fieldSetFlags()[29] = true;
       return this;
     }
 
@@ -3674,7 +3915,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'grCnt' field has been set, false otherwise.
       */
     public boolean hasGrCnt() {
-      return fieldSetFlags()[28];
+      return fieldSetFlags()[29];
     }
 
 
@@ -3685,7 +3926,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearGrCnt() {
       grCnt = null;
-      fieldSetFlags()[28] = false;
+      fieldSetFlags()[29] = false;
       return this;
     }
 
@@ -3705,9 +3946,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setGr1Cnt(java.lang.Integer value) {
-      validate(fields()[29], value);
+      validate(fields()[30], value);
       this.gr1Cnt = value;
-      fieldSetFlags()[29] = true;
+      fieldSetFlags()[30] = true;
       return this;
     }
 
@@ -3717,7 +3958,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'gr1Cnt' field has been set, false otherwise.
       */
     public boolean hasGr1Cnt() {
-      return fieldSetFlags()[29];
+      return fieldSetFlags()[30];
     }
 
 
@@ -3728,7 +3969,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearGr1Cnt() {
       gr1Cnt = null;
-      fieldSetFlags()[29] = false;
+      fieldSetFlags()[30] = false;
       return this;
     }
 
@@ -3748,9 +3989,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setMyebayCnt(java.lang.Integer value) {
-      validate(fields()[30], value);
+      validate(fields()[31], value);
       this.myebayCnt = value;
-      fieldSetFlags()[30] = true;
+      fieldSetFlags()[31] = true;
       return this;
     }
 
@@ -3760,7 +4001,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'myebayCnt' field has been set, false otherwise.
       */
     public boolean hasMyebayCnt() {
-      return fieldSetFlags()[30];
+      return fieldSetFlags()[31];
     }
 
 
@@ -3771,7 +4012,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearMyebayCnt() {
       myebayCnt = null;
-      fieldSetFlags()[30] = false;
+      fieldSetFlags()[31] = false;
       return this;
     }
 
@@ -3791,9 +4032,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setAbsStartTimestamp(java.lang.Long value) {
-      validate(fields()[31], value);
+      validate(fields()[32], value);
       this.absStartTimestamp = value;
-      fieldSetFlags()[31] = true;
+      fieldSetFlags()[32] = true;
       return this;
     }
 
@@ -3803,7 +4044,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'absStartTimestamp' field has been set, false otherwise.
       */
     public boolean hasAbsStartTimestamp() {
-      return fieldSetFlags()[31];
+      return fieldSetFlags()[32];
     }
 
 
@@ -3814,7 +4055,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearAbsStartTimestamp() {
       absStartTimestamp = null;
-      fieldSetFlags()[31] = false;
+      fieldSetFlags()[32] = false;
       return this;
     }
 
@@ -3834,9 +4075,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setSigninPageCnt(java.lang.Integer value) {
-      validate(fields()[32], value);
+      validate(fields()[33], value);
       this.signinPageCnt = value;
-      fieldSetFlags()[32] = true;
+      fieldSetFlags()[33] = true;
       return this;
     }
 
@@ -3846,7 +4087,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'signinPageCnt' field has been set, false otherwise.
       */
     public boolean hasSigninPageCnt() {
-      return fieldSetFlags()[32];
+      return fieldSetFlags()[33];
     }
 
 
@@ -3857,7 +4098,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearSigninPageCnt() {
       signinPageCnt = null;
-      fieldSetFlags()[32] = false;
+      fieldSetFlags()[33] = false;
       return this;
     }
 
@@ -3877,9 +4118,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setNonIframeRdtEventCnt(java.lang.Integer value) {
-      validate(fields()[33], value);
+      validate(fields()[34], value);
       this.nonIframeRdtEventCnt = value;
-      fieldSetFlags()[33] = true;
+      fieldSetFlags()[34] = true;
       return this;
     }
 
@@ -3889,7 +4130,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'nonIframeRdtEventCnt' field has been set, false otherwise.
       */
     public boolean hasNonIframeRdtEventCnt() {
-      return fieldSetFlags()[33];
+      return fieldSetFlags()[34];
     }
 
 
@@ -3900,7 +4141,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearNonIframeRdtEventCnt() {
       nonIframeRdtEventCnt = null;
-      fieldSetFlags()[33] = false;
+      fieldSetFlags()[34] = false;
       return this;
     }
 
@@ -3918,9 +4159,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setBotFlagList(java.util.List<java.lang.Integer> value) {
-      validate(fields()[34], value);
+      validate(fields()[35], value);
       this.botFlagList = value;
-      fieldSetFlags()[34] = true;
+      fieldSetFlags()[35] = true;
       return this;
     }
 
@@ -3929,7 +4170,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'botFlagList' field has been set, false otherwise.
       */
     public boolean hasBotFlagList() {
-      return fieldSetFlags()[34];
+      return fieldSetFlags()[35];
     }
 
 
@@ -3939,7 +4180,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearBotFlagList() {
       botFlagList = null;
-      fieldSetFlags()[34] = false;
+      fieldSetFlags()[35] = false;
       return this;
     }
 
@@ -3959,9 +4200,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setAbsEndTimestamp(java.lang.Long value) {
-      validate(fields()[35], value);
+      validate(fields()[36], value);
       this.absEndTimestamp = value;
-      fieldSetFlags()[35] = true;
+      fieldSetFlags()[36] = true;
       return this;
     }
 
@@ -3971,7 +4212,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'absEndTimestamp' field has been set, false otherwise.
       */
     public boolean hasAbsEndTimestamp() {
-      return fieldSetFlags()[35];
+      return fieldSetFlags()[36];
     }
 
 
@@ -3982,7 +4223,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearAbsEndTimestamp() {
       absEndTimestamp = null;
-      fieldSetFlags()[35] = false;
+      fieldSetFlags()[36] = false;
       return this;
     }
 
@@ -4002,9 +4243,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setEndTimestamp(java.lang.Long value) {
-      validate(fields()[36], value);
+      validate(fields()[37], value);
       this.endTimestamp = value;
-      fieldSetFlags()[36] = true;
+      fieldSetFlags()[37] = true;
       return this;
     }
 
@@ -4014,7 +4255,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'endTimestamp' field has been set, false otherwise.
       */
     public boolean hasEndTimestamp() {
-      return fieldSetFlags()[36];
+      return fieldSetFlags()[37];
     }
 
 
@@ -4025,7 +4266,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearEndTimestamp() {
       endTimestamp = null;
-      fieldSetFlags()[36] = false;
+      fieldSetFlags()[37] = false;
       return this;
     }
 
@@ -4045,9 +4286,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setSojDataDt(java.lang.Long value) {
-      validate(fields()[37], value);
+      validate(fields()[38], value);
       this.sojDataDt = value;
-      fieldSetFlags()[37] = true;
+      fieldSetFlags()[38] = true;
       return this;
     }
 
@@ -4057,7 +4298,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'sojDataDt' field has been set, false otherwise.
       */
     public boolean hasSojDataDt() {
-      return fieldSetFlags()[37];
+      return fieldSetFlags()[38];
     }
 
 
@@ -4068,7 +4309,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearSojDataDt() {
       sojDataDt = null;
-      fieldSetFlags()[37] = false;
+      fieldSetFlags()[38] = false;
       return this;
     }
 
@@ -4088,9 +4329,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setSessionId(java.lang.String value) {
-      validate(fields()[38], value);
+      validate(fields()[39], value);
       this.sessionId = value;
-      fieldSetFlags()[38] = true;
+      fieldSetFlags()[39] = true;
       return this;
     }
 
@@ -4100,7 +4341,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'sessionId' field has been set, false otherwise.
       */
     public boolean hasSessionId() {
-      return fieldSetFlags()[38];
+      return fieldSetFlags()[39];
     }
 
 
@@ -4111,7 +4352,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearSessionId() {
       sessionId = null;
-      fieldSetFlags()[38] = false;
+      fieldSetFlags()[39] = false;
       return this;
     }
 
@@ -4131,9 +4372,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setSessionSkey(java.lang.Long value) {
-      validate(fields()[39], value);
+      validate(fields()[40], value);
       this.sessionSkey = value;
-      fieldSetFlags()[39] = true;
+      fieldSetFlags()[40] = true;
       return this;
     }
 
@@ -4143,7 +4384,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'sessionSkey' field has been set, false otherwise.
       */
     public boolean hasSessionSkey() {
-      return fieldSetFlags()[39];
+      return fieldSetFlags()[40];
     }
 
 
@@ -4154,7 +4395,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearSessionSkey() {
       sessionSkey = null;
-      fieldSetFlags()[39] = false;
+      fieldSetFlags()[40] = false;
       return this;
     }
 
@@ -4174,9 +4415,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setSessionStartDt(java.lang.Long value) {
-      validate(fields()[40], value);
+      validate(fields()[41], value);
       this.sessionStartDt = value;
-      fieldSetFlags()[40] = true;
+      fieldSetFlags()[41] = true;
       return this;
     }
 
@@ -4186,7 +4427,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'sessionStartDt' field has been set, false otherwise.
       */
     public boolean hasSessionStartDt() {
-      return fieldSetFlags()[40];
+      return fieldSetFlags()[41];
     }
 
 
@@ -4197,7 +4438,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearSessionStartDt() {
       sessionStartDt = null;
-      fieldSetFlags()[40] = false;
+      fieldSetFlags()[41] = false;
       return this;
     }
 
@@ -4217,9 +4458,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setFirstSessionStartDt(java.lang.Long value) {
-      validate(fields()[41], value);
+      validate(fields()[42], value);
       this.firstSessionStartDt = value;
-      fieldSetFlags()[41] = true;
+      fieldSetFlags()[42] = true;
       return this;
     }
 
@@ -4229,7 +4470,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'firstSessionStartDt' field has been set, false otherwise.
       */
     public boolean hasFirstSessionStartDt() {
-      return fieldSetFlags()[41];
+      return fieldSetFlags()[42];
     }
 
 
@@ -4240,7 +4481,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearFirstSessionStartDt() {
       firstSessionStartDt = null;
-      fieldSetFlags()[41] = false;
+      fieldSetFlags()[42] = false;
       return this;
     }
 
@@ -4260,9 +4501,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setSessionEndDt(java.lang.Long value) {
-      validate(fields()[42], value);
+      validate(fields()[43], value);
       this.sessionEndDt = value;
-      fieldSetFlags()[42] = true;
+      fieldSetFlags()[43] = true;
       return this;
     }
 
@@ -4272,7 +4513,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'sessionEndDt' field has been set, false otherwise.
       */
     public boolean hasSessionEndDt() {
-      return fieldSetFlags()[42];
+      return fieldSetFlags()[43];
     }
 
 
@@ -4283,7 +4524,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearSessionEndDt() {
       sessionEndDt = null;
-      fieldSetFlags()[42] = false;
+      fieldSetFlags()[43] = false;
       return this;
     }
 
@@ -4303,9 +4544,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setAbsEventCnt(java.lang.Integer value) {
-      validate(fields()[43], value);
+      validate(fields()[44], value);
       this.absEventCnt = value;
-      fieldSetFlags()[43] = true;
+      fieldSetFlags()[44] = true;
       return this;
     }
 
@@ -4315,7 +4556,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'absEventCnt' field has been set, false otherwise.
       */
     public boolean hasAbsEventCnt() {
-      return fieldSetFlags()[43];
+      return fieldSetFlags()[44];
     }
 
 
@@ -4326,7 +4567,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearAbsEventCnt() {
       absEventCnt = null;
-      fieldSetFlags()[43] = false;
+      fieldSetFlags()[44] = false;
       return this;
     }
 
@@ -4346,9 +4587,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setSingleClickSessionFlag(java.lang.Boolean value) {
-      validate(fields()[44], value);
+      validate(fields()[45], value);
       this.singleClickSessionFlag = value;
-      fieldSetFlags()[44] = true;
+      fieldSetFlags()[45] = true;
       return this;
     }
 
@@ -4358,7 +4599,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'singleClickSessionFlag' field has been set, false otherwise.
       */
     public boolean hasSingleClickSessionFlag() {
-      return fieldSetFlags()[44];
+      return fieldSetFlags()[45];
     }
 
 
@@ -4369,7 +4610,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearSingleClickSessionFlag() {
       singleClickSessionFlag = null;
-      fieldSetFlags()[44] = false;
+      fieldSetFlags()[45] = false;
       return this;
     }
 
@@ -4389,9 +4630,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setAsqCnt(java.lang.Integer value) {
-      validate(fields()[45], value);
+      validate(fields()[46], value);
       this.asqCnt = value;
-      fieldSetFlags()[45] = true;
+      fieldSetFlags()[46] = true;
       return this;
     }
 
@@ -4401,7 +4642,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'asqCnt' field has been set, false otherwise.
       */
     public boolean hasAsqCnt() {
-      return fieldSetFlags()[45];
+      return fieldSetFlags()[46];
     }
 
 
@@ -4412,7 +4653,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearAsqCnt() {
       asqCnt = null;
-      fieldSetFlags()[45] = false;
+      fieldSetFlags()[46] = false;
       return this;
     }
 
@@ -4432,9 +4673,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setAtcCnt(java.lang.Integer value) {
-      validate(fields()[46], value);
+      validate(fields()[47], value);
       this.atcCnt = value;
-      fieldSetFlags()[46] = true;
+      fieldSetFlags()[47] = true;
       return this;
     }
 
@@ -4444,7 +4685,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'atcCnt' field has been set, false otherwise.
       */
     public boolean hasAtcCnt() {
-      return fieldSetFlags()[46];
+      return fieldSetFlags()[47];
     }
 
 
@@ -4455,7 +4696,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearAtcCnt() {
       atcCnt = null;
-      fieldSetFlags()[46] = false;
+      fieldSetFlags()[47] = false;
       return this;
     }
 
@@ -4475,9 +4716,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setAtlCnt(java.lang.Integer value) {
-      validate(fields()[47], value);
+      validate(fields()[48], value);
       this.atlCnt = value;
-      fieldSetFlags()[47] = true;
+      fieldSetFlags()[48] = true;
       return this;
     }
 
@@ -4487,7 +4728,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'atlCnt' field has been set, false otherwise.
       */
     public boolean hasAtlCnt() {
-      return fieldSetFlags()[47];
+      return fieldSetFlags()[48];
     }
 
 
@@ -4498,7 +4739,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearAtlCnt() {
       atlCnt = null;
-      fieldSetFlags()[47] = false;
+      fieldSetFlags()[48] = false;
       return this;
     }
 
@@ -4518,9 +4759,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setBoCnt(java.lang.Integer value) {
-      validate(fields()[48], value);
+      validate(fields()[49], value);
       this.boCnt = value;
-      fieldSetFlags()[48] = true;
+      fieldSetFlags()[49] = true;
       return this;
     }
 
@@ -4530,7 +4771,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'boCnt' field has been set, false otherwise.
       */
     public boolean hasBoCnt() {
-      return fieldSetFlags()[48];
+      return fieldSetFlags()[49];
     }
 
 
@@ -4541,7 +4782,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearBoCnt() {
       boCnt = null;
-      fieldSetFlags()[48] = false;
+      fieldSetFlags()[49] = false;
       return this;
     }
 
@@ -4561,9 +4802,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setSrpCnt(java.lang.Integer value) {
-      validate(fields()[49], value);
+      validate(fields()[50], value);
       this.srpCnt = value;
-      fieldSetFlags()[49] = true;
+      fieldSetFlags()[50] = true;
       return this;
     }
 
@@ -4573,7 +4814,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'srpCnt' field has been set, false otherwise.
       */
     public boolean hasSrpCnt() {
-      return fieldSetFlags()[49];
+      return fieldSetFlags()[50];
     }
 
 
@@ -4584,7 +4825,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearSrpCnt() {
       srpCnt = null;
-      fieldSetFlags()[49] = false;
+      fieldSetFlags()[50] = false;
       return this;
     }
 
@@ -4604,9 +4845,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setServEventCnt(java.lang.Integer value) {
-      validate(fields()[50], value);
+      validate(fields()[51], value);
       this.servEventCnt = value;
-      fieldSetFlags()[50] = true;
+      fieldSetFlags()[51] = true;
       return this;
     }
 
@@ -4616,7 +4857,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'servEventCnt' field has been set, false otherwise.
       */
     public boolean hasServEventCnt() {
-      return fieldSetFlags()[50];
+      return fieldSetFlags()[51];
     }
 
 
@@ -4627,7 +4868,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearServEventCnt() {
       servEventCnt = null;
-      fieldSetFlags()[50] = false;
+      fieldSetFlags()[51] = false;
       return this;
     }
 
@@ -4647,9 +4888,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setSearchViewPageCnt(java.lang.Integer value) {
-      validate(fields()[51], value);
+      validate(fields()[52], value);
       this.searchViewPageCnt = value;
-      fieldSetFlags()[51] = true;
+      fieldSetFlags()[52] = true;
       return this;
     }
 
@@ -4659,7 +4900,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'searchViewPageCnt' field has been set, false otherwise.
       */
     public boolean hasSearchViewPageCnt() {
-      return fieldSetFlags()[51];
+      return fieldSetFlags()[52];
     }
 
 
@@ -4670,7 +4911,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearSearchViewPageCnt() {
       searchViewPageCnt = null;
-      fieldSetFlags()[51] = false;
+      fieldSetFlags()[52] = false;
       return this;
     }
 
@@ -4690,9 +4931,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setBrowserFamily(java.lang.String value) {
-      validate(fields()[52], value);
+      validate(fields()[53], value);
       this.browserFamily = value;
-      fieldSetFlags()[52] = true;
+      fieldSetFlags()[53] = true;
       return this;
     }
 
@@ -4702,7 +4943,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'browserFamily' field has been set, false otherwise.
       */
     public boolean hasBrowserFamily() {
-      return fieldSetFlags()[52];
+      return fieldSetFlags()[53];
     }
 
 
@@ -4713,7 +4954,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearBrowserFamily() {
       browserFamily = null;
-      fieldSetFlags()[52] = false;
+      fieldSetFlags()[53] = false;
       return this;
     }
 
@@ -4733,9 +4974,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setBrowserVersion(java.lang.String value) {
-      validate(fields()[53], value);
+      validate(fields()[54], value);
       this.browserVersion = value;
-      fieldSetFlags()[53] = true;
+      fieldSetFlags()[54] = true;
       return this;
     }
 
@@ -4745,7 +4986,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'browserVersion' field has been set, false otherwise.
       */
     public boolean hasBrowserVersion() {
-      return fieldSetFlags()[53];
+      return fieldSetFlags()[54];
     }
 
 
@@ -4756,7 +4997,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearBrowserVersion() {
       browserVersion = null;
-      fieldSetFlags()[53] = false;
+      fieldSetFlags()[54] = false;
       return this;
     }
 
@@ -4776,9 +5017,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setCity(java.lang.String value) {
-      validate(fields()[54], value);
+      validate(fields()[55], value);
       this.city = value;
-      fieldSetFlags()[54] = true;
+      fieldSetFlags()[55] = true;
       return this;
     }
 
@@ -4788,7 +5029,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'city' field has been set, false otherwise.
       */
     public boolean hasCity() {
-      return fieldSetFlags()[54];
+      return fieldSetFlags()[55];
     }
 
 
@@ -4799,7 +5040,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearCity() {
       city = null;
-      fieldSetFlags()[54] = false;
+      fieldSetFlags()[55] = false;
       return this;
     }
 
@@ -4819,9 +5060,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setRegion(java.lang.String value) {
-      validate(fields()[55], value);
+      validate(fields()[56], value);
       this.region = value;
-      fieldSetFlags()[55] = true;
+      fieldSetFlags()[56] = true;
       return this;
     }
 
@@ -4831,7 +5072,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'region' field has been set, false otherwise.
       */
     public boolean hasRegion() {
-      return fieldSetFlags()[55];
+      return fieldSetFlags()[56];
     }
 
 
@@ -4842,7 +5083,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearRegion() {
       region = null;
-      fieldSetFlags()[55] = false;
+      fieldSetFlags()[56] = false;
       return this;
     }
 
@@ -4862,9 +5103,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setCountry(java.lang.String value) {
-      validate(fields()[56], value);
+      validate(fields()[57], value);
       this.country = value;
-      fieldSetFlags()[56] = true;
+      fieldSetFlags()[57] = true;
       return this;
     }
 
@@ -4874,7 +5115,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'country' field has been set, false otherwise.
       */
     public boolean hasCountry() {
-      return fieldSetFlags()[56];
+      return fieldSetFlags()[57];
     }
 
 
@@ -4885,7 +5126,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearCountry() {
       country = null;
-      fieldSetFlags()[56] = false;
+      fieldSetFlags()[57] = false;
       return this;
     }
 
@@ -4905,9 +5146,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setContinent(java.lang.String value) {
-      validate(fields()[57], value);
+      validate(fields()[58], value);
       this.continent = value;
-      fieldSetFlags()[57] = true;
+      fieldSetFlags()[58] = true;
       return this;
     }
 
@@ -4917,7 +5158,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'continent' field has been set, false otherwise.
       */
     public boolean hasContinent() {
-      return fieldSetFlags()[57];
+      return fieldSetFlags()[58];
     }
 
 
@@ -4928,7 +5169,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearContinent() {
       continent = null;
-      fieldSetFlags()[57] = false;
+      fieldSetFlags()[58] = false;
       return this;
     }
 
@@ -4948,9 +5189,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setDeviceClass(java.lang.String value) {
-      validate(fields()[58], value);
+      validate(fields()[59], value);
       this.deviceClass = value;
-      fieldSetFlags()[58] = true;
+      fieldSetFlags()[59] = true;
       return this;
     }
 
@@ -4960,7 +5201,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'deviceClass' field has been set, false otherwise.
       */
     public boolean hasDeviceClass() {
-      return fieldSetFlags()[58];
+      return fieldSetFlags()[59];
     }
 
 
@@ -4971,7 +5212,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearDeviceClass() {
       deviceClass = null;
-      fieldSetFlags()[58] = false;
+      fieldSetFlags()[59] = false;
       return this;
     }
 
@@ -4991,9 +5232,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setDeviceFamily(java.lang.String value) {
-      validate(fields()[59], value);
+      validate(fields()[60], value);
       this.deviceFamily = value;
-      fieldSetFlags()[59] = true;
+      fieldSetFlags()[60] = true;
       return this;
     }
 
@@ -5003,7 +5244,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'deviceFamily' field has been set, false otherwise.
       */
     public boolean hasDeviceFamily() {
-      return fieldSetFlags()[59];
+      return fieldSetFlags()[60];
     }
 
 
@@ -5014,7 +5255,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearDeviceFamily() {
       deviceFamily = null;
-      fieldSetFlags()[59] = false;
+      fieldSetFlags()[60] = false;
       return this;
     }
 
@@ -5034,9 +5275,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setEndResourceId(java.lang.Integer value) {
-      validate(fields()[60], value);
+      validate(fields()[61], value);
       this.endResourceId = value;
-      fieldSetFlags()[60] = true;
+      fieldSetFlags()[61] = true;
       return this;
     }
 
@@ -5046,7 +5287,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'endResourceId' field has been set, false otherwise.
       */
     public boolean hasEndResourceId() {
-      return fieldSetFlags()[60];
+      return fieldSetFlags()[61];
     }
 
 
@@ -5057,7 +5298,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearEndResourceId() {
       endResourceId = null;
-      fieldSetFlags()[60] = false;
+      fieldSetFlags()[61] = false;
       return this;
     }
 
@@ -5077,9 +5318,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setStartResourceId(java.lang.Integer value) {
-      validate(fields()[61], value);
+      validate(fields()[62], value);
       this.startResourceId = value;
-      fieldSetFlags()[61] = true;
+      fieldSetFlags()[62] = true;
       return this;
     }
 
@@ -5089,7 +5330,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'startResourceId' field has been set, false otherwise.
       */
     public boolean hasStartResourceId() {
-      return fieldSetFlags()[61];
+      return fieldSetFlags()[62];
     }
 
 
@@ -5100,7 +5341,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearStartResourceId() {
       startResourceId = null;
-      fieldSetFlags()[61] = false;
+      fieldSetFlags()[62] = false;
       return this;
     }
 
@@ -5120,9 +5361,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setIsReturningVisitor(java.lang.Boolean value) {
-      validate(fields()[62], value);
+      validate(fields()[63], value);
       this.isReturningVisitor = value;
-      fieldSetFlags()[62] = true;
+      fieldSetFlags()[63] = true;
       return this;
     }
 
@@ -5132,7 +5373,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'isReturningVisitor' field has been set, false otherwise.
       */
     public boolean hasIsReturningVisitor() {
-      return fieldSetFlags()[62];
+      return fieldSetFlags()[63];
     }
 
 
@@ -5143,7 +5384,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearIsReturningVisitor() {
       isReturningVisitor = null;
-      fieldSetFlags()[62] = false;
+      fieldSetFlags()[63] = false;
       return this;
     }
 
@@ -5163,9 +5404,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setLineSpeed(java.lang.String value) {
-      validate(fields()[63], value);
+      validate(fields()[64], value);
       this.lineSpeed = value;
-      fieldSetFlags()[63] = true;
+      fieldSetFlags()[64] = true;
       return this;
     }
 
@@ -5175,7 +5416,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'lineSpeed' field has been set, false otherwise.
       */
     public boolean hasLineSpeed() {
-      return fieldSetFlags()[63];
+      return fieldSetFlags()[64];
     }
 
 
@@ -5186,7 +5427,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearLineSpeed() {
       lineSpeed = null;
-      fieldSetFlags()[63] = false;
+      fieldSetFlags()[64] = false;
       return this;
     }
 
@@ -5206,9 +5447,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setOsFamily(java.lang.String value) {
-      validate(fields()[64], value);
+      validate(fields()[65], value);
       this.osFamily = value;
-      fieldSetFlags()[64] = true;
+      fieldSetFlags()[65] = true;
       return this;
     }
 
@@ -5218,7 +5459,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'osFamily' field has been set, false otherwise.
       */
     public boolean hasOsFamily() {
-      return fieldSetFlags()[64];
+      return fieldSetFlags()[65];
     }
 
 
@@ -5229,7 +5470,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearOsFamily() {
       osFamily = null;
-      fieldSetFlags()[64] = false;
+      fieldSetFlags()[65] = false;
       return this;
     }
 
@@ -5249,9 +5490,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setOsVersion(java.lang.String value) {
-      validate(fields()[65], value);
+      validate(fields()[66], value);
       this.osVersion = value;
-      fieldSetFlags()[65] = true;
+      fieldSetFlags()[66] = true;
       return this;
     }
 
@@ -5261,7 +5502,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'osVersion' field has been set, false otherwise.
       */
     public boolean hasOsVersion() {
-      return fieldSetFlags()[65];
+      return fieldSetFlags()[66];
     }
 
 
@@ -5272,7 +5513,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearOsVersion() {
       osVersion = null;
-      fieldSetFlags()[65] = false;
+      fieldSetFlags()[66] = false;
       return this;
     }
 
@@ -5292,9 +5533,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setPulsarEventCnt(java.lang.Integer value) {
-      validate(fields()[66], value);
+      validate(fields()[67], value);
       this.pulsarEventCnt = value;
-      fieldSetFlags()[66] = true;
+      fieldSetFlags()[67] = true;
       return this;
     }
 
@@ -5304,7 +5545,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'pulsarEventCnt' field has been set, false otherwise.
       */
     public boolean hasPulsarEventCnt() {
-      return fieldSetFlags()[66];
+      return fieldSetFlags()[67];
     }
 
 
@@ -5315,7 +5556,50 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearPulsarEventCnt() {
       pulsarEventCnt = null;
-      fieldSetFlags()[66] = false;
+      fieldSetFlags()[67] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'sojEventCnt' field.
+      * from ubisession sojEventCnt
+      * @return The value.
+      */
+    public java.lang.Integer getSojEventCnt() {
+      return sojEventCnt;
+    }
+
+    /**
+      * Sets the value of the 'sojEventCnt' field.
+      * from ubisession sojEventCnt
+      * @param value The value of 'sojEventCnt'.
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SojSession.Builder setSojEventCnt(java.lang.Integer value) {
+      validate(fields()[68], value);
+      this.sojEventCnt = value;
+      fieldSetFlags()[68] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'sojEventCnt' field has been set.
+      * from ubisession sojEventCnt
+      * @return True if the 'sojEventCnt' field has been set, false otherwise.
+      */
+    public boolean hasSojEventCnt() {
+      return fieldSetFlags()[68];
+    }
+
+
+    /**
+      * Clears the value of the 'sojEventCnt' field.
+      * from ubisession sojEventCnt
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SojSession.Builder clearSojEventCnt() {
+      sojEventCnt = null;
+      fieldSetFlags()[68] = false;
       return this;
     }
 
@@ -5335,9 +5619,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setStreamId(java.lang.String value) {
-      validate(fields()[67], value);
+      validate(fields()[69], value);
       this.streamId = value;
-      fieldSetFlags()[67] = true;
+      fieldSetFlags()[69] = true;
       return this;
     }
 
@@ -5347,7 +5631,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'streamId' field has been set, false otherwise.
       */
     public boolean hasStreamId() {
-      return fieldSetFlags()[67];
+      return fieldSetFlags()[69];
     }
 
 
@@ -5358,7 +5642,136 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearStreamId() {
       streamId = null;
-      fieldSetFlags()[67] = false;
+      fieldSetFlags()[69] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'viewEventCnt' field.
+      * from ubisession viewct
+      * @return The value.
+      */
+    public java.lang.Integer getViewEventCnt() {
+      return viewEventCnt;
+    }
+
+    /**
+      * Sets the value of the 'viewEventCnt' field.
+      * from ubisession viewct
+      * @param value The value of 'viewEventCnt'.
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SojSession.Builder setViewEventCnt(java.lang.Integer value) {
+      validate(fields()[70], value);
+      this.viewEventCnt = value;
+      fieldSetFlags()[70] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'viewEventCnt' field has been set.
+      * from ubisession viewct
+      * @return True if the 'viewEventCnt' field has been set, false otherwise.
+      */
+    public boolean hasViewEventCnt() {
+      return fieldSetFlags()[70];
+    }
+
+
+    /**
+      * Clears the value of the 'viewEventCnt' field.
+      * from ubisession viewct
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SojSession.Builder clearViewEventCnt() {
+      viewEventCnt = null;
+      fieldSetFlags()[70] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'referer' field.
+      * map from rf
+      * @return The value.
+      */
+    public java.lang.String getReferer() {
+      return referer;
+    }
+
+    /**
+      * Sets the value of the 'referer' field.
+      * map from rf
+      * @param value The value of 'referer'.
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SojSession.Builder setReferer(java.lang.String value) {
+      validate(fields()[71], value);
+      this.referer = value;
+      fieldSetFlags()[71] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'referer' field has been set.
+      * map from rf
+      * @return True if the 'referer' field has been set, false otherwise.
+      */
+    public boolean hasReferer() {
+      return fieldSetFlags()[71];
+    }
+
+
+    /**
+      * Clears the value of the 'referer' field.
+      * map from rf
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SojSession.Builder clearReferer() {
+      referer = null;
+      fieldSetFlags()[71] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'pageId' field.
+      * map from p
+      * @return The value.
+      */
+    public java.lang.Integer getPageId() {
+      return pageId;
+    }
+
+    /**
+      * Sets the value of the 'pageId' field.
+      * map from p
+      * @param value The value of 'pageId'.
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SojSession.Builder setPageId(java.lang.Integer value) {
+      validate(fields()[72], value);
+      this.pageId = value;
+      fieldSetFlags()[72] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'pageId' field has been set.
+      * map from p
+      * @return True if the 'pageId' field has been set, false otherwise.
+      */
+    public boolean hasPageId() {
+      return fieldSetFlags()[72];
+    }
+
+
+    /**
+      * Clears the value of the 'pageId' field.
+      * map from p
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SojSession.Builder clearPageId() {
+      pageId = null;
+      fieldSetFlags()[72] = false;
       return this;
     }
 
@@ -5378,9 +5791,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setBuserId(java.lang.String value) {
-      validate(fields()[68], value);
+      validate(fields()[73], value);
       this.buserId = value;
-      fieldSetFlags()[68] = true;
+      fieldSetFlags()[73] = true;
       return this;
     }
 
@@ -5390,7 +5803,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'buserId' field has been set, false otherwise.
       */
     public boolean hasBuserId() {
-      return fieldSetFlags()[68];
+      return fieldSetFlags()[73];
     }
 
 
@@ -5401,7 +5814,50 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearBuserId() {
       buserId = null;
-      fieldSetFlags()[68] = false;
+      fieldSetFlags()[73] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'oldsessionskey' field.
+      * from ubisession sessionSkey
+      * @return The value.
+      */
+    public java.lang.Long getOldsessionskey() {
+      return oldsessionskey;
+    }
+
+    /**
+      * Sets the value of the 'oldsessionskey' field.
+      * from ubisession sessionSkey
+      * @param value The value of 'oldsessionskey'.
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SojSession.Builder setOldsessionskey(java.lang.Long value) {
+      validate(fields()[74], value);
+      this.oldsessionskey = value;
+      fieldSetFlags()[74] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'oldsessionskey' field has been set.
+      * from ubisession sessionSkey
+      * @return True if the 'oldsessionskey' field has been set, false otherwise.
+      */
+    public boolean hasOldsessionskey() {
+      return fieldSetFlags()[74];
+    }
+
+
+    /**
+      * Clears the value of the 'oldsessionskey' field.
+      * from ubisession sessionSkey
+      * @return This builder.
+      */
+    public com.ebay.sojourner.common.model.SojSession.Builder clearOldsessionskey() {
+      oldsessionskey = null;
+      fieldSetFlags()[74] = false;
       return this;
     }
 
@@ -5421,9 +5877,9 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.SojSession.Builder setIsOpen(java.lang.Boolean value) {
-      validate(fields()[69], value);
+      validate(fields()[75], value);
       this.isOpen = value;
-      fieldSetFlags()[69] = true;
+      fieldSetFlags()[75] = true;
       return this;
     }
 
@@ -5433,7 +5889,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'isOpen' field has been set, false otherwise.
       */
     public boolean hasIsOpen() {
-      return fieldSetFlags()[69];
+      return fieldSetFlags()[75];
     }
 
 
@@ -5444,7 +5900,7 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public com.ebay.sojourner.common.model.SojSession.Builder clearIsOpen() {
       isOpen = null;
-      fieldSetFlags()[69] = false;
+      fieldSetFlags()[75] = false;
       return this;
     }
 
@@ -5459,70 +5915,76 @@ public class SojSession extends org.apache.avro.specific.SpecificRecordBase impl
         record.attrFlags = fieldSetFlags()[3] ? this.attrFlags : (java.lang.Integer) defaultValue(fields()[3]);
         record.version = fieldSetFlags()[4] ? this.version : (java.lang.Integer) defaultValue(fields()[4]);
         record.botFlags = fieldSetFlags()[5] ? this.botFlags : (java.lang.Integer) defaultValue(fields()[5]);
-        record.ip = fieldSetFlags()[6] ? this.ip : (java.lang.String) defaultValue(fields()[6]);
+        record.ipv4 = fieldSetFlags()[6] ? this.ipv4 : (java.lang.String) defaultValue(fields()[6]);
         record.userAgent = fieldSetFlags()[7] ? this.userAgent : (java.lang.String) defaultValue(fields()[7]);
         record.findingFlags = fieldSetFlags()[8] ? this.findingFlags : (java.lang.Long) defaultValue(fields()[8]);
         record.startPageId = fieldSetFlags()[9] ? this.startPageId : (java.lang.Integer) defaultValue(fields()[9]);
         record.endPageId = fieldSetFlags()[10] ? this.endPageId : (java.lang.Integer) defaultValue(fields()[10]);
         record.botFlag = fieldSetFlags()[11] ? this.botFlag : (java.lang.Integer) defaultValue(fields()[11]);
         record.durationSec = fieldSetFlags()[12] ? this.durationSec : (java.lang.Integer) defaultValue(fields()[12]);
-        record.firstUserId = fieldSetFlags()[13] ? this.firstUserId : (java.lang.String) defaultValue(fields()[13]);
+        record.userId = fieldSetFlags()[13] ? this.userId : (java.lang.String) defaultValue(fields()[13]);
         record.eventCnt = fieldSetFlags()[14] ? this.eventCnt : (java.lang.Integer) defaultValue(fields()[14]);
         record.trafficSrcId = fieldSetFlags()[15] ? this.trafficSrcId : (java.lang.Integer) defaultValue(fields()[15]);
-        record.viCoreCnt = fieldSetFlags()[16] ? this.viCoreCnt : (java.lang.Integer) defaultValue(fields()[16]);
-        record.bidCoreCnt = fieldSetFlags()[17] ? this.bidCoreCnt : (java.lang.Integer) defaultValue(fields()[17]);
-        record.binCoreCnt = fieldSetFlags()[18] ? this.binCoreCnt : (java.lang.Integer) defaultValue(fields()[18]);
-        record.watchCoreCnt = fieldSetFlags()[19] ? this.watchCoreCnt : (java.lang.Integer) defaultValue(fields()[19]);
+        record.viCnt = fieldSetFlags()[16] ? this.viCnt : (java.lang.Integer) defaultValue(fields()[16]);
+        record.bidCnt = fieldSetFlags()[17] ? this.bidCnt : (java.lang.Integer) defaultValue(fields()[17]);
+        record.binCnt = fieldSetFlags()[18] ? this.binCnt : (java.lang.Integer) defaultValue(fields()[18]);
+        record.watchCnt = fieldSetFlags()[19] ? this.watchCnt : (java.lang.Integer) defaultValue(fields()[19]);
         record.homepageCnt = fieldSetFlags()[20] ? this.homepageCnt : (java.lang.Integer) defaultValue(fields()[20]);
-        record.firstSiteId = fieldSetFlags()[21] ? this.firstSiteId : (java.lang.Integer) defaultValue(fields()[21]);
-        record.firstCguid = fieldSetFlags()[22] ? this.firstCguid : (java.lang.String) defaultValue(fields()[22]);
-        record.cobrand = fieldSetFlags()[23] ? this.cobrand : (java.lang.Integer) defaultValue(fields()[23]);
-        record.startTimestamp = fieldSetFlags()[24] ? this.startTimestamp : (java.lang.Long) defaultValue(fields()[24]);
-        record.firstMappedUserId = fieldSetFlags()[25] ? this.firstMappedUserId : (java.lang.Long) defaultValue(fields()[25]);
-        record.firstAppId = fieldSetFlags()[26] ? this.firstAppId : (java.lang.Integer) defaultValue(fields()[26]);
-        record.absDuration = fieldSetFlags()[27] ? this.absDuration : (java.lang.Integer) defaultValue(fields()[27]);
-        record.grCnt = fieldSetFlags()[28] ? this.grCnt : (java.lang.Integer) defaultValue(fields()[28]);
-        record.gr1Cnt = fieldSetFlags()[29] ? this.gr1Cnt : (java.lang.Integer) defaultValue(fields()[29]);
-        record.myebayCnt = fieldSetFlags()[30] ? this.myebayCnt : (java.lang.Integer) defaultValue(fields()[30]);
-        record.absStartTimestamp = fieldSetFlags()[31] ? this.absStartTimestamp : (java.lang.Long) defaultValue(fields()[31]);
-        record.signinPageCnt = fieldSetFlags()[32] ? this.signinPageCnt : (java.lang.Integer) defaultValue(fields()[32]);
-        record.nonIframeRdtEventCnt = fieldSetFlags()[33] ? this.nonIframeRdtEventCnt : (java.lang.Integer) defaultValue(fields()[33]);
-        record.botFlagList = fieldSetFlags()[34] ? this.botFlagList : (java.util.List<java.lang.Integer>) defaultValue(fields()[34]);
-        record.absEndTimestamp = fieldSetFlags()[35] ? this.absEndTimestamp : (java.lang.Long) defaultValue(fields()[35]);
-        record.endTimestamp = fieldSetFlags()[36] ? this.endTimestamp : (java.lang.Long) defaultValue(fields()[36]);
-        record.sojDataDt = fieldSetFlags()[37] ? this.sojDataDt : (java.lang.Long) defaultValue(fields()[37]);
-        record.sessionId = fieldSetFlags()[38] ? this.sessionId : (java.lang.String) defaultValue(fields()[38]);
-        record.sessionSkey = fieldSetFlags()[39] ? this.sessionSkey : (java.lang.Long) defaultValue(fields()[39]);
-        record.sessionStartDt = fieldSetFlags()[40] ? this.sessionStartDt : (java.lang.Long) defaultValue(fields()[40]);
-        record.firstSessionStartDt = fieldSetFlags()[41] ? this.firstSessionStartDt : (java.lang.Long) defaultValue(fields()[41]);
-        record.sessionEndDt = fieldSetFlags()[42] ? this.sessionEndDt : (java.lang.Long) defaultValue(fields()[42]);
-        record.absEventCnt = fieldSetFlags()[43] ? this.absEventCnt : (java.lang.Integer) defaultValue(fields()[43]);
-        record.singleClickSessionFlag = fieldSetFlags()[44] ? this.singleClickSessionFlag : (java.lang.Boolean) defaultValue(fields()[44]);
-        record.asqCnt = fieldSetFlags()[45] ? this.asqCnt : (java.lang.Integer) defaultValue(fields()[45]);
-        record.atcCnt = fieldSetFlags()[46] ? this.atcCnt : (java.lang.Integer) defaultValue(fields()[46]);
-        record.atlCnt = fieldSetFlags()[47] ? this.atlCnt : (java.lang.Integer) defaultValue(fields()[47]);
-        record.boCnt = fieldSetFlags()[48] ? this.boCnt : (java.lang.Integer) defaultValue(fields()[48]);
-        record.srpCnt = fieldSetFlags()[49] ? this.srpCnt : (java.lang.Integer) defaultValue(fields()[49]);
-        record.servEventCnt = fieldSetFlags()[50] ? this.servEventCnt : (java.lang.Integer) defaultValue(fields()[50]);
-        record.searchViewPageCnt = fieldSetFlags()[51] ? this.searchViewPageCnt : (java.lang.Integer) defaultValue(fields()[51]);
-        record.browserFamily = fieldSetFlags()[52] ? this.browserFamily : (java.lang.String) defaultValue(fields()[52]);
-        record.browserVersion = fieldSetFlags()[53] ? this.browserVersion : (java.lang.String) defaultValue(fields()[53]);
-        record.city = fieldSetFlags()[54] ? this.city : (java.lang.String) defaultValue(fields()[54]);
-        record.region = fieldSetFlags()[55] ? this.region : (java.lang.String) defaultValue(fields()[55]);
-        record.country = fieldSetFlags()[56] ? this.country : (java.lang.String) defaultValue(fields()[56]);
-        record.continent = fieldSetFlags()[57] ? this.continent : (java.lang.String) defaultValue(fields()[57]);
-        record.deviceClass = fieldSetFlags()[58] ? this.deviceClass : (java.lang.String) defaultValue(fields()[58]);
-        record.deviceFamily = fieldSetFlags()[59] ? this.deviceFamily : (java.lang.String) defaultValue(fields()[59]);
-        record.endResourceId = fieldSetFlags()[60] ? this.endResourceId : (java.lang.Integer) defaultValue(fields()[60]);
-        record.startResourceId = fieldSetFlags()[61] ? this.startResourceId : (java.lang.Integer) defaultValue(fields()[61]);
-        record.isReturningVisitor = fieldSetFlags()[62] ? this.isReturningVisitor : (java.lang.Boolean) defaultValue(fields()[62]);
-        record.lineSpeed = fieldSetFlags()[63] ? this.lineSpeed : (java.lang.String) defaultValue(fields()[63]);
-        record.osFamily = fieldSetFlags()[64] ? this.osFamily : (java.lang.String) defaultValue(fields()[64]);
-        record.osVersion = fieldSetFlags()[65] ? this.osVersion : (java.lang.String) defaultValue(fields()[65]);
-        record.pulsarEventCnt = fieldSetFlags()[66] ? this.pulsarEventCnt : (java.lang.Integer) defaultValue(fields()[66]);
-        record.streamId = fieldSetFlags()[67] ? this.streamId : (java.lang.String) defaultValue(fields()[67]);
-        record.buserId = fieldSetFlags()[68] ? this.buserId : (java.lang.String) defaultValue(fields()[68]);
-        record.isOpen = fieldSetFlags()[69] ? this.isOpen : (java.lang.Boolean) defaultValue(fields()[69]);
+        record.siteId = fieldSetFlags()[21] ? this.siteId : (java.lang.String) defaultValue(fields()[21]);
+        record.firstSiteId = fieldSetFlags()[22] ? this.firstSiteId : (java.lang.Integer) defaultValue(fields()[22]);
+        record.cguid = fieldSetFlags()[23] ? this.cguid : (java.lang.String) defaultValue(fields()[23]);
+        record.cobrand = fieldSetFlags()[24] ? this.cobrand : (java.lang.Integer) defaultValue(fields()[24]);
+        record.startTimestamp = fieldSetFlags()[25] ? this.startTimestamp : (java.lang.Long) defaultValue(fields()[25]);
+        record.firstMappedUserId = fieldSetFlags()[26] ? this.firstMappedUserId : (java.lang.Long) defaultValue(fields()[26]);
+        record.appId = fieldSetFlags()[27] ? this.appId : (java.lang.Integer) defaultValue(fields()[27]);
+        record.absDuration = fieldSetFlags()[28] ? this.absDuration : (java.lang.Long) defaultValue(fields()[28]);
+        record.grCnt = fieldSetFlags()[29] ? this.grCnt : (java.lang.Integer) defaultValue(fields()[29]);
+        record.gr1Cnt = fieldSetFlags()[30] ? this.gr1Cnt : (java.lang.Integer) defaultValue(fields()[30]);
+        record.myebayCnt = fieldSetFlags()[31] ? this.myebayCnt : (java.lang.Integer) defaultValue(fields()[31]);
+        record.absStartTimestamp = fieldSetFlags()[32] ? this.absStartTimestamp : (java.lang.Long) defaultValue(fields()[32]);
+        record.signinPageCnt = fieldSetFlags()[33] ? this.signinPageCnt : (java.lang.Integer) defaultValue(fields()[33]);
+        record.nonIframeRdtEventCnt = fieldSetFlags()[34] ? this.nonIframeRdtEventCnt : (java.lang.Integer) defaultValue(fields()[34]);
+        record.botFlagList = fieldSetFlags()[35] ? this.botFlagList : (java.util.List<java.lang.Integer>) defaultValue(fields()[35]);
+        record.absEndTimestamp = fieldSetFlags()[36] ? this.absEndTimestamp : (java.lang.Long) defaultValue(fields()[36]);
+        record.endTimestamp = fieldSetFlags()[37] ? this.endTimestamp : (java.lang.Long) defaultValue(fields()[37]);
+        record.sojDataDt = fieldSetFlags()[38] ? this.sojDataDt : (java.lang.Long) defaultValue(fields()[38]);
+        record.sessionId = fieldSetFlags()[39] ? this.sessionId : (java.lang.String) defaultValue(fields()[39]);
+        record.sessionSkey = fieldSetFlags()[40] ? this.sessionSkey : (java.lang.Long) defaultValue(fields()[40]);
+        record.sessionStartDt = fieldSetFlags()[41] ? this.sessionStartDt : (java.lang.Long) defaultValue(fields()[41]);
+        record.firstSessionStartDt = fieldSetFlags()[42] ? this.firstSessionStartDt : (java.lang.Long) defaultValue(fields()[42]);
+        record.sessionEndDt = fieldSetFlags()[43] ? this.sessionEndDt : (java.lang.Long) defaultValue(fields()[43]);
+        record.absEventCnt = fieldSetFlags()[44] ? this.absEventCnt : (java.lang.Integer) defaultValue(fields()[44]);
+        record.singleClickSessionFlag = fieldSetFlags()[45] ? this.singleClickSessionFlag : (java.lang.Boolean) defaultValue(fields()[45]);
+        record.asqCnt = fieldSetFlags()[46] ? this.asqCnt : (java.lang.Integer) defaultValue(fields()[46]);
+        record.atcCnt = fieldSetFlags()[47] ? this.atcCnt : (java.lang.Integer) defaultValue(fields()[47]);
+        record.atlCnt = fieldSetFlags()[48] ? this.atlCnt : (java.lang.Integer) defaultValue(fields()[48]);
+        record.boCnt = fieldSetFlags()[49] ? this.boCnt : (java.lang.Integer) defaultValue(fields()[49]);
+        record.srpCnt = fieldSetFlags()[50] ? this.srpCnt : (java.lang.Integer) defaultValue(fields()[50]);
+        record.servEventCnt = fieldSetFlags()[51] ? this.servEventCnt : (java.lang.Integer) defaultValue(fields()[51]);
+        record.searchViewPageCnt = fieldSetFlags()[52] ? this.searchViewPageCnt : (java.lang.Integer) defaultValue(fields()[52]);
+        record.browserFamily = fieldSetFlags()[53] ? this.browserFamily : (java.lang.String) defaultValue(fields()[53]);
+        record.browserVersion = fieldSetFlags()[54] ? this.browserVersion : (java.lang.String) defaultValue(fields()[54]);
+        record.city = fieldSetFlags()[55] ? this.city : (java.lang.String) defaultValue(fields()[55]);
+        record.region = fieldSetFlags()[56] ? this.region : (java.lang.String) defaultValue(fields()[56]);
+        record.country = fieldSetFlags()[57] ? this.country : (java.lang.String) defaultValue(fields()[57]);
+        record.continent = fieldSetFlags()[58] ? this.continent : (java.lang.String) defaultValue(fields()[58]);
+        record.deviceClass = fieldSetFlags()[59] ? this.deviceClass : (java.lang.String) defaultValue(fields()[59]);
+        record.deviceFamily = fieldSetFlags()[60] ? this.deviceFamily : (java.lang.String) defaultValue(fields()[60]);
+        record.endResourceId = fieldSetFlags()[61] ? this.endResourceId : (java.lang.Integer) defaultValue(fields()[61]);
+        record.startResourceId = fieldSetFlags()[62] ? this.startResourceId : (java.lang.Integer) defaultValue(fields()[62]);
+        record.isReturningVisitor = fieldSetFlags()[63] ? this.isReturningVisitor : (java.lang.Boolean) defaultValue(fields()[63]);
+        record.lineSpeed = fieldSetFlags()[64] ? this.lineSpeed : (java.lang.String) defaultValue(fields()[64]);
+        record.osFamily = fieldSetFlags()[65] ? this.osFamily : (java.lang.String) defaultValue(fields()[65]);
+        record.osVersion = fieldSetFlags()[66] ? this.osVersion : (java.lang.String) defaultValue(fields()[66]);
+        record.pulsarEventCnt = fieldSetFlags()[67] ? this.pulsarEventCnt : (java.lang.Integer) defaultValue(fields()[67]);
+        record.sojEventCnt = fieldSetFlags()[68] ? this.sojEventCnt : (java.lang.Integer) defaultValue(fields()[68]);
+        record.streamId = fieldSetFlags()[69] ? this.streamId : (java.lang.String) defaultValue(fields()[69]);
+        record.viewEventCnt = fieldSetFlags()[70] ? this.viewEventCnt : (java.lang.Integer) defaultValue(fields()[70]);
+        record.referer = fieldSetFlags()[71] ? this.referer : (java.lang.String) defaultValue(fields()[71]);
+        record.pageId = fieldSetFlags()[72] ? this.pageId : (java.lang.Integer) defaultValue(fields()[72]);
+        record.buserId = fieldSetFlags()[73] ? this.buserId : (java.lang.String) defaultValue(fields()[73]);
+        record.oldsessionskey = fieldSetFlags()[74] ? this.oldsessionskey : (java.lang.Long) defaultValue(fields()[74]);
+        record.isOpen = fieldSetFlags()[75] ? this.isOpen : (java.lang.Boolean) defaultValue(fields()[75]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);

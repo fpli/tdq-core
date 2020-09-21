@@ -265,8 +265,9 @@ public class SojournerRTJob {
         .addSink(KafkaProducerFactory.getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SESSION_NON_BOT),
             FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS),
-            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION),
-            SojSession.class))
+            FlinkEnvUtils.getString(Property.KAFKA_PRODUCER_SUBJECT_SOJSESSION),
+            SojSession.class,
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION)))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("SojSession")
@@ -276,8 +277,10 @@ public class SojournerRTJob {
         .addSink(KafkaProducerFactory.getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_SESSION_BOT),
             FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS),
-            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION),
-            SojSession.class))
+            FlinkEnvUtils.getString(Property.KAFKA_PRODUCER_SUBJECT_SOJSESSION),
+            SojSession.class,
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION)
+        ))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Bot SojSession")
@@ -288,9 +291,11 @@ public class SojournerRTJob {
         .addSink(KafkaProducerFactory.getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_NON_BOT),
             FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS),
+            FlinkEnvUtils.getString(Property.KAFKA_PRODUCER_SUBJECT_SOJEVENT),
+            SojEvent.class,
             FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY1),
-            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY2),
-            SojEvent.class))
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY2)
+        ))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("SojEvent")
@@ -300,9 +305,11 @@ public class SojournerRTJob {
         .addSink(KafkaProducerFactory.getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_BOT),
             FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS),
+            FlinkEnvUtils.getString(Property.KAFKA_PRODUCER_SUBJECT_SOJEVENT),
+            SojEvent.class,
             FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY1),
-            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY2),
-            SojEvent.class))
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY2)
+        ))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Bot SojEvent")
@@ -377,9 +384,10 @@ public class SojournerRTJob {
         .addSink(KafkaProducerFactory.getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_LATE),
             FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS),
+            FlinkEnvUtils.getString(Property.KAFKA_PRODUCER_SUBJECT_SOJEVENT),
+            SojEvent.class,
             FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY1),
-            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY2),
-            SojEvent.class))
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY2)))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.SESSION_SLOT_SHARE_GROUP))
         .name("Late SojEvent")

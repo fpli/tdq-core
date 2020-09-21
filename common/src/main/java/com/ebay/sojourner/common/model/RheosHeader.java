@@ -11,11 +11,10 @@ import org.apache.avro.message.BinaryMessageDecoder;
 import org.apache.avro.message.SchemaStore;
 
 @SuppressWarnings("all")
-/** This is the common avro schema that every message stored in shared data stream must comply. */
 @org.apache.avro.specific.AvroGenerated
 public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = 5296339083908648607L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"RheosHeader\",\"namespace\":\"com.ebay.sojourner.common.model\",\"doc\":\"This is the common avro schema that every message stored in shared data stream must comply.\",\"fields\":[{\"name\":\"eventCreateTimestamp\",\"type\":\"long\",\"doc\":\"Event creation time. This is the time the event is created.\"},{\"name\":\"eventSentTimestamp\",\"type\":\"long\",\"doc\":\"Event sent time. This is the time the event is sent out to Kafka. It is not necessary equal to eventCreateTimestamp.\"},{\"name\":\"schemaId\",\"type\":\"int\"},{\"name\":\"eventId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"producerId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"RheosHeader\",\"namespace\":\"com.ebay.sojourner.common.model\",\"fields\":[{\"name\":\"eventCreateTimestamp\",\"type\":\"long\"},{\"name\":\"eventSentTimestamp\",\"type\":\"long\"},{\"name\":\"schemaId\",\"type\":\"int\"},{\"name\":\"eventId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"producerId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -52,9 +51,7 @@ public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase imp
     return DECODER.decode(b);
   }
 
-  /** Event creation time. This is the time the event is created. */
   @Deprecated public long eventCreateTimestamp;
-  /** Event sent time. This is the time the event is sent out to Kafka. It is not necessary equal to eventCreateTimestamp. */
   @Deprecated public long eventSentTimestamp;
   @Deprecated public int schemaId;
   @Deprecated public java.lang.String eventId;
@@ -69,8 +66,8 @@ public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase imp
 
   /**
    * All-args constructor.
-   * @param eventCreateTimestamp Event creation time. This is the time the event is created.
-   * @param eventSentTimestamp Event sent time. This is the time the event is sent out to Kafka. It is not necessary equal to eventCreateTimestamp.
+   * @param eventCreateTimestamp The new value for eventCreateTimestamp
+   * @param eventSentTimestamp The new value for eventSentTimestamp
    * @param schemaId The new value for schemaId
    * @param eventId The new value for eventId
    * @param producerId The new value for producerId
@@ -111,7 +108,7 @@ public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase imp
 
   /**
    * Gets the value of the 'eventCreateTimestamp' field.
-   * @return Event creation time. This is the time the event is created.
+   * @return The value of the 'eventCreateTimestamp' field.
    */
   public java.lang.Long getEventCreateTimestamp() {
     return eventCreateTimestamp;
@@ -119,7 +116,6 @@ public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase imp
 
   /**
    * Sets the value of the 'eventCreateTimestamp' field.
-   * Event creation time. This is the time the event is created.
    * @param value the value to set.
    */
   public void setEventCreateTimestamp(java.lang.Long value) {
@@ -128,7 +124,7 @@ public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase imp
 
   /**
    * Gets the value of the 'eventSentTimestamp' field.
-   * @return Event sent time. This is the time the event is sent out to Kafka. It is not necessary equal to eventCreateTimestamp.
+   * @return The value of the 'eventSentTimestamp' field.
    */
   public java.lang.Long getEventSentTimestamp() {
     return eventSentTimestamp;
@@ -136,7 +132,6 @@ public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase imp
 
   /**
    * Sets the value of the 'eventSentTimestamp' field.
-   * Event sent time. This is the time the event is sent out to Kafka. It is not necessary equal to eventCreateTimestamp.
    * @param value the value to set.
    */
   public void setEventSentTimestamp(java.lang.Long value) {
@@ -223,9 +218,7 @@ public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase imp
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<RheosHeader>
     implements org.apache.avro.data.RecordBuilder<RheosHeader> {
 
-    /** Event creation time. This is the time the event is created. */
     private long eventCreateTimestamp;
-    /** Event sent time. This is the time the event is sent out to Kafka. It is not necessary equal to eventCreateTimestamp. */
     private long eventSentTimestamp;
     private int schemaId;
     private java.lang.String eventId;
@@ -294,7 +287,6 @@ public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase imp
 
     /**
       * Gets the value of the 'eventCreateTimestamp' field.
-      * Event creation time. This is the time the event is created.
       * @return The value.
       */
     public java.lang.Long getEventCreateTimestamp() {
@@ -303,7 +295,6 @@ public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase imp
 
     /**
       * Sets the value of the 'eventCreateTimestamp' field.
-      * Event creation time. This is the time the event is created.
       * @param value The value of 'eventCreateTimestamp'.
       * @return This builder.
       */
@@ -316,7 +307,6 @@ public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase imp
 
     /**
       * Checks whether the 'eventCreateTimestamp' field has been set.
-      * Event creation time. This is the time the event is created.
       * @return True if the 'eventCreateTimestamp' field has been set, false otherwise.
       */
     public boolean hasEventCreateTimestamp() {
@@ -326,7 +316,6 @@ public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase imp
 
     /**
       * Clears the value of the 'eventCreateTimestamp' field.
-      * Event creation time. This is the time the event is created.
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.RheosHeader.Builder clearEventCreateTimestamp() {
@@ -336,7 +325,6 @@ public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase imp
 
     /**
       * Gets the value of the 'eventSentTimestamp' field.
-      * Event sent time. This is the time the event is sent out to Kafka. It is not necessary equal to eventCreateTimestamp.
       * @return The value.
       */
     public java.lang.Long getEventSentTimestamp() {
@@ -345,7 +333,6 @@ public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase imp
 
     /**
       * Sets the value of the 'eventSentTimestamp' field.
-      * Event sent time. This is the time the event is sent out to Kafka. It is not necessary equal to eventCreateTimestamp.
       * @param value The value of 'eventSentTimestamp'.
       * @return This builder.
       */
@@ -358,7 +345,6 @@ public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase imp
 
     /**
       * Checks whether the 'eventSentTimestamp' field has been set.
-      * Event sent time. This is the time the event is sent out to Kafka. It is not necessary equal to eventCreateTimestamp.
       * @return True if the 'eventSentTimestamp' field has been set, false otherwise.
       */
     public boolean hasEventSentTimestamp() {
@@ -368,7 +354,6 @@ public class RheosHeader extends org.apache.avro.specific.SpecificRecordBase imp
 
     /**
       * Clears the value of the 'eventSentTimestamp' field.
-      * Event sent time. This is the time the event is sent out to Kafka. It is not necessary equal to eventCreateTimestamp.
       * @return This builder.
       */
     public com.ebay.sojourner.common.model.RheosHeader.Builder clearEventSentTimestamp() {

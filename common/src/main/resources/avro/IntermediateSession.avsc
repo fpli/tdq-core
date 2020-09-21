@@ -1,6 +1,6 @@
 {
   "type": "record",
-  "name": "SojSession",
+  "name": "IntermediateSession",
   "namespace": "com.ebay.sojourner.common.model",
   "fields": [
     {
@@ -12,47 +12,39 @@
       "doc": "from ubisession guid"
     },
     {
-      "name": "sessionReferrer",
-      "type": [
-        "null",
-        "string"
-      ],
-      "doc": "from ubisession sessionReferrer"
-    },
-    {
-      "name": "siteFlags",
+      "name": "guid1",
       "type": [
         "null",
         "long"
       ],
-      "doc": "from ubisession siteFlags"
+      "doc": "from ubisession guid1"
     },
     {
-      "name": "attrFlags",
+      "name": "guid2",
+      "type": [
+        "null",
+        "long"
+      ],
+      "doc": "from ubisession guid2"
+    },
+    {
+      "name": "absEventCnt",
       "type": [
         "null",
         "int"
       ],
-      "doc": "from ubisession attrFlags"
+      "doc": "from ubisession absEventCnt"
     },
     {
-      "name": "version",
+      "name": "nonIframeRdtEventCnt",
       "type": [
         "null",
         "int"
       ],
-      "doc": "from ubisession version"
+      "doc": "from ubisession nonIframeRdtEventCnt"
     },
     {
-      "name": "botFlags",
-      "type": [
-        "null",
-        "int"
-      ],
-      "doc": "from ubisession botFlags"
-    },
-    {
-      "name": "ipv4",
+      "name": "ip",
       "type": [
         "null",
         "string"
@@ -68,28 +60,12 @@
       "doc": "from ubisession userAgent"
     },
     {
-      "name": "findingFlags",
+      "name": "singleClickSessionFlag",
       "type": [
         "null",
-        "long"
+        "boolean"
       ],
-      "doc": "from ubisession findingFlags"
-    },
-    {
-      "name": "startPageId",
-      "type": [
-        "null",
-        "int"
-      ],
-      "doc": "from ubisession startPageId"
-    },
-    {
-      "name": "endPageId",
-      "type": [
-        "null",
-        "int"
-      ],
-      "doc": "from ubisession endPageId"
+      "doc": "from ubisession singleClickSessionFlag"
     },
     {
       "name": "botFlag",
@@ -100,15 +76,15 @@
       "doc": "from ubisession botFlag"
     },
     {
-      "name": "durationSec",
+      "name": "firstCguid",
       "type": [
         "null",
-        "int"
+        "string"
       ],
-      "doc": "from ubisession durationSec"
+      "doc": "from ubisession firstCguid"
     },
     {
-      "name": "userId",
+      "name": "firstUserId",
       "type": [
         "null",
         "string"
@@ -116,12 +92,12 @@
       "doc": "from ubisession firstUserId"
     },
     {
-      "name": "eventCnt",
+      "name": "validPageCnt",
       "type": [
         "null",
         "int"
       ],
-      "doc": "from ubisession eventCnt"
+      "doc": "from ubisession validPageCnt"
     },
     {
       "name": "trafficSrcId",
@@ -132,36 +108,12 @@
       "doc": "from ubisession trafficSrcId"
     },
     {
-      "name": "viCnt",
+      "name": "exInternalIp",
       "type": [
         "null",
-        "int"
+        "string"
       ],
-      "doc": "from ubisession viCoreCnt"
-    },
-    {
-      "name": "bidCnt",
-      "type": [
-        "null",
-        "int"
-      ],
-      "doc": "from ubisession bidCoreCnt"
-    },
-    {
-      "name": "binCnt",
-      "type": [
-        "null",
-        "int"
-      ],
-      "doc": "from ubisession binCoreCnt"
-    },
-    {
-      "name": "watchCnt",
-      "type": [
-        "null",
-        "int"
-      ],
-      "doc": "from ubisession watchCoreCnt"
+      "doc": "from ubisession exInternalIp"
     },
     {
       "name": "homepageCnt",
@@ -172,28 +124,12 @@
       "doc": "from ubisession homepageCnt"
     },
     {
-      "name": "siteId",
+      "name": "signinPageCnt",
       "type": [
         "null",
-        "string"
+        "int"
       ],
-      "doc": "fron ubisession firstSiteId"
-    },
-      {
-          "name": "firstSiteId",
-          "type": [
-            "null",
-            "int"
-          ],
-          "doc": "fron ubisession firstSiteId"
-        },
-    {
-      "name": "cguid",
-      "type": [
-        "null",
-        "string"
-      ],
-      "doc": "fron ubisession firstCguid"
+      "doc": "fron ubisession signinPageCnt"
     },
     {
       "name": "cobrand",
@@ -212,15 +148,15 @@
       "doc": "from ubisession startTimestamp"
     },
     {
-      "name": "firstMappedUserId",
+      "name": "agentCnt",
       "type": [
         "null",
-        "long"
+        "int"
       ],
-      "doc": "from ubisession firstMappedUserId"
+      "doc": "from ubisession agentCnt"
     },
     {
-      "name": "appId",
+      "name": "firstAppId",
       "type": [
         "null",
         "int"
@@ -228,36 +164,20 @@
       "doc": "from ubisession firstAppId"
     },
     {
-      "name": "absDuration",
+      "name": "bidBinConfirmFlag",
       "type": [
         "null",
-        "long"
+        "boolean"
       ],
-      "doc": "from ubisession absDuration"
+      "doc": "from ubisession bidBinConfirmFlag"
     },
     {
-      "name": "grCnt",
+      "name": "clientIp",
       "type": [
         "null",
-        "int"
+        "string"
       ],
-      "doc": "from ubisession grCnt"
-    },
-    {
-      "name": "gr1Cnt",
-      "type": [
-        "null",
-        "int"
-      ],
-      "doc": "from ubisession gr1Cnt"
-    },
-    {
-      "name": "myebayCnt",
-      "type": [
-        "null",
-        "int"
-      ],
-      "doc": "from ubisession myebayCnt"
+      "doc": "from ubisession clientIp"
     },
     {
       "name": "absStartTimestamp",
@@ -268,20 +188,20 @@
       "doc": "from ubisession absStartTimestamp"
     },
     {
-      "name": "signinPageCnt",
+      "name": "familyViCnt",
       "type": [
         "null",
         "int"
       ],
-      "doc": "from ubisession signinPageCnt"
+      "doc": "from ubisession familyViCnt"
     },
     {
-      "name": "nonIframeRdtEventCnt",
+      "name": "agentString",
       "type": [
         "null",
-        "int"
+        "string"
       ],
-      "doc": "from ubisession nonIframeRdtEventCnt"
+      "doc": "from ubisession agentString"
     },
     {
       "name": "botFlagList",
@@ -341,38 +261,6 @@
         "long"
       ],
       "doc": "from ubisession sessionStartDt"
-    },
-    {
-      "name": "firstSessionStartDt",
-      "type": [
-        "null",
-        "long"
-      ],
-      "doc": "from ubisession firstSessionStartDt"
-    },
-    {
-      "name": "sessionEndDt",
-      "type": [
-        "null",
-        "long"
-      ],
-      "doc": "from ubisession sessionEndDt"
-    },
-    {
-      "name": "absEventCnt",
-      "type": [
-        "null",
-        "int"
-      ],
-      "doc": "from ubisession absEventCnt"
-    },
-    {
-      "name": "singleClickSessionFlag",
-      "type": [
-        "null",
-        "boolean"
-      ],
-      "doc": "from ubisession singleClickSessionFlag"
     },
     {
       "name": "asqCnt",
@@ -550,14 +438,6 @@
       ],
       "doc": "from ubisession pulsarEventCnt"
     },
-      {
-          "name": "sojEventCnt",
-          "type": [
-            "null",
-            "int"
-          ],
-          "doc": "from ubisession sojEventCnt"
-        },
     {
       "name": "streamId",
       "type": [
@@ -566,30 +446,6 @@
       ],
       "doc": "from ubisession streamId"
     },
-     {
-          "name": "viewEventCnt",
-          "type": [
-            "null",
-            "int"
-          ],
-          "doc": "from ubisession viewct"
-        },
-     {
-          "name": "referer",
-          "type": [
-            "null",
-            "string"
-          ],
-          "doc": "map from rf"
-        },
-         {
-          "name": "pageId",
-          "type": [
-            "null",
-            "int"
-          ],
-          "doc": "map from p"
-        },
     {
       "name": "buserId",
       "type": [
@@ -597,21 +453,182 @@
         "string"
       ],
       "doc": "from ubisession buserId"
-    }, {
-            "name": "oldsessionskey",
-            "type": [
-              "null",
-              "long"
-            ],
-            "doc": "from ubisession sessionSkey"
-          },
-         {
-           "name": "isOpen",
-           "type": [
-             "null",
-             "boolean"
-           ],
-           "doc": "to identify open or end"
-         }
+    },
+    {
+      "name": "sessionReferrer",
+      "type": [
+        "null",
+        "string"
+      ],
+      "doc": "from ubisession sessionReferrer"
+    },
+    {
+      "name": "siteFlags",
+      "type": [
+        "null",
+        "long"
+      ],
+      "doc": "from ubisession siteFlags"
+    },
+    {
+      "name": "attrFlags",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "from ubisession attrFlags"
+    },
+    {
+      "name": "version",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "from ubisession version"
+    },
+    {
+      "name": "botFlags",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "from ubisession botFlags"
+    },
+    {
+      "name": "findingFlags",
+      "type": [
+        "null",
+        "long"
+      ],
+      "doc": "from ubisession findingFlags"
+    },
+    {
+      "name": "startPageId",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "from ubisession startPageId"
+    },
+    {
+      "name": "endPageId",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "from ubisession endPageId"
+    },
+    {
+      "name": "durationSec",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "from ubisession durationSec"
+    },
+    {
+      "name": "eventCnt",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "from ubisession eventCnt"
+    },
+    {
+      "name": "viCoreCnt",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "from ubisession viCoreCnt"
+    },
+    {
+      "name": "bidCoreCnt",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "from ubisession bidCoreCnt"
+    },
+    {
+      "name": "binCoreCnt",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "from ubisession binCoreCnt"
+    },
+    {
+      "name": "watchCoreCnt",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "from ubisession watchCoreCnt"
+    },
+    {
+      "name": "firstSiteId",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "fron ubisession firstSiteId"
+    },
+    {
+      "name": "firstMappedUserId",
+      "type": [
+        "null",
+        "long"
+      ],
+      "doc": "from ubisession firstMappedUserId"
+    },
+    {
+      "name": "absDuration",
+      "type": [
+        "null",
+        "long"
+      ],
+      "doc": "from ubisession absDuration"
+    },
+    {
+      "name": "grCnt",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "from ubisession grCnt"
+    },
+    {
+      "name": "gr1Cnt",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "from ubisession gr1Cnt"
+    },
+    {
+      "name": "myebayCnt",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "from ubisession myebayCnt"
+    },
+    {
+      "name": "firstSessionStartDt",
+      "type": [
+        "null",
+        "long"
+      ],
+      "doc": "from ubisession firstSessionStartDt"
+    },
+    {
+      "name": "sessionEndDt",
+      "type": [
+        "null",
+        "long"
+      ],
+      "doc": "from ubisession sessionEndDt"
+    }
   ]
 }

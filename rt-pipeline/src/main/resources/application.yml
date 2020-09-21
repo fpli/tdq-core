@@ -46,6 +46,7 @@ kafka:
     auto-offset-reset: latest
 
   producer:
+    producerId: sojourner
     stream: behavior.totalv2
     topic:
       session:
@@ -65,6 +66,9 @@ kafka:
       - rhs-fxuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.37.tess.io:9092
       - rhs-fxuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.37.tess.io:9092
       - rhs-fxuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.37.tess.io:9092
+    subject:
+      event: behavior.pulsarv2.sojevent.schema
+      session: behavior.pulsarv2.sojsession.schema
 
     batch-size: 524288
     acks: 1

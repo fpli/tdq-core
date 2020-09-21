@@ -8,7 +8,6 @@ import com.ebay.sojourner.common.util.PropertyUtils;
 import com.ebay.sojourner.common.util.SOJListGetValueByIndex;
 import com.ebay.sojourner.common.util.SojEventTimeUtil;
 import com.ebay.sojourner.common.util.UBIConfig;
-import java.util.Calendar;
 import java.util.Set;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +60,7 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
         ubiSession.setClientIp(event.getClientIP());
       }
     } else if (isEarlyEventByMultiCols) {
+      /*
       log.debug(Calendar.getInstance().getTime() +
           " debug AgentIPMetrics2 duplicate event==session:" + ubiSession.getGuid() + " "
           + ubiSession
@@ -71,6 +71,7 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
           .getEventTimestamp() + " "
           + event
           .getClickId() + " " + event.getPageId() + " " + event.getHashCode());
+          */
       if (!ubiSession.isFindFirst()) {
         ubiSession.setAgentInfo(event.getAgentInfo());
         ubiSession.setClientIp(event.getClientIP());

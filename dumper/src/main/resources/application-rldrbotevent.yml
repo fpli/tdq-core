@@ -10,13 +10,13 @@ flink:
   app:
     name: Sojourner LVS Bot Event HDFS Load Pipeline
     parallelism:
-      source: 50
+      source: 100
       sink:
-        hdfs: 50
+        hdfs: 100
     metric:
       watermark-process-progress: sojourner-ubd-bot-event-watermark-delay-time
 
 hdfs:
   dump:
-    path: hdfs://hercules/sys/soj/ubd/events/type=bot
-    watermark-path: hdfs://hercules/sys/soj/ubd/watermark/events/type=bot
+    path: hdfs://hercules/sys/edw/working/ubi/ubi_w/soj/stg_ubi_event_dump_w/type=bot
+    watermark-path: hdfs://hercules/sys/edw/working/ubi/ubi_w/soj/ubi_event_watermark_lkp/type=bot

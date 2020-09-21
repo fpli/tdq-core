@@ -17,9 +17,9 @@ flink:
   app:
     name: Sojourner TEST Non Bot Session HDFS Load Pipeline
     parallelism:
-      source: 15
+      source: 50
       sink:
-        hdfs: 15
+        hdfs: 50
 
 hdfs:
   dump:

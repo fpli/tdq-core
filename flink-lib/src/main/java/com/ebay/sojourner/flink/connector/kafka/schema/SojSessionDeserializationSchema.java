@@ -1,124 +1,132 @@
 package com.ebay.sojourner.flink.connector.kafka.schema;
 
-import com.ebay.sojourner.common.model.JetStreamOutputSession;
+import com.ebay.sojourner.common.model.SojSession;
+import com.ebay.sojourner.common.util.TypeTransformUtil;
 import com.ebay.sojourner.flink.connector.kafka.RheosEventSerdeFactory;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.IOException;
+import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.generic.GenericRecord;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 
-public class SojSessionDeserializationSchema implements
-    DeserializationSchema<JetStreamOutputSession> {
+@Slf4j
+public class SojSessionDeserializationSchema implements DeserializationSchema<SojSession> {
 
   @Override
-  public JetStreamOutputSession deserialize(byte[] message) throws IOException {
+  public SojSession deserialize(byte[] message) throws IOException {
+
     RheosEvent rheosEvent =
         RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
     GenericRecord genericRecord =
         RheosEventSerdeFactory.getRheosEventDeserializer().decode(rheosEvent);
 
-    // generate jetstream output session
-    Long eventCreateTimestamp = rheosEvent.getEventCreateTimestamp();
-    String guid = getString(genericRecord.get("guid"));
-    String sessionId = getString(genericRecord.get("sessionId"));
-    String streamId = getString(genericRecord.get("streamId"));
-    Long absStartTimestamp = getLong(genericRecord.get("absStartTimestamp"));
-    Long absDuration = getLong(genericRecord.get("absDuration"));
-    Long sessionStartDt = getLong(genericRecord.get("sessionStartDt"));
-    Long sessionEndDt = getLong(genericRecord.get("sessionEndDt"));
-    String ipv4 = getString(genericRecord.get("ipv4"));
-    String userAgent = getString(genericRecord.get("userAgent"));
-    String referer = getString(genericRecord.get("referer"));
-    Integer botFlag = getInteger(genericRecord.get("botFlag"));
-    Integer startResourceId = getInteger(genericRecord.get("startResourceId"));
-    Integer endResourceId = getInteger(genericRecord.get("endResourceId"));
-    Integer pageId = getInteger(genericRecord.get("pageId"));
-    Integer viCnt = getInteger(genericRecord.get("viCnt"));
-    Integer bidCnt = getInteger(genericRecord.get("bidCnt"));
-    Integer binCnt = getInteger(genericRecord.get("binCnt"));
-    Integer watchCnt = getInteger(genericRecord.get("watchCnt"));
-    Integer homepageCnt = getInteger(genericRecord.get("homepageCnt"));
-    Integer boCnt = getInteger(genericRecord.get("boCnt"));
-    Integer srpCnt = getInteger(genericRecord.get("srpCnt"));
-    Integer asqCnt = getInteger(genericRecord.get("asqCnt"));
-    Integer atcCnt = getInteger(genericRecord.get("atcCnt"));
-    Integer atlCnt = getInteger(genericRecord.get("atlCnt"));
-    Integer absEventCnt = getInteger(genericRecord.get("absEventCnt"));
-    Integer eventCnt = getInteger(genericRecord.get("eventCnt"));
-    Integer pulsarEventCnt = getInteger(genericRecord.get("pulsarEventCnt"));
-    Integer sojEventCnt = getInteger(genericRecord.get("sojEventCnt"));
-    Integer servEventCnt = getInteger(genericRecord.get("servEventCnt"));
-    Integer viewEventCnt = getInteger(genericRecord.get("viewEventCnt"));
-    Integer searchViewPageCnt = getInteger(genericRecord.get("searchViewPageCnt"));
-    Integer trafficSrcId = getInteger(genericRecord.get("trafficSrcId"));
-    String lineSpeed = getString(genericRecord.get("lineSpeed"));
-    Boolean isReturningVisitor = getBoolean(genericRecord.get("isReturningVisitor"));
-    Integer appId = getInteger(genericRecord.get("appId"));
-    String browserVersion = getString(genericRecord.get("browserVersion"));
-    String browserFamily = getString(genericRecord.get("browserFamily"));
-    String osVersion = getString(genericRecord.get("osVersion"));
-    String osFamily = getString(genericRecord.get("osFamily"));
-    String deviceClass = getString(genericRecord.get("deviceClass"));
-    String deviceFamily = getString(genericRecord.get("deviceFamily"));
-    String city = getString(genericRecord.get("city"));
-    String region = getString(genericRecord.get("region"));
-    String country = getString(genericRecord.get("country"));
-    String continent = getString(genericRecord.get("continent"));
-    Boolean singleClickSessionFlag = getBoolean(genericRecord.get("singleClickSessionFlag"));
-    Integer cobrand = getInteger(genericRecord.get("cobrand"));
-    String siteId = getString(genericRecord.get("siteId"));
-    String cguid = getString(genericRecord.get("cguid"));
-    String userId = getString(genericRecord.get("userId"));
-    String buserId = getString(genericRecord.get("buserId"));
+    log.error("======debug kafka topic record sojSession=======");
+    log.error(genericRecord.toString());
+    String guid = TypeTransformUtil.getString(genericRecord.get("guid"));
+    String sessionReferrer = TypeTransformUtil.getString(genericRecord.get("sessionReferrer"));
+    Long siteFlags = TypeTransformUtil.getLong(genericRecord.get("siteFlags"));
+    Integer attrFlags = TypeTransformUtil.getInteger(genericRecord.get("attrFlags"));
+    Integer version = TypeTransformUtil.getInteger(genericRecord.get("version"));
+    Integer botFlags = TypeTransformUtil.getInteger(genericRecord.get("botFlags"));
+    String ip = TypeTransformUtil.getString(genericRecord.get("ip"));
+    String userAgent = TypeTransformUtil.getString(genericRecord.get("userAgent"));
+    Long findingFlags = TypeTransformUtil.getLong(genericRecord.get("findingFlags"));
+    Integer startPageId = TypeTransformUtil.getInteger(genericRecord.get("startPageId"));
+    Integer endPageId = TypeTransformUtil.getInteger(genericRecord.get("endPageId"));
+    Integer botFlag = TypeTransformUtil.getInteger(genericRecord.get("botFlag"));
+    Integer durationSec = TypeTransformUtil.getInteger(genericRecord.get("durationSec"));
+    String userId = TypeTransformUtil.getString(genericRecord.get("userId"));
+    Integer eventCnt = TypeTransformUtil.getInteger(genericRecord.get("eventCnt"));
+    Integer trafficSrcId = TypeTransformUtil.getInteger(genericRecord.get("trafficSrcId"));
+    Integer viCnt = TypeTransformUtil.getInteger(genericRecord.get("viCnt"));
+    Integer bidCnt = TypeTransformUtil.getInteger(genericRecord.get("bidCnt"));
+    Integer binCnt = TypeTransformUtil.getInteger(genericRecord.get("binCnt"));
+    Integer watchCnt = TypeTransformUtil.getInteger(genericRecord.get("watchCnt"));
+    Integer homepageCnt = TypeTransformUtil.getInteger(genericRecord.get("homepageCnt"));
+    String siteId = TypeTransformUtil.getString(genericRecord.get("siteId"));
+    Integer firstSiteId = TypeTransformUtil.getInteger(genericRecord.get("firstSiteId"));
+    String cguid = TypeTransformUtil.getString(genericRecord.get("cguid"));
+    Integer cobrand = TypeTransformUtil.getInteger(genericRecord.get("cobrand"));
+    Long startTimestamp = TypeTransformUtil.getLong(genericRecord.get("startTimestamp"));
+    Long firstMappedUserId = TypeTransformUtil.getLong(genericRecord.get("firstMappedUserId"));
+    Integer appId = TypeTransformUtil.getInteger(genericRecord.get("appId"));
+    Long absDuration = TypeTransformUtil.getLong(genericRecord.get("absDuration"));
+    Integer grCnt = TypeTransformUtil.getInteger(genericRecord.get("grCnt"));
+    Integer gr1Cnt = TypeTransformUtil.getInteger(genericRecord.get("gr1Cnt"));
+    Integer myebayCnt = TypeTransformUtil.getInteger(genericRecord.get("myebayCnt"));
+    Long absStartTimestamp = TypeTransformUtil.getLong(genericRecord.get("absStartTimestamp"));
+    Integer signinPageCnt = TypeTransformUtil.getInteger(genericRecord.get("signinPageCnt"));
+    Integer nonIframeRdtEventCnt = TypeTransformUtil
+        .getInteger(genericRecord.get("nonIframeRdtEventCnt"));
+    List<Integer> botFlagList = (List) genericRecord.get("botFlagList");
+    Long absEndTimestamp = TypeTransformUtil.getLong(genericRecord.get("absEndTimestamp"));
+    Long endTimestamp = TypeTransformUtil.getLong(genericRecord.get("endTimestamp"));
+    Long sojDataDt = TypeTransformUtil.getLong(genericRecord.get("sojDataDt"));
+    String sessionId = TypeTransformUtil.getString(genericRecord.get("sessionId"));
+    Long sessionSkey = TypeTransformUtil.getLong(genericRecord.get("sessionSkey"));
+    Long sessionStartDt = TypeTransformUtil.getLong(genericRecord.get("sessionStartDt"));
+    Long firstSessionStartDt = TypeTransformUtil.getLong(genericRecord.get("firstSessionStartDt"));
+    Long sessionEndDt = TypeTransformUtil.getLong(genericRecord.get("sessionEndDt"));
+    Integer absEventCnt = TypeTransformUtil.getInteger(genericRecord.get("absEventCnt"));
+    Boolean singleClickSessionFlag = TypeTransformUtil
+        .getBoolean(genericRecord.get("singleClickSessionFlag"));
+    Integer asqCnt = TypeTransformUtil.getInteger(genericRecord.get("asqCnt"));
+    Integer atcCnt = TypeTransformUtil.getInteger(genericRecord.get("atcCnt"));
+    Integer atlCnt = TypeTransformUtil.getInteger(genericRecord.get("atlCnt"));
+    Integer boCnt = TypeTransformUtil.getInteger(genericRecord.get("boCnt"));
+    Integer srpCnt = TypeTransformUtil.getInteger(genericRecord.get("srpCnt"));
+    Integer servEventCnt = TypeTransformUtil.getInteger(genericRecord.get("servEventCnt"));
+    Integer searchViewPageCnt = TypeTransformUtil
+        .getInteger(genericRecord.get("searchViewPageCnt"));
+    String browserFamily = TypeTransformUtil.getString(genericRecord.get("browserFamily"));
+    String browserVersion = TypeTransformUtil.getString(genericRecord.get("browserVersion"));
+    String city = TypeTransformUtil.getString(genericRecord.get("city"));
+    String region = TypeTransformUtil.getString(genericRecord.get("region"));
+    String country = TypeTransformUtil.getString(genericRecord.get("country"));
+    String continent = TypeTransformUtil.getString(genericRecord.get("continent"));
+    String deviceClass = TypeTransformUtil.getString(genericRecord.get("deviceClass"));
+    String deviceFamily = TypeTransformUtil.getString(genericRecord.get("deviceFamily"));
+    Integer endResourceId = TypeTransformUtil.getInteger(genericRecord.get("endResourceId"));
+    Integer startResourceId = TypeTransformUtil.getInteger(genericRecord.get("startResourceId"));
+    Boolean isReturningVisitor = TypeTransformUtil
+        .getBoolean(genericRecord.get("isReturningVisitor"));
+    String lineSpeed = TypeTransformUtil.getString(genericRecord.get("lineSpeed"));
+    String osFamily = TypeTransformUtil.getString(genericRecord.get("osFamily"));
+    String osVersion = TypeTransformUtil.getString(genericRecord.get("osVersion"));
+    Integer pulsarEventCnt = TypeTransformUtil.getInteger(genericRecord.get("pulsarEventCnt"));
+    Integer sojEventCnt = TypeTransformUtil.getInteger(genericRecord.get("sojEventCnt"));
+    String streamId = TypeTransformUtil.getString(genericRecord.get("streamId"));
+    Integer viewEventCnt = TypeTransformUtil.getInteger(genericRecord.get("viewEventCnt"));
+    String referer = TypeTransformUtil.getString(genericRecord.get("referer"));
+    Integer pageId = TypeTransformUtil.getInteger(genericRecord.get("pageId"));
+    String buserId = TypeTransformUtil.getString(genericRecord.get("buserId"));
+    Long oldsessionskey = TypeTransformUtil.getLong(genericRecord.get("oldsessionskey"));
+    Boolean isOpen = TypeTransformUtil.getBoolean(genericRecord.get("isOpen"));
 
-    return new JetStreamOutputSession(guid, eventCreateTimestamp, sessionId, streamId,
-        absStartTimestamp, absDuration, sessionStartDt, sessionEndDt, ipv4, userAgent, referer,
-        botFlag, startResourceId, endResourceId, pageId, viCnt, bidCnt, binCnt, watchCnt,
-        homepageCnt, boCnt, srpCnt, asqCnt, atcCnt, atlCnt, absEventCnt, eventCnt, pulsarEventCnt,
-        sojEventCnt, servEventCnt, viewEventCnt, searchViewPageCnt, trafficSrcId, lineSpeed,
-        isReturningVisitor, appId, browserVersion, browserFamily, osVersion, osFamily, deviceClass,
-        deviceFamily, city, region, country, continent, singleClickSessionFlag, cobrand, siteId,
-        cguid, userId, buserId);
-  }
 
-  private Integer getInteger(Object o) {
-    if (StringUtils.isEmpty(getString(o))) {
-      return null;
-    } else {
-      return Integer.valueOf(getString(o));
-    }
-  }
-
-  private boolean getBoolean(Object o) {
-    if (StringUtils.isEmpty(getString(o))) {
-      return false;
-    } else {
-      return Boolean.valueOf(getString(o));
-    }
-  }
-
-
-  private Long getLong(Object o) {
-    if (StringUtils.isEmpty(getString(o))) {
-      return null;
-    } else {
-      return Long.valueOf(getString(o));
-    }
-  }
-
-  private String getString(Object o) {
-    return (o != null && !"null".equals(o.toString())) ? o.toString() : null;
+    return new SojSession(guid, sessionReferrer, siteFlags, attrFlags, version, botFlags, ip,
+        userAgent, findingFlags, startPageId, endPageId, botFlag, durationSec, userId, eventCnt,
+        trafficSrcId, viCnt, bidCnt, binCnt, watchCnt, homepageCnt, siteId,firstSiteId,cguid,
+        cobrand,
+        startTimestamp, firstMappedUserId, appId, absDuration, grCnt, gr1Cnt, myebayCnt,
+        absStartTimestamp, signinPageCnt, nonIframeRdtEventCnt, botFlagList, absEndTimestamp,
+        endTimestamp, sojDataDt, sessionId, sessionSkey, sessionStartDt, firstSessionStartDt,
+        sessionEndDt, absEventCnt, singleClickSessionFlag, asqCnt, atcCnt, atlCnt, boCnt, srpCnt,
+        servEventCnt, searchViewPageCnt, browserFamily, browserVersion, city, region, country,
+        continent, deviceClass, deviceFamily, endResourceId, startResourceId, isReturningVisitor,
+        lineSpeed, osFamily, osVersion, pulsarEventCnt, sojEventCnt, streamId, viewEventCnt,
+        referer, pageId, buserId, oldsessionskey, isOpen);
   }
 
   @Override
-  public boolean isEndOfStream(JetStreamOutputSession nextElement) {
+  public boolean isEndOfStream(SojSession nextElement) {
     return false;
   }
 
   @Override
-  public TypeInformation<JetStreamOutputSession> getProducedType() {
-    return TypeInformation.of(JetStreamOutputSession.class);
+  public TypeInformation<SojSession> getProducedType() {
+    return TypeInformation.of(SojSession.class);
   }
 }

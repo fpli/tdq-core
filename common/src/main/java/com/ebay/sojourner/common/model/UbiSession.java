@@ -48,7 +48,7 @@ public class UbiSession implements Serializable, Cloneable {
   private int watchCoreCnt; // watchcnt in jetstream
   private int trafficSrcId;
   private Long absStartTimestamp;
-  private int absDuration; // change to long type to allign with jet stream 0810
+  private long absDuration; // change to long type to allign with jet stream 0810
   private int cobrand;
   private int firstSiteId; // siteid in jetstream
   private String firstCguid; //cguid in jetstream
@@ -212,6 +212,9 @@ public class UbiSession implements Serializable, Cloneable {
     } else if (ubiSession.getAbsStartTimestamp() != null && this.getAbsStartTimestamp() > ubiSession
         .getAbsStartTimestamp()) {
       this.setAbsStartTimestamp(ubiSession.getAbsStartTimestamp());
+      this.setSessionId(ubiSession.getSessionId());
+      this.setSessionSkey(ubiSession.getSessionSkey());
+      this.setSessionStartDt(ubiSession.getSessionStartDt());
     }
     if (this.getAbsEndTimestamp() == null && ubiSession.getAbsEndTimestamp() != null) {
       this.setAbsEndTimestamp(ubiSession.getAbsEndTimestamp());
