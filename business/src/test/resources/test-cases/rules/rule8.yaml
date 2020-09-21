@@ -1,15 +1,23 @@
-- name: case1
+- name: scsCountForBot8 > 0 and bbcCount > 6
   type: AgentIpAttribute
   input:
     AgentIpAttribute:
-      scsCountForBot8: 0
-      bbcCount: 5
-  expectResult: 0
+      scsCountForBot8: 1
+      bbcCount: 6
+  expectResult: 8
 
-- name: case2
+- name: scsCountForBot8 <= 0
   type: AgentIpAttribute
   input:
     AgentIpAttribute:
       scsCountForBot8: 0
       bbcCount: 6
+  expectResult: 0
+
+- name: bbcCount <= 5
+  type: AgentIpAttribute
+  input:
+    AgentIpAttribute:
+      scsCountForBot8: 1
+      bbcCount: 5
   expectResult: 0

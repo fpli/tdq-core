@@ -1,4 +1,4 @@
-package com.ebay.sojourner.rt.common.metrics;
+package com.ebay.sojourner.rt.metric;
 
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.SlidingWindowReservoir;

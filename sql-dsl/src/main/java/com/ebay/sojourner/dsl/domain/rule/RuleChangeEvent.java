@@ -1,4 +1,4 @@
-package com.ebay.sojourner.common.model.rule;
+package com.ebay.sojourner.dsl.domain.rule;
 
 import java.time.LocalDateTime;
 import java.util.Set;

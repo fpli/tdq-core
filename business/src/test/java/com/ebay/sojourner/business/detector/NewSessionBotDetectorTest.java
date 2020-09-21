@@ -3,9 +3,9 @@ package com.ebay.sojourner.business.detector;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ebay.sojourner.common.model.UbiSession;
-import com.ebay.sojourner.common.model.rule.RuleCategory;
-import com.ebay.sojourner.common.model.rule.RuleChangeEvent;
-import com.ebay.sojourner.common.model.rule.RuleDefinition;
+import com.ebay.sojourner.dsl.domain.rule.RuleCategory;
+import com.ebay.sojourner.dsl.domain.rule.RuleChangeEvent;
+import com.ebay.sojourner.dsl.domain.rule.RuleDefinition;
 import com.ebay.sojourner.dsl.sql.SQLSessionRule;
 import com.google.common.collect.Sets;
 import java.time.LocalDateTime;

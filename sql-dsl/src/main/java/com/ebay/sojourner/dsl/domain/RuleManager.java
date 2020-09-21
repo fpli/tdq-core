@@ -1,9 +1,9 @@
-package com.ebay.sojourner.business.rule;
+package com.ebay.sojourner.dsl.domain;
 
 import com.ebay.sojourner.common.env.EnvironmentUtils;
-import com.ebay.sojourner.common.model.rule.RuleCategory;
-import com.ebay.sojourner.common.model.rule.RuleChangeEvent;
-import com.ebay.sojourner.common.model.rule.RuleDefinition;
+import com.ebay.sojourner.dsl.domain.rule.RuleCategory;
+import com.ebay.sojourner.dsl.domain.rule.RuleChangeEvent;
+import com.ebay.sojourner.dsl.domain.rule.RuleDefinition;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.time.LocalDateTime;

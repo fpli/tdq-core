@@ -1,4 +1,4 @@
-package com.ebay.sojourner.rt.common.broadcast;
+package com.ebay.sojourner.rt.broadcast;
 
 public enum ActionType {
   LOGIN,

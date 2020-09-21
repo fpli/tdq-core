@@ -1,4 +1,4 @@
-package com.ebay.sojourner.common.model.rule;
+package com.ebay.sojourner.dsl.domain.rule;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;

@@ -6,7 +6,7 @@ import com.ebay.sojourner.common.model.AgentAttribute;
 import com.ebay.sojourner.common.model.AgentAttributeAccumulator;
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.SignatureInfo;
-import com.ebay.sojourner.rt.common.util.SignatureUtils;
+import com.ebay.sojourner.rt.util.SignatureUtils;
 import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;

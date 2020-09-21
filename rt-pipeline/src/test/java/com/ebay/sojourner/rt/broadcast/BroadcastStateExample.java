@@ -1,9 +1,9 @@
-package com.ebay.sojourner.rt.common.broadcast;
+package com.ebay.sojourner.rt.broadcast;
 
-import static com.ebay.sojourner.rt.common.broadcast.ActionType.ADD_TO_CART;
-import static com.ebay.sojourner.rt.common.broadcast.ActionType.LOGIN;
-import static com.ebay.sojourner.rt.common.broadcast.ActionType.LOGOUT;
-import static com.ebay.sojourner.rt.common.broadcast.ActionType.PAYMENT_COMPLETE;
+import static com.ebay.sojourner.rt.broadcast.ActionType.ADD_TO_CART;
+import static com.ebay.sojourner.rt.broadcast.ActionType.LOGIN;
+import static com.ebay.sojourner.rt.broadcast.ActionType.LOGOUT;
+import static com.ebay.sojourner.rt.broadcast.ActionType.PAYMENT_COMPLETE;
 
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.Types;

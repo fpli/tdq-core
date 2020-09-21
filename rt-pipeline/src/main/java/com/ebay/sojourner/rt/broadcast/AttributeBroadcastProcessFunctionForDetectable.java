@@ -1,4 +1,4 @@
-package com.ebay.sojourner.rt.common.broadcast;
+package com.ebay.sojourner.rt.broadcast;
 
 import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.UbiEvent;

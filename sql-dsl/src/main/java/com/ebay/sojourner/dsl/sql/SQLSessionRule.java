@@ -1,7 +1,7 @@
 package com.ebay.sojourner.dsl.sql;
 
 import com.ebay.sojourner.common.model.UbiSession;
-import com.ebay.sojourner.common.model.rule.RuleDefinition;
+import com.ebay.sojourner.dsl.domain.rule.RuleDefinition;
 
 public class SQLSessionRule extends AbstractSQLRule<UbiSession, ReflectiveUbiSession, Integer> {
 

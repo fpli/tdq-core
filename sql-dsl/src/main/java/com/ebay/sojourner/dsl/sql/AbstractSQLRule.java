@@ -1,6 +1,6 @@
 package com.ebay.sojourner.dsl.sql;
 
-import com.ebay.sojourner.common.model.rule.RuleDefinition;
+import com.ebay.sojourner.dsl.domain.rule.RuleDefinition;
 import com.google.common.collect.ImmutableCollection;
 import java.util.LinkedHashMap;
 import java.util.Map;

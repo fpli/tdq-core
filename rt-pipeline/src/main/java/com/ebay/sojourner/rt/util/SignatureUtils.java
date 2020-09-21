@@ -1,4 +1,4 @@
-package com.ebay.sojourner.rt.common.util;
+package com.ebay.sojourner.rt.util;
 
 import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.SignatureInfo;

@@ -1,4 +1,4 @@
-package com.ebay.sojourner.rt.common.broadcast;
+package com.ebay.sojourner.rt.broadcast;
 
 import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.MapStateDescriptor;

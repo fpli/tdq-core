@@ -1,7 +1,7 @@
-package com.ebay.sojourner.business.rule;
+package com.ebay.sojourner.dsl.domain;
 
 import com.ebay.sojourner.common.env.EnvironmentUtils;
-import com.ebay.sojourner.common.model.rule.RuleDefinition;
+import com.ebay.sojourner.dsl.domain.rule.RuleDefinition;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.common.util.RestClientUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
