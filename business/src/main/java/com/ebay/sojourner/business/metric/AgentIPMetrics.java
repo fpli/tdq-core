@@ -61,16 +61,16 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
         ubiSession.setClientIp(event.getClientIP());
       }
     } else if (isEarlyEventByMultiCols) {
-      log.debug(Calendar.getInstance().getTime() +
-          " debug AgentIPMetrics2 duplicate event==session:" + ubiSession.getGuid() + " "
-          + ubiSession
-          .getAbsStartTimestamp() + " " + ubiSession
-          .getClickId() + " " + ubiSession.getPageIdForUAIP() + " " + ubiSession.getHashCode());
-      log.debug(Calendar.getInstance().getTime() +
-          " debug AgentIPMetrics2 duplicate event==event:" + event.getGuid() + " " + event
-          .getEventTimestamp() + " "
-          + event
-          .getClickId() + " " + event.getPageId() + " " + event.getHashCode());
+      //      log.debug(Calendar.getInstance().getTime() +
+      //          " debug AgentIPMetrics2 duplicate event==session:" + ubiSession.getGuid() + " "
+      //          + ubiSession
+      //          .getAbsStartTimestamp() + " " + ubiSession
+      //          .getClickId() + " " + ubiSession.getPageIdForUAIP() + " " + ubiSession.getHashCode());
+      //      log.debug(Calendar.getInstance().getTime() +
+      //          " debug AgentIPMetrics2 duplicate event==event:" + event.getGuid() + " " + event
+      //          .getEventTimestamp() + " "
+      //          + event
+      //          .getClickId() + " " + event.getPageId() + " " + event.getHashCode());
       if (!ubiSession.isFindFirst()) {
         ubiSession.setAgentInfo(event.getAgentInfo());
         ubiSession.setClientIp(event.getClientIP());

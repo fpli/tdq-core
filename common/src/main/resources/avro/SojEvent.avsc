@@ -30,7 +30,7 @@
       "name": "seqNum",
       "type": [
         "null",
-        "int"
+        "string"
       ],
       "doc": "dataClassification=Internal|isEncrypted=false|description=map from tag snsq"
     },
@@ -309,7 +309,7 @@
       "name": "refererHash",
       "type": [
         "null",
-        "long"
+        "string"
       ],
       "doc": "dataClassification=Internal|isEncrypted=false|description=map from tag r"
     },
@@ -410,7 +410,7 @@
       "name": "appId",
       "type": [
         "null",
-        "int"
+        "string"
       ],
       "doc": "dataClassification=Internal|isEncrypted=false|description=application ID, map from tag app"
     },

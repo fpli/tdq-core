@@ -20,8 +20,8 @@ import org.apache.commons.lang3.StringUtils;
 public class RheosAvroKafkaSerializer<T> implements RheosKafkaSerializer<T> {
 
   private static final String FIELD_DELIM = ",";
-  private static int schemaId;
-  private static String producerId;
+  private int schemaId;
+  private String producerId;
   private transient BinaryEncoder encoder;
   private SchemaFactory schemaFactory;
   private SojSerializationSchema sojSerializationSchema;

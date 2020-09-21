@@ -52,7 +52,7 @@
       "doc": "from ubisession botFlags"
     },
     {
-      "name": "ip",
+      "name": "ipv4",
       "type": [
         "null",
         "string"
@@ -175,10 +175,18 @@
       "name": "siteId",
       "type": [
         "null",
-        "int"
+        "string"
       ],
       "doc": "fron ubisession firstSiteId"
     },
+      {
+          "name": "firstSiteId",
+          "type": [
+            "null",
+            "int"
+          ],
+          "doc": "fron ubisession firstSiteId"
+        },
     {
       "name": "cguid",
       "type": [

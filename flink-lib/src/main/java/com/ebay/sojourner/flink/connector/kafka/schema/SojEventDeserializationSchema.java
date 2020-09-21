@@ -7,10 +7,12 @@ import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 
+@Slf4j
 public class SojEventDeserializationSchema implements DeserializationSchema<SojEvent> {
 
   @Override
@@ -20,11 +22,12 @@ public class SojEventDeserializationSchema implements DeserializationSchema<SojE
         RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
     GenericRecord genericRecord =
         RheosEventSerdeFactory.getRheosEventDeserializer().decode(rheosEvent);
-
+    log.error("======debug kafka topic record sojEvent=======");
+    log.error(genericRecord.toString());
     String guid = TypeTransformUtil.getString(genericRecord.get("guid"));
     String sessionId = TypeTransformUtil.getString(genericRecord.get("sessionId"));
     Long sessionSkey = TypeTransformUtil.getLong(genericRecord.get("sessionSkey"));
-    Integer seqNum = TypeTransformUtil.getInteger(genericRecord.get("seqNum"));
+    String seqNum = TypeTransformUtil.getString(genericRecord.get("seqNum"));
     Long sessionStartDt = TypeTransformUtil.getLong(genericRecord.get("sessionStartDt"));
     Long sojDataDt = TypeTransformUtil.getLong(genericRecord.get("sojDataDt"));
     Integer version = TypeTransformUtil.getInteger(genericRecord.get("version"));
@@ -63,7 +66,7 @@ public class SojEventDeserializationSchema implements DeserializationSchema<SojE
     Integer rdt = TypeTransformUtil.getInteger(genericRecord.get("rdt"));
     Integer regu = TypeTransformUtil.getInteger(genericRecord.get("regu"));
     Boolean iframe = TypeTransformUtil.getBoolean(genericRecord.get("iframe"));
-    Long refererHash = TypeTransformUtil.getLong(genericRecord.get("refererHash"));
+    String refererHash = TypeTransformUtil.getString(genericRecord.get("refererHash"));
     String sqr = TypeTransformUtil.getString(genericRecord.get("sqr"));
     String itemId = TypeTransformUtil.getString(genericRecord.get("itemId"));
     String flags = TypeTransformUtil.getString(genericRecord.get("flags"));
@@ -76,7 +79,7 @@ public class SojEventDeserializationSchema implements DeserializationSchema<SojE
     String remoteIP = TypeTransformUtil.getString(genericRecord.get("remoteIP"));
     String agentInfo = TypeTransformUtil.getString(genericRecord.get("agentInfo"));
     String forwardedFor = TypeTransformUtil.getString(genericRecord.get("forwardedFor"));
-    Integer appId = TypeTransformUtil.getInteger(genericRecord.get("appId"));
+    String  appId = TypeTransformUtil.getString(genericRecord.get("appId"));
     String appVersion = TypeTransformUtil.getString(genericRecord.get("appVersion"));
     String osVersion = TypeTransformUtil.getString(genericRecord.get("osVersion"));
     String trafficSource = TypeTransformUtil.getString(genericRecord.get("trafficSource"));

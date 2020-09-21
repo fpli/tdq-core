@@ -14,8 +14,8 @@ import org.apache.avro.message.SchemaStore;
 /**  tags not included but in UbiEvent: current_impr_id, source_impr_id, staticPageType, reservedForFuture, eventAttr, oldSessionSkey, seqNum, sessionStartDt, sojDataDt, version */
 @org.apache.avro.specific.AvroGenerated
 public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -3535304836767294421L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SojEvent\",\"namespace\":\"com.ebay.sojourner.common.model\",\"doc\":\" tags not included but in UbiEvent: current_impr_id, source_impr_id, staticPageType, reservedForFuture, eventAttr, oldSessionSkey, seqNum, sessionStartDt, sojDataDt, version\",\"fields\":[{\"name\":\"guid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"sessionId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag snid\"},{\"name\":\"sessionSkey\",\"type\":[\"null\",\"long\"]},{\"name\":\"seqNum\",\"type\":[\"null\",\"int\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag snsq\"},{\"name\":\"sessionStartDt\",\"type\":[\"null\",\"long\"]},{\"name\":\"sojDataDt\",\"type\":[\"null\",\"long\"]},{\"name\":\"version\",\"type\":[\"null\",\"int\"]},{\"name\":\"staticPageType\",\"type\":[\"null\",\"int\"]},{\"name\":\"reservedForFuture\",\"type\":[\"null\",\"int\"]},{\"name\":\"eventAttr\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"currentImprId\",\"type\":[\"null\",\"long\"]},{\"name\":\"sourceImprId\",\"type\":[\"null\",\"long\"]},{\"name\":\"eventTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from timestamp, publish time\"},{\"name\":\"eventCaptureTime\",\"type\":[\"null\",\"long\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=mobile specific, map from mtsts, used for mobile case\"},{\"name\":\"requestCorrelationId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=request correlation id, map from tag rq\"},{\"name\":\"cguid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=correlation guid, map from tag n\"},{\"name\":\"sid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=Sojourner key for source id\"},{\"name\":\"pageId\",\"type\":[\"null\",\"int\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag p\"},{\"name\":\"pageName\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"pageFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag pgf\"},{\"name\":\"eventFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from efam of pulsar event, event family\"},{\"name\":\"eventAction\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from eactn of pulsar event, event action\"},{\"name\":\"userId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag u/bu\"},{\"name\":\"clickId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=Click Id, map from tag c\"},{\"name\":\"siteId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=Site ID, map from tag t\"},{\"name\":\"ciid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"siid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"oldSessionSkey\",\"type\":[\"null\",\"long\"]},{\"name\":\"partialValidPage\",\"type\":[\"null\",\"boolean\"]},{\"name\":\"sessionStartTime\",\"type\":[\"null\",\"long\"]},{\"name\":\"sessionEndTime\",\"type\":[\"null\",\"long\"]},{\"name\":\"botFlags\",\"type\":[\"null\",{\"type\":\"array\",\"items\":\"int\"}],\"default\":null},{\"name\":\"icfBinary\",\"type\":[\"null\",\"long\"]},{\"name\":\"ingestTime\",\"type\":[\"null\",\"long\"]},{\"name\":\"generateTime\",\"type\":[\"null\",\"long\"]},{\"name\":\"eventCnt\",\"type\":[\"null\",\"long\"]},{\"name\":\"dataCenter\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"rdt\",\"type\":[\"null\",\"int\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=1 indicates that the command redirected to another URL\"},{\"name\":\"regu\",\"type\":[\"null\",\"int\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=indicating that this is a registered user, map from tag regU\"},{\"name\":\"iframe\",\"type\":[\"null\",\"boolean\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag _ifrm\"},{\"name\":\"refererHash\",\"type\":[\"null\",\"long\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag r\"},{\"name\":\"sqr\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=search keyword, map from tag sQr\"},{\"name\":\"itemId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag itm/item\"},{\"name\":\"flags\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag flgs\"},{\"name\":\"urlQueryString\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag Referer\"},{\"name\":\"webServer\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=web server, map from Server\"},{\"name\":\"cookies\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag ck/C\"},{\"name\":\"referrer\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"bot\",\"type\":[\"null\",\"int\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag bott\"},{\"name\":\"clientIP\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"remoteIP\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag RemoteIP\"},{\"name\":\"agentInfo\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag Agent\"},{\"name\":\"forwardedFor\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"appId\",\"type\":[\"null\",\"int\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=application ID, map from tag app\"},{\"name\":\"appVersion\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=application version, map from mav\"},{\"name\":\"osVersion\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=operation system version, map from osv\"},{\"name\":\"trafficSource\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from trffc_src\"},{\"name\":\"cobrand\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from cbrnd\"},{\"name\":\"deviceFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from dd_d\"},{\"name\":\"deviceType\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from dd_dc\"},{\"name\":\"browserVersion\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from dd_bv\"},{\"name\":\"browserFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from dd_bf\"},{\"name\":\"osFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from dd_os\"},{\"name\":\"enrichedOsVersion\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from dd_osv\"},{\"name\":\"applicationPayload\",\"type\":{\"type\":\"map\",\"values\":{\"type\":\"string\",\"avro.java.string\"",":\"String\"},\"avro.java.string\":\"String\"}},{\"name\":\"rlogid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"CAL request log id\",\"default\":null,\"avro.java.string\":\"String\"},{\"name\":\"clientData\",\"type\":{\"type\":\"map\",\"values\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"avro.java.string\":\"String\"},\"doc\":\"Includes ForwardFor, ContentLength, Script, Server, Encoding, TMachine, TStamp, TName, TStatus, TDuration, TPayload\"}]}");
+  private static final long serialVersionUID = 2540347486304360878L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SojEvent\",\"namespace\":\"com.ebay.sojourner.common.model\",\"doc\":\" tags not included but in UbiEvent: current_impr_id, source_impr_id, staticPageType, reservedForFuture, eventAttr, oldSessionSkey, seqNum, sessionStartDt, sojDataDt, version\",\"fields\":[{\"name\":\"guid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"sessionId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag snid\"},{\"name\":\"sessionSkey\",\"type\":[\"null\",\"long\"]},{\"name\":\"seqNum\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag snsq\"},{\"name\":\"sessionStartDt\",\"type\":[\"null\",\"long\"]},{\"name\":\"sojDataDt\",\"type\":[\"null\",\"long\"]},{\"name\":\"version\",\"type\":[\"null\",\"int\"]},{\"name\":\"staticPageType\",\"type\":[\"null\",\"int\"]},{\"name\":\"reservedForFuture\",\"type\":[\"null\",\"int\"]},{\"name\":\"eventAttr\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"currentImprId\",\"type\":[\"null\",\"long\"]},{\"name\":\"sourceImprId\",\"type\":[\"null\",\"long\"]},{\"name\":\"eventTimestamp\",\"type\":[\"null\",\"long\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from timestamp, publish time\"},{\"name\":\"eventCaptureTime\",\"type\":[\"null\",\"long\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=mobile specific, map from mtsts, used for mobile case\"},{\"name\":\"requestCorrelationId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=request correlation id, map from tag rq\"},{\"name\":\"cguid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=correlation guid, map from tag n\"},{\"name\":\"sid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=Sojourner key for source id\"},{\"name\":\"pageId\",\"type\":[\"null\",\"int\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag p\"},{\"name\":\"pageName\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"pageFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag pgf\"},{\"name\":\"eventFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from efam of pulsar event, event family\"},{\"name\":\"eventAction\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from eactn of pulsar event, event action\"},{\"name\":\"userId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag u/bu\"},{\"name\":\"clickId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=Click Id, map from tag c\"},{\"name\":\"siteId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=Site ID, map from tag t\"},{\"name\":\"ciid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"siid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"oldSessionSkey\",\"type\":[\"null\",\"long\"]},{\"name\":\"partialValidPage\",\"type\":[\"null\",\"boolean\"]},{\"name\":\"sessionStartTime\",\"type\":[\"null\",\"long\"]},{\"name\":\"sessionEndTime\",\"type\":[\"null\",\"long\"]},{\"name\":\"botFlags\",\"type\":[\"null\",{\"type\":\"array\",\"items\":\"int\"}],\"default\":null},{\"name\":\"icfBinary\",\"type\":[\"null\",\"long\"]},{\"name\":\"ingestTime\",\"type\":[\"null\",\"long\"]},{\"name\":\"generateTime\",\"type\":[\"null\",\"long\"]},{\"name\":\"eventCnt\",\"type\":[\"null\",\"long\"]},{\"name\":\"dataCenter\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"rdt\",\"type\":[\"null\",\"int\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=1 indicates that the command redirected to another URL\"},{\"name\":\"regu\",\"type\":[\"null\",\"int\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=indicating that this is a registered user, map from tag regU\"},{\"name\":\"iframe\",\"type\":[\"null\",\"boolean\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag _ifrm\"},{\"name\":\"refererHash\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag r\"},{\"name\":\"sqr\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=search keyword, map from tag sQr\"},{\"name\":\"itemId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag itm/item\"},{\"name\":\"flags\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag flgs\"},{\"name\":\"urlQueryString\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag Referer\"},{\"name\":\"webServer\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=web server, map from Server\"},{\"name\":\"cookies\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag ck/C\"},{\"name\":\"referrer\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"bot\",\"type\":[\"null\",\"int\"],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag bott\"},{\"name\":\"clientIP\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"remoteIP\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag RemoteIP\"},{\"name\":\"agentInfo\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from tag Agent\"},{\"name\":\"forwardedFor\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"appId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=application ID, map from tag app\"},{\"name\":\"appVersion\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=application version, map from mav\"},{\"name\":\"osVersion\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=operation system version, map from osv\"},{\"name\":\"trafficSource\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from trffc_src\"},{\"name\":\"cobrand\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from cbrnd\"},{\"name\":\"deviceFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from dd_d\"},{\"name\":\"deviceType\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from dd_dc\"},{\"name\":\"browserVersion\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from dd_bv\"},{\"name\":\"browserFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from dd_bf\"},{\"name\":\"osFamily\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|description=map from dd_os\"},{\"name\":\"enrichedOsVersion\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"dataClassification=Internal|isEncrypted=false|descr","iption=map from dd_osv\"},{\"name\":\"applicationPayload\",\"type\":{\"type\":\"map\",\"values\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"avro.java.string\":\"String\"}},{\"name\":\"rlogid\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"CAL request log id\",\"default\":null,\"avro.java.string\":\"String\"},{\"name\":\"clientData\",\"type\":{\"type\":\"map\",\"values\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"avro.java.string\":\"String\"},\"doc\":\"Includes ForwardFor, ContentLength, Script, Server, Encoding, TMachine, TStamp, TName, TStatus, TDuration, TPayload\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -57,7 +57,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
   @Deprecated public java.lang.String sessionId;
   @Deprecated public java.lang.Long sessionSkey;
   /** dataClassification=Internal|isEncrypted=false|description=map from tag snsq */
-  @Deprecated public java.lang.Integer seqNum;
+  @Deprecated public java.lang.String seqNum;
   @Deprecated public java.lang.Long sessionStartDt;
   @Deprecated public java.lang.Long sojDataDt;
   @Deprecated public java.lang.Integer version;
@@ -110,7 +110,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
   /** dataClassification=Internal|isEncrypted=false|description=map from tag _ifrm */
   @Deprecated public java.lang.Boolean iframe;
   /** dataClassification=Internal|isEncrypted=false|description=map from tag r */
-  @Deprecated public java.lang.Long refererHash;
+  @Deprecated public java.lang.String refererHash;
   /** dataClassification=Internal|isEncrypted=false|description=search keyword, map from tag sQr */
   @Deprecated public java.lang.String sqr;
   /** dataClassification=Internal|isEncrypted=false|description=map from tag itm/item */
@@ -133,7 +133,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
   @Deprecated public java.lang.String agentInfo;
   @Deprecated public java.lang.String forwardedFor;
   /** dataClassification=Internal|isEncrypted=false|description=application ID, map from tag app */
-  @Deprecated public java.lang.Integer appId;
+  @Deprecated public java.lang.String appId;
   /** dataClassification=Internal|isEncrypted=false|description=application version, map from mav */
   @Deprecated public java.lang.String appVersion;
   /** dataClassification=Internal|isEncrypted=false|description=operation system version, map from osv */
@@ -237,7 +237,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
    * @param rlogid CAL request log id
    * @param clientData Includes ForwardFor, ContentLength, Script, Server, Encoding, TMachine, TStamp, TName, TStatus, TDuration, TPayload
    */
-  public SojEvent(java.lang.String guid, java.lang.String sessionId, java.lang.Long sessionSkey, java.lang.Integer seqNum, java.lang.Long sessionStartDt, java.lang.Long sojDataDt, java.lang.Integer version, java.lang.Integer staticPageType, java.lang.Integer reservedForFuture, java.lang.String eventAttr, java.lang.Long currentImprId, java.lang.Long sourceImprId, java.lang.Long eventTimestamp, java.lang.Long eventCaptureTime, java.lang.String requestCorrelationId, java.lang.String cguid, java.lang.String sid, java.lang.Integer pageId, java.lang.String pageName, java.lang.String pageFamily, java.lang.String eventFamily, java.lang.String eventAction, java.lang.String userId, java.lang.String clickId, java.lang.String siteId, java.lang.String ciid, java.lang.String siid, java.lang.Long oldSessionSkey, java.lang.Boolean partialValidPage, java.lang.Long sessionStartTime, java.lang.Long sessionEndTime, java.util.List<java.lang.Integer> botFlags, java.lang.Long icfBinary, java.lang.Long ingestTime, java.lang.Long generateTime, java.lang.Long eventCnt, java.lang.String dataCenter, java.lang.Integer rdt, java.lang.Integer regu, java.lang.Boolean iframe, java.lang.Long refererHash, java.lang.String sqr, java.lang.String itemId, java.lang.String flags, java.lang.String urlQueryString, java.lang.String webServer, java.lang.String cookies, java.lang.String referrer, java.lang.Integer bot, java.lang.String clientIP, java.lang.String remoteIP, java.lang.String agentInfo, java.lang.String forwardedFor, java.lang.Integer appId, java.lang.String appVersion, java.lang.String osVersion, java.lang.String trafficSource, java.lang.String cobrand, java.lang.String deviceFamily, java.lang.String deviceType, java.lang.String browserVersion, java.lang.String browserFamily, java.lang.String osFamily, java.lang.String enrichedOsVersion, java.util.Map<java.lang.String,java.lang.String> applicationPayload, java.lang.String rlogid, java.util.Map<java.lang.String,java.lang.String> clientData) {
+  public SojEvent(java.lang.String guid, java.lang.String sessionId, java.lang.Long sessionSkey, java.lang.String seqNum, java.lang.Long sessionStartDt, java.lang.Long sojDataDt, java.lang.Integer version, java.lang.Integer staticPageType, java.lang.Integer reservedForFuture, java.lang.String eventAttr, java.lang.Long currentImprId, java.lang.Long sourceImprId, java.lang.Long eventTimestamp, java.lang.Long eventCaptureTime, java.lang.String requestCorrelationId, java.lang.String cguid, java.lang.String sid, java.lang.Integer pageId, java.lang.String pageName, java.lang.String pageFamily, java.lang.String eventFamily, java.lang.String eventAction, java.lang.String userId, java.lang.String clickId, java.lang.String siteId, java.lang.String ciid, java.lang.String siid, java.lang.Long oldSessionSkey, java.lang.Boolean partialValidPage, java.lang.Long sessionStartTime, java.lang.Long sessionEndTime, java.util.List<java.lang.Integer> botFlags, java.lang.Long icfBinary, java.lang.Long ingestTime, java.lang.Long generateTime, java.lang.Long eventCnt, java.lang.String dataCenter, java.lang.Integer rdt, java.lang.Integer regu, java.lang.Boolean iframe, java.lang.String refererHash, java.lang.String sqr, java.lang.String itemId, java.lang.String flags, java.lang.String urlQueryString, java.lang.String webServer, java.lang.String cookies, java.lang.String referrer, java.lang.Integer bot, java.lang.String clientIP, java.lang.String remoteIP, java.lang.String agentInfo, java.lang.String forwardedFor, java.lang.String appId, java.lang.String appVersion, java.lang.String osVersion, java.lang.String trafficSource, java.lang.String cobrand, java.lang.String deviceFamily, java.lang.String deviceType, java.lang.String browserVersion, java.lang.String browserFamily, java.lang.String osFamily, java.lang.String enrichedOsVersion, java.util.Map<java.lang.String,java.lang.String> applicationPayload, java.lang.String rlogid, java.util.Map<java.lang.String,java.lang.String> clientData) {
     this.guid = guid;
     this.sessionId = sessionId;
     this.sessionSkey = sessionSkey;
@@ -389,7 +389,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
     case 0: guid = (java.lang.String)value$; break;
     case 1: sessionId = (java.lang.String)value$; break;
     case 2: sessionSkey = (java.lang.Long)value$; break;
-    case 3: seqNum = (java.lang.Integer)value$; break;
+    case 3: seqNum = (java.lang.String)value$; break;
     case 4: sessionStartDt = (java.lang.Long)value$; break;
     case 5: sojDataDt = (java.lang.Long)value$; break;
     case 6: version = (java.lang.Integer)value$; break;
@@ -426,7 +426,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
     case 37: rdt = (java.lang.Integer)value$; break;
     case 38: regu = (java.lang.Integer)value$; break;
     case 39: iframe = (java.lang.Boolean)value$; break;
-    case 40: refererHash = (java.lang.Long)value$; break;
+    case 40: refererHash = (java.lang.String)value$; break;
     case 41: sqr = (java.lang.String)value$; break;
     case 42: itemId = (java.lang.String)value$; break;
     case 43: flags = (java.lang.String)value$; break;
@@ -439,7 +439,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
     case 50: remoteIP = (java.lang.String)value$; break;
     case 51: agentInfo = (java.lang.String)value$; break;
     case 52: forwardedFor = (java.lang.String)value$; break;
-    case 53: appId = (java.lang.Integer)value$; break;
+    case 53: appId = (java.lang.String)value$; break;
     case 54: appVersion = (java.lang.String)value$; break;
     case 55: osVersion = (java.lang.String)value$; break;
     case 56: trafficSource = (java.lang.String)value$; break;
@@ -510,7 +510,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
    * Gets the value of the 'seqNum' field.
    * @return dataClassification=Internal|isEncrypted=false|description=map from tag snsq
    */
-  public java.lang.Integer getSeqNum() {
+  public java.lang.String getSeqNum() {
     return seqNum;
   }
 
@@ -519,7 +519,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
    * dataClassification=Internal|isEncrypted=false|description=map from tag snsq
    * @param value the value to set.
    */
-  public void setSeqNum(java.lang.Integer value) {
+  public void setSeqNum(java.lang.String value) {
     this.seqNum = value;
   }
 
@@ -1118,7 +1118,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
    * Gets the value of the 'refererHash' field.
    * @return dataClassification=Internal|isEncrypted=false|description=map from tag r
    */
-  public java.lang.Long getRefererHash() {
+  public java.lang.String getRefererHash() {
     return refererHash;
   }
 
@@ -1127,7 +1127,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
    * dataClassification=Internal|isEncrypted=false|description=map from tag r
    * @param value the value to set.
    */
-  public void setRefererHash(java.lang.Long value) {
+  public void setRefererHash(java.lang.String value) {
     this.refererHash = value;
   }
 
@@ -1336,7 +1336,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
    * Gets the value of the 'appId' field.
    * @return dataClassification=Internal|isEncrypted=false|description=application ID, map from tag app
    */
-  public java.lang.Integer getAppId() {
+  public java.lang.String getAppId() {
     return appId;
   }
 
@@ -1345,7 +1345,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
    * dataClassification=Internal|isEncrypted=false|description=application ID, map from tag app
    * @param value the value to set.
    */
-  public void setAppId(java.lang.Integer value) {
+  public void setAppId(java.lang.String value) {
     this.appId = value;
   }
 
@@ -1606,7 +1606,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
     private java.lang.String sessionId;
     private java.lang.Long sessionSkey;
     /** dataClassification=Internal|isEncrypted=false|description=map from tag snsq */
-    private java.lang.Integer seqNum;
+    private java.lang.String seqNum;
     private java.lang.Long sessionStartDt;
     private java.lang.Long sojDataDt;
     private java.lang.Integer version;
@@ -1659,7 +1659,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
     /** dataClassification=Internal|isEncrypted=false|description=map from tag _ifrm */
     private java.lang.Boolean iframe;
     /** dataClassification=Internal|isEncrypted=false|description=map from tag r */
-    private java.lang.Long refererHash;
+    private java.lang.String refererHash;
     /** dataClassification=Internal|isEncrypted=false|description=search keyword, map from tag sQr */
     private java.lang.String sqr;
     /** dataClassification=Internal|isEncrypted=false|description=map from tag itm/item */
@@ -1682,7 +1682,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
     private java.lang.String agentInfo;
     private java.lang.String forwardedFor;
     /** dataClassification=Internal|isEncrypted=false|description=application ID, map from tag app */
-    private java.lang.Integer appId;
+    private java.lang.String appId;
     /** dataClassification=Internal|isEncrypted=false|description=application version, map from mav */
     private java.lang.String appVersion;
     /** dataClassification=Internal|isEncrypted=false|description=operation system version, map from osv */
@@ -2392,7 +2392,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
       * dataClassification=Internal|isEncrypted=false|description=map from tag snsq
       * @return The value.
       */
-    public java.lang.Integer getSeqNum() {
+    public java.lang.String getSeqNum() {
       return seqNum;
     }
 
@@ -2402,7 +2402,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
       * @param value The value of 'seqNum'.
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojEvent.Builder setSeqNum(java.lang.Integer value) {
+    public com.ebay.sojourner.common.model.SojEvent.Builder setSeqNum(java.lang.String value) {
       validate(fields()[3], value);
       this.seqNum = value;
       fieldSetFlags()[3] = true;
@@ -3899,7 +3899,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
       * dataClassification=Internal|isEncrypted=false|description=map from tag r
       * @return The value.
       */
-    public java.lang.Long getRefererHash() {
+    public java.lang.String getRefererHash() {
       return refererHash;
     }
 
@@ -3909,7 +3909,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
       * @param value The value of 'refererHash'.
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojEvent.Builder setRefererHash(java.lang.Long value) {
+    public com.ebay.sojourner.common.model.SojEvent.Builder setRefererHash(java.lang.String value) {
       validate(fields()[40], value);
       this.refererHash = value;
       fieldSetFlags()[40] = true;
@@ -4446,7 +4446,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
       * dataClassification=Internal|isEncrypted=false|description=application ID, map from tag app
       * @return The value.
       */
-    public java.lang.Integer getAppId() {
+    public java.lang.String getAppId() {
       return appId;
     }
 
@@ -4456,7 +4456,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
       * @param value The value of 'appId'.
       * @return This builder.
       */
-    public com.ebay.sojourner.common.model.SojEvent.Builder setAppId(java.lang.Integer value) {
+    public com.ebay.sojourner.common.model.SojEvent.Builder setAppId(java.lang.String value) {
       validate(fields()[53], value);
       this.appId = value;
       fieldSetFlags()[53] = true;
@@ -5047,7 +5047,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
         record.guid = fieldSetFlags()[0] ? this.guid : (java.lang.String) defaultValue(fields()[0]);
         record.sessionId = fieldSetFlags()[1] ? this.sessionId : (java.lang.String) defaultValue(fields()[1]);
         record.sessionSkey = fieldSetFlags()[2] ? this.sessionSkey : (java.lang.Long) defaultValue(fields()[2]);
-        record.seqNum = fieldSetFlags()[3] ? this.seqNum : (java.lang.Integer) defaultValue(fields()[3]);
+        record.seqNum = fieldSetFlags()[3] ? this.seqNum : (java.lang.String) defaultValue(fields()[3]);
         record.sessionStartDt = fieldSetFlags()[4] ? this.sessionStartDt : (java.lang.Long) defaultValue(fields()[4]);
         record.sojDataDt = fieldSetFlags()[5] ? this.sojDataDt : (java.lang.Long) defaultValue(fields()[5]);
         record.version = fieldSetFlags()[6] ? this.version : (java.lang.Integer) defaultValue(fields()[6]);
@@ -5084,7 +5084,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
         record.rdt = fieldSetFlags()[37] ? this.rdt : (java.lang.Integer) defaultValue(fields()[37]);
         record.regu = fieldSetFlags()[38] ? this.regu : (java.lang.Integer) defaultValue(fields()[38]);
         record.iframe = fieldSetFlags()[39] ? this.iframe : (java.lang.Boolean) defaultValue(fields()[39]);
-        record.refererHash = fieldSetFlags()[40] ? this.refererHash : (java.lang.Long) defaultValue(fields()[40]);
+        record.refererHash = fieldSetFlags()[40] ? this.refererHash : (java.lang.String) defaultValue(fields()[40]);
         record.sqr = fieldSetFlags()[41] ? this.sqr : (java.lang.String) defaultValue(fields()[41]);
         record.itemId = fieldSetFlags()[42] ? this.itemId : (java.lang.String) defaultValue(fields()[42]);
         record.flags = fieldSetFlags()[43] ? this.flags : (java.lang.String) defaultValue(fields()[43]);
@@ -5097,7 +5097,7 @@ public class SojEvent extends org.apache.avro.specific.SpecificRecordBase implem
         record.remoteIP = fieldSetFlags()[50] ? this.remoteIP : (java.lang.String) defaultValue(fields()[50]);
         record.agentInfo = fieldSetFlags()[51] ? this.agentInfo : (java.lang.String) defaultValue(fields()[51]);
         record.forwardedFor = fieldSetFlags()[52] ? this.forwardedFor : (java.lang.String) defaultValue(fields()[52]);
-        record.appId = fieldSetFlags()[53] ? this.appId : (java.lang.Integer) defaultValue(fields()[53]);
+        record.appId = fieldSetFlags()[53] ? this.appId : (java.lang.String) defaultValue(fields()[53]);
         record.appVersion = fieldSetFlags()[54] ? this.appVersion : (java.lang.String) defaultValue(fields()[54]);
         record.osVersion = fieldSetFlags()[55] ? this.osVersion : (java.lang.String) defaultValue(fields()[55]);
         record.trafficSource = fieldSetFlags()[56] ? this.trafficSource : (java.lang.String) defaultValue(fields()[56]);
