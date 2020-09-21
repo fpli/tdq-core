@@ -15,9 +15,9 @@ flink:
   app:
     name: Sojourner RNO Bot Session HDFS Load Pipeline
     parallelism:
-      source: 20
+      source: 50
       sink:
-        hdfs: 20
+        hdfs: 50
     metric:
       watermark-process-progress: sojourner-ubd-bot-session-watermark-delay-time
 
