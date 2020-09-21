@@ -1,11 +1,11 @@
 package com.ebay.sojourner.business.detector;
 
-import com.ebay.sojourner.business.rule.RuleChangeEventListener;
-import com.ebay.sojourner.business.rule.RuleManager;
+import com.ebay.sojourner.dsl.domain.RuleChangeEventListener;
+import com.ebay.sojourner.dsl.domain.RuleManager;
 import com.ebay.sojourner.common.model.UbiEvent;
-import com.ebay.sojourner.common.model.rule.RuleCategory;
-import com.ebay.sojourner.common.model.rule.RuleChangeEvent;
-import com.ebay.sojourner.common.model.rule.RuleDefinition;
+import com.ebay.sojourner.dsl.domain.rule.RuleCategory;
+import com.ebay.sojourner.dsl.domain.rule.RuleChangeEvent;
+import com.ebay.sojourner.dsl.domain.rule.RuleDefinition;
 import com.ebay.sojourner.dsl.sql.SQLEventRule;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;

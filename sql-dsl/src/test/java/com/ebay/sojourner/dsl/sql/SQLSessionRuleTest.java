@@ -3,7 +3,7 @@ package com.ebay.sojourner.dsl.sql;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.ebay.sojourner.common.model.UbiSession;
-import com.ebay.sojourner.common.model.rule.RuleDefinition;
+import com.ebay.sojourner.dsl.domain.rule.RuleDefinition;
 import org.junit.Test;
 
 public class SQLSessionRuleTest {
@@ -29,20 +29,6 @@ public class SQLSessionRuleTest {
     Integer result = rule.execute(ubiSession);
 
     assertEquals(1, result);
-  }
-
-  @Test
-  public void testUdf() throws Exception {
-    String sql = "SELECT square(viewCnt) FROM soj.idl_session";
-
-    SQLSessionRule rule = new SQLSessionRule(getRuleDef(sql));
-
-    UbiSession ubiSession = new UbiSession();
-    ubiSession.setViewCnt(2);
-
-    Integer result = rule.execute(ubiSession);
-
-    assertEquals(4, result);
   }
 
 }

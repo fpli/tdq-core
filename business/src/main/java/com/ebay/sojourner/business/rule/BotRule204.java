@@ -10,10 +10,8 @@ public class BotRule204 extends AbstractBotRule<UbiSession> {
     int validPageCount = session.getValidPageCnt();
     if (session.getGrCnt() == validPageCount && session.getSiidCnt() == 0) {
       if ((validPageCount > 20
-          && (session.getFirstSiteId() == Integer.MIN_VALUE || session.getFirstSiteId() != 100))
-          || (validPageCount > 100
-          && session.getFirstSiteId() != Integer.MIN_VALUE
-          && session.getFirstSiteId() == 100)) {
+            && (session.getFirstSiteId() == Integer.MIN_VALUE || session.getFirstSiteId() != 100))
+          || (validPageCount > 100 && session.getFirstSiteId() == 100)) {
         return BotRules.MANY_SRP_WITHOUT_SIID;
       }
     }

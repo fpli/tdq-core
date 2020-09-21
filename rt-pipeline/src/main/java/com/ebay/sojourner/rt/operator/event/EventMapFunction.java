@@ -2,7 +2,7 @@ package com.ebay.sojourner.rt.operator.event;
 
 import com.ebay.sojourner.business.detector.EventBotDetector;
 import com.ebay.sojourner.business.parser.EventParser;
-import com.ebay.sojourner.business.rule.RuleManager;
+import com.ebay.sojourner.dsl.domain.RuleManager;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
 import java.util.Set;
