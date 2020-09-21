@@ -39,6 +39,7 @@ public class RheosSchemeFactory implements SchemaFactory {
   }
 
   public Object validateField(String key, Object value) {
+
     Schema schema = holder.fields.get(key);
     List<Schema> schemas;
     if (schema == null) {
@@ -46,13 +47,13 @@ public class RheosSchemeFactory implements SchemaFactory {
     } else if (!holder.validator.validate(schema, value)) {
       String cls = value.getClass().getSimpleName();
       try {
-       schemas = schema.getTypes();
-      }catch(Exception e){
-        log.error("Schema can not get types:",e,schema.toString());
+        schemas = schema.getTypes();
+      } catch (Exception e) {
+        log.error("Schema can not get types:", e, schema.toString());
         return value;
       }
 
-      if (schemas!=null&&schemas.size() > 0) {
+      if (schemas != null && schemas.size() > 0) {
         String type = null;
         for (Schema s : schemas) {
           if (!s.getName().equalsIgnoreCase("null")) {
@@ -103,9 +104,6 @@ public class RheosSchemeFactory implements SchemaFactory {
       for (Field field : content.getFields()) {
         fields.put(field.name(), field.schema());
       }
-
     }
   }
-
-
 }

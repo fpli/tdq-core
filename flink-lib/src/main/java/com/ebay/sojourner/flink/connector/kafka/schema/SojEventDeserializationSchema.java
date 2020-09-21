@@ -6,6 +6,7 @@ import com.ebay.sojourner.flink.connector.kafka.RheosEventSerdeFactory;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -86,10 +87,9 @@ public class SojEventDeserializationSchema implements DeserializationSchema<SojE
     String browserFamily = TypeTransformUtil.getString(genericRecord.get("browserFamily"));
     String osFamily = TypeTransformUtil.getString(genericRecord.get("osFamily"));
     String enrichedOsVersion = TypeTransformUtil.getString(genericRecord.get("enrichedOsVersion"));
-    String applicationPayload = TypeTransformUtil
-        .getString(genericRecord.get("applicationPayload"));
+    Map<String, String> applicationPayload = (Map) genericRecord.get("applicationPayload");
     String rlogid = TypeTransformUtil.getString(genericRecord.get("rlogid"));
-    String clientData = TypeTransformUtil.getString(genericRecord.get("clientData"));
+    Map<String, String> clientData = (Map) genericRecord.get("clientData");
 
     return new SojEvent(guid, sessionId, sessionSkey, seqNum, sessionStartDt, sojDataDt, version,
         staticPageType, reservedForFuture, eventAttr, currentImprId, sourceImprId, eventTimestamp,
