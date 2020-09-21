@@ -6,10 +6,12 @@ import com.ebay.sojourner.flink.connector.kafka.RheosEventSerdeFactory;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.IOException;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 
+@Slf4j
 public class SojSessionDeserializationSchema implements DeserializationSchema<SojSession> {
 
   @Override
@@ -20,6 +22,8 @@ public class SojSessionDeserializationSchema implements DeserializationSchema<So
     GenericRecord genericRecord =
         RheosEventSerdeFactory.getRheosEventDeserializer().decode(rheosEvent);
 
+    log.error("======debug kafka topic record sojSession=======");
+    log.error(genericRecord.toString());
     String guid = TypeTransformUtil.getString(genericRecord.get("guid"));
     String sessionReferrer = TypeTransformUtil.getString(genericRecord.get("sessionReferrer"));
     Long siteFlags = TypeTransformUtil.getLong(genericRecord.get("siteFlags"));
@@ -41,7 +45,8 @@ public class SojSessionDeserializationSchema implements DeserializationSchema<So
     Integer binCnt = TypeTransformUtil.getInteger(genericRecord.get("binCnt"));
     Integer watchCnt = TypeTransformUtil.getInteger(genericRecord.get("watchCnt"));
     Integer homepageCnt = TypeTransformUtil.getInteger(genericRecord.get("homepageCnt"));
-    Integer siteId = TypeTransformUtil.getInteger(genericRecord.get("siteId"));
+    String siteId = TypeTransformUtil.getString(genericRecord.get("siteId"));
+    Integer firstSiteId = TypeTransformUtil.getInteger(genericRecord.get("firstSiteId"));
     String cguid = TypeTransformUtil.getString(genericRecord.get("cguid"));
     Integer cobrand = TypeTransformUtil.getInteger(genericRecord.get("cobrand"));
     Long startTimestamp = TypeTransformUtil.getLong(genericRecord.get("startTimestamp"));
@@ -100,9 +105,11 @@ public class SojSessionDeserializationSchema implements DeserializationSchema<So
     Long oldsessionskey = TypeTransformUtil.getLong(genericRecord.get("oldsessionskey"));
     Boolean isOpen = TypeTransformUtil.getBoolean(genericRecord.get("isOpen"));
 
+
     return new SojSession(guid, sessionReferrer, siteFlags, attrFlags, version, botFlags, ip,
         userAgent, findingFlags, startPageId, endPageId, botFlag, durationSec, userId, eventCnt,
-        trafficSrcId, viCnt, bidCnt, binCnt, watchCnt, homepageCnt, siteId, cguid, cobrand,
+        trafficSrcId, viCnt, bidCnt, binCnt, watchCnt, homepageCnt, siteId,firstSiteId,cguid,
+        cobrand,
         startTimestamp, firstMappedUserId, appId, absDuration, grCnt, gr1Cnt, myebayCnt,
         absStartTimestamp, signinPageCnt, nonIframeRdtEventCnt, botFlagList, absEndTimestamp,
         endTimestamp, sojDataDt, sessionId, sessionSkey, sessionStartDt, firstSessionStartDt,

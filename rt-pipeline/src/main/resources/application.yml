@@ -67,8 +67,8 @@ kafka:
       - rhs-fxuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.37.tess.io:9092
       - rhs-fxuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.37.tess.io:9092
     subject:
-        event: behavior.pulsar.sojevent.schema
-        session: behavior.pulsar.sojsession.schema
+        event: behavior.pulsar.sojevent.schemanew
+        session: behavior.pulsar.sojsession.schemanew
 
     batch-size: 524288
     acks: 1
