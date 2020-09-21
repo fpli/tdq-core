@@ -80,6 +80,7 @@ public class RheosAvroKafkaSerializer<T> implements RheosKafkaSerializer<T> {
   }
 
   private RheosEvent constructREvent(T data) {
+
     GenericRecord record = constructGenericRecord(data);
     long createTimestamp = System.currentTimeMillis();
     RheosEvent rheosEvent = new RheosEvent(record);
@@ -92,6 +93,7 @@ public class RheosAvroKafkaSerializer<T> implements RheosKafkaSerializer<T> {
   }
 
   private GenericRecord constructGenericRecord(T data) {
+
     GenericData.Record record = new GenericData.Record(schemaFactory.getSchema());
     Field[] columns = data.getClass().getDeclaredFields();
     for (Field column : columns) {

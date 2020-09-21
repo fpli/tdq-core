@@ -384,9 +384,10 @@ public class SojournerRTJob {
         .addSink(KafkaProducerFactory.getProducer(
             FlinkEnvUtils.getString(Property.KAFKA_TOPIC_EVENT_LATE),
             FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS),
+            FlinkEnvUtils.getString(Property.KAFKA_PRODUCER_SUBJECT_SOJEVENT),
+            SojEvent.class,
             FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY1),
-            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY2),
-            SojEvent.class))
+            FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_EVENT_KEY2)))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.SESSION_SLOT_SHARE_GROUP))
         .name("Late SojEvent")

@@ -33,15 +33,15 @@ public class KafkaProducerFactory {
       }
     } else {
       return new FlinkKafkaProducer(topic,
-          new SojSerializationSchema(topic, subject,
-              producerConfig, messageKey),
-          producerConfig, Semantic.AT_LEAST_ONCE);
+          new SojSerializationSchema(topic, subject, producerConfig, messageKey), producerConfig,
+          Semantic.AT_LEAST_ONCE);
     }
   }
 
-  public static <T> FlinkKafkaProducer<T> getProducer(String topic, String brokers) {
+  public static <T> FlinkKafkaProducer<T> getProducer(String topic, String brokers, Class<T> tClass,
+      String... messagekey) {
 
-    return getProducer(topic, brokers, null, (Class<T>) null, null);
+    return getProducer(topic, brokers, null, tClass, null);
   }
 
   public static <T> FlinkKafkaProducer<T> getProducer(String topic, String brokers,
@@ -49,7 +49,7 @@ public class KafkaProducerFactory {
 
     return getProducer(topic, brokers, subject, null, messageKey);
   }
-  
+
   public static <T> FlinkKafkaProducer<T> getProducer(String topic, String brokers,
       String messageKey, Class<T> tClass) {
 

@@ -29,7 +29,6 @@ public class RheosEventSerdeFactory {
       Map<String, Object> config = new HashMap<>();
       config.put(StreamConnectorConfig.RHEOS_SERVICES_URLS, RHEOS_SERVICES_URL);
       rheosEventDeserializer = new GenericRecordDomainDataDecoder(config);
-      // rheosEventDeserializer = new GenericRecordDomainDataDecoder(RheosSchemaUtils.getConfig());
     }
 
     return rheosEventDeserializer;
