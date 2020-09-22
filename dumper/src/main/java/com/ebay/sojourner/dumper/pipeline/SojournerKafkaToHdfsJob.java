@@ -19,20 +19,21 @@ public class SojournerKafkaToHdfsJob {
     int sinkParallelNum = FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM);
     String dc = FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_DATA_CENTER);
 
-        // kafka source
-        SourceDataStreamBuilder dataStreamBuilder = new SourceDataStreamBuilder<>(
+    // kafka source
+    SourceDataStreamBuilder dataStreamBuilder = new SourceDataStreamBuilder<>(
         executionEnvironment, deserializeClass
     );
 
-    DataStream sourceDataStream = dataStreamBuilder.buildOfDC(DataCenter.valueOf(dc));
+    DataStream sourceDataStream = dataStreamBuilder
+        .buildOfDC(DataCenter.valueOf(dc), FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME),
+            FlinkEnvUtils.getString(Property.SOURCE_UID));
 
     // hdfs sink
     sourceDataStream
         .addSink(HdfsConnectorFactory.createWithParquet(hdfsPath, deserializeClass))
         .setParallelism(sinkParallelNum)
-        .name(String.format("Hdfs Sink To Location: %s", hdfsPath))
-        // .name(String.format("Hdfs Sink To Location: %s", hdfsPath.substring(29)))
-        .uid("sink-id");
+        .name(FlinkEnvUtils.getString(Property.SINK_OPERATOR_NAME_SIGNATURE))
+        .uid(FlinkEnvUtils.getString(Property.SINK_UID_SIGNATURE));
 
     // submit job
     FlinkEnvUtils

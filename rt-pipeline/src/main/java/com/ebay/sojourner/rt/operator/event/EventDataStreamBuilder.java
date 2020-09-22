@@ -13,14 +13,12 @@ public class EventDataStreamBuilder {
 
   public static DataStream<UbiEvent> build(DataStream<RawEvent> sourceDataStream, DataCenter dc) {
 
-    DataStream<UbiEvent> eventDataStream = sourceDataStream
+    return sourceDataStream
         .map(new EventMapFunction())
         .setParallelism(FlinkEnvUtils.getInteger(Property.EVENT_PARALLELISM))
         .slotSharingGroup(getSlotGroupForDC(dc))
-        .name(String.format("Event Operator For %s", dc))
-        .uid(String.format("event-%s-id", dc));
-
-    return eventDataStream;
+        .name(String.format("Event Operator %s", dc))
+        .uid(String.format("event-operator-%s", dc));
   }
 
   private static String getSlotGroupForDC(DataCenter dc) {

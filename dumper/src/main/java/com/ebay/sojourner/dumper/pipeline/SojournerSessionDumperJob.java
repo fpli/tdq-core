@@ -23,35 +23,36 @@ public class SojournerSessionDumperJob {
     String dc = FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_DATA_CENTER);
 
     // kafka source
-    SourceDataStreamBuilder dataStreamBuilder = new SourceDataStreamBuilder<>(
+    SourceDataStreamBuilder<SojSession> dataStreamBuilder = new SourceDataStreamBuilder<>(
         executionEnvironment, SojSession.class
     );
 
-    DataStream<SojSession> sourceDataStream = dataStreamBuilder.buildOfDC(DataCenter.valueOf(dc));
+    DataStream<SojSession> sourceDataStream = dataStreamBuilder
+        .buildOfDC(DataCenter.valueOf(dc), FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME),
+            FlinkEnvUtils.getString(Property.SOURCE_UID));
 
     // extract timestamp
     DataStream<SojWatermark> sojSessionWatermarkStream = sourceDataStream
         .process(new ExtractWatermarkProcessFunction<>(
             FlinkEnvUtils.getString(Property.FLINK_APP_METRIC_NAME)))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
-        .name("sojSession timestamp extract")
-        .uid("extract-timestamp-id");
+        .name("SojSession Timestamp Extract")
+        .uid("sojsession-timestamp-extract");
 
     // sink timestamp to hdfs
     sojSessionWatermarkStream
         .addSink(HdfsConnectorFactory.createWithParquet(
             FlinkEnvUtils.getString(Property.HDFS_DUMP_WATERMARK_PATH), SojWatermark.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
-        .name(String.format("Hdfs Sink To Location: %s",
-            FlinkEnvUtils.getString(Property.HDFS_DUMP_WATERMARK_PATH)))
-        .uid("sink-timestamp-id");
+        .name(FlinkEnvUtils.getString(Property.SINK_OPERATOR_NAME_WATERMARK))
+        .uid(FlinkEnvUtils.getString(Property.SINK_UID_WATERMARK));
 
     SingleOutputStreamOperator<SojSession> sameDaySessionStream = sourceDataStream
         .process(new SplitSessionProcessFunction(OutputTagConstants.crossDaySessionOutputTag,
             OutputTagConstants.openSessionOutputTag))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
-        .name("split session")
-        .uid("split-session-id");
+        .name("SojSession Split")
+        .uid("sojsession-split");
 
     DataStream<SojSession> crossDaySessionStream = sameDaySessionStream
         .getSideOutput(OutputTagConstants.crossDaySessionOutputTag);
@@ -64,27 +65,24 @@ public class SojournerSessionDumperJob {
         .addSink(HdfsConnectorFactory.createWithParquet(
             FlinkEnvUtils.getString(Property.HDFS_SAME_DAY_SESSION_DUMP_PATH), SojSession.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM))
-        .name(String.format("Hdfs Sink To Location: %s",
-            FlinkEnvUtils.getString(Property.HDFS_SAME_DAY_SESSION_DUMP_PATH)))
-        .uid("same-day-session-sink-id");
+        .name(FlinkEnvUtils.getString(Property.SINK_OPERATOR_NAME_SESSION_SAME_DAY))
+        .uid(FlinkEnvUtils.getString(Property.SINK_UID_SESSION_SAME_DAY));
 
     // cross day session hdfs sink
     crossDaySessionStream
         .addSink(HdfsConnectorFactory.createWithParquet(
             FlinkEnvUtils.getString(Property.HDFS_CROSS_DAY_SESSION_DUMP_PATH), SojSession.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM))
-        .name(String.format("Hdfs Sink To Location: %s",
-            FlinkEnvUtils.getString(Property.HDFS_CROSS_DAY_SESSION_DUMP_PATH)))
-        .uid("cross-day-session-sink-id");
+        .name(FlinkEnvUtils.getString(Property.SINK_OPERATOR_NAME_SESSION_CROSS_DAY))
+        .uid(FlinkEnvUtils.getString(Property.SINK_UID_SESSION_CROSS_DAY));
 
     // open session hdfs sink
     openSessionStream
         .addSink(HdfsConnectorFactory.createWithParquet(
             FlinkEnvUtils.getString(Property.HDFS_OPEN_SESSION_DUMP_PATH), SojSession.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM))
-        .name(String.format("Hdfs Sink To Location: %s",
-            FlinkEnvUtils.getString(Property.HDFS_OPEN_SESSION_DUMP_PATH)))
-        .uid("open-session-sink-id");
+        .name(FlinkEnvUtils.getString(Property.SINK_OPERATOR_NAME_SESSION_OPEN))
+        .uid(FlinkEnvUtils.getString(Property.SINK_UID_SESSION_OPEN));
 
     // submit job
     FlinkEnvUtils

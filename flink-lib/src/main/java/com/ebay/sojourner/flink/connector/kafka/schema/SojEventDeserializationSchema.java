@@ -22,8 +22,6 @@ public class SojEventDeserializationSchema implements DeserializationSchema<SojE
         RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
     GenericRecord genericRecord =
         RheosEventSerdeFactory.getRheosEventDeserializer().decode(rheosEvent);
-    log.error("======debug kafka topic record sojEvent=======");
-    log.error(genericRecord.toString());
     String guid = TypeTransformUtil.getString(genericRecord.get("guid"));
     String sessionId = TypeTransformUtil.getString(genericRecord.get("sessionId"));
     Long sessionSkey = TypeTransformUtil.getLong(genericRecord.get("sessionSkey"));
@@ -79,7 +77,7 @@ public class SojEventDeserializationSchema implements DeserializationSchema<SojE
     String remoteIP = TypeTransformUtil.getString(genericRecord.get("remoteIP"));
     String agentInfo = TypeTransformUtil.getString(genericRecord.get("agentInfo"));
     String forwardedFor = TypeTransformUtil.getString(genericRecord.get("forwardedFor"));
-    String  appId = TypeTransformUtil.getString(genericRecord.get("appId"));
+    String appId = TypeTransformUtil.getString(genericRecord.get("appId"));
     String appVersion = TypeTransformUtil.getString(genericRecord.get("appVersion"));
     String osVersion = TypeTransformUtil.getString(genericRecord.get("osVersion"));
     String trafficSource = TypeTransformUtil.getString(genericRecord.get("trafficSource"));
