@@ -30,7 +30,7 @@ public class SojSessionDeserializationSchema implements DeserializationSchema<So
     Integer attrFlags = TypeTransformUtil.getInteger(genericRecord.get("attrFlags"));
     Integer version = TypeTransformUtil.getInteger(genericRecord.get("version"));
     Integer botFlags = TypeTransformUtil.getInteger(genericRecord.get("botFlags"));
-    String ip = TypeTransformUtil.getString(genericRecord.get("ip"));
+    String ip = TypeTransformUtil.getString(genericRecord.get("ipv4"));
     String userAgent = TypeTransformUtil.getString(genericRecord.get("userAgent"));
     Long findingFlags = TypeTransformUtil.getLong(genericRecord.get("findingFlags"));
     Integer startPageId = TypeTransformUtil.getInteger(genericRecord.get("startPageId"));
