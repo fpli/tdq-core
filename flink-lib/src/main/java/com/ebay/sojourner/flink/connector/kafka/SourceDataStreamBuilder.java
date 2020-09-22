@@ -5,7 +5,6 @@ import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.util.DataCenter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
@@ -16,24 +15,19 @@ public class SourceDataStreamBuilder<T> {
   private StreamExecutionEnvironment environment;
   private Class<T> tClass;
 
-  public DataStream<T> buildOfDC(DataCenter dc) {
-    return this.buildOfDC(dc, null);
+  public DataStream<T> buildOfDC(DataCenter dc, String operatorName, String uid) {
+    return this.buildOfDC(dc, operatorName, uid, null);
   }
 
-  public DataStream<T> buildOfDC(DataCenter dc, String slotGroup) {
+  public DataStream<T> buildOfDC(DataCenter dc, String operatorName, String uid, String slotGroup) {
 
     KafkaConsumerConfig kafkaConsumerConfig = KafkaConnectorFactory.getKafkaConsumerConfig(dc);
     return environment
         .addSource(KafkaSourceFunction.buildSource(kafkaConsumerConfig, tClass))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .slotSharingGroup(slotGroup)
-        .name(String.format("Rheos Kafka Consumer From DC: %s, Topic: %s",
-            dc, StringUtils.join(kafkaConsumerConfig.getTopicList(), ",")))
-        .uid(String.format("source-%s-%s-id", dc, kafkaConsumerConfig.getTopicList().get(0)));
-    /*
-        .name(String.format("Kafka Consumer From DC: %s, Topic: %s",
-        dc, kafkaConsumerConfig.getTopic()))
-        .uid(String.format("source-%s-id", dc));
-        */
+        .name(operatorName)
+        .uid(uid);
+
   }
 }

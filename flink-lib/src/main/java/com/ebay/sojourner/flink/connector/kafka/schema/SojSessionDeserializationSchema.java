@@ -21,9 +21,6 @@ public class SojSessionDeserializationSchema implements DeserializationSchema<So
         RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
     GenericRecord genericRecord =
         RheosEventSerdeFactory.getRheosEventDeserializer().decode(rheosEvent);
-
-    log.error("======debug kafka topic record sojSession=======");
-    log.error(genericRecord.toString());
     String guid = TypeTransformUtil.getString(genericRecord.get("guid"));
     String sessionReferrer = TypeTransformUtil.getString(genericRecord.get("sessionReferrer"));
     Long siteFlags = TypeTransformUtil.getLong(genericRecord.get("siteFlags"));

@@ -53,10 +53,10 @@ flink:
   app:
     name: Sojourner RNO Non Bot Event HDFS Load Pipeline
     parallelism:
-      source: 150
+      source: 200
       sink:
         kafka: 100
-        hdfs: 150
+        hdfs: 200
     checkpoint:
       data-dir: /opt/sojourner-ubd/checkpoint
       interval-ms: 300000
@@ -64,6 +64,16 @@ flink:
       min-pause-between-ms: 120000
       max-concurrent: 1
       tolerate-failure-number: 3
+    operator-name:
+      source: Sojourner Total RNO Nonbot Event Source
+      sink:
+        event: Sojourner Total RNO Nonbot Event Sink
+        watermark: Sojourner Total RNO Nonbot Event Watermark Sink
+    uid:
+      source: sojourner-total-rno-nonbot-event-source
+      sink:
+        event: sojourner-total-rno-nonbot-event-sink
+        watermark: sojourner-total-rno-nonbot-event-watermark-sink
     metric:
       watermark-process-progress: sojourner-ubd-nonbot-event-watermark-delay-time
 
