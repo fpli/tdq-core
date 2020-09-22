@@ -5,13 +5,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+@Slf4j
 public class PropertyUtils {
 
   public static Properties loadInProperties(String absoluteFilePath, String alternativeResource)
@@ -110,7 +112,7 @@ public class PropertyUtils {
     if (StringUtils.isEmpty(sojStr)) {
       return null;
     }
-    Map<String, String> sojMap = new HashMap<>();
+    Map<String, String> sojMap = new LinkedHashMap<>();
     String[] keyValues = sojStr.split("&");
     if (keyValues != null && keyValues.length > 0) {
       for (String keyValue : keyValues) {
