@@ -16,6 +16,16 @@ kafka:
 flink:
   app:
     name: Sojourner LVS Non Bot Event HDFS Load Pipeline
+    operator-name:
+      source: Sojourner Total LVS Nonbot Event Source
+      sink:
+        event: Sojourner Total LVS Nonbot Event Sink
+        watermark: Sojourner Total LVS Nonbot Event Watermark Sink
+    uid:
+      source: sojourner-total-lvs-nonbot-event-source
+      sink:
+        event: sojourner-total-lvs-nonbot-event-sink
+        watermark: sojourner-total-lvs-nonbot-event-watermark-sink
 
 hdfs:
   dump:

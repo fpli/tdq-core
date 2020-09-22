@@ -10,6 +10,16 @@ flink:
       source: 100
       sink:
         hdfs: 100
+    operator-name:
+      source: Sojourner Total RNO Bot Event Source
+      sink:
+        event: Sojourner Total RNO Bot Event Sink
+        watermark: Sojourner Total RNO Bot Event Watermark Sink
+    uid:
+      source: sojourner-total-rno-bot-event-source
+      sink:
+        event: sojourner-total-rno-bot-event-sink
+        watermark: sojourner-total-rno-bot-event-watermark-sink
     metric:
       watermark-process-progress: sojourner-ubd-bot-event-watermark-delay-time
 

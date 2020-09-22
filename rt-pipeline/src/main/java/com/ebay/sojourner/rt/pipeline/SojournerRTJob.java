@@ -29,7 +29,6 @@ import com.ebay.sojourner.rt.metric.AgentMetricsCollectorProcessFunction;
 import com.ebay.sojourner.rt.metric.EventMetricsCollectorProcessFunction;
 import com.ebay.sojourner.rt.metric.IpMetricsCollectorProcessFunction;
 import com.ebay.sojourner.rt.metric.PipelineMetricsCollectorProcessFunction;
-import com.ebay.sojourner.rt.util.SignatureUtils;
 import com.ebay.sojourner.rt.operator.attribute.AgentAttributeAgg;
 import com.ebay.sojourner.rt.operator.attribute.AgentIpAttributeAgg;
 import com.ebay.sojourner.rt.operator.attribute.AgentIpAttributeAggSliding;
@@ -48,6 +47,7 @@ import com.ebay.sojourner.rt.operator.session.UbiSessionAgg;
 import com.ebay.sojourner.rt.operator.session.UbiSessionToSessionCoreMapFunction;
 import com.ebay.sojourner.rt.operator.session.UbiSessionToSojSessionProcessFunction;
 import com.ebay.sojourner.rt.operator.session.UbiSessionWindowProcessFunction;
+import com.ebay.sojourner.rt.util.SignatureUtils;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -77,11 +77,17 @@ public class SojournerRTJob {
     );
 
     DataStream<RawEvent> rawEventDataStreamForRNO = dataStreamBuilder
-        .buildOfDC(RNO, FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP));
+        .buildOfDC(RNO, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_RNO),
+            FlinkEnvUtils.getString(Property.SOURCE_UID_RNO),
+            FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP));
     DataStream<RawEvent> rawEventDataStreamForSLC = dataStreamBuilder
-        .buildOfDC(SLC, FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP));
+        .buildOfDC(SLC, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_SLC),
+            FlinkEnvUtils.getString(Property.SOURCE_UID_SLC),
+            FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP));
     DataStream<RawEvent> rawEventDataStreamForLVS = dataStreamBuilder
-        .buildOfDC(LVS, FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP));
+        .buildOfDC(LVS, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS),
+            FlinkEnvUtils.getString(Property.SOURCE_UID_LVS),
+            FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP));
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
@@ -124,7 +130,7 @@ public class SojournerRTJob {
         .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.SESSION_SLOT_SHARE_GROUP))
         .name("Session Operator")
-        .uid("session-id");
+        .uid("session-operator");
 
     DataStream<UbiEvent> ubiEventWithSessionId =
         ubiSessionDataStream.getSideOutput(OutputTagConstants.mappedEventOutputTag);
@@ -139,7 +145,7 @@ public class SojournerRTJob {
             .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
             .slotSharingGroup(FlinkEnvUtils.getString(Property.SESSION_SLOT_SHARE_GROUP))
             .name("UbiSession To SessionCore")
-            .uid("session-enhance-id");
+            .uid("ubisession-to-sessioncore");
 
     // 4. Attribute Operator
     // 4.1 Sliding window
@@ -154,7 +160,7 @@ public class SojournerRTJob {
             .setParallelism(FlinkEnvUtils.getInteger(Property.PRE_AGENT_IP_PARALLELISM))
             .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
             .name("Attribute Operator (Agent+IP Pre-Aggregation)")
-            .uid("pre-agent-ip-id");
+            .uid("attribute-operator-pre-aggregation");
 
     DataStream<BotSignature> agentIpSignatureDataStream = agentIpAttributeDatastream
         .keyBy("agent", "clientIp")
@@ -165,7 +171,7 @@ public class SojournerRTJob {
         .setParallelism(FlinkEnvUtils.getInteger(Property.AGENT_IP_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Attribute Operator (Agent+IP)")
-        .uid("agent-ip-id");
+        .uid("attribute-operator-agent-ip");
 
     DataStream<BotSignature> agentSignatureDataStream = agentIpAttributeDatastream
         .keyBy("agent")
@@ -175,7 +181,7 @@ public class SojournerRTJob {
         .setParallelism(FlinkEnvUtils.getInteger(Property.AGENT_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Attribute Operator (Agent)")
-        .uid("agent-id");
+        .uid("attribute-operator-agent");
 
     DataStream<BotSignature> ipSignatureDataStream = agentIpAttributeDatastream
         .keyBy("clientIp")
@@ -185,7 +191,7 @@ public class SojournerRTJob {
         .setParallelism(FlinkEnvUtils.getInteger(Property.IP_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Attribute Operator (IP)")
-        .uid("ip-id");
+        .uid("attribute-operato-ip");
 
     // union attribute signature for broadcast
     DataStream<BotSignature> attributeSignatureDataStream = agentIpSignatureDataStream
@@ -202,16 +208,16 @@ public class SojournerRTJob {
             .map(new DetectableSessionMapFunction())
             .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
             .slotSharingGroup(FlinkEnvUtils.getString(Property.SESSION_SLOT_SHARE_GROUP))
-            .name("UbiSessionTransForBroadcast")
-            .uid("session-broadcast-id");
+            .name("Transform UbiSession for Union")
+            .uid("transform-ubisession-for-union");
 
     DataStream<Either<UbiEvent, UbiSession>> ubiEventTransDataStream =
         ubiEventWithSessionId
             .map(new DetectableEventMapFunction())
             .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
             .slotSharingGroup(FlinkEnvUtils.getString(Property.SESSION_SLOT_SHARE_GROUP))
-            .name("UbiEventTransForBroadcast")
-            .uid("event-broadcast-id");
+            .name("Transform UbiEvent for Union")
+            .uid("transform-ubievent-for-union");
 
     DataStream<Either<UbiEvent, UbiSession>> detectableDataStream =
         ubiSessionTransDataStream.union(ubiEventTransDataStream);
@@ -224,7 +230,7 @@ public class SojournerRTJob {
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Signature Bot Detector")
-        .uid("signature-detection-id");
+        .uid("signature-bot-detector");
 
     DataStream<UbiSession> signatureBotDetectionForSession =
         signatureBotDetectionForEvent.getSideOutput(OutputTagConstants.sessionOutputTag);
@@ -236,7 +242,7 @@ public class SojournerRTJob {
             .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
             .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
             .name("UbiEvent to SojEvent")
-            .uid("event-transform-id");
+            .uid("ubievent-to-sojevent");
 
     DataStream<SojEvent> botSojEventStream = sojEventWithSessionId
         .getSideOutput(OutputTagConstants.botEventOutputTag);
@@ -249,7 +255,7 @@ public class SojournerRTJob {
             .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
             .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
             .name("UbiSession to SojSession")
-            .uid("session-transform-id");
+            .uid("ubisession-to-sojsession");
 
     DataStream<SojSession> botSojSessionStream = sojSessionStream
         .getSideOutput(OutputTagConstants.botSessionOutputTag);
@@ -270,8 +276,8 @@ public class SojournerRTJob {
             FlinkEnvUtils.getString(Property.BEHAVIOR_MESSAGE_KEY_SESSION)))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
-        .name("SojSession")
-        .uid("session-sink-id");
+        .name("Nonbot SojSession")
+        .uid("nonbot-sojsession-sink");
 
     botSojSessionStream
         .addSink(KafkaProducerFactory.getProducer(
@@ -284,7 +290,7 @@ public class SojournerRTJob {
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Bot SojSession")
-        .uid("bot-session-sink-id");
+        .uid("bot-sojsession-sink");
 
     // kafka sink for bot and nonbot sojevent
     sojEventWithSessionId
@@ -298,8 +304,8 @@ public class SojournerRTJob {
         ))
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
-        .name("SojEvent")
-        .uid("event-sink-id");
+        .name("Nonbot SojEvent")
+        .uid("nonbot-sojevent-sink");
 
     botSojEventStream
         .addSink(KafkaProducerFactory.getProducer(
@@ -313,7 +319,7 @@ public class SojournerRTJob {
         .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Bot SojEvent")
-        .uid("bot-event-sink-id");
+        .uid("bot-sojevent-sink");
 
     // metrics collector for end to end
     signatureBotDetectionForEvent
@@ -321,7 +327,7 @@ public class SojournerRTJob {
         .setParallelism(FlinkEnvUtils.getInteger(Property.METRICS_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Pipeline Metrics Collector")
-        .uid("pipeline-metrics-id");
+        .uid("pipeline-metrics-collector");
 
     // metrics collector for event rules hit
     signatureBotDetectionForEvent
@@ -329,7 +335,7 @@ public class SojournerRTJob {
         .setParallelism(FlinkEnvUtils.getInteger(Property.METRICS_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Event Metrics Collector")
-        .uid("event-metrics-id");
+        .uid("event-metrics-collector");
 
     // metrics collector for signature generation or expiration
     agentIpSignatureDataStream
@@ -337,7 +343,7 @@ public class SojournerRTJob {
         .setParallelism(FlinkEnvUtils.getInteger(Property.AGENT_IP_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("AgentIp Metrics Collector")
-        .uid("agentIp-metrics-id");
+        .uid("agent-ip-metrics-collector");
 
     agentSignatureDataStream
         .process(new AgentMetricsCollectorProcessFunction())
@@ -378,7 +384,7 @@ public class SojournerRTJob {
         .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.SESSION_SLOT_SHARE_GROUP))
         .name("Late UbiEvent to SojEvent")
-        .uid("late-event-transform-id");
+        .uid("late-ubievent-to-sojevent");
 
     lateSojEventStream
         .addSink(KafkaProducerFactory.getProducer(
@@ -391,7 +397,7 @@ public class SojournerRTJob {
         .setParallelism(FlinkEnvUtils.getInteger(Property.SESSION_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.SESSION_SLOT_SHARE_GROUP))
         .name("Late SojEvent")
-        .uid("late-event-sink-id");
+        .uid("late-sojevent-sink");
 
     // Submit this job
     FlinkEnvUtils
