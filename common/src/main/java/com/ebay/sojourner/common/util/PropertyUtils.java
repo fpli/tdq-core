@@ -124,23 +124,4 @@ public class PropertyUtils {
     }
     return sojMap;
   }
-
-  public static void main(String[] args) {
-    String clientInfo = "TPayload=corr_id_%3Dd8614a035f295369%26node_id%3Dbb5990c6f0e9cd1c"
-        + "%26REQUEST_GUID%3D174b01b1-9090-aaec-ccd3-ce05f5eb8c01%26logid%3Dt6qjpbq%253F"
-        + "%253Cumjthu%2560t%2A%253Bwhls%2528rbpv6710-174b01b190e-0x130%26cal_mod%3Dfalse&TPool"
-        + "=r1rover&TDuration=14&TStatus=0&TType=URL&ContentLength=-1&ForwardedFor=10.21.177"
-        + ".19&Script=/rover/1/709-53476-19255-0/1&Server=rover.ebay.com&TMachine=10.174.204"
-        + ".205&TStamp=03:00:00.00&TName=rover&Agent=Mozilla/5.0 (compatible; adidxbot/2.0;"
-        + " +http://www.bing.com/bingbot.htm)&RemoteIP=40.77.167.74&Encoding=gzip, deflate";
-    log.info(mapToString(stringToMap(clientInfo)));
-    String applicationPayLoad = "rdt=1&c=1&rvrrefts=b01b19161740aaecccd50bd1ff7dd311&g"
-        + "=b01b190d1740aaecccd64171f5782adb&nid=&h=0d&cguidsrc=new&n"
-        + "=b01b190e1740aaecccd64171f5782ad9&uc=1&url_mpre=http%3A%2F%2Fwww.ebay"
-        + ".fr%2Fitm%2Flike%2F123910644857&p=3084&uaid=b01b190d1740aaecccd64171f5782adaS0&bs=0"
-        + "&rvrid=2610749100186&t=0&cflgs=wA**&ul=en-US&hrc=301&gitCommitId"
-        + "=ef61ef010bd721c30b3e3092a4bae5d88481e9ab&pn=2&rq=d8614a035f295369&pagename"
-        + "=EntryTracking&ciid=GxkOzM0*";
-    log.info(mapToString(stringToMap(applicationPayLoad)));
-  }
 }
