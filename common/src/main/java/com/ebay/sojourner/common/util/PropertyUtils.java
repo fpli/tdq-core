@@ -10,8 +10,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+@Slf4j
 public class PropertyUtils {
 
   public static Properties loadInProperties(String absoluteFilePath, String alternativeResource)
@@ -131,7 +133,7 @@ public class PropertyUtils {
         + ".19&Script=/rover/1/709-53476-19255-0/1&Server=rover.ebay.com&TMachine=10.174.204"
         + ".205&TStamp=03:00:00.00&TName=rover&Agent=Mozilla/5.0 (compatible; adidxbot/2.0;"
         + " +http://www.bing.com/bingbot.htm)&RemoteIP=40.77.167.74&Encoding=gzip, deflate";
-    System.out.println(mapToString(stringToMap(clientInfo)));
+    log.info(mapToString(stringToMap(clientInfo)));
     String applicationPayLoad = "rdt=1&c=1&rvrrefts=b01b19161740aaecccd50bd1ff7dd311&g"
         + "=b01b190d1740aaecccd64171f5782adb&nid=&h=0d&cguidsrc=new&n"
         + "=b01b190e1740aaecccd64171f5782ad9&uc=1&url_mpre=http%3A%2F%2Fwww.ebay"
@@ -139,6 +141,6 @@ public class PropertyUtils {
         + "&rvrid=2610749100186&t=0&cflgs=wA**&ul=en-US&hrc=301&gitCommitId"
         + "=ef61ef010bd721c30b3e3092a4bae5d88481e9ab&pn=2&rq=d8614a035f295369&pagename"
         + "=EntryTracking&ciid=GxkOzM0*";
-    System.out.println(mapToString(stringToMap(applicationPayLoad)));
+    log.info(mapToString(stringToMap(applicationPayLoad)));
   }
 }
