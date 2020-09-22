@@ -53,10 +53,10 @@ flink:
   app:
     name: Sojourner RNO Non Bot Event HDFS Load Pipeline
     parallelism:
-      source: 150
+      source: 200
       sink:
         kafka: 100
-        hdfs: 150
+        hdfs: 200
     checkpoint:
       data-dir: /opt/sojourner-ubd/checkpoint
       interval-ms: 300000

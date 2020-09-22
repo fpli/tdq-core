@@ -191,7 +191,7 @@ public class SojournerRTJob {
         .setParallelism(FlinkEnvUtils.getInteger(Property.IP_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name("Attribute Operator (IP)")
-        .uid("attribute-operato-ip");
+        .uid("attribute-operator-ip");
 
     // union attribute signature for broadcast
     DataStream<BotSignature> attributeSignatureDataStream = agentIpSignatureDataStream
