@@ -7,24 +7,25 @@
     SessionAccumulator:
       ubiSession:
         distinctClickIdSet:
-          -
+          - 123
   expect:
     UbiSession:
       distinctClickIdSet:
-        -
+        - 123
         - 4018
 
 - name: test2
   inputs:
     UbiEvent:
       iframe: false
-      rdt: false
+      rdt: true
       clickId: 4018
     SessionAccumulator:
       ubiSession:
         distinctClickIdSet:
+          - 123
           - 4018
   expect:
     UbiSession:
       distinctClickIdSet:
-        -
+        - 123

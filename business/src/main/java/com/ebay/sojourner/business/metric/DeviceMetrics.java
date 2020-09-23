@@ -2,10 +2,9 @@ package com.ebay.sojourner.business.metric;
 
 import com.ebay.sojourner.common.model.SessionAccumulator;
 import com.ebay.sojourner.common.model.UbiEvent;
-import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.SojEventTimeUtil;
 
-public class DeviceMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, EventListener {
+public class DeviceMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
   @Override
   public void init() throws Exception {
@@ -34,23 +33,6 @@ public class DeviceMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
 
   @Override
   public void end(SessionAccumulator sessionAccumulator) throws Exception {
-
-  }
-
-  @Override
-  public void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
-    if (!ubiEvent.isIframe() && !ubiEvent.isRdt()) {
-      if (ubiEvent.getOsFamily() != null) {
-        ubiSession.setDeviceFamily(ubiEvent.getDeviceFamily());
-      }
-      if (ubiEvent.getOsVersion() != null) {
-        ubiSession.setDeviceClass(ubiEvent.getDeviceType());
-      }
-    }
-  }
-
-  @Override
-  public void onLateEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
 
   }
 }

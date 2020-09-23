@@ -9,21 +9,21 @@ import java.util.ArrayList;
 public class SojUtils {
 
   public static boolean isRover3084Click(UbiEvent event) {
-    if (event.getPageId() == Integer.MIN_VALUE) {
+    if (event.getPageId() == -1) {
       return false;
     }
     return 3084 == event.getPageId();
   }
 
   public static boolean isRover3085Click(UbiEvent event) {
-    if (event.getPageId() == Integer.MIN_VALUE) {
+    if (event.getPageId() == -1) {
       return false;
     }
     return event.getPageId() == 3085;
   }
 
   public static boolean isRover3962Click(UbiEvent event) {
-    if (event.getPageId() == Integer.MIN_VALUE) {
+    if (event.getPageId() == -1) {
       return false;
     }
     return event.getPageId() == 3962;
@@ -34,7 +34,7 @@ public class SojUtils {
   }
 
   public static boolean isScEvent(UbiEvent event) {
-    Integer pageId = event.getPageId() == Integer.MIN_VALUE ? -99 : event.getPageId();
+    Integer pageId = event.getPageId() == -1 ? -99 : event.getPageId();
     return !event.isRdt()
         && !event.isIframe()
         // || urlQueryString.matches("(/roverimp|.*SojPageView).*")

@@ -18,10 +18,8 @@ public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
   @Override
   public void init() throws Exception {
-    viPGT =
-        new ArrayList<>(
-            PropertyUtils.parseProperty(
-                UBIConfig.getString(Property.VI_EVENT_VALUES), Property.PROPERTY_DELIMITER));
+    viPGT = new ArrayList<>(PropertyUtils.parseProperty(
+        UBIConfig.getString(Property.VI_EVENT_VALUES), Property.PROPERTY_DELIMITER));
   }
 
   @Override
@@ -63,7 +61,7 @@ public class FmlyViCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
       if (event.getPageId() == 2066804
           && StringUtils.isNotBlank(event.getUrlQueryString())
           && (event.getUrlQueryString().startsWith("/itm/like")
-          || event.getUrlQueryString().startsWith("/itm/future"))) {
+              || event.getUrlQueryString().startsWith("/itm/future"))) {
         return "VI";
       }
       if (event.getPageId() == 1521826 || event.getPageId() == 2066804) {

@@ -4,6 +4,7 @@ import com.ebay.sojourner.common.model.IpAttribute;
 import com.ebay.sojourner.common.util.BotHostMatcher;
 import com.ebay.sojourner.common.util.TypeTransformUtil;
 
+@Deprecated
 public class BotRuleForDeclarativeHost extends AbstractBotRule<IpAttribute> {
 
   public static final int SESSION_COUNT_THRESHOLD = 300;

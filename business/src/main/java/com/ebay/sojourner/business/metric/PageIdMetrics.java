@@ -3,12 +3,11 @@ package com.ebay.sojourner.business.metric;
 import com.ebay.sojourner.business.parser.PageIndicator;
 import com.ebay.sojourner.common.model.SessionAccumulator;
 import com.ebay.sojourner.common.model.UbiEvent;
-import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.common.util.SojEventTimeUtil;
 import com.ebay.sojourner.common.util.UBIConfig;
 
-public class PageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, EventListener {
+public class PageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
   private PageIndicator indicator = null;
 
@@ -70,23 +69,5 @@ public class PageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
 
   void setPageIndicator(PageIndicator indicator) {
     this.indicator = indicator;
-  }
-
-  @Override
-  public void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
-    if (!ubiEvent.isIframe()) {
-      if (!ubiEvent.isRdt() || indicator.isCorrespondingPageEvent(ubiEvent)) {
-        ubiSession.setStartPageId(ubiEvent.getPageId());
-      }
-    }
-  }
-
-  @Override
-  public void onLateEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
-    if (!ubiEvent.isIframe()) {
-      if (!ubiEvent.isRdt() || indicator.isCorrespondingPageEvent(ubiEvent)) {
-        ubiSession.setEndPageId(ubiEvent.getPageId());
-      }
-    }
   }
 }

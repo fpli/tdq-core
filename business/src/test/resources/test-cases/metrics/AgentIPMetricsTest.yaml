@@ -1,51 +1,159 @@
-- name: test_findFirst_clientIPNotNull
+- name: isEarlyEvent and !isFindFirst
   inputs:
     UbiEvent:
-      clientIP: "1.1.1.1"
+      clientData:
+        remoteIP: "1.1.1.1"
+      eventTimestamp: 1600761563000
       agentInfo: "I am an agent"
+      clientIP: "1.1.1.1"
     SessionAccumulator:
       ubiSession:
+        absStartTimestamp: 1600761564000
         findFirst: false
-        externalIp: "bla"
-        externalIp2: "bla"
   expect:
     UbiSession:
       clientIp: "1.1.1.1"
       agentInfo: "I am an agent"
 
-- name: test_rdt_iframe_findFirst
+- name: isEarlyEventByMultiCols and !isFindFirst
   inputs:
     UbiEvent:
-      rdt: false
-      iframe: false
-      clientIP: "1.1.1.1"
+      clientData:
+        remoteIP: "1.1.1.1"
+      eventTimestamp: 1600761563000
       agentInfo: "I am an agent"
+      clientIP: "1.1.1.1"
     SessionAccumulator:
       ubiSession:
+        absStartTimestamp:
         findFirst: false
-        externalIp: "bla"
-        externalIp2: "bla"
+  expect:
+    UbiSession:
+      clientIp: "1.1.1.1"
+      agentInfo: "I am an agent"
+
+- name: isEarlyValidEvent and !iframe and !rdt
+  inputs:
+    UbiEvent:
+      clientData:
+        remoteIP: "1.1.1.1"
+      eventTimestamp: 1600761563000
+      agentInfo: "I am an agent"
+      clientIP: "1.1.1.1"
+      iframe: false
+      rdt: false
+    SessionAccumulator:
+      ubiSession:
+        startTimestamp: 1600761564000
   expect:
     UbiSession:
       clientIp: "1.1.1.1"
       agentInfo: "I am an agent"
       findFirst: true
 
-- name: test_partialValidPage
+- name: isPartialValidPage and !iframe and !rdt and ExternalIp null and InternalIp null
   inputs:
     UbiEvent:
-      rdt: false
-      iframe: false
       clientData:
-        remoteIP: 1.2.3.4
-        ForwardFor: 1.2.3.4
-      clientIP: "1.1.1.1"
+        remoteIP: "1.1.1.1"
+        forwardFor: "test.com"
+      eventTimestamp: 1600761563000
       agentInfo: "I am an agent"
+      clientIP: "1.1.1.1"
+      iframe: false
+      rdt: false
     SessionAccumulator:
       ubiSession:
-        findFirst: false
-        externalIp2: "bla"
+        externalIp:
+        internalIp:
+        startTimestamp: 1600761564000
   expect:
     UbiSession:
-      externalIp: 1.2.3.4
+      externalIp: "1.1.1.1"
       internalIp:
+
+- name: isPartialValidPage and !iframe and !rdt and ExternalIp null and InternalIp null and badPageId
+  inputs:
+    UbiEvent:
+      pageId: 3818
+      clientData:
+        remoteIP: "1.1.1.1"
+        forwardFor: "test.com"
+      eventTimestamp: 1600761563000
+      agentInfo: "I am an agent"
+      clientIP: "1.1.1.1"
+      iframe: false
+      rdt: false
+    SessionAccumulator:
+      ubiSession:
+        externalIp:
+        internalIp:
+        startTimestamp: 1600761564000
+  expect:
+    UbiSession:
+      externalIp:
+      internalIp: "1.1.1.1"
+
+- name: isPartialValidPage and !iframe and !rdt and ExternalIp null and InternalIp not null
+  inputs:
+    UbiEvent:
+      clientData:
+        remoteIP: "1.1.1.1"
+        forwardFor: "test.com"
+      eventTimestamp: 1600761563000
+      agentInfo: "I am an agent"
+      clientIP: "1.1.1.1"
+      iframe: false
+      rdt: false
+    SessionAccumulator:
+      ubiSession:
+        externalIp:
+        internalIp: "1.1.1.2"
+        startTimestamp: 1600761564000
+  expect:
+    UbiSession:
+      externalIp: "1.1.1.1"
+      internalIp: "1.1.1.2"
+
+- name: isPartialValidPage and !iframe and !rdt and ExternalIp not null and isEarlyValidEvent
+  inputs:
+    UbiEvent:
+      clientData:
+        remoteIP: "1.1.3.1"
+        forwardFor: "test.com"
+      eventTimestamp: 1600761563000
+      agentInfo: "I am an agent"
+      clientIP: "1.1.1.1"
+      iframe: false
+      rdt: false
+    SessionAccumulator:
+      ubiSession:
+        externalIp: "1.1.1.2"
+        internalIp:
+        startTimestamp: 1600761564000
+  expect:
+    UbiSession:
+      externalIp: "1.1.3.1"
+      internalIp:
+
+- name: isPartialValidPage and !iframe and !rdt and ExternalIp not null and badPageId
+  inputs:
+    UbiEvent:
+      pageId: 3818
+      clientData:
+        remoteIP: "1.1.3.1"
+        forwardFor: "test.com"
+      eventTimestamp: 1600761563000
+      agentInfo: "I am an agent"
+      clientIP: "1.1.1.1"
+      iframe: false
+      rdt: false
+    SessionAccumulator:
+      ubiSession:
+        externalIp: "1.1.1.2"
+        internalIp:
+        startTimestamp: 1600761564000
+  expect:
+    UbiSession:
+      externalIp: "1.1.1.2"
+      internalIp: "1.1.3.1"

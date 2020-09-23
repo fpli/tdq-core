@@ -10,39 +10,23 @@ import org.apache.commons.lang3.StringUtils;
 public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
   private static final Integer EXCEPTION_NULL_INTEGER_VALUE = -99;
-  private static final Long DEFAULTDATE = 0L;
-  private static final Integer NUMBER_ATTRIBUTE_FLAG = 13;
+  private static final Long DEFAULT_DATE = 0L;
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-    /*
-     * is_abvar Application_Payload.contain('&abvar=' ) &&
-     * !Application_Payload.contain('&abvar=0&' ) && !Application_Payload.contain('&abvar=-1&')
-     * is_test Application_Payload.contain('&test=') is_tui_abtesto
-     * Application_Payload.contain('&tui_abtest=' ) is_epr Application_Payload.contain('&epr=')
-     * is_pgV Application_Payload.contain('&pgV=') is_m2g
-     * Application_Payload.contain('&Motors20Group='|'&m2g=' )
-     */
     Long eventDate = event.getSojDataDt();
-    //  if (eventDate != null && sessionAccumulator.getUbiSession().isFirstSessionStartDt()) {
-    //    sessionAccumulator.getUbiSession().setSessionStartDt(eventDate);
-    //
-    //    sessionAccumulator.getUbiSession().setFirstSessionStartDt(false);
-    //  }
-
     if (eventDate == null) {
-      eventDate = DEFAULTDATE;
+      eventDate = DEFAULT_DATE;
     } else {
       eventDate = SojTimestamp.castSojTimestampToDate(eventDate);
     }
     String applicationPayload = event.getApplicationPayload();
     String webServer = event.getWebServer();
     String referrer = event.getReferrer();
-    Integer pageId = event.getPageId();
+    int pageId = event.getPageId();
     String userId = event.getUserId();
-    Long firstSessionStartDT =
-        SojTimestamp
-            .castSojTimestampToDate(sessionAccumulator.getUbiSession().getFirstSessionStartDt());
+    Long firstSessionStartDT = SojTimestamp.castSojTimestampToDate(
+          sessionAccumulator.getUbiSession().getFirstSessionStartDt());
     // replace null with default value
     if (applicationPayload == null) {
       applicationPayload = "";
@@ -53,7 +37,7 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
     if (referrer == null) {
       referrer = "";
     }
-    if (pageId == null) {
+    if (pageId == -1) {
       pageId = EXCEPTION_NULL_INTEGER_VALUE;
     }
     // update user list
@@ -68,52 +52,52 @@ public class AttributeFlagMetrics implements FieldMetrics<UbiEvent, SessionAccum
       sessionAccumulator.getUbiSession().getAttributeFlags()[10] = 1;
     }
 
-    if (applicationPayload.indexOf("&rule=") >= 0) {
+    if (applicationPayload.contains("&rule=")) {
       sessionAccumulator.getUbiSession().getAttributes().isCustRule = true;
     }
 
-    if (webServer.indexOf("express.ebay") >= 0 || webServer.indexOf("ebayexpress") >= 0) {
+    if (webServer.contains("express.ebay") || webServer.contains("ebayexpress")) {
       sessionAccumulator.getUbiSession().getAttributes().isWeb_ee = true;
     }
 
-    if (webServer.indexOf("sofe") >= 0 && referrer.indexOf("pages.ebay.com/express") >= 0) {
+    if (webServer.contains("sofe") && referrer.contains("pages.ebay.com/express")) {
       sessionAccumulator.getUbiSession().getAttributes().isSofe = true;
     }
 
-    if (webServer.indexOf("half.") >= 0) {
+    if (webServer.contains("half.")) {
       sessionAccumulator.getUbiSession().getAttributes().isHalf = true;
     }
 
     if (pageId == 2588
-        && (referrer.indexOf("http://www.express.ebay") >= 0
-        || referrer.indexOf("http://www.ebayexpress") >= 0)) {
+        && (referrer.contains("http://www.express.ebay")
+            || referrer.contains("http://www.ebayexpress"))) {
       sessionAccumulator.getUbiSession().getAttributes().isEbxRef = true;
     }
 
-    if (applicationPayload.indexOf("&abvar=") >= 0
-        && applicationPayload.indexOf("&abvar=0&") <= 0
-        && applicationPayload.indexOf("&abvar=-1&") <= 0) {
+    if (applicationPayload.contains("&abvar=")
+        && !applicationPayload.contains("&abvar=0&")
+        && !applicationPayload.contains("&abvar=-1&")) {
       sessionAccumulator.getUbiSession().getAttributes().isAbvar = true;
     }
 
-    if (applicationPayload.indexOf("&test=") >= 0) {
+    if (applicationPayload.contains("&test=")) {
       sessionAccumulator.getUbiSession().getAttributes().isTest = true;
     }
 
-    if (applicationPayload.indexOf("&tui_abtest=") >= 0) {
+    if (applicationPayload.contains("&tui_abtest=")) {
       sessionAccumulator.getUbiSession().getAttributes().isTuiAbtest = true;
     }
 
-    if (applicationPayload.indexOf("&epr=") >= 0) {
+    if (applicationPayload.contains("&epr=")) {
       sessionAccumulator.getUbiSession().getAttributes().isEpr = true;
     }
 
-    if (applicationPayload.indexOf("&pgV=") >= 0) {
+    if (applicationPayload.contains("&pgV=")) {
       sessionAccumulator.getUbiSession().getAttributes().isPgV = true;
     }
 
-    if (applicationPayload.indexOf("&Motors20Group=") >= 0
-        || applicationPayload.indexOf("&m2g=") >= 0) {
+    if (applicationPayload.contains("&Motors20Group=")
+        || applicationPayload.contains("&m2g=")) {
       sessionAccumulator.getUbiSession().getAttributes().isM2g = true;
     }
     flagProcess(sessionAccumulator.getUbiSession().getAttributes(), sessionAccumulator);

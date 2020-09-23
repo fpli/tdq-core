@@ -1,0 +1,86 @@
+- name: absEventCnt = 1
+  inputs:
+    UbiEvent:
+      enrichedOsVersion: 111
+      osFamily: ios
+    SessionAccumulator:
+      ubiSession:
+        absEventCnt: 1
+  expect:
+    UbiSession:
+      osFamily: ios
+      osVersion: 111
+
+- name: absEventCnt > 1 and isEarlyEvent and !findFirstForOs
+  inputs:
+    UbiEvent:
+      enrichedOsVersion: 111
+      osFamily: ios
+      eventTimestamp: 1600761564000
+    SessionAccumulator:
+      ubiSession:
+        absEventCnt: 2
+        findFirstForOs: false
+        absStartTimestamp: 1600761565000
+  expect:
+    UbiSession:
+      osFamily: ios
+      osVersion: 111
+
+- name: absEventCnt > 1 and isEarlyEvent and findFirstForOs
+  inputs:
+    UbiEvent:
+      enrichedOsVersion: 111
+      osFamily: ios
+      eventTimestamp: 1600761564000
+    SessionAccumulator:
+      ubiSession:
+        absEventCnt: 2
+        findFirstForOs: true
+        absStartTimestamp: 1600761565000
+  expect:
+    UbiSession:
+      osFamily:
+      osVersion:
+
+- name: absEventCnt > 1 and isEarlyValidEvent
+  inputs:
+    UbiEvent:
+      enrichedOsVersion: 111
+      osFamily: ios
+      eventTimestamp: 1600761564000
+      iframe: false
+      rdt: false
+      pageId: 1
+    SessionAccumulator:
+      ubiSession:
+        absEventCnt: 2
+        findFirstForOs: false
+        absStartTimestamp: 1600761564000
+        startTimestamp: 1600761565000
+  expect:
+    UbiSession:
+      osFamily: ios
+      osVersion: 111
+      findFirstForOs: true
+
+- name: absEventCnt > 1 and isEarlyValidEvent
+  inputs:
+    UbiEvent:
+      enrichedOsVersion: 111
+      osFamily: ios
+      eventTimestamp: 1600761564000
+      iframe: false
+      rdt: false
+      pageId: -1
+    SessionAccumulator:
+      ubiSession:
+        absEventCnt: 2
+        findFirstForOs: false
+        absStartTimestamp: 1600761564000
+        startTimestamp: 1600761565000
+  expect:
+    UbiSession:
+      osFamily:
+      osVersion:
+      findFirstForOs: false

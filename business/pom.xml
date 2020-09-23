@@ -27,12 +27,5 @@
       <artifactId>sojourner-common</artifactId>
       <version>${project.version}</version>
     </dependency>
-
-    <!-- Test Dependencies  -->
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-csv</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 </project>

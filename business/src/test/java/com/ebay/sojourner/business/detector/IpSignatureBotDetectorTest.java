@@ -31,6 +31,6 @@ class IpSignatureBotDetectorTest {
   @Test
   void initBotRules() {
     Set<Rule> botRules = Whitebox.getInternalState(ipSignatureBotDetector, "botRules", IpSignatureBotDetector.class);
-    assertThat(botRules.size()).isEqualTo(3);
+    assertThat(botRules.size()).isEqualTo(2);
   }
 }
