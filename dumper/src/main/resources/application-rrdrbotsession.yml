@@ -10,6 +10,22 @@ flink:
       source: 50
       sink:
         hdfs: 50
+    operator-name:
+      source: Sojourner Total RNO Bot Session Source
+      sink:
+        session:
+          open: Sojourner Total RNO Bot Open Session Sink
+          same-day: Sojourner Total RNO Bot Same Day Session Sink
+          cross-day: Sojourner Total RNO Bot Cross Day Session Sink
+        watermark: Sojourner Total RNO Bot Session Watermark Sink
+    uid:
+      source: sojourner-total-rno-bot-session-source
+      sink:
+        session:
+          open: sojourner-total-rno-bot-open-session-sink
+          same-day: sojourner-total-rno-bot-same-day-session-sink
+          cross-day: sojourner-total-rno-bot-cross-day-session-sink
+        watermark: sojourner-total-rno-bot-session-watermark-sink
     metric:
       watermark-process-progress: sojourner-ubd-bot-session-watermark-delay-time
 

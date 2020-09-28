@@ -10,6 +10,14 @@ flink:
       source: 10
       sink:
         hdfs: 10
+    operator-name:
+      source: Sojourner Total RNO Signature Agent IP Source
+      sink:
+        signature: Sojourner Total RNO Signature Agent IP Sink
+    uid:
+      source: sojourner-total-rno-signature-agent-ip-source
+      sink:
+        signature: sojourner-total-rno-signature-agent-ip-sink
 
 hdfs:
   dump:

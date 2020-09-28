@@ -63,7 +63,7 @@ public class SignatureUtils {
         .setParallelism(FlinkEnvUtils.getInteger(Property.DEFAULT_PARALLELISM))
         .slotSharingGroup(slotGroup)
         .name(String.format("%s Signature", signatureId))
-        .uid(String.format("signature-%s-sink-id", signatureId));
+        .uid(String.format("signature-%s-sink", signatureId));
 
   }
 

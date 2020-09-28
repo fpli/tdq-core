@@ -12,9 +12,9 @@ kafka:
     topic:
       - behavior.pathfinder.events.total
     group-id:
-      rno: sojourner-pathfinder-realtime-rno
-      lvs: sojourner-pathfinder-realtime-rno
-      slc: sojourner-pathfinder-realtime-rno
+      rno: sojourner-pathfinder-realtime
+      lvs: sojourner-pathfinder-realtime
+      slc: sojourner-pathfinder-realtime
     bootstrap-servers:
       rno:
         - rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
@@ -117,6 +117,17 @@ flink:
       guid: guid
       cross-session: cross-session
       broadcast: broadcast
+    operator-name:
+      source:
+        rno: Pathfinder RNO Source
+        lvs: Pathfinder LVS Source
+        slc: Pathfinder SLC Source
+    uid:
+      source:
+        rno: pathfinder-rno-source
+        lvs: pathfinder-lvs-source
+        slc: pathfinder-slc-source
+
     data-skew:
       is-filter: false
       guid-list:

@@ -231,6 +231,14 @@ public class Property {
   public static final String BROADCAST_PARALLELISM = "flink.app.parallelism.broadcast";
   public static final String METRICS_PARALLELISM = "flink.app.parallelism.metrics";
 
+  // flink source operator name and uid
+  public static final String SOURCE_OPERATOR_NAME_RNO = "flink.app.operator-name.source.rno";
+  public static final String SOURCE_OPERATOR_NAME_LVS = "flink.app.operator-name.source.lvs";
+  public static final String SOURCE_OPERATOR_NAME_SLC = "flink.app.operator-name.source.slc";
+  public static final String SOURCE_UID_RNO = "flink.app.uid.source.rno";
+  public static final String SOURCE_UID_LVS = "flink.app.uid.source.lvs";
+  public static final String SOURCE_UID_SLC = "flink.app.uid.source.slc";
+
   public static final String DEFAULT_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.default";
   public static final String SOURCE_EVENT_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event";
   public static final String SOURCE_EVENT_LVS_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event-lvs";
@@ -268,6 +276,20 @@ public class Property {
   // parallelism config
   public static final String SINK_HDFS_PARALLELISM = "flink.app.parallelism.sink.hdfs";
   public static final String SINK_KAFKA_PARALLELISM = "flink.app.parallelism.sink.kafka";
+  public static final String SOURCE_OPERATOR_NAME = "flink.app.operator-name.source";
+  public static final String SOURCE_UID = "flink.app.uid.source";
+  public static final String SINK_OPERATOR_NAME_EVENT = "flink.app.operator-name.sink.event";
+  public static final String SINK_UID_EVENT = "flink.app.uid.sink.event";
+  public static final String SINK_OPERATOR_NAME_WATERMARK = "flink.app.operator-name.sink.watermark";
+  public static final String SINK_UID_WATERMARK = "flink.app.uid.sink.watermark";
+  public static final String SINK_OPERATOR_NAME_SESSION_OPEN = "flink.app.operator-name.sink.session.open";
+  public static final String SINK_UID_SESSION_OPEN = "flink.app.uid.sink.session.open";
+  public static final String SINK_OPERATOR_NAME_SESSION_SAME_DAY = "flink.app.operator-name.sink.session.same-day";
+  public static final String SINK_UID_SESSION_SAME_DAY = "flink.app.uid.sink.session.same-day";
+  public static final String SINK_OPERATOR_NAME_SESSION_CROSS_DAY = "flink.app.operator-name.sink.session.cross-day";
+  public static final String SINK_UID_SESSION_CROSS_DAY = "flink.app.uid.sink.session.cross-day";
+  public static final String SINK_OPERATOR_NAME_SIGNATURE = "flink.app.operator-name.sink.signature";
+  public static final String SINK_UID_SIGNATURE = "flink.app.uid.sink.signature";
 
   // hdfs
   public static final String HDFS_DUMP_PATH = "hdfs.dump.path";

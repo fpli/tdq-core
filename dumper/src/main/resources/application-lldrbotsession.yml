@@ -20,6 +20,22 @@ flink:
       source: 50
       sink:
         hdfs: 50
+    operator-name:
+      source: Sojourner Total LVS Bot Session Source
+      sink:
+        session:
+          open: Sojourner Total LVS Bot Open Session Sink
+          same-day: Sojourner Total LVS Bot Same Day Session Sink
+          cross-day: Sojourner Total LVS Bot Cross Day Session Sink
+        watermark: Sojourner Total LVS Bot Session Watermark Sink
+    uid:
+      source: sojourner-total-lvs-bot-session-source
+      sink:
+        session:
+          open: sojourner-total-lvs-bot-open-session-sink
+          same-day: sojourner-total-lvs-bot-same-day-session-sink
+          cross-day: sojourner-total-lvs-bot-cross-day-session-sink
+        watermark: sojourner-total-lvs-bot-session-watermark-sink
     metric:
       watermark-process-progress: sojourner-ubd-bot-session-watermark-delay-time
 

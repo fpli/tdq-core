@@ -21,16 +21,13 @@ public class SojSessionDeserializationSchema implements DeserializationSchema<So
         RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
     GenericRecord genericRecord =
         RheosEventSerdeFactory.getRheosEventDeserializer().decode(rheosEvent);
-
-    log.error("======debug kafka topic record sojSession=======");
-    log.error(genericRecord.toString());
     String guid = TypeTransformUtil.getString(genericRecord.get("guid"));
     String sessionReferrer = TypeTransformUtil.getString(genericRecord.get("sessionReferrer"));
     Long siteFlags = TypeTransformUtil.getLong(genericRecord.get("siteFlags"));
     Integer attrFlags = TypeTransformUtil.getInteger(genericRecord.get("attrFlags"));
     Integer version = TypeTransformUtil.getInteger(genericRecord.get("version"));
     Integer botFlags = TypeTransformUtil.getInteger(genericRecord.get("botFlags"));
-    String ip = TypeTransformUtil.getString(genericRecord.get("ip"));
+    String ip = TypeTransformUtil.getString(genericRecord.get("ipv4"));
     String userAgent = TypeTransformUtil.getString(genericRecord.get("userAgent"));
     Long findingFlags = TypeTransformUtil.getLong(genericRecord.get("findingFlags"));
     Integer startPageId = TypeTransformUtil.getInteger(genericRecord.get("startPageId"));
