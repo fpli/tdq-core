@@ -119,11 +119,10 @@ flink:
         slc: pathfinder-slc-source
 
     data-skew:
-      is-filter: false
-      guid-list:
-        - abc
-        - def
-        - ghi
+      is-filter: true
+      guid-set:
+        - 17a61c8c16d0a9c509d4c64cffffff61
+      pageid-set: []
     checkpoint:
       data-dir: /opt/sojourner-ubd/checkpoint
       interval-ms: 300000

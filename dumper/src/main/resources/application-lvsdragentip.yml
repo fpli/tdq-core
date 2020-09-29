@@ -2,7 +2,7 @@ kafka:
   consumer:
     data-center: RNO
     topic:
-      - behavior.totalv2.signature.agent-ip
+      - behavior.totalv2.signature.agent-ip-rno
     group-id:
       rno: sojourner-total-dumper-lvs
     bootstrap-servers:
