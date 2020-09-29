@@ -3,7 +3,7 @@ kafka:
     data-center: RNO
     stream: behavior.total.new
     topic:
-      - behavior.total.new.signature.agent
+      - behavior.total.new.signature.agentIp
     group-id:
       rno: sojourner-total-new-dumper
     bootstrap-servers:
@@ -16,19 +16,19 @@ kafka:
 
 flink:
   app:
-    name: Sojourner RNO Agent Signature HDFS Load Pipeline TEST
+    name: Sojourner RNO AgentIp Signature HDFS Load Pipeline TEST
     parallelism:
       source: 10
       sink:
         hdfs: 10
     operator-name:
-      source: Sojourner Total New RNO Signature Agent Source
-      sink: Sojourner Total New RNO Signature Agent Sink
+      source: Sojourner Total New RNO Signature Agent IP Source
+      sink: Sojourner Total New RNO Signature Agent IP Sink
     uid:
-      source: sojourner-total-new-rno-signature-agent-source
-      sink: sojourner-total-new-rno-signature-agent-sink
+      source: sojourner-total-new-rno-signature-agent-ip-source
+      sink: sojourner-total-new-rno-signature-agent-ip-sink
 
 hdfs:
   dump:
-    path: hdfs://apollo-rno/sys/soj/ubd/test/signatures/type=agent
+    path: hdfs://apollo-rno/sys/soj/ubd/test/signatures/type=agentIp
     class-name: com.ebay.sojourner.common.model.BotSignature

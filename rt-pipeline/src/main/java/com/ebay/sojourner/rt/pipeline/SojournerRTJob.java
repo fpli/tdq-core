@@ -16,6 +16,7 @@ import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
+import com.ebay.sojourner.flink.common.util.DataStreamRescaledBuilder;
 import com.ebay.sojourner.flink.common.util.OutputTagConstants;
 import com.ebay.sojourner.flink.common.window.CompositeTrigger;
 import com.ebay.sojourner.flink.common.window.MidnightOpenSessionTrigger;
@@ -77,15 +78,15 @@ public class SojournerRTJob {
     );
 
     DataStream<RawEvent> rawEventDataStreamForRNO = dataStreamBuilder
-        .buildOfDC(RNO, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_RNO),
+        .buildForRealtime(RNO, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_RNO),
             FlinkEnvUtils.getString(Property.SOURCE_UID_RNO),
             FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP));
     DataStream<RawEvent> rawEventDataStreamForSLC = dataStreamBuilder
-        .buildOfDC(SLC, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_SLC),
+        .buildForRealtime(SLC, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_SLC),
             FlinkEnvUtils.getString(Property.SOURCE_UID_SLC),
             FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP));
     DataStream<RawEvent> rawEventDataStreamForLVS = dataStreamBuilder
-        .buildOfDC(LVS, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS),
+        .buildForRealtime(LVS, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS),
             FlinkEnvUtils.getString(Property.SOURCE_UID_LVS),
             FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP));
 
@@ -222,15 +223,19 @@ public class SojournerRTJob {
     DataStream<Either<UbiEvent, UbiSession>> detectableDataStream =
         ubiSessionTransDataStream.union(ubiEventTransDataStream);
 
+    DataStream<Either<UbiEvent, UbiSession>> rescaledDetectableDataStream =
+        DataStreamRescaledBuilder.build(detectableDataStream);
+
     // connect ubiEvent,ubiSession DataStream and broadcast Stream
-    SingleOutputStreamOperator<UbiEvent> signatureBotDetectionForEvent = detectableDataStream
-        .connect(attributeSignatureBroadcastStream)
-        .process(
-            new AttributeBroadcastProcessFunctionForDetectable(OutputTagConstants.sessionOutputTag))
-        .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
-        .name("Signature Bot Detector")
-        .uid("signature-bot-detector");
+    SingleOutputStreamOperator<UbiEvent> signatureBotDetectionForEvent =
+        rescaledDetectableDataStream.connect(attributeSignatureBroadcastStream)
+            .process(
+                new AttributeBroadcastProcessFunctionForDetectable(
+                    OutputTagConstants.sessionOutputTag))
+            .setParallelism(FlinkEnvUtils.getInteger(Property.BROADCAST_PARALLELISM))
+            .slotSharingGroup(FlinkEnvUtils.getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
+            .name("Signature Bot Detector")
+            .uid("signature-bot-detector");
 
     DataStream<UbiSession> signatureBotDetectionForSession =
         signatureBotDetectionForEvent.getSideOutput(OutputTagConstants.sessionOutputTag);

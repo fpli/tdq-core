@@ -72,7 +72,8 @@ public class SojournerRTJobForQA {
     );
 
     DataStream<RawEvent> rawEventDataStream = dataStreamBuilder
-        .buildOfDC(DataCenter.LVS, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS),
+        .buildForRealtime(DataCenter.LVS,
+            FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS),
             FlinkEnvUtils.getString(Property.SOURCE_UID_LVS));
 
     // 2. Event Operator

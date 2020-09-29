@@ -1,10 +1,11 @@
 kafka:
   consumer:
+    data-center: RNO
     stream: behavior.total.new
     topic:
       - behavior.total.new.signature.ip
     group-id:
-      rno: sojourner-total-dumper-test
+      rno: sojourner-total-new-dumper
     bootstrap-servers:
       rno:
         - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
@@ -15,11 +16,17 @@ kafka:
 
 flink:
   app:
-    name: Sojourner TEST Ip Signature HDFS Load Pipeline
+    name: Sojourner RNO Ip Signature HDFS Load Pipeline TEST
     parallelism:
       source: 10
       sink:
         hdfs: 10
+    operator-name:
+      source: Sojourner Total New RNO Signature IP Source
+      sink: Sojourner Total New RNO Signature IP Sink
+    uid:
+      source: sojourner-total-new-rno-signature-ip-source
+      sink: sojourner-total-new-rno-signature-ip-sink
 
 hdfs:
   dump:

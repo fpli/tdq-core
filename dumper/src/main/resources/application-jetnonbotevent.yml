@@ -4,7 +4,7 @@ kafka:
     topic:
       - behavior.total.sojevent.total
     group-id:
-      rno: sojourner-jetstream-event-non-bot-rno
+      rno: sojourner-jetstream-dumper
     bootstrap-servers:
       rno:
         - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
@@ -20,6 +20,12 @@ flink:
       source: 150
       sink:
         hdfs: 150
+    operator-name:
+      source: Jetstream Total Nonbot Event Source
+      sink: Jetstream Total Nonbot Event Sink
+    uid:
+      source: jetstream-total-nonbot-event-source
+      sink: jetstream-total-nonbot-event-sink
 
 hdfs:
   dump:

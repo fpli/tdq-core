@@ -40,7 +40,6 @@ flink:
       agent-ip: 2
       agent: 2
       ip: 2
-      guid: 2
       broadcast: 2
       metrics: 2
     data-skew:

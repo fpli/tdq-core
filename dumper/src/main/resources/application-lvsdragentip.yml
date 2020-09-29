@@ -1,0 +1,33 @@
+kafka:
+  consumer:
+    data-center: RNO
+    topic:
+      - behavior.totalv2.signature.agent-ip
+    group-id:
+      rno: sojourner-total-dumper-lvs
+    bootstrap-servers:
+      rno:
+        - rhs-fxuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.37.tess.io:9092
+        - rhs-fxuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.37.tess.io:9092
+        - rhs-fxuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.37.tess.io:9092
+        - rhs-fxuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.37.tess.io:9092
+        - rhs-fxuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.37.tess.io:9092
+
+flink:
+  app:
+    name: Sojourner LVS AgentIp Signature HDFS Load Pipeline
+    parallelism:
+      source: 10
+      sink:
+        hdfs: 10
+    operator-name:
+      source: Sojourner Total LVS Signature Agent IP Source
+      sink: Sojourner Total LVS Signature Agent IP Sink
+    uid:
+      source: sojourner-total-lvs-signature-agent-ip-source
+      sink: sojourner-total-lvs-signature-agent-ip-sink
+
+hdfs:
+  dump:
+    path: hdfs://hercules/sys/soj/ubd/signatures/type=agentIp
+    class-name: com.ebay.sojourner.common.model.BotSignature
