@@ -198,9 +198,9 @@ public class TypeTransformUtil {
     }
   }
 
-  public static boolean getBoolean(Object o) {
+  public static Boolean getBoolean(Object o) {
     if (StringUtils.isEmpty(getString(o))) {
-      return false;
+      return null;
     } else {
       return Boolean.valueOf(getString(o));
     }
