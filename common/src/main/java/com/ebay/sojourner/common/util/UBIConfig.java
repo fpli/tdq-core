@@ -116,7 +116,6 @@ public class UBIConfig {
 
     if (enableTest) {
       setBoolean(Property.IS_TEST_ENABLE, true);
-      loadLookupTableLocally();
     } else {
       setString(Property.IFRAME_PAGE_IDS, getUBIProperty(Property.IFRAME_PAGE_IDS));
       setString(Property.FINDING_FLAGS, getUBIProperty(Property.FINDING_FLAGS));
@@ -127,23 +126,10 @@ public class UBIConfig {
       setString(Property.LARGE_SESSION_GUID, getUBIProperty(Property.LARGE_SESSION_GUID));
       setString(Property.PAGE_FMLY, getUBIProperty(Property.PAGE_FMLY));
       setString(Property.MPX_ROTATION, getUBIProperty(Property.MPX_ROTATION));
-      //            conf.setString(Property.IFRAME_PAGE_IDS4Bot12,
-      // getUBIProperty(Property.IFRAME_PAGE_IDS4Bot12));
       setString(Property.SELECTED_IPS, getUBIProperty(Property.SELECTED_IPS));
       setString(Property.SELECTED_AGENTS, getUBIProperty(Property.SELECTED_AGENTS));
       setString(Property.LKP_PATH,getUBIProperty(Property.LKP_PATH));
     }
-  }
-
-  private static void loadLookupTableLocally() throws Exception {
-  //    LkpManager fetcher = LkpManager.getInstance();
-  //    fetcher.loadLocally();
-  //    for (String key : fetcher.getResult().keySet()) {
-  //      if (null == getString(key)) {
-  //        String value = fetcher.getResult().get(key);
-  //        setString(key, value);
-  //      }
-  //    }
   }
 
   private static void setConfiguration() throws Exception {
@@ -204,6 +190,8 @@ public class UBIConfig {
     // Set APP PAYLOAD KV Property
     setString(Property.SWD_VALUES, getUBIProperty(Property.SWD_VALUES));
     setString(Property.ROT_VALUES, getUBIProperty(Property.ROT_VALUES));
+    setString(Property.SOCIAL_AGENT_ID22, getUBIProperty(Property.SOCIAL_AGENT_ID22));
+    setString(Property.SOCIAL_AGENT_ID23, getUBIProperty(Property.SOCIAL_AGENT_ID23));
     setString(Property.VI_EVENT_VALUES, getUBIProperty(Property.VI_EVENT_VALUES));
     // Set APP ID property
     setString(Property.MOBILE_APP, getUBIProperty(Property.MOBILE_APP));

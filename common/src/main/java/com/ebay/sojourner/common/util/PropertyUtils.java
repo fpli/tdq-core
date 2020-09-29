@@ -74,11 +74,11 @@ public class PropertyUtils {
   }
 
   public static Set<Integer> getIntegerSet(String property, String delimiter) {
-    HashSet<Integer> propertySet = new HashSet<Integer>();
+    Set<Integer> propertySet = new HashSet<>();
     if (StringUtils.isNotBlank(property)) {
       String[] list = property.split(delimiter);
-      for (int i = 0; i < list.length; i++) {
-        propertySet.add(Integer.valueOf(list[i].trim()));
+      for (String s : list) {
+        propertySet.add(Integer.valueOf(s.trim()));
         // Do not ignore the NumberFormatException as it indicates the configuration errors.
       }
     }
@@ -86,11 +86,11 @@ public class PropertyUtils {
   }
 
   public static Set<Long> getLongSet(String property, String delimiter) {
-    HashSet<Long> propertySet = new HashSet<Long>();
+    Set<Long> propertySet = new HashSet<>();
     if (StringUtils.isNotBlank(property)) {
       String[] list = property.split(delimiter);
-      for (int i = 0; i < list.length; i++) {
-        propertySet.add(Long.valueOf(list[i].trim()));
+      for (String s : list) {
+        propertySet.add(Long.valueOf(s.trim()));
         // Do not ignore the NumberFormatException as it indicates the configuration errors.
       }
     }

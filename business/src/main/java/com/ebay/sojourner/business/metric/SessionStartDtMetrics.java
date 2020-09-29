@@ -2,14 +2,12 @@ package com.ebay.sojourner.business.metric;
 
 import com.ebay.sojourner.common.model.SessionAccumulator;
 import com.ebay.sojourner.common.model.UbiEvent;
-import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.SojEventTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>,
-    EventListener {
+public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
   @Override
   public void init() throws Exception {
@@ -78,18 +76,5 @@ public class SessionStartDtMetrics implements FieldMetrics<UbiEvent, SessionAccu
       sessionAccumulator.getUbiSession()
           .setSessionStartDt(sessionAccumulator.getUbiSession().getFirstSessionStartDt());
     }
-  }
-
-  @Override
-  public void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
-    ubiSession.setFirstSessionStartDt(ubiEvent.getSojDataDt());
-    long sessionSkey = ubiEvent.getEventTimestamp() / Constants.SESSION_KEY_DIVISION;
-    ubiSession.setSessionSkey(sessionSkey);
-    ubiEvent.setSessionSkey(sessionSkey);
-  }
-
-  @Override
-  public void onLateEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
-
   }
 }

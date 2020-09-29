@@ -2,10 +2,9 @@ package com.ebay.sojourner.business.metric;
 
 import com.ebay.sojourner.common.model.SessionAccumulator;
 import com.ebay.sojourner.common.model.UbiEvent;
-import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.SojEventTimeUtil;
 
-public class LineSpeedMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>, EventListener {
+public class LineSpeedMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
   @Override
   public void init() throws Exception {
@@ -30,20 +29,6 @@ public class LineSpeedMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
 
   @Override
   public void end(SessionAccumulator sessionAccumulator) throws Exception {
-
-  }
-
-  @Override
-  public void onEarlyEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
-    if (!ubiEvent.isIframe() && !ubiEvent.isRdt()) {
-      if (ubiEvent.getLineSpeed() != null) {
-        ubiSession.setLineSpeed(ubiEvent.getLineSpeed());
-      }
-    }
-  }
-
-  @Override
-  public void onLateEventChange(UbiEvent ubiEvent, UbiSession ubiSession) {
 
   }
 }

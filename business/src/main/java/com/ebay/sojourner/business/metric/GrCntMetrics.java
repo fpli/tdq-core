@@ -8,12 +8,13 @@ import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.common.util.PropertyUtils;
 import com.ebay.sojourner.common.util.UBIConfig;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
-  private ArrayList<String> viPGT;
+  private List<String> viPGT;
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
@@ -28,9 +29,8 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
         && !event.isIframe()
         && event.isPartialValidPage()
         && pageId != -1
-        && ((pageFmlyNameMap.containsKey(pageId) && "GR"
-        .equals(pageFmlyNameMap.get(pageId)[1]))
-        || (getImPGT(event) != null && "GR".equals(getImPGT(event))))) {
+        && ((pageFmlyNameMap.containsKey(pageId) && "GR".equals(pageFmlyNameMap.get(pageId)[1]))
+            || (getImPGT(event) != null && "GR".equals(getImPGT(event))))) {
       sessionAccumulator
           .getUbiSession()
           .setGrCnt(sessionAccumulator.getUbiSession().getGrCnt() + 1);
@@ -43,10 +43,8 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
 
   @Override
   public void init() throws Exception {
-    viPGT =
-        new ArrayList<>(
-            PropertyUtils.parseProperty(
-                UBIConfig.getString(Property.VI_EVENT_VALUES), Property.PROPERTY_DELIMITER));
+    viPGT = new ArrayList<>(PropertyUtils.parseProperty(
+        UBIConfig.getString(Property.VI_EVENT_VALUES), Property.PROPERTY_DELIMITER));
   }
 
   private String getImPGT(UbiEvent event) {
@@ -58,7 +56,7 @@ public class GrCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> 
     if (event.getPageId() == 2066804
         && StringUtils.isNotBlank(event.getUrlQueryString())
         && (event.getUrlQueryString().startsWith("/itm/like")
-        || event.getUrlQueryString().startsWith("/itm/future"))) {
+            || event.getUrlQueryString().startsWith("/itm/future"))) {
       return "VI";
     }
     if (event.getPageId() == 1521826 || event.getPageId() == 2066804) {

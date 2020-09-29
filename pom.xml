@@ -455,14 +455,6 @@
         <artifactId>joda-time</artifactId>
         <version>2.10.5</version>
       </dependency>
-
-      <!--apache common csv-->
-      <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-csv</artifactId>
-        <version>1.2</version>
-        <scope>test</scope>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 

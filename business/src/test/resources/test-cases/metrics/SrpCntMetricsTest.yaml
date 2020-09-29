@@ -7,10 +7,10 @@
       partialValidPage: true
     SessionAccumulator:
       ubiSession:
-        grCnt: 10
+        srpCnt: 10
   expect:
     UbiSession:
-      grCnt: 11
+      srpCnt: 11
 
 - name: getImPGT = VI
   inputs:
@@ -22,10 +22,10 @@
       urlQueryString: "/itm/like..."
     SessionAccumulator:
       ubiSession:
-        grCnt: 10
+        srpCnt: 10
   expect:
     UbiSession:
-      grCnt: 10
+      srpCnt: 10
 
 - name: pageFmly = GR
   inputs:
@@ -36,7 +36,7 @@
       partialValidPage: true
     SessionAccumulator:
       ubiSession:
-        grCnt: 10
+        srpCnt: 10
   expect:
     UbiSession:
-      grCnt: 11
+      srpCnt: 11

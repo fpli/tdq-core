@@ -37,7 +37,6 @@ public class OsMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
           ubiSession.setOsVersion(event.getEnrichedOsVersion());
           ubiSession.setOsFamily(event.getOsFamily());
         }
-
       }
       if (isEarlyValidEvent) {
         if (!event.isIframe() && !event.isRdt() && event.getPageId() != -1) {

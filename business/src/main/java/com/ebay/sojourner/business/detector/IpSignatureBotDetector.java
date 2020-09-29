@@ -1,7 +1,6 @@
 package com.ebay.sojourner.business.detector;
 
 import com.ebay.sojourner.business.rule.BotRule7;
-import com.ebay.sojourner.business.rule.BotRuleForDeclarativeHost;
 import com.ebay.sojourner.business.rule.BotRuleForSuspectIP;
 import com.ebay.sojourner.common.model.IpAttribute;
 import com.ebay.sojourner.dsl.domain.rule.Rule;
@@ -51,6 +50,5 @@ public class IpSignatureBotDetector implements BotDetector<IpAttribute> {
   public void initBotRules() {
     botRules.add(new BotRule7());
     botRules.add(new BotRuleForSuspectIP());
-    botRules.add(new BotRuleForDeclarativeHost());
   }
 }

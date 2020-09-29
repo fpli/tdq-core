@@ -37,12 +37,12 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
   private static String regString4Id22;
   private static String regString4Id21_1;
   private static String regString4Id23;
-  private static Set<Integer> landPageSet1 = new HashSet<>();
-  private static Set<Integer> landPageSet2 = new HashSet<>();
-  private static Set<Integer> swdSet = new HashSet<>();
-  private static Set<Long> rotSet = new HashSet<>();
-  private static Set<Integer> socialAgentId22 = new HashSet<>();
-  private static Set<Integer> socialAgentId23 = new HashSet<>();
+  private Set<Integer> landPageSet1 = new HashSet<>();
+  private Set<Integer> landPageSet2 = new HashSet<>();
+  private Set<Integer> swdSet = new HashSet<>();
+  private Set<Long> rotSet = new HashSet<>();
+  private Set<Integer> socialAgentId22 = new HashSet<>();
+  private Set<Integer> socialAgentId23 = new HashSet<>();
   private static StringBuilder stingBuilder = new StringBuilder();
 
   static {
@@ -92,8 +92,6 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
     regString4Id23 = stingBuilder.toString();
   }
 
-  private volatile IntermediateMetrics intermediateMetrics;
-
   @Override
   public void end(SessionAccumulator sessionAccumulator) throws Exception {
     sessionAccumulator.getUbiSession().getIntermediateMetrics().end(sessionAccumulator);
@@ -115,7 +113,7 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
 
     // calculate the traffic source id base on intermedia parameters
     if (("11030".equals(intermediateMetrics.getScEventE())
-        || "11030".equals(intermediateMetrics.getRoverClickE()))
+          || "11030".equals(intermediateMetrics.getRoverClickE()))
         && INITIALSESSIONDATE.compareTo(startTSOnCurrentCobrandSite) <= 0) {
       return 23;
     }
@@ -260,8 +258,6 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
     if (intermediateMetrics.getRoverEntryTs() != null
         && intermediateMetrics.getRoverEntryTs() <= startTSOnCurrentCobrandSite + SESCOND1
         && "15".equals(intermediateMetrics.getMpxChannelId())) {
-
-      log.info("this is for 257 14");
       return 14;
     }
     if (intermediateMetrics.getRoverEntryTs() != null
@@ -370,8 +366,6 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
       return 13;
     }
     if ("15".equals(intermediateMetrics.getImgMpxChannelId())) {
-
-      log.info("this is for 367 14");
       return 14;
     }
     if ("16".equals(intermediateMetrics.getImgMpxChannelId())) {
@@ -390,11 +384,9 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
       return 25;
     }
     if (intermediateMetrics.getRefDomain().startsWith("itemlistings.ebay.")) {
-      log.info("this is for 390");
       return 21;
     }
     if (intermediateMetrics.getRefDomain().matches(regString4Id21)) {
-      log.info("this is for 394");
       return 21;
     }
     if (intermediateMetrics.getRefDomain().contains(".craigslist.")) {
@@ -405,7 +397,6 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
       return 8;
     }
     if (intermediateMetrics.getRefDomain().matches(".*toolbar.*\\.google\\..*")) {
-      log.info("this is for 405");
       return 21;
     }
     if (intermediateMetrics.getRefDomain().matches(regString4Id22)) {
@@ -458,14 +449,12 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
       if (landPageSet1.contains(intermediateMetrics.getLandPageID())) {
         return 8;
       }
-      log.info("this is for 458");
       return 21;
     }
     if (intermediateMetrics.getRefDomain().matches(regString4Id21_1)) {
       if (landPageSet1.contains(intermediateMetrics.getLandPageID())) {
         return 8;
       }
-      log.info("this is for 465");
       return 21;
     }
     if (StringUtils.isBlank(intermediateMetrics.getRefDomain())
@@ -512,7 +501,6 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
       return 8;
     }
     if (intermediateMetrics.getSearchAgentTypeId() != null) {
-      log.info("this is for 512");
       return 21;
     }
     if (intermediateMetrics.getFirstNotifyTs() != null
@@ -525,14 +513,10 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
         && intermediateMetrics.getRoverEntryTs() >= startTSOnCurrentCobrandSite - SECOND30
         && intermediateMetrics.getFirstMppId() != null
         && intermediateMetrics.getFirstMppId() > 0) {
-
-      log.info("this is for 510 14");
       return 14;
     }
     if (intermediateMetrics.getFinalMppId() != null
         && intermediateMetrics.getFinalMppId() > 0) {
-
-      log.info("this is for 523 14");
       return 14;
     }
     if (StringUtils.isBlank(intermediateMetrics.getRefDomain())) {
@@ -549,18 +533,6 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
       if (StringUtils.isNotBlank(intermediateMetrics.getCurAdme())
           && !intermediateMetrics.getCurAdme().startsWith("TB")) {
         return 4;
-      }
-      if (!StringUtils.isNotBlank(intermediateMetrics.getPrevAdme())
-          || intermediateMetrics.getPrevAdme().startsWith("TB")) {
-        if (!landPageSet2.contains(intermediateMetrics.getLandPageID())
-            || !StringUtils.isNotBlank(intermediateMetrics.getPrevAdme())
-            || intermediateMetrics.getPrevAdme().startsWith("TB")) {
-          if (!landPageSet2.contains(intermediateMetrics.getLandPageID())
-              || !StringUtils.isNotBlank(intermediateMetrics.getFutureAdme())
-              || !intermediateMetrics.getFutureAdme().startsWith("TB")) {
-            ;
-          }
-        }
       }
     }
     return Integer.MIN_VALUE;
@@ -586,7 +558,6 @@ public class TrafficSourceIdMetrics implements FieldMetrics<UbiEvent, SessionAcc
   @Override
   public void start(SessionAccumulator sessionAccumulator) throws Exception {
     sessionAccumulator.getUbiSession().initIntermediateMetrics();
-
   }
 
 }

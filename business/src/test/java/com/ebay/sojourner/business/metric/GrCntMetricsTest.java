@@ -9,18 +9,18 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
-public class GrCntMetricsTest extends BaseMetricsTest {
+class GrCntMetricsTest extends BaseMetricsTest {
 
-  private GrCntMetrics grCntMetrics;
+  GrCntMetrics grCntMetrics;
 
   @BeforeEach
-  public void setup() throws Exception {
+  void setup() throws Exception {
     grCntMetrics = new GrCntMetrics();
     yaml = loadTestCasesYaml("GrCntMetricsTest.yaml");
   }
 
   @TestFactory
-  public Collection<DynamicTest> dynamicTests() throws Exception {
+  Collection<DynamicTest> test_feed_dynamic() throws Exception {
     return generateDynamicTests(yaml, grCntMetrics);
   }
 

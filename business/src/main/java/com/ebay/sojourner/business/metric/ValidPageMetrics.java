@@ -47,7 +47,7 @@ public class ValidPageMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     }
     if (event.isPartialValidPage()
         && !event.isIframe()
-        && ((event.getPageId() != Integer.MIN_VALUE && !invalidPageIds.contains(event.getPageId()))
+        && ((event.getPageId() != -1 && !invalidPageIds.contains(event.getPageId()))
         || csTracking == 0)) {
       sessionAccumulator
           .getUbiSession()
