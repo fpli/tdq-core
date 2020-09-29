@@ -5,12 +5,21 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 
 public class KafkaSourceFunction {
 
-  public static <T> FlinkKafkaConsumer<T> buildSource(KafkaConsumerConfig config, Class<T> tClass) {
+  public static <T> FlinkKafkaConsumer<T> buildSourceForRealtime(KafkaConsumerConfig config,
+      Class<T> tClass) {
 
     FlinkKafkaConsumer<T> kafkaConsumer = KafkaConsumerFactory.getConsumer(config, tClass);
 
     kafkaConsumer.assignTimestampsAndWatermarks(
         new SojBoundedOutOfOrderlessTimestampExtractor<>(Time.minutes(3)));
+
+    return kafkaConsumer;
+  }
+
+  public static <T> FlinkKafkaConsumer<T> buildSourceForDumper(KafkaConsumerConfig config,
+      Class<T> tClass) {
+
+    FlinkKafkaConsumer<T> kafkaConsumer = KafkaConsumerFactory.getConsumer(config, tClass);
 
     return kafkaConsumer;
   }

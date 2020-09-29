@@ -25,15 +25,16 @@ public class SojournerKafkaToHdfsJob {
     );
 
     DataStream sourceDataStream = dataStreamBuilder
-        .buildOfDC(DataCenter.valueOf(dc), FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME),
+        .buildForRealtime(DataCenter.valueOf(dc),
+            FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME),
             FlinkEnvUtils.getString(Property.SOURCE_UID));
 
     // hdfs sink
     sourceDataStream
         .addSink(HdfsConnectorFactory.createWithParquet(hdfsPath, deserializeClass))
         .setParallelism(sinkParallelNum)
-        .name(FlinkEnvUtils.getString(Property.SINK_OPERATOR_NAME_SIGNATURE))
-        .uid(FlinkEnvUtils.getString(Property.SINK_UID_SIGNATURE));
+        .name(FlinkEnvUtils.getString(Property.SINK_OPERATOR_NAME))
+        .uid(FlinkEnvUtils.getString(Property.SINK_UID));
 
     // submit job
     FlinkEnvUtils

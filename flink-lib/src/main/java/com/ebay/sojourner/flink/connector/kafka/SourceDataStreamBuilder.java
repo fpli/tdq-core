@@ -15,19 +15,35 @@ public class SourceDataStreamBuilder<T> {
   private StreamExecutionEnvironment environment;
   private Class<T> tClass;
 
-  public DataStream<T> buildOfDC(DataCenter dc, String operatorName, String uid) {
-    return this.buildOfDC(dc, operatorName, uid, null);
+  public DataStream<T> buildForRealtime(DataCenter dc, String operatorName, String uid) {
+    return this.buildForRealtime(dc, operatorName, uid, null);
   }
 
-  public DataStream<T> buildOfDC(DataCenter dc, String operatorName, String uid, String slotGroup) {
+  public DataStream<T> buildForDumper(DataCenter dc, String operatorName, String uid) {
+    return this.buildForDumper(dc, operatorName, uid, null);
+  }
+
+  public DataStream<T> buildForRealtime(DataCenter dc, String operatorName, String uid,
+      String slotGroup) {
 
     KafkaConsumerConfig kafkaConsumerConfig = KafkaConnectorFactory.getKafkaConsumerConfig(dc);
     return environment
-        .addSource(KafkaSourceFunction.buildSource(kafkaConsumerConfig, tClass))
+        .addSource(KafkaSourceFunction.buildSourceForRealtime(kafkaConsumerConfig, tClass))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .slotSharingGroup(slotGroup)
         .name(operatorName)
         .uid(uid);
+  }
 
+  private DataStream<T> buildForDumper(DataCenter dc, String operatorName, String uid,
+      String slotGroup) {
+
+    KafkaConsumerConfig kafkaConsumerConfig = KafkaConnectorFactory.getKafkaConsumerConfig(dc);
+    return environment
+        .addSource(KafkaSourceFunction.buildSourceForDumper(kafkaConsumerConfig, tClass))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
+        .slotSharingGroup(slotGroup)
+        .name(operatorName)
+        .uid(uid);
   }
 }

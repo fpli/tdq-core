@@ -4,7 +4,7 @@ kafka:
     topic:
       - behavior.totalv2.signature.agent
     group-id:
-      lvs: sojourner-total-dumper-lvs
+      lvs: sojourner-total-dumper-rno
     bootstrap-servers:
       lvs:
         - rhs-ravvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
@@ -15,19 +15,19 @@ kafka:
 
 flink:
   app:
-    name: Sojourner LVS Agent Signature HDFS Load Pipeline
+    name: Sojourner RNO Agent Signature HDFS Load Pipeline
     parallelism:
       source: 10
       sink:
         hdfs: 10
     operator-name:
-      source: Sojourner Total LVS Signature Agent Source
-      sink: Sojourner Total LVS Signature Agent Sink
+      source: Sojourner Total RNO Signature Agent Source
+      sink: Sojourner Total RNO Signature Agent Sink
     uid:
-      source: sojourner-total-lvs-signature-agent-source
-      sink: sojourner-total-lvs-signature-agent-sink
+      source: sojourner-total-rno-signature-agent-source
+      sink: sojourner-total-rno-signature-agent-sink
 
 hdfs:
   dump:
-    path: hdfs://hercules/sys/soj/ubd/signatures/type=agent
+    path: hdfs://apollo-rno/sys/soj/ubd/signatures/type=agent
     class-name: com.ebay.sojourner.common.model.BotSignature

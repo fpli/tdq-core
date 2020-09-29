@@ -1,4 +1,0 @@
-kafka:
-  consumer:
-    topic:
-      - behavior.totalv2.sojevent-nonbot-lvs

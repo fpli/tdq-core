@@ -4,7 +4,7 @@ kafka:
     topic:
       - behavior.pulsar.misc.bot
     group-id:
-      rno: sojourner-jetstream-event-bot-rno
+      rno: sojourner-jetstream-dumper
     bootstrap-servers:
       rno:
         - rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
@@ -20,6 +20,12 @@ flink:
       source: 30
       sink:
         hdfs: 30
+    operator-name:
+      source: Jetstream Pulsar Bot Event Source
+      sink: Jetstream Pulsar Bot Event Sink
+    uid:
+      source: jetstream-pulsar-bot-event-source
+      sink: jetstream-pulsar-bot-event-sink
 
 hdfs:
   dump:

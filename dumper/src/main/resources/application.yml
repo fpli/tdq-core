@@ -1,18 +1,6 @@
 kafka:
   consumer:
     stream: behavior.totalv2
-    data-center: RNO
-    topic:
-      - behavior.totalv2.sojevent-nonbot
-    group-id:
-      rno: sojourner-total-dumper-rno
-    bootstrap-servers:
-      rno:
-        - rhs-fxuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.37.tess.io:9092
 
     max-poll-records: 3000
     # 16MB, default value is 50MB
@@ -24,39 +12,8 @@ kafka:
     max-partitions-fetch-bytes: 4194304
     auto-offset-reset: latest
 
-  producer:
-    stream: behavior.totalv2
-    topic:
-    bootstrap-servers:
-      rno:
-        - rhs-fxuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.37.tess.io:9092
-
-    batch-size: 131072
-    acks: 1
-    linger-ms: 10
-    request-timeout-ms: 60000
-    retries: 3
-    buffer-memory: 67108864
-    compression-type: lz4
-    message-key:
-      session: guid
-      event:
-        default: guid
-        key1: guid
-        key2: pageId
-
 flink:
   app:
-    name: Sojourner RNO Non Bot Event HDFS Load Pipeline
-    parallelism:
-      source: 200
-      sink:
-        kafka: 100
-        hdfs: 200
     checkpoint:
       data-dir: /opt/sojourner-ubd/checkpoint
       interval-ms: 300000
@@ -64,18 +21,6 @@ flink:
       min-pause-between-ms: 120000
       max-concurrent: 1
       tolerate-failure-number: 3
-    operator-name:
-      source: Sojourner Total RNO Nonbot Event Source
-      sink:
-        event: Sojourner Total RNO Nonbot Event Sink
-        watermark: Sojourner Total RNO Nonbot Event Watermark Sink
-    uid:
-      source: sojourner-total-rno-nonbot-event-source
-      sink:
-        event: sojourner-total-rno-nonbot-event-sink
-        watermark: sojourner-total-rno-nonbot-event-watermark-sink
-    metric:
-      watermark-process-progress: sojourner-ubd-nonbot-event-watermark-delay-time
 
 rheos:
   registry-url: https://rheos-services.stratus.ebay.com
@@ -84,8 +29,3 @@ rheos:
     iaf:
       secret: c4bb6fca-7ac5-46dd-b218-a49cb6307dbc
       env: production
-
-hdfs:
-  dump:
-    path: hdfs://apollo-rno/sys/edw/working/ubi/ubi_w/soj/stg_ubi_event_dump_w/type=nonbot
-    watermark-path: hdfs://apollo-rno/sys/edw/working/ubi/ubi_w/soj/ubi_event_watermark_lkp/type=nonbot

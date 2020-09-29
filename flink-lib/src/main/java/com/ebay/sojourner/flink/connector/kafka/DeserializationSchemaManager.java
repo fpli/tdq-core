@@ -6,6 +6,7 @@ import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.flink.connector.kafka.schema.AvroKeyedDeserializationSchema;
+import com.ebay.sojourner.flink.connector.kafka.schema.PassThroughDeserializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.RawEventDeserializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.JetstreamEventDeserializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.JetstreamSessionDeserializationSchema;
@@ -28,6 +29,8 @@ public class DeserializationSchemaManager {
       return new SojEventDeserializationSchema();
     } else if (clazz.isAssignableFrom(SojSession.class)) {
       return new SojSessionDeserializationSchema();
+    } else if (clazz.isAssignableFrom(byte[].class)) {
+      return new PassThroughDeserializationSchema();
     }
 
     throw new IllegalStateException("Cannot find deserialization schema");

@@ -4,7 +4,7 @@ kafka:
     topic:
       - behavior.pulsar.sojsession.sessionend
     group-id:
-      rno: sojourner-jetstream-session-non-bot-rno
+      rno: sojourner-jetstream-dumper
     bootstrap-servers:
       rno:
         - rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
@@ -20,6 +20,12 @@ flink:
       source: 15
       sink:
         hdfs: 15
+    operator-name:
+      source: Jetstream Pulsar Nonbot Session Source
+      sink: Jetstream Pulsar Nonbot Session Sink
+    uid:
+      source: jetstream-pulsar-nonbot-session-source
+      sink: jetstream-pulsar-nonbot-session-sink
 
 hdfs:
   dump:

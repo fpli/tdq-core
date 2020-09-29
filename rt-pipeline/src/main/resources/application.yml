@@ -50,16 +50,16 @@ kafka:
     stream: behavior.totalv2
     topic:
       session:
-        bot: behavior.totalv2.sojsession-bot
-        non-bot: behavior.totalv2.sojsession-nonbot
+        bot: behavior.totalv2.sojsession-bot-rno
+        non-bot: behavior.totalv2.sojsession-nonbot-rno
       event:
-        bot: behavior.totalv2.sojevent-bot
-        non-bot: behavior.totalv2.sojevent-nonbot
-        late: behavior.totalv2.sojevent-late
+        bot: behavior.totalv2.sojevent-bot-rno
+        non-bot: behavior.totalv2.sojevent-nonbot-rno
+        late: behavior.totalv2.sojevent-late-rno
       signature:
-        agent-ip: behavior.totalv2.signature.agent-ip
-        agent: behavior.totalv2.signature.agent
-        ip: behavior.totalv2.signature.ip
+        agent-ip: behavior.totalv2.signature.agent-ip-rno
+        agent: behavior.totalv2.signature.agent-rno
+        ip: behavior.totalv2.signature.ip-rno
     bootstrap-servers:
       - rhs-fxuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.37.tess.io:9092
       - rhs-fxuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.37.tess.io:9092
@@ -80,11 +80,9 @@ kafka:
     message-key:
       session: guid
       event:
-        default: guid
         key1: guid
         key2: pageId
       signature:
-        guid: guid
         ip: ip
         agent: userAgent
         agent-ip: userAgent
@@ -101,22 +99,14 @@ flink:
       agent-ip: 50
       agent: 50
       ip: 50
-      guid: 100
       broadcast: 300
       metrics: 300
     slot-sharing-group:
-      default: default
       source-event-lvs: lvs
       source-event-slc: slc
       source-event-rno: rno
       session: session
-      pre-agent-ip: pre-agent-ip
-      agent-ip: agent-ip
-      agent: agent
-      ip: ip
-      guid: guid
       cross-session: cross-session
-      broadcast: broadcast
     operator-name:
       source:
         rno: Pathfinder RNO Source
@@ -149,10 +139,6 @@ hdfs:
 
 rheos:
   registry-url: https://rheos-services.stratus.ebay.com
-  schema-name:
-    event:
-    session:
-    attribute:
   client:
     id: "urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618"
     iaf:

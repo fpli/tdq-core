@@ -3,16 +3,18 @@ package com.ebay.sojourner.dumper.pipeline;
 import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.model.SojWatermark;
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.dumper.common.ExtractWatermarkProcessFunction;
-import com.ebay.sojourner.dumper.common.SplitSessionProcessFunction;
+import com.ebay.sojourner.dumper.common.session.ByteToSojSessionMapFunction;
+import com.ebay.sojourner.dumper.common.session.SplitSessionProcessFunction;
+import com.ebay.sojourner.dumper.common.watermark.ExtractWatermarkProcessFunction;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
-import com.ebay.sojourner.flink.common.util.DataCenter;
 import com.ebay.sojourner.flink.common.util.OutputTagConstants;
 import com.ebay.sojourner.flink.connector.hdfs.HdfsConnectorFactory;
-import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
+import com.ebay.sojourner.flink.common.util.DataStreamRescaledBuilder;
+import com.ebay.sojourner.flink.connector.kafka.SojBoundedOutOfOrderlessTimestampExtractor;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.windowing.time.Time;
 
 public class SojournerSessionDumperJob {
 
@@ -22,37 +24,47 @@ public class SojournerSessionDumperJob {
 
     String dc = FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_DATA_CENTER);
 
-    // kafka source
-    SourceDataStreamBuilder<SojSession> dataStreamBuilder = new SourceDataStreamBuilder<>(
-        executionEnvironment, SojSession.class
-    );
+    // rescaled kafka source
+    DataStream<byte[]> rescaledByteSessionDataStream =
+        DataStreamRescaledBuilder.buildKafkaSource(executionEnvironment, dc, byte[].class);
 
-    DataStream<SojSession> sourceDataStream = dataStreamBuilder
-        .buildOfDC(DataCenter.valueOf(dc), FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME),
-            FlinkEnvUtils.getString(Property.SOURCE_UID));
+    // byte to sojsession
+    DataStream<SojSession> sojSessionDataStream = rescaledByteSessionDataStream
+        .map(new ByteToSojSessionMapFunction())
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM))
+        .name(FlinkEnvUtils.getString(Property.PASS_THROUGH_OPERATOR_NAME))
+        .uid(FlinkEnvUtils.getString(Property.PASS_THROUGH_UID));
+
+    // assgin watermark
+    DataStream<SojSession> assignedWatermarkSojSessionDataStream = sojSessionDataStream
+        .assignTimestampsAndWatermarks(new SojBoundedOutOfOrderlessTimestampExtractor<>(
+            Time.milliseconds(0)))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM))
+        .name(FlinkEnvUtils.getString(Property.ASSIGN_WATERMARK_OPERATOR_NAME))
+        .uid(FlinkEnvUtils.getString(Property.ASSIGN_WATERMARK_UID));
 
     // extract timestamp
-    DataStream<SojWatermark> sojSessionWatermarkStream = sourceDataStream
+    DataStream<SojWatermark> sojSessionWatermarkStream = assignedWatermarkSojSessionDataStream
         .process(new ExtractWatermarkProcessFunction<>(
             FlinkEnvUtils.getString(Property.FLINK_APP_METRIC_NAME)))
-        .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
-        .name("SojSession Timestamp Extract")
-        .uid("sojsession-timestamp-extract");
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM))
+        .name(FlinkEnvUtils.getString(Property.TIMESTAMP_EXTRACT_OPERATOR_NAME))
+        .uid(FlinkEnvUtils.getString(Property.TIMESTAMP_EXTRACT_UID));
 
     // sink timestamp to hdfs
     sojSessionWatermarkStream
         .addSink(HdfsConnectorFactory.createWithParquet(
             FlinkEnvUtils.getString(Property.HDFS_DUMP_WATERMARK_PATH), SojWatermark.class))
-        .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM))
         .name(FlinkEnvUtils.getString(Property.SINK_OPERATOR_NAME_WATERMARK))
         .uid(FlinkEnvUtils.getString(Property.SINK_UID_WATERMARK));
 
-    SingleOutputStreamOperator<SojSession> sameDaySessionStream = sourceDataStream
+    SingleOutputStreamOperator<SojSession> sameDaySessionStream = sojSessionDataStream
         .process(new SplitSessionProcessFunction(OutputTagConstants.crossDaySessionOutputTag,
             OutputTagConstants.openSessionOutputTag))
-        .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
-        .name("SojSession Split")
-        .uid("sojsession-split");
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM))
+        .name(FlinkEnvUtils.getString(Property.SESSION_SPLIT_OPERATOR_NAME))
+        .uid(FlinkEnvUtils.getString(Property.SESSION_SPLIT_UID));
 
     DataStream<SojSession> crossDaySessionStream = sameDaySessionStream
         .getSideOutput(OutputTagConstants.crossDaySessionOutputTag);

@@ -187,15 +187,12 @@ public class Property {
   public static final String ACKS = "kafka.producer.acks";
   public static final String COMPRESSION_TYPE = "kafka.producer.compression-type";
   public static final String BEHAVIOR_MESSAGE_KEY_SESSION = "kafka.producer.message-key.session";
-  public static final String BEHAVIOR_MESSAGE_KEY_EVENT_DEFAULT = "kafka.producer.message-key.event.default";
   public static final String BEHAVIOR_MESSAGE_KEY_EVENT_KEY1 = "kafka.producer.message-key.event.key1";
   public static final String BEHAVIOR_MESSAGE_KEY_EVENT_KEY2 = "kafka.producer.message-key.event.key2";
   public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_IP = "kafka.producer.message-key.signature.ip";
-  public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_GUID = "kafka.producer.message-key.signature.guid";
   public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT = "kafka.producer.message-key.signature.agent";
   public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT_IP = "kafka.producer.message-key.signature.agent-ip";
   public static final String KAFKA_PRODUCER_BOOTSTRAP_SERVERS = "kafka.producer.bootstrap-servers";
-  public static final String KAFKA_PRODUCER_TOPIC = "kafka.producer.topic";
   public static final String KAFKA_PRODUCER_SUBJECT_SOJEVENT = "kafka.producer.subject.event";
   public static final String KAFKA_PRODUCER_SUBJECT_SOJSESSION = "kafka.producer.subject.session";
   public static final String PRODUCER_ID = "kafka.producer.producerId";
@@ -205,10 +202,6 @@ public class Property {
   public static final String RHEOS_CLIENT_ID = "rheos.client.id";
   public static final String RHEOS_CLIENT_IAF_SECRET = "rheos.client.iaf.secret";
   public static final String RHEOS_CLIENT_IAF_ENV = "rheos.client.iaf.env";
-  public static final String RHEOS_SCHEMA_NAME_EVENT = "rheos.schema-name.event";
-  public static final String RHEOS_SCHEMA_NAME_SESSION = "rheos.schema-name.session";
-  public static final String RHEOS_SCHEMA_NAME_ATTRIBUTE = "rheos.schema-name.attribute";
-
 
   // flink checkpoint
   public static final String CHECKPOINT_DATA_DIR = "flink.app.checkpoint.data-dir";
@@ -227,31 +220,23 @@ public class Property {
   public static final String AGENT_IP_PARALLELISM = "flink.app.parallelism.agent-ip";
   public static final String AGENT_PARALLELISM = "flink.app.parallelism.agent";
   public static final String IP_PARALLELISM = "flink.app.parallelism.ip";
-  public static final String GUID_PARALLELISM = "flink.app.parallelism.guid";
   public static final String BROADCAST_PARALLELISM = "flink.app.parallelism.broadcast";
   public static final String METRICS_PARALLELISM = "flink.app.parallelism.metrics";
 
-  // flink source operator name and uid
-  public static final String SOURCE_OPERATOR_NAME_RNO = "flink.app.operator-name.source.rno";
-  public static final String SOURCE_OPERATOR_NAME_LVS = "flink.app.operator-name.source.lvs";
-  public static final String SOURCE_OPERATOR_NAME_SLC = "flink.app.operator-name.source.slc";
-  public static final String SOURCE_UID_RNO = "flink.app.uid.source.rno";
-  public static final String SOURCE_UID_LVS = "flink.app.uid.source.lvs";
-  public static final String SOURCE_UID_SLC = "flink.app.uid.source.slc";
-
-  public static final String DEFAULT_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.default";
   public static final String SOURCE_EVENT_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event";
   public static final String SOURCE_EVENT_LVS_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event-lvs";
   public static final String SOURCE_EVENT_SLC_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event-slc";
   public static final String SOURCE_EVENT_RNO_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event-rno";
   public static final String SESSION_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.session";
   public static final String CROSS_SESSION_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.cross-session";
-  public static final String BROADCAST_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.broadcast";
-  public static final String PRE_AGENT_IP_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.pre-agent-ip";
-  public static final String AGENT_IP_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.agent-ip";
-  public static final String AGENT_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.agent";
-  public static final String IP_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.ip";
-  public static final String GUID_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.guid";
+
+  // flink - operator name and uid
+  public static final String SOURCE_OPERATOR_NAME_RNO = "flink.app.operator-name.source.rno";
+  public static final String SOURCE_OPERATOR_NAME_LVS = "flink.app.operator-name.source.lvs";
+  public static final String SOURCE_OPERATOR_NAME_SLC = "flink.app.operator-name.source.slc";
+  public static final String SOURCE_UID_RNO = "flink.app.uid.source.rno";
+  public static final String SOURCE_UID_LVS = "flink.app.uid.source.lvs";
+  public static final String SOURCE_UID_SLC = "flink.app.uid.source.slc";
 
   // flink - app name
   public static final String FLINK_APP_NAME = "flink.app.name";
@@ -273,11 +258,20 @@ public class Property {
   public static final String REST_AUTH_TOKEN = "rest-client.auth-token";
 
   // ------------------------- batch pipeline common property ---------------------------
-  // parallelism config
+  // flink - parallelism
   public static final String SINK_HDFS_PARALLELISM = "flink.app.parallelism.sink.hdfs";
-  public static final String SINK_KAFKA_PARALLELISM = "flink.app.parallelism.sink.kafka";
+
+  // flink - operator name and uid
   public static final String SOURCE_OPERATOR_NAME = "flink.app.operator-name.source";
   public static final String SOURCE_UID = "flink.app.uid.source";
+  public static final String PASS_THROUGH_OPERATOR_NAME = "flink.app.operator-name.pass-through";
+  public static final String PASS_THROUGH_UID = "flink.app.uid.pass-through";
+  public static final String TIMESTAMP_EXTRACT_OPERATOR_NAME = "flink.app.operator-name.extract-watermark";
+  public static final String TIMESTAMP_EXTRACT_UID = "flink.app.uid.extract-watermark";
+  public static final String SESSION_SPLIT_OPERATOR_NAME = "flink.app.operator-name.session-split";
+  public static final String SESSION_SPLIT_UID = "flink.app.uid.session-split";
+  public static final String ASSIGN_WATERMARK_OPERATOR_NAME = "flink.app.operator-name.assgin-watermark";
+  public static final String ASSIGN_WATERMARK_UID = "flink.app.uid.assgin-watermark";
   public static final String SINK_OPERATOR_NAME_EVENT = "flink.app.operator-name.sink.event";
   public static final String SINK_UID_EVENT = "flink.app.uid.sink.event";
   public static final String SINK_OPERATOR_NAME_WATERMARK = "flink.app.operator-name.sink.watermark";
@@ -288,8 +282,8 @@ public class Property {
   public static final String SINK_UID_SESSION_SAME_DAY = "flink.app.uid.sink.session.same-day";
   public static final String SINK_OPERATOR_NAME_SESSION_CROSS_DAY = "flink.app.operator-name.sink.session.cross-day";
   public static final String SINK_UID_SESSION_CROSS_DAY = "flink.app.uid.sink.session.cross-day";
-  public static final String SINK_OPERATOR_NAME_SIGNATURE = "flink.app.operator-name.sink.signature";
-  public static final String SINK_UID_SIGNATURE = "flink.app.uid.sink.signature";
+  public static final String SINK_OPERATOR_NAME = "flink.app.operator-name.sink";
+  public static final String SINK_UID = "flink.app.uid.sink";
 
   // hdfs
   public static final String HDFS_DUMP_PATH = "hdfs.dump.path";
@@ -303,21 +297,12 @@ public class Property {
   // kafka producer
   public static final String KAFKA_TOPIC_SESSION_BOT = "kafka.producer.topic.session.bot";
   public static final String KAFKA_TOPIC_SESSION_NON_BOT = "kafka.producer.topic.session.non-bot";
-  public static final String KAFKA_TOPIC_INTERMEDIATE_SESSION = "kafka.producer.topic.intermediate-session";
   public static final String KAFKA_TOPIC_EVENT_BOT = "kafka.producer.topic.event.bot";
   public static final String KAFKA_TOPIC_EVENT_NON_BOT = "kafka.producer.topic.event.non-bot";
   public static final String KAFKA_TOPIC_EVENT_LATE = "kafka.producer.topic.event.late";
   public static final String KAFKA_TOPIC_SIGNATURE_AGENT_IP = "kafka.producer.topic.signature.agent-ip";
   public static final String KAFKA_TOPIC_SIGNATURE_AGENT = "kafka.producer.topic.signature.agent";
   public static final String KAFKA_TOPIC_SIGNATURE_IP = "kafka.producer.topic.signature.ip";
-  public static final String KAFKA_TOPIC_SIGNATURE_GUID = "kafka.producer.topic.signature.guid";
-
-  // hdfs
-  public static final String HDFS_PATH_PARENT = "hdfs.path.parent";
-  public static final String HDFS_PATH_EVENT_NON_BOT = "hdfs.path.event.non-bot";
-  public static final String HDFS_PATH_SESSION_NON_BOT = "hdfs.path.session.non-bot";
-  public static final String HDFS_PATH_INTERMEDIATE_SESSION = "hdfs.path.intermediate-session";
-  public static final String HDFS_PATH_SIGNATURES = "hdfs.path.signatures";
 
   // data skew
   public static final String IS_FILTER = "flink.app.data-skew.is-filter";

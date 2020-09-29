@@ -3,13 +3,15 @@ package com.ebay.sojourner.dumper.pipeline;
 import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojWatermark;
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.dumper.common.ExtractWatermarkProcessFunction;
+import com.ebay.sojourner.dumper.common.event.ByteToSojEventMapFunction;
+import com.ebay.sojourner.dumper.common.watermark.ExtractWatermarkProcessFunction;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
-import com.ebay.sojourner.flink.common.util.DataCenter;
 import com.ebay.sojourner.flink.connector.hdfs.HdfsConnectorFactory;
-import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
+import com.ebay.sojourner.flink.common.util.DataStreamRescaledBuilder;
+import com.ebay.sojourner.flink.connector.kafka.SojBoundedOutOfOrderlessTimestampExtractor;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.windowing.time.Time;
 
 public class SojournerEventDumperJob {
 
@@ -19,33 +21,43 @@ public class SojournerEventDumperJob {
 
     String dc = FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_DATA_CENTER);
 
-    // kafka source
-    SourceDataStreamBuilder<SojEvent> dataStreamBuilder = new SourceDataStreamBuilder<>(
-        executionEnvironment, SojEvent.class
-    );
+    // rescaled kafka source
+    DataStream<byte[]> rescaledByteEventDataStream =
+        DataStreamRescaledBuilder.buildKafkaSource(executionEnvironment, dc, byte[].class);
 
-    DataStream<SojEvent> sourceDataStream = dataStreamBuilder
-        .buildOfDC(DataCenter.valueOf(dc), FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME),
-            FlinkEnvUtils.getString(Property.SOURCE_UID));
+    // byte to sojevent
+    DataStream<SojEvent> sojEventDataStream = rescaledByteEventDataStream
+        .map(new ByteToSojEventMapFunction())
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM))
+        .name(FlinkEnvUtils.getString(Property.PASS_THROUGH_OPERATOR_NAME))
+        .uid(FlinkEnvUtils.getString(Property.PASS_THROUGH_UID));
+
+    // assgin watermark
+    DataStream<SojEvent> assignedWatermarkSojEventDataStream = sojEventDataStream
+        .assignTimestampsAndWatermarks(new SojBoundedOutOfOrderlessTimestampExtractor<>(
+            Time.milliseconds(0)))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM))
+        .name(FlinkEnvUtils.getString(Property.ASSIGN_WATERMARK_OPERATOR_NAME))
+        .uid(FlinkEnvUtils.getString(Property.ASSIGN_WATERMARK_UID));
 
     // extract timestamp
-    DataStream<SojWatermark> sojEventWatermarkStream = sourceDataStream
+    DataStream<SojWatermark> sojEventWatermarkStream = assignedWatermarkSojEventDataStream
         .process(new ExtractWatermarkProcessFunction<>(
             FlinkEnvUtils.getString(Property.FLINK_APP_METRIC_NAME)))
-        .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
-        .name("SojEvent Timestamp Extract")
-        .uid("sojevent-timestamp-extract");
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM))
+        .name(FlinkEnvUtils.getString(Property.TIMESTAMP_EXTRACT_OPERATOR_NAME))
+        .uid(FlinkEnvUtils.getString(Property.TIMESTAMP_EXTRACT_UID));
 
     // sink timestamp to hdfs
     sojEventWatermarkStream
         .addSink(HdfsConnectorFactory.createWithParquet(
             FlinkEnvUtils.getString(Property.HDFS_DUMP_WATERMARK_PATH), SojWatermark.class))
-        .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM))
         .name(FlinkEnvUtils.getString(Property.SINK_OPERATOR_NAME_WATERMARK))
         .uid(FlinkEnvUtils.getString(Property.SINK_UID_WATERMARK));
 
     // hdfs sink
-    sourceDataStream
+    sojEventDataStream
         .addSink(HdfsConnectorFactory.createWithParquet(
             FlinkEnvUtils.getString(Property.HDFS_DUMP_PATH), SojEvent.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM))

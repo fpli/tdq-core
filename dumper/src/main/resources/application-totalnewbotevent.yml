@@ -1,10 +1,11 @@
 kafka:
   consumer:
+    data-center: RNO
     stream: behavior.total.new
     topic:
       - behavior.total.new.sojevent.bot
     group-id:
-      rno: sojourner-total-dumper-test
+      rno: sojourner-total-new-dumper
     bootstrap-servers:
       rno:
         - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
@@ -15,11 +16,29 @@ kafka:
 
 flink:
   app:
-    name: Sojourner TEST Bot Event HDFS Load Pipeline
+    name: Sojourner RNO Bot Event HDFS Load Pipeline TEST
     parallelism:
-      source: 100
+      source: 150
       sink:
-        hdfs: 100
+        hdfs: 300
+    operator-name:
+      source: Sojourner Total New RNO Bot Event Source
+      pass-through: RNO Byte To Bot Event
+      assgin-watermark: RNO Bot Event Watermark Assign
+      extract-watermark: RNO Bot Event Timestamp Extract
+      sink:
+        event: Sojourner Total New RNO Bot Event Sink
+        watermark: Sojourner Total New RNO Bot Event Watermark Sink
+    uid:
+      source: sojourner-total-new-rno-bot-event-source
+      pass-through: rno-byte-to-bot-event
+      assgin-watermark: rno-bot-event-watermak-assign
+      extract-watermark: rno-bot-event-timestamp-extract
+      sink:
+        event: sojourner-total-new-rno-bot-event-sink
+        watermark: sojourner-total-new-rno-bot-event-watermark-sink
+    metric:
+      watermark-process-progress: sojourner-ubd-bot-event-watermark-delay-time
 
 hdfs:
   dump:
