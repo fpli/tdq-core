@@ -1,5 +1,6 @@
 package com.ebay.sojourner.flink.connector.kafka;
 
+import java.util.Set;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 
@@ -9,6 +10,18 @@ public class KafkaSourceFunction {
       Class<T> tClass) {
 
     FlinkKafkaConsumer<T> kafkaConsumer = KafkaConsumerFactory.getConsumer(config, tClass);
+
+    kafkaConsumer.assignTimestampsAndWatermarks(
+        new SojBoundedOutOfOrderlessTimestampExtractor<>(Time.minutes(3)));
+
+    return kafkaConsumer;
+  }
+
+  public static <T> FlinkKafkaConsumer<T> buildSourceForRealtime(KafkaConsumerConfig config,
+      Class<T> tClass, Set<String> guidList) {
+
+    FlinkKafkaConsumer<T> kafkaConsumer = KafkaConsumerFactory
+        .getConsumer(config, tClass, guidList);
 
     kafkaConsumer.assignTimestampsAndWatermarks(
         new SojBoundedOutOfOrderlessTimestampExtractor<>(Time.minutes(3)));

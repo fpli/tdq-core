@@ -1,8 +1,6 @@
 package com.ebay.sojourner.rt.operator.event;
 
 import com.ebay.sojourner.common.model.RawEvent;
-import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -16,17 +14,17 @@ public class DataSkewProcessFunction extends
 
   private OutputTag outputTag;
   private Boolean isFilter;
-  private Set<String> filterGuidSet;
+  private Set<String> filterPageIdSet;
 
-  public DataSkewProcessFunction(OutputTag outputTag) {
+  public DataSkewProcessFunction(OutputTag outputTag, Boolean isFilter, Set<String> pageIdList) {
     this.outputTag = outputTag;
+    this.isFilter = isFilter;
+    this.filterPageIdSet = pageIdList;
   }
 
   @Override
   public void open(Configuration parameters) throws Exception {
     super.open(parameters);
-    isFilter = FlinkEnvUtils.getBoolean(Property.IS_FILTER);
-    filterGuidSet = FlinkEnvUtils.getSet(Property.FILTER_GUID_LIST);
   }
 
   @Override
@@ -43,9 +41,9 @@ public class DataSkewProcessFunction extends
       map.putAll(rawEvent.getSojA());
       map.putAll(rawEvent.getSojK());
       map.putAll(rawEvent.getSojC());
-      if (map.containsKey("g")) {
-        String guid = map.get("g");
-        if (filterGuidSet.contains(guid)) {
+      if (map.containsKey("p")) {
+        String guid = map.get("p");
+        if (filterPageIdSet.contains(guid)) {
           context.output(outputTag, rawEvent);
         } else {
           out.collect(rawEvent);

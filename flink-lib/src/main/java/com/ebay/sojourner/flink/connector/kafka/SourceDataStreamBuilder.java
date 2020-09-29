@@ -3,6 +3,7 @@ package com.ebay.sojourner.flink.connector.kafka;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.util.DataCenter;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -29,6 +30,19 @@ public class SourceDataStreamBuilder<T> {
     KafkaConsumerConfig kafkaConsumerConfig = KafkaConnectorFactory.getKafkaConsumerConfig(dc);
     return environment
         .addSource(KafkaSourceFunction.buildSourceForRealtime(kafkaConsumerConfig, tClass))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
+        .slotSharingGroup(slotGroup)
+        .name(operatorName)
+        .uid(uid);
+  }
+
+  public DataStream<T> buildForRealtime(DataCenter dc, String operatorName, String uid,
+      String slotGroup, Set<String> guidList) {
+
+    KafkaConsumerConfig kafkaConsumerConfig = KafkaConnectorFactory.getKafkaConsumerConfig(dc);
+    return environment
+        .addSource(
+            KafkaSourceFunction.buildSourceForRealtime(kafkaConsumerConfig, tClass, guidList))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .slotSharingGroup(slotGroup)
         .name(operatorName)

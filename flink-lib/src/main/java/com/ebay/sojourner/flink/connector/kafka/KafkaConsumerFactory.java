@@ -1,9 +1,11 @@
 package com.ebay.sojourner.flink.connector.kafka;
 
 import com.ebay.sojourner.common.model.BotSignature;
+import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import java.util.Properties;
+import java.util.Set;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.RoundRobinAssignor;
@@ -13,6 +15,12 @@ public class KafkaConsumerFactory {
   public static <T> FlinkKafkaConsumer<T> getConsumer(KafkaConsumerConfig config, Class<T> tClass) {
 
     return buildFlinkKafkaConsumer(config, tClass);
+  }
+
+  public static <T> FlinkKafkaConsumer<T> getConsumer(KafkaConsumerConfig config, Class<T> tClass,
+      Set<String> guidList) {
+
+    return buildFlinkKafkaConsumer(config, tClass, guidList);
   }
 
   private static <T> FlinkKafkaConsumer<T> buildFlinkKafkaConsumer(
@@ -26,6 +34,30 @@ public class KafkaConsumerFactory {
       flinkKafkaConsumer = new FlinkKafkaConsumer<>(
           config.getTopicList(),
           DeserializationSchemaManager.getKeyedSchema(tClass),
+          commonConfig);
+    } else {
+
+      flinkKafkaConsumer = new FlinkKafkaConsumer<>(
+          config.getTopicList(),
+          DeserializationSchemaManager.getSchema(tClass),
+          commonConfig);
+    }
+
+    flinkKafkaConsumer.setStartFromLatest();
+    return flinkKafkaConsumer;
+  }
+
+  private static <T> FlinkKafkaConsumer<T> buildFlinkKafkaConsumer(
+      KafkaConsumerConfig config, Class<T> tClass, Set<String> guidList) {
+
+    FlinkKafkaConsumer flinkKafkaConsumer;
+    Properties commonConfig = buildKafkaCommonConfig(config);
+
+    if (tClass.isAssignableFrom(RawEvent.class)) {
+
+      flinkKafkaConsumer = new FlinkKafkaConsumer<>(
+          config.getTopicList(),
+          DeserializationSchemaManager.getSchema(tClass, guidList),
           commonConfig);
     } else {
 

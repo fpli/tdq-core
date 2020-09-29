@@ -16,7 +16,6 @@ import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.state.MapStateDesc;
-import com.ebay.sojourner.flink.common.util.DataStreamRescaledBuilder;
 import com.ebay.sojourner.flink.common.util.OutputTagConstants;
 import com.ebay.sojourner.flink.common.window.CompositeTrigger;
 import com.ebay.sojourner.flink.common.window.MidnightOpenSessionTrigger;
@@ -80,15 +79,48 @@ public class SojournerRTJob {
     DataStream<RawEvent> rawEventDataStreamForRNO = dataStreamBuilder
         .buildForRealtime(RNO, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_RNO),
             FlinkEnvUtils.getString(Property.SOURCE_UID_RNO),
-            FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP));
+            FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP),
+            FlinkEnvUtils.getSet(Property.FILTER_GUID_LIST));
     DataStream<RawEvent> rawEventDataStreamForSLC = dataStreamBuilder
         .buildForRealtime(SLC, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_SLC),
             FlinkEnvUtils.getString(Property.SOURCE_UID_SLC),
-            FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP));
+            FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP),
+            FlinkEnvUtils.getSet(Property.FILTER_GUID_LIST));
     DataStream<RawEvent> rawEventDataStreamForLVS = dataStreamBuilder
         .buildForRealtime(LVS, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS),
             FlinkEnvUtils.getString(Property.SOURCE_UID_LVS),
-            FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP));
+            FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP),
+            FlinkEnvUtils.getSet(Property.FILTER_GUID_LIST));
+
+    // filter skew guid
+    /*
+    DataStream<RawEvent> filteredRawEventDataStreamForLVS = rawEventDataStreamForLVS
+        .process(new DataSkewProcessFunction(OutputTagConstants.dataSkewOutputTag,
+            FlinkEnvUtils.getBoolean(Property.IS_FILTER),
+            FlinkEnvUtils.getSet(Property.FILTER_PAGE_ID_LIST)))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP))
+        .name("Filter LVS Skew Guid")
+        .uid("filter-lvs-skew-guid");
+
+    DataStream<RawEvent> filteredRawEventDataStreamForSLC = rawEventDataStreamForSLC
+        .process(new DataSkewProcessFunction(OutputTagConstants.dataSkewOutputTag,
+            FlinkEnvUtils.getBoolean(Property.IS_FILTER),
+            FlinkEnvUtils.getSet(Property.FILTER_PAGE_ID_LIST)))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP))
+        .name("Filter SLC Skew Guid")
+        .uid("filter-slc-skew-guid");
+
+    DataStream<RawEvent> filteredRawEventDataStreamForRNO = rawEventDataStreamForRNO
+        .process(new DataSkewProcessFunction(OutputTagConstants.dataSkewOutputTag,
+            FlinkEnvUtils.getBoolean(Property.IS_FILTER),
+            FlinkEnvUtils.getSet(Property.FILTER_PAGE_ID_LIST)))
+        .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
+        .slotSharingGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP))
+        .name("Filter RNO Skew Guid")
+        .uid("filter-rno-skew-guid");
+        */
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
@@ -223,12 +255,9 @@ public class SojournerRTJob {
     DataStream<Either<UbiEvent, UbiSession>> detectableDataStream =
         ubiSessionTransDataStream.union(ubiEventTransDataStream);
 
-    DataStream<Either<UbiEvent, UbiSession>> rescaledDetectableDataStream =
-        DataStreamRescaledBuilder.build(detectableDataStream);
-
     // connect ubiEvent,ubiSession DataStream and broadcast Stream
     SingleOutputStreamOperator<UbiEvent> signatureBotDetectionForEvent =
-        rescaledDetectableDataStream.connect(attributeSignatureBroadcastStream)
+        detectableDataStream.connect(attributeSignatureBroadcastStream)
             .process(
                 new AttributeBroadcastProcessFunctionForDetectable(
                     OutputTagConstants.sessionOutputTag))
