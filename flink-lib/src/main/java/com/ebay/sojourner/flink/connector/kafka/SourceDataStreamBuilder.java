@@ -37,12 +37,12 @@ public class SourceDataStreamBuilder<T> {
   }
 
   public DataStream<T> buildForRealtime(DataCenter dc, String operatorName, String uid,
-      String slotGroup, Set<String> guidList) {
+      String slotGroup, Set<String> guidSet) {
 
     KafkaConsumerConfig kafkaConsumerConfig = KafkaConnectorFactory.getKafkaConsumerConfig(dc);
     return environment
         .addSource(
-            KafkaSourceFunction.buildSourceForRealtime(kafkaConsumerConfig, tClass, guidList))
+            KafkaSourceFunction.buildSourceForRealtime(kafkaConsumerConfig, tClass, guidSet))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .slotSharingGroup(slotGroup)
         .name(operatorName)

@@ -80,24 +80,24 @@ public class SojournerRTJob {
         .buildForRealtime(RNO, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_RNO),
             FlinkEnvUtils.getString(Property.SOURCE_UID_RNO),
             FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP),
-            FlinkEnvUtils.getSet(Property.FILTER_GUID_LIST));
+            FlinkEnvUtils.getSet(Property.FILTER_GUID_SET));
     DataStream<RawEvent> rawEventDataStreamForSLC = dataStreamBuilder
         .buildForRealtime(SLC, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_SLC),
             FlinkEnvUtils.getString(Property.SOURCE_UID_SLC),
             FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP),
-            FlinkEnvUtils.getSet(Property.FILTER_GUID_LIST));
+            FlinkEnvUtils.getSet(Property.FILTER_GUID_SET));
     DataStream<RawEvent> rawEventDataStreamForLVS = dataStreamBuilder
         .buildForRealtime(LVS, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS),
             FlinkEnvUtils.getString(Property.SOURCE_UID_LVS),
             FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP),
-            FlinkEnvUtils.getSet(Property.FILTER_GUID_LIST));
+            FlinkEnvUtils.getSet(Property.FILTER_GUID_SET));
 
     // filter skew guid
     /*
     DataStream<RawEvent> filteredRawEventDataStreamForLVS = rawEventDataStreamForLVS
         .process(new DataSkewProcessFunction(OutputTagConstants.dataSkewOutputTag,
             FlinkEnvUtils.getBoolean(Property.IS_FILTER),
-            FlinkEnvUtils.getSet(Property.FILTER_PAGE_ID_LIST)))
+            FlinkEnvUtils.getSet(Property.FILTER_PAGE_ID_SET)))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP))
         .name("Filter LVS Skew Guid")
@@ -106,7 +106,7 @@ public class SojournerRTJob {
     DataStream<RawEvent> filteredRawEventDataStreamForSLC = rawEventDataStreamForSLC
         .process(new DataSkewProcessFunction(OutputTagConstants.dataSkewOutputTag,
             FlinkEnvUtils.getBoolean(Property.IS_FILTER),
-            FlinkEnvUtils.getSet(Property.FILTER_PAGE_ID_LIST)))
+            FlinkEnvUtils.getSet(Property.FILTER_PAGE_ID_SET)))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP))
         .name("Filter SLC Skew Guid")
@@ -115,7 +115,7 @@ public class SojournerRTJob {
     DataStream<RawEvent> filteredRawEventDataStreamForRNO = rawEventDataStreamForRNO
         .process(new DataSkewProcessFunction(OutputTagConstants.dataSkewOutputTag,
             FlinkEnvUtils.getBoolean(Property.IS_FILTER),
-            FlinkEnvUtils.getSet(Property.FILTER_PAGE_ID_LIST)))
+            FlinkEnvUtils.getSet(Property.FILTER_PAGE_ID_SET)))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .slotSharingGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP))
         .name("Filter RNO Skew Guid")

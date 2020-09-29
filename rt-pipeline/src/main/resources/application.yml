@@ -120,9 +120,9 @@ flink:
 
     data-skew:
       is-filter: true
-      guid-list:
+      guid-set:
         - 17a61c8c16d0a9c509d4c64cffffff61
-      pageid-list: []
+      pageid-set: []
     checkpoint:
       data-dir: /opt/sojourner-ubd/checkpoint
       interval-ms: 300000

@@ -18,10 +18,10 @@ public class KafkaSourceFunction {
   }
 
   public static <T> FlinkKafkaConsumer<T> buildSourceForRealtime(KafkaConsumerConfig config,
-      Class<T> tClass, Set<String> guidList) {
+      Class<T> tClass, Set<String> guidSet) {
 
     FlinkKafkaConsumer<T> kafkaConsumer = KafkaConsumerFactory
-        .getConsumer(config, tClass, guidList);
+        .getConsumer(config, tClass, guidSet);
 
     kafkaConsumer.assignTimestampsAndWatermarks(
         new SojBoundedOutOfOrderlessTimestampExtractor<>(Time.minutes(3)));

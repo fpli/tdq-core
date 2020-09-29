@@ -39,10 +39,10 @@ public class DeserializationSchemaManager {
     throw new IllegalStateException("Cannot find deserialization schema");
   }
 
-  public static <T> KafkaDeserializationSchema<?> getSchema(Class<T> clazz, Set<String> guidList) {
+  public static <T> KafkaDeserializationSchema<?> getSchema(Class<T> clazz, Set<String> guidSet) {
 
     if (clazz.isAssignableFrom(RawEvent.class)) {
-      return new RawEventKafkaDeserializationSchema(guidList, new RawEventDeserializationSchema());
+      return new RawEventKafkaDeserializationSchema(guidSet, new RawEventDeserializationSchema());
     }
 
     throw new IllegalStateException("Cannot find kafka deserialization schema");

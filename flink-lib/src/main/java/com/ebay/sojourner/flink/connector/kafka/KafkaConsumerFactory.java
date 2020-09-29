@@ -18,9 +18,9 @@ public class KafkaConsumerFactory {
   }
 
   public static <T> FlinkKafkaConsumer<T> getConsumer(KafkaConsumerConfig config, Class<T> tClass,
-      Set<String> guidList) {
+      Set<String> guidSet) {
 
-    return buildFlinkKafkaConsumer(config, tClass, guidList);
+    return buildFlinkKafkaConsumer(config, tClass, guidSet);
   }
 
   private static <T> FlinkKafkaConsumer<T> buildFlinkKafkaConsumer(
@@ -48,7 +48,7 @@ public class KafkaConsumerFactory {
   }
 
   private static <T> FlinkKafkaConsumer<T> buildFlinkKafkaConsumer(
-      KafkaConsumerConfig config, Class<T> tClass, Set<String> guidList) {
+      KafkaConsumerConfig config, Class<T> tClass, Set<String> guidSet) {
 
     FlinkKafkaConsumer flinkKafkaConsumer;
     Properties commonConfig = buildKafkaCommonConfig(config);
@@ -57,7 +57,7 @@ public class KafkaConsumerFactory {
 
       flinkKafkaConsumer = new FlinkKafkaConsumer<>(
           config.getTopicList(),
-          DeserializationSchemaManager.getSchema(tClass, guidList),
+          DeserializationSchemaManager.getSchema(tClass, guidSet),
           commonConfig);
     } else {
 

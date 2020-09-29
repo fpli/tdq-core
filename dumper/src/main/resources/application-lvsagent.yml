@@ -2,7 +2,7 @@ kafka:
   consumer:
     data-center: LVS
     topic:
-      - behavior.totalv2.signature.agent
+      - behavior.totalv2.signature.agent-lvs
     group-id:
       lvs: sojourner-total-dumper-lvs
     bootstrap-servers:

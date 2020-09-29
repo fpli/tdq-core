@@ -306,7 +306,7 @@ public class Property {
 
   // data skew
   public static final String IS_FILTER = "flink.app.data-skew.is-filter";
-  public static final String FILTER_GUID_LIST = "flink.app.data-skew.guid-list";
-  public static final String FILTER_PAGE_ID_LIST = "flink.app.data-skew.pageid-list";
+  public static final String FILTER_GUID_SET = "flink.app.data-skew.guid-set";
+  public static final String FILTER_PAGE_ID_SET = "flink.app.data-skew.pageid-set";
 
 }
