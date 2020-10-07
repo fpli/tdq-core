@@ -191,4 +191,5 @@ public class SojUtils {
     sojSession.setIsOpen(ubiSession.isOpenEmit());
     return sojSession;
   }
+
 }

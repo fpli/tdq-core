@@ -1,6 +1,7 @@
 package com.ebay.sojourner.common.model;
 
 import com.ebay.sojourner.common.util.CalTimeOfDay;
+import com.ebay.sojourner.common.util.PropertyUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,86 +42,143 @@ public class ClientData {
     clientInfo.append("TPayload=").append(tPayload);
 
     if (tPool != null && !tPool.equals("")) {
-      clientInfo.append("&TPool=").append(tPool);
+      String tagValue=tPool;
+      if(tPool.contains("&")||tPool.contains("=")) {
+        tagValue= PropertyUtils.encodeValue(tPool);
+      }
+      clientInfo.append("&TPool=").append(tagValue);
     }
     if (tDuration != null && !tDuration.equals("")) {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
-      clientInfo.append("TDuration=").append(tDuration);
+      String tagValue=tDuration;
+      if(tDuration.contains("&")||tDuration.contains("=")) {
+        tagValue = PropertyUtils.encodeValue(tDuration);
+      }
+      clientInfo.append("TDuration=").append(tagValue);
+
     }
     if (tStatus != null && !tStatus.equals("")) {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
-      clientInfo.append("TStatus=").append(tStatus);
+      String tagValue=tStatus;
+      if(tStatus.contains("&")||tStatus.contains("=")) {
+        tagValue = PropertyUtils.encodeValue(tStatus);
+      }
+      clientInfo.append("TStatus=").append(tagValue);
     }
     if (tType != null && !tType.equals("")) {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
-      clientInfo.append("TType=").append(tType);
+      String tagValue=tType;
+      if(tType.contains("&")||tType.contains("=")) {
+        tagValue = PropertyUtils.encodeValue(tType);
+      }
+      clientInfo.append("TType=").append(tagValue);
     }
     if (contentLength != null && !contentLength.equals("")) {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
-      clientInfo.append("ContentLength=").append(contentLength);
+      String tagValue=contentLength;
+      if(contentLength.contains("&")||contentLength.contains("=")) {
+        tagValue = PropertyUtils.encodeValue(contentLength);
+      }
+      clientInfo.append("ContentLength=").append(tagValue);
     }
     if (forwardFor != null && !forwardFor.equals("")) {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
-      clientInfo.append("ForwardedFor=").append(forwardFor);
+      String tagValue=forwardFor;
+      if(forwardFor.contains("&")||forwardFor.contains("=")) {
+        tagValue = PropertyUtils.encodeValue(forwardFor);
+      }
+      clientInfo.append("ForwardedFor=").append(tagValue);
     }
     if (script != null && !script.equals("")) {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
-      clientInfo.append("Script=").append(script);
+      String tagValue=script;
+      if(script.contains("&")||script.contains("=")) {
+        tagValue = PropertyUtils.encodeValue(script);
+      }
+      clientInfo.append("Script=").append(tagValue);
     }
     if (server != null && !server.equals("")) {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
-      clientInfo.append("Server=").append(server);
+      String tagValue=server;
+      if(server.contains("&")||server.contains("=")) {
+        tagValue = PropertyUtils.encodeValue(server);
+      }
+      clientInfo.append("Server=").append(tagValue);
     }
     if (tMachine != null && !tMachine.equals("")) {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
-      clientInfo.append("TMachine=").append(tMachine);
+      String tagValue=tMachine;
+      if(tMachine.contains("&")||tMachine.contains("=")) {
+        tagValue = PropertyUtils.encodeValue(tMachine);
+      }
+      clientInfo.append("TMachine=").append(tagValue);
     }
     if (tStamp != null && !tStamp.equals("")) {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
-      String tstamp = toCALDateString(Long.valueOf(tStamp));
+      String tagValue=tStamp;
+      if(tStamp.contains("&")||tStamp.contains("=")) {
+        tagValue = PropertyUtils.encodeValue(tStamp);
+      }
+      String tstamp = toCALDateString(Long.valueOf(tagValue));
       clientInfo.append("TStamp=").append(tstamp);
     }
     if (tName != null && !tName.equals("")) {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
-      clientInfo.append("TName=").append(tName);
+      String tagValue=tName;
+      if(tName.contains("&")||tName.contains("=")) {
+        tagValue = PropertyUtils.encodeValue(tName);
+      }
+      clientInfo.append("TName=").append(tagValue);
     }
     if (agent != null && !agent.equals("")) {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
-      clientInfo.append("Agent=").append(agent);
+      String tagValue=agent;
+      if(agent.contains("&")||agent.contains("=")) {
+        tagValue = PropertyUtils.encodeValue(agent);
+      }
+      clientInfo.append("Agent=").append(tagValue);
     }
     if (remoteIP != null && !remoteIP.equals("")) {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
-      clientInfo.append("RemoteIP=").append(remoteIP);
+      String tagValue=remoteIP;
+      if(remoteIP.contains("&")||remoteIP.contains("=")) {
+        tagValue = PropertyUtils.encodeValue(remoteIP);
+      }
+      clientInfo.append("RemoteIP=").append(tagValue);
     }
     if (encoding != null && !encoding.equals("")) {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
-      clientInfo.append("Encoding=").append(encoding);
+      String tagValue=encoding;
+      if(encoding.contains("&")||encoding.contains("=")) {
+        tagValue = PropertyUtils.encodeValue(encoding);
+      }
+      clientInfo.append("Encoding=").append(tagValue);
     }
     // Referer must be in the end of clientData since it has nested '&' '='
     // if (referrer != null && !referrer.equals("") && !referrer.equalsIgnoreCase("null")) {
@@ -128,7 +186,11 @@ public class ClientData {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
-      clientInfo.append("Referer=").append(referrer);
+      String tagValue=referrer;
+      if(referrer.contains("&")||referrer.contains("=")) {
+        tagValue = PropertyUtils.encodeValue(referrer);
+      }
+      clientInfo.append("Referer=").append(tagValue);
     }
     return clientInfo.toString();
   }
@@ -137,4 +199,6 @@ public class ClientData {
     CalTimeOfDay calTimeOfDay = new CalTimeOfDay(time);
     return calTimeOfDay.toString();
   }
+
+
 }

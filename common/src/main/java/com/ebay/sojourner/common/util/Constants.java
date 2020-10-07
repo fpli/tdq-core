@@ -94,6 +94,9 @@ public class Constants {
           "Encoding", "TPool", "TStamp", "TType", "TName", "TStatus", "TDuration", "TPayload",
           "TMachine");
 
+  //CLIENT_TAGS_EXCLUDE
+  public static final List<String> CLIENT_TAG_EXCLUDE=Arrays
+      .asList( "TPayload");
 
 }
 
