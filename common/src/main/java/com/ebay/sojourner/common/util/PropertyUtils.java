@@ -113,27 +113,12 @@ public class PropertyUtils {
       return null;
     }
     Map<String, String> sojMap = new LinkedHashMap<>();
-    String[] keyValues = sojStr.split("&");
-    if (keyValues != null && keyValues.length > 0) {
-      for (String keyValue : keyValues) {
-        String[] keyValuePair = keyValue.split("=",-1);
-        if (keyValuePair != null && keyValuePair.length > 0) {
-          if(keyValuePair.length==1){
-            sojMap.put(keyValuePair[0], "");
-          } else if(keyValuePair.length==2){
-            sojMap.put(keyValuePair[0], keyValuePair[1]);
-          } else{
-            StringBuilder sb = new StringBuilder();
-            for(int i=1;i<keyValuePair.length;i++){
-              sb.append(keyValuePair[i]).append("=");
-            }
-            sojMap.put(keyValuePair[0], sb.substring(0,sb.length()-1));
-          }
-
-        }
+    for (String tag : Constants.CLIENT_TAGS) {
+      String value = SOJParseClientInfo.getClientInfo(sojStr, tag);
+      if (value != null && !"".equals(value)) {
+        sojMap.put(tag, value);
       }
     }
     return sojMap;
   }
-
 }

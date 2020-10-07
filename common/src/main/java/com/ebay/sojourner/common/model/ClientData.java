@@ -2,8 +2,10 @@ package com.ebay.sojourner.common.model;
 
 import com.ebay.sojourner.common.util.CalTimeOfDay;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
+@Slf4j
 public class ClientData {
 
   private String forwardFor;
@@ -135,6 +137,4 @@ public class ClientData {
     CalTimeOfDay calTimeOfDay = new CalTimeOfDay(time);
     return calTimeOfDay.toString();
   }
-
-
 }

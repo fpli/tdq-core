@@ -1,5 +1,7 @@
 package com.ebay.sojourner.common.util;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.TimeZone;
 
 public class Constants {
@@ -81,6 +83,17 @@ public class Constants {
   public static final String TAG_ITEMIDS = "!itemIds";
   public static final String TAG_TRKP = "trkp";
   public static final String TAG_MTSTS = "mtsts";
+
+  //CHARSET
+
+  public static final String CHAR_SET = "UTF-8";
+
+  //CLIENTDATA TAGS
+  public static final List<String> CLIENT_TAGS = Arrays
+      .asList("ForwardedFor", "RemoteIP", "Referer", "ContentLength", "Script", "Server", "Agent",
+          "Encoding", "TPool", "TStamp", "TType", "TName", "TStatus", "TDuration", "TPayload",
+          "TMachine");
+
 
 }
 
