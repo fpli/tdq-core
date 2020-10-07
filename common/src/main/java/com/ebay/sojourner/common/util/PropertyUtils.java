@@ -3,7 +3,6 @@ package com.ebay.sojourner.common.util;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -148,7 +147,7 @@ public class PropertyUtils {
     try {
       tagValue = URLDecoder
           .decode(value, Constants.CHAR_SET);
-    } catch (UnsupportedEncodingException e) {
+    } catch (Exception e) {
       tagValue = value;
       log.error("Decode value error", e);
     }
@@ -160,7 +159,7 @@ public class PropertyUtils {
     try {
       tagValue = URLEncoder
           .encode(value, Constants.CHAR_SET);
-    } catch (UnsupportedEncodingException e) {
+    } catch (Exception e) {
       tagValue = value;
       log.error("encode value error", e);
     }
