@@ -46,12 +46,13 @@ public class SojUtils {
     SojEvent sojEvent = new SojEvent();
     sojEvent.setGuid(ubiEvent.getGuid());
     sojEvent.setAppId(ubiEvent.getAppId() == null ? null : String.valueOf(ubiEvent.getAppId()));
-    sojEvent.setApplicationPayload(PropertyUtils.stringToMap(ubiEvent.getApplicationPayload()));
+    sojEvent.setApplicationPayload(PropertyUtils.stringToMap(ubiEvent.getApplicationPayload(),
+        false));
     sojEvent.setAppVersion(ubiEvent.getAppVersion());
     sojEvent.setBotFlags(new ArrayList<>(ubiEvent.getBotFlags()));
     sojEvent.setClientData(
         ubiEvent.getClientData() == null ? null :
-            PropertyUtils.stringToMap(ubiEvent.getClientData().toString()));
+            PropertyUtils.stringToMap(ubiEvent.getClientData().toString(),true));
     sojEvent.setBrowserFamily(ubiEvent.getBrowserFamily());
     sojEvent.setBrowserVersion(ubiEvent.getBrowserVersion());
     sojEvent.setClickId(ubiEvent.getClickId() == -1 ? null : String.valueOf(ubiEvent.getClickId()));
