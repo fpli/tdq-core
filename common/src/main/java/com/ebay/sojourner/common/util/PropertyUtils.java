@@ -110,7 +110,7 @@ public class PropertyUtils {
     return sb.toString();
   }
 
-  public static Map stringToMap(String sojStr,boolean needDecode) {
+  public static Map stringToMap(String sojStr, boolean needDecode) {
     if (StringUtils.isEmpty(sojStr)) {
       return null;
     }
@@ -123,7 +123,8 @@ public class PropertyUtils {
           if (keyValuePair.length == 1) {
             sojMap.put(keyValuePair[0], "");
           } else if (keyValuePair.length == 2) {
-            if(needDecode) {
+
+            if (needDecode) {
               if (!Constants.CLIENT_TAG_EXCLUDE.contains(keyValuePair[0])) {
                 if (keyValuePair[1] != null && keyValuePair[1].contains("%")) {
                   String tagValue = decodeValue(keyValuePair[1]);
@@ -134,11 +135,10 @@ public class PropertyUtils {
               } else {
                 sojMap.put(keyValuePair[0], keyValuePair[1]);
               }
-            }else{
+            } else {
               sojMap.put(keyValuePair[0], keyValuePair[1]);
             }
           }
-
         }
       }
     }
@@ -177,25 +177,29 @@ public class PropertyUtils {
   //    like"
   //        + " Gecko) Chrome/85.0.4183.121 &&=Safari/537.36 Edg/85.0.564.63");
   //    clientData.setTPayload(
-  //        "corr_id_%3D7359ac6641847458%26node_id%3D353eb9e6375b6414%26REQUEST_GUID%3D174cc0d1
-  //        -9820"
+  //        "corr_id_%3D7359ac6641847458%26node_id%3D353eb9e6375b6414%26REQUEST_GUID%3D174cc0d1 -
+  //        9820"
   //            + "-aada-ba47-8090ff1bd075%26logid%3Dt6wwm53vpd77%253C%253Dosusqn47pse31%25285%253E"
   //            + "%253A745%253B-174cc0d1987-0xdd%26cal_mod%3Dfalse");
-  //    clientData.setReferrer("https://www.ebay.com/sch/6028/i
-  //    .html?_nkw=fiat+x1%2F9&_sacat=6028&_sop=12&_pgn=7&rt=nc");
-  //    System.out.println(stringToMap(clientData.toString()));
+  //    clientData.setReferrer(
+  //        "https://www.ebay.de/itm/%C3%98-100-125-160-mm-HM-Lochs%C3%A4ge-Satz-Bohrkrone"
+  //            + "-Dosenbohrer-f%C3%BCr-Beton/223545013140");
+  //    System.out.println(stringToMap(clientData.toString(), true));
+  //    System.out.println(encodeValue(
+  //        "https://www.ebay.de/itm/%C3%98-100-125-160-mm-HM-Lochs%C3%A4ge-Satz-Bohrkrone"
+  //            + "-Dosenbohrer-f%C3%BCr-Beton/223545013140"));
   //    System.out.println(stringToMap(
   //        "TPayload=corr_id_%3D7359ac6641847458%26node_id%3D353eb9e6375b6414%26REQUEST_GUID"
   //            + "%3D174cc0d1-9820-aada-ba47-8090ff1bd075%26logid%3Dt6wwm53vpd77%253C"
   //            + "%253Dosusqn47pse31%25285%253E%253A745%253B-174cc0d1987-0xdd%26cal_mod%3Dfalse"
-  //            + "&TPool=r1searchsvc&TDuration=3&TStatus=0&TType=URL&ContentLength=1300
-  //            &ForwardedFor"
+  //            + "&TPool=r1searchsvc&TDuration=3&TStatus=0&TType=URL&ContentLength=1300&
+  //            ForwardedFor"
   //            + "=108.66.0.180;184.26.53.21&Script=/trk20svc/TrackingResource/v1&Server=www.ebay"
   //            + ".com&TMachine=10.173.171.164&TStamp=13:14:04.67&TName=Ginger.CollectionSvc"
   //            + ".track&Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
-  //            (KHTML,"
+  //            (KHTML, "
   //            + "like Gecko) Chrome/85.0.4183.121 Safari/537.36 Edg/85.0.564.63&RemoteIP=108.66.0"
   //            + ".180&Encoding=gzip&Referer=https://www.ebay.com/sch/6028/i"
-  //            + ".html?_nkw=fiat+x1%2F9&_sacat=6028&_sop=12&_pgn=7&rt=nc=a"));
+  //            + ".html?_nkw=fiat+x1%2F9&_sacat=6028&_sop=12&_pgn=7&rt=nc=a", true));
   //  }
 }

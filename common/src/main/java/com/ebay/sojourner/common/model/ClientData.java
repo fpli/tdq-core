@@ -186,10 +186,7 @@ public class ClientData {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
-      String tagValue=referrer;
-      if(referrer.contains("&")||referrer.contains("=")) {
-        tagValue = PropertyUtils.encodeValue(referrer);
-      }
+      String tagValue=PropertyUtils.encodeValue(referrer);
       clientInfo.append("Referer=").append(tagValue);
     }
     return clientInfo.toString();
