@@ -110,7 +110,7 @@ public class PropertyUtils {
     return sb.toString();
   }
 
-  public static Map stringToMap(String sojStr) {
+  public static Map stringToMap(String sojStr,boolean needDecode) {
     if (StringUtils.isEmpty(sojStr)) {
       return null;
     }
@@ -123,14 +123,18 @@ public class PropertyUtils {
           if (keyValuePair.length == 1) {
             sojMap.put(keyValuePair[0], "");
           } else if (keyValuePair.length == 2) {
-            if (!Constants.CLIENT_TAG_EXCLUDE.contains(keyValuePair[0])) {
-              if (keyValuePair[1] != null && keyValuePair[1].contains("%")) {
-                String tagValue = decodeValue(keyValuePair[1]);
-                sojMap.put(keyValuePair[0], tagValue);
+            if(needDecode) {
+              if (!Constants.CLIENT_TAG_EXCLUDE.contains(keyValuePair[0])) {
+                if (keyValuePair[1] != null && keyValuePair[1].contains("%")) {
+                  String tagValue = decodeValue(keyValuePair[1]);
+                  sojMap.put(keyValuePair[0], tagValue);
+                } else {
+                  sojMap.put(keyValuePair[0], keyValuePair[1]);
+                }
               } else {
                 sojMap.put(keyValuePair[0], keyValuePair[1]);
               }
-            } else {
+            }else{
               sojMap.put(keyValuePair[0], keyValuePair[1]);
             }
           }
