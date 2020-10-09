@@ -154,10 +154,7 @@ public class ClientData {
       if (clientInfo.length() > 0) {
         clientInfo.append("&");
       }
-      String tagValue=agent;
-      if(agent.contains("&")||agent.contains("=")) {
-        tagValue = PropertyUtils.encodeValue(agent);
-      }
+      String tagValue=PropertyUtils.encodeValue(agent);
       clientInfo.append("Agent=").append(tagValue);
     }
     if (remoteIP != null && !remoteIP.equals("")) {
