@@ -7,7 +7,7 @@ import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.SojTimestamp;
 import com.ebay.sojourner.common.util.TypeTransformUtil;
 import com.ebay.sojourner.common.util.UbiSessionHelper;
-import com.ebay.sojourner.flink.common.state.MapStateDesc;
+import com.ebay.sojourner.flink.state.MapStateDesc;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

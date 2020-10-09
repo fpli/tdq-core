@@ -1,7 +1,6 @@
-package com.ebay.sojourner.flink.common.util;
+package com.ebay.sojourner.flink.common;
 
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;

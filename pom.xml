@@ -51,6 +51,9 @@
     <jacoco.plugin.version>0.8.5</jacoco.plugin.version>
     <compiler.plugin.version>3.8.1</compiler.plugin.version>
     <surefire.plugin.version>3.0.0-M5</surefire.plugin.version>
+    <sonar.coverage.exclusions>
+      src/main/java/com/ebay/sojourner/rt/pipeline/*.java,src/main/java/com/ebay/sojourner/dumper/pipeline/*.java,src/main/java/org/apache/flink/streaming/runtime/operators/windowing/*.java
+    </sonar.coverage.exclusions>
   </properties>
 
   <dependencyManagement>
@@ -709,6 +712,13 @@
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
           <version>${jacoco.plugin.version}</version>
+          <configuration>
+            <excludes>
+              <exclude>com/ebay/sojourner/rt/pipeline/**/*</exclude>
+              <exclude>com/ebay/sojourner/dumper/pipeline/**/*</exclude>
+              <exclude>org/apache/flink/streaming/runtime/operators/windowing/**/*</exclude>
+            </excludes>
+          </configuration>
           <!--
               We have to use Offline Instrumentation as the on-the-fly instrumentation is not
               compatible with PowerMock. See detail in link:

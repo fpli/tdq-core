@@ -1,7 +1,7 @@
-package com.ebay.sojourner.flink.common.state;
+package com.ebay.sojourner.flink.state;
 
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.contrib.streaming.state.PredefinedOptions;
 import org.apache.flink.contrib.streaming.state.RocksDBStateBackend;

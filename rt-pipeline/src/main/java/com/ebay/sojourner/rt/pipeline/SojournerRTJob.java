@@ -1,8 +1,8 @@
 package com.ebay.sojourner.rt.pipeline;
 
-import static com.ebay.sojourner.flink.common.util.DataCenter.LVS;
-import static com.ebay.sojourner.flink.common.util.DataCenter.RNO;
-import static com.ebay.sojourner.flink.common.util.DataCenter.SLC;
+import static com.ebay.sojourner.flink.common.DataCenter.LVS;
+import static com.ebay.sojourner.flink.common.DataCenter.RNO;
+import static com.ebay.sojourner.flink.common.DataCenter.SLC;
 
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.BotSignature;
@@ -14,13 +14,13 @@ import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
-import com.ebay.sojourner.flink.common.state.MapStateDesc;
-import com.ebay.sojourner.flink.common.util.OutputTagConstants;
-import com.ebay.sojourner.flink.common.window.CompositeTrigger;
-import com.ebay.sojourner.flink.common.window.MidnightOpenSessionTrigger;
-import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
-import com.ebay.sojourner.flink.common.window.SojEventTimeSessionWindows;
+import com.ebay.sojourner.flink.common.FlinkEnvUtils;
+import com.ebay.sojourner.flink.state.MapStateDesc;
+import com.ebay.sojourner.flink.common.OutputTagConstants;
+import com.ebay.sojourner.flink.window.CompositeTrigger;
+import com.ebay.sojourner.flink.window.MidnightOpenSessionTrigger;
+import com.ebay.sojourner.flink.window.OnElementEarlyFiringTrigger;
+import com.ebay.sojourner.flink.window.SojEventTimeSessionWindows;
 import com.ebay.sojourner.flink.connector.kafka.KafkaProducerFactory;
 import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.rt.broadcast.AttributeBroadcastProcessFunctionForDetectable;

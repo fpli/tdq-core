@@ -3,7 +3,7 @@ package com.ebay.sojourner.flink.connector.kafka;
 import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import java.util.Properties;
 import java.util.Set;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;

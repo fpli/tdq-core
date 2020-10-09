@@ -1,8 +1,8 @@
 package com.ebay.sojourner.flink.connector.kafka;
 
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
-import com.ebay.sojourner.flink.common.util.DataCenter;
+import com.ebay.sojourner.flink.common.DataCenter;
+import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;

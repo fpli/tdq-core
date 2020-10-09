@@ -1,8 +1,8 @@
 package com.ebay.sojourner.dumper.pipeline;
 
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
-import com.ebay.sojourner.flink.common.util.DataCenter;
+import com.ebay.sojourner.flink.common.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.DataCenter;
 import com.ebay.sojourner.flink.connector.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import org.apache.flink.streaming.api.datastream.DataStream;

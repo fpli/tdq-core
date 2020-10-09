@@ -1,4 +1,4 @@
-package com.ebay.sojourner.flink.common.window;
+package com.ebay.sojourner.flink.window;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,13 +14,14 @@ import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.streaming.api.watermark.Watermark;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.api.windowing.triggers.EventTimeTrigger;
 import org.apache.flink.streaming.api.windowing.triggers.Trigger;
 import org.apache.flink.test.util.MiniClusterWithClientResource;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-public class MignightOpenSessionTriggerTest {
+public class CompositeTriggerTest {
 
   public static final LocalDateTime SOME_MIDNIGHT =
       LocalDateTime.of(LocalDate.of(2020, 9, 1), LocalTime.MIDNIGHT);
@@ -45,18 +46,30 @@ public class MignightOpenSessionTriggerTest {
         new TestEvent(1001,
             SOME_MIDNIGHT.plusMinutes(30).toEpochSecond(ZONE_OFFSET_MST) * 1000,
             2));
-    runTemplate(events, MidnightOpenSessionTrigger.of(Time.hours(7)));
+    runTemplate(events, CompositeTrigger.Builder.create()
+        .trigger(MidnightOpenSessionTrigger.of(Time.hours(7)))
+        .trigger(EventTimeTrigger.create()).build());
 
-    Assert.assertEquals(1, CollectSink.SESSIONS.size());
+    Assert.assertEquals(3, CollectSink.SESSIONS.size());
     TestSession session0 = CollectSink.SESSIONS.get(0);
     Assert.assertEquals(SOME_MIDNIGHT.minusMinutes(10).toEpochSecond(ZONE_OFFSET_MST) * 1000,
         session0.getStart());
     Assert.assertEquals(1, session0.getCount());
     Assert.assertEquals(1, session0.getSum());
+    TestSession session1 = CollectSink.SESSIONS.get(1);
+    Assert.assertEquals(SOME_MIDNIGHT.minusMinutes(10).toEpochSecond(ZONE_OFFSET_MST) * 1000,
+        session1.getStart());
+    Assert.assertEquals(1, session1.getCount());
+    Assert.assertEquals(1, session1.getSum());
+    TestSession session2 = CollectSink.SESSIONS.get(2);
+    Assert.assertEquals(SOME_MIDNIGHT.plusMinutes(30).toEpochSecond(ZONE_OFFSET_MST) * 1000,
+        session2.getStart());
+    Assert.assertEquals(1, session2.getCount());
+    Assert.assertEquals(2, session2.getSum());
   }
 
   @Test
-  public void testMidnightTrigger_Merging_LessEvents() {
+  public void testMidnightTrigger_Merging() {
     List<TestEvent> events = new ArrayList<>();
     events.add(
         new TestEvent(1001,
@@ -70,91 +83,21 @@ public class MignightOpenSessionTriggerTest {
         new TestEvent(1001,
             SOME_MIDNIGHT.plusMinutes(10).toEpochSecond(ZONE_OFFSET_MST) * 1000,
             4));
-    runTemplate(events, MidnightOpenSessionTrigger.of(Time.hours(7)));
+    runTemplate(events, CompositeTrigger.Builder.create()
+        .trigger(MidnightOpenSessionTrigger.of(Time.hours(7)))
+        .trigger(EventTimeTrigger.create()).build());
 
-    Assert.assertEquals(1, CollectSink.SESSIONS.size());
+    Assert.assertEquals(2, CollectSink.SESSIONS.size());
     TestSession session0 = CollectSink.SESSIONS.get(0);
     Assert.assertEquals(SOME_MIDNIGHT.minusMinutes(10).toEpochSecond(ZONE_OFFSET_MST) * 1000,
         session0.getStart());
     Assert.assertEquals(2, session0.getCount());
     Assert.assertEquals(3, session0.getSum());
-  }
-
-  @Test
-  public void testMidnightTrigger_Merging_MoreEvents() {
-    List<TestEvent> events = new ArrayList<>();
-    events.add(
-        new TestEvent(1001,
-            SOME_MIDNIGHT.minusMinutes(20).toEpochSecond(ZONE_OFFSET_MST) * 1000,
-            1));
-    events.add(
-        new TestEvent(1001,
-            SOME_MIDNIGHT.minusMinutes(10).toEpochSecond(ZONE_OFFSET_MST) * 1000,
-            2));
-    events.add(
-        new TestEvent(1001,
-            SOME_MIDNIGHT.plusMinutes(1).toEpochSecond(ZONE_OFFSET_MST) * 1000,
-            4));
-    events.add(
-        new TestEvent(1001,
-            SOME_MIDNIGHT.plusMinutes(10).toEpochSecond(ZONE_OFFSET_MST) * 1000,
-            8));
-    events.add(
-        new TestEvent(1001,
-            SOME_MIDNIGHT.minusMinutes(20).toEpochSecond(ZONE_OFFSET_MST) * 1000,
-            16));
-    runTemplate(events, MidnightOpenSessionTrigger.of(Time.hours(7)));
-
-    Assert.assertEquals(1, CollectSink.SESSIONS.size());
-    TestSession session0 = CollectSink.SESSIONS.get(0);
-    Assert.assertEquals(SOME_MIDNIGHT.minusMinutes(20).toEpochSecond(ZONE_OFFSET_MST) * 1000,
-        session0.getStart());
-    Assert.assertEquals(3, session0.getCount());
-    Assert.assertEquals(7, session0.getSum());
-  }
-
-  @Test
-  public void testMidnightTrigger_Merging_MultiMidnight() {
-    List<TestEvent> events = new ArrayList<>();
-    events.add(
-        new TestEvent(1001,
-            SOME_MIDNIGHT.minusMinutes(20).toEpochSecond(ZONE_OFFSET_MST) * 1000,
-            1));
-    events.add(
-        new TestEvent(1001,
-            SOME_MIDNIGHT.minusMinutes(10).toEpochSecond(ZONE_OFFSET_MST) * 1000,
-            2));
-    events.add(
-        new TestEvent(1001,
-            SOME_MIDNIGHT.plusMinutes(1).toEpochSecond(ZONE_OFFSET_MST) * 1000,
-            4));
-    int eventInterval = 30;
-    int eventsSpanningADay = 24 * 60 / eventInterval;
-    for (int i = 0; i < eventsSpanningADay * 2; i++) {
-      events.add(
-          new TestEvent(1001,
-              SOME_MIDNIGHT.plusMinutes(1 + eventInterval * (i + 1)).toEpochSecond(ZONE_OFFSET_MST)
-                  * 1000,
-              1));
-    }
-    runTemplate(events, MidnightOpenSessionTrigger.of(Time.hours(7)));
-
-    Assert.assertEquals(3, CollectSink.SESSIONS.size());
-    TestSession session0 = CollectSink.SESSIONS.get(0);
-    Assert.assertEquals(SOME_MIDNIGHT.minusMinutes(20).toEpochSecond(ZONE_OFFSET_MST) * 1000,
-        session0.getStart());
-    Assert.assertEquals(3, session0.getCount());
-    Assert.assertEquals(7, session0.getSum());
     TestSession session1 = CollectSink.SESSIONS.get(1);
-    Assert.assertEquals(SOME_MIDNIGHT.minusMinutes(20).toEpochSecond(ZONE_OFFSET_MST) * 1000,
+    Assert.assertEquals(SOME_MIDNIGHT.minusMinutes(10).toEpochSecond(ZONE_OFFSET_MST) * 1000,
         session1.getStart());
-    Assert.assertEquals(3 + eventsSpanningADay, session1.getCount());
-    Assert.assertEquals(7 + eventsSpanningADay, session1.getSum());
-    TestSession session2 = CollectSink.SESSIONS.get(2);
-    Assert.assertEquals(SOME_MIDNIGHT.minusMinutes(20).toEpochSecond(ZONE_OFFSET_MST) * 1000,
-        session2.getStart());
-    Assert.assertEquals(3 + eventsSpanningADay * 2, session2.getCount());
-    Assert.assertEquals(7 + eventsSpanningADay * 2, session2.getSum());
+    Assert.assertEquals(3, session1.getCount());
+    Assert.assertEquals(7, session1.getSum());
   }
 
   public void runTemplate(List<TestEvent> events, Trigger trigger) {

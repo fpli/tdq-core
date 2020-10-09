@@ -1,4 +1,4 @@
-package com.ebay.sojourner.flink.common.state;
+package com.ebay.sojourner.flink.state;
 
 import java.util.Map;
 import org.apache.flink.api.common.state.MapStateDescriptor;

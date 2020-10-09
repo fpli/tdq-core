@@ -1,7 +1,7 @@
 package com.ebay.sojourner.flink.connector.kafka;
 
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import io.ebay.rheos.kafka.client.StreamConnectorConfig;
 import io.ebay.rheos.schema.avro.GenericRecordDomainDataDecoder;
 import io.ebay.rheos.schema.avro.RheosEventDeserializer;

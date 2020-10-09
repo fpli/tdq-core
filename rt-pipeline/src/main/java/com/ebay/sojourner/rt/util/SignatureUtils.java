@@ -4,7 +4,7 @@ import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.SignatureInfo;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connector.kafka.KafkaProducerFactory;
 import java.util.LinkedHashSet;
 import java.util.Map;
