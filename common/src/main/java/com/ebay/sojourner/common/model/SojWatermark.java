@@ -8,4 +8,5 @@ import lombok.Data;
 public class SojWatermark {
 
   private Long watermark;
+  private int subtaskIndex;
 }
