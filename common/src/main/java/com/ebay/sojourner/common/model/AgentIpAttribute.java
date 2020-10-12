@@ -355,7 +355,6 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
         break;
       case 8:
         scsCountForBot8 = -1;
-
         break;
       default:
         break;
@@ -421,6 +420,7 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
         directSessionCnt = 0;
         mktgSessionCnt = 0;
         ipCountForSuspect = 0;
+        break;
       case 210:
         totalCnt = 0;
         validPageCnt = -1;
@@ -439,6 +439,7 @@ public class AgentIpAttribute implements Attribute<SessionCore>, Serializable {
         hllSketch = null;
         isAllAgentHoper = true;
         totalCntForSec1 = 0;
+        break;
       default:
         break;
     }

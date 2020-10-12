@@ -52,7 +52,11 @@
     <compiler.plugin.version>3.8.1</compiler.plugin.version>
     <surefire.plugin.version>3.0.0-M5</surefire.plugin.version>
     <sonar.coverage.exclusions>
-      src/main/java/com/ebay/sojourner/rt/pipeline/*.java,src/main/java/com/ebay/sojourner/dumper/pipeline/*.java,src/main/java/org/apache/flink/streaming/runtime/operators/windowing/*.java
+      src/main/java/com/ebay/sojourner/rt/pipeline/*.java,
+      src/main/java/com/ebay/sojourner/dumper/pipeline/*.java,
+      src/main/java/org/apache/flink/streaming/runtime/operators/windowing/*.java,
+      src/main/java/com/ebay/sojourner/dsl/domain/rule/*.java,
+      src/main/java/com/ebay/sojourner/dsl/domain/RuleManager.java
     </sonar.coverage.exclusions>
   </properties>
 
@@ -717,6 +721,8 @@
               <exclude>com/ebay/sojourner/rt/pipeline/**/*</exclude>
               <exclude>com/ebay/sojourner/dumper/pipeline/**/*</exclude>
               <exclude>org/apache/flink/streaming/runtime/operators/windowing/**/*</exclude>
+              <exclude>com/ebay/sojourner/dsl/domain/rule/**/*</exclude>
+              <exclude>com/ebay/sojourner/dsl/domain/RuleManager.java</exclude>
             </excludes>
           </configuration>
           <!--

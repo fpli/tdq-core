@@ -13,21 +13,15 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 @Slf4j
-public class RuleFetcher {
+public final class RuleFetcher {
 
-  private final OkHttpClient client;
-  private final ObjectMapper objectMapper;
+  private final OkHttpClient client = RestClientUtils.getRestClient();
+  private final ObjectMapper objectMapper = new ObjectMapper();
   private static final String FETCH_ALL_RULES_URL =
       EnvironmentUtils.get(Property.REST_SERVER) + "/api/rule/list/published";
 
-  public RuleFetcher() {
-    this.client = RestClientUtils.getRestClient();
-    this.objectMapper = new ObjectMapper();
-  }
-
   public List<RuleDefinition> fetchAllRules() throws Exception {
-    Request request = RestClientUtils
-        .buildRequest(FETCH_ALL_RULES_URL);
+    Request request = RestClientUtils.buildRequest(FETCH_ALL_RULES_URL);
     log.info("Fetching rules, url: {}", FETCH_ALL_RULES_URL);
     Response response = client.newCall(request).execute();
     List<RuleDefinition> ruleDefinitionList = objectMapper
