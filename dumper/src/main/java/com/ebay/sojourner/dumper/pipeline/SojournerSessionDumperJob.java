@@ -6,11 +6,13 @@ import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.dumper.common.session.ByteToSojSessionMapFunction;
 import com.ebay.sojourner.dumper.common.session.SplitSessionProcessFunction;
 import com.ebay.sojourner.dumper.common.watermark.ExtractWatermarkProcessFunction;
-import com.ebay.sojourner.flink.common.DataStreamRescaledBuilder;
+import com.ebay.sojourner.flink.common.DataCenter;
 import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.OutputTagConstants;
 import com.ebay.sojourner.flink.connector.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.connector.kafka.SojBoundedOutOfOrderlessTimestampExtractor;
+import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
+import com.ebay.sojourner.flink.connector.kafka.schema.PassThroughDeserializationSchema;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -25,8 +27,14 @@ public class SojournerSessionDumperJob {
     String dc = FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_DATA_CENTER);
 
     // rescaled kafka source
-    DataStream<byte[]> rescaledByteSessionDataStream =
-        DataStreamRescaledBuilder.buildKafkaSource(executionEnvironment, dc, byte[].class);
+    SourceDataStreamBuilder<byte[]> dataStreamBuilder =
+        new SourceDataStreamBuilder<>(executionEnvironment);
+
+    DataStream<byte[]> rescaledByteSessionDataStream = dataStreamBuilder
+        .dc(DataCenter.valueOf(dc))
+        .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME))
+        .uid(FlinkEnvUtils.getString(Property.SOURCE_UID))
+        .buildRescaled(new PassThroughDeserializationSchema());
 
     // byte to sojsession
     DataStream<SojSession> sojSessionDataStream = rescaledByteSessionDataStream

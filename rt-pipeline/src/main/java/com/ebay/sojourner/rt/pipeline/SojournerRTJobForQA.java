@@ -10,6 +10,7 @@ import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.FlinkEnvUtils;
+import com.ebay.sojourner.flink.connector.kafka.schema.RawEventDeserializationSchema;
 import com.ebay.sojourner.flink.state.MapStateDesc;
 import com.ebay.sojourner.flink.common.DataCenter;
 import com.ebay.sojourner.flink.common.OutputTagConstants;
@@ -67,14 +68,14 @@ public class SojournerRTJobForQA {
     // 1. Rheos Consumer
     // 1.1 Consume RawEvent from Rheos PathFinder topic
     // 1.2 Assign timestamps and emit watermarks.
-    SourceDataStreamBuilder<RawEvent> dataStreamBuilder = new SourceDataStreamBuilder<>(
-        executionEnvironment, RawEvent.class
-    );
+    SourceDataStreamBuilder<RawEvent> dataStreamBuilder =
+        new SourceDataStreamBuilder<>(executionEnvironment);
 
     DataStream<RawEvent> rawEventDataStream = dataStreamBuilder
-        .buildForRealtime(DataCenter.LVS,
-            FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS),
-            FlinkEnvUtils.getString(Property.SOURCE_UID_LVS));
+        .dc(DataCenter.LVS)
+        .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS))
+        .uid(FlinkEnvUtils.getString(Property.SOURCE_UID_LVS))
+        .build(new RawEventDeserializationSchema());
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
