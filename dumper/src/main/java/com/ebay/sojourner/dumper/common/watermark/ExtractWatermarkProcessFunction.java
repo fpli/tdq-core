@@ -11,6 +11,7 @@ public class ExtractWatermarkProcessFunction<T> extends ProcessFunction<T, SojWa
   private AtomicInteger atomicInteger;
   private transient Long watermarkDelayTime;
   private String metricName;
+  private int subtaskIndex;
 
   public ExtractWatermarkProcessFunction(String metricName) {
     this.metricName = metricName;
@@ -22,6 +23,7 @@ public class ExtractWatermarkProcessFunction<T> extends ProcessFunction<T, SojWa
     atomicInteger = new AtomicInteger(0);
     getRuntimeContext().getMetricGroup()
         .gauge(metricName, () -> watermarkDelayTime);
+    subtaskIndex = getRuntimeContext().getIndexOfThisSubtask();
   }
 
   @Override
@@ -31,7 +33,7 @@ public class ExtractWatermarkProcessFunction<T> extends ProcessFunction<T, SojWa
     watermarkDelayTime = System.currentTimeMillis() - ctx.timestamp();
     int andIncrement = atomicInteger.getAndIncrement();
     if (andIncrement % 1000 == 0) {
-      out.collect(new SojWatermark(ctx.timestamp()));
+      out.collect(new SojWatermark(ctx.timestamp(),subtaskIndex));
     }
   }
 }

@@ -13,8 +13,6 @@ case "$1" in
     major=${arr[0]}
     updated_major=$((${major}+1))
     new_version="${updated_major}.0.0-SNAPSHOT"
-    mvn versions:set -q -DnewVersion=${new_version} > /dev/null
-    echo "New version is: ${new_version}"
     ;;
 
   minor)
@@ -24,8 +22,6 @@ case "$1" in
     minor=${arr[1]}
     updated_minor=$((${minor}+1))
     new_version="${arr[0]}.${updated_minor}.0-SNAPSHOT"
-    mvn versions:set -q -DnewVersion=${new_version} > /dev/null
-    echo "New version is: ${new_version}"
     ;;
 
   patch)
@@ -35,14 +31,16 @@ case "$1" in
     patch=${arr[2]}
     updated_patch=$((${patch}+1))
     new_version="${arr[0]}.${arr[1]}.${updated_patch}-SNAPSHOT"
-    mvn versions:set -q -DnewVersion=${new_version} > /dev/null
-    echo "New version is: ${new_version}"
     ;;
 
   *)
     echo "Usage: $0 {major|minor|patch}"
+    exit 1
     ;;
 esac
+
+mvn versions:set -q -DnewVersion=${new_version} > /dev/null
+echo "New version is: ${new_version}"
 
 # commit and push
 # git commit -am "Bump version to ${new_version} [skip-ci]" > /dev/null
