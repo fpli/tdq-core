@@ -74,7 +74,7 @@ public class SourceDataStreamBuilder<T> {
         .uid(uid);
 
     if (rescaled) {
-      dataStream.rescale();
+      return dataStream.rescale();
     }
 
     return dataStream;
@@ -96,7 +96,7 @@ public class SourceDataStreamBuilder<T> {
         .uid(uid);
 
     if (rescaled) {
-      dataStream.rescale();
+      return dataStream.rescale();
     }
 
     return dataStream;

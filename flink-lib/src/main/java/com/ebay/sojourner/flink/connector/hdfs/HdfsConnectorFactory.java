@@ -11,9 +11,11 @@ import org.apache.parquet.hadoop.metadata.CompressionCodecName;
 
 public class HdfsConnectorFactory {
 
+  private HdfsConnectorFactory() {}
+
   public static <T> StreamingFileSink<T> createWithParquet(String sinkPath, Class<T> type) {
     final String schemaString = ReflectData.AllowNull.get().getSchema(type).toString();
-    final ParquetBuilder<T> builder = (out) ->
+    final ParquetBuilder<T> builder = out ->
         AvroParquetWriter.<T>builder(out).withSchema(new Schema.Parser().parse(schemaString))
                                          .withDataModel(ReflectData.get())
                                          .withCompressionCodec(CompressionCodecName.SNAPPY)

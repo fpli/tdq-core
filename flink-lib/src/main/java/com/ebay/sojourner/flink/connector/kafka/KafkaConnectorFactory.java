@@ -13,6 +13,8 @@ import org.apache.kafka.common.config.SaslConfigs;
 
 public class KafkaConnectorFactory {
 
+  private KafkaConnectorFactory() {}
+
   public static Properties getKafkaCommonConfig() {
 
     Properties props = new Properties();
