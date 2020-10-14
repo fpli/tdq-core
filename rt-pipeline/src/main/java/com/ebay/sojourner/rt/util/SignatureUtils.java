@@ -4,9 +4,8 @@ import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.SignatureInfo;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connector.kafka.KafkaProducerFactory;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -15,20 +14,6 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 
 @Slf4j
 public class SignatureUtils {
-
-  public static Set<Integer> generateNewSignature(Map<Integer, Integer> signatureStates) {
-
-    LinkedHashSet<Integer> newGenerateSignatures = new LinkedHashSet<>();
-
-    if (signatureStates.size() > 0) {
-      for (Map.Entry<Integer, Integer> signatureState : signatureStates.entrySet()) {
-        newGenerateSignatures.add(signatureState.getKey());
-
-      }
-    }
-
-    return newGenerateSignatures;
-  }
 
   public static Set<Integer> setBotFlags(Set<Integer> sourceSet, Set<Integer> targetSet) {
     targetSet.clear();

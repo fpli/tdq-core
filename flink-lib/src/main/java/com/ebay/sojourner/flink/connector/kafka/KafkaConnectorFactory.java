@@ -4,14 +4,16 @@ import static com.ebay.sojourner.common.util.Property.KAFKA_CONSUMER_BOOTSTRAP_S
 import static com.ebay.sojourner.common.util.Property.KAFKA_CONSUMER_GROUP_ID;
 
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
-import com.ebay.sojourner.flink.common.util.DataCenter;
+import com.ebay.sojourner.flink.common.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.DataCenter;
 import java.util.List;
 import java.util.Properties;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.kafka.common.config.SaslConfigs;
 
 public class KafkaConnectorFactory {
+
+  private KafkaConnectorFactory() {}
 
   public static Properties getKafkaCommonConfig() {
 

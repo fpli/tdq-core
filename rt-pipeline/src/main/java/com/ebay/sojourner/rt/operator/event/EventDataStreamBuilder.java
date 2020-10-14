@@ -5,8 +5,8 @@ import static com.ebay.sojourner.common.util.Property.SOURCE_EVENT_SLOT_SHARE_GR
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
-import com.ebay.sojourner.flink.common.util.DataCenter;
+import com.ebay.sojourner.flink.common.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.DataCenter;
 import org.apache.flink.streaming.api.datastream.DataStream;
 
 public class EventDataStreamBuilder {

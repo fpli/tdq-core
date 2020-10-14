@@ -1,7 +1,7 @@
 package com.ebay.sojourner.flink.connector.kafka;
 
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connector.kafka.schema.AvroKeyedSerializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.SojEventKeyedSerializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.SojSerializationSchema;

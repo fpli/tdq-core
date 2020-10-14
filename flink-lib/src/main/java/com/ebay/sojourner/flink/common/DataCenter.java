@@ -1,4 +1,4 @@
-package com.ebay.sojourner.flink.common.util;
+package com.ebay.sojourner.flink.common;
 
 
 import lombok.AllArgsConstructor;

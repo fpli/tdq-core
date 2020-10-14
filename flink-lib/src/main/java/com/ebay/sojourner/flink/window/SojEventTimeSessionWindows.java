@@ -1,4 +1,4 @@
-package com.ebay.sojourner.flink.common.window;
+package com.ebay.sojourner.flink.window;
 
 import java.util.ArrayList;
 import java.util.Collection;

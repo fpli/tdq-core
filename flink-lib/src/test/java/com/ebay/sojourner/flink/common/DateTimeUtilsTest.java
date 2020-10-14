@@ -1,6 +1,5 @@
-package com.ebay.sojourner.flink.util;
+package com.ebay.sojourner.flink.common;
 
-import com.ebay.sojourner.flink.common.util.DateTimeUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

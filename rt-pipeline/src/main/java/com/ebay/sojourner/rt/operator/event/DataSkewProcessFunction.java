@@ -4,7 +4,6 @@ import com.ebay.sojourner.common.model.RawEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
@@ -20,16 +19,6 @@ public class DataSkewProcessFunction extends
     this.outputTag = outputTag;
     this.isFilter = isFilter;
     this.filterPageIdSet = pageIdList;
-  }
-
-  @Override
-  public void open(Configuration parameters) throws Exception {
-    super.open(parameters);
-  }
-
-  @Override
-  public void close() throws Exception {
-    super.close();
   }
 
   @Override

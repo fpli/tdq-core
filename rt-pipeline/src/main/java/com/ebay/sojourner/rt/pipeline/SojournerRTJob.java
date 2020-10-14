@@ -1,8 +1,8 @@
 package com.ebay.sojourner.rt.pipeline;
 
-import static com.ebay.sojourner.flink.common.util.DataCenter.LVS;
-import static com.ebay.sojourner.flink.common.util.DataCenter.RNO;
-import static com.ebay.sojourner.flink.common.util.DataCenter.SLC;
+import static com.ebay.sojourner.flink.common.DataCenter.LVS;
+import static com.ebay.sojourner.flink.common.DataCenter.RNO;
+import static com.ebay.sojourner.flink.common.DataCenter.SLC;
 
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.BotSignature;
@@ -14,13 +14,15 @@ import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.env.FlinkEnvUtils;
-import com.ebay.sojourner.flink.common.state.MapStateDesc;
-import com.ebay.sojourner.flink.common.util.OutputTagConstants;
-import com.ebay.sojourner.flink.common.window.CompositeTrigger;
-import com.ebay.sojourner.flink.common.window.MidnightOpenSessionTrigger;
-import com.ebay.sojourner.flink.common.window.OnElementEarlyFiringTrigger;
-import com.ebay.sojourner.flink.common.window.SojEventTimeSessionWindows;
+import com.ebay.sojourner.flink.common.FlinkEnvUtils;
+import com.ebay.sojourner.flink.connector.kafka.schema.RawEventDeserializationSchema;
+import com.ebay.sojourner.flink.connector.kafka.schema.RawEventKafkaDeserializationSchema;
+import com.ebay.sojourner.flink.state.MapStateDesc;
+import com.ebay.sojourner.flink.common.OutputTagConstants;
+import com.ebay.sojourner.flink.window.CompositeTrigger;
+import com.ebay.sojourner.flink.window.MidnightOpenSessionTrigger;
+import com.ebay.sojourner.flink.window.OnElementEarlyFiringTrigger;
+import com.ebay.sojourner.flink.window.SojEventTimeSessionWindows;
 import com.ebay.sojourner.flink.connector.kafka.KafkaProducerFactory;
 import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.rt.broadcast.AttributeBroadcastProcessFunctionForDetectable;
@@ -72,25 +74,33 @@ public class SojournerRTJob {
     // 1. Rheos Consumer
     // 1.1 Consume RawEvent from Rheos PathFinder topic
     // 1.2 Assign timestamps and emit watermarks.
-    SourceDataStreamBuilder<RawEvent> dataStreamBuilder = new SourceDataStreamBuilder<>(
-        executionEnvironment, RawEvent.class
-    );
+    SourceDataStreamBuilder<RawEvent> dataStreamBuilder =
+        new SourceDataStreamBuilder<>(executionEnvironment);
 
     DataStream<RawEvent> rawEventDataStreamForRNO = dataStreamBuilder
-        .buildForRealtime(RNO, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_RNO),
-            FlinkEnvUtils.getString(Property.SOURCE_UID_RNO),
-            FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP),
-            FlinkEnvUtils.getSet(Property.FILTER_GUID_SET));
+        .dc(RNO)
+        .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_RNO))
+        .uid(FlinkEnvUtils.getString(Property.SOURCE_UID_RNO))
+        .slotGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP))
+        .build(new RawEventKafkaDeserializationSchema(
+            FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
+            new RawEventDeserializationSchema()));
     DataStream<RawEvent> rawEventDataStreamForSLC = dataStreamBuilder
-        .buildForRealtime(SLC, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_SLC),
-            FlinkEnvUtils.getString(Property.SOURCE_UID_SLC),
-            FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP),
-            FlinkEnvUtils.getSet(Property.FILTER_GUID_SET));
+        .dc(SLC)
+        .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_SLC))
+        .uid(FlinkEnvUtils.getString(Property.SOURCE_UID_SLC))
+        .slotGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP))
+        .build(new RawEventKafkaDeserializationSchema(
+            FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
+            new RawEventDeserializationSchema()));
     DataStream<RawEvent> rawEventDataStreamForLVS = dataStreamBuilder
-        .buildForRealtime(LVS, FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS),
-            FlinkEnvUtils.getString(Property.SOURCE_UID_LVS),
-            FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP),
-            FlinkEnvUtils.getSet(Property.FILTER_GUID_SET));
+        .dc(LVS)
+        .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS))
+        .uid(FlinkEnvUtils.getString(Property.SOURCE_UID_LVS))
+        .slotGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP))
+        .build(new RawEventKafkaDeserializationSchema(
+            FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
+            new RawEventDeserializationSchema()));
 
     // filter skew guid
     /*

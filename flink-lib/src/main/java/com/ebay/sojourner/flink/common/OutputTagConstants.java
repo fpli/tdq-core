@@ -1,4 +1,4 @@
-package com.ebay.sojourner.flink.common.util;
+package com.ebay.sojourner.flink.common;
 
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.SojEvent;
