@@ -1,5 +1,7 @@
 package com.ebay.sojourner.rt.pipeline;
 
+import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_FROM_TIMESTAMP;
+import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN;
 import static com.ebay.sojourner.flink.common.DataCenter.LVS;
 import static com.ebay.sojourner.flink.common.DataCenter.RNO;
 import static com.ebay.sojourner.flink.common.DataCenter.SLC;
@@ -82,6 +84,8 @@ public class SojournerRTJob {
         .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_RNO))
         .uid(FlinkEnvUtils.getString(Property.SOURCE_UID_RNO))
         .slotGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP))
+        .outOfOrderlessInMin(FlinkEnvUtils.getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
+        .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
         .build(new RawEventKafkaDeserializationSchema(
             FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
             new RawEventDeserializationSchema()));
@@ -90,6 +94,8 @@ public class SojournerRTJob {
         .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_SLC))
         .uid(FlinkEnvUtils.getString(Property.SOURCE_UID_SLC))
         .slotGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP))
+        .outOfOrderlessInMin(FlinkEnvUtils.getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
+        .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
         .build(new RawEventKafkaDeserializationSchema(
             FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
             new RawEventDeserializationSchema()));
@@ -98,6 +104,8 @@ public class SojournerRTJob {
         .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS))
         .uid(FlinkEnvUtils.getString(Property.SOURCE_UID_LVS))
         .slotGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP))
+        .outOfOrderlessInMin(FlinkEnvUtils.getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
+        .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
         .build(new RawEventKafkaDeserializationSchema(
             FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
             new RawEventDeserializationSchema()));

@@ -244,6 +244,10 @@ public class Property {
   // flink - metric name
   public static final String FLINK_APP_METRIC_NAME = "flink.app.metric.watermark-process-progress";
 
+  // flink - source operator
+  public static final String FLINK_APP_SOURCE_FROM_TIMESTAMP = "flink.app.source.from-timestamp";
+  public static final String FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN = "flink.app.source.out-of-orderless-in-min";
+
   // zookeeper
   public static final String ZOOKEEPER_SERVER = "zookeeper.server";
   public static final String ZOOKEEPER_SESSION_TIMEOUT_MS = "zookeeper.sessionTimeoutMs";

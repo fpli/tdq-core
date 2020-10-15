@@ -58,7 +58,7 @@ public class KafkaProducerFactory {
 
   private static Properties getKafkaProducerConfig(String brokers) {
 
-    Properties producerConfig = KafkaConnectorFactory.getKafkaCommonConfig();
+    Properties producerConfig = KafkaCommonConfig.get();
     producerConfig
         .put(ProducerConfig.BATCH_SIZE_CONFIG, FlinkEnvUtils.getInteger(Property.BATCH_SIZE));
     producerConfig.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG,

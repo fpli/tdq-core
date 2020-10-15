@@ -15,6 +15,8 @@ public class SourceDataStreamBuilder<T> {
   private String operatorName;
   private String uid;
   private String slotGroup;
+  private int outOfOrderlessInMin;
+  private long fromTimestamp;
   private boolean rescaled;
 
   public SourceDataStreamBuilder(StreamExecutionEnvironment environment) {
@@ -46,6 +48,16 @@ public class SourceDataStreamBuilder<T> {
     return this;
   }
 
+  public SourceDataStreamBuilder<T> outOfOrderlessInMin(int outOfOrderlessInMin) {
+    this.outOfOrderlessInMin = outOfOrderlessInMin;
+    return this;
+  }
+
+  public SourceDataStreamBuilder<T> fromTimestamp(long fromTimestamp) {
+    this.fromTimestamp = fromTimestamp;
+    return this;
+  }
+
   public DataStream<T> build(DeserializationSchema<T> schema) {
     return this.build(schema, dc, operatorName, uid, slotGroup, rescaled);
   }
@@ -61,13 +73,13 @@ public class SourceDataStreamBuilder<T> {
   public DataStream<T> build(DeserializationSchema<T> schema, DataCenter dc,
                              String operatorName, String uid, String slotGroup, boolean rescaled) {
 
-    KafkaConsumerConfig kafkaConsumerConfig = KafkaConnectorFactory.getKafkaConsumerConfig(dc);
-
-    KafkaSourceFunctionBuilder<T> kafkaSourceFunctionBuilder =
-        new KafkaSourceFunctionBuilder<>(kafkaConsumerConfig);
+    KafkaConsumerConfig config = KafkaConsumerConfig.ofDC(dc);
+    config.setOutOfOrderlessInMin(outOfOrderlessInMin);
+    config.setFromTimestamp(fromTimestamp);
+    KafkaConsumerFactory factory = new KafkaConsumerFactory(config);
 
     DataStream<T> dataStream = environment
-        .addSource(kafkaSourceFunctionBuilder.build(schema))
+        .addSource(factory.getConsumer(schema))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .slotSharingGroup(slotGroup)
         .name(operatorName)
@@ -83,13 +95,13 @@ public class SourceDataStreamBuilder<T> {
   public DataStream<T> build(KafkaDeserializationSchema<T> schema, DataCenter dc,
                              String operatorName, String uid, String slotGroup, boolean rescaled) {
 
-    KafkaConsumerConfig kafkaConsumerConfig = KafkaConnectorFactory.getKafkaConsumerConfig(dc);
-
-    KafkaSourceFunctionBuilder<T> kafkaSourceFunctionBuilder =
-        new KafkaSourceFunctionBuilder<>(kafkaConsumerConfig);
+    KafkaConsumerConfig config = KafkaConsumerConfig.ofDC(dc);
+    config.setOutOfOrderlessInMin(outOfOrderlessInMin);
+    config.setFromTimestamp(fromTimestamp);
+    KafkaConsumerFactory factory = new KafkaConsumerFactory(config);
 
     DataStream<T> dataStream = environment
-        .addSource(kafkaSourceFunctionBuilder.build(schema))
+        .addSource(factory.getConsumer(schema))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
         .slotSharingGroup(slotGroup)
         .name(operatorName)

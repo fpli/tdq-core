@@ -77,6 +77,12 @@ public class FlinkEnvUtils {
     return Integer.valueOf(value);
   }
 
+  public static Long getLong(String key) {
+    String value = EnvironmentUtils.get(key);
+    CONFIG.put(key, value);
+    return Long.valueOf(value);
+  }
+
   public static Boolean getBoolean(String key) {
     String value = EnvironmentUtils.get(key);
     CONFIG.put(key, value);
