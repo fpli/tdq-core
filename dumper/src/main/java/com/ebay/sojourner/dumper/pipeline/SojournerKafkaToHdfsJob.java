@@ -1,7 +1,6 @@
 package com.ebay.sojourner.dumper.pipeline;
 
 import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_FROM_TIMESTAMP;
-import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN;
 
 import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.JetStreamOutputEvent;
@@ -16,6 +15,7 @@ import com.ebay.sojourner.flink.connector.kafka.schema.JetstreamEventDeserializa
 import com.ebay.sojourner.flink.connector.kafka.schema.JetstreamSessionDeserializationSchema;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.connectors.kafka.internals.KafkaDeserializationSchemaWrapper;
 
 public class SojournerKafkaToHdfsJob {
 
@@ -35,9 +35,9 @@ public class SojournerKafkaToHdfsJob {
           .dc(DataCenter.valueOf(dc))
           .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME))
           .uid(FlinkEnvUtils.getString(Property.SOURCE_UID))
-          .outOfOrderlessInMin(FlinkEnvUtils.getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
           .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
-          .build(new JetstreamEventDeserializationSchema());
+          .buildRescaled(
+              new KafkaDeserializationSchemaWrapper<>(new JetstreamEventDeserializationSchema()));
       // hdfs sink
       sourceDataStream
           .addSink(HdfsConnectorFactory.createWithParquet(hdfsPath, JetStreamOutputEvent.class))
@@ -53,9 +53,9 @@ public class SojournerKafkaToHdfsJob {
           .dc(DataCenter.valueOf(dc))
           .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME))
           .uid(FlinkEnvUtils.getString(Property.SOURCE_UID))
-          .outOfOrderlessInMin(FlinkEnvUtils.getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
           .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
-          .build(new JetstreamSessionDeserializationSchema());
+          .buildRescaled(
+              new KafkaDeserializationSchemaWrapper<>(new JetstreamSessionDeserializationSchema()));
 
       // hdfs sink
       sourceDataStream
@@ -71,9 +71,8 @@ public class SojournerKafkaToHdfsJob {
           .dc(DataCenter.valueOf(dc))
           .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME))
           .uid(FlinkEnvUtils.getString(Property.SOURCE_UID))
-          .outOfOrderlessInMin(FlinkEnvUtils.getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
           .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
-          .build(new AvroKeyedDeserializationSchema<>(BotSignature.class));
+          .buildRescaled(new AvroKeyedDeserializationSchema<>(BotSignature.class));
 
       // hdfs sink
       sourceDataStream

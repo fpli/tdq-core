@@ -53,6 +53,7 @@ import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindow
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.triggers.EventTimeTrigger;
+import org.apache.flink.streaming.connectors.kafka.internals.KafkaDeserializationSchemaWrapper;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.types.Either;
 
@@ -75,7 +76,7 @@ public class SojournerRTJobForQA {
         .dc(DataCenter.LVS)
         .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS))
         .uid(FlinkEnvUtils.getString(Property.SOURCE_UID_LVS))
-        .build(new RawEventDeserializationSchema());
+        .build(new KafkaDeserializationSchemaWrapper<>(new RawEventDeserializationSchema()));
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent

@@ -9,6 +9,10 @@
 kafka:
   consumer:
     stream: behavior.pathfinder
+    traffic-is-down:
+      rno: false
+      slc: false
+      lvs: false
     topic:
       - behavior.pathfinder.events.total
     group-id:

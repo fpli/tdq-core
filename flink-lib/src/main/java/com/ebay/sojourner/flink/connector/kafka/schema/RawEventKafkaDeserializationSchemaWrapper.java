@@ -7,12 +7,13 @@ import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.streaming.connectors.kafka.KafkaDeserializationSchema;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
-public class RawEventKafkaDeserializationSchema implements KafkaDeserializationSchema<RawEvent> {
+public class RawEventKafkaDeserializationSchemaWrapper implements
+    KafkaDeserializationSchema<RawEvent> {
 
   private Set<String> skewGuids = new HashSet<>();
   private RawEventDeserializationSchema rawEventDeserializationSchema;
 
-  public RawEventKafkaDeserializationSchema(Set<String> skewGuids,
+  public RawEventKafkaDeserializationSchemaWrapper(Set<String> skewGuids,
       RawEventDeserializationSchema rawEventDeserializationSchema) {
     this.skewGuids = skewGuids;
     this.rawEventDeserializationSchema = rawEventDeserializationSchema;

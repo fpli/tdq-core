@@ -1,6 +1,7 @@
 kafka:
   consumer:
     stream: behavior.total
+    data-center: RNO
     topic:
       - behavior.total.sojevent.total
     group-id:
