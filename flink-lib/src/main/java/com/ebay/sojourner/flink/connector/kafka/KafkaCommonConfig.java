@@ -10,7 +10,7 @@ public class KafkaCommonConfig {
   public static Properties get() {
 
     Properties props = new Properties();
-    props.put("sasl.mechanism", "IAF");
+    props.put(SaslConfigs.SASL_MECHANISM, "IAF");
     props.put("security.protocol", "SASL_PLAINTEXT");
 
     final String saslJaasConfig =
