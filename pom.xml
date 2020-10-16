@@ -53,6 +53,7 @@
     <surefire.plugin.version>3.0.0-M5</surefire.plugin.version>
     <sonar.coverage.exclusions>
       src/main/java/com/ebay/sojourner/rt/pipeline/*.java,
+      src/main/java/com/ebay/sojourner/rt/metric/*.java,
       src/main/java/com/ebay/sojourner/dumper/pipeline/*.java,
       src/main/java/org/apache/flink/streaming/runtime/operators/windowing/*.java,
       src/main/java/com/ebay/sojourner/dsl/domain/rule/*.java,
@@ -719,6 +720,7 @@
           <configuration>
             <excludes>
               <exclude>com/ebay/sojourner/rt/pipeline/**/*</exclude>
+              <exclude>com/ebay/sojourner/rt/metric/**/*</exclude>
               <exclude>com/ebay/sojourner/dumper/pipeline/**/*</exclude>
               <exclude>org/apache/flink/streaming/runtime/operators/windowing/**/*</exclude>
               <exclude>com/ebay/sojourner/dsl/domain/rule/**/*</exclude>

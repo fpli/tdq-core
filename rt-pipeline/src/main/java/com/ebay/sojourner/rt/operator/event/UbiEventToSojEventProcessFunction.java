@@ -12,10 +12,10 @@ import org.apache.flink.util.OutputTag;
 
 public class UbiEventToSojEventProcessFunction extends ProcessFunction<UbiEvent, SojEvent> {
 
-  private OutputTag outputTag;
-  private List<Integer> intermediateBotFlagList = Arrays.asList(220, 221, 222, 223);
+  private final OutputTag<SojEvent> outputTag;
+  private final List<Integer> intermediateBotFlagList = Arrays.asList(220, 221, 222, 223);
 
-  public UbiEventToSojEventProcessFunction(OutputTag outputTag) {
+  public UbiEventToSojEventProcessFunction(OutputTag<SojEvent> outputTag) {
     this.outputTag = outputTag;
   }
 

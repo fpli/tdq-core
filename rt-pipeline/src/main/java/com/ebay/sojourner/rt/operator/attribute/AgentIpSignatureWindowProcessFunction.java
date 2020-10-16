@@ -9,14 +9,11 @@ import com.ebay.sojourner.common.util.SojTimestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.java.tuple.Tuple;
-import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
-@Slf4j
 public class AgentIpSignatureWindowProcessFunction extends
     ProcessWindowFunction<AgentIpAttributeAccumulator, BotSignature, Tuple, TimeWindow> {
 
@@ -56,16 +53,5 @@ public class AgentIpSignatureWindowProcessFunction extends
             timestamp));
       }
     }
-  }
-
-  @Override
-  public void open(Configuration conf) throws Exception {
-    super.open(conf);
-
-  }
-
-  @Override
-  public void clear(Context context) throws Exception {
-    super.clear(context);
   }
 }

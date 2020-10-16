@@ -9,7 +9,6 @@ import com.ebay.sojourner.common.util.BitUtils;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.GUID2Date;
 import com.ebay.sojourner.common.util.LkpManager;
-import com.ebay.sojourner.common.util.MiscUtil;
 import com.ebay.sojourner.common.util.SessionCoreHelper;
 import com.ebay.sojourner.common.util.SessionFlags;
 import com.ebay.sojourner.common.util.SojTimestamp;
@@ -17,32 +16,15 @@ import com.ebay.sojourner.common.util.TypeTransformUtil;
 import com.ebay.sojourner.common.util.UbiLookups;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.configuration.Configuration;
 
 public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSession, SessionCore> {
 
-  protected static boolean checkIabAgent(String agent) {
-    if (StringUtils.isNotBlank(agent)) {
-      for (String iabAgentReg : LkpManager.getInstance().getIabAgentRegs()) {
-        if (agent.toLowerCase().contains(iabAgentReg)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
   @Override
-  public SessionCore map(UbiSession ubiSession) throws Exception {
-    SessionCore sessionCore = transToSessionCore(ubiSession);
-    return sessionCore;
-  }
-
-  private SessionCore transToSessionCore(UbiSession session) throws Exception {
+  public SessionCore map(UbiSession session) throws Exception {
     SessionCore core = new SessionCore();
     core.setAbsEventCnt(session.getAbsEventCnt());
 
-    if (!StringUtils.isBlank(session.getUserAgent())) {
+    if (StringUtils.isNotBlank(session.getUserAgent())) {
       long[] long4AgentHash = TypeTransformUtil
           .md522Long(TypeTransformUtil.getMD5(session.getUserAgent()));
       AgentHash agentHash = new AgentHash();
@@ -55,8 +37,9 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
       agentHash.setAgentHash2(0L);
       core.setUserAgent(agentHash);
     }
+
     core.setIp(TypeTransformUtil.ipToInt(session.getIp()) == null ? 0
-        : TypeTransformUtil.ipToInt(session.getIp()));
+                   : TypeTransformUtil.ipToInt(session.getIp()));
     core.setBotFlag(session.getBotFlag());
     if (session.getFirstCguid() != null) {
       long[] long4Cguid = TypeTransformUtil.md522Long(session.getFirstCguid());
@@ -91,28 +74,18 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
     core.setAbsEndTimestamp(session.getAbsEndTimestamp());
     core.setAbsStartTimestamp(session.getAbsStartTimestamp());
     // handle IAB
-    if (session.getNonIframeRdtEventCnt() > 0 && core.getUserAgent() != null) {
-      //      Boolean whether = iabCache.get(core.getUserAgent());
-      //      if (whether == null) {
-      //        whether = checkIabAgent(session.getUserAgent());
-      //        iabCache.put(core.getUserAgent(), whether);
-      //      }
-      Boolean whether = checkIabAgent(session.getUserAgent());
-
-      if (whether) {
-        core.setFlags(BitUtils.setBit(core.getFlags(), SessionFlags.IAB_AGENT));
-      }
+    if (session.getNonIframeRdtEventCnt() > 0 && checkIabAgent(session.getUserAgent())) {
+      core.setFlags(BitUtils.setBit(core.getFlags(), SessionFlags.IAB_AGENT));
     }
 
-    if (BitUtils.isBitSet(core.getFlags(), SessionFlags.AGENT_STRING_DIFF) && !StringUtils
-        .isBlank(session.getAgentString())) {
+    if (BitUtils.isBitSet(core.getFlags(), SessionFlags.AGENT_STRING_DIFF)
+        && StringUtils.isNotBlank(session.getAgentString())) {
       long[] long4AgentHash =
           TypeTransformUtil.md522Long(TypeTransformUtil.getMD5(session.getAgentString()));
       AgentHash agentHash = new AgentHash();
       agentHash.setAgentHash1(long4AgentHash[0]);
       agentHash.setAgentHash2(long4AgentHash[1]);
       core.setAgentString(agentHash);
-
     } else if (StringUtils.isBlank(session.getAgentString())) {
       AgentHash agentHash = new AgentHash();
       agentHash.setAgentHash1(0L);
@@ -120,7 +93,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
       core.setAgentString(agentHash);
     }
 
-    if (!MiscUtil.objEquals(session.getIp(), session.getExInternalIp())) {
+    if (!StringUtils.equals(session.getIp(), session.getExInternalIp())) {
       core.setFlags(BitUtils.setBit(core.getFlags(), SessionFlags.EXINTERNALIP_NONTRIMED_DIFF));
       core.setExInternalIpNonTrim(TypeTransformUtil.ipToInt(session.getExInternalIp()));
     }
@@ -129,7 +102,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
     if (session.getExInternalIp() != null) {
       eiipTrimed = session.getExInternalIp().trim();
     }
-    if (!MiscUtil.objEquals(session.getIp(), eiipTrimed)) {
+    if (!StringUtils.equals(session.getIp(), eiipTrimed)) {
       core.setFlags(BitUtils.setBit(core.getFlags(), SessionFlags.EXINTERNALIP_DIFF));
       core.setExInternalIp(TypeTransformUtil.ipToInt(eiipTrimed));
     }
@@ -137,34 +110,18 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
     // TODO to match the incorrect old logic , just for 'data quality'
     AgentHash agentString = SessionCoreHelper.getAgentString(core);
     if (agentString.getAgentHash1() != 0L && agentString.getAgentHash2() != 0L) {
-      //      Boolean equal = base64Cache.get(agentString);
-      //      String agentStrAfterBase64 = null;
-      //      if (equal == null) {
-      //        String agentBase64 = Base64Ebay.encode(session.getAgentString().getBytes());
-      //        agentStrAfterBase64 = Base64Ebay.decodeUTF8(agentBase64);
-      //        equal = MiscUtil.objEquals(agentString, agentStrAfterBase64);
-      //        base64Cache.put(agentString, equal);
-      //      }
       String agentBase64 = Base64Ebay.encode(session.getAgentString().getBytes());
       String agentStrAfterBase64 = Base64Ebay.decodeUTF8(agentBase64);
-      Boolean equal = MiscUtil.objEquals(agentString, agentStrAfterBase64);
-      AgentHash agentAfterBase64 = agentString;
-      if (!equal) {
-        if (agentAfterBase64.getAgentHash1() == 0L && agentAfterBase64.getAgentHash2() == 0L) {
-          agentBase64 = Base64Ebay.encode(session.getAgentString().getBytes());
-          agentStrAfterBase64 = Base64Ebay.decodeUTF8(agentBase64);
-        }
 
-        long[] long4AgentHash = TypeTransformUtil
-            .md522Long(TypeTransformUtil.getMD5(agentStrAfterBase64));
-        agentAfterBase64 = new AgentHash();
-        agentAfterBase64.setAgentHash1(long4AgentHash[0]);
-        agentAfterBase64.setAgentHash2(long4AgentHash[1]);
-      }
+      long[] long4AgentHash = TypeTransformUtil
+          .md522Long(TypeTransformUtil.getMD5(agentStrAfterBase64));
+      AgentHash agentAfterBase64 = new AgentHash();
+      agentAfterBase64.setAgentHash1(long4AgentHash[0]);
+      agentAfterBase64.setAgentHash2(long4AgentHash[1]);
 
-      if (!MiscUtil.objEquals(core.getUserAgent(), agentAfterBase64)) {
+      if (!core.getUserAgent().equals(agentAfterBase64)) {
         core.setFlags(BitUtils.setBit(core.getFlags(),
-            SessionFlags.AGENT_STRING_AFTER_BASE64_DIFF));
+                                      SessionFlags.AGENT_STRING_AFTER_BASE64_DIFF));
         core.setAgentStringAfterBase64(agentAfterBase64);
       }
     }
@@ -172,9 +129,20 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
     return core;
   }
 
-  public int getFlags(UbiSession session) throws Exception {
-    Integer DIRECT_SESSION_SRC = 1;
-    Integer SINGLE_PAGE_SESSION = 1;
+  private boolean checkIabAgent(String agent) {
+    if (StringUtils.isNotBlank(agent)) {
+      for (String iabAgentReg : LkpManager.getInstance().getIabAgentRegs()) {
+        if (agent.toLowerCase().contains(iabAgentReg)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private int getFlags(UbiSession session) throws Exception {
+    final int DIRECT_SESSION_SRC = 1;
+    final int SINGLE_PAGE_SESSION = 1;
     int flags = 0;
     if (session.getSingleClickSessionFlag() == null) {
       flags = BitUtils.setBit(flags, SessionFlags.SINGLE_CLICK_NULL_POS);
@@ -213,13 +181,12 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
       flags = BitUtils.setBit(flags, SessionFlags.SITE_FLAGS_POS);
     }
 
-    if (!StringUtils.isBlank(session.getAgentString())) {
-      if (UbiLookups.getInstance().getAgentMatcher().match(session.getAgentString())) {
-        flags = BitUtils.setBit(flags, SessionFlags.DECLARATIVE_AGENT_FLAGS_POS);
-      }
+    if (StringUtils.isNotBlank(session.getAgentString())
+        && UbiLookups.getInstance().getAgentMatcher().match(session.getAgentString())) {
+      flags = BitUtils.setBit(flags, SessionFlags.DECLARATIVE_AGENT_FLAGS_POS);
     }
 
-    if (SINGLE_PAGE_SESSION.equals(session.getValidPageCnt())) {
+    if (session.getValidPageCnt() == SINGLE_PAGE_SESSION) {
       flags = BitUtils.setBit(flags, SessionFlags.SPS_SESSION_POS);
     }
 
@@ -227,7 +194,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
       flags = BitUtils.setBit(flags, SessionFlags.ZERO_NON_IFRAME_RDT);
     }
 
-    if (!MiscUtil.objEquals(session.getUserAgent(), session.getAgentString())) {
+    if (!StringUtils.equals(session.getUserAgent(), session.getAgentString())) {
       flags = BitUtils.setBit(flags, SessionFlags.AGENT_STRING_DIFF);
     }
     return flags;
@@ -248,12 +215,6 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
       return false;
     }
     return false;
-  }
-
-  @Override
-  public void open(Configuration configuration) throws Exception {
-    super.open(configuration);
-
   }
 
 }
