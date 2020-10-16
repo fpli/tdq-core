@@ -1,5 +1,7 @@
 package com.ebay.sojourner.dumper.pipeline;
 
+import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_FROM_TIMESTAMP;
+
 import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojWatermark;
 import com.ebay.sojourner.common.util.Property;
@@ -14,6 +16,7 @@ import com.ebay.sojourner.flink.connector.kafka.schema.PassThroughDeserializatio
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.connectors.kafka.internals.KafkaDeserializationSchemaWrapper;
 
 public class SojournerEventDumperJob {
 
@@ -31,7 +34,9 @@ public class SojournerEventDumperJob {
         .dc(DataCenter.valueOf(dc))
         .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME))
         .uid(FlinkEnvUtils.getString(Property.SOURCE_UID))
-        .buildRescaled(new PassThroughDeserializationSchema());
+        .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+        .buildRescaled(
+            new KafkaDeserializationSchemaWrapper<>(new PassThroughDeserializationSchema()));
 
     // byte to sojevent
     DataStream<SojEvent> sojEventDataStream = rescaledByteEventDataStream

@@ -9,6 +9,10 @@
 kafka:
   consumer:
     stream: behavior.pathfinder
+    traffic-is-down:
+      rno: false
+      slc: false
+      lvs: false
     topic:
       - behavior.pathfinder.events.total
     group-id:
@@ -131,6 +135,9 @@ flink:
       max-concurrent: 1
       tolerate-failure-number: 3
     hot-deploy: false
+    source:
+      from-timestamp: 0
+      out-of-orderless-in-min: 3
 
 hdfs:
   path:

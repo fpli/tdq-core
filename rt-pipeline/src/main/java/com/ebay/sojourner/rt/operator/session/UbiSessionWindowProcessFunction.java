@@ -5,7 +5,6 @@ import com.ebay.sojourner.business.metric.SessionMetrics;
 import com.ebay.sojourner.common.model.SessionAccumulator;
 import com.ebay.sojourner.common.model.UbiSession;
 import java.util.Set;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.common.typeutils.base.LongSerializer;
 import org.apache.flink.api.java.tuple.Tuple;
@@ -13,29 +12,17 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
-import org.apache.flink.util.OutputTag;
 
-@Slf4j
 public class UbiSessionWindowProcessFunction
     extends ProcessWindowFunction<SessionAccumulator, UbiSession, Tuple, TimeWindow> {
 
   private static final ValueStateDescriptor<Long> lastTimestampStateDescriptor =
-      new ValueStateDescriptor("lastTimestamp",
-          LongSerializer.INSTANCE);
+      new ValueStateDescriptor("lastTimestamp", LongSerializer.INSTANCE);
 
-  private OutputTag outputTag = null;
   private SessionEndBotDetector sessionEndBotDetector;
 
-  public UbiSessionWindowProcessFunction() {
-
-  }
-
-  public UbiSessionWindowProcessFunction(OutputTag outputTag) {
-    this.outputTag = outputTag;
-  }
-
-  private static void outputSession(UbiSession ubiSessionTmp,
-      Collector<UbiSession> out, boolean isOpen) {
+  private void outputSession(UbiSession ubiSessionTmp,
+                             Collector<UbiSession> out, boolean isOpen) {
     UbiSession ubiSession = new UbiSession();
     ubiSession.setGuid(ubiSessionTmp.getGuid());
     ubiSession.setAgentString(ubiSessionTmp.getAgentString());
@@ -53,11 +40,9 @@ public class UbiSessionWindowProcessFunction
     ubiSession.setAbsEndTimestamp(ubiSessionTmp.getAbsEndTimestamp());
     ubiSession.setClientIp(ubiSessionTmp.getClientIp());
     ubiSession.setInternalIp(ubiSessionTmp.getInternalIp());
-    ubiSession.setSingleClickSessionFlag(
-        ubiSessionTmp.getSingleClickSessionFlag());
+    ubiSession.setSingleClickSessionFlag(ubiSessionTmp.getSingleClickSessionFlag());
     ubiSession.setBotFlagList(ubiSessionTmp.getBotFlagList());
-    ubiSession.setNonIframeRdtEventCnt(
-        ubiSessionTmp.getNonIframeRdtEventCnt());
+    ubiSession.setNonIframeRdtEventCnt(ubiSessionTmp.getNonIframeRdtEventCnt());
     ubiSession.setSessionReferrer(ubiSessionTmp.getSessionReferrer());
     ubiSession.setBotFlag(ubiSessionTmp.getBotFlag());
     ubiSession.setVersion(ubiSessionTmp.getVersion());

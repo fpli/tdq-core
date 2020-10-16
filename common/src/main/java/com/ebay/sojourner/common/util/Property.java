@@ -178,6 +178,11 @@ public class Property {
   public static final String KAFKA_CONSUMER_GROUP_ID = "kafka.consumer.group-id";
   public static final String KAFKA_CONSUMER_DATA_CENTER = "kafka.consumer.data-center";
 
+  // dc traffic down
+  public static final String RNO_TRAFFIC_IS_DOWN = "kafka.consumer.traffic-is-down.rno";
+  public static final String LVS_TRAFFIC_IS_DOWN = "kafka.consumer.traffic-is-down.lvs";
+  public static final String SLC_TRAFFIC_IS_DOWN = "kafka.consumer.traffic-is-down.slc";
+
   // kafka producer
   public static final String BATCH_SIZE = "kafka.producer.batch-size";
   public static final String REQUEST_TIMEOUT_MS = "kafka.producer.request-timeout-ms";
@@ -243,6 +248,10 @@ public class Property {
 
   // flink - metric name
   public static final String FLINK_APP_METRIC_NAME = "flink.app.metric.watermark-process-progress";
+
+  // flink - source operator
+  public static final String FLINK_APP_SOURCE_FROM_TIMESTAMP = "flink.app.source.from-timestamp";
+  public static final String FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN = "flink.app.source.out-of-orderless-in-min";
 
   // zookeeper
   public static final String ZOOKEEPER_SERVER = "zookeeper.server";

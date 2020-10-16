@@ -9,7 +9,6 @@ public class UbiEventToSojEventMapFunction extends RichMapFunction<UbiEvent, Soj
 
   @Override
   public SojEvent map(UbiEvent ubiEvent) throws Exception {
-    SojEvent sojEvent = SojUtils.convertUbiEvent2SojEvent(ubiEvent);
-    return sojEvent;
+    return SojUtils.convertUbiEvent2SojEvent(ubiEvent);
   }
 }

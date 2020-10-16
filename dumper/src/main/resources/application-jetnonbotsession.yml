@@ -1,6 +1,7 @@
 kafka:
   consumer:
     stream: behavior.pulsar
+    data-center: RNO
     topic:
       - behavior.pulsar.sojsession.sessionend
     group-id:

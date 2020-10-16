@@ -17,16 +17,16 @@ import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.OutputTagConstants;
+import com.ebay.sojourner.flink.connector.kafka.KafkaProducerFactory;
+import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.flink.connector.kafka.schema.RawEventDeserializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.RawEventKafkaDeserializationSchemaWrapper;
 import com.ebay.sojourner.flink.state.MapStateDesc;
-import com.ebay.sojourner.flink.common.OutputTagConstants;
 import com.ebay.sojourner.flink.window.CompositeTrigger;
 import com.ebay.sojourner.flink.window.MidnightOpenSessionTrigger;
 import com.ebay.sojourner.flink.window.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.flink.window.SojEventTimeSessionWindows;
-import com.ebay.sojourner.flink.connector.kafka.KafkaProducerFactory;
-import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.rt.broadcast.AttributeBroadcastProcessFunctionForDetectable;
 import com.ebay.sojourner.rt.metric.AgentIpMetricsCollectorProcessFunction;
 import com.ebay.sojourner.rt.metric.AgentMetricsCollectorProcessFunction;
@@ -64,7 +64,7 @@ import org.apache.flink.streaming.api.windowing.triggers.EventTimeTrigger;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperatorHelper;
 import org.apache.flink.types.Either;
 
-public class SojournerRTJob {
+public class SojournerRTJobForDCTrafficDownOrRestore {
 
   public static void main(String[] args) throws Exception {
 
@@ -79,36 +79,53 @@ public class SojournerRTJob {
     SourceDataStreamBuilder<RawEvent> dataStreamBuilder =
         new SourceDataStreamBuilder<>(executionEnvironment);
 
-    DataStream<RawEvent> rawEventDataStreamForRNO = dataStreamBuilder
-        .dc(RNO)
-        .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_RNO))
-        .uid(FlinkEnvUtils.getString(Property.SOURCE_UID_RNO))
-        .slotGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP))
-        .outOfOrderlessInMin(FlinkEnvUtils.getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
-        .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
-        .build(new RawEventKafkaDeserializationSchemaWrapper(
-            FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
-            new RawEventDeserializationSchema()));
-    DataStream<RawEvent> rawEventDataStreamForSLC = dataStreamBuilder
-        .dc(SLC)
-        .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_SLC))
-        .uid(FlinkEnvUtils.getString(Property.SOURCE_UID_SLC))
-        .slotGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP))
-        .outOfOrderlessInMin(FlinkEnvUtils.getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
-        .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
-        .build(new RawEventKafkaDeserializationSchemaWrapper(
-            FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
-            new RawEventDeserializationSchema()));
-    DataStream<RawEvent> rawEventDataStreamForLVS = dataStreamBuilder
-        .dc(LVS)
-        .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS))
-        .uid(FlinkEnvUtils.getString(Property.SOURCE_UID_LVS))
-        .slotGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP))
-        .outOfOrderlessInMin(FlinkEnvUtils.getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
-        .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
-        .build(new RawEventKafkaDeserializationSchemaWrapper(
-            FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
-            new RawEventDeserializationSchema()));
+    DataStream<UbiEvent> ubiEventDataStreamForRNO = null;
+    if (!FlinkEnvUtils.getBoolean(Property.RNO_TRAFFIC_IS_DOWN)) {
+      DataStream<RawEvent> rawEventDataStreamForRNO = dataStreamBuilder
+          .dc(RNO)
+          .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_RNO))
+          .uid(FlinkEnvUtils.getString(Property.SOURCE_UID_RNO))
+          .slotGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP))
+          .outOfOrderlessInMin(FlinkEnvUtils.getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
+          .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+          .build(new RawEventKafkaDeserializationSchemaWrapper(
+              FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
+              new RawEventDeserializationSchema()));
+      ubiEventDataStreamForRNO = EventDataStreamBuilder
+          .build(rawEventDataStreamForRNO, RNO);
+    }
+
+    DataStream<UbiEvent> ubiEventDataStreamForLVS = null;
+    if (!FlinkEnvUtils.getBoolean(Property.LVS_TRAFFIC_IS_DOWN)) {
+      DataStream<RawEvent> rawEventDataStreamForLVS = dataStreamBuilder
+          .dc(LVS)
+          .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS))
+          .uid(FlinkEnvUtils.getString(Property.SOURCE_UID_LVS))
+          .slotGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP))
+          .outOfOrderlessInMin(FlinkEnvUtils.getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
+          .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+          .build(new RawEventKafkaDeserializationSchemaWrapper(
+              FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
+              new RawEventDeserializationSchema()));
+      ubiEventDataStreamForLVS = EventDataStreamBuilder
+          .build(rawEventDataStreamForLVS, LVS);
+    }
+
+    DataStream<UbiEvent> ubiEventDataStreamForSLC = null;
+    if (!FlinkEnvUtils.getBoolean(Property.SLC_TRAFFIC_IS_DOWN)) {
+      DataStream<RawEvent> rawEventDataStreamForSLC = dataStreamBuilder
+          .dc(SLC)
+          .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_SLC))
+          .uid(FlinkEnvUtils.getString(Property.SOURCE_UID_SLC))
+          .slotGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP))
+          .outOfOrderlessInMin(FlinkEnvUtils.getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
+          .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+          .build(new RawEventKafkaDeserializationSchemaWrapper(
+              FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
+              new RawEventDeserializationSchema()));
+      ubiEventDataStreamForSLC = EventDataStreamBuilder
+          .build(rawEventDataStreamForSLC, SLC);
+    }
 
     // filter skew guid
     /*
@@ -143,17 +160,19 @@ public class SojournerRTJob {
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
     // 2.2 Event level bot detection via bot rule
-    DataStream<UbiEvent> ubiEventDataStreamForLVS = EventDataStreamBuilder
-        .build(rawEventDataStreamForLVS, LVS);
-    DataStream<UbiEvent> ubiEventDataStreamForSLC = EventDataStreamBuilder
-        .build(rawEventDataStreamForSLC, SLC);
-    DataStream<UbiEvent> ubiEventDataStreamForRNO = EventDataStreamBuilder
-        .build(rawEventDataStreamForRNO, RNO);
-
     // union ubiEvent from SLC/RNO/LVS
-    DataStream<UbiEvent> ubiEventDataStream = ubiEventDataStreamForLVS
-        .union(ubiEventDataStreamForSLC)
-        .union(ubiEventDataStreamForRNO);
+    DataStream<UbiEvent> ubiEventDataStream;
+    if (ubiEventDataStreamForLVS == null) {
+      ubiEventDataStream = ubiEventDataStreamForRNO.union(ubiEventDataStreamForSLC);
+    } else if (ubiEventDataStreamForSLC == null) {
+      ubiEventDataStream = ubiEventDataStreamForLVS.union(ubiEventDataStreamForRNO);
+    } else if (ubiEventDataStreamForRNO == null) {
+      ubiEventDataStream = ubiEventDataStreamForLVS.union(ubiEventDataStreamForSLC);
+    } else {
+      ubiEventDataStream = ubiEventDataStreamForLVS
+          .union(ubiEventDataStreamForSLC)
+          .union(ubiEventDataStreamForRNO);
+    }
 
     // refine windowsoperator
     // 3. Session Operator
