@@ -72,12 +72,13 @@ public class SojournerSessionDumperJob {
         .name(FlinkEnvUtils.getString(Property.SINK_OPERATOR_NAME_WATERMARK))
         .uid(FlinkEnvUtils.getString(Property.SINK_UID_WATERMARK));
 
-    SingleOutputStreamOperator<SojSession> sameDaySessionStream = sojSessionDataStream
-        .process(new SplitSessionProcessFunction(OutputTagConstants.crossDaySessionOutputTag,
-            OutputTagConstants.openSessionOutputTag))
-        .setParallelism(FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM))
-        .name(FlinkEnvUtils.getString(Property.SESSION_SPLIT_OPERATOR_NAME))
-        .uid(FlinkEnvUtils.getString(Property.SESSION_SPLIT_UID));
+    SingleOutputStreamOperator<SojSession> sameDaySessionStream =
+        assignedWatermarkSojSessionDataStream
+            .process(new SplitSessionProcessFunction(OutputTagConstants.crossDaySessionOutputTag,
+                OutputTagConstants.openSessionOutputTag))
+            .setParallelism(FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM))
+            .name(FlinkEnvUtils.getString(Property.SESSION_SPLIT_OPERATOR_NAME))
+            .uid(FlinkEnvUtils.getString(Property.SESSION_SPLIT_UID));
 
     DataStream<SojSession> crossDaySessionStream = sameDaySessionStream
         .getSideOutput(OutputTagConstants.crossDaySessionOutputTag);
