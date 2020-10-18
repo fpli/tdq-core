@@ -70,7 +70,7 @@ public class SojournerEventDumperJob {
         .uid(FlinkEnvUtils.getString(Property.SINK_UID_WATERMARK));
 
     // hdfs sink
-    sojEventDataStream
+    assignedWatermarkSojEventDataStream
         .addSink(HdfsConnectorFactory.createWithParquet(
             FlinkEnvUtils.getString(Property.HDFS_DUMP_PATH), SojEvent.class))
         .setParallelism(FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM))
