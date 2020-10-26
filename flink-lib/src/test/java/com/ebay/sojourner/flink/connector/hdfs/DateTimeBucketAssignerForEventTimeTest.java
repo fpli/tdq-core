@@ -41,7 +41,7 @@ class DateTimeBucketAssignerForEventTimeTest {
   @Test
   void getBucketId() {
     String bucketId = bucketAssigner.getBucketId(sojSession, context);
-    assertThat(bucketId).isEqualTo("dt=20200721/hr=15");
+    assertThat(bucketId).isEqualTo("dt=20200721/hr=00");
   }
 
   @Test
