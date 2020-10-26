@@ -27,11 +27,7 @@ public class DateTimeBucketAssignerForEventTime<IN> implements BucketAssigner<IN
   }
 
   public DateTimeBucketAssignerForEventTime(String formatString) {
-    this(formatString, ZoneId.systemDefault());
-  }
-
-  public DateTimeBucketAssignerForEventTime(ZoneId zoneId) {
-    this(DEFAULT_FORMAT_STRING, zoneId);
+    this(formatString, ZoneId.of("-7"));
   }
 
   public DateTimeBucketAssignerForEventTime(String formatString, ZoneId zoneId) {
