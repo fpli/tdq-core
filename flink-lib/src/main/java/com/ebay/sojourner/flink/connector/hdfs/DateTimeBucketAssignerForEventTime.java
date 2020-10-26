@@ -30,10 +30,6 @@ public class DateTimeBucketAssignerForEventTime<IN> implements BucketAssigner<IN
     this(formatString, ZoneId.systemDefault());
   }
 
-  public DateTimeBucketAssignerForEventTime(ZoneId zoneId) {
-    this(DEFAULT_FORMAT_STRING, zoneId);
-  }
-
   public DateTimeBucketAssignerForEventTime(String formatString, ZoneId zoneId) {
     this.formatString = Preconditions.checkNotNull(formatString);
     this.zoneId = Preconditions.checkNotNull(zoneId);
