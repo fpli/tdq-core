@@ -52,7 +52,7 @@ public class SojUtils {
     sojEvent.setBotFlags(new ArrayList<>(ubiEvent.getBotFlags()));
     sojEvent.setClientData(
         ubiEvent.getClientData() == null ? null :
-            PropertyUtils.stringToMap(ubiEvent.getClientData().toString(),true));
+            PropertyUtils.stringToMap(ubiEvent.getClientData().toString(), true));
     sojEvent.setBrowserFamily(ubiEvent.getBrowserFamily());
     sojEvent.setBrowserVersion(ubiEvent.getBrowserVersion());
     sojEvent.setClickId(ubiEvent.getClickId() == -1 ? null : String.valueOf(ubiEvent.getClickId()));
@@ -122,10 +122,12 @@ public class SojUtils {
     sojSession.setIpv4(ubiSession.getIp());
     sojSession.setUserAgent(ubiSession.getUserAgent());
     sojSession.setSojDataDt(ubiSession.getSojDataDt());
-    sojSession.setSessionStartDt(ubiSession.getSessionStartDt());
+    //change sojtimestamp to unixtimestamp
+    sojSession.setSessionStartDt(SojTimestamp.getUnixTimestamp(ubiSession.getSessionStartDt()));
     sojSession.setStartTimestamp(ubiSession.getStartTimestamp());
     sojSession.setEndTimestamp(ubiSession.getEndTimestamp());
-    sojSession.setAbsStartTimestamp(ubiSession.getAbsStartTimestamp());
+    // change sojtimestamp to unixtimestamp
+    sojSession.setAbsStartTimestamp(SojTimestamp.getUnixTimestamp(ubiSession.getAbsStartTimestamp()));
     sojSession.setAbsEndTimestamp(ubiSession.getAbsEndTimestamp());
     sojSession.setBotFlagList(new ArrayList<>(ubiSession.getBotFlagList()));
     sojSession.setNonIframeRdtEventCnt(ubiSession.getNonIframeRdtEventCnt());
@@ -190,6 +192,9 @@ public class SojUtils {
     sojSession.setStreamId(ubiSession.getStreamId());
     sojSession.setBuserId(ubiSession.getBuserId());
     sojSession.setIsOpen(ubiSession.isOpenEmit());
+    //fix bugs
+    sojSession.setPageId(ubiSession.getPageId());
+    sojSession.setSojEventCnt(ubiSession.getAbsEventCnt());
     return sojSession;
   }
 

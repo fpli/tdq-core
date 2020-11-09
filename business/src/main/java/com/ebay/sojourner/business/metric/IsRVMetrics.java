@@ -7,14 +7,14 @@ public class IsRVMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
-    sessionAccumulator.getUbiSession().setIsReturningVisitor(false);
+    sessionAccumulator.getUbiSession().setIsReturningVisitor(true);
 
   }
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-    if (event.isRv() && !sessionAccumulator.getUbiSession().isReturningVisitor()) {
-      sessionAccumulator.getUbiSession().setIsReturningVisitor(true);
+    if (!event.isRv() && sessionAccumulator.getUbiSession().isReturningVisitor()) {
+      sessionAccumulator.getUbiSession().setIsReturningVisitor(false);
     }
   }
 

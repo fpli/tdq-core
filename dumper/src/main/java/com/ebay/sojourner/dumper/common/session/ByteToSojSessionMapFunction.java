@@ -1,6 +1,7 @@
 package com.ebay.sojourner.dumper.common.session;
 
 import com.ebay.sojourner.common.model.SojSession;
+import com.ebay.sojourner.common.util.SojTimestamp;
 import com.ebay.sojourner.common.util.TypeTransformUtil;
 import com.ebay.sojourner.flink.connector.kafka.RheosEventSerdeFactory;
 import io.ebay.rheos.schema.event.RheosEvent;
@@ -56,7 +57,10 @@ public class ByteToSojSessionMapFunction extends RichMapFunction<byte[], SojSess
     Integer grCnt = TypeTransformUtil.getInteger(genericRecord.get("grCnt"));
     Integer gr1Cnt = TypeTransformUtil.getInteger(genericRecord.get("gr1Cnt"));
     Integer myebayCnt = TypeTransformUtil.getInteger(genericRecord.get("myebayCnt"));
-    Long absStartTimestamp = TypeTransformUtil.getLong(genericRecord.get("absStartTimestamp"));
+    // to convert unixtimestamp to sojtimestamp
+    Long absStartTimestamp = SojTimestamp.getSojTimestamp(TypeTransformUtil.getLong(genericRecord.get(
+        "absStartTimestamp")));
+
     Integer signinPageCnt = TypeTransformUtil.getInteger(genericRecord.get("signinPageCnt"));
     Integer nonIframeRdtEventCnt = TypeTransformUtil
         .getInteger(genericRecord.get("nonIframeRdtEventCnt"));
@@ -66,7 +70,9 @@ public class ByteToSojSessionMapFunction extends RichMapFunction<byte[], SojSess
     Long sojDataDt = TypeTransformUtil.getLong(genericRecord.get("sojDataDt"));
     String sessionId = TypeTransformUtil.getString(genericRecord.get("sessionId"));
     Long sessionSkey = TypeTransformUtil.getLong(genericRecord.get("sessionSkey"));
-    Long sessionStartDt = TypeTransformUtil.getLong(genericRecord.get("sessionStartDt"));
+    // to convert unixtimestamp to sojtimestamp
+    Long sessionStartDt = SojTimestamp.getSojTimestamp(TypeTransformUtil.getLong(genericRecord.get(
+        "sessionStartDt")));
     Long firstSessionStartDt = TypeTransformUtil.getLong(genericRecord.get("firstSessionStartDt"));
     Long sessionEndDt = TypeTransformUtil.getLong(genericRecord.get("sessionEndDt"));
     Integer absEventCnt = TypeTransformUtil.getInteger(genericRecord.get("absEventCnt"));

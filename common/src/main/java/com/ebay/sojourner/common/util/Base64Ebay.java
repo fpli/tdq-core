@@ -157,4 +157,22 @@ public final class Base64Ebay {
 
     return out;
   }
+  private static int isBitSet(byte[] decodedBuckets, int position) {
+    int bucket = position / 8;
+    if (bucket < decodedBuckets.length) {
+      int actualFlag = decodedBuckets[bucket];
+      int bitLocation = position % 8;
+      int bitValue = actualFlag >> 7 - bitLocation & 1;
+      return bitValue;
+    }
+    return 0;
+  }
+
+  public static void main(String[] args) {
+    String cflgs="AAE*";
+    byte[] flagBytes = Base64.decode(cflgs, false);
+    if (isBitSet(flagBytes, 0) != 0) {
+      System.out.println("yes");
+    }
+  }
 }
