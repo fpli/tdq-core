@@ -152,6 +152,7 @@
     <module name="EmptyCatchBlock">
       <property name="exceptionVariableName" value="expected"/>
     </module>
+    <module name="UncommentedMain"/>
     <module name="CommentsIndentation"/>
     <module name="UnusedImports"/>
     <module name="RedundantImport"/>
@@ -160,7 +161,6 @@
       <property name="format" value="throw new \w+Error\("/>
       <property name="message" value="Avoid throwing error in application code."/>
     </module>
-
     <module name="Regexp">
       <property name="format" value="System\.out\.println"/>
       <property name="illegalPattern" value="true"/>

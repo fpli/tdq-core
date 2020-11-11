@@ -127,7 +127,8 @@ public class SojUtils {
     sojSession.setStartTimestamp(ubiSession.getStartTimestamp());
     sojSession.setEndTimestamp(ubiSession.getEndTimestamp());
     // change sojtimestamp to unixtimestamp
-    sojSession.setAbsStartTimestamp(SojTimestamp.getUnixTimestamp(ubiSession.getAbsStartTimestamp()));
+    sojSession.setAbsStartTimestamp(
+        SojTimestamp.getUnixTimestamp(ubiSession.getAbsStartTimestamp()));
     sojSession.setAbsEndTimestamp(ubiSession.getAbsEndTimestamp());
     sojSession.setBotFlagList(new ArrayList<>(ubiSession.getBotFlagList()));
     sojSession.setNonIframeRdtEventCnt(ubiSession.getNonIframeRdtEventCnt());

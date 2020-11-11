@@ -58,8 +58,8 @@ public class ByteToSojSessionMapFunction extends RichMapFunction<byte[], SojSess
     Integer gr1Cnt = TypeTransformUtil.getInteger(genericRecord.get("gr1Cnt"));
     Integer myebayCnt = TypeTransformUtil.getInteger(genericRecord.get("myebayCnt"));
     // to convert unixtimestamp to sojtimestamp
-    Long absStartTimestamp = SojTimestamp.getSojTimestamp(TypeTransformUtil.getLong(genericRecord.get(
-        "absStartTimestamp")));
+    Long absStartTimestamp = SojTimestamp.getSojTimestamp(
+        TypeTransformUtil.getLong(genericRecord.get("absStartTimestamp")));
 
     Integer signinPageCnt = TypeTransformUtil.getInteger(genericRecord.get("signinPageCnt"));
     Integer nonIframeRdtEventCnt = TypeTransformUtil
@@ -71,8 +71,8 @@ public class ByteToSojSessionMapFunction extends RichMapFunction<byte[], SojSess
     String sessionId = TypeTransformUtil.getString(genericRecord.get("sessionId"));
     Long sessionSkey = TypeTransformUtil.getLong(genericRecord.get("sessionSkey"));
     // to convert unixtimestamp to sojtimestamp
-    Long sessionStartDt = SojTimestamp.getSojTimestamp(TypeTransformUtil.getLong(genericRecord.get(
-        "sessionStartDt")));
+    Long sessionStartDt = SojTimestamp.getSojTimestamp(
+        TypeTransformUtil.getLong(genericRecord.get("sessionStartDt")));
     Long firstSessionStartDt = TypeTransformUtil.getLong(genericRecord.get("firstSessionStartDt"));
     Long sessionEndDt = TypeTransformUtil.getLong(genericRecord.get("sessionEndDt"));
     Integer absEventCnt = TypeTransformUtil.getInteger(genericRecord.get("absEventCnt"));
