@@ -26,7 +26,11 @@ class UbiSessionToSojSessionProcessFunctionTest {
     OneInputStreamOperatorTestHarness<UbiSession, SojSession> harness = ProcessFunctionTestHarnesses
         .forProcessFunction(processFunction);
 
-    harness.processElement(new UbiSession(), 10);
+    UbiSession ubiSession = new UbiSession();
+    ubiSession.setSessionStartDt(10000000000L);
+    ubiSession.setAbsStartTimestamp(10000000000L);
+
+    harness.processElement(ubiSession, 10);
     List<SojSession> sojSessions = harness.extractOutputValues();
     assertThat(sojSessions.size()).isEqualTo(1);
   }

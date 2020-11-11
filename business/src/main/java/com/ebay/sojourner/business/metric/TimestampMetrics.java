@@ -8,6 +8,7 @@ import com.ebay.sojourner.common.util.IntermediateLkp;
 import com.ebay.sojourner.common.util.IsValidIPv4;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.common.util.PropertyUtils;
+import com.ebay.sojourner.common.util.SojTimestamp;
 import com.ebay.sojourner.common.util.SojUtils;
 import com.ebay.sojourner.common.util.UBIConfig;
 import java.util.Set;
@@ -188,6 +189,10 @@ public class TimestampMetrics implements FieldMetrics<UbiEvent, SessionAccumulat
     sessionAccumulator.getUbiSession()
                       .setSojDataDt(sessionAccumulator.getUbiSession()
                                                       .getAbsEndTimestamp());
+    // add logic to feed sessionenddt
+    sessionAccumulator.getUbiSession()
+        .setSessionEndDt(SojTimestamp.getUnixTimestamp(sessionAccumulator.getUbiSession()
+            .getAbsEndTimestamp()));
     // Fix bug HDMIT-3732 to avoid integer result overflow
     int durationSec =
         (sessionAccumulator.getUbiSession().getStartTimestamp() == null

@@ -54,4 +54,10 @@ under the License.
   <!-- Local test job  -->
   <suppress checks=".*"
     files="src/main/java/com/ebay/sojourner/rt/pipeline/.*Local.java$"/>
+
+  <!-- Allow 'main' in Flink Jobs  -->
+  <suppress checks="UncommentedMain"
+    files="src/main/java/com/ebay/sojourner/rt/pipeline/.*.java$"/>
+  <suppress checks="UncommentedMain"
+    files="src/main/java/com/ebay/sojourner/dumper/pipeline/.*.java$"/>
 </suppressions>
