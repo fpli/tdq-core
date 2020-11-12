@@ -1,6 +1,7 @@
 package com.ebay.sojourner.flink.connector.hdfs;
 
 import com.ebay.sojourner.common.model.SojSession;
+import com.ebay.sojourner.common.util.SojTimestamp;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -45,7 +46,8 @@ public class DateTimeBucketAssignerForEventTime<IN> implements BucketAssigner<IN
 
     if (element instanceof SojSession) {
       SojSession sojSession = (SojSession) element;
-      defaultTsStr = dateTimeFormatter.format(Instant.ofEpochMilli(sojSession.getSessionStartDt()));
+      defaultTsStr = dateTimeFormatter.format(Instant.ofEpochMilli(
+          SojTimestamp.getSojTimestampToUnixTimestamp(sojSession.getSessionStartDt())));
     } else {
       defaultTsStr = dateTimeFormatter.format(Instant.ofEpochMilli(context.timestamp()));
     }
