@@ -18,7 +18,7 @@ class DateTimeBucketAssignerForEventTimeTest {
   void setUp() {
     bucketAssigner = new DateTimeBucketAssignerForEventTime<>();
     sojSession = new SojSession();
-    sojSession.setSessionStartDt(3804278400000000L);
+    sojSession.setSessionStartDt(1605150999996L);
     context = new Context() {
       @Override
       public long currentProcessingTime() {
@@ -41,7 +41,7 @@ class DateTimeBucketAssignerForEventTimeTest {
   @Test
   void getBucketId() {
     String bucketId = bucketAssigner.getBucketId(sojSession, context);
-    assertThat(bucketId).isEqualTo("dt=20200721/hr=00");
+    assertThat(bucketId).isEqualTo("dt=20201111/hr=20");
   }
 
   @Test
