@@ -9,16 +9,22 @@ public class UserIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
   @Override
   public void start(SessionAccumulator sessionAccumulator) {
     sessionAccumulator.getUbiSession().setFirstUserId(null);
+    sessionAccumulator.getUbiSession().setBuserId(null);
   }
 
   @Override
   public void feed(UbiEvent event, SessionAccumulator sessionAccumulator) {
-    boolean isEarlyEvent = SojEventTimeUtil
-        .isEarlyEvent(event.getEventTimestamp(),
-            sessionAccumulator.getUbiSession().getAbsStartTimestamp());
-    if ((isEarlyEvent ? isEarlyEvent : sessionAccumulator.getUbiSession().getFirstUserId() == null)
+    boolean isEarlyEvent = SojEventTimeUtil.isEarlyEvent(
+        event.getEventTimestamp(), sessionAccumulator.getUbiSession().getAbsStartTimestamp());
+
+    if ((isEarlyEvent || sessionAccumulator.getUbiSession().getFirstUserId() == null)
         && event.getUserId() != null) {
       sessionAccumulator.getUbiSession().setFirstUserId(event.getUserId());
+    }
+
+    if ((isEarlyEvent || sessionAccumulator.getUbiSession().getBuserId() == null)
+        && event.getBuserId() != null) {
+      sessionAccumulator.getUbiSession().setBuserId(event.getBuserId());
     }
   }
 

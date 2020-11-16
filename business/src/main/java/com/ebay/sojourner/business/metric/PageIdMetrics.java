@@ -37,18 +37,19 @@ public class PageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
             || isEarlyValidEvent) {
           if (event.getPageId() != -1) {
             sessionAccumulator.getUbiSession().setStartPageId(event.getPageId());
+            sessionAccumulator.getUbiSession().setStartResourceId(event.getPageId());
           }
         }
         if (isLateValidEvent) {
           if (event.getPageId() != -1) {
             sessionAccumulator.getUbiSession().setEndPageId(event.getPageId());
+            sessionAccumulator.getUbiSession().setEndResourceId(event.getPageId());
           }
         }
       }
     }
     if (isEarlyEvent) {
       sessionAccumulator.getUbiSession().setPageId(event.getPageId());
-
     }
   }
 

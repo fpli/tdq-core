@@ -98,5 +98,7 @@ public class Constants {
   public static final List<String> CLIENT_TAG_EXCLUDE=Arrays
       .asList( "TPayload");
 
+  public static final int DEFAULT_PAGE_ID = -1;
+
 }
 

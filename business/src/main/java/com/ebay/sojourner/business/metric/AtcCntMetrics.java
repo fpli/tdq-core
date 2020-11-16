@@ -18,9 +18,9 @@ public class AtcCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
     Map<Integer, String[]> pageFmlyNameMap = LkpManager.getInstance().getPageFmlyMaps();
     Integer pageId = event.getPageId();
     String[] pageFmlyName = pageFmlyNameMap.get(pageId);
+    // Jetstream: from SOJEvent(_pgf = 'ATC' and rdt = 0  and _ifrm = false);
     if (!event.isRdt()
         && !event.isIframe()
-        //  && event.isPartialValidPage()
         && (pageFmlyName != null && "ATC".equals(pageFmlyName[1]))) {
       sessionAccumulator
           .getUbiSession()

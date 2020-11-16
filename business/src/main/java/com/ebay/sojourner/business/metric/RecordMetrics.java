@@ -1,12 +1,13 @@
 package com.ebay.sojourner.business.metric;
 
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class RecordMetrics<Source, Target> implements Aggregator<Source, Target> {
 
-  protected CopyOnWriteArraySet<FieldMetrics<Source, Target>> fieldMetrics
+  protected Set<FieldMetrics<Source, Target>> fieldMetrics
       = new CopyOnWriteArraySet<>();
 
   /**

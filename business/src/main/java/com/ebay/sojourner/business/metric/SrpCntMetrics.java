@@ -26,6 +26,7 @@ public class SrpCntMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
     Map<Integer, String[]> pageFmlyNameMap = LkpManager.getInstance().getPageFmlyMaps();
     Integer pageId = event.getPageId();
     String[] pageFmlyName = pageFmlyNameMap.get(pageId);
+    // Jetstream: from SOJEvent(_pgf in ('GR', 'GR-1') and rdt = 0 and _ifrm = false)
     if (!event.isRdt()
         && !event.isIframe()
         && event.isPartialValidPage()
