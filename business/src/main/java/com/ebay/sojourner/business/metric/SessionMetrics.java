@@ -80,11 +80,8 @@ public class SessionMetrics extends RecordMetrics<UbiEvent, SessionAccumulator> 
     addFieldMetrics(new AtlCntMetrics());
     addFieldMetrics(new BoCntMetrics());
     addFieldMetrics(new SrpCntMetrics());
-    addFieldMetrics(new OsMetrics());
-
     addFieldMetrics(new PageIdMetrics());
-    addFieldMetrics(new DeviceMetrics());
-    addFieldMetrics(new BrowserMetrics());
+    addFieldMetrics(new DeviceInfoMetrics());
     addFieldMetrics(new AddressMetrics());
     addFieldMetrics(new LineSpeedMetrics());
     // move traffic source id to bottom

@@ -28,9 +28,8 @@ public class JSColumnParser implements FieldParser<RawEvent, UbiEvent> {
   private static final String COUNTRY = "cn";
   private static final String CONTINENT = "con";
   private static final String LINE_SPEED = "ls";
-  private static final String RETURNING_VISITOR = "rv";
-  private static final String STREAM_ID = "rv";
-  private static final String BUSER_ID = "si";
+  private static final String STREAM_ID = "si";
+  private static final String BUSER_ID = "bu";
 
   @Override
   public void init() throws Exception {
@@ -64,7 +63,6 @@ public class JSColumnParser implements FieldParser<RawEvent, UbiEvent> {
     String country = map.get(COUNTRY);
     String continent = map.get(CONTINENT);
     String lineSpeed = map.get(LINE_SPEED);
-    boolean returningVisitor = Boolean.parseBoolean(map.get(RETURNING_VISITOR));
     String streamId = map.get(STREAM_ID);
     String buserId = map.get(BUSER_ID);
     if (StringUtils.isNotEmpty(deviceFamily)) {
@@ -127,7 +125,6 @@ public class JSColumnParser implements FieldParser<RawEvent, UbiEvent> {
     if (StringUtils.isNotEmpty(streamId)) {
       ubiEvent.setStreamId(streamId);
     }
-    ubiEvent.setIsReturningVisitor(returningVisitor);
     ubiEvent.setRlogid(rawEvent.getClientData().getRlogid());
     ubiEvent.setRemoteIP(rawEvent.getClientData().getRemoteIP());
   }

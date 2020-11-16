@@ -32,6 +32,7 @@ public class UbiEvent implements Serializable {
   private String webServer;
   private String referrer;
   private String userId;
+  private String buserId;
   private Long itemId;
   private String flags;
   private boolean rdt; //int in jetstream
@@ -86,14 +87,8 @@ public class UbiEvent implements Serializable {
   private String country;
   private String continent;
   private String lineSpeed;
-  private boolean isReturningVisitor;
   private String streamId;
-  private String buserId;
   private boolean rv;
-
-  public void setIsReturningVisitor(boolean returningVisitor) {
-    isReturningVisitor = returningVisitor;
-  }
 
   public void updateSessionId() {
     this.sessionId = concatTimestamp(this.guid, this.eventTimestamp);
@@ -132,6 +127,5 @@ public class UbiEvent implements Serializable {
   public boolean hasSessionEndTime() {
     return Constants.NO_TIMESTAMP != sessionEndTime;
   }
-
 
 }

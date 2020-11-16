@@ -21,12 +21,13 @@ public class UbiSession implements Serializable, Cloneable {
   private int botFlag;
   private int version;
   private String firstUserId; // userid in jetstream
+  private String buserId;
   private long siteFlags;
   private int attrFlags;
   private int botFlags;
   private Long findingFlags;
-  private int startPageId; //pageid in jetstream
-  private int endPageId; //pageid in jetstream
+  private int startPageId;
+  private int endPageId;
   private Long startTimestamp;
   private Long startTimestampNOIFRAMERDT;
   private Long endTimestampNOIFRAMERDT;
@@ -125,21 +126,19 @@ public class UbiSession implements Serializable, Cloneable {
   private String region;
   private String country;
   private String continent;
+  private String lineSpeed;
   private String browserFamily;//Exists in UBI_EVENT, get first
   private String browserVersion;//Exists in UBI_EVENT, get first
   private String deviceClass;//Exists in UBI_EVENT, get first
   private String deviceFamily;//Exists in UBI_EVENT, get first
   private String osFamily;//Exists in UBI_EVENT, get first
   private String osVersion;//Exists in UBI_EVENT, get first
-  private int startResourceId;//Capture first non-iframe/rdt page view and refresh metadata
-  //if r1 is not null, extract second field from r1 as pageId, and use it first for exit page logic
-  private int endResourceId;
+  private int startResourceId; // align logic with startPageId in batch
+  private int endResourceId; // align logic with endPageId in batch
   private boolean isReturningVisitor;
-  private String lineSpeed;
   private int pulsarEventCnt = 0;
   private long sessionEndDt;
   private String streamId;
-  private String buserId;
   private boolean openEmit = false;
 
   // for adjust useragent and ip
