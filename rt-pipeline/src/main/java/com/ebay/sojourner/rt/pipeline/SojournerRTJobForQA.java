@@ -1,5 +1,7 @@
 package com.ebay.sojourner.rt.pipeline;
 
+import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN;
+
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.RawEvent;
@@ -64,6 +66,7 @@ public class SojournerRTJobForQA {
     // 0.0 Prepare execution environment
     // 0.1 UBI configuration
     // 0.2 Flink configuration
+    args = new String[] {"--profile", "qa"};
     final StreamExecutionEnvironment executionEnvironment = FlinkEnvUtils.prepare(args);
 
     // 1. Rheos Consumer
@@ -76,7 +79,9 @@ public class SojournerRTJobForQA {
         .dc(DataCenter.LVS)
         .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS))
         .uid(FlinkEnvUtils.getString(Property.SOURCE_UID_LVS))
-        .build(new KafkaDeserializationSchemaWrapper<>(new RawEventDeserializationSchema()));
+        .outOfOrderlessInMin(FlinkEnvUtils.getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
+        .build(new KafkaDeserializationSchemaWrapper<>(new RawEventDeserializationSchema(
+            FlinkEnvUtils.getString(Property.RHEOS_KAFKA_REGISTRY_URL))));
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent

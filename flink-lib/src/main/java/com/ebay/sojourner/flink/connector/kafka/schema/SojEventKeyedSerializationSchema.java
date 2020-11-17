@@ -4,6 +4,7 @@ import io.jsonwebtoken.lang.Collections;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.generic.GenericDatumWriter;
@@ -22,7 +23,7 @@ public class SojEventKeyedSerializationSchema<T> implements KeyedSerializationSc
   private static final long serialVersionUID = 2L;
   private static final String CHAR_SET = "utf-8";
   private Class<T> tClass;
-  private transient List<Field> keyFieldList;
+  private transient List<Field> keyFieldList = new ArrayList<>();
   private String delimiter = ",";
   // private Schema schema;
   private List<String> keyList;
@@ -91,6 +92,7 @@ public class SojEventKeyedSerializationSchema<T> implements KeyedSerializationSc
     }
 
     if (CollectionUtils.isEmpty(keyFieldList)) {
+      keyFieldList = new ArrayList<>();
       String keyName = null;
       try {
         for (int i = 0; i < keyList.size(); i++) {

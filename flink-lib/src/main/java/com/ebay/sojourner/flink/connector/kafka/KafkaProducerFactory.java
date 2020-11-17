@@ -41,7 +41,7 @@ public class KafkaProducerFactory {
   public static <T> FlinkKafkaProducer<T> getProducer(String topic, String brokers, Class<T> tClass,
       String... messagekey) {
 
-    return getProducer(topic, brokers, null, tClass, null);
+    return getProducer(topic, brokers, null, tClass, messagekey);
   }
 
   public static <T> FlinkKafkaProducer<T> getProducer(String topic, String brokers,
