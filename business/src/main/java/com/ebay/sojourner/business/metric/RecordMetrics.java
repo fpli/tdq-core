@@ -32,7 +32,7 @@ public abstract class RecordMetrics<Source, Target> implements Aggregator<Source
       try {
         metrics.feed(source, target);
       }catch(Exception e){
-        log.error(" session metric feed issue :"+e.getMessage());
+        //        log.error(" session metric feed issue :"+e.getMessage());
       }
     }
   }
