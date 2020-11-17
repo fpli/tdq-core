@@ -423,7 +423,7 @@ public class LkpManager {
 
     @Override
     public boolean accept(Path path) {
-      if (fileName.contains(path.getName())) {
+      if (path.getName().contains(fileName)) {
         return true;
       }
       return false;
