@@ -26,4 +26,18 @@ public class LkpRefreshTimeTask extends TimerTask {
     lkpManager.refreshLkpFiles();
     //    lkpManager.closeFS();
   }
+
+  public static void main(String[] args) {
+    Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 5);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+    Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+          @Override
+          public void run() {
+            System.out.println("test");
+          }
+        }, calendar.getTime(), TimeUnit.DAYS.toMillis(1));
+  }
 }

@@ -325,10 +325,15 @@ public class LkpManager {
       log.error("lkp value before:======" + entry.getValue());
     }
     Path path = new Path(LKP_PATH, fileName);
+    log.error("path.getName:"+path.getName());
+    log.error("path.toString:"+path.toString());
+    Path path2 = new Path(LKP_PATH+fileName);
+    log.error("path.getName2:"+path.getName());
+    log.error("path.toString2:"+path.toString());
     try {
       initFs();
-      if (fileSystem.exists(path)) {
-        FileStatus[] fileStatus = fileSystem.listStatus(path, new FileNameFilter(fileName));
+      if (fileSystem.exists(path2)) {
+        FileStatus[] fileStatus = fileSystem.listStatus(path2, new FileNameFilter(fileName));
         long lastModifiedTime = fileStatus[0].getModificationTime();
         long preLastModifiedTime =
             lkpFileLastUpdDt.get(fileName) == null ? 0 : lkpFileLastUpdDt.get(fileName);
