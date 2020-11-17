@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -329,7 +330,7 @@ public class LkpManager {
           lkpFileLastUpdDt.put(fileName, lastModifiedTime);
         }
 
-        log.error("lkp refresh time:" + System.currentTimeMillis());
+        log.error("lkp refresh time:" + Calendar.getInstance().getTime());
         log.error("lkp refresh filename:" + fileName);
         for (Entry entry : lkpFileLastUpdDt.entrySet()) {
           log.error("lkp key:======" + entry.getKey());
