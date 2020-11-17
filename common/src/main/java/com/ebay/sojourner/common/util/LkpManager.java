@@ -320,6 +320,7 @@ public class LkpManager {
     }
     String fileName = getString(lkpType);
     Path path = new Path(LKP_PATH, fileName);
+    log.error("filepath:",path.toString());
     try {
       initFs();
       if (fileSystem.exists(path)) {
