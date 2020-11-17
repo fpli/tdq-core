@@ -328,9 +328,12 @@ public class LkpManager {
         if (lastModifiedTime > preLastModifiedTime) {
           lkpFileLastUpdDt.put(fileName, lastModifiedTime);
         }
-        for(Entry entry:lkpFileLastUpdDt.entrySet()){
-          log.error("lkp key:======"+entry.getKey());
-          log.error("lkp value:======"+entry.getValue());
+
+        log.error("lkp refresh time:" + System.currentTimeMillis());
+        log.error("lkp refresh filename:" + fileName);
+        for (Entry entry : lkpFileLastUpdDt.entrySet()) {
+          log.error("lkp key:======" + entry.getKey());
+          log.error("lkp value:======" + entry.getValue());
         }
         return lastModifiedTime > preLastModifiedTime;
       }
