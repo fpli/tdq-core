@@ -17,7 +17,8 @@ public class LkpRefreshTimeTask extends TimerTask {
     calendar.set(Calendar.MINUTE, 0);
     calendar.set(Calendar.SECOND, 0);
     Timer timer = new Timer(true);
-    timer.scheduleAtFixedRate(this, calendar.getTime(), TimeUnit.DAYS.toMillis(1));
+    //    timer.scheduleAtFixedRate(this, calendar.getTime(), TimeUnit.DAYS.toMillis(1));
+    timer.scheduleAtFixedRate(this, calendar.getTime(), TimeUnit.MINUTES.toMillis(1));
   }
 
   @Override
