@@ -318,6 +318,12 @@ public class LkpManager {
     if (!loadLkpFromHDFS) {
       return false;
     }
+    log.error("lkp refresh time before :" + Calendar.getInstance().getTime());
+    log.error("lkp refresh filename before:" + fileName);
+    for (Entry entry : lkpFileLastUpdDt.entrySet()) {
+      log.error("lkp key before:======" + entry.getKey());
+      log.error("lkp value before:======" + entry.getValue());
+    }
     Path path = new Path(LKP_PATH, fileName);
     try {
       initFs();
@@ -330,11 +336,11 @@ public class LkpManager {
           lkpFileLastUpdDt.put(fileName, lastModifiedTime);
         }
 
-        log.error("lkp refresh time:" + Calendar.getInstance().getTime());
-        log.error("lkp refresh filename:" + fileName);
+        log.error("lkp refresh time after :" + Calendar.getInstance().getTime());
+        log.error("lkp refresh filename after:" + fileName);
         for (Entry entry : lkpFileLastUpdDt.entrySet()) {
-          log.error("lkp key:======" + entry.getKey());
-          log.error("lkp value:======" + entry.getValue());
+          log.error("lkp key after:======" + entry.getKey());
+          log.error("lkp value after:======" + entry.getValue());
         }
         return lastModifiedTime > preLastModifiedTime;
       }
@@ -423,7 +429,7 @@ public class LkpManager {
 
     @Override
     public boolean accept(Path path) {
-      if (path.getName().contains(fileName)) {
+      if (fileName.contains(path.getName())) {
         return true;
       }
       return false;
