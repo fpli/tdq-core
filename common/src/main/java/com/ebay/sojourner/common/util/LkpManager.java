@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -326,6 +327,10 @@ public class LkpManager {
             lkpFileLastUpdDt.get(fileName) == null ? 0 : lkpFileLastUpdDt.get(fileName);
         if (lastModifiedTime > preLastModifiedTime) {
           lkpFileLastUpdDt.put(fileName, lastModifiedTime);
+        }
+        for(Entry entry:lkpFileLastUpdDt.entrySet()){
+          log.error("lkp key:======"+entry.getKey());
+          log.error("lkp value:======"+entry.getValue());
         }
         return lastModifiedTime > preLastModifiedTime;
       }
