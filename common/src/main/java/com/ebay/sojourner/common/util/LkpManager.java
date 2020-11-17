@@ -311,29 +311,19 @@ public class LkpManager {
     return instream;
   }
 
-  public boolean isUpdate(String fileName) {
+  public boolean isUpdate(String lkpType) {
     if (firstRun) {
       return true;
     }
     if (!loadLkpFromHDFS) {
       return false;
     }
-    log.error("lkp refresh time before :" + Calendar.getInstance().getTime());
-    log.error("lkp refresh filename before:" + fileName);
-    for (Entry entry : lkpFileLastUpdDt.entrySet()) {
-      log.error("lkp key before:======" + entry.getKey());
-      log.error("lkp value before:======" + entry.getValue());
-    }
+    String fileName = getString(lkpType);
     Path path = new Path(LKP_PATH, fileName);
-    log.error("path.getName:"+path.getName());
-    log.error("path.toString:"+path.toString());
-    Path path2 = new Path(LKP_PATH+fileName);
-    log.error("path.getName2:"+path.getName());
-    log.error("path.toString2:"+path.toString());
     try {
       initFs();
-      if (fileSystem.exists(path2)) {
-        FileStatus[] fileStatus = fileSystem.listStatus(path2, new FileNameFilter(fileName));
+      if (fileSystem.exists(path)) {
+        FileStatus[] fileStatus = fileSystem.listStatus(path, new FileNameFilter(fileName));
         long lastModifiedTime = fileStatus[0].getModificationTime();
         long preLastModifiedTime =
             lkpFileLastUpdDt.get(fileName) == null ? 0 : lkpFileLastUpdDt.get(fileName);
