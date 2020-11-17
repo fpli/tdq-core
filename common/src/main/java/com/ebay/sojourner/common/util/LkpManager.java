@@ -311,7 +311,7 @@ public class LkpManager {
     return instream;
   }
 
-  public boolean isUpdate(String lkpType) {
+  public synchronized boolean isUpdate(String lkpType) {
     if (firstRun) {
       return true;
     }
@@ -319,10 +319,10 @@ public class LkpManager {
       return false;
     }
     String fileName = getString(lkpType);
-    log.error("lkpType:", lkpType);
-    log.error("fileName:", fileName);
+    log.error("lkpType2222:", lkpType);
+    log.error("fileName2222:", fileName);
     Path path = new Path(LKP_PATH, fileName);
-    log.error("filepath:", path.toString());
+    log.error("filepath222:", path.toString());
     try {
       initFs();
       if (fileSystem.exists(path)) {
