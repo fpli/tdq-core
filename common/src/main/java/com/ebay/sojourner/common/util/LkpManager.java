@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -67,6 +66,10 @@ public class LkpManager {
     return lkpManager;
   }
 
+  //  public static void main(String[] args) {
+  //    LkpManager.getInstance().refreshLkpFiles();
+  //  }
+
   public void refreshLkpFiles() {
     refreshIframePageIds();
     refreshSelectedIps();
@@ -78,6 +81,7 @@ public class LkpManager {
     refreshAppIds();
     refreshPageFmlys();
     refreshMpxRotetion();
+    printLkpFileStatus();
   }
 
   private void refreshIframePageIds() {
@@ -311,7 +315,7 @@ public class LkpManager {
     return instream;
   }
 
-  public synchronized boolean isUpdate(String lkpType) {
+  public boolean isUpdate(String lkpType) {
     if (firstRun) {
       return true;
     }
@@ -319,10 +323,7 @@ public class LkpManager {
       return false;
     }
     String fileName = getString(lkpType);
-    log.error("lkpType2222:", lkpType);
-    log.error("fileName2222:", fileName);
-    Path path = new Path(LKP_PATH, fileName);
-    log.error("filepath222:", path.toString());
+    Path path = new Path(LKP_PATH + fileName);
     try {
       initFs();
       if (fileSystem.exists(path)) {
@@ -333,17 +334,10 @@ public class LkpManager {
         if (lastModifiedTime > preLastModifiedTime) {
           lkpFileLastUpdDt.put(fileName, lastModifiedTime);
         }
-
-        log.error("lkp refresh time after :" + Calendar.getInstance().getTime());
-        log.error("lkp refresh filename after:" + fileName);
-        for (Entry entry : lkpFileLastUpdDt.entrySet()) {
-          log.error("lkp key after:======" + entry.getKey());
-          log.error("lkp value after:======" + entry.getValue());
-        }
         return lastModifiedTime > preLastModifiedTime;
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      log.error("check Lkp File Status filed: {}", e);
     } finally {
       closeFS();
     }
@@ -370,6 +364,17 @@ public class LkpManager {
       configuration.setBoolean("fs.hdfs.impl.disable.cache", true);
       fileSystem = FileSystem.newInstance(configuration);
       loadLkpFromHDFS = true;
+    }
+  }
+
+  private void printLkpFileStatus() {
+    StringBuilder stringBuilder = new StringBuilder();
+    for (Entry entry : lkpFileLastUpdDt.entrySet()) {
+      stringBuilder.append("Lkp FileName : ").append(entry.getKey());
+      stringBuilder.append("Lkp File LastModifiedDate : ").append(entry.getValue()).append(";");
+    }
+    if (!StringUtils.isNotEmpty(stringBuilder.toString())) {
+      log.warn(stringBuilder.toString());
     }
   }
 
@@ -433,4 +438,5 @@ public class LkpManager {
       return false;
     }
   }
+
 }
