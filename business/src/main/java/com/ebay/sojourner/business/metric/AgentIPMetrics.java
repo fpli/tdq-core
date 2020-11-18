@@ -37,6 +37,12 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
     sessionAccumulator.getUbiSession().setExternalIp2(null);
     sessionAccumulator.getUbiSession().setAgentInfo(null);
     sessionAccumulator.getUbiSession().setClientIp(null);
+    sessionAccumulator.getUbiSession().setBrowserFamily(null);
+    sessionAccumulator.getUbiSession().setBrowserVersion(null);
+    sessionAccumulator.getUbiSession().setDeviceFamily(null);
+    sessionAccumulator.getUbiSession().setDeviceClass(null);
+    sessionAccumulator.getUbiSession().setOsFamily(null);
+    sessionAccumulator.getUbiSession().setOsVersion(null);
   }
 
   @Override
@@ -53,11 +59,13 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
       if (!ubiSession.isFindFirst()) {
         ubiSession.setAgentInfo(event.getAgentInfo());
         ubiSession.setClientIp(event.getClientIP());
+        setDeviceMetrics(ubiSession, event);
       }
     } else if (isEarlyEventByMultiCols) {
       if (!ubiSession.isFindFirst()) {
         ubiSession.setAgentInfo(event.getAgentInfo());
         ubiSession.setClientIp(event.getClientIP());
+        setDeviceMetrics(ubiSession, event);
       }
     }
 
@@ -65,6 +73,7 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
       if (!event.isIframe() && !event.isRdt()) {
         ubiSession.setAgentInfo(event.getAgentInfo());
         ubiSession.setClientIp(event.getClientIP());
+        setDeviceMetrics(ubiSession, event);
         ubiSession.setFindFirst(true);
       }
     }
@@ -106,6 +115,15 @@ public class AgentIPMetrics implements FieldMetrics<UbiEvent, SessionAccumulator
         }
       }
     }
+  }
+
+  private void setDeviceMetrics(UbiSession ubiSession, UbiEvent event) {
+    ubiSession.setBrowserFamily(event.getBrowserFamily());
+    ubiSession.setBrowserVersion(event.getBrowserVersion());
+    ubiSession.setDeviceFamily(event.getDeviceFamily());
+    ubiSession.setDeviceClass(event.getDeviceType());
+    ubiSession.setOsFamily(event.getOsFamily());
+    ubiSession.setOsVersion(event.getEnrichedOsVersion());
   }
 
   @Override
