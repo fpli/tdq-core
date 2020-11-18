@@ -51,7 +51,7 @@ public class LkpManager {
   private volatile LkpRefreshTimeTask lkpRefreshTimeTask;
 
   private LkpManager() {
-    lkpRefreshTimeTask = new LkpRefreshTimeTask(this);
+    // lkpRefreshTimeTask = new LkpRefreshTimeTask(this);
     refreshLkpFiles();
     firstRun = false;
   }
@@ -265,7 +265,7 @@ public class LkpManager {
     String filename = getString(lkpType);
     Path filePath = new Path(LKP_PATH + filename);
     StringBuffer resultBuilder = new StringBuffer();
-    try (InputStream in = getInputStream(filePath, filename)) {
+    try (InputStream in = getStreamFromClasspath(filename)) {
       byte[] bytes = new byte[4096];
       int readBytes = 0;
       while ((readBytes = in.read(bytes)) != -1) {
