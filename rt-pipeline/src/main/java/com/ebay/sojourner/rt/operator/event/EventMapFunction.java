@@ -34,6 +34,8 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
   @Override
   public UbiEvent map(RawEvent rawEvent) throws Exception {
 
+    Thread.sleep(1000);
+
     if (rawEvent != null) {
       throw new NullPointerException("test metaspace leak for flink 1.11");
     }
