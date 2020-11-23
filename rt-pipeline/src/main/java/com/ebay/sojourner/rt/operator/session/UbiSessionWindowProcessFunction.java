@@ -51,6 +51,7 @@ public class UbiSessionWindowProcessFunction
     ubiSession.setAttrFlags(ubiSessionTmp.getAttrFlags());
     ubiSession.setBotFlags(ubiSessionTmp.getBotFlags());
     ubiSession.setFindingFlags(ubiSessionTmp.getFindingFlags());
+    ubiSession.setPageId(ubiSessionTmp.getPageId());
     ubiSession.setStartPageId(ubiSessionTmp.getStartPageId());
     ubiSession.setEndPageId(ubiSessionTmp.getEndPageId());
     ubiSession.setDurationSec(ubiSessionTmp.getDurationSec());
