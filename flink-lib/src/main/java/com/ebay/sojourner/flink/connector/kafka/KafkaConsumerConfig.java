@@ -25,7 +25,7 @@ public class KafkaConsumerConfig {
   private long fromTimestamp;
   private Properties properties;
 
-  public static KafkaConsumerConfig ofDC(DataCenter dataCenter) {
+public static KafkaConsumerConfig ofDC(DataCenter dataCenter) {
     KafkaConsumerConfig config = new KafkaConsumerConfig();
 
     final List<String> topics = FlinkEnvUtils.getList(Property.KAFKA_CONSUMER_TOPIC);
