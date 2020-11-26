@@ -65,7 +65,7 @@
       minMaxEventTimestamp:
         - 1578000000
         - 1578600000
-      eventCnt: 2
+      eventCnt: 5
       botFlagList:
         - 0
   expectResult: 12

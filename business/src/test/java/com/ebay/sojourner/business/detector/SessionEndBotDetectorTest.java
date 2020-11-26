@@ -5,11 +5,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.ebay.sojourner.business.rule.BotRule208;
+import com.ebay.sojourner.business.rule.BotRule12End;
 import com.ebay.sojourner.business.rule.BotRule206;
+import com.ebay.sojourner.business.rule.BotRule208;
 import com.ebay.sojourner.common.model.UbiSession;
-import com.ebay.sojourner.dsl.domain.rule.Rule;
 import com.ebay.sojourner.common.util.UbiBotFilter;
+import com.ebay.sojourner.dsl.domain.rule.Rule;
 import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,15 +29,18 @@ public class SessionEndBotDetectorTest {
   UbiBotFilter mockBotFilter = mock(UbiBotFilter.class);
   BotRule206 mockRule206 = mock(BotRule206.class);
   BotRule208 mockRule208 = mock(BotRule208.class);
+  BotRule12End mockRule12 = mock(BotRule12End.class);
 
   @Before
   public void setUp() throws Exception {
     PowerMockito.whenNew(UbiBotFilter.class).withNoArguments().thenReturn(mockBotFilter);
     PowerMockito.whenNew(BotRule206.class).withNoArguments().thenReturn(mockRule206);
     PowerMockito.whenNew(BotRule208.class).withNoArguments().thenReturn(mockRule208);
+    PowerMockito.whenNew(BotRule12End.class).withNoArguments().thenReturn(mockRule12);
     when(mockBotFilter.filter(any(), any())).thenReturn(false);
     when(mockRule206.getBotFlag(any())).thenReturn(206);
     when(mockRule208.getBotFlag(any())).thenReturn(0);
+    when(mockRule12.getBotFlag(any())).thenReturn(0);
 
     sessionEndBotDetector = SessionEndBotDetector.getInstance();
   }
@@ -52,7 +56,8 @@ public class SessionEndBotDetectorTest {
 
   @Test
   public void initBotRules() {
-    Set<Rule> botRules = Whitebox.getInternalState(sessionEndBotDetector, "botRules", SessionEndBotDetector.class);
-    assertThat(botRules.size()).isEqualTo(2);
+    Set<Rule> botRules = Whitebox
+        .getInternalState(sessionEndBotDetector, "botRules", SessionEndBotDetector.class);
+    assertThat(botRules.size()).isEqualTo(3);
   }
 }
