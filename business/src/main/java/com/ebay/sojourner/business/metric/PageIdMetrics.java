@@ -48,7 +48,7 @@ public class PageIdMetrics implements FieldMetrics<UbiEvent, SessionAccumulator>
         }
       }
     }
-    if (isEarlyEvent) {
+    if (isLateEvent) {
       sessionAccumulator.getUbiSession().setPageId(event.getPageId());
     }
   }
