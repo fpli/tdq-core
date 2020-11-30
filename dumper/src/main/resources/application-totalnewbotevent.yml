@@ -42,5 +42,5 @@ flink:
 
 hdfs:
   dump:
-    path: hdfs://apollo-rno/sys/soj/ubd/test/events/type=bot
-    watermark-path: hdfs://apollo-rno/sys/soj/ubd/test/watermark/events/type=bot
+    path: hdfs://apollo-rno/sys/soj/ubd/events/type=bot
+    watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/events/type=bot
