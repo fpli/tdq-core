@@ -1,6 +1,7 @@
 package com.ebay.sojourner.flink.connector.kafka;
 
-import org.apache.flink.streaming.api.windowing.time.Time;
+import java.time.Duration;
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.KafkaDeserializationSchema;
 
@@ -20,9 +21,16 @@ public class KafkaConsumerFactory {
         config.getProperties());
 
     if (config.getOutOfOrderlessInMin() > 0) {
+
+      flinkKafkaConsumer.assignTimestampsAndWatermarks(
+          WatermarkStrategy.forBoundedOutOfOrderness(Duration.ofMinutes(3))
+              .withTimestampAssigner(new SojSerializableTimestampAssigner())
+              .withIdleness(Duration.ofMinutes(10)));
+      /*
       flinkKafkaConsumer.assignTimestampsAndWatermarks(
           new SojBoundedOutOfOrderlessTimestampExtractor<>(
               Time.minutes(config.getOutOfOrderlessInMin())));
+              */
     }
 
     if (config.getFromTimestamp() > 0) {

@@ -164,4 +164,4 @@ rest-client:
   auth-username: soj-flink-app
   auth-token: B65613BAE51443268AEBCAEF26C30ABE
 
-ua-parser-env: prod
+ua-parser-env: dev

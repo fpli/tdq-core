@@ -46,13 +46,21 @@ public class RawEventDeserializationSchema implements DeserializationSchema<RawE
           DateTimeZone.forTimeZone(Constants.PST_TIMEZONE));
   private static String[] tagsToEncode = new String[]{Constants.TAG_ITEMIDS, Constants.TAG_TRKP};
 
+  private String schemaRegistryUrl = null;
+
+  public RawEventDeserializationSchema() { }
+
+  public RawEventDeserializationSchema(String schemaRegistryUrl) {
+    this.schemaRegistryUrl = schemaRegistryUrl;
+  }
+
   @Override
   public RawEvent deserialize(byte[] message) throws IOException {
     long ingestTime = new Date().getTime();
     RheosEvent rheosEvent =
         RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
     GenericRecord genericRecord =
-        RheosEventSerdeFactory.getRheosEventDeserializer().decode(rheosEvent);
+        RheosEventSerdeFactory.getRheosEventDeserializer(schemaRegistryUrl).decode(rheosEvent);
 
     // Generate RheosHeader
     RheosHeader rheosHeader =

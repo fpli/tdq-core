@@ -2,9 +2,9 @@ package com.ebay.sojourner.rt.operator.event;
 
 import com.ebay.sojourner.business.detector.EventBotDetector;
 import com.ebay.sojourner.business.parser.EventParser;
-import com.ebay.sojourner.dsl.domain.RuleManager;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.dsl.domain.RuleManager;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.accumulators.AverageAccumulator;
@@ -33,6 +33,7 @@ public class EventMapFunction extends RichMapFunction<RawEvent, UbiEvent> {
 
   @Override
   public UbiEvent map(RawEvent rawEvent) throws Exception {
+
     UbiEvent event = new UbiEvent();
     long startTimeForEventParser = System.nanoTime();
     parser.parse(rawEvent, event);

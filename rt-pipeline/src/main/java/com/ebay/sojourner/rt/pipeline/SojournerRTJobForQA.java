@@ -1,5 +1,7 @@
 package com.ebay.sojourner.rt.pipeline;
 
+import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN;
+
 import com.ebay.sojourner.common.model.AgentIpAttribute;
 import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.RawEvent;
@@ -9,17 +11,17 @@ import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.Property;
+import com.ebay.sojourner.flink.common.DataCenter;
 import com.ebay.sojourner.flink.common.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.OutputTagConstants;
+import com.ebay.sojourner.flink.connector.kafka.KafkaProducerFactory;
+import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.flink.connector.kafka.schema.RawEventDeserializationSchema;
 import com.ebay.sojourner.flink.state.MapStateDesc;
-import com.ebay.sojourner.flink.common.DataCenter;
-import com.ebay.sojourner.flink.common.OutputTagConstants;
 import com.ebay.sojourner.flink.window.CompositeTrigger;
 import com.ebay.sojourner.flink.window.MidnightOpenSessionTrigger;
 import com.ebay.sojourner.flink.window.OnElementEarlyFiringTrigger;
 import com.ebay.sojourner.flink.window.SojEventTimeSessionWindows;
-import com.ebay.sojourner.flink.connector.kafka.KafkaProducerFactory;
-import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.rt.broadcast.AttributeBroadcastProcessFunctionForDetectable;
 import com.ebay.sojourner.rt.metric.AgentIpMetricsCollectorProcessFunction;
 import com.ebay.sojourner.rt.metric.AgentMetricsCollectorProcessFunction;
@@ -64,6 +66,7 @@ public class SojournerRTJobForQA {
     // 0.0 Prepare execution environment
     // 0.1 UBI configuration
     // 0.2 Flink configuration
+    args = new String[] {"--profile", "qa"};
     final StreamExecutionEnvironment executionEnvironment = FlinkEnvUtils.prepare(args);
 
     // 1. Rheos Consumer
@@ -76,7 +79,9 @@ public class SojournerRTJobForQA {
         .dc(DataCenter.LVS)
         .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME_LVS))
         .uid(FlinkEnvUtils.getString(Property.SOURCE_UID_LVS))
-        .build(new KafkaDeserializationSchemaWrapper<>(new RawEventDeserializationSchema()));
+        .outOfOrderlessInMin(FlinkEnvUtils.getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
+        .build(new KafkaDeserializationSchemaWrapper<>(new RawEventDeserializationSchema(
+            FlinkEnvUtils.getString(Property.RHEOS_KAFKA_REGISTRY_URL))));
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
