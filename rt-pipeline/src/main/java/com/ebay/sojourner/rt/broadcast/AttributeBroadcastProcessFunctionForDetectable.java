@@ -6,7 +6,6 @@ import com.ebay.sojourner.common.model.UbiSession;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.SojTimestamp;
 import com.ebay.sojourner.common.util.TypeTransformUtil;
-import com.ebay.sojourner.common.util.UbiSessionHelper;
 import com.ebay.sojourner.flink.state.MapStateDesc;
 import java.util.List;
 import java.util.Map;
@@ -106,21 +105,25 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
         }
       }
 
-      if ((UbiSessionHelper.isAgentDeclarative(ubiEvent.getAgentInfo()) && ubiEvent.getBotFlags()
-          .contains(223))
-          || (ubiEvent.getBotFlags().contains(220) && ubiEvent.getBotFlags().contains(222))) {
-        ubiEvent.getBotFlags().add(202);
-      }
-
-      if ((UbiSessionHelper.isAgentDeclarative(ubiEvent.getAgentInfo()) && ubiEvent.getBotFlags()
-          .contains(223))
-          || (ubiEvent.getBotFlags().contains(220) && ubiEvent.getBotFlags().contains(222))) {
-        ubiEvent.getBotFlags().add(210);
-      }
-
-      if (ubiEvent.getBotFlags().contains(223) && ubiEvent.getBotFlags().contains(224)) {
-        ubiEvent.getBotFlags().add(211);
-      }
+      //      if ((UbiSessionHelper.isAgentDeclarative(ubiEvent.getAgentInfo()) && ubiEvent
+      //      .getBotFlags()
+      //          .contains(223))
+      //          || (ubiEvent.getBotFlags().contains(220) && ubiEvent.getBotFlags().contains
+      //          (222))) {
+      //        ubiEvent.getBotFlags().add(202);
+      //      }
+      //
+      //      if ((UbiSessionHelper.isAgentDeclarative(ubiEvent.getAgentInfo()) && ubiEvent
+      //      .getBotFlags()
+      //          .contains(223))
+      //          || (ubiEvent.getBotFlags().contains(220) && ubiEvent.getBotFlags().contains
+      //          (222))) {
+      //        ubiEvent.getBotFlags().add(210);
+      //      }
+      //
+      //      if (ubiEvent.getBotFlags().contains(223) && ubiEvent.getBotFlags().contains(224)) {
+      //        ubiEvent.getBotFlags().add(211);
+      //      }
       out.collect(ubiEvent);
 
     } else {
@@ -183,23 +186,24 @@ public class AttributeBroadcastProcessFunctionForDetectable extends
         }
       }
 
-      if ((UbiSessionHelper.isAgentDeclarative(ubiSession.getUserAgent())
-          && ubiSession.getBotFlagList().contains(223))
-          || (ubiSession.getBotFlagList().contains(220)
-          && ubiSession.getBotFlagList().contains(222))) {
-        ubiSession.getBotFlagList().add(202);
-      }
-
-      if ((UbiSessionHelper.isAgentDeclarative(ubiSession.getUserAgent())
-          && ubiSession.getBotFlagList().contains(223))
-          || (ubiSession.getBotFlagList().contains(220)
-          && ubiSession.getBotFlagList().contains(222))) {
-        ubiSession.getBotFlagList().add(210);
-      }
-
-      if (ubiSession.getBotFlagList().contains(223) && ubiSession.getBotFlagList().contains(224)) {
-        ubiSession.getBotFlagList().add(211);
-      }
+      //      if ((UbiSessionHelper.isAgentDeclarative(ubiSession.getUserAgent())
+      //          && ubiSession.getBotFlagList().contains(223))
+      //          || (ubiSession.getBotFlagList().contains(220)
+      //          && ubiSession.getBotFlagList().contains(222))) {
+      //        ubiSession.getBotFlagList().add(202);
+      //      }
+      //
+      //      if ((UbiSessionHelper.isAgentDeclarative(ubiSession.getUserAgent())
+      //          && ubiSession.getBotFlagList().contains(223))
+      //          || (ubiSession.getBotFlagList().contains(220)
+      //          && ubiSession.getBotFlagList().contains(222))) {
+      //        ubiSession.getBotFlagList().add(210);
+      //      }
+      //
+      //      if (ubiSession.getBotFlagList().contains(223) && ubiSession.getBotFlagList()
+      //      .contains(224)) {
+      //        ubiSession.getBotFlagList().add(211);
+      //      }
       context.output(outputTag, ubiSession);
 
     }
