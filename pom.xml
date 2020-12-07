@@ -15,6 +15,7 @@
     <module>common</module>
     <module>rt-pipeline</module>
     <module>dumper</module>
+    <module>distributor</module>
     <module>flink-lib</module>
     <module>business</module>
     <module>sql-dsl</module>
@@ -56,6 +57,7 @@
       src/main/java/com/ebay/sojourner/rt/pipeline/*.java,
       src/main/java/com/ebay/sojourner/rt/metric/*.java,
       src/main/java/com/ebay/sojourner/dumper/pipeline/*.java,
+      src/main/java/com/ebay/sojourner/distributor/pipeline/*.java,
       src/main/java/org/apache/flink/streaming/runtime/operators/windowing/*.java,
       src/main/java/com/ebay/sojourner/dsl/domain/rule/*.java,
       src/main/java/com/ebay/sojourner/dsl/domain/RuleManager.java
@@ -587,6 +589,51 @@
   </pluginRepositories>
 
   <profiles>
+    <!-- This profile helps to make things run out of the box in IntelliJ -->
+    <!-- Its adds Flink's core classes to the runtime class path. -->
+    <!-- Otherwise they are missing in IntelliJ, because the dependency is 'provided' -->
+    <profile>
+      <id>Flink-IDEA</id>
+      <activation>
+        <property>
+          <name>idea.version</name>
+        </property>
+      </activation>
+
+      <dependencies>
+        <dependency>
+          <groupId>org.apache.flink</groupId>
+          <artifactId>flink-core</artifactId>
+          <scope>compile</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.flink</groupId>
+          <artifactId>flink-java</artifactId>
+          <scope>compile</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.flink</groupId>
+          <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
+          <scope>compile</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.flink</groupId>
+          <artifactId>flink-runtime-web_${scala.binary.version}</artifactId>
+          <scope>compile</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.avro</groupId>
+          <artifactId>avro</artifactId>
+          <scope>compile</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.flink</groupId>
+          <artifactId>flink-statebackend-rocksdb_${scala.binary.version}</artifactId>
+          <scope>compile</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+
     <profile>
       <id>sonar</id>
       <activation>
@@ -608,6 +655,7 @@
       </properties>
     </profile>
   </profiles>
+
   <distributionManagement>
     <repository>
       <id>ebay-data-releases</id>
@@ -618,6 +666,7 @@
       <url>http://nxrepository.corp.ebay.com/nexus/content/repositories/ebay.data.snapshots</url>
     </snapshotRepository>
   </distributionManagement>
+
   <build>
     <pluginManagement>
       <plugins>
@@ -721,6 +770,7 @@
               <exclude>com/ebay/sojourner/rt/pipeline/**/*</exclude>
               <exclude>com/ebay/sojourner/rt/metric/**/*</exclude>
               <exclude>com/ebay/sojourner/dumper/pipeline/**/*</exclude>
+              <exclude>com/ebay/sojourner/distributor/pipeline/**/*</exclude>
               <exclude>org/apache/flink/streaming/runtime/operators/windowing/**/*</exclude>
               <exclude>com/ebay/sojourner/dsl/domain/rule/**/*</exclude>
               <exclude>com/ebay/sojourner/dsl/domain/RuleManager.java</exclude>

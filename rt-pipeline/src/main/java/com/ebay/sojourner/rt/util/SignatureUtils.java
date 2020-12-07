@@ -1,16 +1,11 @@
 package com.ebay.sojourner.rt.util;
 
-import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.SignatureInfo;
 import com.ebay.sojourner.common.util.Constants;
-import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.FlinkEnvUtils;
-import com.ebay.sojourner.flink.connector.kafka.KafkaProducerFactory;
 import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.metrics.Counter;
-import org.apache.flink.streaming.api.datastream.DataStream;
 
 @Slf4j
 public class SignatureUtils {
@@ -34,22 +29,6 @@ public class SignatureUtils {
         eCounter.inc();
       }
     }
-  }
-
-  public static void buildSignatureKafkaSink(DataStream<BotSignature> dataStream, String topic,
-      String signatureId, String slotGroup, String messageKey) {
-
-    dataStream
-        .addSink(KafkaProducerFactory.getProducer(
-            topic,
-            FlinkEnvUtils.getListString(Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS),
-            messageKey,
-            BotSignature.class))
-        .setParallelism(FlinkEnvUtils.getInteger(Property.DEFAULT_PARALLELISM))
-        .slotSharingGroup(slotGroup)
-        .name(String.format("%s Signature", signatureId))
-        .uid(String.format("signature-%s-sink", signatureId));
-
   }
 
   public static void updateSignatureStatus(Map<Integer, SignatureInfo> signatureStatus,

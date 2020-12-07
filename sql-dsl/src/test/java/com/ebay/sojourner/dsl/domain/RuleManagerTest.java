@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +30,7 @@ public class RuleManagerTest {
   }
 
   @Test
-  public void close_isNull() {
+  public void close_isNull() throws Exception {
     ruleManager.close();
     ExecutorService zkExecutor = Whitebox.getInternalState(ruleManager, "zkExecutor");
     ScheduledExecutorService schedulingExecutor = Whitebox.getInternalState(ruleManager, "schedulingExecutor");
@@ -38,14 +39,20 @@ public class RuleManagerTest {
   }
 
   @Test
-  public void close_isNotNull() {
+  public void close_isNotNull() throws Exception {
     Whitebox.setInternalState(ruleManager, "zkExecutor", Executors.newSingleThreadExecutor());
     Whitebox.setInternalState(ruleManager, "schedulingExecutor", Executors.newSingleThreadScheduledExecutor());
     ruleManager.close();
-
+    Thread.sleep(1000); // wait thread pool close
     ExecutorService zkExecutor = Whitebox.getInternalState(ruleManager, "zkExecutor");
     ScheduledExecutorService schedulingExecutor = Whitebox.getInternalState(ruleManager, "schedulingExecutor");
     assertThat(zkExecutor.isShutdown()).isTrue();
     assertThat(schedulingExecutor.isShutdown()).isTrue();
+  }
+
+  @After
+  public void resetFields() throws Exception {
+    Whitebox.setInternalState(ruleManager, "zkExecutor", null, RuleManager.class);
+    Whitebox.setInternalState(ruleManager, "schedulingExecutor", null, RuleManager.class);
   }
 }

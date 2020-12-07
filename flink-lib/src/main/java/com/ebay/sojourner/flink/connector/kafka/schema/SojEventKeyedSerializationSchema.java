@@ -17,6 +17,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.streaming.util.serialization.KeyedSerializationSchema;
 
+@Deprecated
 @Slf4j
 public class SojEventKeyedSerializationSchema<T> implements KeyedSerializationSchema<T> {
 

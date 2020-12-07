@@ -1,42 +1,6 @@
-kafka:
-  consumer:
-    group-id:
-      lvs: sojourner-pathfinder-consumer-qa
-    bootstrap-servers:
-      lvs:
-        - rhs-vvrvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
-        - rhs-vvrvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
-        - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
-        - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
-        - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-
-  producer:
-    stream: behavior.trafficjam
-    topic:
-      session:
-        bot: behavior.trafficjam.session.bot
-        non-bot: behavior.trafficjam.session
-      event:
-        bot: behavior.trafficjam.event.bot
-        non-bot: behavior.trafficjam.event
-      signature:
-        agent-ip: behavior.trafficjam.agent.ip
-        agent: behavior.trafficjam.agent
-        ip: behavior.trafficjam.ip
-    bootstrap-servers:
-      - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
-      - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
-      - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
-      - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
-      - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
-    message-key:
-      session: guid
-      event:
-        key1: guid
-        key2: pageId
-
 flink:
   app:
+    name: Sojourner Realtime Pipeline - QA
     parallelism:
       source: 2
       event: 2
@@ -56,6 +20,46 @@ flink:
     source:
       from-timestamp: 0
       out-of-orderless-in-min: 3
+      dc: lvs
+    sink:
+      dc: lvs
+      kafka:
+        topic:
+          session:
+            bot: behavior.trafficjam.session.bot
+            non-bot: behavior.trafficjam.session
+          event:
+            bot: behavior.trafficjam.event.bot
+            non-bot: behavior.trafficjam.event
+          signature:
+            agent-ip: behavior.trafficjam.agent.ip
+            agent: behavior.trafficjam.agent
+            ip: behavior.trafficjam.ip
+        message-key:
+          session: guid
+          event: guid,pageId
+
+kafka:
+  consumer:
+    group-id: sojourner-pathfinder-consumer-qa
+    stream: behavior.trafficjam
+    bootstrap-servers:
+      lvs:
+        - rhs-vvrvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-vvrvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-vvrvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-vvrvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-vvrvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
+
+  producer:
+    stream: behavior.trafficjam
+    bootstrap-servers:
+      lvs:
+        - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092
+        - rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092
 
 rheos:
   registry-url: https://rheos-services.qa.ebay.com

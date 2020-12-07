@@ -24,8 +24,7 @@ public class RheosAvroKafkaSerializer<T> implements RheosKafkaSerializer<T> {
   private transient BinaryEncoder encoder;
   private SchemaFactory schemaFactory;
 
-  public RheosAvroKafkaSerializer(
-      Schema schema, int schemaId, String producerId) {
+  public RheosAvroKafkaSerializer(Schema schema, int schemaId, String producerId) {
     this.schemaFactory = new RheosSchemeFactory();
     this.schemaId = schemaId;
     this.producerId = producerId;
@@ -60,7 +59,6 @@ public class RheosAvroKafkaSerializer<T> implements RheosKafkaSerializer<T> {
 
   @Override
   public byte[] encodeData(T data) {
-
     GenericRecord genericRecord = constructREvent(data);
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     encoder = EncoderFactory.get().binaryEncoder(out, null);
@@ -74,24 +72,20 @@ public class RheosAvroKafkaSerializer<T> implements RheosKafkaSerializer<T> {
       e.printStackTrace();
     }
     return serializedValue;
-
   }
 
   private RheosEvent constructREvent(T data) {
-
     GenericRecord record = constructGenericRecord(data);
     long createTimestamp = System.currentTimeMillis();
     RheosEvent rheosEvent = new RheosEvent(record);
     rheosEvent.setEventCreateTimestamp(createTimestamp);
     rheosEvent.setEventSentTimestamp(System.currentTimeMillis());
-    rheosEvent
-        .setProducerId(this.producerId);
+    rheosEvent.setProducerId(this.producerId);
     rheosEvent.setSchemaId(this.schemaId);
     return rheosEvent;
   }
 
   private GenericRecord constructGenericRecord(T data) {
-
     GenericData.Record record = new GenericData.Record(schemaFactory.getSchema());
     Field[] columns = data.getClass().getDeclaredFields();
     for (Field column : columns) {
@@ -103,7 +97,6 @@ public class RheosAvroKafkaSerializer<T> implements RheosKafkaSerializer<T> {
           continue;
         }
         record.put(column.getName(), valueValid);
-
       } catch (IllegalAccessException e) {
         log.error("constructGenericRecord Error：", e);
       }

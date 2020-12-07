@@ -7,6 +7,10 @@ import org.apache.kafka.common.config.SaslConfigs;
 
 public class KafkaCommonConfig {
 
+  private KafkaCommonConfig() {
+    // empty
+  }
+
   public static Properties get() {
 
     Properties props = new Properties();
@@ -15,9 +19,9 @@ public class KafkaCommonConfig {
 
     final String saslJaasConfig =
         String.format(
-            "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId="
-                + "\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" "
-                + "iafSecret=\"%s\" iafEnv=\"%s\";",
+            "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required " +
+                "iafConsumerId=\"%s\" iafSecret=\"%s\" iafEnv=\"%s\";",
+            FlinkEnvUtils.getString(Property.RHEOS_CLIENT_ID),
             FlinkEnvUtils.getString(Property.RHEOS_CLIENT_IAF_SECRET),
             FlinkEnvUtils.getString(Property.RHEOS_CLIENT_IAF_ENV));
 

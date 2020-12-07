@@ -5,22 +5,22 @@ import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.KafkaDeserializationSchema;
 
-public class KafkaConsumerFactory {
+public class FlinkKafkaConsumerFactory {
 
-  private final KafkaConsumerConfig config;
+  private final FlinkKafkaSourceConfigWrapper configWrapper;
 
-  public KafkaConsumerFactory(KafkaConsumerConfig config) {
-    this.config = config;
+  public FlinkKafkaConsumerFactory(FlinkKafkaSourceConfigWrapper configWrapper) {
+    this.configWrapper = configWrapper;
   }
 
-  public <T> FlinkKafkaConsumer<T> getConsumer(KafkaDeserializationSchema<T> deserializer) {
+  public <T> FlinkKafkaConsumer<T> get(KafkaDeserializationSchema<T> deserializer) {
 
     FlinkKafkaConsumer<T> flinkKafkaConsumer = new FlinkKafkaConsumer<>(
-        config.getTopicList(),
+        configWrapper.getKafkaConsumerConfig().getTopics(),
         deserializer,
-        config.getProperties());
+        configWrapper.getKafkaConsumerConfig().getProperties());
 
-    if (config.getOutOfOrderlessInMin() > 0) {
+    if (configWrapper.getOutOfOrderlessInMin() > 0) {
 
       flinkKafkaConsumer.assignTimestampsAndWatermarks(
           WatermarkStrategy.forBoundedOutOfOrderness(Duration.ofMinutes(3))
@@ -33,8 +33,8 @@ public class KafkaConsumerFactory {
               */
     }
 
-    if (config.getFromTimestamp() > 0) {
-      flinkKafkaConsumer.setStartFromTimestamp(config.getFromTimestamp());
+    if (configWrapper.getFromTimestamp() > 0) {
+      flinkKafkaConsumer.setStartFromTimestamp(configWrapper.getFromTimestamp());
     } else {
       flinkKafkaConsumer.setStartFromLatest();
     }

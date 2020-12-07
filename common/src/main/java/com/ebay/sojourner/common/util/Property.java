@@ -176,12 +176,6 @@ public class Property {
   public static final String KAFKA_CONSUMER_BOOTSTRAP_SERVERS = "kafka.consumer.bootstrap-servers";
   public static final String KAFKA_CONSUMER_TOPIC = "kafka.consumer.topic";
   public static final String KAFKA_CONSUMER_GROUP_ID = "kafka.consumer.group-id";
-  public static final String KAFKA_CONSUMER_DATA_CENTER = "kafka.consumer.data-center";
-
-  // dc traffic down
-  public static final String RNO_TRAFFIC_IS_DOWN = "kafka.consumer.traffic-is-down.rno";
-  public static final String LVS_TRAFFIC_IS_DOWN = "kafka.consumer.traffic-is-down.lvs";
-  public static final String SLC_TRAFFIC_IS_DOWN = "kafka.consumer.traffic-is-down.slc";
 
   // kafka producer
   public static final String BATCH_SIZE = "kafka.producer.batch-size";
@@ -191,15 +185,7 @@ public class Property {
   public static final String BUFFER_MEMORY = "kafka.producer.buffer-memory";
   public static final String ACKS = "kafka.producer.acks";
   public static final String COMPRESSION_TYPE = "kafka.producer.compression-type";
-  public static final String BEHAVIOR_MESSAGE_KEY_SESSION = "kafka.producer.message-key.session";
-  public static final String BEHAVIOR_MESSAGE_KEY_EVENT_KEY1 = "kafka.producer.message-key.event.key1";
-  public static final String BEHAVIOR_MESSAGE_KEY_EVENT_KEY2 = "kafka.producer.message-key.event.key2";
-  public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_IP = "kafka.producer.message-key.signature.ip";
-  public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT = "kafka.producer.message-key.signature.agent";
-  public static final String BEHAVIOR_MESSAGE_KEY_SIGNATURE_AGENT_IP = "kafka.producer.message-key.signature.agent-ip";
   public static final String KAFKA_PRODUCER_BOOTSTRAP_SERVERS = "kafka.producer.bootstrap-servers";
-  public static final String KAFKA_PRODUCER_SUBJECT_SOJEVENT = "kafka.producer.subject.event";
-  public static final String KAFKA_PRODUCER_SUBJECT_SOJSESSION = "kafka.producer.subject.session";
   public static final String PRODUCER_ID = "kafka.producer.producerId";
 
   // rheos
@@ -207,6 +193,31 @@ public class Property {
   public static final String RHEOS_CLIENT_ID = "rheos.client.id";
   public static final String RHEOS_CLIENT_IAF_SECRET = "rheos.client.iaf.secret";
   public static final String RHEOS_CLIENT_IAF_ENV = "rheos.client.iaf.env";
+
+  // flink source
+  public static final String FLINK_APP_SOURCE_DC = "flink.app.source.dc";
+
+  // flink sink
+  public static final String FLINK_APP_SINK_DC = "flink.app.sink.dc";
+
+  public static final String FLINK_APP_SINK_KAFKA_TOPIC = "flink.app.sink.kafka.topic";
+  public static final String FLINK_APP_SINK_KAFKA_TOPIC_SESSION_BOT = "flink.app.sink.kafka.topic.session.bot";
+  public static final String FLINK_APP_SINK_KAFKA_TOPIC_SESSION_NON_BOT = "flink.app.sink.kafka.topic.session.non-bot";
+  public static final String FLINK_APP_SINK_KAFKA_TOPIC_EVENT_BOT = "flink.app.sink.kafka.topic.event.bot";
+  public static final String FLINK_APP_SINK_KAFKA_TOPIC_EVENT_NON_BOT = "flink.app.sink.kafka.topic.event.non-bot";
+  public static final String FLINK_APP_SINK_KAFKA_TOPIC_EVENT_LATE = "flink.app.sink.kafka.topic.event.late";
+  public static final String FLINK_APP_SINK_KAFKA_TOPIC_SIGNATURE_AGENT_IP = "flink.app.sink.kafka.topic.signature.agent-ip";
+  public static final String FLINK_APP_SINK_KAFKA_TOPIC_SIGNATURE_AGENT = "flink.app.sink.kafka.topic.signature.agent";
+  public static final String FLINK_APP_SINK_KAFKA_TOPIC_SIGNATURE_IP = "flink.app.sink.kafka.topic.signature.ip";
+
+  public static final String FLINK_APP_SINK_KAFKA_SUBJECT_EVENT = "flink.app.sink.kafka.subject.event";
+  public static final String FLINK_APP_SINK_KAFKA_SUBJECT_SESSION = "flink.app.sink.kafka.subject.session";
+
+  public static final String FLINK_APP_SINK_KAFKA_MESSAGE_KEY_EVENT = "flink.app.sink.kafka.message-key.event";
+  public static final String FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SESSION = "flink.app.sink.kafka.message-key.session";
+  public static final String FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_AGENT_IP = "flink.app.sink.kafka.message-key.signature.agent-ip";
+  public static final String FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_AGENT = "flink.app.sink.kafka.message-key.signature.agent";
+  public static final String FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_IP = "flink.app.sink.kafka.message-key.signature.ip";
 
   // flink checkpoint
   public static final String CHECKPOINT_DATA_DIR = "flink.app.checkpoint.data-dir";
@@ -227,6 +238,7 @@ public class Property {
   public static final String IP_PARALLELISM = "flink.app.parallelism.ip";
   public static final String BROADCAST_PARALLELISM = "flink.app.parallelism.broadcast";
   public static final String METRICS_PARALLELISM = "flink.app.parallelism.metrics";
+  public static final String SINK_KAFKA_PARALLELISM = "flink.app.parallelism.sink-kafka";
 
   public static final String SOURCE_EVENT_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event";
   public static final String SOURCE_EVENT_LVS_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event-lvs";
@@ -294,24 +306,13 @@ public class Property {
   public static final String SINK_OPERATOR_NAME = "flink.app.operator-name.sink";
   public static final String SINK_UID = "flink.app.uid.sink";
 
-  // hdfs
-  public static final String HDFS_DUMP_PATH = "hdfs.dump.path";
-  public static final String HDFS_SAME_DAY_SESSION_DUMP_PATH = "hdfs.dump.path.same-day";
-  public static final String HDFS_CROSS_DAY_SESSION_DUMP_PATH = "hdfs.dump.path.cross-day";
-  public static final String HDFS_OPEN_SESSION_DUMP_PATH = "hdfs.dump.path.open";
-  public static final String HDFS_DUMP_CLASS = "hdfs.dump.class-name";
-  public static final String HDFS_DUMP_WATERMARK_PATH = "hdfs.dump.watermark-path";
-
-  // ------------------------- rt pipeline property ------------------------
-  // kafka producer
-  public static final String KAFKA_TOPIC_SESSION_BOT = "kafka.producer.topic.session.bot";
-  public static final String KAFKA_TOPIC_SESSION_NON_BOT = "kafka.producer.topic.session.non-bot";
-  public static final String KAFKA_TOPIC_EVENT_BOT = "kafka.producer.topic.event.bot";
-  public static final String KAFKA_TOPIC_EVENT_NON_BOT = "kafka.producer.topic.event.non-bot";
-  public static final String KAFKA_TOPIC_EVENT_LATE = "kafka.producer.topic.event.late";
-  public static final String KAFKA_TOPIC_SIGNATURE_AGENT_IP = "kafka.producer.topic.signature.agent-ip";
-  public static final String KAFKA_TOPIC_SIGNATURE_AGENT = "kafka.producer.topic.signature.agent";
-  public static final String KAFKA_TOPIC_SIGNATURE_IP = "kafka.producer.topic.signature.ip";
+  // flink hdfs sink
+  public static final String FLINK_APP_SINK_HDFS_PATH = "flink.app.sink.hdfs.path";
+  public static final String FLINK_APP_SINK_HDFS_SAME_DAY_SESSION_PATH = "flink.app.sink.hdfs.path.same-day";
+  public static final String FLINK_APP_SINK_HDFS_CROSS_DAY_SESSION_PATH = "flink.app.sink.hdfs.path.cross-day";
+  public static final String FLINK_APP_SINK_HDFS_OPEN_SESSION_PATH = "flink.app.sink.hdfs.path.open";
+  public static final String FLINK_APP_SINK_HDFS_CLASS = "flink.app.sink.hdfs.class-name";
+  public static final String FLINK_APP_SINK_HDFS_WATERMARK_PATH = "flink.app.sink.hdfs.watermark-path";
 
   // data skew
   public static final String IS_FILTER = "flink.app.data-skew.is-filter";
