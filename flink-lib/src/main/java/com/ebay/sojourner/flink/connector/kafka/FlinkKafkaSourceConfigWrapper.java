@@ -8,5 +8,5 @@ import lombok.Data;
 public class FlinkKafkaSourceConfigWrapper {
   private KafkaConsumerConfig kafkaConsumerConfig;
   private int outOfOrderlessInMin;
-  private long fromTimestamp;
+  private String fromTimestamp;
 }

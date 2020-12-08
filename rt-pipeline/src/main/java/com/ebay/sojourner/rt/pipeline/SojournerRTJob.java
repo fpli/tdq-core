@@ -90,7 +90,7 @@ public class SojournerRTJob {
         .uid(getString(Property.SOURCE_UID_RNO))
         .slotGroup(getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP))
         .outOfOrderlessInMin(getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
-        .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+        .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
         .build(new RawEventKafkaDeserializationSchemaWrapper(
             FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
             new RawEventDeserializationSchema()));
@@ -100,7 +100,7 @@ public class SojournerRTJob {
         .uid(getString(Property.SOURCE_UID_SLC))
         .slotGroup(getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP))
         .outOfOrderlessInMin(getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
-        .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+        .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
         .build(new RawEventKafkaDeserializationSchemaWrapper(
             FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
             new RawEventDeserializationSchema()));
@@ -110,7 +110,7 @@ public class SojournerRTJob {
         .uid(getString(Property.SOURCE_UID_LVS))
         .slotGroup(getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP))
         .outOfOrderlessInMin(getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
-        .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+        .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
         .build(new RawEventKafkaDeserializationSchemaWrapper(
             FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
             new RawEventDeserializationSchema()));

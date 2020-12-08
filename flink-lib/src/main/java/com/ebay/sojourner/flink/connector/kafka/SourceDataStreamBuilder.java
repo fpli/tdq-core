@@ -1,6 +1,7 @@
 package com.ebay.sojourner.flink.connector.kafka;
 
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getStringOrDefault;
 
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.DataCenter;
@@ -17,7 +18,7 @@ public class SourceDataStreamBuilder<T> {
   private String slotGroup;
   private int parallelism = getInteger(Property.SOURCE_PARALLELISM);
   private int outOfOrderlessInMin;
-  private long fromTimestamp;
+  private String fromTimestamp = getStringOrDefault(Property.FLINK_APP_SOURCE_FROM_TIMESTAMP, "0");
   private boolean rescaled;
 
   public SourceDataStreamBuilder(StreamExecutionEnvironment environment) {
@@ -59,7 +60,7 @@ public class SourceDataStreamBuilder<T> {
     return this;
   }
 
-  public SourceDataStreamBuilder<T> fromTimestamp(long fromTimestamp) {
+  public SourceDataStreamBuilder<T> fromTimestamp(String fromTimestamp) {
     this.fromTimestamp = fromTimestamp;
     return this;
   }

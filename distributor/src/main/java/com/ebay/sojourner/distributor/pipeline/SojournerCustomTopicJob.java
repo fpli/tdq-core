@@ -43,11 +43,10 @@ public class SojournerCustomTopicJob {
     FlinkKafkaProducerFactory producerFactory = new FlinkKafkaProducerFactory(config);
 
     filteredDataStream.addSink(producerFactory.get(
-            getString(Property.FLINK_APP_SINK_KAFKA_TOPIC),
-            new CustomSojEventSerializationSchema()))
-        .setParallelism(getInteger(Property.SINK_KAFKA_PARALLELISM))
-        .name("Nonbot SojEvent Customized Sink")
-        .uid("nonbot-sojevent-customized-sink");
+        getString(Property.FLINK_APP_SINK_KAFKA_TOPIC), new CustomSojEventSerializationSchema()))
+                      .setParallelism(getInteger(Property.SINK_KAFKA_PARALLELISM))
+                      .name("Nonbot SojEvent Customized Sink")
+                      .uid("nonbot-sojevent-customized-sink");
 
     // Submit this job
     FlinkEnvUtils.execute(executionEnvironment, getString(Property.FLINK_APP_NAME));

@@ -13,7 +13,7 @@ flink:
       tolerate-failure-number: 3
     source:
       dc: rno
-      from-timestamp: 0
+      from-timestamp: earliest
       out-of-orderless-in-min: 0
     sink:
       dc: rno

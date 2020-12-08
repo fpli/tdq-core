@@ -33,10 +33,16 @@ public class FlinkKafkaConsumerFactory {
               */
     }
 
-    if (configWrapper.getFromTimestamp() > 0) {
-      flinkKafkaConsumer.setStartFromTimestamp(configWrapper.getFromTimestamp());
-    } else {
+    String fromTimestamp = configWrapper.getFromTimestamp();
+
+    if (fromTimestamp.equalsIgnoreCase("earliest")) {
+      flinkKafkaConsumer.setStartFromEarliest();
+    } else if (Long.parseLong(fromTimestamp) == 0) {
       flinkKafkaConsumer.setStartFromLatest();
+    } else if (Long.parseLong(fromTimestamp) > 0) {
+      flinkKafkaConsumer.setStartFromTimestamp(Long.parseLong(fromTimestamp));
+    } else {
+      throw new IllegalArgumentException("Cannot parse fromTimestamp value");
     }
 
     return flinkKafkaConsumer;

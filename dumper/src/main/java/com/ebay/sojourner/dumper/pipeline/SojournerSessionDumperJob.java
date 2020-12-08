@@ -2,7 +2,6 @@ package com.ebay.sojourner.dumper.pipeline;
 
 import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_FROM_TIMESTAMP;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
-import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getLong;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
 
 import com.ebay.sojourner.common.model.SojSession;
@@ -40,7 +39,7 @@ public class SojournerSessionDumperJob {
         .dc(DataCenter.of(dc))
         .operatorName(getString(Property.SOURCE_OPERATOR_NAME))
         .uid(getString(Property.SOURCE_UID))
-        .fromTimestamp(getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+        .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
         .buildRescaled(
             new KafkaDeserializationSchemaWrapper<>(new PassThroughDeserializationSchema()));
 

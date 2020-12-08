@@ -36,7 +36,7 @@ public class SojournerKafkaToHdfsJob {
           .dc(DataCenter.of(dc))
           .operatorName(getString(Property.SOURCE_OPERATOR_NAME))
           .uid(getString(Property.SOURCE_UID))
-          .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+          .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
           .buildRescaled(
               new KafkaDeserializationSchemaWrapper<>(new JetstreamEventDeserializationSchema()));
       // hdfs sink
@@ -54,7 +54,7 @@ public class SojournerKafkaToHdfsJob {
           .dc(DataCenter.of(dc))
           .operatorName(getString(Property.SOURCE_OPERATOR_NAME))
           .uid(getString(Property.SOURCE_UID))
-          .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+          .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
           .buildRescaled(
               new KafkaDeserializationSchemaWrapper<>(new JetstreamSessionDeserializationSchema()));
 
@@ -72,7 +72,7 @@ public class SojournerKafkaToHdfsJob {
           .dc(DataCenter.of(dc))
           .operatorName(getString(Property.SOURCE_OPERATOR_NAME))
           .uid(getString(Property.SOURCE_UID))
-          .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+          .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
           .buildRescaled(new AvroKeyedDeserializationSchema<>(BotSignature.class));
 
       // hdfs sink
