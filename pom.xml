@@ -47,7 +47,7 @@
     <hadoop.version>2.7.3</hadoop.version>
     <jackson.version>2.9.8</jackson.version>
     <guava.version>28.1-jre</guava.version>
-    <okhttp3.version>4.4.1</okhttp3.version>
+    <okhttp3.version>4.9.0</okhttp3.version>
     <curator.version>4.2.0</curator.version>
     <zookeeper.version>3.4.14</zookeeper.version>
     <jacoco.plugin.version>0.8.5</jacoco.plugin.version>

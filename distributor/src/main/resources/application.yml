@@ -13,7 +13,7 @@ flink:
       tolerate-failure-number: 3
     source:
       dc: rno
-      from-timestamp: earliest
+      from-timestamp: 0
       out-of-orderless-in-min: 0
     sink:
       dc: rno
@@ -75,3 +75,8 @@ rheos:
     iaf:
       secret: c4bb6fca-7ac5-46dd-b218-a49cb6307dbc
       env: production
+
+rest-client:
+  base-url: https://sojubdportalservice.vip.ebay.com
+  auth-username: soj-flink-app
+  auth-token: B65613BAE51443268AEBCAEF26C30ABE

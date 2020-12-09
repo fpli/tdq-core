@@ -274,7 +274,7 @@ public class Property {
   public static final String ZOOKEEPER_NAMESPACE = "zookeeper.namespace";
 
   // rest client
-  public static final String REST_SERVER = "rest-client.rest-server";
+  public static final String REST_BASE_URL = "rest-client.base-url";
   public static final String REST_AUTH_USERNAME = "rest-client.auth-username";
   public static final String REST_AUTH_TOKEN = "rest-client.auth-token";
 

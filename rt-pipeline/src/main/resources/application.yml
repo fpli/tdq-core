@@ -149,7 +149,7 @@ zookeeper:
   namespace: sojourner
 
 rest-client:
-  rest-server: https://sojubdportalservice.vip.ebay.com
+  base-url: https://sojubdportalservice.vip.ebay.com
   auth-username: soj-flink-app
   auth-token: B65613BAE51443268AEBCAEF26C30ABE
 

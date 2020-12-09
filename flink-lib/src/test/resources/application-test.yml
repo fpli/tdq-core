@@ -22,6 +22,6 @@ zookeeper:
   server: rhs-tdtvkiaa-fzk-lvs-1.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-2.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-3.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-4.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-5.rheos-streaming-qa.svc.32.tess.io:2181
 
 rest-client:
-  rest-server: https://sojubdportalservice.vip.qa.ebay.com
+  base-url: https://sojubdportalservice.vip.qa.ebay.com
 
 ua-parser-env: dev

@@ -68,3 +68,6 @@ rheos:
     iaf:
       secret: 6218c197-200e-49d7-b404-2a4dbf7595ef
       env: staging
+
+rest-client:
+  base-url: https://sojubdportalservice.vip.qa.ebay.com

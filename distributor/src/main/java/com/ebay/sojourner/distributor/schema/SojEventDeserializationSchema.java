@@ -19,9 +19,20 @@ public class SojEventDeserializationSchema implements
   public RawSojEventWrapper deserialize(ConsumerRecord<byte[], byte[]> record) throws Exception {
     String k = new String(record.key());
     String[] str = k.split(",");
-    if (str.length < 2) return null;
+    if (str.length < 2) {
+      log.error("Error when deserialize SojEvent with key: {}", k);
+      return null;
+    }
 
-    return new RawSojEventWrapper(str[0], Integer.parseInt(str[1]), record.value());
+    int pageId = 0;
+    try {
+      pageId = Integer.parseInt(str[1]);
+    } catch (Exception e) {
+      log.error("Cannot parse pageId from message key: {}", k);
+      return null;
+    }
+
+    return new RawSojEventWrapper(str[0], pageId, record.value());
   }
 
   @Override
