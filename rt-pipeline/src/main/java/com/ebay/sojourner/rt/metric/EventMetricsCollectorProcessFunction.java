@@ -42,8 +42,8 @@ public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEve
         .asList("rule801", "rule1", "rule802", "rule803", "rule804", "rule805", "rule806",
             "rule807", "rule810", "rule811", "rule812", "rule813", "rule856", "rule5", "rule6",
             "rule7", "rule8", "rule9", "rule10", "rule11", "rule12", "rule15", "rule203", "rule204",
-            "rule205", "rule206", "rule207", "rule208", "rule212", "rule215", "rule220",
-            "rule221", "rule223", "rule224");
+            "rule205", "rule206", "rule207", "rule208", "rule212", "rule215", "rule202",
+            "rule210", "rule211");
 
     for (String ruleName : eventStaticRuleList) {
       Counter staticRuleCounter =
