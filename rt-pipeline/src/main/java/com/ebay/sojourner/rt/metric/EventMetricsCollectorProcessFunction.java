@@ -1,9 +1,9 @@
 package com.ebay.sojourner.rt.metric;
 
-import com.ebay.sojourner.dsl.domain.RuleManager;
 import com.ebay.sojourner.common.model.UbiEvent;
-import com.ebay.sojourner.dsl.domain.rule.RuleDefinition;
 import com.ebay.sojourner.common.util.Constants;
+import com.ebay.sojourner.dsl.domain.RuleManager;
+import com.ebay.sojourner.dsl.domain.rule.RuleDefinition;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -38,7 +38,12 @@ public class EventMetricsCollectorProcessFunction extends ProcessFunction<UbiEve
             .counter(ubiEventCounterName);
 
     // static rule
-    eventStaticRuleList = Arrays.asList("rule801", "rule1");
+    eventStaticRuleList = Arrays
+        .asList("rule801", "rule1", "rule802", "rule803", "rule804", "rule805", "rule806",
+            "rule807", "rule810", "rule811", "rule812", "rule813", "rule856", "rule5", "rule6",
+            "rule7", "rule8", "rule9", "rule10", "rule11", "rule12", "rule15", "rule203", "rule204",
+            "rule205", "rule206", "rule207", "rule208", "rule212", "rule215", "rule220",
+            "rule221", "rule223", "rule224");
 
     for (String ruleName : eventStaticRuleList) {
       Counter staticRuleCounter =
