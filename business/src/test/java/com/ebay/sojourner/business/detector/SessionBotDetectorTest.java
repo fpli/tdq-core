@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 import com.ebay.sojourner.business.rule.BotRule1;
 import com.ebay.sojourner.business.rule.BotRule10;
 import com.ebay.sojourner.business.rule.BotRule11;
-import com.ebay.sojourner.business.rule.BotRule12;
 import com.ebay.sojourner.business.rule.BotRule15;
 import com.ebay.sojourner.business.rule.BotRule203;
 import com.ebay.sojourner.business.rule.BotRule204;
@@ -18,8 +17,8 @@ import com.ebay.sojourner.business.rule.BotRule212;
 import com.ebay.sojourner.business.rule.BotRule215;
 import com.ebay.sojourner.business.rule.BotRule9;
 import com.ebay.sojourner.common.model.UbiSession;
-import com.ebay.sojourner.dsl.domain.rule.Rule;
 import com.ebay.sojourner.common.util.UbiBotFilter;
+import com.ebay.sojourner.dsl.domain.rule.Rule;
 import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +39,7 @@ public class SessionBotDetectorTest {
   BotRule15 mockRule15 = mock(BotRule15.class);
   BotRule9 mockRule9 = mock(BotRule9.class);
   BotRule10 mockRule10 = mock(BotRule10.class);
-  BotRule12 mockRule12 = mock(BotRule12.class);
+  //  BotRule12 mockRule12 = mock(BotRule12.class);
   BotRule203 mockRule203 = mock(BotRule203.class);
   BotRule204 mockRule204 = mock(BotRule204.class);
   BotRule205 mockRule205 = mock(BotRule205.class);
@@ -56,7 +55,7 @@ public class SessionBotDetectorTest {
     PowerMockito.whenNew(BotRule15.class).withNoArguments().thenReturn(mockRule15);
     PowerMockito.whenNew(BotRule9.class).withNoArguments().thenReturn(mockRule9);
     PowerMockito.whenNew(BotRule10.class).withNoArguments().thenReturn(mockRule10);
-    PowerMockito.whenNew(BotRule12.class).withNoArguments().thenReturn(mockRule12);
+    //    PowerMockito.whenNew(BotRule12.class).withNoArguments().thenReturn(mockRule12);
     PowerMockito.whenNew(BotRule203.class).withNoArguments().thenReturn(mockRule203);
     PowerMockito.whenNew(BotRule204.class).withNoArguments().thenReturn(mockRule204);
     PowerMockito.whenNew(BotRule205.class).withNoArguments().thenReturn(mockRule205);
@@ -82,6 +81,6 @@ public class SessionBotDetectorTest {
   @Test
   public void initBotRules() {
     Set<Rule> botRules = Whitebox.getInternalState(sessionBotDetector, "botRules", SessionBotDetector.class);
-    assertThat(botRules.size()).isEqualTo(12);
+    assertThat(botRules.size()).isEqualTo(11);
   }
 }
