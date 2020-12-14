@@ -8,5 +8,6 @@ import lombok.Data;
 public class RawSojEventWrapper {
   private String guid;
   private int pageId;
+  private String topic;
   private byte[] payload;
 }

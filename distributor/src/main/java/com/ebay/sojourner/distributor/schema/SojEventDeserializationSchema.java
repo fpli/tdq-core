@@ -32,7 +32,7 @@ public class SojEventDeserializationSchema implements
       return null;
     }
 
-    return new RawSojEventWrapper(str[0], pageId, record.value());
+    return new RawSojEventWrapper(str[0], pageId, null, record.value());
   }
 
   @Override
