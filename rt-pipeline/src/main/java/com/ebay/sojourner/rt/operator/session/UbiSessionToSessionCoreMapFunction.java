@@ -39,7 +39,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
     }
 
     core.setIp(TypeTransformUtil.ipToInt(session.getIp()) == null ? 0
-                   : TypeTransformUtil.ipToInt(session.getIp()));
+        : TypeTransformUtil.ipToInt(session.getIp()));
     core.setBotFlag(session.getBotFlag());
     if (session.getFirstCguid() != null) {
       long[] long4Cguid = TypeTransformUtil.md522Long(session.getFirstCguid());
@@ -121,7 +121,7 @@ public class UbiSessionToSessionCoreMapFunction extends RichMapFunction<UbiSessi
 
       if (!core.getUserAgent().equals(agentAfterBase64)) {
         core.setFlags(BitUtils.setBit(core.getFlags(),
-                                      SessionFlags.AGENT_STRING_AFTER_BASE64_DIFF));
+            SessionFlags.AGENT_STRING_AFTER_BASE64_DIFF));
         core.setAgentStringAfterBase64(agentAfterBase64);
       }
     }

@@ -1,18 +1,8 @@
 kafka:
   consumer:
-    data-center: LVS
     topic:
       - behavior.totalv2.sojsession-bot-lvs
-    group-id:
-      lvs: sojourner-total-dumper-lvs
-#      lvs: sojourner-total-dumper-test-lvs
-    bootstrap-servers:
-      lvs:
-        - rhs-ravvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-ravvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-ravvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-ravvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-ravvkiaa-kfk-lvs-5.rheos`-streaming-prod.svc.38.tess.io:9092
+    group-id: sojourner-total-dumper-lvs
 
 flink:
   app:
@@ -47,19 +37,20 @@ flink:
         watermark: sojourner-total-lvs-bot-session-watermark-sink
     metric:
       watermark-process-progress: sojourner-ubd-bot-session-watermark-delay-time
+    source:
+      dc: lvs
+    sink:
+      hdfs:
+        path:
+          open: hdfs://hercules/sys/edw/working/ubi/ubi_w/soj/stg_ubi_session_dump_w/category=open/type=bot
+          same-day: hdfs://hercules/sys/edw/working/ubi/ubi_w/soj/stg_ubi_session_dump_w/category=sameday/type=bot
+          cross-day: hdfs://hercules/sys/edw/working/ubi/ubi_w/soj/stg_ubi_session_dump_w/category=crossday/type=bot
+        watermark-path: hdfs://hercules/sys/edw/working/ubi/ubi_w/soj/ubi_session_watermark_lkp/type=bot
+#      hdfs:
+#        path:
+#          open: hdfs://hercules/sys/soj/ubd/sessions/category=open/type=bot
+#          same-day: hdfs://hercules/sys/soj/ubd/sessions/category=sameday/type=bot
+#          cross-day: hdfs://hercules/sys/soj/ubd/sessions/category=crossday/type=bot
+#        watermark-path: hdfs://hercules/sys/soj/ubd/watermark/sessions/type=bot
 
-hdfs:
-  dump:
-    path:
-      open: hdfs://hercules/sys/edw/working/ubi/ubi_w/soj/stg_ubi_session_dump_w/category=open/type=bot
-      same-day: hdfs://hercules/sys/edw/working/ubi/ubi_w/soj/stg_ubi_session_dump_w/category=sameday/type=bot
-      cross-day: hdfs://hercules/sys/edw/working/ubi/ubi_w/soj/stg_ubi_session_dump_w/category=crossday/type=bot
-    watermark-path: hdfs://hercules/sys/edw/working/ubi/ubi_w/soj/ubi_session_watermark_lkp/type=bot
 
-#hdfs:
-#  dump:
-#    path:
-#      open: hdfs://hercules/sys/soj/ubd/sessions/category=open/type=bot
-#      same-day: hdfs://hercules/sys/soj/ubd/sessions/category=sameday/type=bot
-#      cross-day: hdfs://hercules/sys/soj/ubd/sessions/category=crossday/type=bot
-#    watermark-path: hdfs://hercules/sys/soj/ubd/watermark/sessions/type=bot

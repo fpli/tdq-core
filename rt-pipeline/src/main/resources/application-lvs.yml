@@ -1,29 +1,18 @@
-# case1
-# rno dc down, we need switch rt pipeline to dr cluster(lvs)
-# kafka source(pathfinder) -> flink cluster (lvs) -> kafka sink (lvs)
-
-# case2
-# rno kafka down, we need sink to lvs kafka cluster
-# kafka source(pathfinder) -> flink cluster (lvs/rno) -> kafka sink (lvs)
-
-kafka:
-  producer:
-    stream: behavior.totalv2
-    topic:
-      session:
-        bot: behavior.totalv2.sojsession-bot-lvs
-        non-bot: behavior.totalv2.sojsession-nonbot-lvs
-      event:
-        bot: behavior.totalv2.sojevent-bot-lvs
-        non-bot: behavior.totalv2.sojevent-nonbot-lvs
-        late: behavior.totalv2.sojevent-late-lvs
-      signature:
-        agent-ip: behavior.totalv2.signature.agent-ip-lvs
-        agent: behavior.totalv2.signature.agent-lvs
-        ip: behavior.totalv2.signature.ip-lvs
-    bootstrap-servers:
-      - rhs-ravvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
-      - rhs-ravvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
-      - rhs-ravvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
-      - rhs-ravvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
-      - rhs-ravvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
+flink:
+  app:
+    name: Sojourner Realtime Pipeline - LVS
+    sink:
+      dc: lvs
+      kafka:
+        topic:
+          session:
+            bot: behavior.totalv2.sojsession-bot-lvs
+            non-bot: behavior.totalv2.sojsession-nonbot-lvs
+          event:
+            bot: behavior.totalv2.sojevent-bot-lvs
+            non-bot: behavior.totalv2.sojevent-nonbot-lvs
+            late: behavior.totalv2.sojevent-late-lvs
+          signature:
+            agent-ip: behavior.totalv2.signature.agent-ip-lvs
+            agent: behavior.totalv2.signature.agent-lvs
+            ip: behavior.totalv2.signature.ip-lvs

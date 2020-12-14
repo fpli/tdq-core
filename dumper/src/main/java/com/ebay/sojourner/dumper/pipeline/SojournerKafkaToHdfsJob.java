@@ -1,6 +1,7 @@
 package com.ebay.sojourner.dumper.pipeline;
 
 import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_FROM_TIMESTAMP;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
 
 import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.JetStreamOutputEvent;
@@ -23,37 +24,37 @@ public class SojournerKafkaToHdfsJob {
 
     final StreamExecutionEnvironment executionEnvironment = FlinkEnvUtils.prepare(args);
 
-    Class<?> deserializeClass = Class.forName(FlinkEnvUtils.getString(Property.HDFS_DUMP_CLASS));
-    String hdfsPath = FlinkEnvUtils.getString(Property.HDFS_DUMP_PATH);
+    Class<?> deserializeClass = Class.forName(getString(Property.FLINK_APP_SINK_HDFS_CLASS));
+    String hdfsPath = getString(Property.FLINK_APP_SINK_HDFS_PATH);
     int sinkParallelNum = FlinkEnvUtils.getInteger(Property.SINK_HDFS_PARALLELISM);
-    String dc = FlinkEnvUtils.getString(Property.KAFKA_CONSUMER_DATA_CENTER);
+    String dc = getString(Property.FLINK_APP_SOURCE_DC);
 
     if (deserializeClass.isAssignableFrom(JetStreamOutputEvent.class)) {
       SourceDataStreamBuilder<JetStreamOutputEvent> dataStreamBuilder =
           new SourceDataStreamBuilder<>(executionEnvironment);
       DataStream<JetStreamOutputEvent> sourceDataStream = dataStreamBuilder
-          .dc(DataCenter.valueOf(dc))
-          .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME))
-          .uid(FlinkEnvUtils.getString(Property.SOURCE_UID))
-          .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+          .dc(DataCenter.of(dc))
+          .operatorName(getString(Property.SOURCE_OPERATOR_NAME))
+          .uid(getString(Property.SOURCE_UID))
+          .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
           .buildRescaled(
               new KafkaDeserializationSchemaWrapper<>(new JetstreamEventDeserializationSchema()));
       // hdfs sink
       sourceDataStream
           .addSink(HdfsConnectorFactory.createWithParquet(hdfsPath, JetStreamOutputEvent.class))
           .setParallelism(sinkParallelNum)
-          .name(FlinkEnvUtils.getString(Property.SINK_OPERATOR_NAME))
-          .uid(FlinkEnvUtils.getString(Property.SINK_UID));
+          .name(getString(Property.SINK_OPERATOR_NAME))
+          .uid(getString(Property.SINK_UID));
 
     } else if (deserializeClass.isAssignableFrom(JetStreamOutputSession.class)) {
 
       SourceDataStreamBuilder<JetStreamOutputSession> dataStreamBuilder =
           new SourceDataStreamBuilder<>(executionEnvironment);
       DataStream<JetStreamOutputSession> sourceDataStream = dataStreamBuilder
-          .dc(DataCenter.valueOf(dc))
-          .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME))
-          .uid(FlinkEnvUtils.getString(Property.SOURCE_UID))
-          .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+          .dc(DataCenter.of(dc))
+          .operatorName(getString(Property.SOURCE_OPERATOR_NAME))
+          .uid(getString(Property.SOURCE_UID))
+          .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
           .buildRescaled(
               new KafkaDeserializationSchemaWrapper<>(new JetstreamSessionDeserializationSchema()));
 
@@ -61,29 +62,28 @@ public class SojournerKafkaToHdfsJob {
       sourceDataStream
           .addSink(HdfsConnectorFactory.createWithParquet(hdfsPath, JetStreamOutputSession.class))
           .setParallelism(sinkParallelNum)
-          .name(FlinkEnvUtils.getString(Property.SINK_OPERATOR_NAME))
-          .uid(FlinkEnvUtils.getString(Property.SINK_UID));
+          .name(getString(Property.SINK_OPERATOR_NAME))
+          .uid(getString(Property.SINK_UID));
     } else if (deserializeClass.isAssignableFrom(BotSignature.class)) {
 
       SourceDataStreamBuilder<BotSignature> dataStreamBuilder =
           new SourceDataStreamBuilder<>(executionEnvironment);
       DataStream<BotSignature> sourceDataStream = dataStreamBuilder
-          .dc(DataCenter.valueOf(dc))
-          .operatorName(FlinkEnvUtils.getString(Property.SOURCE_OPERATOR_NAME))
-          .uid(FlinkEnvUtils.getString(Property.SOURCE_UID))
-          .fromTimestamp(FlinkEnvUtils.getLong(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+          .dc(DataCenter.of(dc))
+          .operatorName(getString(Property.SOURCE_OPERATOR_NAME))
+          .uid(getString(Property.SOURCE_UID))
+          .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
           .buildRescaled(new AvroKeyedDeserializationSchema<>(BotSignature.class));
 
       // hdfs sink
       sourceDataStream
           .addSink(HdfsConnectorFactory.createWithParquet(hdfsPath, BotSignature.class))
           .setParallelism(sinkParallelNum)
-          .name(FlinkEnvUtils.getString(Property.SINK_OPERATOR_NAME))
-          .uid(FlinkEnvUtils.getString(Property.SINK_UID));
+          .name(getString(Property.SINK_OPERATOR_NAME))
+          .uid(getString(Property.SINK_UID));
     }
 
     // submit job
-    FlinkEnvUtils
-        .execute(executionEnvironment, FlinkEnvUtils.getString(Property.FLINK_APP_NAME));
+    FlinkEnvUtils.execute(executionEnvironment, getString(Property.FLINK_APP_NAME));
   }
 }

@@ -6,14 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.apache.flink.contrib.streaming.state.RocksDBStateBackend;
 import org.apache.flink.runtime.state.StateBackend;
 import org.apache.flink.runtime.state.filesystem.FsStateBackend;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class StateBackendFactoryTest {
-
-  @BeforeEach
-  void setUp() {
-  }
 
   @Test
   void getStateBackend_fs() {

@@ -71,6 +71,12 @@ public class FlinkEnvUtils {
     return value;
   }
 
+  public static String getStringOrDefault(String key, String defaultValue) {
+    String value = EnvironmentUtils.getStringOrDefault(key, defaultValue);
+    CONFIG.put(key, value);
+    return value;
+  }
+
   public static Integer getInteger(String key) {
     String value = EnvironmentUtils.get(key);
     CONFIG.put(key, value);
@@ -108,5 +114,12 @@ public class FlinkEnvUtils {
     String value = String.join(",", list);
     CONFIG.put(key, value);
     return list;
+  }
+
+  public static String[] getStringArray(String key, String delimiter) {
+    String value = EnvironmentUtils.get(key);
+    String[] res = value.split(delimiter);
+    CONFIG.put(key, value);
+    return res;
   }
 }

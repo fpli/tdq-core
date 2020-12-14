@@ -52,6 +52,15 @@ public class EnvironmentUtils {
     throw new IllegalStateException("Cannot find property " + key);
   }
 
+  public static String getStringOrDefault(String key, String defaultValue) {
+    for (AbstractEnvironment propSource : PROP_SOURCES) {
+      if (propSource.contains(key)) {
+        return propSource.getProperty(key);
+      }
+    }
+    return defaultValue;
+  }
+
   public static Boolean getBoolean(String key) {
     String booleanVal = get(key);
     return Boolean.valueOf(booleanVal);

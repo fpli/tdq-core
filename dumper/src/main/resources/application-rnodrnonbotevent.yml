@@ -1,17 +1,8 @@
 kafka:
   consumer:
-    data-center: RNO
     topic:
       - behavior.totalv2.sojevent-nonbot-rno
-    group-id:
-      rno: sojourner-total-dumper-rno
-    bootstrap-servers:
-      rno:
-        - rhs-fxuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.37.tess.io:9092
+    group-id: sojourner-total-dumper-rno
 
 flink:
   app:
@@ -38,13 +29,14 @@ flink:
         watermark: sojourner-total-rno-nonbot-event-watermark-sink
     metric:
       watermark-process-progress: sojourner-ubd-nonbot-event-watermark-delay-time
+    source:
+      dc: rno
+    sink:
+      hdfs:
+        path: hdfs://apollo-rno/sys/edw/working/ubi/ubi_w/soj/stg_ubi_event_dump_w/type=nonbot
+        watermark-path: hdfs://apollo-rno/sys/edw/working/ubi/ubi_w/soj/ubi_event_watermark_lkp/type=nonbot
+#      hdfs:
+#        path: hdfs://apollo-rno/sys/soj/ubd/events/type=nonbot
+#        watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/events/type=nonbot
 
-hdfs:
-  dump:
-    path: hdfs://apollo-rno/sys/edw/working/ubi/ubi_w/soj/stg_ubi_event_dump_w/type=nonbot
-    watermark-path: hdfs://apollo-rno/sys/edw/working/ubi/ubi_w/soj/ubi_event_watermark_lkp/type=nonbot
 
-#hdfs:
-#  dump:
-#    path: hdfs://apollo-rno/sys/soj/ubd/events/type=nonbot
-#    watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/events/type=nonbot

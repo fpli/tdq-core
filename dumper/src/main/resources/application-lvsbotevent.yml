@@ -1,22 +1,12 @@
 kafka:
   consumer:
-    data-center: LVS
     topic:
-      - behavior.totalv2.sojevent-bot-lvs
-    group-id:
-      lvs: sojourner-total-dumper-lvs
-#      lvs: sojourner-total-dumper-test-lvs
-    bootstrap-servers:
-      lvs:
-        - rhs-ravvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-ravvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-ravvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-ravvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-ravvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
+      - behavior.totalv2.sojsession-bot-rno
+    group-id: sojourner-total-dumper-rno
 
 flink:
   app:
-    name: Sojourner LVS Bot Event HDFS Load Pipeline
+    name: Sojourner Bot Event HDFS Load Pipeline - LVS
     parallelism:
       source: 150
       sink:
@@ -39,13 +29,12 @@ flink:
         watermark: sojourner-total-lvs-bot-event-watermark-sink
     metric:
       watermark-process-progress: sojourner-ubd-bot-event-watermark-delay-time
-
-hdfs:
-  dump:
-    path: hdfs://hercules/sys/edw/working/ubi/ubi_w/soj/stg_ubi_event_dump_w/type=bot
-    watermark-path: hdfs://hercules/sys/edw/working/ubi/ubi_w/soj/ubi_event_watermark_lkp/type=bot
-
-#hdfs:
-#  dump:
-#    path: hdfs://hercules/sys/soj/ubd/events/type=bot
-#    watermark-path: hdfs://hercules/sys/soj/ubd/watermark/events/type=bot
+    source:
+      dc: lvs
+    sink:
+      hdfs:
+        path: hdfs://hercules/sys/edw/working/ubi/ubi_w/soj/stg_ubi_event_dump_w/type=bot
+        watermark-path: hdfs://hercules/sys/edw/working/ubi/ubi_w/soj/ubi_event_watermark_lkp/type=bot
+#      hdfs:
+#        path: hdfs://hercules/sys/soj/ubd/events/type=bot
+#        watermark-path: hdfs://hercules/sys/soj/ubd/watermark/events/type=bot

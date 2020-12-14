@@ -1,8 +1,10 @@
 package com.ebay.sojourner.flink.connector.kafka;
 
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getStringOrDefault;
+
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.DataCenter;
-import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.KafkaDeserializationSchema;
@@ -14,8 +16,10 @@ public class SourceDataStreamBuilder<T> {
   private String operatorName;
   private String uid;
   private String slotGroup;
+  private int parallelism = getInteger(Property.SOURCE_PARALLELISM);
   private int outOfOrderlessInMin;
-  private long fromTimestamp;
+  private String fromTimestamp = getStringOrDefault(Property.FLINK_APP_SOURCE_FROM_TIMESTAMP, "0");
+  private int idleSourceTimeout;
   private boolean rescaled;
 
   public SourceDataStreamBuilder(StreamExecutionEnvironment environment) {
@@ -29,6 +33,11 @@ public class SourceDataStreamBuilder<T> {
 
   public SourceDataStreamBuilder<T> operatorName(String operatorName) {
     this.operatorName = operatorName;
+    return this;
+  }
+
+  public SourceDataStreamBuilder<T> parallelism(int parallelism) {
+    this.parallelism = parallelism;
     return this;
   }
 
@@ -52,30 +61,36 @@ public class SourceDataStreamBuilder<T> {
     return this;
   }
 
-  public SourceDataStreamBuilder<T> fromTimestamp(long fromTimestamp) {
+  public SourceDataStreamBuilder<T> fromTimestamp(String fromTimestamp) {
     this.fromTimestamp = fromTimestamp;
     return this;
   }
 
+  public SourceDataStreamBuilder<T> idleSourceTimeout(int idleSourceTimeout) {
+    this.idleSourceTimeout = idleSourceTimeout;
+    return this;
+  }
+
   public DataStream<T> build(KafkaDeserializationSchema<T> schema) {
-    return this.build(schema, dc, operatorName, uid, slotGroup, rescaled);
+    return this.build(schema, dc, operatorName, parallelism, uid, slotGroup, rescaled);
   }
 
   public DataStream<T> buildRescaled(KafkaDeserializationSchema<T> schema) {
-    return this.build(schema, dc, operatorName, uid, slotGroup, true);
+    return this.build(schema, dc, operatorName, parallelism, uid, slotGroup, true);
   }
 
   public DataStream<T> build(KafkaDeserializationSchema<T> schema, DataCenter dc,
-      String operatorName, String uid, String slotGroup, boolean rescaled) {
+                             String operatorName, int parallelism, String uid, String slotGroup,
+                             boolean rescaled) {
 
     KafkaConsumerConfig config = KafkaConsumerConfig.ofDC(dc);
-    config.setOutOfOrderlessInMin(outOfOrderlessInMin);
-    config.setFromTimestamp(fromTimestamp);
-    KafkaConsumerFactory factory = new KafkaConsumerFactory(config);
+    FlinkKafkaSourceConfigWrapper configWrapper = new FlinkKafkaSourceConfigWrapper(
+        config, outOfOrderlessInMin, idleSourceTimeout, fromTimestamp);
+    FlinkKafkaConsumerFactory factory = new FlinkKafkaConsumerFactory(configWrapper);
 
     DataStream<T> dataStream = environment
-        .addSource(factory.getConsumer(schema))
-        .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
+        .addSource(factory.get(schema))
+        .setParallelism(parallelism)
         .slotSharingGroup(slotGroup)
         .name(operatorName)
         .uid(uid);

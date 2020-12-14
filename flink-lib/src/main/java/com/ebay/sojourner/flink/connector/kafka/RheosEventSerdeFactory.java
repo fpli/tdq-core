@@ -24,10 +24,18 @@ public class RheosEventSerdeFactory {
   }
 
   public static GenericRecordDomainDataDecoder getRheosEventDeserializer() {
+    return getRheosEventDeserializer(null);
+  }
+
+  public static GenericRecordDomainDataDecoder getRheosEventDeserializer(String schemaRegistryUrl) {
 
     if (rheosEventDeserializer == null) {
       Map<String, Object> config = new HashMap<>();
-      config.put(StreamConnectorConfig.RHEOS_SERVICES_URLS, RHEOS_SERVICES_URL);
+      if (schemaRegistryUrl != null) {
+        config.put(StreamConnectorConfig.RHEOS_SERVICES_URLS, schemaRegistryUrl);
+      } else {
+        config.put(StreamConnectorConfig.RHEOS_SERVICES_URLS, RHEOS_SERVICES_URL);
+      }
       rheosEventDeserializer = new GenericRecordDomainDataDecoder(config);
     }
 

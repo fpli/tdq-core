@@ -1,11 +1,9 @@
 kafka:
   consumer:
-    data-center: RNO
     stream: behavior.total.new
     topic:
       - behavior.total.new.sojevent.bot
-    group-id:
-      rno: sojourner-total-new-dumper
+    group-id: sojourner-total-new-dumper
     bootstrap-servers:
       rno:
         - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
@@ -39,8 +37,9 @@ flink:
         watermark: sojourner-total-new-rno-bot-event-watermark-sink
     metric:
       watermark-process-progress: sojourner-ubd-bot-event-watermark-delay-time
-
-hdfs:
-  dump:
-    path: hdfs://apollo-rno/sys/soj/ubd/events/type=bot
-    watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/events/type=bot
+    source:
+      dc: rno
+    sink:
+      hdfs:
+        path: hdfs://apollo-rno/sys/soj/ubd/events/type=bot
+        watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/events/type=bot

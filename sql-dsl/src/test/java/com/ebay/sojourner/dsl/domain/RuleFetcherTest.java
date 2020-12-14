@@ -4,16 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
+import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 import com.ebay.sojourner.common.env.EnvironmentUtils;
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.common.util.RestClientUtils;
+import com.ebay.sojourner.common.util.RestClient;
 import com.ebay.sojourner.dsl.domain.rule.RuleDefinition;
-import java.io.IOException;
 import java.util.List;
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.junit.Before;
@@ -23,15 +20,13 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({EnvironmentUtils.class, RestClientUtils.class})
+@PrepareForTest({EnvironmentUtils.class, RuleFetcher.class})
 public class RuleFetcherTest {
 
   RuleFetcher ruleFetcher;
-  OkHttpClient mockOkHttpClient = mock(OkHttpClient.class);
-  Request mockRequest = mock(Request.class);
+  RestClient mockRestClient = mock(RestClient.class);
   Response mockResponse = mock(Response.class);
   ResponseBody mockResponseBody = mock(ResponseBody.class);
-  Call mockCall = mock(Call.class);
   String json = "[\n" +
       "    {\n" +
       "        \"id\": 1019,\n" +
@@ -81,14 +76,11 @@ public class RuleFetcherTest {
       "]";
 
   @Before
-  public void setUp() throws IOException {
+  public void setUp() throws Exception {
     mockStatic(EnvironmentUtils.class);
-    mockStatic(RestClientUtils.class);
-    when(RestClientUtils.getRestClient()).thenAnswer(invocation -> mockOkHttpClient);
-    when(EnvironmentUtils.get(Property.REST_SERVER)).thenAnswer(invocation -> "http://localhost");
-    when(RestClientUtils.buildRequest("http://localhost/api/rule/list/published")).thenAnswer(invocation -> mockRequest);
-    when(mockOkHttpClient.newCall(mockRequest)).thenReturn(mockCall);
-    when(mockCall.execute()).thenReturn(mockResponse);
+    when(EnvironmentUtils.get(Property.REST_BASE_URL)).thenAnswer(invocation -> "http://localhost");
+    whenNew(RestClient.class).withAnyArguments().thenReturn(mockRestClient);
+    when(mockRestClient.get("/api/rule/list/published")).thenReturn(mockResponse);
     when(mockResponse.body()).thenReturn(mockResponseBody);
     when(mockResponseBody.string()).thenReturn(json);
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-  <property name="log.path" value="/tmp/flink/sojourner-app.log" />
+  <property name="log.path" value="/tmp/flink/sojourner-dumper.log" />
 
   <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>

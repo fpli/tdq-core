@@ -2,6 +2,7 @@ package com.ebay.sojourner.flink.common;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,17 +10,17 @@ class FlinkEnvUtilsTest {
 
   @BeforeEach
   void setUp() {
-    FlinkEnvUtils.prepare(new String[]{"--profile", "qa"});
+    FlinkEnvUtils.prepare(new String[]{"--profile", "test"});
   }
 
   @Test
   void prepare() {
-    assertThat(FlinkEnvUtils.getString("profile")).isEqualTo("qa");
+    assertThat(FlinkEnvUtils.getString("profile")).isEqualTo("test");
   }
 
   @Test
   void getString() {
-    assertThat(FlinkEnvUtils.getString("flink.app.name")).isEqualTo("Sojourner RT Pipeline");
+    assertThat(FlinkEnvUtils.getString("flink.app.name")).isEqualTo("Sojourner Test");
   }
 
   @Test
@@ -35,7 +36,13 @@ class FlinkEnvUtilsTest {
   @Test
   void getListString() {
     assertThat(FlinkEnvUtils.getListString("kafka.consumer.bootstrap-servers.rno")).isEqualTo(
-        "rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092,rhs-glrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092,rhs-glrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092,rhs-glrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092,rhs-glrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092");
+        String.join(",", Lists.newArrayList(
+            "rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092",
+            "rhs-glrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092",
+            "rhs-glrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092",
+            "rhs-glrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092",
+            "rhs-glrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092"
+        )));
   }
 
   @Test
