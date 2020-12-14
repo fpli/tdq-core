@@ -2,16 +2,16 @@ flink:
   app:
     name: Sojourner Realtime Pipeline - RNO
     parallelism:
-      default: 50
+      default: 120
       source: 100
       event: 100
       session: 600
-      pre-agent-ip: 100
-      agent-ip: 50
-      agent: 50
-      ip: 50
-      broadcast: 300
-      metrics: 300
+      pre-agent-ip: 120
+      agent-ip: 120
+      agent: 120
+      ip: 120
+      broadcast: 510
+      metrics: 510
     slot-sharing-group:
       source-event-lvs: lvs
       source-event-slc: slc
@@ -44,7 +44,7 @@ flink:
     source:
       from-timestamp: 0
       out-of-orderless-in-min: 3
-      dc: rno
+      idle-source-timeout-in-min: 10
     sink:
       dc: rno
       kafka:
@@ -127,10 +127,13 @@ kafka:
     batch-size: 524288
     acks: 1
     linger-ms: 50
-    request-timeout-ms: 60000
+    # 30s
+    request-timeout-ms: 30000
     retries: 30
     buffer-memory: 268435456
     compression-type: lz4
+    # 2min
+    delivery-timeout-ms: 120000
 
 rheos:
   registry-url: https://rheos-services.stratus.ebay.com

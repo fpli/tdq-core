@@ -74,8 +74,7 @@ public class KafkaConsumerConfig {
   }
 
   private static String getBrokersForDC(DataCenter dc) {
-    String propKey = KAFKA_CONSUMER_BOOTSTRAP_SERVERS + "." + dc.getValue()
-                                                                .toLowerCase();
+    String propKey = KAFKA_CONSUMER_BOOTSTRAP_SERVERS + "." + dc.getValue().toLowerCase();
     return getListString(propKey);
   }
 

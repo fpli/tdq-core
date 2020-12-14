@@ -19,6 +19,7 @@ public class SourceDataStreamBuilder<T> {
   private int parallelism = getInteger(Property.SOURCE_PARALLELISM);
   private int outOfOrderlessInMin;
   private String fromTimestamp = getStringOrDefault(Property.FLINK_APP_SOURCE_FROM_TIMESTAMP, "0");
+  private int idleSourceTimeout;
   private boolean rescaled;
 
   public SourceDataStreamBuilder(StreamExecutionEnvironment environment) {
@@ -65,6 +66,11 @@ public class SourceDataStreamBuilder<T> {
     return this;
   }
 
+  public SourceDataStreamBuilder<T> idleSourceTimeout(int idleSourceTimeout) {
+    this.idleSourceTimeout = idleSourceTimeout;
+    return this;
+  }
+
   public DataStream<T> build(KafkaDeserializationSchema<T> schema) {
     return this.build(schema, dc, operatorName, parallelism, uid, slotGroup, rescaled);
   }
@@ -79,7 +85,7 @@ public class SourceDataStreamBuilder<T> {
 
     KafkaConsumerConfig config = KafkaConsumerConfig.ofDC(dc);
     FlinkKafkaSourceConfigWrapper configWrapper = new FlinkKafkaSourceConfigWrapper(
-        config, outOfOrderlessInMin, fromTimestamp);
+        config, outOfOrderlessInMin, idleSourceTimeout, fromTimestamp);
     FlinkKafkaConsumerFactory factory = new FlinkKafkaConsumerFactory(configWrapper);
 
     DataStream<T> dataStream = environment

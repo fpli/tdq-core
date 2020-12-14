@@ -66,6 +66,8 @@ public class KafkaProducerConfig {
                        FlinkEnvUtils.getInteger(Property.BATCH_SIZE));
     producerConfig.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG,
                        FlinkEnvUtils.getInteger(Property.REQUEST_TIMEOUT_MS));
+    producerConfig.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG,
+        FlinkEnvUtils.getInteger(Property.DELIVERY_TIMEOUT_MS));
     producerConfig.put(ProducerConfig.RETRIES_CONFIG,
                        FlinkEnvUtils.getInteger(Property.REQUEST_RETRIES));
     producerConfig.put(ProducerConfig.LINGER_MS_CONFIG,

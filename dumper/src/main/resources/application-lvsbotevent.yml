@@ -1,3 +1,9 @@
+kafka:
+  consumer:
+    topic:
+      - behavior.totalv2.sojsession-bot-rno
+    group-id: sojourner-total-dumper-rno
+
 flink:
   app:
     name: Sojourner Bot Event HDFS Load Pipeline - LVS
@@ -23,9 +29,8 @@ flink:
         watermark: sojourner-total-lvs-bot-event-watermark-sink
     metric:
       watermark-process-progress: sojourner-ubd-bot-event-watermark-delay-time
-
     source:
-      dc: LVS
+      dc: lvs
     sink:
       hdfs:
         path: hdfs://hercules/sys/edw/working/ubi/ubi_w/soj/stg_ubi_event_dump_w/type=bot

@@ -1,10 +1,8 @@
 kafka:
   consumer:
-    data-center: RNO
     topic:
       - behavior.totalv2.sojsession-bot-rno
-    group-id:
-      rno: sojourner-total-dumper-rno
+    group-id: sojourner-total-dumper-rno
 
 flink:
   app:
@@ -39,6 +37,8 @@ flink:
         watermark: sojourner-total-rno-bot-session-watermark-sink
     metric:
       watermark-process-progress: sojourner-ubd-bot-session-watermark-delay-time
+    source:
+      dc: rno
     sink:
       hdfs:
         path:
@@ -47,10 +47,9 @@ flink:
           cross-day: hdfs://apollo-rno/sys/edw/working/ubi/ubi_w/soj/stg_ubi_session_dump_w/category=crossday/type=bot
         watermark-path: hdfs://apollo-rno/sys/edw/working/ubi/ubi_w/soj/ubi_session_watermark_lkp/type=bot
 
-#hdfs:
-#  dump:
-#    path:
-#      open: hdfs://apollo-rno/sys/soj/ubd/sessions/category=open/type=bot
-#      same-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=sameday/type=bot
-#      cross-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=crossday/type=bot
-#    watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/sessions/type=bot
+#      hdfs:
+#        path:
+#          open: hdfs://apollo-rno/sys/soj/ubd/sessions/category=open/type=bot
+#          same-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=sameday/type=bot
+#          cross-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=crossday/type=bot
+#        watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/sessions/type=bot

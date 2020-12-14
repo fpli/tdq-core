@@ -1,24 +1,22 @@
 kafka:
   consumer:
     stream: behavior.pulsar
-    data-center: SLC
     topic:
       - behavior.pulsar.misc.bot
-    group-id:
-      slc: sojourner-jetstream-dumper
+    group-id: sojourner-jetstream-dumper
     bootstrap-servers:
-#      rno:
-#        - rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
-#        - rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
-#        - rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
-#        - rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
-#        - rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
+      #      rno:
+      #        - rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
+      #        - rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
+      #        - rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
+      #        - rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
+      #        - rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
       slc:
-         - rhs-qisvkiaa-kfk-slc-1.rheos-streaming-prod.svc.45.tess.io:9092
-         - rhs-qisvkiaa-kfk-slc-2.rheos-streaming-prod.svc.45.tess.io:9092
-         - rhs-qisvkiaa-kfk-slc-3.rheos-streaming-prod.svc.45.tess.io:9092
-         - rhs-qisvkiaa-kfk-slc-51.rheos-streaming-prod.svc.45.tess.io:9092
-         - rhs-qisvkiaa-kfk-slc-52.rheos-streaming-prod.svc.45.tess.io:9092
+        - rhs-qisvkiaa-kfk-slc-1.rheos-streaming-prod.svc.45.tess.io:9092
+        - rhs-qisvkiaa-kfk-slc-2.rheos-streaming-prod.svc.45.tess.io:9092
+        - rhs-qisvkiaa-kfk-slc-3.rheos-streaming-prod.svc.45.tess.io:9092
+        - rhs-qisvkiaa-kfk-slc-51.rheos-streaming-prod.svc.45.tess.io:9092
+        - rhs-qisvkiaa-kfk-slc-52.rheos-streaming-prod.svc.45.tess.io:9092
 
 flink:
   app:
@@ -33,8 +31,10 @@ flink:
     uid:
       source: jetstream-pulsar-bot-event-source
       sink: jetstream-pulsar-bot-event-sink
+    source:
+      dc: slc
+    sink:
+      hdfs:
+        path: hdfs://apollo-rno/sys/soj/ubd/jetstream_events/type=bot/
+        class-name: com.ebay.sojourner.common.model.JetStreamOutputEvent
 
-hdfs:
-  dump:
-    path: hdfs://apollo-rno/sys/soj/ubd/jetstream_events/type=bot/
-    class-name: com.ebay.sojourner.common.model.JetStreamOutputEvent

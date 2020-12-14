@@ -23,9 +23,10 @@ public class FlinkKafkaConsumerFactory {
     if (configWrapper.getOutOfOrderlessInMin() > 0) {
 
       flinkKafkaConsumer.assignTimestampsAndWatermarks(
-          WatermarkStrategy.forBoundedOutOfOrderness(Duration.ofMinutes(3))
+          WatermarkStrategy
+              .forBoundedOutOfOrderness(Duration.ofMinutes(configWrapper.getOutOfOrderlessInMin()))
               .withTimestampAssigner(new SojSerializableTimestampAssigner())
-              .withIdleness(Duration.ofMinutes(10)));
+              .withIdleness(Duration.ofMinutes(configWrapper.getIdleSourceTimeout())));
       /*
       flinkKafkaConsumer.assignTimestampsAndWatermarks(
           new SojBoundedOutOfOrderlessTimestampExtractor<>(

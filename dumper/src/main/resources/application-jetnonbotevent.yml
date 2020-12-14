@@ -1,11 +1,9 @@
 kafka:
   consumer:
     stream: behavior.total
-    data-center: RNO
     topic:
       - behavior.total.sojevent.total
-    group-id:
-      rno: sojourner-jetstream-dumper
+    group-id: sojourner-jetstream-dumper
     bootstrap-servers:
       rno:
         - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
@@ -27,8 +25,10 @@ flink:
     uid:
       source: jetstream-total-nonbot-event-source
       sink: jetstream-total-nonbot-event-sink
+    source:
+      dc: rno
+    sink:
+      hdfs:
+        path: hdfs://apollo-rno/sys/soj/ubd/jetstream_events/type=nonbot/
+        class-name: com.ebay.sojourner.common.model.JetStreamOutputEvent
 
-hdfs:
-  dump:
-    path: hdfs://apollo-rno/sys/soj/ubd/jetstream_events/type=nonbot/
-    class-name: com.ebay.sojourner.common.model.JetStreamOutputEvent

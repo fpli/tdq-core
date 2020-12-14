@@ -1,17 +1,8 @@
 kafka:
   consumer:
-    data-center: RNO
     topic:
       - behavior.totalv2.sojsession-nonbot-rno
-    group-id:
-      rno: sojourner-total-dumper-rno
-    bootstrap-servers:
-      rno:
-        - rhs-fxuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.37.tess.io:9092
+    group-id: sojourner-total-dumper-rno
 
 flink:
   app:
@@ -46,19 +37,20 @@ flink:
         watermark: sojourner-total-rno-nonbot-session-watermark-sink
     metric:
       watermark-process-progress: sojourner-ubd-nonbot-session-watermark-delay-time
+    source:
+      dc: rno
+    sink:
+      hdfs:
+        path:
+          open: hdfs://apollo-rno/sys/edw/working/ubi/ubi_w/soj/stg_ubi_session_dump_w/category=open/type=nonbot
+          same-day: hdfs://apollo-rno/sys/edw/working/ubi/ubi_w/soj/stg_ubi_session_dump_w/category=sameday/type=nonbot
+          cross-day: hdfs://apollo-rno/sys/edw/working/ubi/ubi_w/soj/stg_ubi_session_dump_w/category=crossday/type=nonbot
+        watermark-path: hdfs://apollo-rno/sys/edw/working/ubi/ubi_w/soj/ubi_session_watermark_lkp/type=nonbot
+#      hdfs:
+#        path:
+#          open: hdfs://apollo-rno/sys/soj/ubd/sessions/category=open/type=nonbot
+#          same-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=sameday/type=nonbot
+#          cross-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=crossday/type=nonbot
+#        watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/sessions/type=nonbot
 
-hdfs:
-  dump:
-    path:
-      open: hdfs://apollo-rno/sys/edw/working/ubi/ubi_w/soj/stg_ubi_session_dump_w/category=open/type=nonbot
-      same-day: hdfs://apollo-rno/sys/edw/working/ubi/ubi_w/soj/stg_ubi_session_dump_w/category=sameday/type=nonbot
-      cross-day: hdfs://apollo-rno/sys/edw/working/ubi/ubi_w/soj/stg_ubi_session_dump_w/category=crossday/type=nonbot
-    watermark-path: hdfs://apollo-rno/sys/edw/working/ubi/ubi_w/soj/ubi_session_watermark_lkp/type=nonbot
 
-#hdfs:
-#  dump:
-#    path:
-#      open: hdfs://apollo-rno/sys/soj/ubd/sessions/category=open/type=nonbot
-#      same-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=sameday/type=nonbot
-#      cross-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=crossday/type=nonbot
-#    watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/sessions/type=nonbot

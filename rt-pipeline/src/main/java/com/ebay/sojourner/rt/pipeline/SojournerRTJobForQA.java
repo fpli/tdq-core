@@ -71,7 +71,7 @@ public class SojournerRTJobForQA {
     // 0.0 Prepare execution environment
     // 0.1 UBI configuration
     // 0.2 Flink configuration
-    args = new String[] {"--profile", "qa"};
+    args = new String[]{"--profile", "qa"};
     final StreamExecutionEnvironment executionEnvironment = FlinkEnvUtils.prepare(args);
 
     // 1. Rheos Consumer
@@ -84,7 +84,9 @@ public class SojournerRTJobForQA {
         .dc(DataCenter.LVS)
         .operatorName(getString(Property.SOURCE_OPERATOR_NAME_LVS))
         .uid(getString(Property.SOURCE_UID_LVS))
+        .fromTimestamp(getString(Property.FLINK_APP_SOURCE_FROM_TIMESTAMP))
         .outOfOrderlessInMin(getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
+        .idleSourceTimeout(getInteger(Property.FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN))
         .build(new KafkaDeserializationSchemaWrapper<>(new RawEventDeserializationSchema(
             getString(Property.RHEOS_KAFKA_REGISTRY_URL))));
 
@@ -251,34 +253,34 @@ public class SojournerRTJobForQA {
 
     // kafka sink for bot and nonbot sojsession
     sojSessionStream.addSink(producerFactory.get(
-            getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SESSION_NON_BOT),
-            getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_SESSION),
-            getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SESSION, ",")))
+        getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SESSION_NON_BOT),
+        getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_SESSION),
+        getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SESSION, ",")))
         .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
         .name("SojSession")
         .uid("session-sink-id");
 
     botSojSessionStream.addSink(producerFactory.get(
-            getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SESSION_BOT),
-            getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_SESSION),
-            getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SESSION, ",")))
+        getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SESSION_BOT),
+        getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_SESSION),
+        getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SESSION, ",")))
         .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
         .name("Bot SojSession")
         .uid("bot-session-sink-id");
 
     // kafka sink for bot and nonbot sojevent
     sojEventWithSessionId.addSink(producerFactory.get(
-            getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_EVENT_NON_BOT),
-            getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_EVENT),
-            getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_EVENT, ",")))
+        getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_EVENT_NON_BOT),
+        getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_EVENT),
+        getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_EVENT, ",")))
         .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
         .name("SojEvent")
         .uid("event-sink-id");
 
     botSojEventStream.addSink(producerFactory.get(
-            getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_EVENT_BOT),
-            getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_EVENT),
-            getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_EVENT, ",")))
+        getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_EVENT_BOT),
+        getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_EVENT),
+        getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_EVENT, ",")))
         .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
         .name("Bot SojEvent")
         .uid("bot-event-sink-id");

@@ -42,7 +42,7 @@ public class SojournerEventDumperJob {
 
     // byte to sojevent
     DataStream<SojEvent> sojEventDataStream = rescaledByteEventDataStream
-        .map(new ByteToSojEventMapFunction())
+        .map(new ByteToSojEventMapFunction(getString(Property.RHEOS_KAFKA_REGISTRY_URL)))
         .setParallelism(getInteger(Property.SINK_HDFS_PARALLELISM))
         .name(getString(Property.PASS_THROUGH_OPERATOR_NAME))
         .uid(getString(Property.PASS_THROUGH_UID));

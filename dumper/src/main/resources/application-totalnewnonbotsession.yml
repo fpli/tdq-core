@@ -1,11 +1,9 @@
 kafka:
   consumer:
-    data-center: RNO
     stream: behavior.total.new
     topic:
       - behavior.total.new.sojsession
-    group-id:
-      rno: sojourner-total-new-dumper
+    group-id: sojourner-total-new-dumper
     bootstrap-servers:
       rno:
         - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
@@ -47,11 +45,13 @@ flink:
         watermark: sojourner-total-new-rno-nonbot-session-watermark-sink
     metric:
       watermark-process-progress: sojourner-ubd-nonbot-session-watermark-delay-time
+    source:
+      dc: rno
+    sink:
+      hdfs:
+        path:
+          open: hdfs://apollo-rno/sys/soj/ubd/sessions/category=open/type=nonbot
+          same-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=sameday/type=nonbot
+          cross-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=crossday/type=nonbot
+        watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/sessions/type=nonbot
 
-hdfs:
-  dump:
-    path:
-      open: hdfs://apollo-rno/sys/soj/ubd/sessions/category=open/type=nonbot
-      same-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=sameday/type=nonbot
-      cross-day: hdfs://apollo-rno/sys/soj/ubd/sessions/category=crossday/type=nonbot
-    watermark-path: hdfs://apollo-rno/sys/soj/ubd/watermark/sessions/type=nonbot

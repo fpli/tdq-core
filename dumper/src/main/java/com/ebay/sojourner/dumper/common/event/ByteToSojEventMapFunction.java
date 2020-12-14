@@ -12,6 +12,12 @@ import org.apache.flink.configuration.Configuration;
 
 public class ByteToSojEventMapFunction extends RichMapFunction<byte[], SojEvent> {
 
+  private String schemaRegistryUrl;
+
+  public ByteToSojEventMapFunction(String schemaRegistryUrl) {
+    this.schemaRegistryUrl = schemaRegistryUrl;
+  }
+
   @Override
   public void open(Configuration parameters) throws Exception {
     super.open(parameters);
@@ -23,7 +29,7 @@ public class ByteToSojEventMapFunction extends RichMapFunction<byte[], SojEvent>
     RheosEvent rheosEvent =
         RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
     GenericRecord genericRecord =
-        RheosEventSerdeFactory.getRheosEventDeserializer().decode(rheosEvent);
+        RheosEventSerdeFactory.getRheosEventDeserializer(schemaRegistryUrl).decode(rheosEvent);
 
     String guid = TypeTransformUtil.getString(genericRecord.get("guid"));
     String sessionId = TypeTransformUtil.getString(genericRecord.get("sessionId"));

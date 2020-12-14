@@ -45,7 +45,7 @@ public class SojournerSessionDumperJob {
 
     // byte to sojsession
     DataStream<SojSession> sojSessionDataStream = rescaledByteSessionDataStream
-        .map(new ByteToSojSessionMapFunction())
+        .map(new ByteToSojSessionMapFunction(getString(Property.RHEOS_KAFKA_REGISTRY_URL)))
         .setParallelism(getInteger(Property.SINK_HDFS_PARALLELISM))
         .name(getString(Property.PASS_THROUGH_OPERATOR_NAME))
         .uid(getString(Property.PASS_THROUGH_UID));
