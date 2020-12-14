@@ -1,12 +1,11 @@
 package com.ebay.sojourner.business.detector;
 
-import com.ebay.sojourner.business.rule.BotRule12End;
-import com.ebay.sojourner.business.rule.BotRule208;
 import com.ebay.sojourner.business.rule.BotRule206;
+import com.ebay.sojourner.business.rule.BotRule208;
 import com.ebay.sojourner.common.model.UbiSession;
-import com.ebay.sojourner.dsl.domain.rule.Rule;
 import com.ebay.sojourner.common.util.BotFilter;
 import com.ebay.sojourner.common.util.UbiBotFilter;
+import com.ebay.sojourner.dsl.domain.rule.Rule;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,6 +54,6 @@ public class SessionEndBotDetector implements BotDetector<UbiSession> {
   public void initBotRules() {
     botRules.add(new BotRule206());
     botRules.add(new BotRule208());
-    botRules.add(new BotRule12End());
+    //    botRules.add(new BotRule12End());
   }
 }

@@ -66,7 +66,7 @@ public class SessionBotDetector implements BotDetector<UbiSession> {
     botRules.add(new BotRule15());
     botRules.add(new BotRule9());
     botRules.add(new BotRule10());
-    botRules.add(new BotRule12());
+    //    botRules.add(new BotRule12());
     botRules.add(new BotRule203());
     botRules.add(new BotRule204());
     botRules.add(new BotRule205());
