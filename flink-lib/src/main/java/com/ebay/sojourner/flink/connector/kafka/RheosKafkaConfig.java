@@ -2,6 +2,7 @@ package com.ebay.sojourner.flink.connector.kafka;
 
 import com.ebay.sojourner.common.util.Property;
 import io.ebay.rheos.kafka.client.StreamConnectorConfig;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -10,7 +11,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class RheosKafkaConfig {
+public class RheosKafkaConfig implements Serializable {
   private String rheosServiceUrls;
   private String topic;
   private String subject;
