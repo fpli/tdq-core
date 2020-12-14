@@ -332,6 +332,7 @@ public class SojournerRTJob {
     // kafka sink for bot and nonbot sojsession
     sojSessionStream
         .addSink(producerFactory.get(
+            getString(Property.RHEOS_KAFKA_REGISTRY_URL),
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SESSION_NON_BOT),
             getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_SESSION),
             getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SESSION, ",")))
@@ -342,6 +343,7 @@ public class SojournerRTJob {
 
     botSojSessionStream
         .addSink(producerFactory.get(
+            getString(Property.RHEOS_KAFKA_REGISTRY_URL),
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SESSION_BOT),
             getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_SESSION),
             getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SESSION, ",")))
@@ -353,6 +355,7 @@ public class SojournerRTJob {
     // kafka sink for bot and nonbot sojevent
     sojEventWithSessionId
         .addSink(producerFactory.get(
+            getString(Property.RHEOS_KAFKA_REGISTRY_URL),
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_EVENT_NON_BOT),
             getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_EVENT),
             getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_EVENT, ",")))
@@ -363,6 +366,7 @@ public class SojournerRTJob {
 
     botSojEventStream
         .addSink(producerFactory.get(
+            getString(Property.RHEOS_KAFKA_REGISTRY_URL),
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_EVENT_BOT),
             getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_EVENT),
             getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_EVENT, ",")))
@@ -451,6 +455,7 @@ public class SojournerRTJob {
 
     lateSojEventStream
         .addSink(producerFactory.get(
+            getString(Property.RHEOS_KAFKA_REGISTRY_URL),
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_EVENT_LATE),
             getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_EVENT),
             getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_EVENT, ",")))
