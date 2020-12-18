@@ -5,6 +5,7 @@ import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getStringOrDefault;
 
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.DataCenter;
+import com.google.common.base.Preconditions;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.KafkaDeserializationSchema;
@@ -72,17 +73,19 @@ public class SourceDataStreamBuilder<T> {
   }
 
   public DataStream<T> build(KafkaDeserializationSchema<T> schema) {
+    Preconditions.checkNotNull(dc);
     return this.build(schema, dc, operatorName, parallelism, uid, slotGroup, rescaled);
   }
 
   public DataStream<T> buildRescaled(KafkaDeserializationSchema<T> schema) {
+    Preconditions.checkNotNull(dc);
     return this.build(schema, dc, operatorName, parallelism, uid, slotGroup, true);
   }
 
   public DataStream<T> build(KafkaDeserializationSchema<T> schema, DataCenter dc,
                              String operatorName, int parallelism, String uid, String slotGroup,
                              boolean rescaled) {
-
+    Preconditions.checkNotNull(dc);
     KafkaConsumerConfig config = KafkaConsumerConfig.ofDC(dc);
     FlinkKafkaSourceConfigWrapper configWrapper = new FlinkKafkaSourceConfigWrapper(
         config, outOfOrderlessInMin, idleSourceTimeout, fromTimestamp);

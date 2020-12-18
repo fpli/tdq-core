@@ -16,13 +16,15 @@ flink:
       from-timestamp: 0
       out-of-orderless-in-min: 0
     sink:
-      dc: rno
+      dc: slc
       kafka:
-        topic: behavior.total.new.dead.letter
+        # change me when release
+        topic: behavior.pulsarv2.test.default
 
 kafka:
   consumer:
     stream: behavior.totalv2
+    # change me when release
     group-id: sojourner-total-new-distributor
     topic:
       - behavior.totalv2.sojevent-nonbot-rno
@@ -52,14 +54,15 @@ kafka:
     auto-offset-reset: latest
 
   producer:
-    stream: behavior.total.new
+    # change me when release
+    stream: behavior.pulsarv2.test
     bootstrap-servers:
-      rno:
-        - rhs-pbuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
-        - rhs-pbuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
-        - rhs-pbuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
-        - rhs-pbuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092
-        - rhs-pbuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092
+      slc:
+        - rhs-kxwvkiaa-kfk-slc-1.rheos-streaming-prod.svc.45.tess.io:9092
+        - rhs-kxwvkiaa-kfk-slc-2.rheos-streaming-prod.svc.45.tess.io:9092
+        - rhs-kxwvkiaa-kfk-slc-3.rheos-streaming-prod.svc.45.tess.io:9092
+        - rhs-kxwvkiaa-kfk-slc-4.rheos-streaming-prod.svc.45.tess.io:9092
+        - rhs-kxwvkiaa-kfk-slc-5.rheos-streaming-prod.svc.45.tess.io:9092
     batch-size: 524288
     acks: 1
     linger-ms: 50
@@ -81,5 +84,5 @@ rheos:
 
 rest-client:
   base-url: https://sojubdportalservice.vip.ebay.com
-  auth-username: soj-flink-app
-  auth-token: B65613BAE51443268AEBCAEF26C30ABE
+  username: soj-flink-app
+  pull-interval: 15000

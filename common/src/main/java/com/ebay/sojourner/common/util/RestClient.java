@@ -30,10 +30,9 @@ public class RestClient {
     Request request = new Builder()
         .url(url)
         .addHeader(X_AUTH_USERNAME_HEADER,
-                   EnvironmentUtils.get(Property.REST_AUTH_USERNAME))
+                   EnvironmentUtils.get(Property.REST_USERNAME))
         .addHeader(X_AUTH_TOKEN_HEADER,
-                   EnvironmentUtils.get(Property.REST_AUTH_TOKEN))
-        .addHeader("Authorization", Credentials.basic("sojourner", "sojourner", Charsets.UTF_8))
+                   Credentials.basic("sojourner", "sojourner", Charsets.UTF_8))
         .build();
 
     try {
