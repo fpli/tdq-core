@@ -256,38 +256,42 @@ public class SojournerRTJobForQA {
         getString(Property.RHEOS_KAFKA_REGISTRY_URL),
         getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SESSION_NON_BOT),
         getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_SESSION),
+        getString(Property.PRODUCER_ID),
         getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SESSION, ",")))
-        .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
-        .name("SojSession")
-        .uid("session-sink-id");
+                    .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
+                    .name("SojSession")
+                    .uid("session-sink-id");
 
     botSojSessionStream.addSink(producerFactory.get(
         getString(Property.RHEOS_KAFKA_REGISTRY_URL),
         getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SESSION_BOT),
         getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_SESSION),
+        getString(Property.PRODUCER_ID),
         getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SESSION, ",")))
-        .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
-        .name("Bot SojSession")
-        .uid("bot-session-sink-id");
+                       .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
+                       .name("Bot SojSession")
+                       .uid("bot-session-sink-id");
 
     // kafka sink for bot and nonbot sojevent
     sojEventWithSessionId.addSink(producerFactory.get(
         getString(Property.RHEOS_KAFKA_REGISTRY_URL),
         getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_EVENT_NON_BOT),
         getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_EVENT),
+        getString(Property.PRODUCER_ID),
         getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_EVENT, ",")))
-        .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
-        .name("SojEvent")
-        .uid("event-sink-id");
+                         .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
+                         .name("SojEvent")
+                         .uid("event-sink-id");
 
     botSojEventStream.addSink(producerFactory.get(
         getString(Property.RHEOS_KAFKA_REGISTRY_URL),
         getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_EVENT_BOT),
         getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_EVENT),
+        getString(Property.PRODUCER_ID),
         getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_EVENT, ",")))
-        .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
-        .name("Bot SojEvent")
-        .uid("bot-event-sink-id");
+                     .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
+                     .name("Bot SojEvent")
+                     .uid("bot-event-sink-id");
 
     // metrics collector for end to end
     signatureBotDetectionForEvent

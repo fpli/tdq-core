@@ -1,8 +1,7 @@
 package com.ebay.sojourner.flink.connector.kafka;
 
-import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connector.kafka.schema.RheosGenericKafkaSerializationSchema;
+import com.google.common.base.Preconditions;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer.Semantic;
 import org.apache.flink.streaming.connectors.kafka.KafkaSerializationSchema;
@@ -21,9 +20,13 @@ public class FlinkKafkaProducerFactory {
         Semantic.AT_LEAST_ONCE);
   }
 
+  // Rheos kafka producer
   public FlinkKafkaProducer get(String rheosServiceUrls, String topic, String subject,
-      String[] keys) {
-    String producerId = FlinkEnvUtils.getString(Property.PRODUCER_ID);
+                                String producerId, String... keys) {
+    Preconditions.checkNotNull(rheosServiceUrls);
+    Preconditions.checkNotNull(topic);
+    Preconditions.checkNotNull(subject);
+    Preconditions.checkNotNull(producerId);
 
     RheosKafkaConfig rheosKafkaConfig = new RheosKafkaConfig(
         rheosServiceUrls, topic, subject, producerId, config.getProperties());

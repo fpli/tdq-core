@@ -56,10 +56,13 @@ kafka:
     batch-size: 524288
     acks: 1
     linger-ms: 50
-    request-timeout-ms: 60000
+    # 30s
+    request-timeout-ms: 30000
     retries: 30
     buffer-memory: 268435456
     compression-type: lz4
+    # 2min
+    delivery-timeout-ms: 120000
 
 rheos:
   registry-url: https://rheos-services.qa.ebay.com
@@ -71,3 +74,6 @@ rheos:
 
 rest-client:
   base-url: https://sojubdportalservice.vip.qa.ebay.com
+#  base-url: http://localhost:8080
+  username: soj-flink-app
+  pull-interval: 15000

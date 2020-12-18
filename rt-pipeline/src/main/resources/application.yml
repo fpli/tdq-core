@@ -153,7 +153,6 @@ zookeeper:
 
 rest-client:
   base-url: https://sojubdportalservice.vip.ebay.com
-  auth-username: soj-flink-app
-  auth-token: B65613BAE51443268AEBCAEF26C30ABE
+  username: soj-flink-app
 
 ua-parser-env: prod

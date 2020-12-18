@@ -335,6 +335,7 @@ public class SojournerRTJob {
             getString(Property.RHEOS_KAFKA_REGISTRY_URL),
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SESSION_NON_BOT),
             getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_SESSION),
+            getString(Property.PRODUCER_ID),
             getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SESSION, ",")))
         .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
@@ -346,6 +347,7 @@ public class SojournerRTJob {
             getString(Property.RHEOS_KAFKA_REGISTRY_URL),
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SESSION_BOT),
             getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_SESSION),
+            getString(Property.PRODUCER_ID),
             getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SESSION, ",")))
         .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
@@ -358,6 +360,7 @@ public class SojournerRTJob {
             getString(Property.RHEOS_KAFKA_REGISTRY_URL),
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_EVENT_NON_BOT),
             getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_EVENT),
+            getString(Property.PRODUCER_ID),
             getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_EVENT, ",")))
         .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
@@ -369,6 +372,7 @@ public class SojournerRTJob {
             getString(Property.RHEOS_KAFKA_REGISTRY_URL),
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_EVENT_BOT),
             getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_EVENT),
+            getString(Property.PRODUCER_ID),
             getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_EVENT, ",")))
         .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
         .slotSharingGroup(getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
@@ -453,11 +457,11 @@ public class SojournerRTJob {
         .name("Late UbiEvent to SojEvent")
         .uid("late-ubievent-to-sojevent");
 
-    lateSojEventStream
-        .addSink(producerFactory.get(
+    lateSojEventStream.addSink(producerFactory.get(
             getString(Property.RHEOS_KAFKA_REGISTRY_URL),
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_EVENT_LATE),
             getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_EVENT),
+            getString(Property.PRODUCER_ID),
             getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_EVENT, ",")))
         .setParallelism(getInteger(Property.SESSION_PARALLELISM))
         .slotSharingGroup(getString(Property.SESSION_SLOT_SHARE_GROUP))
