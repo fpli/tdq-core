@@ -7,17 +7,16 @@ import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
 import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.model.SojWatermark;
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.function.SplitSessionProcessFunction;
-import com.ebay.sojourner.flink.function.ExtractWatermarkProcessFunction;
 import com.ebay.sojourner.flink.common.DataCenter;
 import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.OutputTagConstants;
 import com.ebay.sojourner.flink.connector.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.connector.kafka.SojBoundedOutOfOrderlessTimestampExtractor;
 import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
-import com.ebay.sojourner.flink.connector.kafka.schema.RheosEventKafkaDeserializationSchema;
-import com.ebay.sojourner.flink.function.RheosEventToSojSessionMapFunction;
-import io.ebay.rheos.schema.event.RheosEvent;
+import com.ebay.sojourner.flink.connector.kafka.schema.PassThroughDeserializationSchema;
+import com.ebay.sojourner.flink.function.BinaryToSojSessionMapFunction;
+import com.ebay.sojourner.flink.function.ExtractWatermarkProcessFunction;
+import com.ebay.sojourner.flink.function.SplitSessionProcessFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -32,19 +31,19 @@ public class SojournerSessionDumperJob {
     String dc = getString(Property.FLINK_APP_SOURCE_DC);
 
     // rescaled kafka source
-    SourceDataStreamBuilder<RheosEvent> dataStreamBuilder =
+    SourceDataStreamBuilder<byte[]> dataStreamBuilder =
         new SourceDataStreamBuilder<>(executionEnvironment);
 
-    DataStream<RheosEvent> rescaledByteSessionDataStream = dataStreamBuilder
+    DataStream<byte[]> rescaledByteSessionDataStream = dataStreamBuilder
         .dc(DataCenter.of(dc))
         .operatorName(getString(Property.SOURCE_OPERATOR_NAME))
         .uid(getString(Property.SOURCE_UID))
         .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
-        .buildRescaled(new RheosEventKafkaDeserializationSchema());
+        .buildRescaled(new PassThroughDeserializationSchema());
 
     // byte to sojsession
     DataStream<SojSession> sojSessionDataStream = rescaledByteSessionDataStream
-        .map(new RheosEventToSojSessionMapFunction())
+        .map(new BinaryToSojSessionMapFunction())
         .setParallelism(getInteger(Property.SINK_HDFS_PARALLELISM))
         .name(getString(Property.PASS_THROUGH_OPERATOR_NAME))
         .uid(getString(Property.PASS_THROUGH_UID));

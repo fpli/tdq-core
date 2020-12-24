@@ -12,10 +12,9 @@ import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connector.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.connector.kafka.SojBoundedOutOfOrderlessTimestampExtractor;
 import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
-import com.ebay.sojourner.flink.connector.kafka.schema.RheosEventKafkaDeserializationSchema;
+import com.ebay.sojourner.flink.connector.kafka.schema.PassThroughDeserializationSchema;
+import com.ebay.sojourner.flink.function.BinaryToSojEventMapFunction;
 import com.ebay.sojourner.flink.function.ExtractWatermarkProcessFunction;
-import com.ebay.sojourner.flink.function.RheosEventToSojEventMapFunction;
-import io.ebay.rheos.schema.event.RheosEvent;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -29,19 +28,19 @@ public class SojournerEventDumperJob {
     String dc = getString(Property.FLINK_APP_SOURCE_DC);
 
     // rescaled kafka source
-    SourceDataStreamBuilder<RheosEvent> dataStreamBuilder =
+    SourceDataStreamBuilder<byte[]> dataStreamBuilder =
         new SourceDataStreamBuilder<>(executionEnvironment);
 
-    DataStream<RheosEvent> rescaledByteEventDataStream = dataStreamBuilder
+    DataStream<byte[]> rescaledByteEventDataStream = dataStreamBuilder
         .dc(DataCenter.of(dc))
         .operatorName(getString(Property.SOURCE_OPERATOR_NAME))
         .uid(getString(Property.SOURCE_UID))
         .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
-        .buildRescaled(new RheosEventKafkaDeserializationSchema());
+        .buildRescaled(new PassThroughDeserializationSchema());
 
     // byte to sojevent
     DataStream<SojEvent> sojEventDataStream = rescaledByteEventDataStream
-        .map(new RheosEventToSojEventMapFunction())
+        .map(new BinaryToSojEventMapFunction())
         .setParallelism(getInteger(Property.SINK_HDFS_PARALLELISM))
         .name(getString(Property.PASS_THROUGH_OPERATOR_NAME))
         .uid(getString(Property.PASS_THROUGH_UID));
