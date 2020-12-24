@@ -225,7 +225,7 @@ public class SojournerRTJob {
 
     DataStream<BotSignature> agentIpSignatureDataStream = agentIpAttributeDatastream
         .keyBy("agent", "clientIp")
-        .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(3), Time.hours(7)))
+        .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(8), Time.hours(7)))
         .trigger(OnElementEarlyFiringTrigger.create())
         .aggregate(
             new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
@@ -236,7 +236,7 @@ public class SojournerRTJob {
 
     DataStream<BotSignature> agentSignatureDataStream = agentIpAttributeDatastream
         .keyBy("agent")
-        .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(3), Time.hours(7)))
+        .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(8), Time.hours(7)))
         .trigger(OnElementEarlyFiringTrigger.create())
         .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
         .setParallelism(getInteger(Property.AGENT_PARALLELISM))
@@ -247,7 +247,7 @@ public class SojournerRTJob {
     DataStream<BotSignature> ipSignatureDataStream = agentIpAttributeDatastream
         .keyBy("clientIp")
         .window(SlidingEventTimeWindows
-            .of(Time.hours(24), Time.hours(3), Time.hours(7))) // sliding  to 3hours
+            .of(Time.hours(24), Time.hours(8), Time.hours(7))) // sliding  to 3hours
         .trigger(OnElementEarlyFiringTrigger.create())
         .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
         .setParallelism(getInteger(Property.IP_PARALLELISM))
