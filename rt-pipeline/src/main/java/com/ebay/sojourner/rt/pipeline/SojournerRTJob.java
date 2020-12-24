@@ -201,7 +201,11 @@ public class SojournerRTJob {
     // ubiSession to SessionCore
     DataStream<SessionCore> sessionCoreDataStream =
         ubiSessionDataStream
-            .filter(new OpenSessionFilterFunction())    //add opensession filter
+            .filter(new OpenSessionFilterFunction())
+            .setParallelism(getInteger(Property.SESSION_PARALLELISM))
+            .slotSharingGroup(getString(Property.SESSION_SLOT_SHARE_GROUP))
+            .name("UbiSession Open Filter") //add opensession filter name
+            .uid("ubisession-open-filter") //add opensession filter uid
             .map(new UbiSessionToSessionCoreMapFunction())
             .setParallelism(getInteger(Property.SESSION_PARALLELISM))
             .slotSharingGroup(getString(Property.SESSION_SLOT_SHARE_GROUP))
