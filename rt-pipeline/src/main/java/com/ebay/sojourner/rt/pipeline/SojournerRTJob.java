@@ -147,7 +147,7 @@ public class SojournerRTJob {
         .slotSharingGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP))
         .name("Filter RNO Skew Guid")
         .uid("filter-rno-skew-guid");
-        */
+     */
 
     // 2. Event Operator
     // 2.1 Parse and transform RawEvent to UbiEvent
