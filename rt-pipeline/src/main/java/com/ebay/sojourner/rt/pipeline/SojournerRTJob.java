@@ -49,6 +49,7 @@ import com.ebay.sojourner.rt.operator.attribute.IpAttributeAgg;
 import com.ebay.sojourner.rt.operator.attribute.IpWindowProcessFunction;
 import com.ebay.sojourner.rt.operator.event.DetectableEventMapFunction;
 import com.ebay.sojourner.rt.operator.event.EventDataStreamBuilder;
+import com.ebay.sojourner.rt.operator.event.OpenSessionFilterFunction;
 import com.ebay.sojourner.rt.operator.event.UbiEventMapWithStateFunction;
 import com.ebay.sojourner.rt.operator.event.UbiEventToSojEventMapFunction;
 import com.ebay.sojourner.rt.operator.event.UbiEventToSojEventProcessFunction;
@@ -175,7 +176,7 @@ public class SojournerRTJob {
             .window(SojEventTimeSessionWindows.withGapAndMaxDuration(Time.minutes(30),
                 Time.hours(24)))
             .trigger(Builder.create().trigger(EventTimeTrigger.create())
-                            .trigger(MidnightOpenSessionTrigger
+                .trigger(MidnightOpenSessionTrigger
                     .of(Time.hours(7))).build())
             .sideOutputLateData(OutputTagConstants.lateEventOutputTag)
             .aggregate(new UbiSessionAgg(), new UbiSessionWindowProcessFunction());
@@ -200,6 +201,7 @@ public class SojournerRTJob {
     // ubiSession to SessionCore
     DataStream<SessionCore> sessionCoreDataStream =
         ubiSessionDataStream
+            .filter(new OpenSessionFilterFunction())    //add opensession filter
             .map(new UbiSessionToSessionCoreMapFunction())
             .setParallelism(getInteger(Property.SESSION_PARALLELISM))
             .slotSharingGroup(getString(Property.SESSION_SLOT_SHARE_GROUP))
@@ -244,7 +246,8 @@ public class SojournerRTJob {
 
     DataStream<BotSignature> ipSignatureDataStream = agentIpAttributeDatastream
         .keyBy("clientIp")
-        .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(12), Time.hours(7)))
+        .window(SlidingEventTimeWindows
+            .of(Time.hours(24), Time.hours(3), Time.hours(7))) // sliding  to 3hours
         .trigger(OnElementEarlyFiringTrigger.create())
         .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
         .setParallelism(getInteger(Property.IP_PARALLELISM))
@@ -422,18 +425,18 @@ public class SojournerRTJob {
         .addSink(producerFactory.get(
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SIGNATURE_AGENT_IP),
             new AvroKeyedSerializationSchema<>(BotSignature.class,
-            getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_AGENT_IP, ",")[0])))
+                getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_AGENT_IP,
+                    ",")[0])))
         .setParallelism(getInteger(Property.DEFAULT_PARALLELISM))
         .slotSharingGroup(getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name(String.format("%s Signature", Constants.AGENTIP))
         .uid(String.format("signature-%s-sink", Constants.AGENTIP));
 
-
     agentSignatureDataStream
         .addSink(producerFactory.get(
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SIGNATURE_AGENT),
             new AvroKeyedSerializationSchema<>(BotSignature.class,
-            getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_AGENT, ",")[0])))
+                getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_AGENT, ",")[0])))
         .setParallelism(getInteger(Property.DEFAULT_PARALLELISM))
         .slotSharingGroup(getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name(String.format("%s Signature", Constants.AGENT))
@@ -443,7 +446,7 @@ public class SojournerRTJob {
         .addSink(producerFactory.get(
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SIGNATURE_IP),
             new AvroKeyedSerializationSchema<>(BotSignature.class,
-            getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_IP, ",")[0])))
+                getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_IP, ",")[0])))
         .setParallelism(getInteger(Property.DEFAULT_PARALLELISM))
         .slotSharingGroup(getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name(String.format("%s Signature", Constants.IP))
@@ -458,11 +461,11 @@ public class SojournerRTJob {
         .uid("late-ubievent-to-sojevent");
 
     lateSojEventStream.addSink(producerFactory.get(
-            getString(Property.RHEOS_KAFKA_REGISTRY_URL),
-            getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_EVENT_LATE),
-            getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_EVENT),
-            getString(Property.PRODUCER_ID),
-            getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_EVENT, ",")))
+        getString(Property.RHEOS_KAFKA_REGISTRY_URL),
+        getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_EVENT_LATE),
+        getString(Property.FLINK_APP_SINK_KAFKA_SUBJECT_EVENT),
+        getString(Property.PRODUCER_ID),
+        getStringArray(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_EVENT, ",")))
         .setParallelism(getInteger(Property.SESSION_PARALLELISM))
         .slotSharingGroup(getString(Property.SESSION_SLOT_SHARE_GROUP))
         .name("Late SojEvent")
