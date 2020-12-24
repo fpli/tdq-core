@@ -19,6 +19,7 @@ public class AvroKeyedSerializationSchemaTest {
     serializer.serializeValue(e);
   }
 
+  @Ignore
   @Test
   public void testSojSession() {
     AvroKeyedSerializationSchema serializer = new AvroKeyedSerializationSchema(SojSession.class,

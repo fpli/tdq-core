@@ -6,6 +6,6 @@ public interface RheosKafkaSerializer<T> {
 
   byte[] encodeKey(T data, List<String> keyList);
 
-  byte[] encodeData(T data);
+  byte[] encodeValue(T data);
 
 }
