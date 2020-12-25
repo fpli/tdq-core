@@ -28,7 +28,8 @@ public class MappingSourceFunction extends RichSourceFunction<PageIdTopicMapping
     while (true) {
       try {
         Response response = restClient.get("/api/custom_topic_config");
-        List<PageIdTopicMapping> configs = objectMapper
+        List<PageIdTopicMapping> configs =
+            objectMapper
             .reader()
             .forType(new TypeReference<List<PageIdTopicMapping>>() {})
             .readValue(response.body().string());
