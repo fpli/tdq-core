@@ -36,7 +36,7 @@ public class SessionBotDetectorTest {
 
   UbiBotFilter mockBotFilter = mock(UbiBotFilter.class);
   BotRule1 mockRule1 = mock(BotRule1.class);
-  BotRule15 mockRule15 = mock(BotRule15.class);
+  //  BotRule15 mockRule15 = mock(BotRule15.class);
   BotRule9 mockRule9 = mock(BotRule9.class);
   BotRule10 mockRule10 = mock(BotRule10.class);
   //  BotRule12 mockRule12 = mock(BotRule12.class);
@@ -52,7 +52,7 @@ public class SessionBotDetectorTest {
   public void setUp() throws Exception {
     PowerMockito.whenNew(UbiBotFilter.class).withNoArguments().thenReturn(mockBotFilter);
     PowerMockito.whenNew(BotRule1.class).withNoArguments().thenReturn(mockRule1);
-    PowerMockito.whenNew(BotRule15.class).withNoArguments().thenReturn(mockRule15);
+    //    PowerMockito.whenNew(BotRule15.class).withNoArguments().thenReturn(mockRule15);
     PowerMockito.whenNew(BotRule9.class).withNoArguments().thenReturn(mockRule9);
     PowerMockito.whenNew(BotRule10.class).withNoArguments().thenReturn(mockRule10);
     //    PowerMockito.whenNew(BotRule12.class).withNoArguments().thenReturn(mockRule12);
@@ -81,6 +81,6 @@ public class SessionBotDetectorTest {
   @Test
   public void initBotRules() {
     Set<Rule> botRules = Whitebox.getInternalState(sessionBotDetector, "botRules", SessionBotDetector.class);
-    assertThat(botRules.size()).isEqualTo(11);
+    assertThat(botRules.size()).isEqualTo(10);
   }
 }
