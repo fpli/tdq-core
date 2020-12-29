@@ -23,9 +23,9 @@ flink:
 kafka:
   consumer:
     stream: behavior.trafficjam
-    group-id: sojourner-total-new-distributor-local
+    group-id: sojourner-total-new-distributor
     topic:
-      - behavior.trafficjam.custimized.3962
+      - behavior.trafficjam.event
     bootstrap-servers:
       lvs:
         - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092

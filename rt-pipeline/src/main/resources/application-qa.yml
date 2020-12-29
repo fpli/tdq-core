@@ -26,11 +26,11 @@ flink:
       kafka:
         topic:
           session:
-            bot: behavior.trafficjam.sojsession.test
-            non-bot: behavior.trafficjam.sojsession.test
+            bot: behavior.trafficjam.session.bot
+            non-bot: behavior.trafficjam.session
           event:
-            bot: behavior.trafficjam.custimized.3962
-            non-bot: behavior.trafficjam.custimized.3962
+            bot: behavior.trafficjam.event.bot
+            non-bot: behavior.trafficjam.event
           signature:
             agent-ip: behavior.trafficjam.agent.ip
             agent: behavior.trafficjam.agent
@@ -41,7 +41,7 @@ flink:
 
 kafka:
   consumer:
-    group-id: sojourner-pathfinder-consumer-qa-local
+    group-id: sojourner-pathfinder-consumer-qa
     stream: behavior.trafficjam
     bootstrap-servers:
       lvs:
