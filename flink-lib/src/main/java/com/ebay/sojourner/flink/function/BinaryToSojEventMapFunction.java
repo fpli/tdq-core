@@ -21,7 +21,9 @@ public class BinaryToSojEventMapFunction extends RichMapFunction<byte[], SojEven
     Decoder decoder = null;
     try {
       decoder = DecoderFactory.get().binaryDecoder(data, null);
-      return reader.read(null, decoder);
+      SojEvent sojEvent = reader.read(null, decoder);
+      sojEvent.setRheosHeader(null); // remove header to reduce data size
+      return sojEvent;
     } catch (IOException e) {
       throw new RuntimeException("Deserialize SojEvent error", e);
     }
