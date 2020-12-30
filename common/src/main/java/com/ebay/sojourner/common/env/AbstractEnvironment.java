@@ -16,7 +16,7 @@ public abstract class AbstractEnvironment implements Environment {
   @Nullable
   @Override
   public String getProperty(String key) {
-    return String.valueOf(props.get(key));
+    return String.valueOf(props.get(key)).trim();
   }
 
   @Nullable

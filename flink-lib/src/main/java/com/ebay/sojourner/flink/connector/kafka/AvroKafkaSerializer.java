@@ -1,7 +1,5 @@
 package com.ebay.sojourner.flink.connector.kafka;
 
-import io.ebay.rheos.schema.avro.SchemaRegistryAwareAvroSerializerHelper;
-import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
@@ -9,28 +7,24 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.Schema;
-import org.apache.avro.generic.GenericData;
-import org.apache.avro.generic.GenericDatumWriter;
-import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.BinaryEncoder;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.EncoderFactory;
+import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.kafka.common.errors.SerializationException;
 
 @Slf4j
-public class RheosAvroKafkaSerializer<T extends SpecificRecord> implements KafkaSerializer<T> {
+public class AvroKafkaSerializer<T extends SpecificRecord> implements KafkaSerializer<T> {
 
   private static final String FIELD_DELIM = ",";
-  private final RheosKafkaProducerConfig rheosKafkaConfig;
-  private final SchemaRegistryAwareAvroSerializerHelper<T> serializerHelper;
-  private DatumWriter<RheosEvent> writer; // init when using
+  private final Schema schema;
+  private final DatumWriter<SpecificRecord> writer;
 
-  public RheosAvroKafkaSerializer(RheosKafkaProducerConfig rheosKafkaConfig, Class<T> clazz) {
-    this.rheosKafkaConfig = rheosKafkaConfig;
-    this.serializerHelper =
-        new SchemaRegistryAwareAvroSerializerHelper<>(rheosKafkaConfig.toConfigMap(), clazz);
+  public AvroKafkaSerializer(Schema schema) {
+    this.schema = schema;
+    this.writer = new SpecificDatumWriter<>(schema);
   }
 
   @Override
@@ -57,32 +51,18 @@ public class RheosAvroKafkaSerializer<T extends SpecificRecord> implements Kafka
 
   @Override
   public byte[] encodeValue(T data) {
-    Schema schema = data.getSchema();
-    if (writer == null) {
-      writer = new GenericDatumWriter<>(schema);
-    }
-
-    GenericRecord record = (GenericRecord) GenericData.get().deepCopy(schema, data);
-
-    RheosEvent rheosEvent = new RheosEvent(record);
-
-    rheosEvent.setEventCreateTimestamp(System.currentTimeMillis());
-    rheosEvent.setEventSentTimestamp(System.currentTimeMillis());
-    rheosEvent.setSchemaId(serializerHelper.getSchemaId(rheosKafkaConfig.getSchemaSubject()));
-    rheosEvent.setProducerId(rheosKafkaConfig.getProducerId());
-
     try {
       ByteArrayOutputStream out = new ByteArrayOutputStream();
       byte[] serializedValue = null;
       BinaryEncoder encoder = EncoderFactory.get().binaryEncoder(out, null);
-      writer.write(rheosEvent, encoder);
+      writer.write(data, encoder);
       encoder.flush();
       serializedValue = out.toByteArray();
       out.close();
       return serializedValue;
     } catch (Exception e) {
-      throw new SerializationException("Error serializing Avro schema for schema " +
-                                       schema.getName(), e);
+      throw new SerializationException("Error serializing Avro schema for schema: " +
+                                           schema.getName(), e);
     }
   }
 }

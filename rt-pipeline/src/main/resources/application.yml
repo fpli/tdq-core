@@ -108,8 +108,8 @@ kafka:
     auto-offset-reset: latest
 
   producer:
-    producerId: sojourner
     stream: behavior.totalv2
+    producerId: sojourner
     bootstrap-servers:
       rno:
         - rhs-fxuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.37.tess.io:9092

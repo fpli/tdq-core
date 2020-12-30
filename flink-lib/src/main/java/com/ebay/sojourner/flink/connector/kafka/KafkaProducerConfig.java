@@ -1,6 +1,8 @@
 package com.ebay.sojourner.flink.connector.kafka;
 
 import static com.ebay.sojourner.common.util.Property.KAFKA_PRODUCER_BOOTSTRAP_SERVERS;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
 
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.DataCenter;
@@ -63,21 +65,21 @@ public class KafkaProducerConfig {
     Properties producerConfig = KafkaCommonConfig.get();
     producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
     producerConfig.put(ProducerConfig.BATCH_SIZE_CONFIG,
-                       FlinkEnvUtils.getInteger(Property.BATCH_SIZE));
+                       getInteger(Property.BATCH_SIZE));
     producerConfig.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG,
-                       FlinkEnvUtils.getInteger(Property.REQUEST_TIMEOUT_MS));
+                       getInteger(Property.REQUEST_TIMEOUT_MS));
     producerConfig.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG,
-        FlinkEnvUtils.getInteger(Property.DELIVERY_TIMEOUT_MS));
+                       getInteger(Property.DELIVERY_TIMEOUT_MS));
     producerConfig.put(ProducerConfig.RETRIES_CONFIG,
-                       FlinkEnvUtils.getInteger(Property.REQUEST_RETRIES));
+                       getInteger(Property.REQUEST_RETRIES));
     producerConfig.put(ProducerConfig.LINGER_MS_CONFIG,
-                       FlinkEnvUtils.getInteger(Property.LINGER_MS));
+                       getInteger(Property.LINGER_MS));
     producerConfig.put(ProducerConfig.BUFFER_MEMORY_CONFIG,
-                       FlinkEnvUtils.getInteger(Property.BUFFER_MEMORY));
+                       getInteger(Property.BUFFER_MEMORY));
     producerConfig.put(ProducerConfig.ACKS_CONFIG,
-                       FlinkEnvUtils.getString(Property.ACKS));
+                       getString(Property.ACKS));
     producerConfig.put(ProducerConfig.COMPRESSION_TYPE_CONFIG,
-                       FlinkEnvUtils.getString(Property.COMPRESSION_TYPE));
+                       getString(Property.COMPRESSION_TYPE));
 
     return producerConfig;
   }

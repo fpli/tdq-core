@@ -11,14 +11,14 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class RheosKafkaConfig implements Serializable {
+public class RheosKafkaProducerConfig implements Serializable {
   private String rheosServiceUrls;
   private String topic;
-  private String subject;
+  private String schemaSubject;
   private String producerId;
   private Properties kafkaProps;
 
-  public Map<String, Object> toProducerConfigMap() {
+  public Map<String, Object> toConfigMap() {
     Map<String, Object> map = new HashMap<>((Map) kafkaProps);
     map.put(Property.PRODUCER_ID, producerId);
     map.put(StreamConnectorConfig.RHEOS_SERVICES_URLS, rheosServiceUrls);

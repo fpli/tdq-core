@@ -11,7 +11,7 @@ import com.ebay.sojourner.flink.common.DataCenter;
 import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connector.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
-import com.ebay.sojourner.flink.connector.kafka.schema.AvroKeyedDeserializationSchema;
+import com.ebay.sojourner.flink.connector.kafka.schema.AvroKafkaDeserializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.JetstreamEventDeserializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.JetstreamSessionDeserializationSchema;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -73,7 +73,7 @@ public class SojournerKafkaToHdfsJob {
           .operatorName(getString(Property.SOURCE_OPERATOR_NAME))
           .uid(getString(Property.SOURCE_UID))
           .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
-          .buildRescaled(new AvroKeyedDeserializationSchema<>(BotSignature.class));
+          .buildRescaled(new AvroKafkaDeserializationSchema<>(BotSignature.class));
 
       // hdfs sink
       sourceDataStream

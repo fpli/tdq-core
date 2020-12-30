@@ -4,6 +4,45 @@
   "namespace": "com.ebay.sojourner.common.model",
   "fields": [
     {
+      "name": "rheosHeader",
+      "type": {
+        "type": "record",
+        "name": "RheosHeader",
+        "fields": [
+          {
+            "name": "eventCreateTimestamp",
+            "type": "long"
+          },
+          {
+            "name": "eventSentTimestamp",
+            "type": "long"
+          },
+          {
+            "name": "schemaId",
+            "type": "int"
+          },
+          {
+            "name": "eventId",
+            "type": [
+              "null",
+              {
+                "type": "string",
+                "avro.java.string": "String"
+              }
+            ]
+          },
+          {
+            "name": "producerId",
+            "type": {
+              "type": "string",
+              "avro.java.string": "String"
+            }
+          }
+        ]
+      },
+      "doc": "Rheos header"
+    },
+    {
       "name": "guid",
       "type": [
         "null",
@@ -57,7 +96,7 @@
         "null",
         "string"
       ],
-      "doc": "from ubisession ip"
+      "doc": "from ubisession ip for  jetstream"
     },
     {
       "name": "userAgent",
@@ -179,14 +218,14 @@
       ],
       "doc": "fron ubisession firstSiteId"
     },
-      {
-          "name": "firstSiteId",
-          "type": [
-            "null",
-            "int"
-          ],
-          "doc": "fron ubisession firstSiteId"
-        },
+    {
+      "name": "firstSiteId",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "fron ubisession firstSiteId"
+    },
     {
       "name": "cguid",
       "type": [
@@ -550,14 +589,14 @@
       ],
       "doc": "from ubisession pulsarEventCnt"
     },
-      {
-          "name": "sojEventCnt",
-          "type": [
-            "null",
-            "int"
-          ],
-          "doc": "from ubisession sojEventCnt"
-        },
+    {
+      "name": "sojEventCnt",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "from ubisession sojEventCnt"
+    },
     {
       "name": "streamId",
       "type": [
@@ -566,30 +605,30 @@
       ],
       "doc": "from ubisession streamId"
     },
-     {
-          "name": "viewEventCnt",
-          "type": [
-            "null",
-            "int"
-          ],
-          "doc": "from ubisession viewct"
-        },
-     {
-          "name": "referer",
-          "type": [
-            "null",
-            "string"
-          ],
-          "doc": "map from rf"
-        },
-         {
-          "name": "pageId",
-          "type": [
-            "null",
-            "int"
-          ],
-          "doc": "map from p"
-        },
+    {
+      "name": "viewEventCnt",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "from ubisession viewct"
+    },
+    {
+      "name": "referer",
+      "type": [
+        "null",
+        "string"
+      ],
+      "doc": "map from rf"
+    },
+    {
+      "name": "pageId",
+      "type": [
+        "null",
+        "int"
+      ],
+      "doc": "map from p"
+    },
     {
       "name": "buserId",
       "type": [
@@ -597,21 +636,22 @@
         "string"
       ],
       "doc": "from ubisession buserId"
-    }, {
-            "name": "oldsessionskey",
-            "type": [
-              "null",
-              "long"
-            ],
-            "doc": "from ubisession sessionSkey"
-          },
-         {
-           "name": "isOpen",
-           "type": [
-             "null",
-             "boolean"
-           ],
-           "doc": "to identify open or end"
-         }
+    },
+    {
+      "name": "oldsessionskey",
+      "type": [
+        "null",
+        "long"
+      ],
+      "doc": "from ubisession sessionSkey"
+    },
+    {
+      "name": "isOpen",
+      "type": [
+        "null",
+        "boolean"
+      ],
+      "doc": "to identify open or end"
+    }
   ]
 }

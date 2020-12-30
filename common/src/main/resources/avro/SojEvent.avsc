@@ -5,6 +5,45 @@
   "doc": " tags not included but in UbiEvent: current_impr_id, source_impr_id, staticPageType, reservedForFuture, eventAttr, oldSessionSkey, seqNum, sessionStartDt, sojDataDt, version",
   "fields": [
     {
+      "name": "rheosHeader",
+      "type": {
+        "type": "record",
+        "name": "RheosHeader",
+        "fields": [
+          {
+            "name": "eventCreateTimestamp",
+            "type": "long"
+          },
+          {
+            "name": "eventSentTimestamp",
+            "type": "long"
+          },
+          {
+            "name": "schemaId",
+            "type": "int"
+          },
+          {
+            "name": "eventId",
+            "type": [
+              "null",
+              {
+                "type": "string",
+                "avro.java.string": "String"
+              }
+            ]
+          },
+          {
+            "name": "producerId",
+            "type": {
+              "type": "string",
+              "avro.java.string": "String"
+            }
+          }
+        ]
+      },
+      "doc": "Rheos header"
+    },
+    {
       "name": "guid",
       "type": [
         "null",
@@ -495,24 +534,29 @@
       "doc": "dataClassification=Internal|isEncrypted=false|description=map from dd_osv"
     },
     {
-        "name" : "applicationPayload",
-        "type" : {
-          "type" : "map",
-          "values" : "string"
-        }
-      }, {
-        "name" : "rlogid",
-        "type" : [ "null", "string" ],
-        "doc" : "CAL request log id",
-        "default" : null,
-        "avro.java.string" : "String"
-      }, {
-        "name" : "clientData",
-        "type" : {
-          "type" : "map",
-          "values" : "string"
-        },
-        "doc" : "Includes ForwardFor, ContentLength, Script, Server, Encoding, TMachine, TStamp, TName, TStatus, TDuration, TPayload"
+      "name": "applicationPayload",
+      "type": {
+        "type": "map",
+        "values": "string"
       }
+    },
+    {
+      "name": "rlogid",
+      "type": [
+        "null",
+        "string"
+      ],
+      "doc": "CAL request log id",
+      "default": null,
+      "avro.java.string": "String"
+    },
+    {
+      "name": "clientData",
+      "type": {
+        "type": "map",
+        "values": "string"
+      },
+      "doc": "Includes ForwardFor, ContentLength, Script, Server, Encoding, TMachine, TStamp, TName, TStatus, TDuration, TPayload"
+    }
   ]
 }

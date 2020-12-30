@@ -11,6 +11,7 @@ import org.apache.avro.reflect.ReflectDatumWriter;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.flink.streaming.util.serialization.KeyedSerializationSchema;
 
+@Deprecated
 public class AvroKeyedSerializationSchema<T> implements KeyedSerializationSchema<T> {
 
   private static final long serialVersionUID = 1L;

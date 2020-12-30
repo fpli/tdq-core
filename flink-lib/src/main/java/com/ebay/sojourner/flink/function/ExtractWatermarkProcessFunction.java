@@ -1,4 +1,4 @@
-package com.ebay.sojourner.dumper.common.watermark;
+package com.ebay.sojourner.flink.function;
 
 import com.ebay.sojourner.common.model.SojWatermark;
 import java.util.concurrent.atomic.AtomicInteger;

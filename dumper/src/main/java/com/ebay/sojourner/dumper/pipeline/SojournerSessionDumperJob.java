@@ -7,9 +7,6 @@ import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
 import com.ebay.sojourner.common.model.SojSession;
 import com.ebay.sojourner.common.model.SojWatermark;
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.dumper.common.session.ByteToSojSessionMapFunction;
-import com.ebay.sojourner.dumper.common.session.SplitSessionProcessFunction;
-import com.ebay.sojourner.dumper.common.watermark.ExtractWatermarkProcessFunction;
 import com.ebay.sojourner.flink.common.DataCenter;
 import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.OutputTagConstants;
@@ -17,11 +14,13 @@ import com.ebay.sojourner.flink.connector.hdfs.HdfsConnectorFactory;
 import com.ebay.sojourner.flink.connector.kafka.SojBoundedOutOfOrderlessTimestampExtractor;
 import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.flink.connector.kafka.schema.PassThroughDeserializationSchema;
+import com.ebay.sojourner.flink.function.BinaryToSojSessionMapFunction;
+import com.ebay.sojourner.flink.function.ExtractWatermarkProcessFunction;
+import com.ebay.sojourner.flink.function.SplitSessionProcessFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.streaming.connectors.kafka.internals.KafkaDeserializationSchemaWrapper;
 
 public class SojournerSessionDumperJob {
 
@@ -40,12 +39,11 @@ public class SojournerSessionDumperJob {
         .operatorName(getString(Property.SOURCE_OPERATOR_NAME))
         .uid(getString(Property.SOURCE_UID))
         .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
-        .buildRescaled(
-            new KafkaDeserializationSchemaWrapper<>(new PassThroughDeserializationSchema()));
+        .buildRescaled(new PassThroughDeserializationSchema());
 
     // byte to sojsession
     DataStream<SojSession> sojSessionDataStream = rescaledByteSessionDataStream
-        .map(new ByteToSojSessionMapFunction(getString(Property.RHEOS_KAFKA_REGISTRY_URL)))
+        .map(new BinaryToSojSessionMapFunction())
         .setParallelism(getInteger(Property.SINK_HDFS_PARALLELISM))
         .name(getString(Property.PASS_THROUGH_OPERATOR_NAME))
         .uid(getString(Property.PASS_THROUGH_UID));

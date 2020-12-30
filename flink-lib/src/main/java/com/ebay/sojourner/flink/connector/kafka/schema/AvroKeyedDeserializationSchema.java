@@ -9,6 +9,7 @@ import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.streaming.util.serialization.KeyedDeserializationSchema;
 
+@Deprecated
 public class AvroKeyedDeserializationSchema<T> implements KeyedDeserializationSchema<T> {
 
   private static final long serialVersionUID = 1L;

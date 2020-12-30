@@ -118,8 +118,13 @@ public class FlinkEnvUtils {
 
   public static String[] getStringArray(String key, String delimiter) {
     String value = EnvironmentUtils.get(key);
-    String[] res = value.split(delimiter);
     CONFIG.put(key, value);
-    return res;
+    return EnvironmentUtils.getStringArray(key, delimiter);
+  }
+
+  public static List<String> getStringList(String key, String delimiter) {
+    String value = EnvironmentUtils.get(key);
+    CONFIG.put(key, value);
+    return EnvironmentUtils.getStringList(key, delimiter);
   }
 }
