@@ -30,7 +30,7 @@ public class ExtractWatermarkProcessFunction<T> extends ProcessFunction<T, SojWa
   public void processElement(T value, Context ctx, Collector<SojWatermark> out)
       throws Exception {
 
-    watermarkDelayTime = System.currentTimeMillis() - ctx.timestamp();
+    watermarkDelayTime = System.currentTimeMillis() - ctx.timerService().currentWatermark();
     int andIncrement = atomicInteger.getAndIncrement();
     if (andIncrement % 1000 == 0) {
       out.collect(new SojWatermark(ctx.timestamp(),subtaskIndex));

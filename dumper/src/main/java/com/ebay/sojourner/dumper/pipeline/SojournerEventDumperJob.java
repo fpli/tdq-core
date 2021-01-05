@@ -10,14 +10,15 @@ import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.DataCenter;
 import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connector.hdfs.HdfsConnectorFactory;
-import com.ebay.sojourner.flink.connector.kafka.SojBoundedOutOfOrderlessTimestampExtractor;
+import com.ebay.sojourner.flink.connector.kafka.SojSerializableTimestampAssigner;
 import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.flink.connector.kafka.schema.PassThroughDeserializationSchema;
 import com.ebay.sojourner.flink.function.BinaryToSojEventMapFunction;
 import com.ebay.sojourner.flink.function.ExtractWatermarkProcessFunction;
+import java.time.Duration;
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.windowing.time.Time;
 
 public class SojournerEventDumperJob {
 
@@ -47,8 +48,11 @@ public class SojournerEventDumperJob {
 
     // assgin watermark
     DataStream<SojEvent> assignedWatermarkSojEventDataStream = sojEventDataStream
-        .assignTimestampsAndWatermarks(new SojBoundedOutOfOrderlessTimestampExtractor<>(
-            Time.milliseconds(0)))
+        .assignTimestampsAndWatermarks(
+            WatermarkStrategy
+                .<SojEvent>forBoundedOutOfOrderness(Duration.ofMinutes(
+                    FlinkEnvUtils.getInteger(Property.FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN)))
+                .withTimestampAssigner(new SojSerializableTimestampAssigner<>()))
         .setParallelism(getInteger(Property.SINK_HDFS_PARALLELISM))
         .name(getString(Property.ASSIGN_WATERMARK_OPERATOR_NAME))
         .uid(getString(Property.ASSIGN_WATERMARK_UID));
