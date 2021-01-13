@@ -1,5 +1,7 @@
 pipeline {
-  agent any
+  agent {
+    label 'raptor-builder'
+  }
   stages {
     stage('Build') {
       steps {
