@@ -11,3 +11,4 @@ fi
 
 echo "Build version is ${NEW_VERSION}"
 mvn versions:set -DnewVersion=${NEW_VERSION}
+echo ${NEW_VERSION} > build_version_tmp.txt

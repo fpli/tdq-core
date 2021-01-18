@@ -5,6 +5,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
+        slackSend(channel: "yxiao6-test", message: "<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>: Started to build...")
         sh './scripts/generate_build_num.sh'
         sh 'mvn clean test verify package'
       }
@@ -15,6 +16,20 @@ pipeline {
         sh './scripts/upload_rheos_portal.sh dumper'
         sh './scripts/upload_rheos_portal.sh distributor'
       }
+    }
+  }
+  post {
+    success {
+      slackSend(channel: "yxiao6-test", color: "good", message: "<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>: :beer: Success after ${currentBuild.durationString.replace(' and counting', '')}\n job version *${readFile('build_version_tmp.txt').trim()}* has been uploaded to Rheos portal")
+    }
+    failure {
+      slackSend(channel: "yxiao6-test", color: "danger", message: "<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>: :alert: Failure after ${currentBuild.durationString.replace(' and counting', '')}")
+    }
+    aborted {
+      slackSend(channel: "yxiao6-test", color: "warning", message: "<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>: :warning: Aborted after ${currentBuild.durationString.replace(' and counting', '')}")
+    }
+    unstable {
+      slackSend(channel: "yxiao6-test", color: "warning", message: "<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>: :warning: Unstable after ${currentBuild.durationString.replace(' and counting', '')}")
     }
   }
 }
