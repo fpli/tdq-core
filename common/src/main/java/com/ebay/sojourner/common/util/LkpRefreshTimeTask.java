@@ -9,7 +9,7 @@ public class LkpRefreshTimeTask extends TimerTask {
 
   private volatile LkpManager lkpManager;
 
-  public LkpRefreshTimeTask(LkpManager lkpManager) {
+  public LkpRefreshTimeTask(LkpManager lkpManager,TimeUnit timeUnit) {
     this.lkpManager = lkpManager;
     //Set start at 00:05:00 every day
     Calendar calendar = Calendar.getInstance();
@@ -17,7 +17,7 @@ public class LkpRefreshTimeTask extends TimerTask {
     calendar.set(Calendar.MINUTE, 5);
     calendar.set(Calendar.SECOND, 0);
     Timer timer = new Timer(true);
-    timer.scheduleAtFixedRate(this, calendar.getTime(), TimeUnit.HOURS.toMillis(1));
+    timer.scheduleAtFixedRate(this, calendar.getTime(), timeUnit.toMillis(1));
   }
 
   @Override

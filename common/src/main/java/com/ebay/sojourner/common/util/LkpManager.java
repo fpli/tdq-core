@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -33,6 +34,7 @@ public class LkpManager {
   private static final String TEXT_FIELD_DELIMITER = "\t";
   private static final String LKP_PATH = getUBIProperty(Property.LKP_PATH);
   private static volatile LkpManager lkpManager;
+  public volatile boolean firstRun = true;
   private Set<Integer> pageIdSet = new CopyOnWriteArraySet<>();
   private Map<Integer, Integer> findingFlagMap = new ConcurrentHashMap<>();
   private Map<Integer, Integer[]> vtNewIdsMap = new ConcurrentHashMap<>();
@@ -46,13 +48,16 @@ public class LkpManager {
   private Map<String, Long> lkpFileLastUpdDt = new ConcurrentHashMap<>();
   private volatile FileSystem fileSystem = null;
   private volatile boolean loadLkpFromHDFS = false;
-  private volatile boolean firstRun = true;
   private volatile LkpRefreshTimeTask lkpRefreshTimeTask;
 
-  private LkpManager() {
-    lkpRefreshTimeTask = new LkpRefreshTimeTask(this);
+  private LkpManager(TimeUnit timeUnit) {
+    lkpRefreshTimeTask = new LkpRefreshTimeTask(this, timeUnit);
     refreshLkpFiles();
     firstRun = false;
+  }
+
+  private LkpManager() {
+    this(TimeUnit.HOURS);
   }
 
   public static LkpManager getInstance() {
@@ -60,6 +65,17 @@ public class LkpManager {
       synchronized (LkpManager.class) {
         if (lkpManager == null) {
           lkpManager = new LkpManager();
+        }
+      }
+    }
+    return lkpManager;
+  }
+
+  public static LkpManager getInstance(TimeUnit timeUnit) {
+    if (lkpManager == null) {
+      synchronized (LkpManager.class) {
+        if (lkpManager == null) {
+          lkpManager = new LkpManager(timeUnit);
         }
       }
     }
@@ -178,10 +194,10 @@ public class LkpManager {
         if (values[0] != null && values[1] != null) {
           try {
             findingFlagMapMid.put(Integer.valueOf(values[0].trim()),
-                Integer.valueOf(values[1].trim()));
+                    Integer.valueOf(values[1].trim()));
           } catch (NumberFormatException e) {
             log.error(
-                "Ignore the incorrect format for findflags: " + values[0] + " - " + values[1]);
+                    "Ignore the incorrect format for findflags: " + values[0] + " - " + values[1]);
           }
         }
       }
@@ -274,7 +290,7 @@ public class LkpManager {
       int readBytes = 0;
       while ((readBytes = in.read(bytes)) != -1) {
         resultBuilder.append(new String(Arrays.copyOfRange(bytes, 0, readBytes),
-            StandardCharsets.UTF_8));
+                StandardCharsets.UTF_8));
         bytes = new byte[4096];
       }
     } catch (IOException e) {
@@ -306,6 +322,7 @@ public class LkpManager {
     InputStream instream;
     if (StringUtils.isNotBlank(resource)) {
       instream = LkpManager.class.getResourceAsStream(resource);
+
       if (instream == null) {
         throw new FileNotFoundException("Can't locate resource based on classPath: " + resource);
       }
@@ -330,7 +347,7 @@ public class LkpManager {
         FileStatus[] fileStatus = fileSystem.listStatus(path, new FileNameFilter(fileName));
         long lastModifiedTime = fileStatus[0].getModificationTime();
         long preLastModifiedTime =
-            lkpFileLastUpdDt.get(fileName) == null ? 0 : lkpFileLastUpdDt.get(fileName);
+                lkpFileLastUpdDt.get(fileName) == null ? 0 : lkpFileLastUpdDt.get(fileName);
         if (lastModifiedTime > preLastModifiedTime) {
           lkpFileLastUpdDt.put(fileName, lastModifiedTime);
         }
@@ -373,9 +390,26 @@ public class LkpManager {
       stringBuilder.append("Lkp FileName : ").append(entry.getKey());
       stringBuilder.append("Lkp File LastModifiedDate : ").append(entry.getValue()).append(";");
     }
-    if (!StringUtils.isNotEmpty(stringBuilder.toString())) {
+    if (StringUtils.isNotEmpty(stringBuilder.toString())) {
       log.warn(stringBuilder.toString());
     }
+  }
+
+  public void stop() {
+    this.lkpRefreshTimeTask.cancel();
+    lkpRefreshTimeTask = null;
+    pageIdSet = null;
+    findingFlagMap = null;
+    vtNewIdsMap = null;
+    appIdWithBotFlags = null;
+    iabAgentRegs = null;
+    largeSessionGuidSet = null;
+    pageFmlyMap = null;
+    mpxMap = null;
+    selectedIps = null;
+    selectedAgents = null;
+    lkpFileLastUpdDt = null;
+    fileSystem = null;
   }
 
   public Set<Integer> getIframePageIdSet() {
