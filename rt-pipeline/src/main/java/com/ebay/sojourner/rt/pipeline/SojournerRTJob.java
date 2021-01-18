@@ -433,7 +433,6 @@ public class SojournerRTJob {
     agentIpSignatureDataStream
         .addSink(producerFactory.get(new AvroKafkaSerializationSchema<>(
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SIGNATURE_AGENT_IP),
-            BotSignature.getClassSchema(),
             getStringList(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_AGENT_IP, ",")
         )))
         .setParallelism(getInteger(Property.DEFAULT_PARALLELISM))
@@ -444,7 +443,6 @@ public class SojournerRTJob {
     agentSignatureDataStream
         .addSink(producerFactory.get(new AvroKafkaSerializationSchema<>(
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SIGNATURE_AGENT),
-            BotSignature.getClassSchema(),
             getStringList(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_AGENT, ",")
         )))
         .setParallelism(getInteger(Property.DEFAULT_PARALLELISM))
@@ -455,7 +453,6 @@ public class SojournerRTJob {
     ipSignatureDataStream
         .addSink(producerFactory.get(new AvroKafkaSerializationSchema<>(
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SIGNATURE_IP),
-            BotSignature.getClassSchema(),
             getStringList(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_IP, ",")
         )))
         .setParallelism(getInteger(Property.DEFAULT_PARALLELISM))
