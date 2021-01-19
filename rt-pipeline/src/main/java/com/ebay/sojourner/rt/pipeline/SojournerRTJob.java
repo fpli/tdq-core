@@ -433,18 +433,17 @@ public class SojournerRTJob {
     agentIpSignatureDataStream
         .addSink(producerFactory.get(new AvroKafkaSerializationSchema<>(
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SIGNATURE_AGENT_IP),
-            BotSignature.getClassSchema(),
+            BotSignature.getClassSchema().toString(),
             getStringList(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_AGENT_IP, ",")
         )))
         .setParallelism(getInteger(Property.DEFAULT_PARALLELISM))
         .slotSharingGroup(getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
         .name(String.format("%s Signature", Constants.AGENTIP))
         .uid(String.format("signature-%s-sink", Constants.AGENTIP));
-
     agentSignatureDataStream
         .addSink(producerFactory.get(new AvroKafkaSerializationSchema<>(
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SIGNATURE_AGENT),
-            BotSignature.getClassSchema(),
+            BotSignature.getClassSchema().toString(),
             getStringList(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_AGENT, ",")
         )))
         .setParallelism(getInteger(Property.DEFAULT_PARALLELISM))
@@ -455,7 +454,7 @@ public class SojournerRTJob {
     ipSignatureDataStream
         .addSink(producerFactory.get(new AvroKafkaSerializationSchema<>(
             getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SIGNATURE_IP),
-            BotSignature.getClassSchema(),
+            BotSignature.getClassSchema().toString(),
             getStringList(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_IP, ",")
         )))
         .setParallelism(getInteger(Property.DEFAULT_PARALLELISM))
