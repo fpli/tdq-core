@@ -6,7 +6,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        slackSend(channel: "yxiao6-test", message: "<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>: Started to build...")
+        slackSend(channel: slack_channel, message: "<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>: Started to build...")
         sh './scripts/generate_build_num.sh'
         sh 'mvn clean test verify package'
       }
