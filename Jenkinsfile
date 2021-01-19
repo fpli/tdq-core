@@ -1,3 +1,4 @@
+def slack_channel = "sojourner-dev"
 pipeline {
   agent {
     label 'raptor-io-builder'
@@ -20,16 +21,16 @@ pipeline {
   }
   post {
     success {
-      slackSend(channel: "yxiao6-test", color: "good", message: "<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>: :beer: Success after ${currentBuild.durationString.replace(' and counting', '')}\n job version *${readFile('build_version_tmp.txt').trim()}* has been uploaded to Rheos portal")
+      slackSend(channel: slack_channel, color: "good", message: "<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>: :beer: Success after ${currentBuild.durationString.replace(' and counting', '')}\n job version *${readFile('build_version_tmp.txt').trim()}* has been uploaded to Rheos portal")
     }
     failure {
-      slackSend(channel: "yxiao6-test", color: "danger", message: "<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>: :alert: Failure after ${currentBuild.durationString.replace(' and counting', '')}")
+      slackSend(channel: slack_channel, color: "danger", message: "<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>: :alert: Failure after ${currentBuild.durationString.replace(' and counting', '')}")
     }
     aborted {
-      slackSend(channel: "yxiao6-test", color: "warning", message: "<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>: :warning: Aborted after ${currentBuild.durationString.replace(' and counting', '')}")
+      slackSend(channel: slack_channel, color: "warning", message: "<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>: :warning: Aborted after ${currentBuild.durationString.replace(' and counting', '')}")
     }
     unstable {
-      slackSend(channel: "yxiao6-test", color: "warning", message: "<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>: :warning: Unstable after ${currentBuild.durationString.replace(' and counting', '')}")
+      slackSend(channel: slack_channel, color: "warning", message: "<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>: :warning: Unstable after ${currentBuild.durationString.replace(' and counting', '')}")
     }
   }
 }
