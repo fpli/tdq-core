@@ -21,9 +21,7 @@ public class BinaryToSojSessionMapFunction extends RichMapFunction<byte[], SojSe
     Decoder decoder = null;
     try {
       decoder = DecoderFactory.get().binaryDecoder(data, null);
-      SojSession sojSession = reader.read(null, decoder);
-      sojSession.setRheosHeader(null); // remove header to reduce data size
-      return sojSession;
+      return reader.read(null, decoder);
     } catch (IOException e) {
       throw new RuntimeException("Deserialize SojSession error", e);
     }

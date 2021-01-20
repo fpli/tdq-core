@@ -2,9 +2,8 @@ package com.ebay.sojourner.common.model;
 
 import com.ebay.sojourner.common.util.IntermediateMetrics;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
+
 import lombok.Data;
 
 @Data
@@ -145,7 +144,7 @@ public class UbiSession implements Serializable, Cloneable {
   private int clickId = Integer.MAX_VALUE;
   private int pageIdForUAIP = Integer.MAX_VALUE;
   private int hashCode = Integer.MAX_VALUE;
-
+  private Map<Integer,Long> clickWithStamp = new LinkedHashMap<>();
   public UbiSession() {
     //        this.distinctClickIdSet = new HashSet<Integer>();
     //        this.agentSets= new HashSet<String>();
