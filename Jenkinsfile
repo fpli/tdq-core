@@ -1,14 +1,14 @@
 def slack_channel = "sojourner-dev"
 pipeline {
   agent {
-    label 'raptor-io-builder'
+    label 'raptor-builder || raptor-io-builder'
   }
   stages {
     stage('Build') {
       steps {
         slackSend(channel: slack_channel, message: "<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>: Started to build...")
         sh './scripts/generate_build_num.sh'
-        sh 'mvn clean test verify package'
+        sh 'mvn clean test verify package sonar:sonar'
       }
     }
     stage('Deploy') {
