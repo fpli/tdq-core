@@ -1,4 +1,4 @@
-def slack_channel = "sojourner-dev"
+def slack_channel = "yxiao6-test"
 pipeline {
   agent {
     label 'raptor-io-builder'
