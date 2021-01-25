@@ -26,11 +26,13 @@ public class RheosAvroKafkaSerializer<T extends SpecificRecord> implements Kafka
   private final RheosKafkaProducerConfig rheosKafkaConfig;
   private final SchemaRegistryAwareAvroSerializerHelper<T> serializerHelper;
   private DatumWriter<RheosEvent> writer; // init when using
+  private final int schemaId;
 
   public RheosAvroKafkaSerializer(RheosKafkaProducerConfig rheosKafkaConfig, Class<T> clazz) {
     this.rheosKafkaConfig = rheosKafkaConfig;
     this.serializerHelper =
         new SchemaRegistryAwareAvroSerializerHelper<>(rheosKafkaConfig.toConfigMap(), clazz);
+    this.schemaId = serializerHelper.getSchemaId(rheosKafkaConfig.getSchemaSubject());
   }
 
   @Override
@@ -68,7 +70,7 @@ public class RheosAvroKafkaSerializer<T extends SpecificRecord> implements Kafka
 
     rheosEvent.setEventCreateTimestamp(System.currentTimeMillis());
     rheosEvent.setEventSentTimestamp(System.currentTimeMillis());
-    rheosEvent.setSchemaId(serializerHelper.getSchemaId(rheosKafkaConfig.getSchemaSubject()));
+    rheosEvent.setSchemaId(this.schemaId);
     rheosEvent.setProducerId(rheosKafkaConfig.getProducerId());
 
     try {
