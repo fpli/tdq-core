@@ -1,7 +1,7 @@
 def slack_channel = "sojourner-dev"
 pipeline {
   agent {
-    label 'raptor-builder || raptor-io-builder'
+    label 'raptor-io-builder'
   }
   stages {
     stage('Build') {
