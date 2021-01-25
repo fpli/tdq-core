@@ -26,7 +26,7 @@ public class RheosAvroKafkaSerializer<T extends SpecificRecord> implements Kafka
   private final RheosKafkaProducerConfig rheosKafkaConfig;
   private final SchemaRegistryAwareAvroSerializerHelper<T> serializerHelper;
   private DatumWriter<RheosEvent> writer; // init when using
-  private int schemaId;
+  private final int schemaId;
 
   public RheosAvroKafkaSerializer(RheosKafkaProducerConfig rheosKafkaConfig, Class<T> clazz) {
     this.rheosKafkaConfig = rheosKafkaConfig;
