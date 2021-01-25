@@ -121,26 +121,26 @@ public class SojournerRTJob {
                         new RawEventDeserializationSchema()));
 
         // filter skew guid
-    /*
-    DataStream<RawEvent> filteredRawEventDataStreamForLVS = rawEventDataStreamForLVS
-        .process(new DataSkewProcessFunction(OutputTagConstants.dataSkewOutputTag,
-            FlinkEnvUtils.getBoolean(Property.IS_FILTER),
-            FlinkEnvUtils.getSet(Property.FILTER_PAGE_ID_SET)))
-        .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP))
-        .name("Filter LVS Skew Guid")
-        .uid("filter-lvs-skew-guid");
+        /*
+        DataStream<RawEvent> filteredRawEventDataStreamForLVS = rawEventDataStreamForLVS
+            .process(new DataSkewProcessFunction(OutputTagConstants.dataSkewOutputTag,
+                FlinkEnvUtils.getBoolean(Property.IS_FILTER),
+                FlinkEnvUtils.getSet(Property.FILTER_PAGE_ID_SET)))
+            .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
+            .slotSharingGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP))
+            .name("Filter LVS Skew Guid")
+            .uid("filter-lvs-skew-guid");
 
-    DataStream<RawEvent> filteredRawEventDataStreamForSLC = rawEventDataStreamForSLC
-        .process(new DataSkewProcessFunction(OutputTagConstants.dataSkewOutputTag,
-            FlinkEnvUtils.getBoolean(Property.IS_FILTER),
-            FlinkEnvUtils.getSet(Property.FILTER_PAGE_ID_SET)))
-        .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
-        .slotSharingGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP))
-        .name("Filter SLC Skew Guid")
-        .uid("filter-slc-skew-guid");
+        DataStream<RawEvent> filteredRawEventDataStreamForSLC = rawEventDataStreamForSLC
+            .process(new DataSkewProcessFunction(OutputTagConstants.dataSkewOutputTag,
+                FlinkEnvUtils.getBoolean(Property.IS_FILTER),
+                FlinkEnvUtils.getSet(Property.FILTER_PAGE_ID_SET)))
+            .setParallelism(FlinkEnvUtils.getInteger(Property.SOURCE_PARALLELISM))
+            .slotSharingGroup(FlinkEnvUtils.getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP))
+            .name("Filter SLC Skew Guid")
+            .uid("filter-slc-skew-guid");
 
-    DataStream<RawEvent> filteredRawEventDataStreamForRNO = rawEventDataStreamForRNO
+        DataStream<RawEvent> filteredRawEventDataStreamForRNO = rawEventDataStreamForRNO
         .process(new DataSkewProcessFunction(OutputTagConstants.dataSkewOutputTag,
             FlinkEnvUtils.getBoolean(Property.IS_FILTER),
             FlinkEnvUtils.getSet(Property.FILTER_PAGE_ID_SET)))
@@ -230,10 +230,12 @@ public class SojournerRTJob {
 
         DataStream<BotSignature> agentIpSignatureDataStream = agentIpAttributeDatastream
                 .keyBy("agent", "clientIp")
-                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(8), Time.hours(7)))
+                .window(SlidingEventTimeWindows.of(
+                        Time.hours(24), Time.hours(8), Time.hours(7)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(
-                        new AgentIpAttributeAggSliding(), new AgentIpSignatureWindowProcessFunction())
+                        new AgentIpAttributeAggSliding(),
+                        new AgentIpSignatureWindowProcessFunction())
                 .setParallelism(getInteger(Property.AGENT_IP_PARALLELISM))
                 .slotSharingGroup(getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
                 .name("Attribute Operator (Agent+IP)")
@@ -241,7 +243,8 @@ public class SojournerRTJob {
 
         DataStream<BotSignature> agentSignatureDataStream = agentIpAttributeDatastream
                 .keyBy("agent")
-                .window(SlidingEventTimeWindows.of(Time.hours(24), Time.hours(8), Time.hours(7)))
+                .window(SlidingEventTimeWindows.of(
+                        Time.hours(24), Time.hours(8), Time.hours(7)))
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new AgentAttributeAgg(), new AgentWindowProcessFunction())
                 .setParallelism(getInteger(Property.AGENT_PARALLELISM))
@@ -251,8 +254,8 @@ public class SojournerRTJob {
 
         DataStream<BotSignature> ipSignatureDataStream = agentIpAttributeDatastream
                 .keyBy("clientIp")
-                .window(SlidingEventTimeWindows
-                        .of(Time.hours(24), Time.hours(8), Time.hours(7))) // sliding  to 3hours
+                .window(SlidingEventTimeWindows.of(
+                        Time.hours(24), Time.hours(8), Time.hours(7))) // sliding  to 3hours
                 .trigger(OnElementEarlyFiringTrigger.create())
                 .aggregate(new IpAttributeAgg(), new IpWindowProcessFunction())
                 .setParallelism(getInteger(Property.IP_PARALLELISM))
@@ -266,8 +269,8 @@ public class SojournerRTJob {
                 .union(ipSignatureDataStream);
 
         // attribute signature broadcast
-        BroadcastStream<BotSignature> attributeSignatureBroadcastStream = attributeSignatureDataStream
-                .broadcast(MapStateDesc.attributeSignatureDesc);
+        BroadcastStream<BotSignature> attributeSignatureBroadcastStream
+                = attributeSignatureDataStream.broadcast(MapStateDesc.attributeSignatureDesc);
 
         // transform ubiEvent,ubiSession to same type and union
         DataStream<Either<UbiEvent, UbiSession>> ubiSessionTransDataStream =
@@ -306,7 +309,8 @@ public class SojournerRTJob {
         // ubiEvent to sojEvent
         SingleOutputStreamOperator<SojEvent> sojEventWithSessionId =
                 signatureBotDetectionForEvent
-                        .process(new UbiEventToSojEventProcessFunction(OutputTagConstants.botEventOutputTag))
+                        .process(new UbiEventToSojEventProcessFunction(
+                                OutputTagConstants.botEventOutputTag))
                         .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
                         .slotSharingGroup(getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
                         .name("UbiEvent to SojEvent")
@@ -319,7 +323,8 @@ public class SojournerRTJob {
         SingleOutputStreamOperator<SojSession> sojSessionStream =
                 signatureBotDetectionForSession
                         .process(
-                                new UbiSessionToSojSessionProcessFunction(OutputTagConstants.botSessionOutputTag))
+                                new UbiSessionToSojSessionProcessFunction(
+                                        OutputTagConstants.botSessionOutputTag))
                         .setParallelism(getInteger(Property.BROADCAST_PARALLELISM))
                         .slotSharingGroup(getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
                         .name("UbiSession to SojSession")
@@ -433,7 +438,8 @@ public class SojournerRTJob {
         agentIpSignatureDataStream
                 .addSink(producerFactory.get(new AvroKafkaSerializationSchema<>(
                         getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SIGNATURE_AGENT_IP),
-                        getStringList(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_AGENT_IP, ",")
+                        getStringList(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_AGENT_IP,
+                                ",")
                 )))
                 .setParallelism(getInteger(Property.DEFAULT_PARALLELISM))
                 .slotSharingGroup(getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
@@ -442,7 +448,8 @@ public class SojournerRTJob {
         agentSignatureDataStream
                 .addSink(producerFactory.get(new AvroKafkaSerializationSchema<>(
                         getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SIGNATURE_AGENT),
-                        getStringList(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_AGENT, ",")
+                        getStringList(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_AGENT,
+                                ",")
                 )))
                 .setParallelism(getInteger(Property.DEFAULT_PARALLELISM))
                 .slotSharingGroup(getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))
@@ -452,7 +459,8 @@ public class SojournerRTJob {
         ipSignatureDataStream
                 .addSink(producerFactory.get(new AvroKafkaSerializationSchema<>(
                         getString(Property.FLINK_APP_SINK_KAFKA_TOPIC_SIGNATURE_IP),
-                        getStringList(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_IP, ",")
+                        getStringList(Property.FLINK_APP_SINK_KAFKA_MESSAGE_KEY_SIGNATURE_IP,
+                                ",")
                 )))
                 .setParallelism(getInteger(Property.DEFAULT_PARALLELISM))
                 .slotSharingGroup(getString(Property.CROSS_SESSION_SLOT_SHARE_GROUP))

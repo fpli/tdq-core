@@ -1,7 +1,5 @@
 package com.ebay.sojourner.common.util;
 
-import java.util.Calendar;
-import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -19,8 +17,9 @@ public class LkpRefreshTimeTask extends TimerTask {
         //        calendar.set(Calendar.SECOND, 0);
         //        Timer timer = new Timer(true);
         //        timer.scheduleAtFixedRate(this, calendar.getTime(), timeUnit.toMillis(1));
-        ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1);
-        scheduledThreadPoolExecutor.scheduleAtFixedRate(this,0,1,timeUnit);
+        ScheduledThreadPoolExecutor scheduledThreadPoolExecutor
+                = new ScheduledThreadPoolExecutor(1);
+        scheduledThreadPoolExecutor.scheduleAtFixedRate(this, 0, 1, timeUnit);
     }
 
     @Override

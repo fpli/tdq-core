@@ -4,6 +4,9 @@ import com.ebay.sojourner.common.model.SessionAccumulator;
 import com.ebay.sojourner.common.model.UbiEvent;
 import com.ebay.sojourner.common.util.SojEventTimeUtil;
 
+import java.util.Map;
+import java.util.Set;
+
 public class SingleClickFlagMetrics implements FieldMetrics<UbiEvent, SessionAccumulator> {
 
     @Override
@@ -23,21 +26,23 @@ public class SingleClickFlagMetrics implements FieldMetrics<UbiEvent, SessionAcc
             int clickId = event.getClickId();
             if (!event.isRdt()) {
                 if (clickId != -1) {
-                    if (sessionAccumulator.getUbiSession().getDistinctClickIdSet() != null
-                            && sessionAccumulator.getUbiSession().getDistinctClickIdSet().size() < 10) {
-                        if (sessionAccumulator.getUbiSession().getClickWithStamp().get(clickId) == null ||
-                                (sessionAccumulator.getUbiSession().getClickWithStamp().get(clickId) != null
-                                        && sessionAccumulator.getUbiSession().getClickWithStamp().get(clickId)
-                                        < event.getEventTimestamp())) {
-                            sessionAccumulator.getUbiSession().getClickWithStamp().
-                                    put(clickId, event.getEventTimestamp());
+                    Set<Integer> distinctClickIdSet
+                            = sessionAccumulator.getUbiSession().getDistinctClickIdSet();
+                    if (distinctClickIdSet != null && distinctClickIdSet.size() < 10) {
+                        Map<Integer, Long> clickWithStamp
+                                = sessionAccumulator.getUbiSession().getClickWithStamp();
+                        if (clickWithStamp.get(clickId) == null
+                                || (clickWithStamp.get(clickId) != null &&
+                                clickWithStamp.get(clickId) < event.getEventTimestamp())) {
+                            clickWithStamp.put(clickId, event.getEventTimestamp());
                         }
-                        sessionAccumulator.getUbiSession().getDistinctClickIdSet().add(clickId);
+                        distinctClickIdSet.add(clickId);
                     }
                 }
             } else {
                 if (clickId != -1) {
-                    boolean isEarlyValidEvent = SojEventTimeUtil.isEarlyEvent(event.getEventTimestamp(),
+                    boolean isEarlyValidEvent = SojEventTimeUtil.isEarlyEvent(
+                            event.getEventTimestamp(),
                             sessionAccumulator.getUbiSession().getClickWithStamp().get(clickId));
                     if (!isEarlyValidEvent) {
                         sessionAccumulator.getUbiSession().getDistinctClickIdSet().remove(clickId);

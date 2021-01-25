@@ -187,6 +187,7 @@ public class UbiSession implements Serializable, Cloneable {
     this.oldSessionSkeySet.addAll(ubiSession.getOldSessionSkeySet());
     this.botFlagList.addAll(ubiSession.getBotFlagList());
     this.userIdSet.addAll(ubiSession.getUserIdSet());
+    this.distinctClickIdSet.addAll(ubiSession.getDistinctClickIdSet());
     if (!this.isReturningVisitor && ubiSession.isReturningVisitor()) {
       this.isReturningVisitor = ubiSession.isReturningVisitor();
     }
@@ -204,6 +205,7 @@ public class UbiSession implements Serializable, Cloneable {
     } else if (ubiSession.getEndTimestamp() != null && this.getEndTimestamp() < ubiSession
         .getEndTimestamp()) {
       this.setEndTimestamp(ubiSession.getEndTimestamp());
+      this.setEndPageId(ubiSession.getEndPageId());
     }
     if (this.getAbsStartTimestamp() == null && ubiSession.getAbsStartTimestamp() != null) {
       this.setAbsStartTimestamp(ubiSession.getAbsStartTimestamp());
@@ -213,12 +215,14 @@ public class UbiSession implements Serializable, Cloneable {
       this.setSessionId(ubiSession.getSessionId());
       this.setSessionSkey(ubiSession.getSessionSkey());
       this.setSessionStartDt(ubiSession.getSessionStartDt());
+      this.setStartPageId(ubiSession.getStartPageId());
     }
     if (this.getAbsEndTimestamp() == null && ubiSession.getAbsEndTimestamp() != null) {
       this.setAbsEndTimestamp(ubiSession.getAbsEndTimestamp());
     } else if (ubiSession.getAbsEndTimestamp() != null && this.getAbsEndTimestamp() < ubiSession
         .getAbsEndTimestamp()) {
       this.setAbsEndTimestamp(ubiSession.getAbsEndTimestamp());
+
     }
 
     return this;
