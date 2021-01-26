@@ -47,6 +47,7 @@ public class LkpManager {
     private Map<String, Boolean> selectedIps = new ConcurrentHashMap<>();
     private Set<String> selectedAgents = new CopyOnWriteArraySet<>();
     private Map<String, Long> lkpFileLastUpdDt = new ConcurrentHashMap<>();
+    private Map<String, Long> lkpFileLastPreUpdDt = new ConcurrentHashMap<>();
     private volatile FileSystem fileSystem = null;
     private volatile boolean loadLkpFromHDFS = false;
     private volatile LkpRefreshTimeTask lkpRefreshTimeTask;
@@ -117,6 +118,7 @@ public class LkpManager {
                 }
             }
             pageIdSet = pageIdSetMid;
+            updateLkpFileLastUpdDt(property);
         }
     }
 
@@ -134,13 +136,16 @@ public class LkpManager {
                     if (recordPair.length == 2) {
                         String recordKey = recordPair[0];
                         String recordValue = recordPair[1];
-                        if (StringUtils.isNotBlank(recordKey) && StringUtils.isNotBlank(recordValue)) {
-                            selectedIpsMid.put(recordKey.trim(), Boolean.valueOf(recordValue.trim()));
+                        if (StringUtils.isNotBlank(recordKey)
+                                && StringUtils.isNotBlank(recordValue)) {
+                            selectedIpsMid.put(
+                                    recordKey.trim(), Boolean.valueOf(recordValue.trim()));
                         }
                     }
                 }
             }
             selectedIps = selectedIpsMid;
+            updateLkpFileLastUpdDt(property);
         }
     }
 
@@ -162,6 +167,7 @@ public class LkpManager {
                 }
             }
             selectedAgents = selectedAgentsMid;
+            updateLkpFileLastUpdDt(property);
         }
     }
 
@@ -179,6 +185,7 @@ public class LkpManager {
                 }
             }
             largeSessionGuidSet = largeSessionGuidSetMid;
+            updateLkpFileLastUpdDt(property);
         }
     }
 
@@ -194,6 +201,7 @@ public class LkpManager {
                 iabAgentRegsMid.add(iabAgent.toLowerCase());
             }
             iabAgentRegs = iabAgentRegsMid;
+            updateLkpFileLastUpdDt(property);
         }
     }
 
@@ -214,11 +222,13 @@ public class LkpManager {
                                 Integer.valueOf(values[1].trim()));
                     } catch (NumberFormatException e) {
                         log.error(
-                                "Ignore the incorrect format for findflags: " + values[0] + " - " + values[1]);
+                                "Ignore the incorrect format for findflags: "
+                                        + values[0] + " - " + values[1]);
                     }
                 }
             }
             findingFlagMap = findingFlagMapMid;
+            updateLkpFileLastUpdDt(property);
         }
     }
 
@@ -233,12 +243,14 @@ public class LkpManager {
             for (String vtNewId : vtNewIdsValue.split(LKP_RECORD_DELIMITER)) {
                 Integer[] pageInfo = new Integer[2];
                 String[] ids = vtNewId.split(LKP_FILED_DELIMITER, pageInfo.length + 1);
-                Integer newPageId = StringUtils.isEmpty(ids[0]) ? null : Integer.valueOf(ids[0].trim());
+                Integer newPageId =
+                        StringUtils.isEmpty(ids[0]) ? null : Integer.valueOf(ids[0].trim());
                 pageInfo[0] = StringUtils.isEmpty(ids[1]) ? null : Integer.valueOf(ids[1].trim());
                 pageInfo[1] = StringUtils.isEmpty(ids[2]) ? null : Integer.valueOf(ids[2].trim());
                 vtNewIdsMapMid.put(newPageId, pageInfo);
             }
             vtNewIdsMap = vtNewIdsMapMid;
+            updateLkpFileLastUpdDt(property);
         }
     }
 
@@ -257,6 +269,7 @@ public class LkpManager {
                 }
             }
             appIdWithBotFlags = appIdWithBotFlagsMid;
+            updateLkpFileLastUpdDt(property);
         }
     }
 
@@ -271,8 +284,10 @@ public class LkpManager {
             for (String pageFmlyPair : pageFmlysValue.split(LKP_RECORD_DELIMITER)) {
                 String[] pageFmlyNames = new String[2];
                 if (StringUtils.isNotBlank(pageFmlyPair)) {
-                    String[] values = pageFmlyPair.split(LKP_FILED_DELIMITER, pageFmlyNames.length + 1);
-                    Integer pageId = StringUtils.isEmpty(values[0]) ? null : Integer.valueOf(values[0]);
+                    String[] values = pageFmlyPair.split(
+                            LKP_FILED_DELIMITER, pageFmlyNames.length + 1);
+                    Integer pageId =
+                            StringUtils.isEmpty(values[0]) ? null : Integer.valueOf(values[0]);
                     if (values == null || values.length != 3) {
                         log.error("refreshPageFmlys error ========:" + pageFmlyPair);
                     }
@@ -282,6 +297,7 @@ public class LkpManager {
                 }
             }
             pageFmlyMap = pageFmlyMapMid;
+            updateLkpFileLastUpdDt(property);
         }
     }
 
@@ -302,11 +318,13 @@ public class LkpManager {
                     try {
                         mpxMapMid.put(Long.parseLong(values[0].trim()), values[1].trim());
                     } catch (NumberFormatException e) {
-                        log.error("Ignore the incorrect format for mpx: " + values[0] + " - " + values[1]);
+                        log.error("Ignore the incorrect format for mpx: "
+                                + values[0] + " - " + values[1]);
                     }
                 }
             }
             mpxMap = mpxMapMid;
+            updateLkpFileLastUpdDt(property);
         }
     }
 
@@ -325,9 +343,9 @@ public class LkpManager {
                         StandardCharsets.UTF_8));
                 bytes = new byte[4096];
             }
-            updateLkpFileLastUpdDt(filePath, fileName);
         } catch (IOException e) {
-            log.error("Open HDFS file {} issue:{}", filePath.getName(), ExceptionUtils.getStackTrace(e));
+            log.error("Open HDFS file {} issue:{}",
+                    filePath.getName(), ExceptionUtils.getStackTrace(e));
         } finally {
             closeFS();
         }
@@ -340,8 +358,9 @@ public class LkpManager {
             initFs();
             instream = fileSystem.open(path);
         } catch (Exception e) {
-            log.error("can't open HDFS lkp file {}", path, e);
-            log.warn("Load file failed from [{}], will try to load from classpath: {}", path, resource);
+            //            log.error("can't open HDFS lkp file {}", path, e);
+            log.warn("Load file failed from [{}], will try to load from classpath: {}",
+                    path, resource);
             loadLkpFromHDFS = false;
             if (firstRun) {
                 try {
@@ -360,7 +379,8 @@ public class LkpManager {
             instream = LkpManager.class.getResourceAsStream(resource);
 
             if (instream == null) {
-                throw new FileNotFoundException("Can't locate resource based on classPath: " + resource);
+                throw new FileNotFoundException("Can't locate resource based on classPath: "
+                        + resource);
             }
         } else {
             throw new RuntimeException("Try to load empty resource.");
@@ -380,13 +400,15 @@ public class LkpManager {
         try {
             initFs();
             if (fileSystem.exists(path)) {
-                FileStatus[] fileStatus = fileSystem.listStatus(path, new FileNameFilter(fileName));
+                FileStatus[] fileStatus =
+                        fileSystem.listStatus(path, new FileNameFilter(fileName));
                 long lastModifiedTime = fileStatus[0].getModificationTime();
                 long preLastModifiedTime =
-                        lkpFileLastUpdDt.get(fileName) == null ? 0 : lkpFileLastUpdDt.get(fileName);
-                //        if (lastModifiedTime > preLastModifiedTime) {
-                //          lkpFileLastUpdDt.put(fileName, lastModifiedTime);
-                //        }
+                        lkpFileLastUpdDt.get(fileName) == null ?
+                                0 : lkpFileLastUpdDt.get(fileName);
+                if (lastModifiedTime > preLastModifiedTime) {
+                  lkpFileLastPreUpdDt.put(fileName, lastModifiedTime);
+                }
                 return lastModifiedTime > preLastModifiedTime;
             }
         } catch (IOException e) {
@@ -422,29 +444,18 @@ public class LkpManager {
         StringBuilder stringBuilder = new StringBuilder();
         for (Entry entry : lkpFileLastUpdDt.entrySet()) {
             stringBuilder.append("Lkp FileName : ").append(entry.getKey());
-            stringBuilder.append("Lkp File LastModifiedDate : ").append(entry.getValue()).append(";");
+            stringBuilder.append("Lkp File LastModifiedDate : ")
+                    .append(entry.getValue()).append(";");
         }
         if (StringUtils.isNotEmpty(stringBuilder.toString())) {
             log.warn(stringBuilder.toString());
         }
     }
 
-    private void updateLkpFileLastUpdDt(Path path, String fileName) {
-        try {
-            initFs();
-            if (fileSystem.exists(path)) {
-                FileStatus[] fileStatus = fileSystem.listStatus(path, new FileNameFilter(fileName));
-                long lastModifiedTime = fileStatus[0].getModificationTime();
-                long preLastModifiedTime =
-                        lkpFileLastUpdDt.get(fileName) == null ? 0 : lkpFileLastUpdDt.get(fileName);
-                if (lastModifiedTime > preLastModifiedTime) {
-                    lkpFileLastUpdDt.put(fileName, lastModifiedTime);
-                }
-            }
-        } catch (IOException e) {
-            log.error("check Lkp File Status filed: {}", e);
-        } finally {
-            closeFS();
+    private void updateLkpFileLastUpdDt(String lkpType) {
+        String fileName = getString(lkpType);
+        if(lkpFileLastPreUpdDt.get(fileName)!=null) {
+            lkpFileLastUpdDt.put(fileName, lkpFileLastPreUpdDt.get(fileName));
         }
     }
 
