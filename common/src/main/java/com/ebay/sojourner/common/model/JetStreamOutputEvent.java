@@ -1,6 +1,7 @@
 package com.ebay.sojourner.common.model;
 
 import java.io.Serializable;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -53,5 +54,7 @@ public class JetStreamOutputEvent implements Serializable {
   private String agentInfo;
   private String appId;
   private String cobrand;
+  private Map<String, String> applicationPayload;
+  private Map<String, String> clientData;
 
 }

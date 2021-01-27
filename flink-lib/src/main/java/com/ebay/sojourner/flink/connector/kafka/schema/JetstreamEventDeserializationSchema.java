@@ -4,7 +4,10 @@ import com.ebay.sojourner.common.model.JetStreamOutputEvent;
 import com.ebay.sojourner.flink.connector.kafka.RheosEventSerdeFactory;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.util.Utf8;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -65,13 +68,30 @@ public class JetstreamEventDeserializationSchema implements
     String agentInfo = getString(genericRecord.get("agentInfo"));
     String appId = getString(genericRecord.get("appId"));
     String cobrand = getString(genericRecord.get("cobrand"));
+    Map<Utf8, Utf8> applicationPayload = (Map<Utf8, Utf8>) genericRecord.get("applicationPayload");
+    Map<Utf8, Utf8> clientData = (Map<Utf8, Utf8>) genericRecord.get("clientData");
+
+    Map<String, String> applicationPayloadMap = new HashMap<>();
+    if (applicationPayload != null) {
+      for (Map.Entry<Utf8, Utf8> entry : applicationPayload.entrySet()) {
+        applicationPayloadMap.put(entry.getKey().toString(), entry.getValue().toString());
+      }
+    }
+
+    Map<String, String> clientDataMap = new HashMap<>();
+    if (clientData != null) {
+      for (Map.Entry<Utf8, Utf8> entry : clientData.entrySet()) {
+        clientDataMap.put(entry.getKey().toString(), entry.getValue().toString());
+      }
+    }
 
     return new JetStreamOutputEvent(guid, eventTimestamp, eventCreateTimestamp, sid,
         eventCaptureTime, requestCorrelationId, pageFamily, remoteIP, appVersion, eventFamily,
         eventAction, trafficSource, osVersion, deviceFamily, deviceType, browserVersion,
         browserFamily, osFamily, enrichedOsVersion, rlogid, sessionId, cguid, pageId, pageName,
         userId, clickId, siteId, seqNum, ciid, siid, rdt, regu, iframe, refererHash, sqr, itemId,
-        flags, urlQueryString, webServer, cookies, bot, clientIP, agentInfo, appId, cobrand);
+        flags, urlQueryString, webServer, cookies, bot, clientIP, agentInfo, appId, cobrand,
+        applicationPayloadMap, clientDataMap);
   }
 
   private Integer getInteger(Object o) {
