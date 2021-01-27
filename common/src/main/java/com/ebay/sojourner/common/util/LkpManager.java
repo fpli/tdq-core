@@ -51,7 +51,7 @@ public class LkpManager {
     private volatile FileSystem fileSystem = null;
     private volatile boolean loadLkpFromHDFS = false;
     private volatile LkpRefreshTimeTask lkpRefreshTimeTask;
-
+    private Map<String,Object> lkpFileList = new ConcurrentHashMap<>();
     private LkpManager(TimeUnit timeUnit) {
         lkpRefreshTimeTask = new LkpRefreshTimeTask(this, timeUnit);
         refreshLkpFiles();
@@ -61,7 +61,6 @@ public class LkpManager {
     private LkpManager() {
         this(TimeUnit.HOURS);
     }
-
     public static LkpManager getInstance() {
         if (lkpManager == null) {
             synchronized (LkpManager.class) {
@@ -100,6 +99,7 @@ public class LkpManager {
         refreshMpxRotetion();
         refreshLargeSessionGuid();
         printLkpFileStatus();
+        printLkpFileSize();
     }
 
     private void refreshIframePageIds() {
@@ -312,14 +312,14 @@ public class LkpManager {
             for (String mpx : mpxRotations.split(LKP_RECORD_DELIMITER)) {
                 String[] values = mpx.split(LKP_FILED_DELIMITER);
                 if (values == null || values.length != 2) {
-                    log.error("refreshMpxRotetion error ========:" + mpx);
+                    log.error("refreshMpxRotetion error ========:{}", mpx);
                 }
                 if (values[0] != null && values[1] != null) {
                     try {
                         mpxMapMid.put(Long.parseLong(values[0].trim()), values[1].trim());
                     } catch (NumberFormatException e) {
-                        log.error("Ignore the incorrect format for mpx: "
-                                + values[0] + " - " + values[1]);
+                        log.error("Ignore the incorrect format for mpx: {} - {}",
+                                values[0], values[1]);
                     }
                 }
             }
@@ -362,7 +362,7 @@ public class LkpManager {
             log.warn("Load file failed from [{}], will try to load from classpath: {}",
                     path, resource);
             loadLkpFromHDFS = false;
-            if (firstRun) {
+            if (firstRun||lkpFileLastUpdDt.get(resource) == null) {
                 try {
                     instream = getStreamFromClasspath(resource);
                 } catch (FileNotFoundException ex) {
@@ -407,7 +407,7 @@ public class LkpManager {
                         lkpFileLastUpdDt.get(fileName) == null ?
                                 0 : lkpFileLastUpdDt.get(fileName);
                 if (lastModifiedTime > preLastModifiedTime) {
-                  lkpFileLastPreUpdDt.put(fileName, lastModifiedTime);
+                    lkpFileLastPreUpdDt.put(fileName, lastModifiedTime);
                 }
                 return lastModifiedTime > preLastModifiedTime;
             }
@@ -452,9 +452,23 @@ public class LkpManager {
         }
     }
 
+    private void printLkpFileSize() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Entry entry : lkpFileLastUpdDt.entrySet()) {
+            stringBuilder.append("Lkp FileName : ").append(entry.getKey());
+            stringBuilder.append("Lkp File LastModifiedDate : ")
+                    .append(entry.getValue()).append(";");
+        }
+        if (StringUtils.isNotEmpty(stringBuilder.toString())) {
+            log.warn(stringBuilder.toString());
+        }
+    }
+
+
+
     private void updateLkpFileLastUpdDt(String lkpType) {
         String fileName = getString(lkpType);
-        if(lkpFileLastPreUpdDt.get(fileName)!=null) {
+        if (lkpFileLastPreUpdDt.get(fileName) != null) {
             lkpFileLastUpdDt.put(fileName, lkpFileLastPreUpdDt.get(fileName));
         }
     }
