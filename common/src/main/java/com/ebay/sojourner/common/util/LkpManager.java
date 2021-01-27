@@ -51,7 +51,7 @@ public class LkpManager {
     private volatile FileSystem fileSystem = null;
     private volatile boolean loadLkpFromHDFS = false;
     private volatile LkpRefreshTimeTask lkpRefreshTimeTask;
-    private Map<String,Object> lkpFileList = new ConcurrentHashMap<>();
+
     private LkpManager(TimeUnit timeUnit) {
         lkpRefreshTimeTask = new LkpRefreshTimeTask(this, timeUnit);
         refreshLkpFiles();
@@ -61,6 +61,7 @@ public class LkpManager {
     private LkpManager() {
         this(TimeUnit.HOURS);
     }
+
     public static LkpManager getInstance() {
         if (lkpManager == null) {
             synchronized (LkpManager.class) {
@@ -362,7 +363,7 @@ public class LkpManager {
             log.warn("Load file failed from [{}], will try to load from classpath: {}",
                     path, resource);
             loadLkpFromHDFS = false;
-            if (firstRun||lkpFileLastUpdDt.get(resource) == null) {
+            if (firstRun || lkpFileLastUpdDt.get(resource) == null) {
                 try {
                     instream = getStreamFromClasspath(resource);
                 } catch (FileNotFoundException ex) {
@@ -463,7 +464,6 @@ public class LkpManager {
             log.warn(stringBuilder.toString());
         }
     }
-
 
 
     private void updateLkpFileLastUpdDt(String lkpType) {

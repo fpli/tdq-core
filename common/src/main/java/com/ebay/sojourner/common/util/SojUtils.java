@@ -69,7 +69,8 @@ public class SojUtils {
     sojEvent.setEventAttr(ubiEvent.getEventAttr());
     sojEvent.setEventCnt(ubiEvent.getEventCnt());
     sojEvent.setEventFamily(ubiEvent.getEventFamily());
-    sojEvent.setEventTimestamp(ubiEvent.getEventTimestamp());
+    sojEvent.setEventTimestamp(ubiEvent.getEventTimestamp()!=null?
+            SojTimestamp.getUnixTimestamp(ubiEvent.getEventTimestamp()):null);
     sojEvent.setFlags(ubiEvent.getFlags());
     sojEvent.setForwardedFor(ubiEvent.getForwardedFor());
     sojEvent.setGenerateTime(ubiEvent.getGenerateTime());
