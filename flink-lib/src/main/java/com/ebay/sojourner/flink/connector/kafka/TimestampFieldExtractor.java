@@ -31,7 +31,8 @@ public class TimestampFieldExtractor {
 
     } else if (t instanceof SojEvent) {
       SojEvent sojEvent = (SojEvent) t;
-      return SojTimestamp.getUnixTimestamp(sojEvent.getEventTimestamp());
+      return sojEvent.getEventTimestamp();
+      //return SojTimestamp.getUnixTimestamp(sojEvent.getEventTimestamp());
     } else if (t instanceof JetStreamOutputEvent) {
       JetStreamOutputEvent jetStreamOutputEvent = (JetStreamOutputEvent) t;
       return jetStreamOutputEvent.getEventCreateTimestamp();
