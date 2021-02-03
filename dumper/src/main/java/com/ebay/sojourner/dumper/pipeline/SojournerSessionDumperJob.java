@@ -16,6 +16,7 @@ import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.flink.connector.kafka.schema.PassThroughDeserializationSchema;
 import com.ebay.sojourner.flink.function.BinaryToSojSessionMapFunction;
 import com.ebay.sojourner.flink.function.ExtractWatermarkProcessFunction;
+import com.ebay.sojourner.flink.function.SojSessionTimestampTransMapFunction;
 import com.ebay.sojourner.flink.function.SplitSessionProcessFunction;
 import java.time.Duration;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -60,8 +61,15 @@ public class SojournerSessionDumperJob {
         .name(getString(Property.ASSIGN_WATERMARK_OPERATOR_NAME))
         .uid(getString(Property.ASSIGN_WATERMARK_UID));
 
+    // unix timestamp to sojourner timestamp
+    DataStream<SojSession> finalSojSessionDataStream = assignedWatermarkSojSessionDataStream
+        .map(new SojSessionTimestampTransMapFunction())
+        .setParallelism(getInteger(Property.SINK_HDFS_PARALLELISM))
+        .name("Unix Timestamp To Soj Timestamp")
+        .uid("unix-timestamp-to-soj-timestamp");
+
     // extract timestamp
-    DataStream<SojWatermark> sojSessionWatermarkStream = assignedWatermarkSojSessionDataStream
+    DataStream<SojWatermark> sojSessionWatermarkStream = finalSojSessionDataStream
         .process(new ExtractWatermarkProcessFunction<>(
             getString(Property.FLINK_APP_METRIC_NAME)))
         .setParallelism(getInteger(Property.SINK_HDFS_PARALLELISM))
@@ -77,7 +85,7 @@ public class SojournerSessionDumperJob {
         .uid(getString(Property.SINK_UID_WATERMARK));
 
     SingleOutputStreamOperator<SojSession> sameDaySessionStream =
-        assignedWatermarkSojSessionDataStream
+        finalSojSessionDataStream
             .process(new SplitSessionProcessFunction(OutputTagConstants.crossDaySessionOutputTag,
                 OutputTagConstants.openSessionOutputTag))
             .setParallelism(getInteger(Property.SINK_HDFS_PARALLELISM))

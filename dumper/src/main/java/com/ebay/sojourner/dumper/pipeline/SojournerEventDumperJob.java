@@ -15,6 +15,7 @@ import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.flink.connector.kafka.schema.PassThroughDeserializationSchema;
 import com.ebay.sojourner.flink.function.BinaryToSojEventMapFunction;
 import com.ebay.sojourner.flink.function.ExtractWatermarkProcessFunction;
+import com.ebay.sojourner.flink.function.SojEventTimestampTransMapFunction;
 import java.time.Duration;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -57,8 +58,15 @@ public class SojournerEventDumperJob {
         .name(getString(Property.ASSIGN_WATERMARK_OPERATOR_NAME))
         .uid(getString(Property.ASSIGN_WATERMARK_UID));
 
+    // unix timestamp to sojourner timestamp
+    DataStream<SojEvent> finalSojEventDataStream = assignedWatermarkSojEventDataStream
+        .map(new SojEventTimestampTransMapFunction())
+        .setParallelism(getInteger(Property.SINK_HDFS_PARALLELISM))
+        .name("Unix Timestamp To Soj Timestamp")
+        .uid("unix-timestamp-to-soj-timestamp");
+
     // extract timestamp
-    DataStream<SojWatermark> sojEventWatermarkStream = assignedWatermarkSojEventDataStream
+    DataStream<SojWatermark> sojEventWatermarkStream = finalSojEventDataStream
         .process(new ExtractWatermarkProcessFunction<>(
             getString(Property.FLINK_APP_METRIC_NAME)))
         .setParallelism(getInteger(Property.SINK_HDFS_PARALLELISM))
@@ -74,7 +82,7 @@ public class SojournerEventDumperJob {
         .uid(getString(Property.SINK_UID_WATERMARK));
 
     // hdfs sink
-    assignedWatermarkSojEventDataStream
+    finalSojEventDataStream
         .addSink(HdfsConnectorFactory.createWithParquet(
             getString(Property.FLINK_APP_SINK_HDFS_PATH), SojEvent.class))
         .setParallelism(getInteger(Property.SINK_HDFS_PARALLELISM))
