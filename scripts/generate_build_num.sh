@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+echo $(mvn -v)
 CURRENT_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive exec:exec)
 
 if [[ "${CURRENT_VERSION}" =~ .*"-SNAPSHOT"$ ]]; then
@@ -10,5 +11,5 @@ else
 fi
 
 echo "Build version is ${NEW_VERSION}"
-mvn versions:set -DnewVersion=${NEW_VERSION}
 echo ${NEW_VERSION} > build_version_tmp.txt
+mvn versions:set -DnewVersion=${NEW_VERSION}
