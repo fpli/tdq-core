@@ -3,6 +3,10 @@ pipeline {
   agent {
     label 'raptor-io-builder'
   }
+  tools {
+    maven 'Maven3.6.3'
+    jdk 'OPENJDK8'
+  }
   stages {
     stage('Build') {
       steps {
