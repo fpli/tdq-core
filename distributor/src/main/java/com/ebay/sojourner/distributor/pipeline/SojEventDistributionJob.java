@@ -10,7 +10,7 @@ import com.ebay.sojourner.common.model.PageIdTopicMapping;
 import com.ebay.sojourner.common.model.RawSojEventWrapper;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.distributor.broadcast.SojEventDistProcessFunction;
-import com.ebay.sojourner.distributor.function.MappingSourceFunction;
+import com.ebay.sojourner.distributor.function.CustomTopicConfigSourceFunction;
 import com.ebay.sojourner.distributor.schema.CustomSojEventSerializationSchema;
 import com.ebay.sojourner.distributor.schema.SojEventDeserializationSchema;
 import com.ebay.sojourner.flink.common.DataCenter;
@@ -53,8 +53,9 @@ public class SojEventDistributionJob {
 
 
     DataStream<PageIdTopicMapping> mappingSourceStream = executionEnvironment
-        .addSource(new MappingSourceFunction(getString(Property.REST_BASE_URL),
-                                             getLong(Property.REST_PULL_INTERVAL)))
+        .addSource(new CustomTopicConfigSourceFunction(getString(Property.REST_BASE_URL),
+                                                       getLong(Property.REST_CONFIG_PULL_INTERVAL),
+                                                       getString(Property.REST_CONFIG_ENV)))
         .setParallelism(1)
         .name(CONFIG_SOURCE_OP_NAME)
         .uid(CONFIG_SOURCE_UID);

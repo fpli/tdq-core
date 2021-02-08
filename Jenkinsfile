@@ -3,6 +3,10 @@ pipeline {
   agent {
     label 'raptor-io-builder'
   }
+  tools {
+    maven 'Maven3.6.3'
+    jdk 'OPENJDK8'
+  }
   stages {
     stage('Build') {
       steps {
@@ -13,9 +17,9 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        sh './scripts/upload_rheos_portal.sh rt-pipeline'
-        sh './scripts/upload_rheos_portal.sh dumper'
-        sh './scripts/upload_rheos_portal.sh distributor'
+        sh '[ -d "rt-pipeline" ] && ./scripts/upload_rheos_portal.sh rt-pipeline'
+        sh '[ -d "dumper" ] && ./scripts/upload_rheos_portal.sh dumper'
+        sh '[ -d "distributor" ] && ./scripts/upload_rheos_portal.sh distributor'
       }
     }
   }

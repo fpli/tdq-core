@@ -219,7 +219,8 @@ public class Property {
   // rest client
   public static final String REST_BASE_URL = "rest-client.base-url";
   public static final String REST_USERNAME = "rest-client.username";
-  public static final String REST_PULL_INTERVAL = "rest-client.pull-interval";
+  public static final String REST_CONFIG_PULL_INTERVAL = "rest-client.config.pull-interval";
+  public static final String REST_CONFIG_ENV = "rest-client.config.env";
 
   // ------------------------- batch pipeline common property ---------------------------
   // flink - parallelism

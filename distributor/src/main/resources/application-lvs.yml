@@ -1,0 +1,11 @@
+flink:
+  app:
+    name: Sojourner Distributor - LVS
+    source:
+      dc: lvs
+    sink:
+      dc: slc
+
+kafka:
+  consumer:
+    group-id: sojourner-distributor-lvs
