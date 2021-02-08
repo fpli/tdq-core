@@ -2,8 +2,8 @@ flink:
   app:
     name: Sojourner Distributor - RNO
     parallelism:
-      source: 50
-      sink-kafka: 50
+      source: 200
+      sink-kafka: 200
     checkpoint:
       data-dir: /opt/sojourner-distributor/checkpoint
       interval-ms: 300000
@@ -16,16 +16,14 @@ flink:
       from-timestamp: 0
       out-of-orderless-in-min: 0
     sink:
-      dc: slc
+      dc: rno
       kafka:
-        # change me when release
-        topic: behavior.pulsarv2.test.default
+        topic: behavior.pulsar.sojevent.deadletter
 
 kafka:
   consumer:
     stream: behavior.totalv2
-    # change me when release
-    group-id: sojourner-total-new-distributor
+    group-id: sojourner-distributor-rno
     topic:
       - behavior.totalv2.sojevent-nonbot-rno
       - behavior.totalv2.sojevent-nonbot-lvs
@@ -54,15 +52,20 @@ kafka:
     auto-offset-reset: latest
 
   producer:
-    # change me when release
-    stream: behavior.pulsarv2.test
+    stream: behavior.pulsar
     bootstrap-servers:
+      rno:
+        - rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
+        - rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
+        - rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
+        - rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
+        - rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
       slc:
-        - rhs-kxwvkiaa-kfk-slc-1.rheos-streaming-prod.svc.45.tess.io:9092
-        - rhs-kxwvkiaa-kfk-slc-2.rheos-streaming-prod.svc.45.tess.io:9092
-        - rhs-kxwvkiaa-kfk-slc-3.rheos-streaming-prod.svc.45.tess.io:9092
-        - rhs-kxwvkiaa-kfk-slc-4.rheos-streaming-prod.svc.45.tess.io:9092
-        - rhs-kxwvkiaa-kfk-slc-5.rheos-streaming-prod.svc.45.tess.io:9092
+        - rhs-qisvkiaa-kfk-slc-1.rheos-streaming-prod.svc.45.tess.io:9092
+        - rhs-qisvkiaa-kfk-slc-2.rheos-streaming-prod.svc.45.tess.io:9092
+        - rhs-qisvkiaa-kfk-slc-3.rheos-streaming-prod.svc.45.tess.io:9092
+        - rhs-qisvkiaa-kfk-slc-4.rheos-streaming-prod.svc.45.tess.io:9092
+        - rhs-qisvkiaa-kfk-slc-5.rheos-streaming-prod.svc.45.tess.io:9092
     batch-size: 524288
     acks: 1
     linger-ms: 50
@@ -85,4 +88,6 @@ rheos:
 rest-client:
   base-url: https://sojubdportalservice.vip.ebay.com
   username: soj-flink-app
-  pull-interval: 15000
+  config:
+    pull-interval: 30000
+    env: prod
