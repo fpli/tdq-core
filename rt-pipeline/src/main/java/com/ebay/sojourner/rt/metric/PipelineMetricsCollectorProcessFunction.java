@@ -28,21 +28,15 @@ public class PipelineMetricsCollectorProcessFunction extends ProcessFunction<Ubi
   @Override
   public void open(Configuration parameters) throws Exception {
     super.open(parameters);
-    Histogram siteToSourceHistogram =
-        new Histogram(new SlidingWindowReservoir(500));
-    Histogram siteToSinkHistogram =
-        new Histogram(new SlidingWindowReservoir(500));
-    Histogram sourceToSinkHistogram =
-        new Histogram(new SlidingWindowReservoir(500));
     siteToSourceWrapper = getRuntimeContext().getMetricGroup()
         .addGroup(Constants.SOJ_METRICS_GROUP)
-        .histogram(siteToSource, new DropwizardHistogramWrapper(siteToSourceHistogram));
+        .histogram(siteToSource, new DropwizardHistogramWrapper(latencyHistogram));
     siteToSinkWrapper = getRuntimeContext().getMetricGroup()
         .addGroup(Constants.SOJ_METRICS_GROUP)
-        .histogram(siteToSink, new DropwizardHistogramWrapper(siteToSinkHistogram));
+        .histogram(siteToSink, new DropwizardHistogramWrapper(latencyHistogram));
     sourceToSinkWrapper = getRuntimeContext().getMetricGroup()
         .addGroup(Constants.SOJ_METRICS_GROUP)
-        .histogram(sourceToSink, new DropwizardHistogramWrapper(sourceToSinkHistogram));
+        .histogram(sourceToSink, new DropwizardHistogramWrapper(latencyHistogram));
   }
 
   @Override
