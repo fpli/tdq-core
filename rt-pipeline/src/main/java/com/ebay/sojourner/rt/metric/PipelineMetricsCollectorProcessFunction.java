@@ -58,6 +58,10 @@ public class PipelineMetricsCollectorProcessFunction extends ProcessFunction<Ubi
     siteToSinkWrapper.update(siteToSink);
     sourceToSinkWrapper.update(sourceToSink);
 
+    if (value.getPageFamily() == null || value.getPageFamily().equals("")) {
+      value.setPageFamily("null");
+    }
+
     String pageFamilyAndSiteId = value.getPageFamily() + "," + value.getSiteId();
     if (domainWrapperMap.containsKey(pageFamilyAndSiteId)
         && domainWrapperMap.get(pageFamilyAndSiteId) != null) {
