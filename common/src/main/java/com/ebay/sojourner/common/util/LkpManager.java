@@ -7,11 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -48,6 +45,7 @@ public class LkpManager {
     private Set<String> selectedAgents = new CopyOnWriteArraySet<>();
     private Map<String, Long> lkpFileLastUpdDt = new ConcurrentHashMap<>();
     private Map<String, Long> lkpFileLastPreUpdDt = new ConcurrentHashMap<>();
+    private Map<String, Set<Integer>> pageFmlyAllMap = new ConcurrentHashMap<>();
     private volatile FileSystem fileSystem = null;
     private volatile boolean loadLkpFromHDFS = false;
     private volatile LkpRefreshTimeTask lkpRefreshTimeTask;
@@ -302,6 +300,35 @@ public class LkpManager {
         }
     }
 
+    private void refreshPageFmlysTotal() {
+        String property = Property.PAGE_FMLY_ALL;
+        if (isUpdate(property)) {
+            Map<String, Set<Integer>> pageFmlyAllMapMid = new ConcurrentHashMap<>();
+            String pageFmlysValue = getLkpFileContent(property);
+            if (pageFmlysValue == null) {
+                return;
+            }
+            for (String pageFmlyPair : pageFmlysValue.split(LKP_RECORD_DELIMITER)) {
+
+                if (StringUtils.isNotBlank(pageFmlyPair)) {
+                    String[] values = pageFmlyPair.split(LKP_FILED_DELIMITER, 2);
+                    Integer pageId =
+                            StringUtils.isEmpty(values[0]) ? null : Integer.valueOf(values[0]);
+                    String pageFmly = StringUtils.isEmpty(values[1]) ? "" : values[1];
+                    if (pageFmlyAllMapMid.get(pageFmly) != null) {
+                        pageFmlyAllMapMid.get(pageFmly).add(pageId);
+                    } else {
+                        Set<Integer> pageIdSet = new HashSet<>();
+                        pageIdSet.add(pageId);
+                        pageFmlyAllMapMid.put(pageFmly, pageIdSet);
+                    }
+                }
+            }
+            pageFmlyAllMap = pageFmlyAllMapMid;
+            updateLkpFileLastUpdDt(property);
+        }
+    }
+
     private void refreshMpxRotetion() {
         String property = Property.MPX_ROTATION;
         if (isUpdate(property)) {
@@ -483,6 +510,7 @@ public class LkpManager {
         iabAgentRegs = null;
         largeSessionGuidSet = null;
         pageFmlyMap = null;
+        pageFmlyAllMap = null;
         mpxMap = null;
         selectedIps = null;
         selectedAgents = null;
@@ -512,6 +540,10 @@ public class LkpManager {
 
     public Map<Integer, String[]> getPageFmlyMaps() {
         return pageFmlyMap;
+    }
+
+    public Map<String, Set<Integer>> getPageFmlyAllMaps() {
+        return pageFmlyAllMap;
     }
 
     public Map<String, Boolean> getSelectedIps() {

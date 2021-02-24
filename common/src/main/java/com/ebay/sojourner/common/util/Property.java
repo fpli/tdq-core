@@ -23,6 +23,7 @@ public class Property {
   public static final String TEST_USER_IDS = "test.user.ids";
   public static final String LARGE_SESSION_GUID = "large.session.guid";
   public static final String MPX_ROTATION = "mpx.rotation";
+  public static final String PAGE_FMLY_ALL = "pageFmlyAll";
 
   // -------------------- Page Indicator Property --------------------------------
   public static final String SEARCH_VIEW_PAGES = "search.view.pages";
