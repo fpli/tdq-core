@@ -145,6 +145,7 @@ public class UbiSession implements Serializable, Cloneable {
   private int pageIdForUAIP = Integer.MAX_VALUE;
   private int hashCode = Integer.MAX_VALUE;
   private Map<Integer,Long> clickWithStamp = new LinkedHashMap<>();
+  private Map<Integer,Long> rdtClickWithStamp = new LinkedHashMap<>();
   public UbiSession() {
     //        this.distinctClickIdSet = new HashSet<Integer>();
     //        this.agentSets= new HashSet<String>();
