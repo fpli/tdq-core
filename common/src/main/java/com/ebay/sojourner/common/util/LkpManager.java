@@ -96,6 +96,7 @@ public class LkpManager {
         refreshAppIds();
         refreshPageFmlys();
         refreshMpxRotetion();
+        refreshPageFmlysTotal();
         refreshLargeSessionGuid();
         printLkpFileStatus();
         printLkpFileSize();
