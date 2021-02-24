@@ -28,7 +28,12 @@ public class SingleClickFlagMetrics implements FieldMetrics<UbiEvent, SessionAcc
                 if (clickId != -1) {
                     Set<Integer> distinctClickIdSet
                             = sessionAccumulator.getUbiSession().getDistinctClickIdSet();
-                    if (distinctClickIdSet != null && distinctClickIdSet.size() < 10) {
+                    Map<Integer, Long> rdtClickWithStamp
+                            = sessionAccumulator.getUbiSession().getRdtClickWithStamp();
+                    if (distinctClickIdSet != null && distinctClickIdSet.size() < 10 &&
+                            rdtClickWithStamp != null &&  (rdtClickWithStamp.get(clickId) == null
+                            || (rdtClickWithStamp.get(clickId) != null &&
+                            event.getEventTimestamp() > rdtClickWithStamp.get(clickId)))) {
                         Map<Integer, Long> clickWithStamp
                                 = sessionAccumulator.getUbiSession().getClickWithStamp();
                         if (clickWithStamp.get(clickId) == null
@@ -39,6 +44,7 @@ public class SingleClickFlagMetrics implements FieldMetrics<UbiEvent, SessionAcc
                         distinctClickIdSet.add(clickId);
                     }
                 }
+
             } else {
                 if (clickId != -1) {
                     boolean isEarlyValidEvent = SojEventTimeUtil.isEarlyEvent(
@@ -46,6 +52,17 @@ public class SingleClickFlagMetrics implements FieldMetrics<UbiEvent, SessionAcc
                             sessionAccumulator.getUbiSession().getClickWithStamp().get(clickId));
                     if (!isEarlyValidEvent) {
                         sessionAccumulator.getUbiSession().getDistinctClickIdSet().remove(clickId);
+                    } else {
+                        if (!sessionAccumulator.getUbiSession().getDistinctClickIdSet()
+                                .contains(clickId)) {
+                            Map<Integer, Long> rdtClickWithStamp
+                                    = sessionAccumulator.getUbiSession().getRdtClickWithStamp();
+                            if (rdtClickWithStamp.get(clickId) == null
+                                    || (rdtClickWithStamp.get(clickId) != null &&
+                                    rdtClickWithStamp.get(clickId) < event.getEventTimestamp())) {
+                                rdtClickWithStamp.put(clickId, event.getEventTimestamp());
+                            }
+                        }
                     }
                 }
             }
