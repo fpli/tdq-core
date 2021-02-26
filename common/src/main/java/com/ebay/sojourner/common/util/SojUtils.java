@@ -7,6 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
 
 @Slf4j
 public class SojUtils {
@@ -209,8 +211,8 @@ public class SojUtils {
         map.putAll(rawEvent.getSojK());
         map.putAll(rawEvent.getSojC());
 
-        if (map.get(tagName)!=null) {
-          return 1;
+        if (map.get(tagName) != null) {
+            return 1;
         }
         return 0;
     }
@@ -229,6 +231,16 @@ public class SojUtils {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
             log.warn("Parsing PageId failed, format incorrect...");
+        }
+        return null;
+    }
+
+    public static String getPageFmly(Integer pageId) {
+        Map<String, Set<Integer>> pageFmlyMap = LkpManager.getInstance().getPageFmlyAllMaps();
+        for (Map.Entry<String, Set<Integer>> entry : pageFmlyMap.entrySet()) {
+            if (entry.getValue() != null && entry.getValue().contains(pageId)) {
+                return entry.getKey();
+            }
         }
         return null;
     }
