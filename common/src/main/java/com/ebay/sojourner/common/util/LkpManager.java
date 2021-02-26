@@ -47,7 +47,7 @@ public class LkpManager {
     private Map<String, Boolean> selectedIps = new ConcurrentHashMap<>();
     private Set<String> selectedAgents = new CopyOnWriteArraySet<>();
     private Map<String, Long> lkpFileLastUpdDt = new ConcurrentHashMap<>();
-    private Map<String, Long> lkpFileLastPreUpdDt = new ConcurrentHashMap<>();
+    private Map<String, Long> lkpFileLastPreUpdDte = new ConcurrentHashMap<>();
     private volatile FileSystem fileSystem = null;
     private volatile boolean loadLkpFromHDFS = false;
     private volatile LkpRefreshTimeTask lkpRefreshTimeTask;
