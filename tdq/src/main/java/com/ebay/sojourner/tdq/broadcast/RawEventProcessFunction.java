@@ -85,7 +85,7 @@ public class RawEventProcessFunction extends
             if (tdqConfigMapping.getPageFamilys() != null && tdqConfigMapping.getPageFamilys()
                     .contains(pageFamily)) {
                 StringBuilder domain = new StringBuilder(pageFamily).append(Constants.DOMAIN_DEL)
-                        .append(siteId);
+                        .append(siteId == null ? "null" : siteId);
                 Set<String> tags = tdqConfigMapping.getTags();
                 TagMissingCntMetrics tagMissingCntMetrics = new TagMissingCntMetrics();
                 tagMissingCntMetrics.setMetricName(tdqConfigMapping.getMetricName());
@@ -108,7 +108,7 @@ public class RawEventProcessFunction extends
         Integer siteId = SojUtils.getSiteId(rawEvent);
         String pageFamily = SojUtils.getPageFmly(pageId);
         StringBuilder domain = new StringBuilder(pageFamily).append(Constants.DOMAIN_DEL)
-                .append(siteId);
+                .append(siteId == null ? "null" : siteId);
         Set<String> tags = tdqConfigMapping.getTags();
         TagSumMetrics tagSumMetrics = new TagSumMetrics();
         tagSumMetrics.setMetricName(tdqConfigMapping.getMetricName());
@@ -129,7 +129,7 @@ public class RawEventProcessFunction extends
             Integer siteId = SojUtils.getSiteId(rawEvent);
             String pageFamily = SojUtils.getPageFmly(pageId);
             StringBuilder domain = new StringBuilder(pageFamily).append(Constants.DOMAIN_DEL)
-                    .append(siteId);
+                    .append(siteId == null ? "null" : siteId);
             Set<Integer> pageIds = tdqConfigMapping.getPageIds();
             PageCntMetrics pageCntMetrics = new PageCntMetrics();
             pageCntMetrics.setMetricName(tdqConfigMapping.getMetricName());
@@ -151,7 +151,7 @@ public class RawEventProcessFunction extends
         Integer siteId = SojUtils.getSiteId(rawEvent);
         String pageFamily = SojUtils.getPageFmly(pageId);
         StringBuilder domain = new StringBuilder(pageFamily).append(Constants.DOMAIN_DEL)
-                .append(siteId);
+                .append(siteId == null ? "null" : siteId);
         Set<String> tags = tdqConfigMapping.getTags();
         TransformErrorMetrics transformErrorMetrics = new TransformErrorMetrics();
         transformErrorMetrics.setMetricName(tdqConfigMapping.getMetricName());

@@ -17,7 +17,7 @@ import java.util.Map;
 import static java.util.Map.Entry;
 
 public class SojMetricsProcessWindowFunction extends
-        ProcessWindowFunction<SojMetrics, Tuple, Tuple, TimeWindow> {
+        ProcessWindowFunction<SojMetrics, SojMetrics, Tuple, TimeWindow> {
     private static final Map<String, Gauge> domainMetricGuageMap = new HashMap<>();
     private static final Map<String, Object> domainMetricValueMap = new HashMap<>();
 
@@ -28,7 +28,7 @@ public class SojMetricsProcessWindowFunction extends
 
     @Override
     public void process(Tuple tuple, Context context, Iterable<SojMetrics> elements,
-                        Collector<Tuple> out) {
+                        Collector<SojMetrics> out) {
         SojMetrics sojMetrics = elements.iterator().next();
         collectSojMetrics(sojMetrics, context.window().getEnd());
         out.collect(null);
@@ -70,7 +70,7 @@ public class SojMetricsProcessWindowFunction extends
                                     .addGroup(Constants.SOJ_PGAE_FAMILY, domainList[0])
                                     .addGroup(Constants.SOJ_SITE_ID, domainList[1])
                                     .addGroup(Constants.SOJ_EVENT_TIME, String.valueOf(evenTime))
-                                    .addGroup(Constants.SOJ_TAG_NAME, tagName)
+                                    .addGroup(Constants.SOJ_TAG_NAME, tagName.replace("|", "-"))
                                     .gauge(Constants.TAG_MISSING_CNT_METRICS,
                                             new SojMetricsGauge(domainMetricValueMap,
                                                     sb.toString()));
@@ -144,7 +144,7 @@ public class SojMetricsProcessWindowFunction extends
                                     .addGroup(Constants.SOJ_PGAE_FAMILY, domainList[0])
                                     .addGroup(Constants.SOJ_SITE_ID, domainList[1])
                                     .addGroup(Constants.SOJ_EVENT_TIME, String.valueOf(evenTime))
-                                    .addGroup(Constants.SOJ_TAG_NAME, tagName)
+                                    .addGroup(Constants.SOJ_TAG_NAME, tagName.replace("|", "-"))
                                     .gauge(Constants.TAG_SUM_METRICS,
                                             new SojMetricsGauge(domainMetricValueMap,
                                                     sb.toString()));
@@ -243,7 +243,8 @@ public class SojMetricsProcessWindowFunction extends
                                     .addGroup(Constants.SOJ_PGAE_FAMILY, domainList[0])
                                     .addGroup(Constants.SOJ_SITE_ID, domainList[1])
                                     .addGroup(Constants.SOJ_EVENT_TIME, String.valueOf(evenTime))
-                                    .addGroup(Constants.SOJ_PAGE_ID, String.valueOf(tagName))
+                                    .addGroup(Constants.SOJ_TAG_NAME, String.valueOf(tagName
+                                            .replace("|", "-")))
                                     .gauge(Constants.TRANSFORM_ERROR_METRICS,
                                             new SojMetricsGauge(domainMetricValueMap,
                                                     sb.toString()));
@@ -259,7 +260,8 @@ public class SojMetricsProcessWindowFunction extends
                                     .addGroup(Constants.SOJ_PGAE_FAMILY, domainList[0])
                                     .addGroup(Constants.SOJ_SITE_ID, domainList[1])
                                     .addGroup(Constants.SOJ_EVENT_TIME, String.valueOf(evenTime))
-                                    .addGroup(Constants.SOJ_PAGE_ID, String.valueOf(tagName))
+                                    .addGroup(Constants.SOJ_TAG_NAME, String.valueOf(tagName
+                                        .replace("|", "-")))
                                     .gauge(Constants.TRANSFORM_ERROR_METRICS,
                                             new SojMetricsGauge(domainMetricValueMap,
                                                     sb.toString()));

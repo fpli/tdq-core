@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,7 +16,7 @@ import java.util.Set;
 public class TagMissingCntMetrics implements Serializable {
     private MetricType metricType;
     private String metricName;
-    private Set<String> pageFamilySet;
-    private Map<String,Map<String,Long>> tagCntMap;
+    private Set<String> pageFamilySet = new HashSet<>();
+    private Map<String, Map<String, Long>> tagCntMap = new HashMap<>();
 
 }

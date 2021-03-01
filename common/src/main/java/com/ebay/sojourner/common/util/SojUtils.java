@@ -315,13 +315,15 @@ public class SojUtils {
     }
 
     public static String getPageFmly(Integer pageId) {
-        Map<String, Set<Integer>> pageFmlyMap = LkpManager.getInstance().getPageFmlyAllMaps();
-        for (Map.Entry<String, Set<Integer>> entry : pageFmlyMap.entrySet()) {
-            if (entry.getValue() != null && entry.getValue().contains(pageId)) {
-                return entry.getKey();
+        if(pageId!=null) {
+            Map<String, Set<Integer>> pageFmlyMap = LkpManager.getInstance().getPageFmlyAllMaps();
+            for (Map.Entry<String, Set<Integer>> entry : pageFmlyMap.entrySet()) {
+                if (entry.getValue() != null && entry.getValue().contains(pageId)) {
+                    return entry.getKey();
+                }
             }
         }
-        return null;
+        return "null";
     }
 
     public static long checkFormat(String type, String value) {

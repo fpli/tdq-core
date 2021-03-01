@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 @AllArgsConstructor
@@ -13,5 +14,5 @@ import java.util.Map;
 public class TagSumMetrics implements Serializable {
     private MetricType metricType;
     private String metricName;
-    private Map<String,Map<String,Double>> tagSumMap;
+    private Map<String,Map<String,Double>> tagSumMap= new HashMap<>();
 }

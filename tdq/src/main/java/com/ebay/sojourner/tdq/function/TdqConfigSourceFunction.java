@@ -39,7 +39,7 @@ public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping
                         "        \"createTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"updateTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"metricName\":\"Glabal_Mandotory_Tag_Rate\",\n" +
-                        "        \"metricType\":\"1\",\n" +
+                        "        \"metricType\":\"TAG_MISS_CNT\",\n" +
                         "        \"pageFamilys\":[\"ASQ\"\n" +
                         "           ,\"BID\"\n" +
                         "           ,\"BIDFLOW\"\n" +
@@ -61,7 +61,7 @@ public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping
                         "        \"createTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"updateTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"metricName\":\"Event_Capature_Publish_Latency\",\n" +
-                        "        \"metricType\":\"2\",\n" +
+                        "        \"metricType\":\"TAG_SUM\",\n" +
                         "        \"pageFamilys\":[],\n" +
                         "        \"tags\":[\"TDuration\"],\n" +
                         "        \"pageIds\": [],\n" +
@@ -73,7 +73,7 @@ public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping
                         "        \"createTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"updateTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"metricName\":\"Marketing_Event_Volume\",\n" +
-                        "        \"metricType\":\"3\",\n" +
+                        "        \"metricType\":\"PAGE_CNT\",\n" +
                         "        \"pageFamilys\":[],\n" +
                         "        \"tags\":[],\n" +
                         "        \"pageIds\": [2547208,2483445],\n" +
@@ -85,7 +85,7 @@ public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping
                         "        \"createTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"updateTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"metricName\":\"Transformation_Error_Rate \",\n" +
-                        "        \"metricType\":\"4\",\n" +
+                        "        \"metricType\":\"TRANSFORM_ERROR\",\n" +
                         "        \"pageFamilys\":[],\n" +
                         "        \"tags\":[\"u-Integer\"],\n" +
                         "        \"pageIds\": [],\n" +
@@ -100,7 +100,7 @@ public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping
                 //                                .readValue(response.body().string());
 
                 for (TdqConfigMapping mapping : tdqConfigMappings) {
-                    ctx.collect(mapping);
+                    ctx.collectWithTimestamp(mapping,System.currentTimeMillis());
                 }
             } catch (Exception e) {
                 log.error("Error when calling rest api");

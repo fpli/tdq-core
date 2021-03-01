@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -12,8 +13,8 @@ import java.util.Map;
 @Data
 public class RawEventMetrics implements Serializable {
     private String guid;
-    private Map<String,TagMissingCntMetrics> tagMissingCntMetricsMap ;
-    private Map<String,TagSumMetrics> tagSumMetricsMap ;
-    private Map<String,PageCntMetrics> pageCntMetricsMap ;
-    private Map<String,TransformErrorMetrics> transformErrorMetricsMap ;
+    private Map<String,TagMissingCntMetrics> tagMissingCntMetricsMap = new HashMap<>();
+    private Map<String,TagSumMetrics> tagSumMetricsMap = new HashMap<>();
+    private Map<String,PageCntMetrics> pageCntMetricsMap = new HashMap<>();
+    private Map<String,TransformErrorMetrics> transformErrorMetricsMap = new HashMap<>();
 }

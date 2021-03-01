@@ -45,17 +45,17 @@ public class Constants {
 
   // flink metrics
   public static final String SOJ_METRICS_GROUP = "sojourner_ubd";
-  public static final String SOJ_METRIC_TYPE = "sojourner_metric_type";
-  public static final String SOJ_METRIC_NAME = "sojourner_metric_name";
-  public static final String SOJ_PGAE_FAMILY = "sojourner_page_family";
-  public static final String SOJ_SITE_ID = "sojourner_site_id";
-  public static final String SOJ_TAG_NAME = "sojourner_tag_name";
-  public static final String SOJ_PAGE_ID = "sojourner_page_id";
-  public static final String TAG_MISSING_CNT_METRICS = "tag_missing_cnt_gauge";
-  public static final String TAG_SUM_METRICS = "tag_sum_gauge";
-  public static final String PAGE_CNT_METRICS = "page_cnt_gauge";
-  public static final String TRANSFORM_ERROR_METRICS = "tansform_error_gauge";
-  public static final String SOJ_EVENT_TIME = "sojourner_event_time";
+  public static final String SOJ_METRIC_TYPE = "metric_type";
+  public static final String SOJ_METRIC_NAME = "metric_name";
+  public static final String SOJ_PGAE_FAMILY = "page_family";
+  public static final String SOJ_SITE_ID = "site_id";
+  public static final String SOJ_TAG_NAME = "tag_name";
+  public static final String SOJ_PAGE_ID = "page_id";
+  public static final String TAG_MISSING_CNT_METRICS = "missing_cnt";
+  public static final String TAG_SUM_METRICS = "sum";
+  public static final String PAGE_CNT_METRICS = "cnt";
+  public static final String TRANSFORM_ERROR_METRICS = "tansform_error_cnt";
+  public static final String SOJ_EVENT_TIME = "event_time";
   // flied delimiter
   public static final String FIELD_DELIM = "\007";
   public static final String DOMAIN_DEL="-";

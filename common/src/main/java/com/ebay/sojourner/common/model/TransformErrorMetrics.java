@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 @AllArgsConstructor
@@ -13,5 +14,5 @@ import java.util.Map;
 public class TransformErrorMetrics implements Serializable {
     private MetricType metricType;
     private String metricName;
-    private Map<String,Map<String,Long>> tagErrorCntMap;
+    private Map<String,Map<String,Long>> tagErrorCntMap= new HashMap<>();
 }

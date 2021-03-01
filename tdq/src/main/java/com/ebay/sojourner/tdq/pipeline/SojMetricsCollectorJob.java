@@ -2,6 +2,7 @@ package com.ebay.sojourner.tdq.pipeline;
 
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.RawEventMetrics;
+import com.ebay.sojourner.common.model.SojMetrics;
 import com.ebay.sojourner.common.model.TdqConfigMapping;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.FlinkEnvUtils;
@@ -13,17 +14,19 @@ import com.ebay.sojourner.tdq.function.EmptyMetricFilterFunction;
 import com.ebay.sojourner.tdq.function.SojMetricsAgg;
 import com.ebay.sojourner.tdq.function.SojMetricsProcessWindowFunction;
 import com.ebay.sojourner.tdq.function.TdqConfigSourceFunction;
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
+
+import java.time.Duration;
 
 import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_FROM_TIMESTAMP;
 import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN;
@@ -34,10 +37,12 @@ public class SojMetricsCollectorJob {
 
     private static final String CONFIG_SOURCE_OP_NAME = "Tdq Config Mapping Source";
     private static final String CONFIG_SOURCE_UID = "tdq-config-mapping-source";
+    private static final String CONFIG_SOURCE_OP_NAME2 = "Tdq Config Mapping Source2";
+    private static final String CONFIG_SOURCE_UID2 = "tdq-config-mapping-source2";
     private static final String CONNECTOR_OP_NAME = "Connector Operator";
     private static final String CONNECTOR_OP_UID = "connector-operator";
     private static final String FILTER_OP_NAME = "Filter Operator";
-    private static final String FILTER_OP_UID = "connector-operator";
+    private static final String FILTER_OP_UID = "filter-operator";
 
     //soj Metrcis collector
     public static void main(String[] args) throws Exception {
@@ -90,9 +95,15 @@ public class SojMetricsCollectorJob {
                 .addSource(new TdqConfigSourceFunction(getString(Property.REST_BASE_URL),
                         getLong(Property.REST_CONFIG_PULL_INTERVAL),
                         getString(Property.REST_CONFIG_ENV)))
-                .setParallelism(1)
                 .name(CONFIG_SOURCE_OP_NAME)
-                .uid(CONFIG_SOURCE_UID);
+                .uid(CONFIG_SOURCE_UID)
+                .assignTimestampsAndWatermarks(WatermarkStrategy
+                        .<TdqConfigMapping>forBoundedOutOfOrderness(Duration.ofMinutes(0))
+                        .withIdleness(Duration.ofSeconds(1)))
+                .setParallelism(1)
+                .name(CONFIG_SOURCE_OP_NAME2)
+                .uid(CONFIG_SOURCE_UID2)
+                ;
 
         // union ubiEvent from SLC/RNO/LVS
         DataStream<RawEvent> rawEventDataStream = rawEventDataStreamForRNO
@@ -120,7 +131,7 @@ public class SojMetricsCollectorJob {
                 .name(FILTER_OP_NAME) //add opensession filter name
                 .uid(FILTER_OP_UID) //add opensession filter uid;
                 ;
-        DataStream<Tuple> sojMetricsCollectorDataStream =
+        DataStream<SojMetrics> sojMetricsCollectorDataStream =
                 filteredRawEventMetricsDataStream
                         .keyBy("guid")
                         .window(TumblingEventTimeWindows.of(Time.minutes(5)))
