@@ -11,8 +11,8 @@ import java.io.Serializable;
 @Data
 public class RawEventMetric implements Serializable {
     private String guid;
-    private TagMissingCntMetric tagMissingCntMetric;
-    private TagSumMetric tagSumMetric;
-    private PageCntMetric pageCntMetric;
-    private TransformErrorMetric transformErrorMetric;
+    private TagMissingCntMetric tagMissingCntMetric=null;
+    private TagSumMetric tagSumMetric=null;
+    private PageCntMetric pageCntMetric=null;
+    private TransformErrorMetric transformErrorMetric=null;
 }
