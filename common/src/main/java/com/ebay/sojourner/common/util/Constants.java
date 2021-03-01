@@ -45,10 +45,21 @@ public class Constants {
 
   // flink metrics
   public static final String SOJ_METRICS_GROUP = "sojourner_ubd";
-
+  public static final String SOJ_METRIC_TYPE = "sojourner_metric_type";
+  public static final String SOJ_METRIC_NAME = "sojourner_metric_name";
+  public static final String SOJ_PGAE_FAMILY = "sojourner_page_family";
+  public static final String SOJ_SITE_ID = "sojourner_site_id";
+  public static final String SOJ_TAG_NAME = "sojourner_tag_name";
+  public static final String SOJ_PAGE_ID = "sojourner_page_id";
+  public static final String TAG_MISSING_CNT_METRICS = "tag_missing_cnt_gauge";
+  public static final String TAG_SUM_METRICS = "tag_sum_gauge";
+  public static final String PAGE_CNT_METRICS = "page_cnt_gauge";
+  public static final String TRANSFORM_ERROR_METRICS = "tansform_error_gauge";
+  public static final String SOJ_EVENT_TIME = "sojourner_event_time";
   // flied delimiter
   public static final String FIELD_DELIM = "\007";
-
+  public static final String DOMAIN_DEL="-";
+  public static final String METRIC_DEL="_";
   // signatures suffix
   public static final String GENERATION_PREFFIX = "_g";
   public static final String EXPIRATION_PREFFIX = "_e";
@@ -56,7 +67,7 @@ public class Constants {
   public static final String AGENTIP = "AgentIp";
   public static final String IP = "Ip";
   public static final String GUID = "Guid";
-
+  public static final String G_TAG = "g";
   //Time format/ Time Zone Constants
   public static final String DEFAULT_TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
   public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
@@ -80,6 +91,7 @@ public class Constants {
 
   // TAG
   public static final String P_TAG = "p";
+  public static final String T_TAG = "t";
   public static final String TAG_ITEMIDS = "!itemIds";
   public static final String TAG_TRKP = "trkp";
   public static final String TAG_MTSTS = "mtsts";

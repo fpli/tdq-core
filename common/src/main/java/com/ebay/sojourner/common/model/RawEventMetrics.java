@@ -5,14 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class RawEventMetric implements Serializable {
+public class RawEventMetrics implements Serializable {
     private String guid;
-    private TagMissingCntMetric tagMissingCntMetric=null;
-    private TagSumMetric tagSumMetric=null;
-    private PageCntMetric pageCntMetric=null;
-    private TransformErrorMetric transformErrorMetric=null;
+    private Map<String,TagMissingCntMetrics> tagMissingCntMetricsMap ;
+    private Map<String,TagSumMetrics> tagSumMetricsMap ;
+    private Map<String,PageCntMetrics> pageCntMetricsMap ;
+    private Map<String,TransformErrorMetrics> transformErrorMetricsMap ;
 }

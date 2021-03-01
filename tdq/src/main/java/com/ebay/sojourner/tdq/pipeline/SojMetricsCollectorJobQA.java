@@ -30,7 +30,7 @@ import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_OUT_OF_OR
 import static com.ebay.sojourner.flink.common.DataCenter.*;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.*;
 
-public class SojMetricsCollectorJob {
+public class SojMetricsCollectorJobQA {
 
     private static final String CONFIG_SOURCE_OP_NAME = "Tdq Config Mapping Source";
     private static final String CONFIG_SOURCE_UID = "tdq-config-mapping-source";
@@ -45,6 +45,7 @@ public class SojMetricsCollectorJob {
         // 0.0 Prepare execution environment
         // 0.1 UBI configuration
         // 0.2 Flink configuration
+        args = new String[]{"--profile", "qa"};
         final StreamExecutionEnvironment executionEnvironment = FlinkEnvUtils.prepare(args);
 
         // 1. Rheos Consumer

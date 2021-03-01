@@ -208,6 +208,7 @@ public class Property {
 
   // flink - metric name
   public static final String FLINK_APP_METRIC_NAME = "flink.app.metric.watermark-process-progress";
+  public static final String SOJOURNER_METRICS_COLLECTOR = "flink.app.slot-sharing-group.metrics-collector";
 
   // zookeeper
   public static final String ZOOKEEPER_SERVER = "zookeeper.server";

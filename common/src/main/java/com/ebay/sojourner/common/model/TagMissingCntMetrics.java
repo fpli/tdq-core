@@ -6,14 +6,15 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class TagMissingCntMetric implements Serializable {
+public class TagMissingCntMetrics implements Serializable {
     private MetricType metricType;
     private String metricName;
-    private String pageFamily;
-    private Map<String,Long> tagCntMap;
+    private Set<String> pageFamilySet;
+    private Map<String,Map<String,Long>> tagCntMap;
 
 }

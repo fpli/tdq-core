@@ -1,40 +1,32 @@
 flink:
   app:
-    name: Sojourner Realtime Pipeline - RNO
+    name: Sojourner TDQ
     parallelism:
-      default: 120
-      source: 100
+      default: 50
+      source: 50
       event: 100
-      session: 600
-      pre-agent-ip: 120
-      agent-ip: 120
-      agent: 120
-      ip: 120
-      broadcast: 510
-      metrics: 510
+      broadcast: 100
     slot-sharing-group:
-      source-event-lvs: lvs
-      source-event-slc: slc
-      source-event-rno: rno
-      session: session
-      cross-session: cross-session
+      source-event-lvs: tdq-lvs
+      source-event-slc: tdq-slc
+      source-event-rno: tdq-rno
+      metrics-collector: metrics-collector
     operator-name:
       source:
-        rno: Pathfinder RNO Source
-        lvs: Pathfinder LVS Source
-        slc: Pathfinder SLC Source
+        rno: Pathfinder RNO Tdq Source
+        lvs: Pathfinder LVS Tdq Source
+        slc: Pathfinder SLC Tdq Source
     uid:
       source:
-        rno: pathfinder-rno-source
-        lvs: pathfinder-lvs-source
-        slc: pathfinder-slc-source
+        rno: pathfinder-rno-tdq-source
+        lvs: pathfinder-lvs-tdq-source
+        slc: pathfinder-slc-tdq-source
     data-skew:
       is-filter: true
-      guid-set:
-        - 17a61c8c16d0a9c509d4c64cffffff61
+      guid-set: []
       pageid-set: []
     checkpoint:
-      data-dir: /opt/sojourner-ubd/checkpoint
+      data-dir: /opt/sojourner-tdq/checkpoint
       interval-ms: 300000
       timeout-ms: 900000
       min-pause-between-ms: 120000
@@ -45,38 +37,13 @@ flink:
       from-timestamp: 0
       out-of-orderless-in-min: 3
       idle-source-timeout-in-min: 10
-    sink:
-      dc: rno
-      kafka:
-        topic:
-          session:
-            bot: behavior.totalv2.sojsession-bot-rno
-            non-bot: behavior.totalv2.sojsession-nonbot-rno
-          event:
-            bot: behavior.totalv2.sojevent-bot-rno
-            non-bot: behavior.totalv2.sojevent-nonbot-rno
-            late: behavior.totalv2.sojevent-late-rno
-          signature:
-            agent-ip: behavior.totalv2.signature.agent-ip-rno
-            agent: behavior.totalv2.signature.agent-rno
-            ip: behavior.totalv2.signature.ip-rno
-        subject:
-          event: behavior.pulsarv2.sojevent.schema
-          session: behavior.pulsarv2.sojsession.schema
-        message-key:
-          session: guid
-          event: guid,pageId
-          signature:
-            ip: ip
-            agent: userAgent
-            agent-ip: userAgent
 
 kafka:
   consumer:
     stream: behavior.pathfinder
     topic:
       - behavior.pathfinder.events.total
-    group-id: sojourner-pathfinder-realtime
+    group-id: sojourner-tdq
     bootstrap-servers:
       rno:
         - rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
@@ -107,34 +74,6 @@ kafka:
     max-partitions-fetch-bytes: 10485760
     auto-offset-reset: latest
 
-  producer:
-    stream: behavior.totalv2
-    producerId: sojourner
-    bootstrap-servers:
-      rno:
-        - rhs-fxuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.37.tess.io:9092
-        - rhs-fxuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.37.tess.io:9092
-      lvs:
-        - rhs-ravvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-ravvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-ravvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-ravvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-ravvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
-
-    batch-size: 524288
-    acks: 1
-    linger-ms: 50
-    # 30s
-    request-timeout-ms: 30000
-    retries: 30
-    buffer-memory: 268435456
-    compression-type: lz4
-    # 2min
-    delivery-timeout-ms: 120000
-
 rheos:
   registry-url: https://rheos-services.stratus.ebay.com
   client:
@@ -143,16 +82,11 @@ rheos:
       secret: c4bb6fca-7ac5-46dd-b218-a49cb6307dbc
       env: production
 
-zookeeper:
-  enable: false
-  sessionTimeoutMs: 15000
-  connectionTimeoutMs: 5000
-  maxRetries: 3
-  baseSleepTimeMs: 1000
-  namespace: sojourner
-
 rest-client:
   base-url: https://sojubdportalservice.vip.ebay.com
   username: soj-flink-app
+  config:
+    pull-interval: 30000
+    env: prod
 
 ua-parser-env: prod

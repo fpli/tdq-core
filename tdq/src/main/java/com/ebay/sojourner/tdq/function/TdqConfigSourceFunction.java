@@ -34,60 +34,60 @@ public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping
                         "/api/custom_topic_config/list/topic_page_ids?env=" + env);
                 String responseResult="[\n" +
                         "    {\n" +
-                        "        \"createdBy\": \"yxiao6\",\n" +
-                        "        \"updatedBy\": \"yxiao6\",\n" +
+                        "        \"createdBy\": \"xiaoding\",\n" +
+                        "        \"updatedBy\": \"xiaoding\",\n" +
                         "        \"createTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"updateTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"metricName\":\"Glabal_Mandotory_Tag_Rate\",\n" +
                         "        \"metricType\":\"1\",\n" +
-                        "        \"pageFamilys\":[ASQ\n" +
-                        "           ,BID\n" +
-                        "           ,BIDFLOW\n" +
-                        "           ,BIN\n" +
-                        "           ,BINFLOW\n" +
-                        "           ,CART\n" +
-                        "           ,OFFER\n" +
-                        "           ,UNWTCH\n" +
-                        "           ,VI\n" +
-                        "           ,WTCH\n" +
-                        "           ,XO],\n" +
-                        "        \"tags\":[itm|itmid|itm_id|itmlist|litm,u],\n" +
+                        "        \"pageFamilys\":[\"ASQ\"\n" +
+                        "           ,\"BID\"\n" +
+                        "           ,\"BIDFLOW\"\n" +
+                        "           ,\"BIN\"\n" +
+                        "           ,\"BINFLOW\"\n" +
+                        "           ,\"CART\"\n" +
+                        "           ,\"OFFER\"\n" +
+                        "           ,\"UNWTCH\"\n" +
+                        "           ,\"VI\"\n" +
+                        "            ,\"WTCH\"\n" +
+                        "            ,\"XO\"],\n" +
+                        "        \"tags\":[\"itm|itmid|itm_id|itmlist|litm\",\"u\"],\n" +
                         "        \"pageIds\": [],\n" +
                         "        \"env\": \"prod\"\n" +
                         "    },\n" +
                         "    {\n" +
-                        "        \"createdBy\": \"yxiao6\",\n" +
-                        "        \"updatedBy\": \"yxiao6\",\n" +
+                        "        \"createdBy\": \"xiaoding\",\n" +
+                        "        \"updatedBy\": \"xiaoding\",\n" +
                         "        \"createTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"updateTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"metricName\":\"Event_Capature_Publish_Latency\",\n" +
                         "        \"metricType\":\"2\",\n" +
                         "        \"pageFamilys\":[],\n" +
-                        "        \"tags\":[TDuration],\n" +
+                        "        \"tags\":[\"TDuration\"],\n" +
                         "        \"pageIds\": [],\n" +
                         "        \"env\": \"prod\"\n" +
                         "    },\n" +
                         "     {\n" +
-                        "        \"createdBy\": \"yxiao6\",\n" +
-                        "        \"updatedBy\": \"yxiao6\",\n" +
+                        "        \"createdBy\": \"xiaoding\",\n" +
+                        "        \"updatedBy\": \"xiaoding\",\n" +
                         "        \"createTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"updateTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"metricName\":\"Marketing_Event_Volume\",\n" +
                         "        \"metricType\":\"3\",\n" +
                         "        \"pageFamilys\":[],\n" +
-                        "        \"tags\":[TDuration],\n" +
+                        "        \"tags\":[],\n" +
                         "        \"pageIds\": [2547208,2483445],\n" +
                         "        \"env\": \"prod\"\n" +
                         "    },\n" +
                         "    {\n" +
-                        "        \"createdBy\": \"yxiao6\",\n" +
-                        "        \"updatedBy\": \"yxiao6\",\n" +
+                        "        \"createdBy\": \"xiaoding\",\n" +
+                        "        \"updatedBy\": \"xiaoding\",\n" +
                         "        \"createTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"updateTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"metricName\":\"Transformation_Error_Rate \",\n" +
                         "        \"metricType\":\"4\",\n" +
                         "        \"pageFamilys\":[],\n" +
-                        "        \"tags\":[u],\n" +
+                        "        \"tags\":[\"u-Integer\"],\n" +
                         "        \"pageIds\": [],\n" +
                         "        \"env\": \"prod\"\n" +
                         "    }\n" +
@@ -97,7 +97,7 @@ public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping
                                 .reader()
                                 .forType(new TypeReference<List<TdqConfigMapping>>() {})
                             .readValue(responseResult);// test in local
-//                                .readValue(response.body().string());
+                //                                .readValue(response.body().string());
 
                 for (TdqConfigMapping mapping : tdqConfigMappings) {
                     ctx.collect(mapping);

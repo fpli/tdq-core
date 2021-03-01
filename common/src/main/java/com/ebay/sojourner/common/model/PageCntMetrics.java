@@ -10,8 +10,8 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class PageCntMetric implements Serializable {
+public class PageCntMetrics implements Serializable {
     private MetricType metricType;
     private String metricName;
-    private Map<Integer,Long> pageCntMap;
+    private Map<String,Map<Integer,Long>> pageCntMap;
 }

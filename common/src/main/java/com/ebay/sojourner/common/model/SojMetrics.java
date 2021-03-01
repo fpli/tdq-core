@@ -10,9 +10,9 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class SojMetric implements Serializable {
-    private Map<String, TagMissingCntMetrics> tagMissingCntMetricMap;
-    private Map<String, TagSumMetrics> tagSumMetricMap;
-    private Map<String, PageCntMetrics> pageCntMetricMap;
-    private Map<String, TransformErrorMetrics> transformErrorMetricMap;
+public class SojMetrics implements Serializable {
+    private Map<String, TagMissingCntMetrics> tagMissingCntMetricsMap;
+    private Map<String, TagSumMetrics> tagSumMetricsMap;
+    private Map<String, PageCntMetrics> pageCntMetricsMap;
+    private Map<String, TransformErrorMetrics> transformErrorMetricsMap;
 }

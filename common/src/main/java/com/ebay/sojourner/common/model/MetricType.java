@@ -1,8 +1,7 @@
-package com.ebay.sojourner.tdq.meta;
+package com.ebay.sojourner.common.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @Getter

@@ -60,7 +60,8 @@ public class SojUtils {
                         PropertyUtils.stringToMap(ubiEvent.getClientData().toString(), true));
         sojEvent.setBrowserFamily(ubiEvent.getBrowserFamily());
         sojEvent.setBrowserVersion(ubiEvent.getBrowserVersion());
-        sojEvent.setClickId(ubiEvent.getClickId() == -1 ? null : String.valueOf(ubiEvent.getClickId()));
+        sojEvent.setClickId(ubiEvent.getClickId() == -1 ? null
+                : String.valueOf(ubiEvent.getClickId()));
         sojEvent.setClientIP(ubiEvent.getClientIP());
         sojEvent.setCobrand(String.valueOf(ubiEvent.getCobrand()));
         sojEvent.setCookies(ubiEvent.getCookies());
@@ -82,7 +83,8 @@ public class SojUtils {
         sojEvent.setIcfBinary(ubiEvent.getIcfBinary());
         sojEvent.setIframe(ubiEvent.isIframe());
         sojEvent.setIngestTime(ubiEvent.getIngestTime());
-        sojEvent.setItemId(ubiEvent.getItemId() == null ? null : String.valueOf(ubiEvent.getItemId()));
+        sojEvent.setItemId(ubiEvent.getItemId() == null ? null
+                : String.valueOf(ubiEvent.getItemId()));
         sojEvent.setOldSessionSkey(ubiEvent.getOldSessionSkey());
         sojEvent.setOsFamily(ubiEvent.getOsFamily());
         sojEvent.setOsVersion(ubiEvent.getOsVersion());
@@ -93,7 +95,8 @@ public class SojUtils {
         sojEvent.setPartialValidPage(ubiEvent.isPartialValidPage());
         sojEvent.setRdt(ubiEvent.isRdt() ? 1 : 0);
         sojEvent.setRefererHash(
-                ubiEvent.getRefererHash() == null ? null : String.valueOf(ubiEvent.getRefererHash()));
+                ubiEvent.getRefererHash() == null ? null
+                        : String.valueOf(ubiEvent.getRefererHash()));
         sojEvent.setReferrer(ubiEvent.getReferrer());
         sojEvent.setRegu(ubiEvent.getRegu());
         sojEvent.setRemoteIP(ubiEvent.getRemoteIP());
@@ -108,7 +111,8 @@ public class SojUtils {
         sojEvent.setSojDataDt(ubiEvent.getSojDataDt());
         sojEvent.setSessionStartTime(ubiEvent.getSessionStartTime());
         sojEvent.setSid(ubiEvent.getSid());
-        sojEvent.setSiteId(ubiEvent.getSiteId() == -1 ? null : String.valueOf(ubiEvent.getSiteId()));
+        sojEvent.setSiteId(ubiEvent.getSiteId() == -1 ? null
+                : String.valueOf(ubiEvent.getSiteId()));
         sojEvent.setSourceImprId(ubiEvent.getSourceImprId());
         sojEvent.setSqr(ubiEvent.getSqr());
         sojEvent.setStaticPageType(ubiEvent.getStaticPageType());
@@ -129,7 +133,8 @@ public class SojUtils {
         sojSession.setUserAgent(ubiSession.getUserAgent());
         sojSession.setSojDataDt(ubiSession.getSojDataDt());
         //change sojtimestamp to unixtimestamp
-        sojSession.setSessionStartDt(SojTimestamp.getUnixTimestamp(ubiSession.getSessionStartDt()));
+        sojSession.setSessionStartDt(SojTimestamp
+                .getUnixTimestamp(ubiSession.getSessionStartDt()));
         sojSession.setStartTimestamp(ubiSession.getStartTimestamp());
         sojSession.setEndTimestamp(ubiSession.getEndTimestamp());
         // change sojtimestamp to unixtimestamp
@@ -139,7 +144,8 @@ public class SojUtils {
         sojSession.setBotFlagList(new ArrayList<>(ubiSession.getBotFlagList()));
         sojSession.setNonIframeRdtEventCnt(ubiSession.getNonIframeRdtEventCnt());
         sojSession.setSessionReferrer(ubiSession.getSessionReferrer());
-        sojSession.setBotFlag(RulePriorityUtils.getHighPriorityBotFlag(ubiSession.getBotFlagList()));
+        sojSession.setBotFlag(RulePriorityUtils.getHighPriorityBotFlag(
+                ubiSession.getBotFlagList()));
         sojSession.setVersion(ubiSession.getVersion());
         sojSession.setUserId(ubiSession.getFirstUserId());
         sojSession.setSiteFlags(ubiSession.getSiteFlags());
@@ -163,7 +169,8 @@ public class SojUtils {
                 ubiSession.getFirstSiteId() == Integer.MIN_VALUE ? null :
                         String.valueOf(ubiSession.getFirstSiteId()));
         sojSession.setFirstSiteId(
-                ubiSession.getFirstSiteId() == Integer.MIN_VALUE ? null : ubiSession.getFirstSiteId());
+                ubiSession.getFirstSiteId() == Integer.MIN_VALUE ? null
+                        : ubiSession.getFirstSiteId());
         sojSession.setCguid(ubiSession.getFirstCguid());
         sojSession.setFirstMappedUserId(ubiSession.getFirstMappedUserId());
         sojSession.setHomepageCnt(ubiSession.getHomepageCnt());
@@ -205,16 +212,68 @@ public class SojUtils {
         return sojSession;
     }
 
-    public static int getTagCnt(RawEvent rawEvent, String tagName) {
+    public static long getTagCnt(RawEvent rawEvent, String tagName) {
         Map<String, String> map = new HashMap<>();
         map.putAll(rawEvent.getSojA());
         map.putAll(rawEvent.getSojK());
         map.putAll(rawEvent.getSojC());
 
-        if (map.get(tagName) != null) {
-            return 1;
+        String[] tags = tagName.split("|");
+        for (String tag : tags) {
+            if (map.get(tag) != null) {
+                return 1;
+            } else if (SOJParseClientInfo.getClientInfo(
+                    rawEvent.getClientData().toString(), tag) != null) {
+                return 1;
+            }
         }
         return 0;
+    }
+
+    public static Double getTagValue(RawEvent rawEvent, String tagName) {
+        Map<String, String> map = new HashMap<>();
+        map.putAll(rawEvent.getSojA());
+        map.putAll(rawEvent.getSojK());
+        map.putAll(rawEvent.getSojC());
+
+        String[] tags = tagName.split("|");
+        for (String tag : tags) {
+            if (StringUtils.isNotBlank(map.get(tag))) {
+                try {
+                    return Double.parseDouble(map.get(tag));
+                } catch (Exception e) {
+                    log.error("cant convert into double");
+                    return 0.0;
+                }
+            } else if (StringUtils.isNotBlank(SOJParseClientInfo
+                    .getClientInfo(rawEvent.getClientData().toString(), tag))) {
+                try {
+                    return Double.parseDouble(SOJParseClientInfo
+                            .getClientInfo(rawEvent.getClientData().toString(), tag));
+                } catch (Exception e) {
+                    log.error("cant convert into double");
+                    return 0.0;
+                }
+            }
+        }
+        return 0.0;
+    }
+
+    public static String getTagValueStr(RawEvent rawEvent, String tagName) {
+        Map<String, String> map = new HashMap<>();
+        map.putAll(rawEvent.getSojA());
+        map.putAll(rawEvent.getSojK());
+        map.putAll(rawEvent.getSojC());
+        String[] tags = tagName.split("|");
+        for (String tag : tags) {
+            if (StringUtils.isNotBlank(map.get(tag))) {
+                return map.get(tag);
+            } else if (StringUtils.isNotBlank(SOJParseClientInfo
+                    .getClientInfo(rawEvent.getClientData().toString(), tag))) {
+                return SOJParseClientInfo.getClientInfo(rawEvent.getClientData().toString(), tag);
+            }
+        }
+        return null;
     }
 
     public static Integer getPageId(RawEvent rawEvent) {
@@ -235,6 +294,26 @@ public class SojUtils {
         return null;
     }
 
+    public static Integer getSiteId(RawEvent rawEvent) {
+        try {
+            String siteId = null;
+            Map<String, String> map = new HashMap<>();
+            map.putAll(rawEvent.getSojA());
+            map.putAll(rawEvent.getSojK());
+            map.putAll(rawEvent.getSojC());
+            if (StringUtils.isNotBlank(map.get(Constants.T_TAG))) {
+                siteId = map.get(Constants.T_TAG);
+            }
+            siteId = IntegerField.parse(siteId);
+            if (StringUtils.isNotBlank(siteId)) {
+                return Integer.parseInt(siteId);
+            }
+        } catch (Exception e) {
+            log.debug("Parsing SiteId failed, format wrong...");
+        }
+        return null;
+    }
+
     public static String getPageFmly(Integer pageId) {
         Map<String, Set<Integer>> pageFmlyMap = LkpManager.getInstance().getPageFmlyAllMaps();
         for (Map.Entry<String, Set<Integer>> entry : pageFmlyMap.entrySet()) {
@@ -244,5 +323,85 @@ public class SojUtils {
         }
         return null;
     }
+
+    public static long checkFormat(String type, String value) {
+        int cnt = 0;
+        switch (type) {
+            case "Integer": {
+                try {
+                    Integer.parseInt(value);
+                    cnt = 1;
+                } catch (NumberFormatException e) {
+                    log.error("format issue");
+                }
+                break;
+            }
+            case "Long": {
+                try {
+                    Long.parseLong(value);
+                    cnt = 1;
+                } catch (NumberFormatException e) {
+                    log.error("format issue");
+                }
+                break;
+            }
+            case "Short": {
+                try {
+                    Short.parseShort(value);
+                    cnt = 1;
+                } catch (NumberFormatException e) {
+                    log.error("format issue");
+                }
+                break;
+            }
+            case "Float": {
+                try {
+                    Float.parseFloat(value);
+                    cnt = 1;
+                } catch (NumberFormatException e) {
+                    log.error("format issue");
+                }
+                break;
+            }
+            case "Double": {
+                try {
+                    Double.parseDouble(value);
+                    cnt = 1;
+                } catch (NumberFormatException e) {
+                    log.error("format issue");
+                }
+                break;
+            }
+            case "Byte": {
+                try {
+                    Byte.parseByte(value);
+                    cnt = 1;
+                } catch (NumberFormatException e) {
+                    log.error("format issue");
+                }
+                break;
+            }
+            case "Boolean": {
+                try {
+                    Boolean.parseBoolean(value);
+                    cnt = 1;
+                } catch (NumberFormatException e) {
+                    log.error("format issue");
+                }
+                break;
+            }
+            case "Character":
+            case "String": {
+                cnt = 1;
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+
+        return cnt;
+    }
+
 
 }

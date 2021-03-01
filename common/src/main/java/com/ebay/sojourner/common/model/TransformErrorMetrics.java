@@ -10,8 +10,8 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class TransformErrorMetric implements Serializable {
+public class TransformErrorMetrics implements Serializable {
     private MetricType metricType;
     private String metricName;
-    private Map<String,Long> tagErrorCntMap;
+    private Map<String,Map<String,Long>> tagErrorCntMap;
 }

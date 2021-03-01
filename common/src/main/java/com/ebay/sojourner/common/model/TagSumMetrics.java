@@ -10,8 +10,8 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class TagSumMetric implements Serializable {
+public class TagSumMetrics implements Serializable {
     private MetricType metricType;
     private String metricName;
-    private Map<String,Double> tagSumMap;
+    private Map<String,Map<String,Double>> tagSumMap;
 }

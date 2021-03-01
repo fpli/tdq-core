@@ -15,7 +15,7 @@ import java.util.Set;
 @Data
 public class TdqConfigMapping {
   private String metricName;
-  private int metricType;
+  private MetricType metricType;
   private Set<Integer> pageIds;
   private Set<String> pageFamilys;
   private Set<String> tags;

@@ -13,7 +13,7 @@
   <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>${log.path}</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>${log.path}/sojourner-app-%d{yyyy-MM-dd}.log</fileNamePattern>
+      <fileNamePattern>${log.path}/sojourner-tdq-%d{yyyy-MM-dd}.log</fileNamePattern>
       <maxHistory>30</maxHistory>
       <totalSizeCap>1GB</totalSizeCap>
     </rollingPolicy>
