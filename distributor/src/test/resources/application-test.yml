@@ -46,7 +46,7 @@ rheos:
       env: staging
 
 rest-client:
-  base-url: https://sojubdportalservice.vip.qa.ebay.com
+  base-url: https://sojsvc.vip.qa.ebay.com
 #  base-url: http://localhost:8080
   username: soj-flink-app
   config:

@@ -36,6 +36,8 @@ under the License.
   <suppress checks=".*"
     files="src/main/java/com/ebay/sojourner/common/model/RheosHeader.java"/>
   <suppress checks=".*"
+    files="src/main/java/com/ebay/sojourner/common/model/PulsarEvent.java"/>
+  <suppress checks=".*"
     files="src/main/java/com/ebay/sojourner/common/model/AgentHash.java"/>
   <suppress checks=".*"
     files="src/main/java/com/ebay/sojourner/common/model/IntermediateSession.java"/>

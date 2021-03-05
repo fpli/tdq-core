@@ -1,0 +1,438 @@
+{
+  "type": "record",
+  "name": "PulsarEvent",
+  "namespace": "com.ebay.sojourner.common.model",
+  "fields": [
+    {
+      "name": "rheosHeader",
+      "type": {
+        "type": "record",
+        "name": "RheosHeader",
+        "fields": [
+          {
+            "name": "eventCreateTimestamp",
+            "type": "long"
+          },
+          {
+            "name": "eventSentTimestamp",
+            "type": "long"
+          },
+          {
+            "name": "schemaId",
+            "type": "int"
+          },
+          {
+            "name": "eventId",
+            "type": [
+              "null",
+              {
+                "type": "string",
+                "avro.java.string": "String"
+              }
+            ]
+          },
+          {
+            "name": "producerId",
+            "type": {
+              "type": "string",
+              "avro.java.string": "String"
+            }
+          }
+        ]
+      },
+      "doc": "Rheos header"
+    },
+    {
+      "name": "si",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "rq",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "gci",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "ai",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "ac",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "di",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "ct",
+      "type": [
+        "null",
+        "long"
+      ]
+    },
+    {
+      "name": "dy",
+      "type": [
+        "null",
+        "int"
+      ]
+    },
+    {
+      "name": "ctz",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "et",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "tn",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "or",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "gf",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "ef",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "ei",
+      "type": [
+        "null",
+        "long"
+      ]
+    },
+    {
+      "name": "pr",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "ipv4",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "ipv6",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "ua",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "lac",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "lc",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "rf",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "ch",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "exg",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "exe",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "exa",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "exz",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "exs",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "exv",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "r0",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "r1",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "url",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "hrc",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "dd_bv",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "dd_bf",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "dd_osv",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "dd_os",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "dd_dc",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "dd_d",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "cty",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "rgn",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "cn",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "con",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "lat",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "lon",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "chl",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "ptnr",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "kwd",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "kw",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "plm",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "msg",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "cpn",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "pge",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "mdl",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "lnk",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "bot",
+      "type": [
+        "null",
+        "boolean"
+      ]
+    }
+  ]
+}

@@ -6,6 +6,7 @@ import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
 import com.ebay.sojourner.common.model.BotSignature;
 import com.ebay.sojourner.common.model.JetStreamOutputEvent;
 import com.ebay.sojourner.common.model.JetStreamOutputSession;
+import com.ebay.sojourner.common.model.PulsarEvent;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.DataCenter;
 import com.ebay.sojourner.flink.common.FlinkEnvUtils;
@@ -78,6 +79,23 @@ public class SojournerKafkaToHdfsJob {
       // hdfs sink
       sourceDataStream
           .addSink(HdfsConnectorFactory.createWithParquet(hdfsPath, BotSignature.class))
+          .setParallelism(sinkParallelNum)
+          .name(getString(Property.SINK_OPERATOR_NAME))
+          .uid(getString(Property.SINK_UID));
+    } else if (deserializeClass.isAssignableFrom(PulsarEvent.class)) {
+      SourceDataStreamBuilder<PulsarEvent> dataStreamBuilder =
+          new SourceDataStreamBuilder<>(executionEnvironment);
+
+      DataStream<PulsarEvent> sourceDataStream = dataStreamBuilder
+          .dc(DataCenter.of(dc))
+          .operatorName(getString(Property.SOURCE_OPERATOR_NAME))
+          .uid(getString(Property.SOURCE_UID))
+          .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+          .buildRescaled(new AvroKafkaDeserializationSchema<>(PulsarEvent.class));
+
+      // hdfs sink
+      sourceDataStream
+          .addSink(HdfsConnectorFactory.createWithParquet(hdfsPath, PulsarEvent.class))
           .setParallelism(sinkParallelNum)
           .name(getString(Property.SINK_OPERATOR_NAME))
           .uid(getString(Property.SINK_UID));

@@ -5,7 +5,7 @@ flink:
       source: 3
       sink-kafka: 3
     checkpoint:
-      data-dir: /tmp/flink/checkpoint/sojourner-distributor
+      data-dir: /tmp/flink/sojourner/distributor/checkpoint
     source:
       dc: lvs
     sink:
@@ -46,7 +46,7 @@ rheos:
       env: staging
 
 rest-client:
-  base-url: https://sojubdportalservice.vip.qa.ebay.com
+  base-url: https://sojsvc.vip.qa.ebay.com
 #  base-url: http://localhost:8080
   username: soj-flink-app
   config:
