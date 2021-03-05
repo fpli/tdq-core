@@ -315,7 +315,7 @@ public class SojUtils {
     }
 
     public static String getPageFmly(Integer pageId) {
-        if(pageId!=null) {
+        if (pageId != null) {
             Map<String, Set<Integer>> pageFmlyMap = LkpManager.getInstance().getPageFmlyAllMaps();
             for (Map.Entry<String, Set<Integer>> entry : pageFmlyMap.entrySet()) {
                 if (entry.getValue() != null && entry.getValue().contains(pageId)) {
@@ -328,73 +328,76 @@ public class SojUtils {
 
     public static long checkFormat(String type, String value) {
         int cnt = 0;
+        if (value == null) {
+            return 0;
+        }
         switch (type) {
             case "Integer": {
                 try {
                     Integer.parseInt(value);
-                    cnt = 1;
                 } catch (NumberFormatException e) {
-                    log.error("format issue");
+                    log.error("{} format issue,value:{}", type, value);
+                    cnt = 1;
                 }
                 break;
             }
             case "Long": {
                 try {
                     Long.parseLong(value);
-                    cnt = 1;
                 } catch (NumberFormatException e) {
-                    log.error("format issue");
+                    log.error("{} format issue,value:{}", type, value);
+                    cnt = 1;
                 }
                 break;
             }
             case "Short": {
                 try {
                     Short.parseShort(value);
-                    cnt = 1;
                 } catch (NumberFormatException e) {
-                    log.error("format issue");
+                    log.error("{} format issue,value:{}", type, value);
+                    cnt = 1;
                 }
                 break;
             }
             case "Float": {
                 try {
                     Float.parseFloat(value);
-                    cnt = 1;
                 } catch (NumberFormatException e) {
-                    log.error("format issue");
+                    log.error("{} format issue,value:{}", type, value);
+                    cnt = 1;
                 }
                 break;
             }
             case "Double": {
                 try {
                     Double.parseDouble(value);
-                    cnt = 1;
                 } catch (NumberFormatException e) {
-                    log.error("format issue");
+                    log.error("{} format issue,value:{}", type, value);
+                    cnt = 1;
                 }
                 break;
             }
             case "Byte": {
                 try {
                     Byte.parseByte(value);
-                    cnt = 1;
                 } catch (NumberFormatException e) {
-                    log.error("format issue");
+                    log.error("{} format issue,value:{}", type, value);
+                    cnt = 1;
                 }
                 break;
             }
             case "Boolean": {
                 try {
                     Boolean.parseBoolean(value);
-                    cnt = 1;
                 } catch (NumberFormatException e) {
-                    log.error("format issue");
+                    log.error("{} format issue,value:{}", type, value);
+                    cnt = 1;
                 }
                 break;
             }
             case "Character":
             case "String": {
-                cnt = 1;
+                cnt = 0;
                 break;
             }
             default: {

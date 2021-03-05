@@ -189,6 +189,8 @@ public class Property {
   public static final String BROADCAST_PARALLELISM = "flink.app.parallelism.broadcast";
   public static final String METRICS_PARALLELISM = "flink.app.parallelism.metrics";
   public static final String SINK_KAFKA_PARALLELISM = "flink.app.parallelism.sink-kafka";
+  public static final String METRIICS_COLLECTOR_PARALLELISM = "flink.app.parallelism.metrics-collector";
+  public static final String TDQ_NORMALIZER_PARALLELISM = "flink.app.parallelism.tdq-normalizer";
 
   // flink slot share group
   public static final String SOURCE_EVENT_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event";
@@ -197,7 +199,8 @@ public class Property {
   public static final String SOURCE_EVENT_RNO_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.source-event-rno";
   public static final String SESSION_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.session";
   public static final String CROSS_SESSION_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.cross-session";
-
+  public static final String TDQ_NORMALIZER_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.tdq-normalizer";
+  public static final String METRICS_COLLECTOR_SLOT_SHARE_GROUP = "flink.app.slot-sharing-group.metrics-collector";
   // flink - operator name and uid
   public static final String SOURCE_OPERATOR_NAME_RNO = "flink.app.operator-name.source.rno";
   public static final String SOURCE_OPERATOR_NAME_LVS = "flink.app.operator-name.source.lvs";

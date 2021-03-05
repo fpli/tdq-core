@@ -2,15 +2,17 @@ flink:
   app:
     name: Sojourner TDQ
     parallelism:
-      default: 50
-      source: 50
-      event: 100
+      default: 100
+      source: 100
+      tdq-normalizer: 300
+      metrics-collector: 150
       broadcast: 100
     slot-sharing-group:
       source-event-lvs: tdq-lvs
       source-event-slc: tdq-slc
       source-event-rno: tdq-rno
       metrics-collector: metrics-collector
+      tdq-normalizer: tdq-normalizer
     operator-name:
       source:
         rno: Pathfinder RNO Tdq Source

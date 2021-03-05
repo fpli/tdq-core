@@ -22,7 +22,6 @@ import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 
@@ -62,7 +61,7 @@ public class SojMetricsCollectorJob {
                 .dc(RNO)
                 .operatorName(getString(Property.SOURCE_OPERATOR_NAME_RNO))
                 .uid(getString(Property.SOURCE_UID_RNO))
-                //                .slotGroup(getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP))
+                .slotGroup(getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP))
                 .outOfOrderlessInMin(getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
                 .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
                 .idleSourceTimeout(getInteger(Property.FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN))
@@ -73,7 +72,7 @@ public class SojMetricsCollectorJob {
                 .dc(SLC)
                 .operatorName(getString(Property.SOURCE_OPERATOR_NAME_SLC))
                 .uid(getString(Property.SOURCE_UID_SLC))
-                //                .slotGroup(getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP))
+                .slotGroup(getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP))
                 .outOfOrderlessInMin(getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
                 .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
                 .idleSourceTimeout(getInteger(Property.FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN))
@@ -84,7 +83,7 @@ public class SojMetricsCollectorJob {
                 .dc(LVS)
                 .operatorName(getString(Property.SOURCE_OPERATOR_NAME_LVS))
                 .uid(getString(Property.SOURCE_UID_LVS))
-                //                .slotGroup(getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP))
+                .slotGroup(getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP))
                 .outOfOrderlessInMin(getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
                 .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
                 .idleSourceTimeout(getInteger(Property.FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN))
@@ -102,8 +101,7 @@ public class SojMetricsCollectorJob {
                         .withIdleness(Duration.ofSeconds(1)))
                 .setParallelism(1)
                 .name(CONFIG_SOURCE_OP_NAME2)
-                .uid(CONFIG_SOURCE_UID2)
-                ;
+                .uid(CONFIG_SOURCE_UID2);
 
         // union ubiEvent from SLC/RNO/LVS
         DataStream<RawEvent> rawEventDataStream = rawEventDataStreamForRNO
@@ -124,10 +122,12 @@ public class SojMetricsCollectorJob {
                         .process(new RawEventProcessFunction(stateDescriptor))
                         .name(CONNECTOR_OP_NAME)
                         .uid(CONNECTOR_OP_UID)
-                        .setParallelism(getInteger(Property.SOURCE_PARALLELISM));
+                        .slotSharingGroup(Property.TDQ_NORMALIZER_SLOT_SHARE_GROUP)
+                        .setParallelism(getInteger(Property.TDQ_NORMALIZER_PARALLELISM));
         DataStream<RawEventMetrics> filteredRawEventMetricsDataStream = rawEventMetricDataStream
                 .filter(new EmptyMetricFilterFunction())
-                .setParallelism(getInteger(Property.SOURCE_PARALLELISM))
+                .setParallelism(getInteger(Property.TDQ_NORMALIZER_PARALLELISM))
+                .slotSharingGroup(Property.TDQ_NORMALIZER_SLOT_SHARE_GROUP)
                 .name(FILTER_OP_NAME) //add opensession filter name
                 .uid(FILTER_OP_UID) //add opensession filter uid;
                 ;
@@ -136,14 +136,10 @@ public class SojMetricsCollectorJob {
                         .keyBy("guid")
                         .window(TumblingEventTimeWindows.of(Time.minutes(5)))
                         .aggregate(new SojMetricsAgg(), new SojMetricsProcessWindowFunction())
-                        .setParallelism(getInteger(Property.DEFAULT_PARALLELISM))
+                        .setParallelism(getInteger(Property.METRIICS_COLLECTOR_PARALLELISM))
+                        .slotSharingGroup(Property.METRICS_COLLECTOR_SLOT_SHARE_GROUP)
                         .name("sojourner metrics collector")
                         .uid("sojourner-metrics-collector");
-        sojMetricsCollectorDataStream
-                .addSink(new DiscardingSink<>())
-                .setParallelism(getInteger(Property.DEFAULT_PARALLELISM))
-                .name("sojourner tdq sink")
-                .uid("sojourner-tdq-sink");
         // Submit this job
         FlinkEnvUtils.execute(executionEnvironment, getString(Property.FLINK_APP_NAME));
     }

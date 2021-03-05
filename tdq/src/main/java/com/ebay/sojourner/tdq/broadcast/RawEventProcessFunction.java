@@ -4,13 +4,14 @@ import com.ebay.sojourner.common.model.*;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.SojUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.util.Collector;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -40,7 +41,7 @@ public class RawEventProcessFunction extends
     @Override
     public void processBroadcastElement(TdqConfigMapping mapping, Context ctx,
                                         Collector<RawEventMetrics> out) throws Exception {
-        log.info("process broadcast pageId topic mapping: {}", mapping);
+        log.info("process broadcast tdq config mapping: {}", mapping);
         BroadcastState<String, TdqConfigMapping> broadcastState =
                 ctx.getBroadcastState(stateDescriptor);
         MetricType metricType = mapping.getMetricType();
@@ -91,10 +92,12 @@ public class RawEventProcessFunction extends
                 tagMissingCntMetrics.setMetricName(tdqConfigMapping.getMetricName());
                 tagMissingCntMetrics.setMetricType(tdqConfigMapping.getMetricType());
                 tagMissingCntMetrics.getPageFamilySet().add(pageFamily);
-                for (String tagName : tags) {
-                    long tagCnt = SojUtils.getTagCnt(rawEvent, tagName);
-                    Map<String, Long> tagWithCnt = new HashedMap();
-                    tagWithCnt.put(tagName, tagCnt);
+                if (CollectionUtils.isNotEmpty(tags)) {
+                    Map<String, Long> tagWithCnt = new HashMap<>();
+                    for (String tagName : tags) {
+                        long tagCnt = SojUtils.getTagCnt(rawEvent, tagName);
+                        tagWithCnt.put(tagName, tagCnt);
+                    }
                     tagMissingCntMetrics.getTagCntMap().put(domain.toString(), tagWithCnt);
                 }
                 rawEventMetrics.getTagMissingCntMetricsMap().put(metricKey, tagMissingCntMetrics);
@@ -113,10 +116,12 @@ public class RawEventProcessFunction extends
         TagSumMetrics tagSumMetrics = new TagSumMetrics();
         tagSumMetrics.setMetricName(tdqConfigMapping.getMetricName());
         tagSumMetrics.setMetricType(tdqConfigMapping.getMetricType());
-        for (String tagName : tags) {
-            double tagCnt = SojUtils.getTagValue(rawEvent, tagName);
-            Map<String, Double> tagWithCnt = new HashedMap();
-            tagWithCnt.put(tagName, tagCnt);
+        if (CollectionUtils.isNotEmpty(tags)) {
+            Map<String, Double> tagWithCnt = new HashMap();
+            for (String tagName : tags) {
+                double tagCnt = SojUtils.getTagValue(rawEvent, tagName);
+                tagWithCnt.put(tagName, tagCnt);
+            }
             tagSumMetrics.getTagSumMap().put(domain.toString(), tagWithCnt);
         }
         rawEventMetrics.getTagSumMetricsMap().put(metricKey, tagSumMetrics);
@@ -135,7 +140,7 @@ public class RawEventProcessFunction extends
             pageCntMetrics.setMetricName(tdqConfigMapping.getMetricName());
             pageCntMetrics.setMetricType(tdqConfigMapping.getMetricType());
             if (pageIds.contains(pageId)) {
-                Map<Integer, Long> pageWithCnt = new HashedMap();
+                Map<Integer, Long> pageWithCnt = new HashMap();
                 pageWithCnt.put(pageId, 1L);
                 pageCntMetrics.getPageCntMap().put(domain.toString(), pageWithCnt);
             }
@@ -156,12 +161,14 @@ public class RawEventProcessFunction extends
         TransformErrorMetrics transformErrorMetrics = new TransformErrorMetrics();
         transformErrorMetrics.setMetricName(tdqConfigMapping.getMetricName());
         transformErrorMetrics.setMetricType(tdqConfigMapping.getMetricType());
-        for (String tagName : tags) {
-            String[] tagKV = tagName.split("-");
-            String tagValue = SojUtils.getTagValueStr(rawEvent, tagKV[0]);
-            long cnt = SojUtils.checkFormat(tagKV[1], tagValue);
-            Map<String, Long> tagWithCnt = new HashedMap();
-            tagWithCnt.put(tagKV[0], cnt);
+        if (CollectionUtils.isNotEmpty(tags)) {
+            Map<String, Long> tagWithCnt = new HashMap();
+            for (String tagName : tags) {
+                String[] tagKV = tagName.split("-");
+                String tagValue = SojUtils.getTagValueStr(rawEvent, tagKV[0]);
+                long cnt = SojUtils.checkFormat(tagKV[1], tagValue);
+                tagWithCnt.put(tagKV[0], cnt);
+            }
             transformErrorMetrics.getTagErrorCntMap().put(domain.toString(), tagWithCnt);
         }
         rawEventMetrics.getTransformErrorMetricsMap().put(metricKey, transformErrorMetrics);

@@ -87,7 +87,7 @@ public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping
                         "        \"metricName\":\"Transformation_Error_Rate \",\n" +
                         "        \"metricType\":\"TRANSFORM_ERROR\",\n" +
                         "        \"pageFamilys\":[],\n" +
-                        "        \"tags\":[\"u-Integer\"],\n" +
+                        "        \"tags\":[\"u-Long\"],\n" +
                         "        \"pageIds\": [],\n" +
                         "        \"env\": \"prod\"\n" +
                         "    }\n" +

@@ -11,15 +11,15 @@ import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Map.Entry;
 
 public class SojMetricsProcessWindowFunction extends
         ProcessWindowFunction<SojMetrics, SojMetrics, Tuple, TimeWindow> {
-    private static final Map<String, Gauge> domainMetricGuageMap = new HashMap<>();
-    private static final Map<String, Object> domainMetricValueMap = new HashMap<>();
+    private static final Map<String, Gauge> domainMetricGuageMap = new ConcurrentHashMap<>();
+    private static final Map<String, Object> domainMetricValueMap = new ConcurrentHashMap<>();
 
     @Override
     public void open(Configuration parameters) throws Exception {
@@ -58,7 +58,7 @@ public class SojMetricsProcessWindowFunction extends
                         String tagName = tagMissingCntEntry.getKey();
                         Long tagCount = tagMissingCntEntry.getValue();
                         StringBuilder sb = new StringBuilder(Constants.SOJ_METRICS_GROUP)
-                                .append(metricKey).append(domain).append(tagName);
+                                .append(metricKey).append(domain).append(evenTime).append(tagName);
                         if (!domainMetricValueMap.containsKey(sb.toString())) {
                             domainMetricValueMap.put(sb.toString(), tagCount);
                             Gauge gauge = getRuntimeContext()
@@ -77,21 +77,6 @@ public class SojMetricsProcessWindowFunction extends
                             domainMetricGuageMap.put(sb.toString(), gauge);
                         } else {
                             domainMetricValueMap.put(sb.toString(), tagCount);
-                            Gauge gauge = getRuntimeContext()
-                                    .getMetricGroup().addGroup(Constants.SOJ_METRICS_GROUP)
-                                    .addGroup(Constants.SOJ_METRIC_TYPE,
-                                            tagMissingCntMetrics.getMetricType().toString())
-                                    .addGroup(Constants.SOJ_METRIC_NAME,
-                                            tagMissingCntMetrics.getMetricName())
-                                    .addGroup(Constants.SOJ_PGAE_FAMILY, domainList[0])
-                                    .addGroup(Constants.SOJ_SITE_ID, domainList[1])
-                                    .addGroup(Constants.SOJ_EVENT_TIME, String.valueOf(evenTime))
-                                    .addGroup(Constants.SOJ_TAG_NAME, tagName)
-                                    .gauge(Constants.TAG_MISSING_CNT_METRICS,
-                                            new SojMetricsGauge(domainMetricValueMap,
-                                                    sb.toString()));
-                            domainMetricGuageMap.put(sb.toString(), gauge);
-
                         }
                     }
 
@@ -116,7 +101,7 @@ public class SojMetricsProcessWindowFunction extends
                         String tagName = tagSumEntry.getKey();
                         Double tagCount = tagSumEntry.getValue();
                         StringBuilder sb = new StringBuilder(Constants.SOJ_METRICS_GROUP)
-                                .append(metricKey).append(domain).append(tagName);
+                                .append(metricKey).append(domain).append(evenTime).append(tagName);
                         if (!domainMetricValueMap.containsKey(sb.toString())) {
                             domainMetricValueMap.put(sb.toString(), tagCount);
                             Gauge gauge = getRuntimeContext()
@@ -135,20 +120,6 @@ public class SojMetricsProcessWindowFunction extends
                             domainMetricGuageMap.put(sb.toString(), gauge);
                         } else {
                             domainMetricValueMap.put(sb.toString(), tagCount);
-                            Gauge gauge = getRuntimeContext()
-                                    .getMetricGroup().addGroup(Constants.SOJ_METRICS_GROUP)
-                                    .addGroup(Constants.SOJ_METRIC_TYPE,
-                                            tagSumMetrics.getMetricType().toString())
-                                    .addGroup(Constants.SOJ_METRIC_NAME,
-                                            tagSumMetrics.getMetricName())
-                                    .addGroup(Constants.SOJ_PGAE_FAMILY, domainList[0])
-                                    .addGroup(Constants.SOJ_SITE_ID, domainList[1])
-                                    .addGroup(Constants.SOJ_EVENT_TIME, String.valueOf(evenTime))
-                                    .addGroup(Constants.SOJ_TAG_NAME, tagName.replace("|", "-"))
-                                    .gauge(Constants.TAG_SUM_METRICS,
-                                            new SojMetricsGauge(domainMetricValueMap,
-                                                    sb.toString()));
-                            domainMetricGuageMap.put(sb.toString(), gauge);
                         }
                     }
 
@@ -173,7 +144,7 @@ public class SojMetricsProcessWindowFunction extends
                         Integer pageId = pageCntEntry.getKey();
                         Long pageCnt = pageCntEntry.getValue();
                         StringBuilder sb = new StringBuilder(Constants.SOJ_METRICS_GROUP)
-                                .append(metricKey).append(domain).append(pageId);
+                                .append(metricKey).append(domain).append(evenTime).append(pageId);
                         if (!domainMetricValueMap.containsKey(sb.toString())) {
                             domainMetricValueMap.put(sb.toString(), pageCnt);
                             Gauge gauge = getRuntimeContext()
@@ -192,20 +163,6 @@ public class SojMetricsProcessWindowFunction extends
                             domainMetricGuageMap.put(sb.toString(), gauge);
                         } else {
                             domainMetricValueMap.put(sb.toString(), pageCnt);
-                            Gauge gauge = getRuntimeContext()
-                                    .getMetricGroup().addGroup(Constants.SOJ_METRICS_GROUP)
-                                    .addGroup(Constants.SOJ_METRIC_TYPE,
-                                            pageCntMetrics.getMetricType().toString())
-                                    .addGroup(Constants.SOJ_METRIC_NAME,
-                                            pageCntMetrics.getMetricName())
-                                    .addGroup(Constants.SOJ_PGAE_FAMILY, domainList[0])
-                                    .addGroup(Constants.SOJ_SITE_ID, domainList[1])
-                                    .addGroup(Constants.SOJ_EVENT_TIME, String.valueOf(evenTime))
-                                    .addGroup(Constants.SOJ_PAGE_ID, String.valueOf(pageId))
-                                    .gauge(Constants.PAGE_CNT_METRICS,
-                                            new SojMetricsGauge(domainMetricValueMap,
-                                                    sb.toString()));
-                            domainMetricGuageMap.put(sb.toString(), gauge);
                         }
                     }
 
@@ -231,7 +188,7 @@ public class SojMetricsProcessWindowFunction extends
                         String tagName = transformErrorEntry.getKey();
                         Long tagErrorCnt = transformErrorEntry.getValue();
                         StringBuilder sb = new StringBuilder(Constants.SOJ_METRICS_GROUP)
-                                .append(metricKey).append(domain).append(tagName);
+                                .append(metricKey).append(domain).append(evenTime).append(tagName);
                         if (!domainMetricValueMap.containsKey(sb.toString())) {
                             domainMetricValueMap.put(sb.toString(), tagErrorCnt);
                             Gauge gauge = getRuntimeContext()
@@ -251,21 +208,6 @@ public class SojMetricsProcessWindowFunction extends
                             domainMetricGuageMap.put(sb.toString(), gauge);
                         } else {
                             domainMetricValueMap.put(sb.toString(), tagErrorCnt);
-                            Gauge gauge = getRuntimeContext()
-                                    .getMetricGroup().addGroup(Constants.SOJ_METRICS_GROUP)
-                                    .addGroup(Constants.SOJ_METRIC_TYPE,
-                                            transformErrorMetrics.getMetricType().toString())
-                                    .addGroup(Constants.SOJ_METRIC_NAME,
-                                            transformErrorMetrics.getMetricName())
-                                    .addGroup(Constants.SOJ_PGAE_FAMILY, domainList[0])
-                                    .addGroup(Constants.SOJ_SITE_ID, domainList[1])
-                                    .addGroup(Constants.SOJ_EVENT_TIME, String.valueOf(evenTime))
-                                    .addGroup(Constants.SOJ_TAG_NAME, String.valueOf(tagName
-                                        .replace("|", "-")))
-                                    .gauge(Constants.TRANSFORM_ERROR_METRICS,
-                                            new SojMetricsGauge(domainMetricValueMap,
-                                                    sb.toString()));
-                            domainMetricGuageMap.put(sb.toString(), gauge);
                         }
                     }
 
