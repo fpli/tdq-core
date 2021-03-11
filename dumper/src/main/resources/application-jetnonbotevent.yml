@@ -5,12 +5,12 @@ kafka:
       - behavior.total.sojevent.total
     group-id: sojourner-jetstream-dumper
     bootstrap-servers:
-      rno:
-        - rhs-rdrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.26.tess.io:9092
-        - rhs-rdrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092
-        - rhs-rdrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092
-        - rhs-rdrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.26.tess.io:9092
-        - rhs-rdrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092
+      lvs:
+        - rhs-qlsvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
+        - rhs-qlsvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
+        - rhs-qlsvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
+        - rhs-qlsvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
+        - rhs-qlsvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
 
 flink:
   app:
@@ -26,7 +26,7 @@ flink:
       source: jetstream-total-nonbot-event-source
       sink: jetstream-total-nonbot-event-sink
     source:
-      dc: rno
+      dc: lvs
     sink:
       hdfs:
         path: hdfs://apollo-rno/sys/soj/ubd/jetstream_events/type=nonbot/

@@ -1,5 +1,6 @@
 package com.ebay.sojourner.business.detector;
 
+import com.ebay.sojourner.business.rule.BotRule12End;
 import com.ebay.sojourner.business.rule.BotRule206;
 import com.ebay.sojourner.business.rule.BotRule208;
 import com.ebay.sojourner.common.model.UbiSession;
@@ -54,6 +55,6 @@ public class SessionEndBotDetector implements BotDetector<UbiSession> {
   public void initBotRules() {
     botRules.add(new BotRule206());
     botRules.add(new BotRule208());
-    //    botRules.add(new BotRule12End());
+    botRules.add(new BotRule12End());
   }
 }

@@ -557,6 +557,13 @@
         "values": "string"
       },
       "doc": "Includes ForwardFor, ContentLength, Script, Server, Encoding, TMachine, TStamp, TName, TStatus, TDuration, TPayload"
+    },
+    {
+      "name": "rv",
+      "type": [
+        "null",
+        "boolean"
+      ]
     }
   ]
 }
