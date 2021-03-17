@@ -10,9 +10,10 @@ import com.ebay.sojourner.common.model.PageIdTopicMapping;
 import com.ebay.sojourner.common.model.RawSojEventWrapper;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.distributor.broadcast.SojEventDistProcessFunction;
+import com.ebay.sojourner.distributor.function.AddTagMapFunction;
 import com.ebay.sojourner.distributor.function.CustomTopicConfigSourceFunction;
-import com.ebay.sojourner.distributor.schema.CustomSojEventSerializationSchema;
-import com.ebay.sojourner.distributor.schema.SojEventDeserializationSchema;
+import com.ebay.sojourner.distributor.schema.SojEventDistDeserializationSchema;
+import com.ebay.sojourner.distributor.schema.SojEventDistSerializationSchema;
 import com.ebay.sojourner.flink.common.DataCenter;
 import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connector.kafka.FlinkKafkaProducerFactory;
@@ -26,18 +27,19 @@ import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
-public class SojEventDistributionJob {
+public class SojEventDistJob {
   public static void main(String[] args) throws Exception {
 
     final String DATA_SOURCE_OP_NAME = "Non-bot SojEvent Source";
     final String DATA_SOURCE_UID = "non-bot-sojevent-source";
     final String CONFIG_SOURCE_OP_NAME = "PageId Topic Mapping Source";
     final String CONFIG_SOURCE_UID = "pageId-topic-mapping-source";
+    final String ADD_TAG_OP_NAME = "Add Tag";
+    final String ADD_TAG_OP_UID = "add-tag";
     final String DIST_OP_NAME = "SojEvent Distribution";
     final String DIST_UID = "sojevent-dist";
     final String SINK_OP_NAME = "Non-bot SojEvent Distribution Sink";
     final String SINK_UID = "non-bot-sojevent-dist-sink";
-
 
     final StreamExecutionEnvironment executionEnvironment = FlinkEnvUtils.prepare(args);
 
@@ -49,17 +51,22 @@ public class SojEventDistributionJob {
         .parallelism(getInteger(Property.SOURCE_PARALLELISM))
         .operatorName(DATA_SOURCE_OP_NAME)
         .uid(DATA_SOURCE_UID)
-        .build(new SojEventDeserializationSchema());
+        .build(new SojEventDistDeserializationSchema());
+
+    DataStream<RawSojEventWrapper> mappedDataStream =
+        sojEventDataStream.map(new AddTagMapFunction())
+                          .name(ADD_TAG_OP_NAME)
+                          .uid(ADD_TAG_OP_UID)
+                          .setParallelism(getInteger(Property.SOURCE_PARALLELISM));
 
 
     DataStream<PageIdTopicMapping> mappingSourceStream = executionEnvironment
         .addSource(new CustomTopicConfigSourceFunction(getString(Property.REST_BASE_URL),
                                                        getLong(Property.REST_CONFIG_PULL_INTERVAL),
-                                                       getString(Property.REST_CONFIG_ENV)))
+                                                       getString(Property.REST_CONFIG_PROFILE)))
         .setParallelism(1)
         .name(CONFIG_SOURCE_OP_NAME)
         .uid(CONFIG_SOURCE_UID);
-
 
     MapStateDescriptor<Integer, PageIdTopicMapping> stateDescriptor = new MapStateDescriptor<>(
         "pageIdTopicMappingBroadcastState",
@@ -71,17 +78,17 @@ public class SojEventDistributionJob {
         mappingSourceStream.broadcast(stateDescriptor);
 
     DataStream<RawSojEventWrapper> sojEventDistStream =
-        sojEventDataStream.connect(broadcastStream)
-                          .process(new SojEventDistProcessFunction(stateDescriptor))
-                          .name(DIST_OP_NAME)
-                          .uid(DIST_UID)
-                          .setParallelism(getInteger(Property.SOURCE_PARALLELISM));
+        mappedDataStream.connect(broadcastStream)
+                        .process(new SojEventDistProcessFunction(stateDescriptor))
+                        .name(DIST_OP_NAME)
+                        .uid(DIST_UID)
+                        .setParallelism(getInteger(Property.SOURCE_PARALLELISM));
 
     KafkaProducerConfig config = KafkaProducerConfig.ofDC(getString(FLINK_APP_SINK_DC));
     FlinkKafkaProducerFactory producerFactory = new FlinkKafkaProducerFactory(config);
 
     sojEventDistStream.addSink(producerFactory.get(
-        getString(Property.FLINK_APP_SINK_KAFKA_TOPIC), new CustomSojEventSerializationSchema()))
+        getString(Property.FLINK_APP_SINK_KAFKA_TOPIC), new SojEventDistSerializationSchema()))
                       .setParallelism(getInteger(Property.SINK_KAFKA_PARALLELISM))
                       .name(SINK_OP_NAME)
                       .uid(SINK_UID);

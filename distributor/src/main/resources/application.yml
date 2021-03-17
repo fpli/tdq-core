@@ -90,4 +90,4 @@ rest-client:
   username: soj-flink-app
   config:
     pull-interval: 30000
-    env: prod
+    profile: prod
