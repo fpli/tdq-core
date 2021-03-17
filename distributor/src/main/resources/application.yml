@@ -13,10 +13,12 @@ flink:
       tolerate-failure-number: 3
     source:
       dc: rno
+      operator-name: Non-bot SojEvent Source
       from-timestamp: 0
       out-of-orderless-in-min: 0
     sink:
       dc: rno
+      operator-name: Non-bot SojEvent Sink
       kafka:
         topic: behavior.pulsar.sojevent.deadletter
 
@@ -90,4 +92,4 @@ rest-client:
   username: soj-flink-app
   config:
     pull-interval: 30000
-    env: prod
+    profile: prod

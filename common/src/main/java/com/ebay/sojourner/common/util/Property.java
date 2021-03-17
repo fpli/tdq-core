@@ -146,12 +146,14 @@ public class Property {
 
   // flink source
   public static final String FLINK_APP_SOURCE_DC = "flink.app.source.dc";
+  public static final String FLINK_APP_SOURCE_OP_NAME = "flink.app.source.operator-name";
   public static final String FLINK_APP_SOURCE_FROM_TIMESTAMP = "flink.app.source.from-timestamp";
   public static final String FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN = "flink.app.source.out-of-orderless-in-min";
   public static final String FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN = "flink.app.source.idle-source-timeout-in-min";
 
   // flink sink
   public static final String FLINK_APP_SINK_DC = "flink.app.sink.dc";
+  public static final String FLINK_APP_SINK_OP_NAME = "flink.app.sink.operator-name";
   public static final String FLINK_APP_SINK_KAFKA_TOPIC = "flink.app.sink.kafka.topic";
   public static final String FLINK_APP_SINK_KAFKA_TOPIC_SESSION_BOT = "flink.app.sink.kafka.topic.session.bot";
   public static final String FLINK_APP_SINK_KAFKA_TOPIC_SESSION_NON_BOT = "flink.app.sink.kafka.topic.session.non-bot";
@@ -222,6 +224,7 @@ public class Property {
   public static final String REST_USERNAME = "rest-client.username";
   public static final String REST_CONFIG_PULL_INTERVAL = "rest-client.config.pull-interval";
   public static final String REST_CONFIG_ENV = "rest-client.config.env";
+  public static final String REST_CONFIG_PROFILE = "rest-client.config.profile";
 
   // ------------------------- batch pipeline common property ---------------------------
   // flink - parallelism
