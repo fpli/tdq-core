@@ -22,7 +22,7 @@ public class AddTagMapFunction extends RichMapFunction<RawSojEventWrapper, RawSo
   private static final String REFERER_TAG = "Referer";
   private static final String REMOTE_IP_TAG = "RemoteIP";
   private static final String TPOOL_TAG = "TPool";
-  private static final String TTYPE_TAG = "Ttype";
+  private static final String TTYPE_TAG = "TType";
   private static final String BOTT_TAG = "bott";
   private static final String CBRND_TAG = "cbrnd";
   private static final String CLIENT_IP_TAG = "clientIP";
