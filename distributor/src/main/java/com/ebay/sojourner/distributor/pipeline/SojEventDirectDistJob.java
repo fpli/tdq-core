@@ -1,7 +1,9 @@
 package com.ebay.sojourner.distributor.pipeline;
 
 import static com.ebay.sojourner.common.util.Property.FLINK_APP_SINK_DC;
+import static com.ebay.sojourner.common.util.Property.FLINK_APP_SINK_OP_NAME;
 import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_DC;
+import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_OP_NAME;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getLong;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
@@ -29,17 +31,16 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 public class SojEventDirectDistJob {
   public static void main(String[] args) throws Exception {
 
-    final String DATA_SOURCE_OP_NAME = "Non-bot SojEvent Source";
-    final String DATA_SOURCE_UID = "non-bot-sojevent-source";
+    final StreamExecutionEnvironment executionEnvironment = FlinkEnvUtils.prepare(args);
+
+    final String DATA_SOURCE_OP_NAME = getString(FLINK_APP_SOURCE_OP_NAME);
+    final String DATA_SOURCE_UID = "sojevent-dist-source";
     final String CONFIG_SOURCE_OP_NAME = "PageId Topic Mapping Source";
     final String CONFIG_SOURCE_UID = "pageId-topic-mapping-source";
-    final String DIST_OP_NAME = "SojEvent Distribution";
-    final String DIST_UID = "sojevent-dist";
-    final String SINK_OP_NAME = "Non-bot SojEvent Distribution Sink";
-    final String SINK_UID = "non-bot-sojevent-dist-sink";
-
-
-    final StreamExecutionEnvironment executionEnvironment = FlinkEnvUtils.prepare(args);
+    final String DIST_OP_NAME = "SojEvent Filter and Distribution";
+    final String DIST_UID = "sojevent-filter-and-dist";
+    final String SINK_OP_NAME = getString(FLINK_APP_SINK_OP_NAME);
+    final String SINK_UID = "sojevent-dist-sink";
 
     SourceDataStreamBuilder<RawSojEventWrapper> dataStreamBuilder =
         new SourceDataStreamBuilder<>(executionEnvironment);
