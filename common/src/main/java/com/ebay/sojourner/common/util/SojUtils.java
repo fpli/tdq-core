@@ -125,10 +125,10 @@ public class SojUtils {
         sojEvent.setBot(RulePriorityUtils.getHighPriorityBotFlag(ubiEvent.getBotFlags()));
         if (sojEvent.getApplicationPayload() != null
             && StringUtils.isNotBlank(sojEvent.getApplicationPayload().get("ciid"))
-            && !sojEvent.getApplicationPayload().get("ciid").equals("null")
-            && sojEvent.getApplicationPayload().size() > 0) {
+            && !sojEvent.getApplicationPayload().get("ciid").equals("null")) {
             sojEvent.setCiid(sojEvent.getApplicationPayload().get("ciid"));
         }
+
         return sojEvent;
     }
 
