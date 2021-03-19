@@ -6,12 +6,15 @@ flink:
       source: 100
       tdq-normalizer: 300
       metrics-collector: 150
-      broadcast: 100
+      metrics-collector-post: 50
+      metrics-collector-final: 10
     slot-sharing-group:
       source-event-lvs: tdq-lvs
       source-event-slc: tdq-slc
       source-event-rno: tdq-rno
       metrics-collector: metrics-collector
+      metrics-collector-post: metrics-collector-post
+      metrics-collector-final: metrics-collector-final
       tdq-normalizer: tdq-normalizer
     operator-name:
       source:

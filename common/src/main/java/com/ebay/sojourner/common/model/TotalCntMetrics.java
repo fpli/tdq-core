@@ -11,6 +11,6 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class TransformErrorMetrics extends TdqMetrics implements Serializable {
-    private Map<String,Map<String,Long>> tagErrorCntMap= new HashMap<>();
+public class TotalCntMetrics extends TdqMetrics implements Serializable {
+    private Map<String, Long> totalCntMap= new HashMap<>();
 }

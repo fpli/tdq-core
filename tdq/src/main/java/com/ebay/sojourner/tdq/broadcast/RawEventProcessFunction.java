@@ -71,6 +71,10 @@ public class RawEventProcessFunction extends
                 calculateTransFormerErrorMetrics(rawEventMetrics, rawEvent, tdqConfigMapping,
                         metricKey);
                 break;
+            case TOTAL_CNT:
+                calculateTotalCntMetrics(rawEventMetrics, rawEvent, tdqConfigMapping,
+                        metricKey);
+                break;
             default:
                 break;
         }
@@ -95,8 +99,10 @@ public class RawEventProcessFunction extends
                 if (CollectionUtils.isNotEmpty(tags)) {
                     Map<String, Long> tagWithCnt = new HashMap<>();
                     for (String tagName : tags) {
-                        long tagCnt = SojUtils.getTagCnt(rawEvent, tagName);
-                        tagWithCnt.put(tagName, tagCnt);
+                        long tagCnt = SojUtils.getTagMissingCnt(rawEvent, tagName);
+                        if (tagCnt != 0) {
+                            tagWithCnt.put(tagName, tagCnt);
+                        }
                     }
                     tagMissingCntMetrics.getTagCntMap().put(domain.toString(), tagWithCnt);
                 }
@@ -119,8 +125,8 @@ public class RawEventProcessFunction extends
         if (CollectionUtils.isNotEmpty(tags)) {
             Map<String, Double> tagWithCnt = new HashMap();
             for (String tagName : tags) {
-                double tagCnt = SojUtils.getTagValue(rawEvent, tagName);
-                tagWithCnt.put(tagName, tagCnt);
+                double tagValue = SojUtils.getTagValue(rawEvent, tagName);
+                tagWithCnt.put(tagName, tagValue);
             }
             tagSumMetrics.getTagSumMap().put(domain.toString(), tagWithCnt);
         }
@@ -139,9 +145,11 @@ public class RawEventProcessFunction extends
             PageCntMetrics pageCntMetrics = new PageCntMetrics();
             pageCntMetrics.setMetricName(tdqConfigMapping.getMetricName());
             pageCntMetrics.setMetricType(tdqConfigMapping.getMetricType());
-            if (pageIds.contains(pageId)) {
+            if (CollectionUtils.isNotEmpty(pageIds)) {
                 Map<Integer, Long> pageWithCnt = new HashMap();
-                pageWithCnt.put(pageId, 1L);
+                if (pageIds.contains(pageId)) {
+                    pageWithCnt.put(pageId, 1L);
+                }
                 pageCntMetrics.getPageCntMap().put(domain.toString(), pageWithCnt);
             }
             rawEventMetrics.getPageCntMetricsMap().put(metricKey, pageCntMetrics);
@@ -165,12 +173,37 @@ public class RawEventProcessFunction extends
             Map<String, Long> tagWithCnt = new HashMap();
             for (String tagName : tags) {
                 String[] tagKV = tagName.split("-");
+                long cnt = 0L;
                 String tagValue = SojUtils.getTagValueStr(rawEvent, tagKV[0]);
-                long cnt = SojUtils.checkFormat(tagKV[1], tagValue);
-                tagWithCnt.put(tagKV[0], cnt);
+                if ("u".equals(tagKV[0])) {l
+                    cnt = SojUtils.checkFormatForU(tagKV[1], tagValue);
+                } else {
+                    cnt = SojUtils.checkFormat(tagKV[1], tagValue);
+                }
+                if (cnt != 0) {
+                    tagWithCnt.put(tagKV[0], cnt);
+                }
             }
             transformErrorMetrics.getTagErrorCntMap().put(domain.toString(), tagWithCnt);
         }
         rawEventMetrics.getTransformErrorMetricsMap().put(metricKey, transformErrorMetrics);
     }
+
+    private void calculateTotalCntMetrics(RawEventMetrics rawEventMetrics, RawEvent rawEvent,
+                                          TdqConfigMapping tdqConfigMapping, String metricKey) {
+        Integer pageId = SojUtils.getPageId(rawEvent);
+        if (pageId != null) {
+            Integer siteId = SojUtils.getSiteId(rawEvent);
+            String pageFamily = SojUtils.getPageFmly(pageId);
+            StringBuilder domain = new StringBuilder(pageFamily).append(Constants.DOMAIN_DEL)
+                    .append(siteId == null ? "null" : siteId);
+            Set<Integer> pageIds = tdqConfigMapping.getPageIds();
+            TotalCntMetrics totalCntMetrics = new TotalCntMetrics();
+            totalCntMetrics.setMetricName(tdqConfigMapping.getMetricName());
+            totalCntMetrics.setMetricType(tdqConfigMapping.getMetricType());
+            totalCntMetrics.getTotalCntMap().put(domain.toString(), 1L);
+            rawEventMetrics.getTotalCntMetricsMap().put(metricKey, totalCntMetrics);
+        }
+    }
+
 }

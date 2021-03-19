@@ -13,9 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class TagMissingCntMetrics implements Serializable {
-    private MetricType metricType;
-    private String metricName;
+public class TagMissingCntMetrics extends TdqMetrics implements Serializable {
     private Set<String> pageFamilySet = new HashSet<>();
     private Map<String, Map<String, Long>> tagCntMap = new HashMap<>();
 

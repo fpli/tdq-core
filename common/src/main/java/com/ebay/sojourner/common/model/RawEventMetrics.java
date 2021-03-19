@@ -17,4 +17,5 @@ public class RawEventMetrics implements Serializable {
     private Map<String,TagSumMetrics> tagSumMetricsMap = new HashMap<>();
     private Map<String,PageCntMetrics> pageCntMetricsMap = new HashMap<>();
     private Map<String,TransformErrorMetrics> transformErrorMetricsMap = new HashMap<>();
+    private Map<String,TotalCntMetrics> totalCntMetricsMap = new HashMap<>();
 }

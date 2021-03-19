@@ -54,6 +54,7 @@ public class Constants {
   public static final String TAG_MISSING_CNT_METRICS = "missing_cnt";
   public static final String TAG_SUM_METRICS = "sum";
   public static final String PAGE_CNT_METRICS = "cnt";
+  public static final String TOTAL_CNT_METRICS = "total_cnt";
   public static final String TRANSFORM_ERROR_METRICS = "tansform_error_cnt";
   public static final String SOJ_EVENT_TIME = "event_time";
   // flied delimiter
@@ -95,7 +96,7 @@ public class Constants {
   public static final String TAG_ITEMIDS = "!itemIds";
   public static final String TAG_TRKP = "trkp";
   public static final String TAG_MTSTS = "mtsts";
-
+  public static final String TOTAL_METRICS_NAME = "total_cnt";
   //CHARSET
 
   public static final String CHAR_SET = "UTF-8";

@@ -11,8 +11,6 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class TagSumMetrics implements Serializable {
-    private MetricType metricType;
-    private String metricName;
-    private Map<String,Map<String,Double>> tagSumMap= new HashMap<>();
+public class TagSumMetrics extends TdqMetrics implements Serializable {
+    private Map<String, Map<String, Double>> tagSumMap = new HashMap<>();
 }

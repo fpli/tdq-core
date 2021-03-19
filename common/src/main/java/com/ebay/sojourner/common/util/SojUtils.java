@@ -13,6 +13,8 @@ import java.util.Set;
 @Slf4j
 public class SojUtils {
 
+    private static final String SPLIT_DEL = "\\|";
+
     public static boolean isRover3084Click(UbiEvent event) {
         if (event.getPageId() == -1) {
             return false;
@@ -212,22 +214,22 @@ public class SojUtils {
         return sojSession;
     }
 
-    public static long getTagCnt(RawEvent rawEvent, String tagName) {
+    public static long getTagMissingCnt(RawEvent rawEvent, String tagName) {
         Map<String, String> map = new HashMap<>();
         map.putAll(rawEvent.getSojA());
         map.putAll(rawEvent.getSojK());
         map.putAll(rawEvent.getSojC());
 
-        String[] tags = tagName.split("|");
+        String[] tags = tagName.split(SPLIT_DEL);
         for (String tag : tags) {
             if (map.get(tag) != null) {
-                return 1;
+                return 0;
             } else if (SOJParseClientInfo.getClientInfo(
                     rawEvent.getClientData().toString(), tag) != null) {
-                return 1;
+                return 0;
             }
         }
-        return 0;
+        return 1;
     }
 
     public static Double getTagValue(RawEvent rawEvent, String tagName) {
@@ -236,7 +238,7 @@ public class SojUtils {
         map.putAll(rawEvent.getSojK());
         map.putAll(rawEvent.getSojC());
 
-        String[] tags = tagName.split("|");
+        String[] tags = tagName.split(SPLIT_DEL);
         for (String tag : tags) {
             if (StringUtils.isNotBlank(map.get(tag))) {
                 try {
@@ -264,7 +266,7 @@ public class SojUtils {
         map.putAll(rawEvent.getSojA());
         map.putAll(rawEvent.getSojK());
         map.putAll(rawEvent.getSojC());
-        String[] tags = tagName.split("|");
+        String[] tags = tagName.split(SPLIT_DEL);
         for (String tag : tags) {
             if (StringUtils.isNotBlank(map.get(tag))) {
                 return map.get(tag);
@@ -408,5 +410,26 @@ public class SojUtils {
         return cnt;
     }
 
+    public static long checkFormatForU(String type, String userId) {
+        try {
+            if (StringUtils.isNotBlank(userId)) {
+                if (IntegerField.getIntVal(userId) == null) {
+                    userId = RegexReplace.replace(userId, "(\\D)+", "", 1, 0, 'i');
+                    if (userId.length() > 28) {
+                        return 1;
+                    }
+                }
+                long result = Long.parseLong(userId.trim());
+                if (result >= 1 && result <= 9999999999999999L) {
+                    return 0;
+                }
+            } else {
+                return 0;
+            }
+        } catch (Exception e) {
+            log.error("Incorrect format: " + userId);
+        }
+        return 1;
+    }
 
 }

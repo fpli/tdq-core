@@ -9,7 +9,7 @@ import java.util.Map;
 import static java.util.Map.Entry;
 
 @Slf4j
-public class SojMetricsAgg implements AggregateFunction<RawEventMetrics, SojMetrics, SojMetrics> {
+public class SojMetricsSplitAgg implements AggregateFunction<SojMetrics, SojMetrics, SojMetrics> {
 
     @Override
     public SojMetrics createAccumulator() {
@@ -18,12 +18,14 @@ public class SojMetricsAgg implements AggregateFunction<RawEventMetrics, SojMetr
     }
 
     @Override
-    public SojMetrics add(RawEventMetrics rawEventMetrics, SojMetrics sojMetrics) {
-        addTagMissingCntMetrics(rawEventMetrics, sojMetrics);
-        addTagSumMetrics(rawEventMetrics, sojMetrics);
-        addTransformErrorCntMetrics(rawEventMetrics, sojMetrics);
-        addPageCntMetrics(rawEventMetrics, sojMetrics);
-        addTotalCntMetrics(rawEventMetrics, sojMetrics);
+    public SojMetrics add(SojMetrics inputSojMetrics,
+                          SojMetrics sojMetrics) {
+        addTagMissingCntMetrics(inputSojMetrics, sojMetrics);
+        addTagSumMetrics(inputSojMetrics, sojMetrics);
+        addTransformErrorCntMetrics(inputSojMetrics, sojMetrics);
+        addPageCntMetrics(inputSojMetrics, sojMetrics);
+        addTotalCntMetrics(inputSojMetrics, sojMetrics);
+        sojMetrics.setEventTime(inputSojMetrics.getEventTime());
         return sojMetrics;
     }
 
@@ -37,9 +39,9 @@ public class SojMetricsAgg implements AggregateFunction<RawEventMetrics, SojMetr
         return null;
     }
 
-    private void addTagMissingCntMetrics(RawEventMetrics rawEventMetrics,
+    private void addTagMissingCntMetrics(SojMetrics inputSojMetrics,
                                          SojMetrics sojMetrics) {
-        for (Entry<String, TagMissingCntMetrics> entry : rawEventMetrics
+        for (Entry<String, TagMissingCntMetrics> entry : inputSojMetrics
                 .getTagMissingCntMetricsMap().entrySet()) {
             String metricKey = entry.getKey();
             TagMissingCntMetrics tagMissingCntMetrics = entry.getValue();
@@ -75,9 +77,9 @@ public class SojMetricsAgg implements AggregateFunction<RawEventMetrics, SojMetr
         }
     }
 
-    private void addTagSumMetrics(RawEventMetrics rawEventMetrics, SojMetrics sojMetrics) {
+    private void addTagSumMetrics(SojMetrics inputSojMetrics, SojMetrics sojMetrics) {
         for (Entry<String, TagSumMetrics> entry
-                : rawEventMetrics.getTagSumMetricsMap().entrySet()) {
+                : inputSojMetrics.getTagSumMetricsMap().entrySet()) {
             String metricKey = entry.getKey();
             TagSumMetrics tagSumMetrics = entry.getValue();
             if (sojMetrics.getTagSumMetricsMap().containsKey(metricKey)) {
@@ -110,9 +112,9 @@ public class SojMetricsAgg implements AggregateFunction<RawEventMetrics, SojMetr
         }
     }
 
-    private void addPageCntMetrics(RawEventMetrics rawEventMetrics, SojMetrics sojMetrics) {
+    private void addPageCntMetrics(SojMetrics inputSojMetrics, SojMetrics sojMetrics) {
         for (Entry<String, PageCntMetrics> entry
-                : rawEventMetrics.getPageCntMetricsMap().entrySet()) {
+                : inputSojMetrics.getPageCntMetricsMap().entrySet()) {
             String metricKey = entry.getKey();
             PageCntMetrics pageCntMetrics = entry.getValue();
             if (sojMetrics.getPageCntMetricsMap().containsKey(metricKey)) {
@@ -145,10 +147,10 @@ public class SojMetricsAgg implements AggregateFunction<RawEventMetrics, SojMetr
         }
     }
 
-    private void addTransformErrorCntMetrics(RawEventMetrics rawEventMetrics,
+    private void addTransformErrorCntMetrics(SojMetrics inputSojMetrics,
                                              SojMetrics sojMetrics) {
         for (Entry<String, TransformErrorMetrics> entry
-                : rawEventMetrics.getTransformErrorMetricsMap().entrySet()) {
+                : inputSojMetrics.getTransformErrorMetricsMap().entrySet()) {
             String metricKey = entry.getKey();
             TransformErrorMetrics transformErrorMetrics = entry.getValue();
             if (sojMetrics.getTransformErrorMetricsMap().containsKey(metricKey)) {
@@ -184,26 +186,25 @@ public class SojMetricsAgg implements AggregateFunction<RawEventMetrics, SojMetr
         }
     }
 
-
-    private void addTotalCntMetrics(RawEventMetrics rawEventMetrics, SojMetrics sojMetrics) {
+    private void addTotalCntMetrics(SojMetrics inputSojMetrics, SojMetrics sojMetrics) {
         for (Entry<String, TotalCntMetrics> entry
-                : rawEventMetrics.getTotalCntMetricsMap().entrySet()) {
+                : inputSojMetrics.getTotalCntMetricsMap().entrySet()) {
             String metricKey = entry.getKey();
             TotalCntMetrics totalCntMetrics = entry.getValue();
             if (sojMetrics.getTotalCntMetricsMap().containsKey(metricKey)) {
-                Map<String, Long> sojDomainTotalCntMap
+                Map<String, Long> sojDomainPageCntMap
                         = sojMetrics.getTotalCntMetricsMap()
                         .get(metricKey).getTotalCntMap();
                 Map<String, Long> domainTotalCntMap = totalCntMetrics.getTotalCntMap();
                 for (Entry<String, Long> domainTotalCntEntry
                         : domainTotalCntMap.entrySet()) {
                     String domain = domainTotalCntEntry.getKey();
-                    if (sojDomainTotalCntMap.containsKey(domain)) {
+                    if (sojDomainPageCntMap.containsKey(domain)) {
                         Long totalCnt = domainTotalCntEntry.getValue();
-                        Long sojTotalCnt = sojDomainTotalCntMap.get(domain);
-                        sojDomainTotalCntMap.put(domain, totalCnt + sojTotalCnt);
+                        Long sojTotalCnt = sojDomainPageCntMap.get(domain);
+                        sojDomainPageCntMap.put(domain,totalCnt+sojTotalCnt);
                     } else {
-                        sojDomainTotalCntMap.put(domain, domainTotalCntEntry.getValue());
+                        sojDomainPageCntMap.put(domain, domainTotalCntEntry.getValue());
                     }
                 }
             } else {

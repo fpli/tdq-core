@@ -9,7 +9,8 @@ public enum MetricType {
     TAG_MISS_CNT(1, "Tag miss count"),
     TAG_SUM(2, "Tag sum"),
     PAGE_CNT(3, "Page count"),
-    TRANSFORM_ERROR(4, "Transform error");
+    TRANSFORM_ERROR(4, "Transform error"),
+    TOTAL_CNT(5, "Total cnt");
 
     private final int id;
     private final String desc;

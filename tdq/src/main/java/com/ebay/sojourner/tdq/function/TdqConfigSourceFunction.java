@@ -84,10 +84,22 @@ public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping
                         "        \"updatedBy\": \"xiaoding\",\n" +
                         "        \"createTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"updateTime\": \"2021-02-08T07:53:49\",\n" +
-                        "        \"metricName\":\"Transformation_Error_Rate \",\n" +
+                        "        \"metricName\":\"Transformation_Error_Rate\",\n" +
                         "        \"metricType\":\"TRANSFORM_ERROR\",\n" +
                         "        \"pageFamilys\":[],\n" +
                         "        \"tags\":[\"u-Long\"],\n" +
+                        "        \"pageIds\": [],\n" +
+                        "        \"env\": \"prod\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "        \"createdBy\": \"xiaoding\",\n" +
+                        "        \"updatedBy\": \"xiaoding\",\n" +
+                        "        \"createTime\": \"2021-02-08T07:53:49\",\n" +
+                        "        \"updateTime\": \"2021-02-08T07:53:49\",\n" +
+                        "        \"metricName\":\"TOTAL_CNT\",\n" +
+                        "        \"metricType\":\"TOTAL_CNT\",\n" +
+                        "        \"pageFamilys\":[],\n" +
+                        "        \"tags\":[],\n" +
                         "        \"pageIds\": [],\n" +
                         "        \"env\": \"prod\"\n" +
                         "    }\n" +
@@ -98,7 +110,6 @@ public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping
                                 .forType(new TypeReference<List<TdqConfigMapping>>() {})
                             .readValue(responseResult);// test in local
                 //                                .readValue(response.body().string());
-
                 for (TdqConfigMapping mapping : tdqConfigMappings) {
                     ctx.collectWithTimestamp(mapping,System.currentTimeMillis());
                 }

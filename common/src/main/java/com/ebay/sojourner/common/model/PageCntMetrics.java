@@ -11,8 +11,6 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class PageCntMetrics implements Serializable {
-    private MetricType metricType;
-    private String metricName;
-    private Map<String,Map<Integer,Long>> pageCntMap = new HashMap<>();
+public class PageCntMetrics extends TdqMetrics implements Serializable {
+    private Map<String, Map<Integer, Long>> pageCntMap = new HashMap<>();
 }

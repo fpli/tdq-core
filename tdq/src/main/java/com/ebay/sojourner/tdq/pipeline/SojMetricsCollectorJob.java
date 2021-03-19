@@ -1,19 +1,14 @@
 package com.ebay.sojourner.tdq.pipeline;
 
-import com.ebay.sojourner.common.model.RawEvent;
-import com.ebay.sojourner.common.model.RawEventMetrics;
-import com.ebay.sojourner.common.model.SojMetrics;
-import com.ebay.sojourner.common.model.TdqConfigMapping;
+import com.ebay.sojourner.common.model.*;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.FlinkEnvUtils;
+import com.ebay.sojourner.flink.common.OutputTagConstants;
 import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.flink.connector.kafka.schema.RawEventDeserializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.RawEventKafkaDeserializationSchemaWrapper;
 import com.ebay.sojourner.tdq.broadcast.RawEventProcessFunction;
-import com.ebay.sojourner.tdq.function.EmptyMetricFilterFunction;
-import com.ebay.sojourner.tdq.function.SojMetricsAgg;
-import com.ebay.sojourner.tdq.function.SojMetricsProcessWindowFunction;
-import com.ebay.sojourner.tdq.function.TdqConfigSourceFunction;
+import com.ebay.sojourner.tdq.function.*;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
@@ -21,6 +16,7 @@ import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -124,15 +120,8 @@ public class SojMetricsCollectorJob {
                         .uid(CONNECTOR_OP_UID)
                         .slotSharingGroup(Property.TDQ_NORMALIZER_SLOT_SHARE_GROUP)
                         .setParallelism(getInteger(Property.TDQ_NORMALIZER_PARALLELISM));
-        DataStream<RawEventMetrics> filteredRawEventMetricsDataStream = rawEventMetricDataStream
-                .filter(new EmptyMetricFilterFunction())
-                .setParallelism(getInteger(Property.TDQ_NORMALIZER_PARALLELISM))
-                .slotSharingGroup(Property.TDQ_NORMALIZER_SLOT_SHARE_GROUP)
-                .name(FILTER_OP_NAME) //add opensession filter name
-                .uid(FILTER_OP_UID) //add opensession filter uid;
-                ;
-        DataStream<SojMetrics> sojMetricsCollectorDataStream =
-                filteredRawEventMetricsDataStream
+        SingleOutputStreamOperator<SojMetrics> sojMetricsCollectorDataStream =
+                rawEventMetricDataStream
                         .keyBy("guid")
                         .window(TumblingEventTimeWindows.of(Time.minutes(5)))
                         .aggregate(new SojMetricsAgg(), new SojMetricsProcessWindowFunction())
@@ -140,6 +129,70 @@ public class SojMetricsCollectorJob {
                         .slotSharingGroup(Property.METRICS_COLLECTOR_SLOT_SHARE_GROUP)
                         .name("sojourner metrics collector")
                         .uid("sojourner-metrics-collector");
+        SingleOutputStreamOperator<SojMetrics> sojMetricsCollectorDataStreamPostAgg
+                = sojMetricsCollectorDataStream.keyBy("taskIndex","eventTime")
+                .window(TumblingEventTimeWindows.of(Time.minutes(1)))
+                .aggregate(new SojMetricsSplitAgg(), new SojMetricsSplitProcessWindowFunction())
+                .setParallelism(getInteger(Property.METRIICS_COLLECTOR_PARALLELISM))
+                .slotSharingGroup(Property.METRICS_COLLECTOR_SLOT_SHARE_GROUP)
+                .name("sojourner metrics collector post agg")
+                .uid("sojourner-metrics-collector-post-agg");
+        DataStream<TagMissingCntMetrics> tagMissingCntMetricsDataStream
+                = sojMetricsCollectorDataStreamPostAgg.getSideOutput(
+                OutputTagConstants.TAG_MISSING_CNT_METRICS_OUTPUT_TAG);
+        DataStream<TagSumMetrics> tagSumMetricsDataStream = sojMetricsCollectorDataStreamPostAgg
+                .getSideOutput(OutputTagConstants.TAG_SUM_METRICS_OUTPUT_TAG);
+        DataStream<PageCntMetrics> pageCntMetricsDataStream = sojMetricsCollectorDataStreamPostAgg
+                .getSideOutput(OutputTagConstants.PAGE_CNT_METRICS_OUTPUT_TAG);
+        DataStream<TransformErrorMetrics> transformErrorMetricsDataStream
+                = sojMetricsCollectorDataStreamPostAgg.getSideOutput(
+                OutputTagConstants.TRANSFORM_ERROR_METRICS_OUTPUT_TAG);
+        DataStream<TotalCntMetrics> totalCntMetricsDataStream
+                = sojMetricsCollectorDataStreamPostAgg.getSideOutput(
+                OutputTagConstants.TOTAL_CNT_METRICS_OUTPUT_TAG);
+        tagMissingCntMetricsDataStream.keyBy("metricName", "eventTime")
+                .window(TumblingEventTimeWindows.of(Time.minutes(1)))
+                .aggregate(new SojMetricsPostAgg<TagMissingCntMetrics>(TagMissingCntMetrics.class),
+                        new SojMetricsFinalProcessWindowFunction<TagMissingCntMetrics>())
+                .setParallelism(getInteger(Property.METRIICS_COLLECTOR_FINAL_PARALLELISM))
+                .slotSharingGroup(Property.METRICS_COLLECTOR_FINAL_SLOT_SHARE_GROUP)
+                .name("sojourner tag missing cnt metrics collector")
+                .uid("sojourner-tag-missing-cnt-metrics-collector");
+        tagSumMetricsDataStream.keyBy("metricName", "eventTime")
+                .window(TumblingEventTimeWindows.of(Time.minutes(1)))
+                .aggregate(new SojMetricsPostAgg<TagSumMetrics>(TagSumMetrics.class),
+                        new SojMetricsFinalProcessWindowFunction<TagSumMetrics>())
+                .setParallelism(getInteger(Property.METRIICS_COLLECTOR_FINAL_PARALLELISM))
+                .slotSharingGroup(Property.METRICS_COLLECTOR_FINAL_SLOT_SHARE_GROUP)
+                .name("sojourner tag sum metrics collector")
+                .uid("sojourner-tag-sum-metrics-collector");
+        pageCntMetricsDataStream.keyBy("metricName", "eventTime")
+                .window(TumblingEventTimeWindows.of(Time.minutes(1)))
+                .aggregate(new SojMetricsPostAgg<PageCntMetrics>(PageCntMetrics.class),
+                        new SojMetricsFinalProcessWindowFunction<PageCntMetrics>())
+                .setParallelism(getInteger(Property.METRIICS_COLLECTOR_FINAL_PARALLELISM))
+                .slotSharingGroup(Property.METRICS_COLLECTOR_FINAL_SLOT_SHARE_GROUP)
+                .name("sojourner page cnt metrics collector")
+                .uid("sojourner-page-cnt-metrics-collector");
+        transformErrorMetricsDataStream.keyBy("metricName", "eventTime")
+                .window(TumblingEventTimeWindows.of(Time.minutes(1)))
+                .aggregate(
+                        new SojMetricsPostAgg<TransformErrorMetrics>(TransformErrorMetrics.class),
+                        new SojMetricsFinalProcessWindowFunction<TransformErrorMetrics>())
+                .setParallelism(getInteger(Property.METRIICS_COLLECTOR_FINAL_PARALLELISM))
+                .slotSharingGroup(Property.METRICS_COLLECTOR_FINAL_SLOT_SHARE_GROUP)
+                .name("sojourner tansform error cnt metrics collector")
+                .uid("sojourner-tansform-error-cnt-metrics-collector");
+
+        totalCntMetricsDataStream.keyBy( "eventTime")
+                .window(TumblingEventTimeWindows.of(Time.minutes(1)))
+                .aggregate(
+                        new SojMetricsPostAgg<TotalCntMetrics>(TotalCntMetrics.class),
+                        new SojMetricsFinalProcessWindowFunction<TotalCntMetrics>())
+                .setParallelism(getInteger(Property.METRIICS_COLLECTOR_FINAL_PARALLELISM))
+                .slotSharingGroup(Property.METRICS_COLLECTOR_FINAL_SLOT_SHARE_GROUP)
+                .name("sojourner total cnt metrics collector")
+                .uid("sojourner-total-cnt-metrics-collector");
         // Submit this job
         FlinkEnvUtils.execute(executionEnvironment, getString(Property.FLINK_APP_NAME));
     }
