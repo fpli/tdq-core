@@ -50,8 +50,8 @@ public class SojUtils {
         sojEvent.setGuid(ubiEvent.getGuid());
         sojEvent.setAppId(ubiEvent.getAppId() == null ? null :
                 String.valueOf(ubiEvent.getAppId()));
-        sojEvent.setApplicationPayload(PropertyUtils.stringToMap(ubiEvent.getApplicationPayload(),
-                false));
+        sojEvent.setApplicationPayload(
+            PropertyUtils.stringToMap(ubiEvent.getApplicationPayload(), false));
         sojEvent.setAppVersion(ubiEvent.getAppVersion());
         sojEvent.setBotFlags(new ArrayList<>(ubiEvent.getBotFlags()));
         sojEvent.setClientData(
