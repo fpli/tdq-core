@@ -1,9 +1,12 @@
 package com.ebay.sojourner.tdq.function;
 
+import com.ebay.sojourner.common.model.PageIdTopicMapping;
 import com.ebay.sojourner.common.model.TdqConfigMapping;
+import com.ebay.sojourner.common.model.TopicPageIdMapping;
 import com.ebay.sojourner.common.util.RestClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import org.apache.flink.configuration.Configuration;
@@ -34,7 +37,7 @@ public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping
             try {
                 Response response = restClient.get(
                         "/api/custom_topic_config/list/topic_page_ids?env=" + env);
-                String responseResult="[\n" +
+                String responseResult = "[\n" +
                         "    {\n" +
                         "        \"createdBy\": \"xiaoding\",\n" +
                         "        \"updatedBy\": \"xiaoding\",\n" +
@@ -119,11 +122,12 @@ public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping
                 List<TdqConfigMapping> tdqConfigMappings =
                         objectMapper
                                 .reader()
-                                .forType(new TypeReference<List<TdqConfigMapping>>() {})
-                            .readValue(responseResult);// test in local
+                                .forType(new TypeReference<List<TdqConfigMapping>>() {
+                                })
+                                .readValue(responseResult);// test in local
                 //                                .readValue(response.body().string());
                 for (TdqConfigMapping mapping : tdqConfigMappings) {
-                    ctx.collectWithTimestamp(mapping,System.currentTimeMillis());
+                    ctx.collectWithTimestamp(mapping, System.currentTimeMillis());
                 }
             } catch (Exception e) {
                 log.error("Error when calling rest api");
@@ -131,7 +135,7 @@ public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping
 
             Thread.sleep(interval);
             Date currentDate = Calendar.getInstance().getTime();
-            if((currentDate.getHours()%2)==0&&(currentDate.getMinutes()%60)==26){
+            if ((currentDate.getHours() % 2) == 0 && (currentDate.getMinutes() % 60) == 26) {
                 throw new Exception("need to restart application");
             }
         }

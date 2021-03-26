@@ -10,12 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-
 @Slf4j
 public class SojUtils {
-
     private static final String SPLIT_DEL = "\\|";
-
     public static boolean isRover3084Click(UbiEvent event) {
         if (event.getPageId() == -1) {
             return false;
@@ -53,18 +50,20 @@ public class SojUtils {
     public static SojEvent convertUbiEvent2SojEvent(UbiEvent ubiEvent) {
         SojEvent sojEvent = new SojEvent();
         sojEvent.setGuid(ubiEvent.getGuid());
-        sojEvent.setAppId(ubiEvent.getAppId() == null ? null : String.valueOf(ubiEvent.getAppId()));
-        sojEvent.setApplicationPayload(PropertyUtils.stringToMap(ubiEvent.getApplicationPayload(),
-                false));
+        sojEvent.setAppId(ubiEvent.getAppId() == null ? null :
+                String.valueOf(ubiEvent.getAppId()));
+        sojEvent.setApplicationPayload(
+            PropertyUtils.stringToMap(ubiEvent.getApplicationPayload(), false));
         sojEvent.setAppVersion(ubiEvent.getAppVersion());
         sojEvent.setBotFlags(new ArrayList<>(ubiEvent.getBotFlags()));
         sojEvent.setClientData(
                 ubiEvent.getClientData() == null ? null :
-                        PropertyUtils.stringToMap(ubiEvent.getClientData().toString(), true));
+                        PropertyUtils.stringToMap(
+                                ubiEvent.getClientData().toString(), true));
         sojEvent.setBrowserFamily(ubiEvent.getBrowserFamily());
         sojEvent.setBrowserVersion(ubiEvent.getBrowserVersion());
-        sojEvent.setClickId(ubiEvent.getClickId() == -1 ? null
-                : String.valueOf(ubiEvent.getClickId()));
+        sojEvent.setClickId(ubiEvent.getClickId() == -1 ? null :
+                String.valueOf(ubiEvent.getClickId()));
         sojEvent.setClientIP(ubiEvent.getClientIP());
         sojEvent.setCobrand(String.valueOf(ubiEvent.getCobrand()));
         sojEvent.setCookies(ubiEvent.getCookies());
@@ -124,6 +123,13 @@ public class SojUtils {
         sojEvent.setUserId(ubiEvent.getUserId());
         sojEvent.setVersion(ubiEvent.getVersion());
         sojEvent.setWebServer(ubiEvent.getWebServer());
+        sojEvent.setRv(ubiEvent.isRv());
+        sojEvent.setBot(RulePriorityUtils.getHighPriorityBotFlag(ubiEvent.getBotFlags()));
+        if (sojEvent.getApplicationPayload() != null
+            && StringUtils.isNotBlank(sojEvent.getApplicationPayload().get("ciid"))
+            && !sojEvent.getApplicationPayload().get("ciid").equals("null")) {
+            sojEvent.setCiid(sojEvent.getApplicationPayload().get("ciid"));
+        }
         return sojEvent;
     }
 

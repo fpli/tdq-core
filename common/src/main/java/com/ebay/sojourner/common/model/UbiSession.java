@@ -145,7 +145,7 @@ public class UbiSession implements Serializable, Cloneable {
   private int pageIdForUAIP = Integer.MAX_VALUE;
   private int hashCode = Integer.MAX_VALUE;
   private Map<Integer,Long> clickWithStamp = new LinkedHashMap<>();
-  private Map<Integer,Long> rdtClickWithStamp = new LinkedHashMap<>();
+  // private Map<Integer,Long> rdtClickWithStamp = new LinkedHashMap<>();
   public UbiSession() {
     //        this.distinctClickIdSet = new HashSet<Integer>();
     //        this.agentSets= new HashSet<String>();
@@ -224,6 +224,20 @@ public class UbiSession implements Serializable, Cloneable {
         .getAbsEndTimestamp()) {
       this.setAbsEndTimestamp(ubiSession.getAbsEndTimestamp());
 
+    }
+
+    if (clickWithStamp != null && clickWithStamp.size() > 0) {
+      for (Map.Entry<Integer, Long> entry : clickWithStamp.entrySet()) {
+        int clickId = entry.getKey();
+        long lastEventTimestamp = entry.getValue();
+        if (ubiSession.getClickWithStamp() != null &&
+            ubiSession.getClickWithStamp().size() > 0) {
+          if (ubiSession.getClickWithStamp().get(clickId) != null &&
+              ubiSession.getClickWithStamp().get(clickId) > lastEventTimestamp) {
+            clickWithStamp.put(clickId, ubiSession.getClickWithStamp().get(clickId));
+          }
+        }
+      }
     }
 
     return this;

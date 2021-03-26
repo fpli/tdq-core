@@ -14,11 +14,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -113,7 +110,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             Set<Integer> pageIdSetMid = new CopyOnWriteArraySet<>();
             String pageIds = getLkpFileContent(property);
-            if (StringUtils.isBlank(pageIds)) {
+            if (pageIds == null || pageIds.equals("")) {
                 return;
             }
             for (String pageId : pageIds.split(LKP_RECORD_DELIMITER)) {
@@ -133,7 +130,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             Map<String, Boolean> selectedIpsMid = new ConcurrentHashMap<>();
             String fileContent = getLkpFileContent(property);
-            if (StringUtils.isBlank(fileContent)) {
+            if (fileContent == null || fileContent.equals("")) {
                 return;
             }
             for (String record : fileContent.split(TEXT_RECORD_DELIMITER)) {
@@ -160,7 +157,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             Set<String> selectedAgentsMid = new CopyOnWriteArraySet<>();
             String fileContent = getLkpFileContent(property);
-            if (StringUtils.isBlank(fileContent)) {
+            if (fileContent == null || fileContent.equals("")) {
                 return;
             }
             for (String record : fileContent.split(TEXT_RECORD_DELIMITER)) {
@@ -199,7 +196,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             Set<String> largeSessionGuidSetMid = new CopyOnWriteArraySet<>();
             String largeSessionGuids = getLkpFileContent(property);
-            if (StringUtils.isBlank(largeSessionGuids)) {
+            if (largeSessionGuids == null || largeSessionGuids.equals("")) {
                 return;
             }
             for (String guid : largeSessionGuids.split(LKP_FILED_DELIMITER)) {
@@ -217,7 +214,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             List<String> iabAgentRegsMid = new CopyOnWriteArrayList<>();
             String iabAgentRegValue = getLkpFileContent(property);
-            if (StringUtils.isBlank(iabAgentRegValue)) {
+            if (iabAgentRegValue == null || iabAgentRegValue.equals("")) {
                 return;
             }
             for (String iabAgent : iabAgentRegValue.split(LKP_RECORD_DELIMITER)) {
@@ -233,7 +230,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             Map<Integer, Integer> findingFlagMapMid = new ConcurrentHashMap<>();
             String findingFlags = getLkpFileContent(property);
-            if (StringUtils.isBlank(findingFlags)) {
+            if (findingFlags == null || findingFlags.equals("")) {
                 return;
             }
             for (String pageFlag : findingFlags.split(LKP_RECORD_DELIMITER)) {
@@ -260,7 +257,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             Map<Integer, Integer[]> vtNewIdsMapMid = new ConcurrentHashMap<>();
             String vtNewIdsValue = getLkpFileContent(property);
-            if (StringUtils.isBlank(vtNewIdsValue)) {
+            if (vtNewIdsValue == null || vtNewIdsValue.equals("")) {
                 return;
             }
             for (String vtNewId : vtNewIdsValue.split(LKP_RECORD_DELIMITER)) {
@@ -282,7 +279,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             Set<String> appIdWithBotFlagsMid = new CopyOnWriteArraySet<>();
             String appIdAndFlags = getLkpFileContent(property);
-            if (StringUtils.isBlank(appIdAndFlags)) {
+            if (appIdAndFlags == null || appIdAndFlags.equals("")) {
                 return;
             }
             String[] appIdFlagPair = appIdAndFlags.split(LKP_RECORD_DELIMITER);
@@ -301,7 +298,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             Map<Integer, String[]> pageFmlyMapMid = new ConcurrentHashMap<>();
             String pageFmlysValue = getLkpFileContent(property);
-            if (StringUtils.isBlank(pageFmlysValue)) {
+            if (pageFmlysValue == null || pageFmlysValue.equals("")) {
                 return;
             }
             for (String pageFmlyPair : pageFmlysValue.split(LKP_RECORD_DELIMITER)) {

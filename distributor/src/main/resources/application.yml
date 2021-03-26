@@ -5,7 +5,7 @@ flink:
       source: 200
       sink-kafka: 200
     checkpoint:
-      data-dir: /opt/sojourner-distributor/checkpoint
+      data-dir: /opt/flink/sojourner/distributor/checkpoint
       interval-ms: 300000
       timeout-ms: 900000
       min-pause-between-ms: 120000
@@ -13,10 +13,12 @@ flink:
       tolerate-failure-number: 3
     source:
       dc: rno
+      operator-name: Non-bot SojEvent Source
       from-timestamp: 0
       out-of-orderless-in-min: 0
     sink:
       dc: rno
+      operator-name: Non-bot SojEvent Sink
       kafka:
         topic: behavior.pulsar.sojevent.deadletter
 
@@ -86,8 +88,8 @@ rheos:
       env: production
 
 rest-client:
-  base-url: https://sojubdportalservice.vip.ebay.com
+  base-url: https://sojsvc.vip.ebay.com
   username: soj-flink-app
   config:
     pull-interval: 30000
-    env: prod
+    profile: prod

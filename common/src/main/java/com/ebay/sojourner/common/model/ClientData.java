@@ -147,6 +147,22 @@ public class ClientData {
       String tagValue = PropertyUtils.encodeValue(referrer);
       clientInfo.append("Referer=").append(tagValue);
     }
+
+    if (corrId != null && !corrId.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      String tagValue = PropertyUtils.encodeValue(corrId);
+      clientInfo.append("corrId=").append(tagValue);
+    }
+
+    if (nodeId != null && !nodeId.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      String tagValue = PropertyUtils.encodeValue(nodeId);
+      clientInfo.append("nodeId=").append(tagValue);
+    }
     return clientInfo.toString();
   }
 

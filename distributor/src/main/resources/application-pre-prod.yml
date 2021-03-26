@@ -2,8 +2,8 @@ flink:
   app:
     name: Sojourner Distributor - PRE PROD
     parallelism:
-      source: 140
-      sink-kafka: 140
+      source: 200
+      sink-kafka: 200
     source:
       dc: rno
     sink:
@@ -37,4 +37,4 @@ kafka:
 
 rest-client:
   config:
-    env: pre-prod
+    profile: pre-prod

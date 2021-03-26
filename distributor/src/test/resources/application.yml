@@ -86,7 +86,7 @@ rheos:
       env: production
 
 rest-client:
-  base-url: https://sojubdportalservice.vip.ebay.com
+  base-url: https://sojsvc.vip.ebay.com
   username: soj-flink-app
   config:
     pull-interval: 30000

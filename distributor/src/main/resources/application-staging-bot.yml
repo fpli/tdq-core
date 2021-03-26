@@ -18,7 +18,7 @@ kafka:
     stream: behavior.trafficjam
     group-id: sojourner-distributor-staging
     topic:
-      - behavior.trafficjam.event
+      - behavior.trafficjam.event.bot
     bootstrap-servers:
       lvs:
         - rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092
@@ -51,4 +51,4 @@ rest-client:
   username: soj-flink-app
   config:
     pull-interval: 15000
-    profile: staging
+    profile: staging-bot
