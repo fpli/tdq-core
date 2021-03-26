@@ -157,6 +157,19 @@ public class SojMetricsPostAgg<T extends TdqMetrics> implements AggregateFunctio
                 sojDomainTotalCntMap.put(domain, domainTotalCntEntry.getValue());
             }
         }
+        Map<String, Long> domainTotalCntItmMap = totalCntMetrics.getTotalCntItmMap();
+        Map<String, Long> sojDomainTotalCntItmMap = accTotalCntMetrics.getTotalCntItmMap();
+        for (Entry<String, Long> domainTotalCntItmEntry
+                : domainTotalCntItmMap.entrySet()) {
+            String domain = domainTotalCntItmEntry.getKey();
+            if (sojDomainTotalCntItmMap.containsKey(domain)) {
+                Long totalCnt = domainTotalCntItmEntry.getValue();
+                Long sojTotalCnt = sojDomainTotalCntItmMap.get(domain);
+                sojDomainTotalCntItmMap.put(domain, totalCnt + sojTotalCnt);
+            } else {
+                sojDomainTotalCntItmMap.put(domain, domainTotalCntItmEntry.getValue());
+            }
+        }
     }
 
     private void addTransformErrorCntMetrics(TransformErrorMetrics transformErrorMetrics,

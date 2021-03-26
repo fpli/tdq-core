@@ -207,6 +207,21 @@ public class SojMetricsSplitAgg implements AggregateFunction<SojMetrics, SojMetr
                         sojDomainPageCntMap.put(domain, domainTotalCntEntry.getValue());
                     }
                 }
+                Map<String, Long> sojDomainPageCntItmMap
+                        = sojMetrics.getTotalCntMetricsMap()
+                        .get(metricKey).getTotalCntItmMap();
+                Map<String, Long> domainTotalCntItmMap = totalCntMetrics.getTotalCntItmMap();
+                for (Entry<String, Long> domainTotalCntItmEntry
+                        : domainTotalCntItmMap.entrySet()) {
+                    String domain = domainTotalCntItmEntry.getKey();
+                    if (sojDomainPageCntItmMap.containsKey(domain)) {
+                        Long totalCnt = domainTotalCntItmEntry.getValue();
+                        Long sojTotalCnt = sojDomainPageCntItmMap.get(domain);
+                        sojDomainPageCntItmMap.put(domain,totalCnt+sojTotalCnt);
+                    } else {
+                        sojDomainPageCntItmMap.put(domain, domainTotalCntItmEntry.getValue());
+                    }
+                }
             } else {
                 sojMetrics.getTotalCntMetricsMap().put(metricKey, totalCntMetrics);
             }

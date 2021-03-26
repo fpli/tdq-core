@@ -55,8 +55,13 @@ public class Constants {
   public static final String TAG_SUM_METRICS = "sum";
   public static final String PAGE_CNT_METRICS = "cnt";
   public static final String TOTAL_CNT_METRICS = "total_cnt";
+  public static final String TOTAL_CNT_ITM_METRICS = "total_itm_cnt";
   public static final String TRANSFORM_ERROR_METRICS = "tansform_error_cnt";
   public static final String SOJ_EVENT_TIME = "event_time";
+  public static final String SOJ_METRICS_TOTAL = "total";
+  public static final String SOJ_METRICS_TOTAL_ITM = "total_itm";
+  public static final String SOJ_METRICS_TOTAL_TYPE = "total_type";
+
   // flied delimiter
   public static final String FIELD_DELIM = "\007";
   public static final String DOMAIN_DEL="-";
@@ -112,6 +117,10 @@ public class Constants {
       .asList( "TPayload");
 
   public static final int DEFAULT_PAGE_ID = -1;
+
+  //exclude pageFamillies
+  public static final List<String> EXCLUDE_PAGE_FAMILY = Arrays
+          .asList("VI", "XO", "CART", "BINFLOW");
 
 }
 

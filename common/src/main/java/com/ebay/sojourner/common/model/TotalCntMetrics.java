@@ -13,4 +13,5 @@ import java.util.Map;
 @Data
 public class TotalCntMetrics extends TdqMetrics implements Serializable {
     private Map<String, Long> totalCntMap= new HashMap<>();
+    private Map<String, Long> totalCntItmMap= new HashMap<>();
 }

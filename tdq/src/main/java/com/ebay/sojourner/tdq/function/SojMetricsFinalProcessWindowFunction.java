@@ -174,7 +174,7 @@ public class SojMetricsFinalProcessWindowFunction<T extends TdqMetrics> extends
             String[] domainList = domain.split(Constants.DOMAIN_DEL);
             Long totalCnt = domainTotalCntEntry.getValue();
             StringBuilder sb = new StringBuilder(Constants.SOJ_METRICS_GROUP)
-                    .append(metricKey).append(domain)
+                    .append(metricKey).append(domain).append(Constants.SOJ_METRICS_TOTAL)
                     .append(totalCntMetrics.getEventTime());
             if (!domainMetricValueMap.containsKey(sb.toString())) {
                 domainMetricValueMap.put(sb.toString(), totalCnt);
@@ -189,6 +189,37 @@ public class SojMetricsFinalProcessWindowFunction<T extends TdqMetrics> extends
                         .addGroup(Constants.SOJ_EVENT_TIME,
                                 String.valueOf(totalCntMetrics.getEventTime()))
                         .gauge(Constants.TOTAL_CNT_METRICS,
+                                new SojMetricsGauge(domainMetricValueMap,
+                                        sb.toString()));
+                domainMetricGuageMap.put(sb.toString(), gauge);
+
+            } else {
+                domainMetricValueMap.put(sb.toString(), totalCnt);
+            }
+        }
+
+        Map<String, Long> domainTotalCntItmMap = totalCntMetrics.getTotalCntItmMap();
+        for (Entry<String, Long> domainTotalCntItmEntry :
+                domainTotalCntItmMap.entrySet()) {
+            String domain = domainTotalCntItmEntry.getKey();
+            String[] domainList = domain.split(Constants.DOMAIN_DEL);
+            Long totalCnt = domainTotalCntItmEntry.getValue();
+            StringBuilder sb = new StringBuilder(Constants.SOJ_METRICS_GROUP)
+                    .append(metricKey).append(domain).append(Constants.SOJ_METRICS_TOTAL_ITM)
+                    .append(totalCntMetrics.getEventTime());
+            if (!domainMetricValueMap.containsKey(sb.toString())) {
+                domainMetricValueMap.put(sb.toString(), totalCnt);
+                Gauge gauge = getRuntimeContext()
+                        .getMetricGroup().addGroup(Constants.SOJ_METRICS_GROUP)
+                        .addGroup(Constants.SOJ_METRIC_TYPE,
+                                totalCntMetrics.getMetricType().toString())
+                        .addGroup(Constants.SOJ_METRIC_NAME,
+                                totalCntMetrics.getMetricName())
+                        .addGroup(Constants.SOJ_PGAE_FAMILY, domainList[0])
+                        .addGroup(Constants.SOJ_SITE_ID, domainList[1])
+                        .addGroup(Constants.SOJ_EVENT_TIME,
+                                String.valueOf(totalCntMetrics.getEventTime()))
+                        .gauge(Constants.TOTAL_CNT_ITM_METRICS,
                                 new SojMetricsGauge(domainMetricValueMap,
                                         sb.toString()));
                 domainMetricGuageMap.put(sb.toString(), gauge);

@@ -93,5 +93,7 @@ rest-client:
   config:
     pull-interval: 30000
     env: prod
-
+missing-cnt-exclude:
+  u:
+    - VI
 ua-parser-env: prod

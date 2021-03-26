@@ -87,8 +87,9 @@ public class RawEventProcessFunction extends
         Integer siteId = SojUtils.getSiteId(rawEvent);
         if (pageId != null) {
             String pageFamily = SojUtils.getPageFmly(pageId);
-            if (tdqConfigMapping.getPageFamilys() != null && tdqConfigMapping.getPageFamilys()
-                    .contains(pageFamily)) {
+            boolean ifCountIn = SojUtils.checkIfCountIn(pageId);
+            if (ifCountIn && tdqConfigMapping.getPageFamilys() != null
+                    && tdqConfigMapping.getPageFamilys().contains(pageFamily)) {
                 StringBuilder domain = new StringBuilder(pageFamily).append(Constants.DOMAIN_DEL)
                         .append(siteId == null ? "null" : siteId);
                 Set<String> tags = tdqConfigMapping.getTags();
@@ -99,9 +100,16 @@ public class RawEventProcessFunction extends
                 if (CollectionUtils.isNotEmpty(tags)) {
                     Map<String, Long> tagWithCnt = new HashMap<>();
                     for (String tagName : tags) {
-                        long tagCnt = SojUtils.getTagMissingCnt(rawEvent, tagName);
-                        if (tagCnt != 0) {
-                            tagWithCnt.put(tagName, tagCnt);
+                        if (!"u".equals(tagName)) {
+                            long tagCnt = SojUtils.getTagMissingCnt(rawEvent, tagName);
+                            if (tagCnt != 0) {
+                                tagWithCnt.put(tagName, tagCnt);
+                            }
+                        } else {
+                            long tagCnt = SojUtils.getTagMissingCnt(rawEvent, tagName);
+                            if (tagCnt != 0) {
+                                tagWithCnt.put(tagName, tagCnt);
+                            }
                         }
                     }
                     tagMissingCntMetrics.getTagCntMap().put(domain.toString(), tagWithCnt);
@@ -175,7 +183,7 @@ public class RawEventProcessFunction extends
                 String[] tagKV = tagName.split("-");
                 long cnt = 0L;
                 String tagValue = SojUtils.getTagValueStr(rawEvent, tagKV[0]);
-                if ("u".equals(tagKV[0])) {l
+                if ("u".equals(tagKV[0])) {
                     cnt = SojUtils.checkFormatForU(tagKV[1], tagValue);
                 } else {
                     cnt = SojUtils.checkFormat(tagKV[1], tagValue);
@@ -195,13 +203,17 @@ public class RawEventProcessFunction extends
         if (pageId != null) {
             Integer siteId = SojUtils.getSiteId(rawEvent);
             String pageFamily = SojUtils.getPageFmly(pageId);
+            boolean ifCountIn = SojUtils.checkIfCountIn(pageId);
             StringBuilder domain = new StringBuilder(pageFamily).append(Constants.DOMAIN_DEL)
                     .append(siteId == null ? "null" : siteId);
-            Set<Integer> pageIds = tdqConfigMapping.getPageIds();
             TotalCntMetrics totalCntMetrics = new TotalCntMetrics();
             totalCntMetrics.setMetricName(tdqConfigMapping.getMetricName());
             totalCntMetrics.setMetricType(tdqConfigMapping.getMetricType());
             totalCntMetrics.getTotalCntMap().put(domain.toString(), 1L);
+            if (ifCountIn && tdqConfigMapping.getPageFamilys() != null
+                    && tdqConfigMapping.getPageFamilys().contains(pageFamily)) {
+                totalCntMetrics.getTotalCntItmMap().put(domain.toString(), 1L);
+            }
             rawEventMetrics.getTotalCntMetricsMap().put(metricKey, totalCntMetrics);
         }
     }

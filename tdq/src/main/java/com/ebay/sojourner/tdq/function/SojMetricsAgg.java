@@ -152,7 +152,6 @@ public class SojMetricsAgg implements AggregateFunction<RawEventMetrics, SojMetr
             String metricKey = entry.getKey();
             TransformErrorMetrics transformErrorMetrics = entry.getValue();
             if (sojMetrics.getTransformErrorMetricsMap().containsKey(metricKey)) {
-
                 Map<String, Map<String, Long>> domainTagErrorCntMap
                         = transformErrorMetrics.getTagErrorCntMap();
                 Map<String, Map<String, Long>> sojDomainTagErrorCntMap
@@ -204,6 +203,21 @@ public class SojMetricsAgg implements AggregateFunction<RawEventMetrics, SojMetr
                         sojDomainTotalCntMap.put(domain, totalCnt + sojTotalCnt);
                     } else {
                         sojDomainTotalCntMap.put(domain, domainTotalCntEntry.getValue());
+                    }
+                }
+                Map<String, Long> sojDomainTotalCntItmMap
+                        = sojMetrics.getTotalCntMetricsMap()
+                        .get(metricKey).getTotalCntItmMap();
+                Map<String, Long> domainTotalCntItmMap = totalCntMetrics.getTotalCntItmMap();
+                for (Entry<String, Long> domainTotalCntItmEntry
+                        : domainTotalCntItmMap.entrySet()) {
+                    String domain = domainTotalCntItmEntry.getKey();
+                    if (sojDomainTotalCntItmMap.containsKey(domain)) {
+                        Long totalCnt = domainTotalCntItmEntry.getValue();
+                        Long sojTotalCnt = sojDomainTotalCntItmMap.get(domain);
+                        sojDomainTotalCntItmMap.put(domain, totalCnt + sojTotalCnt);
+                    } else {
+                        sojDomainTotalCntItmMap.put(domain, domainTotalCntItmEntry.getValue());
                     }
                 }
             } else {

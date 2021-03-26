@@ -60,7 +60,7 @@ public class Property {
   public static final String INVALID_BOT_FILTER = "invalid.session.bot.filter";
   public static final String SELECTED_IPS = "selected.ips";
   public static final String SELECTED_AGENTS = "selected.agents";
-
+  public static final String ITM_PAGES = "itm.pages";
   // --------------------- APP PAYLOAD KV Property ---------------------------------
   public static final String SWD_VALUES = "swd.values";
   public static final String ROT_VALUES = "rot.values";
@@ -270,5 +270,8 @@ public class Property {
   public static final String IS_FILTER = "flink.app.data-skew.is-filter";
   public static final String FILTER_GUID_SET = "flink.app.data-skew.guid-set";
   public static final String FILTER_PAGE_ID_SET = "flink.app.data-skew.pageid-set";
+
+  // missing cnt exclude pagefamilies
+  public static final String MISSING_CNT_EXCLUDE = "missing-cnt-exclude.u";
 
 }

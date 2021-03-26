@@ -2,6 +2,7 @@ package com.ebay.sojourner.common.util;
 
 import com.ebay.sojourner.common.model.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -318,15 +319,36 @@ public class SojUtils {
 
     public static String getPageFmly(Integer pageId) {
         if (pageId != null) {
-            Map<String, Set<Integer>> pageFmlyMap = LkpManager.getInstance().getPageFmlyAllMaps();
-            for (Map.Entry<String, Set<Integer>> entry : pageFmlyMap.entrySet()) {
-                if (entry.getValue() != null && entry.getValue().contains(pageId)) {
+            Map<String, Map<Integer, Integer>> pageFmlyMap
+                    = LkpManager.getInstance().getPageFmlyAllMaps();
+            for (Map.Entry<String, Map<Integer, Integer>> entry : pageFmlyMap.entrySet()) {
+                if (MapUtils.isNotEmpty(entry.getValue())
+                        && entry.getValue().containsKey(pageId)) {
                     return entry.getKey();
                 }
             }
         }
         return "null";
     }
+
+    public static boolean checkIfCountIn(Integer pageId) {
+        if (pageId != null) {
+            Map<String, Map<Integer, Integer>> pageFmlyMap
+                    = LkpManager.getInstance().getPageFmlyAllMaps();
+            Set<Integer> itmPages =LkpManager.getInstance().getItmPages();
+            for (Map.Entry<String, Map<Integer, Integer>> entry : pageFmlyMap.entrySet()) {
+                if (itmPages.contains(pageId)&&MapUtils.isNotEmpty(entry.getValue())
+                        && entry.getValue().containsKey(pageId)
+                        && entry.getValue().get(pageId)==0
+                ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
 
     public static long checkFormat(String type, String value) {
         int cnt = 0;

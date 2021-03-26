@@ -9,6 +9,8 @@ import okhttp3.Response;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -98,7 +100,17 @@ public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping
                         "        \"updateTime\": \"2021-02-08T07:53:49\",\n" +
                         "        \"metricName\":\"TOTAL_CNT\",\n" +
                         "        \"metricType\":\"TOTAL_CNT\",\n" +
-                        "        \"pageFamilys\":[],\n" +
+                        "        \"pageFamilys\":[\"ASQ\"\n" +
+                        "           ,\"BID\"\n" +
+                        "           ,\"BIDFLOW\"\n" +
+                        "           ,\"BIN\"\n" +
+                        "           ,\"BINFLOW\"\n" +
+                        "           ,\"CART\"\n" +
+                        "           ,\"OFFER\"\n" +
+                        "           ,\"UNWTCH\"\n" +
+                        "           ,\"VI\"\n" +
+                        "            ,\"WTCH\"\n" +
+                        "            ,\"XO\"],\n" +
                         "        \"tags\":[],\n" +
                         "        \"pageIds\": [],\n" +
                         "        \"env\": \"prod\"\n" +
@@ -118,6 +130,10 @@ public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping
             }
 
             Thread.sleep(interval);
+            Date currentDate = Calendar.getInstance().getTime();
+            if((currentDate.getHours()%2)==0&&(currentDate.getMinutes()%60)==26){
+                throw new Exception("need to restart application");
+            }
         }
     }
 
