@@ -1,0 +1,213 @@
+---
+name: soj-tdq
+rheos:
+  # only support is EventTime, if event time is null, then set system processing time
+  stream.time: EventTime
+  parallelism:
+    default: 50
+    source: 50
+    event: 100
+  checkpoint:
+    data-dir: /opt/sojourner-tdq/checkpoint
+    interval-ms: 300000
+    timeout-ms: 900000
+    min-pause-between-ms: 120000
+    max-concurrent: 1
+    tolerate-failure-number: 3
+
+data.sources:
+  # TODO hard code source, add schema id, RheosEvent to flink row
+  - name: source1 # name is uid
+    connector:
+      type: kafka
+      config:
+        stream: behavior.pathfinder
+        topic:
+          - behavior.pathfinder.events.total
+        group-id: sojourner-tdq
+        bootstrap-servers:
+          rno:
+            - rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
+            - rhs-glrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
+            - rhs-glrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
+            - rhs-glrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
+            - rhs-glrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
+          slc:
+            - rhs-mwsvkiaa-kfk-slc-1.rheos-streaming-prod.svc.45.tess.io:9092
+            - rhs-mwsvkiaa-kfk-slc-2.rheos-streaming-prod.svc.45.tess.io:9092
+            - rhs-mwsvkiaa-kfk-slc-3.rheos-streaming-prod.svc.45.tess.io:9092
+            - rhs-mwsvkiaa-kfk-slc-4.rheos-streaming-prod.svc.45.tess.io:9092
+            - rhs-mwsvkiaa-kfk-slc-5.rheos-streaming-prod.svc.45.tess.io:9092
+          lvs:
+            - rhs-swsvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
+            - rhs-swsvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
+            - rhs-swsvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
+            - rhs-swsvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
+            - rhs-swsvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
+      
+        max-poll-records: 5000
+        # 50MB, default value is 50MB
+        fetch-max-bytes: 52428800
+        # 8MB, default value is 64KB
+        receive-buffer: 8388608
+        fetch-max-wait-ms: 100
+        # 10MB, default value is 1MB
+        max-partitions-fetch-bytes: 10485760
+        auto-offset-reset: latest
+        # TODO hard code RawEvent
+        schema-class: com.ebay.sojourner.flink.connector.kafka.schema.RawEventDeserializationSchema
+      
+        watermark:
+          time.column: eventTimestamp
+          # string and timestamp number
+          from.timestamp: EARLIEST
+          out-of-orderless-in-min: 3
+          idle-source-timeout-in-min: 10
+        # extract:
+        #     - name: tags.u
+        #       type: java.lang.String
+        #     - name: tags.pageFamilies
+        #       alias: pageFamilies
+        #       type: java.lang.String
+      rheos:
+        registry-url: https://rheos-services.stratus.ebay.com
+        client:
+          id: "urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618"
+          iaf:
+            secret: c4bb6fca-7ac5-46dd-b218-a49cb6307dbc
+            env: production
+
+evaluate.rule:
+  rules:
+    - rule.name: TBD
+      dsl.type: flink-sql
+    - rule.name: TBD
+      dsl.type: flink-ds-ops
+      desc: sample|uniqueness
+    - rule.name: TBD
+      dsl.type: tdq-dsl
+      dq.type: sample
+      desc: sample record out|uniqueness complex sql
+      out:
+        - name: TBD
+          type: record
+          sink:
+            - CONSOLESink
+    - rule.name: t2
+      source: source1
+      dsl.type: tdq-dsl
+      dq.type: profiling
+      desc: Guage Metrics
+      window:
+        type: TUMBLE
+        size: 1 HOUR
+      advance:
+        desc: TBD
+        preKeyBy:
+          column.name: guid
+          window:
+            watermark:
+              size: 5 MINUTE
+          out:
+            name: out3
+            type: metric
+            metric.names:
+              - MISS_COUNT
+      details:
+        - metric.name: MISS_COUNT
+          desc: |
+            SELECT
+              pageFamilies, count(1)
+            FROM t
+            WHERE pageFamilies IN ('ASQ', 'BID','BIDFLOW', 'BIN', 'BINFLOW', 'CART', 'OFFER', 'UNWTCH', 'VI', 'WTCH', 'XO')
+            GROUP BY pageFamilies
+          expression: count(1)
+          filter:
+            - column.name: tags.itm
+              type: isNull
+            - column.name: pageFamilies
+              type: enumeration
+              caseInsensitive: true
+              values:
+                - ASQ
+                - BID
+                - BIDFLOW
+                - BIN
+                - BINFLOW
+                - CART
+                - OFFER
+                - UNWTCH
+                - VI
+                - WTCH
+                - XO
+          dimension:
+            - pageFamilies
+        - metric.name: PAGE_ID_COUNT
+          desc: |
+            select pageIds, count(1) from t
+            where pageIds in (2547208, 2483445)
+            group by pageIds
+          expression: count(1)
+          filter:
+            - column.name: pageIds
+              type: enumeration
+              values:
+                - 2547208
+                - 2483445
+          dimension:
+            - pageIds
+        - metric.name: PAGE_ID_COUNT2
+          desc: select count(1) from t where pageIds in (2547208, 2483445)
+          expression: count(1)
+          filter:
+            - column.name: pageIds
+              type: enumeration
+              values:
+                - 2547208
+                - 2483445
+        - metric.name: TAGS_U_VALIDATE_COUNT
+          desc: select count(1) from t where isInteger(tags.u)
+          expression: count(1)
+          filter:
+            - column.name: tags.u
+              type: isInteger
+        - metric.name: DEMO1
+          desc: select count(1) from t where user in (1,2,hive_none,null)
+          expression: count(1)
+          filter:
+            column.name: user
+            type: enumeration
+            values:
+              - '1'
+              - '2'
+              - hive_none
+              - ''
+        - metric.name: DEMO2
+          desc: select count(1) from t where regex(name,'^zhanglei.natur\w{1}$')
+          expression: count(1)
+          filter:
+            column.name: name
+            type: regex
+            values:
+              - "^zhanglei.natur\\w{1}$"
+        - metric.name: EVENT_CAPTURE_PUBLISH_LATENCY
+          desc: select sum(cast(tags.TDuration as Double)) from t
+          expression: sum(td)
+          transformation:
+            - column.name: tags.TDuration
+              alias: td
+              column.type: double
+              expression: parseDouble
+              
+sinks:
+  - name: CONSOLESink
+    type: CONSOLE
+    config:
+      max.log.lines: 100
+  - name: SHERLOCKSink
+    type: SHERLOCK
+    config:
+      - username:
+        password:
+  - name: TBD
+    type: HDFS

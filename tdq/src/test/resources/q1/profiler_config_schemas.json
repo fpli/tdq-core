@@ -1,0 +1,78 @@
+[
+  {
+    "name": "site_id_extract",
+    "type": "udf",
+    "out_type": "String"
+  },
+  {
+    "name": "page_id_extract",
+    "type": "udf",
+    "out_type": "String"
+  },
+  {
+    "name": "page_family_extract",
+    "type": "udf",
+    "out_type": "String"
+  },
+  {
+    "name": "tag_extract",
+    "type": "udf",
+    "out_type": "String",
+    "requiredParams": [
+      {"name": "column", "type": "String"}
+    ]
+  },
+  {
+    "name": "cast",
+    "type": "udf",
+    "out_type": "T",
+    "requiredParams": [
+      {"name": "column", "type": "String"}
+    ]
+  },
+  {
+    "name": "Count",
+    "type": "uadf",
+    "requiredParams": [],
+    "optionalParams": [
+      {"name": "where", "type": "String"}
+    ]
+  },
+  {
+    "name": "Maximum",
+    "requiredParams": [
+      {"name": "column", "type": "String"}
+    ],
+    "optionalParams": [
+      {"name": "where", "type": "String"}
+    ]
+  },
+  {
+    "name": "MaxLength",
+    "requiredParams": [
+      {"name": "column", "type": "String"}
+    ],
+    "optionalParams": [
+      {"name": "where", "type": "String"}
+    ]
+  },
+  {
+    "name": "MinLength",
+    "requiredParams": [
+      {"name": "column", "type": "String"}
+    ],
+    "optionalParams": [
+      {"name": "where", "type": "String"}
+    ]
+  },
+  {
+    "name": "ApproxQuantiles",
+    "requiredParams": [
+      {"name": "column", "type": "String"},
+      {"name": "quantiles", "type": "String"}
+    ],
+    "optionalParams": [
+      {"name": "relativeError", "type": "Double"}
+    ]
+  }
+]

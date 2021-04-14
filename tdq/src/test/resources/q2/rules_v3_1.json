@@ -1,0 +1,76 @@
+{
+  "rules": [
+    {
+      "name": "GLOBAL_MANDATORY_TAG_ITEM_RATE",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "1h"
+      },
+      "profilers": [
+        {
+          "desc": "Global Mandatory Tag - Item Rate",
+          "metric-name": "global_mandatory_tag_item_rate",
+          "expression": {
+            "operator": "itm_valid_cnt / itm_missing_cnt"
+          },
+          "transformation": [
+            {
+              "alias": "itm_missing_cnt",
+              "expression": {
+                "operator": "COUNT"
+              },
+              "filter": "TAG_EXTRACT('itm|itmid|itm_id|itmlist|litm') IS NULL"
+            },
+            {
+              "alias": "itm_valid_cnt",
+              "expression": {
+                "operator": "COUNT"
+              },
+              "filter": "TAG_EXTRACT('itm|itmid|itm_id|itmlist|litm') RLIKE '^(\\d+(%2C)?)+$'"
+            },
+            {
+              "alias": "t_duration",
+              "expression": {
+                "operator": "CAST(TAG_EXTRACT('TDuration') AS DOUBLE)"
+              }
+            },
+            {
+              "alias": "example_sum",
+              "expression": {
+                "operator": "AVG(t_duration)"
+              },
+              "filter": "t_duration > 100"
+            }
+          ],
+          "dimensions": ["page_family"]
+        }
+      ]
+    },
+    {
+      "name": "event_capture_publish_latency",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "5m"
+      },
+      "profilers": [
+        {
+          "desc": "Event Capture Publish Latency",
+          "metric-name": "event_capture_publish_latency",
+          "expression": {
+            "operator": "SUM(t_duration)"
+          },
+          "transformation": [
+            {
+              "alias": "t_duration",
+              "expression": {
+                "operator": "CAST(TAG_EXTRACT('TDuration') AS DOUBLE)"
+              }
+            }
+          ],
+          "filter": "page_id in ('2547208', '2483445')",
+          "dimensions": ["page_id"]
+        }
+      ]
+    }
+  ]
+}

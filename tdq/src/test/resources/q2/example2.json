@@ -1,0 +1,124 @@
+{
+  "rules": [
+    {
+      "name": "GLOBAL_MANDATORY_FOR_MKT",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "1h"
+      },
+      "profilers": [
+        {
+          "desc": "Global Mandatory Tag - Item Rate",
+          "metric-name": "global_mandatory_tag_item_rate",
+          "expression": {
+            "operator": "SQL",
+            "config": {"text": "itm_valid_cnt / itm_missing_cnt"}
+          },
+          "transformation": [
+            {
+              "alias": "item",
+              "expression": {
+                "operator": "SQL",
+                "config": {"text": "TAG_EXTRACT('itm|itmid|itm_id|itmlist|litm')"}
+              }
+            },
+            {
+              "alias": "itm_missing_cnt",
+              "expression": {
+                "operator": "Count"
+              },
+              "filter": "item IS NULL"
+            },
+            {
+              "alias": "itm_valid_cnt",
+              "expression": {
+                "operator": "Count"
+              },
+              "filter": "LENGTH( REGEXP_EXTRACT(item, '^(\\d+(%2C)?)+$', 1) ) > 0 "
+            }
+          ],
+          "dimensions": ["page_family"]
+        }
+      ]
+    },
+    {
+      "name": "event_capture_publish_latency",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "5m"
+      },
+      "profilers": [
+        {
+          "desc": "Event Capture Publish Latency",
+          "metric-name": "event_capture_publish_latency",
+          "expression": {
+            "operator": "Sum",
+            "config": {"column": "t_duration_f"}
+          },
+          "transformation": [
+            {
+              "alias": "t_duration",
+              "expression": {
+                "operator": "SQL",
+                "config": {"text": "CAST(TAG_EXTRACT('TDuration') AS DOUBLE)"}
+              }
+            },
+            {
+              "alias": "t_duration_f",
+              "expression": {
+                "operator": "SQL",
+                "config": {"text": "case when t_duration>500 then 3 when t_duration>200 then 2 else 1 end"}
+              }
+            }
+          ],
+          "filter": "page_id in ('2547208', '2483445')",
+          "dimensions": ["page_id"]
+        }
+      ]
+    },
+    {
+      "name": "event_capture_publish_latency2",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "5m"
+      },
+      "profilers": [
+        {
+          "desc": "Event Capture Publish Latency",
+          "metric-name": "event_capture_publish_latency2",
+          "expression": {
+            "operator": "SQL",
+            "config": {"text": "avg2 / avg1"}
+          },
+          "transformation": [
+            {
+              "alias": "t_duration",
+              "expression": {
+                "operator": "SQL",
+                "config": {"text": "CAST(TAG_EXTRACT('TDuration') AS DOUBLE)"}
+              }
+            },
+            {
+              "alias": "avg2",
+              "expression": {
+                "operator": "Avg",
+                "config": {"column": "t_duration"}
+              },
+              "filter": "t_duration > 500 "
+            },
+            {
+              "alias": "avg1",
+              "expression": {
+                "operator": "Avg",
+                "config": {"column": "t_duration"}
+              },
+              "filter": "t_duration < 100"
+            }
+          ],
+          "filter": "page_id in ('2547208', '2483445')",
+          "dimensions": ["page_id"]
+        }
+      ]
+    }
+  ]
+}

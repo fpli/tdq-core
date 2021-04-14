@@ -1,0 +1,64 @@
+{
+  "rules": [
+    {
+      "name": "GLOBAL_MANDATORY_TAG_ITEM_RATE",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "1h"
+      },
+      "profilers": [
+        {
+          "desc": "Global Mandatory Tag - Item Rate",
+          "metric-name": "GLOBAL_MANDATORY_TAG_ITEM_RATE",
+          "expression": {
+            "operator": "/",
+            "params": {
+              "columns": ["itm_valid_cnt", "itm_missing_cnt"]
+            }
+          },
+          "transformations": [
+            {
+              "alias": "itm_missing_cnt",
+              "expression": {
+                "operator": "COUNT",
+                "params": {
+                  "columns": ["t_itm_string"]
+                }
+              },
+              "filter": "t_itm_string is null"
+            },
+            {
+              "alias": "itm_valid_cnt",
+              "expression": {
+                "operator": "COUNT"
+              },
+              "filter": "t_itm_integer is not null"
+            }
+          ],
+          "dimensions": ["page_family"]
+        }
+      ]
+    },
+    {
+      "name": "EVENT_CAPTURE_PUBLISH_LATENCY",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "30m"
+      },
+      "profilers": [
+        {
+          "desc": "Event Capture Publish Latency",
+          "metric-name": "EVENT_CAPTURE_PUBLISH_LATENCY",
+          "expression": {
+            "operator": "SUM",
+            "params": {
+              "columns": ["t_duration_double"]
+            }
+          },
+          "filter": "page_id in (2547208, 2483445)",
+          "dimensions": ["page_id"]
+        }
+      ]
+    }
+  ]
+}

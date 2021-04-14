@@ -19,9 +19,21 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+
+    <scala-211.major.version>2.11</scala-211.major.version>
+    <scala-212.major.version>2.12</scala-212.major.version>
+    <scala.major.version>${scala-211.major.version}</scala.major.version>
+    <scala.version>${scala.major.version}.10</scala.version>
+    <scala-maven-plugin.version>4.4.0</scala-maven-plugin.version>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>1.9.4</version>
+    </dependency>
+
     <dependency>
       <groupId>com.ebay.sojourner</groupId>
       <artifactId>sojourner-flink-lib</artifactId>
@@ -52,6 +64,20 @@
       <version>${flink.version}</version>
       <scope>test</scope>
       <classifier>tests</classifier>
+    </dependency>
+
+    <!--scala-->
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+      <version>${scala.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-compiler</artifactId>
+      <version>${scala.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -105,6 +131,42 @@
       <plugin>
         <groupId>io.ebay.rheos.streaming</groupId>
         <artifactId>job-uploader-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+        <version>${scala-maven-plugin.version}</version>
+        <configuration>
+          <scalaCompatVersion>${scala.major.version}</scalaCompatVersion>
+          <scalaVersion>${scala.version}</scalaVersion>
+        </configuration>
+        <executions>
+          <execution>
+            <id>scala-compile-first</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>add-source</goal>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>scala-test-compile</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${compiler.plugin.version}</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
       </plugin>
     </plugins>
   </build>
