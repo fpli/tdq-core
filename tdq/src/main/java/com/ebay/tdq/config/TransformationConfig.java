@@ -1,6 +1,7 @@
 package com.ebay.tdq.config;
 
 import java.io.Serializable;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import lombok.Value;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class TransformationConfig implements Serializable {
-    private String           alias;
-    private ExpressionConfig expression;
-    private String           filter;
+    private String              alias;
+    private ExpressionConfig    expression;
+    private String              filter;
 }

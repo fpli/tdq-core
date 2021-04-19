@@ -2,24 +2,29 @@ import com.ebay.sojourner.common.model.ClientData;
 import com.ebay.sojourner.common.model.RawEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.lang.time.FastDateFormat;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 
 /**
  * @author juntzhang
  */
 public class TDQRawEventSourceFunction implements SourceFunction<RawEvent> {
+    public static Map<String, Double> aggr = new HashMap<>();
+
+    public synchronized static void compute(Map<String, Double> aggr, RawEvent rawEvent) {
+    }
+
     @Override
     public void run(SourceContext<RawEvent> ctx) {
         while (true) {
-            String   siteId   = String.valueOf(getSiteId());
-            String   item     = getItm();
-            String   tDuration       = String.valueOf(getInt() % 100);
-            String   pageId   = new String[]{"711", "1702898", "1677718"}[getInt() % 3];
-            String   contentLength   = String.valueOf(getInt() % 100);
-            RawEvent rawEvent = new RawEvent();
+            String   siteId        = String.valueOf(getSiteId());
+            String   item          = getItm();
+            String   tDuration     = String.valueOf(getInt() % 100);
+            String   pageId        = new String[]{"711", "1702898", "1677718"}[getInt() % 2];
+            String   contentLength = String.valueOf(getInt() % 100);
+            RawEvent rawEvent      = new RawEvent();
             rawEvent.setClientData(new ClientData());
             rawEvent.getClientData().setContentLength(contentLength);
             rawEvent.setEventTimestamp(System.currentTimeMillis());
@@ -30,13 +35,15 @@ public class TDQRawEventSourceFunction implements SourceFunction<RawEvent> {
             rawEvent.getSojA().put("t", siteId);
             rawEvent.getSojA().put("TDuration", tDuration);
             rawEvent.getSojA().put("itm", item);
-            System.out.println(Thread.currentThread() + ">{" +
-                    "page_id=" + pageId +
-                    ",contentLength=" + contentLength +
-                    ",site_id=" + siteId +
-                    ",itm=" + item +
-                    ",TDuration=" + tDuration +
-                    ",eventTime=" + FastDateFormat.getInstance("yyy-MM-dd HH:mm:ss").format(rawEvent.getEventTimestamp()) + "}");
+            compute(aggr, rawEvent);
+//            System.out.println(Thread.currentThread() + ">{" +
+//                    "page_id=" + pageId +
+//                    ",contentLength=" + contentLength +
+//                    ",site_id=" + siteId +
+//                    ",itm=" + item +
+//                    ",TDuration=" + tDuration +
+//                    ",eventTime=" + FastDateFormat.getInstance("yyy-MM-dd HH:mm:ss").format(rawEvent
+//                    .getEventTimestamp()) + "}");
             ctx.collect(rawEvent);
             try {
                 Thread.sleep(500 * (getInt() % 5 + 1));
@@ -50,7 +57,7 @@ public class TDQRawEventSourceFunction implements SourceFunction<RawEvent> {
     }
 
     public static String getItm() {
-        return new String[]{"12311", "123s", "", null}[getInt() % 4];
+        return new String[]{"123", "1abc", "", null}[getInt() % 4];
     }
 
     public static int getSiteId() {
@@ -61,13 +68,14 @@ public class TDQRawEventSourceFunction implements SourceFunction<RawEvent> {
     public void cancel() {
     }
 
-    public static void main(String[] args) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        String   siteId   = String.valueOf(getSiteId());
-        String   item     = getItm();
-        String   tDuration       = String.valueOf(getInt() % 100);
-        String   pageId   = new String[]{"711", "1702898", "1677718"}[getInt() % 3];
-        String   contentLength   = String.valueOf(getInt() % 100);
-        RawEvent rawEvent = new RawEvent();
+    public static void main(String[] args) throws IllegalAccessException, NoSuchMethodException,
+            InvocationTargetException {
+        String   siteId        = String.valueOf(getSiteId());
+        String   item          = getItm();
+        String   tDuration     = String.valueOf(getInt() % 100);
+        String   pageId        = new String[]{"711", "1702898", "1677718"}[getInt() % 3];
+        String   contentLength = String.valueOf(getInt() % 100);
+        RawEvent rawEvent      = new RawEvent();
         rawEvent.setClientData(new ClientData());
         rawEvent.getClientData().setContentLength(contentLength);
         rawEvent.setEventTimestamp(System.currentTimeMillis());

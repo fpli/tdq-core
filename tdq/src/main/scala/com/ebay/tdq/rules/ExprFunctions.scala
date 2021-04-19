@@ -1,6 +1,7 @@
 package com.ebay.tdq.rules
 
 import com.ebay.sojourner.common.model.RawEvent
+import com.ebay.tdq.rules.physical.TdqUDFs
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.math.NumberUtils
 
@@ -41,25 +42,25 @@ object ExprFunctions {
     operatorName.toUpperCase() match {
       case "REGEXP_EXTRACT" =>
         assert(operands.length == 3)
-        TdqProcessFunction.regexpExtract(
+        TdqUDFs.regexpExtract(
           operands(0).asInstanceOf[String],
           operands(1).asInstanceOf[String],
           operands(2).asInstanceOf[Number].intValue()
         );
       case "TAG_EXTRACT" =>
         assert(operands.length == 2)
-        TdqProcessFunction.extractTag(
+        TdqUDFs.extractTag(
           operands(0).asInstanceOf[RawEvent],
           operands(1).asInstanceOf[String]
         );
       case "SITE_ID" =>
         assert(operands.length == 1)
-        TdqProcessFunction.siteId(
+        TdqUDFs.siteId(
           operands(0).asInstanceOf[RawEvent]
         );
       case "PAGE_FAMILY" =>
         assert(operands.length == 1)
-        TdqProcessFunction.pageFamily(
+        TdqUDFs.pageFamily(
           operands(0).asInstanceOf[RawEvent]
         );
       // todo transfer all number to Decimal

@@ -32,20 +32,19 @@ public class TdqAggregateFunction implements AggregateFunction<TdqMetric, TdqMet
     @Override
     public TdqMetric getResult(TdqMetric m) {
         SqlNode node =
-                TdqProcessFunction.getExpr((String) m.getProfilerConfig().getExpression().getConfig().get("text"));
+                TdqRawEventProcessFunction.getExpr((String) m.getProfilerConfig().getExpression().getConfig().get("text"));
         Object val;
         if (node instanceof SqlBasicCall) {
             // math calculator
             SqlBasicCall call = (SqlBasicCall) node;
             val = ExprFunctions.opt(call.getOperator().getName(),
-                    TdqProcessFunction.transformOperands(call.getOperands(), m.getExprMap()));
+                    TdqRawEventProcessFunction.transformOperands(call.getOperands(), m.getExprMap()));
         } else if (node instanceof SqlIdentifier) {
             // select from pre agg
             val = m.getExprMap().get(((SqlIdentifier) node).getSimple());
         } else {
             throw new IllegalStateException("Unexpected operand: " + node);
         }
-
         m.setValue((Double) val);
         return m;
     }
@@ -54,6 +53,9 @@ public class TdqAggregateFunction implements AggregateFunction<TdqMetric, TdqMet
     public TdqMetric merge(TdqMetric m1, TdqMetric m2) {
         Set<String> keys = new HashSet<>(m1.getExprMap().keySet());
         TdqMetric   m    = m1.copy();
+        if (m.getEventTime() < m2.getEventTime()) {
+            m.setEventTime(m2.getEventTime());
+        }
         keys.addAll(m2.getExprMap().keySet());
         for (String k : keys) {
             m.getExprMap().put(

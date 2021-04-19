@@ -1,6 +1,7 @@
 package com.ebay.tdq.rules;
 
 import com.ebay.tdq.config.ProfilerConfig;
+import com.ebay.tdq.rules.physical.PhysicalPlan;
 import com.google.common.collect.Maps;
 import java.io.Serializable;
 import java.util.Map;
@@ -16,11 +17,12 @@ import org.apache.commons.lang.time.FastDateFormat;
  */
 @Data
 public class TdqMetric implements Serializable {
-    private String              uid;      // metricKey + tags + windows + partition
-    // TODO add diff tag of windows
-    // private Integer             windows;
+    private String              uid;      // metricKey + tags + partition
+    private Long                partition;
+    private Long                window;   // seconds
     private String              metricKey;
     private ProfilerConfig      profilerConfig;
+    private PhysicalPlan        physicalPlan;
     private Map<String, Object> tags    = Maps.newTreeMap();
     private Long                eventTime;
     private Map<String, Object> exprMap = Maps.newHashMap();
@@ -70,6 +72,7 @@ public class TdqMetric implements Serializable {
         StringJoiner sj = new StringJoiner(",");
         tags.forEach((k, v) -> sj.add(k + "=" + v));
         exprMap.forEach((k, v) -> sj.add(k + "=" + v));
+        sj.add("window" + "=" + window);
         sj.add("uid" + "=" + uid);
         sj.add("eventTime" + "=" + FastDateFormat.getInstance("yyy-MM-dd HH:mm:ss").format(eventTime));
         sb.append(sj).append("}").append(" ").append(value);

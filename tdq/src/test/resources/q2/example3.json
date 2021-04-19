@@ -11,40 +11,40 @@
       },
       "profilers": [
         {
-          "metric-name": "global_mandatory_tag_item_rate1",
-          "dimensions": ["domain", "site_id"],
-          "comment": "Global Mandatory Tag - Item Rate",
-          "expression": {"operator": "Expr", "config": {"text": "itm_valid_cnt / itm_no_missing_cnt"}},
+          "metric-name": "event_capture_publish_latency",
+          "comment": "Event Capture Publish Latency",
+          "dimensions": ["page_id"],
+          "expression": {"operator": "Expr", "config": {"text": "t_duration_sum"}},
+          "filter": "page_id in ('1702898', '1677718') and CAST(clientData.contentLength AS INTEGER) > 30",
           "transformations": [
             {
-              "alias": "domain",
-              "expression": {"operator": "UDF", "config": {"text": "PAGE_FAMILY(__RAW_EVENT)"}}
+              "alias": "page_id",
+              "expression": {"operator": "UDF", "config": {"text": "TAG_EXTRACT(__RAW_EVENT, 'p')"}}
             },
             {
-              "alias": "site_id",
-              "expression": {"operator": "UDF", "config": {"text": "SITE_ID(__RAW_EVENT)"}}
-            },
-            {
-              "alias": "item",
+              "alias": "t_duration",
               "expression": {
-                "operator": "UDF",
-                "config": {"text": "TAG_EXTRACT(__RAW_EVENT, 'itm|itmid|itm_id|itmlist|litm')"}
+                "operator": "Expr",
+                "config": {"text": "CAST(TAG_EXTRACT(__RAW_EVENT, 'TDuration') AS DOUBLE)"}
               }
             },
             {
-              "alias": "itm_no_missing_cnt",
-              "expression": {"operator": "Count", "config": {}},
-              "filter": "length(item) > 0"
-            },
-            {
-              "alias": "itm_valid_cnt",
-              "expression": {"operator": "Count", "config": {}},
-              "filter": "LENGTH( REGEXP_EXTRACT(item, '^(\\d+(%2C)?)+$', 1) ) > 0"
+              "alias": "t_duration_sum",
+              "expression": {"operator": "SUM", "config": {"arg0": "t_duration"}}
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "name": "rule_2",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "30s"
+      },
+      "profilers": [
         {
-          "metric-name": "global_mandatory_tag_item_rate2",
+          "metric-name": "global_mandatory_tag_item_rate",
           "comment": "Global Mandatory Tag - Item Rate",
           "dimensions": ["domain"],
           "expression": {"operator": "Expr", "config": {"text": "itm_valid_cnt / itm_cnt"}},
@@ -77,30 +77,6 @@
             {
               "alias": "itm_valid_cnt",
               "expression": {"operator": "Sum", "config": {"arg0": "itm_valid_ind"}}
-            }
-          ]
-        },
-        {
-          "metric-name": "event_capture_publish_latency",
-          "comment": "Event Capture Publish Latency",
-          "dimensions": ["page_id"],
-          "expression": {"operator": "Expr", "config": {"text": "t_duration_sum"}},
-          "filter": "page_id in ('1702898', '1677718') and CAST(clientData.contentLength AS INTEGER) > 30",
-          "transformations": [
-            {
-              "alias": "page_id",
-              "expression": {"operator": "UDF", "config": {"text": "TAG_EXTRACT(__RAW_EVENT, 'p')"}}
-            },
-            {
-              "alias": "t_duration",
-              "expression": {
-                "operator": "Expr",
-                "config": {"text": "CAST(TAG_EXTRACT(__RAW_EVENT, 'TDuration') AS DOUBLE)"}
-              }
-            },
-            {
-              "alias": "t_duration_sum",
-              "expression": {"operator": "SUM", "config": {"arg0": "t_duration"}}
             }
           ]
         }

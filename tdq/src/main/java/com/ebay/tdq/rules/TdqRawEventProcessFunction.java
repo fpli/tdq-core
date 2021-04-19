@@ -1,7 +1,6 @@
 package com.ebay.tdq.rules;
 
 import com.ebay.sojourner.common.model.RawEvent;
-import com.ebay.sojourner.common.util.SojUtils;
 import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;
@@ -11,9 +10,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
-import java.util.regex.MatchResult;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.calcite.avatica.util.Casing;
 import org.apache.calcite.avatica.util.Quoting;
@@ -35,23 +31,20 @@ import org.apache.calcite.tools.Frameworks;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.util.Collector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author juntzhang
  */
 @Slf4j
-public class TdqProcessFunction extends BroadcastProcessFunction<RawEvent, TdqConfig, TdqMetric> {
+public class TdqRawEventProcessFunction extends BroadcastProcessFunction<RawEvent, TdqConfig, TdqMetric> {
     private final MapStateDescriptor<String, TdqConfig> stateDescriptor;
 
-    public TdqProcessFunction(MapStateDescriptor<String, TdqConfig> descriptor) {
+    public TdqRawEventProcessFunction(MapStateDescriptor<String, TdqConfig> descriptor) {
         this.stateDescriptor = descriptor;
     }
 
@@ -78,7 +71,7 @@ public class TdqProcessFunction extends BroadcastProcessFunction<RawEvent, TdqCo
         StringJoiner  sj          = new StringJoiner(",");
         StringBuilder mapAsString = new StringBuilder("{");
         for (String key : map.keySet()) {
-            sj.add(key + "=" + map.get(key));
+            sj.add(key + "=" + map.get(key)+"\n");
         }
         mapAsString.append(sj).append("}");
         return mapAsString.toString();
@@ -119,7 +112,7 @@ public class TdqProcessFunction extends BroadcastProcessFunction<RawEvent, TdqCo
                     try {
                         o = PropertyUtils.getProperty(params.get("__RAW_EVENT"), fieldName);
                     } catch (Exception e) {
-                        LOG.warn(e.getMessage());
+//                        LOG.warn(e.getMessage());
                     }
                 }
                 ans[i] = o;
@@ -182,7 +175,6 @@ public class TdqProcessFunction extends BroadcastProcessFunction<RawEvent, TdqCo
         } else {
             throw new IllegalStateException("Unexpected operator: " + call);
         }
-//        addCheckVal(key, val);
     }
 
     public static Object transformExpr0(TdqMetric m, SqlBasicCall call, Map<String, Object> params) {
@@ -224,6 +216,7 @@ public class TdqProcessFunction extends BroadcastProcessFunction<RawEvent, TdqCo
 
     public static void transform(TdqMetric m, ProfilerConfig profilerConfig,
             Map<String, Object> params) throws SqlParseException {
+        // TODO depends
         for (TransformationConfig cfg : profilerConfig.getTransformations()) {
             String expr;
             String operator = cfg.getExpression().getOperator();
@@ -251,26 +244,38 @@ public class TdqProcessFunction extends BroadcastProcessFunction<RawEvent, TdqCo
         }
     }
 
-    public void processElement0(RawEvent rawEvent, ReadOnlyContext context, ProfilerConfig config,
+    public void processElement0(RawEvent rawEvent, ReadOnlyContext context, RuleConfig ruleConfig,
             Collector<TdqMetric> collector) throws SqlParseException {
-        String              metricKey = config.getMetricName();
-        Map<String, Object> params    = new HashMap<>();
-        params.put("__RAW_EVENT", rawEvent);
-        TdqMetric m = new TdqMetric(metricKey, rawEvent.getEventTimestamp());
-        transform(m, config, params);
-        m.setProfilerConfig(config);
-        m.genUID();
-        if (m.getTags().size() != config.getDimensions().size()) {
-            LOG.warn("tags is illegal __RAW_EVENT[" + rawEvent + "]");
-            return;
-        }
-        // get filter field first
-        if (StringUtils.isNotBlank(config.getFilter())) {
-            SqlSelect    call = getSql("SELECT 1 FROM T WHERE " + config.getFilter());
-            SqlBasicCall p    = (SqlBasicCall) call.getWhere();
-            if ((Boolean) ExprFunctions.opt(p.getOperator().getName(), transformOperands(p.operands, params))) {
-                collector.collect(m);
+        for (ProfilerConfig profilerConfig : ruleConfig.getProfilers()) {
+            String              metricKey = profilerConfig.getMetricName();
+            Map<String, Object> params    = new HashMap<>();
+            params.put("__RAW_EVENT", rawEvent);
+            TdqMetric m = new TdqMetric(metricKey, rawEvent.getEventTimestamp());
+            transform(m, profilerConfig, params);
+            m.setProfilerConfig(profilerConfig);
+            m.genUID();
+            if (m.getTags().size() != profilerConfig.getDimensions().size()) {
+                log.warn("tags is illegal __RAW_EVENT[" + rawEvent + "]");
+                return;
             }
+            // get filter field first
+            if (StringUtils.isNotBlank(profilerConfig.getFilter())) {
+                SqlSelect    call = getSql("SELECT 1 FROM T WHERE " + profilerConfig.getFilter());
+                SqlBasicCall p    = (SqlBasicCall) call.getWhere();
+                if ((Boolean) ExprFunctions.opt(p.getOperator().getName(), transformOperands(p.operands, params))) {
+                    collect(ruleConfig, collector, m);
+                }
+            } else {
+                collect(ruleConfig, collector, m);
+            }
+        }
+    }
+
+    private void collect(RuleConfig ruleConfig, Collector<TdqMetric> collector, TdqMetric m) {
+        m.setWindow(DateUtils.toSeconds((String) ruleConfig.getConfig().get("window")));
+        if (m.getWindow() == null) {
+            // TODO add metric monitor
+            log.warn("Rule config[{}] illegal, missing window!", ruleConfig);
         } else {
             collector.collect(m);
         }
@@ -279,13 +284,19 @@ public class TdqProcessFunction extends BroadcastProcessFunction<RawEvent, TdqCo
     @Override
     public void processElement(RawEvent rawEvent, ReadOnlyContext ctx, Collector<TdqMetric> collector) throws Exception {
         ReadOnlyBroadcastState<String, TdqConfig> broadcastState = ctx.getBroadcastState(stateDescriptor);
+        boolean                                   success        = false;
         for (Map.Entry<String, TdqConfig> entry : broadcastState.immutableEntries()) {
-            for (RuleConfig ruleConfig : entry.getValue().getRules()) {
-                for (ProfilerConfig cfg : ruleConfig.getProfilers()) {
-                    processElement0(rawEvent, ctx, cfg, collector);
+            try {
+                for (RuleConfig ruleConfig : entry.getValue().getRules()) {
+                    processElement0(rawEvent, ctx, ruleConfig, collector);
                 }
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
             }
-
+            success = true;
+        }
+        if (!success) {
+            log.warn("Drop events {}", rawEvent);
         }
     }
 
@@ -295,88 +306,5 @@ public class TdqProcessFunction extends BroadcastProcessFunction<RawEvent, TdqCo
         broadcastState.put(tdqConfig.getId(), tdqConfig);
     }
 
-
-    // functions
-    public static String extractTag(RawEvent rawEvent, String tag) {
-        return SojUtils.getTagValueStr(rawEvent, tag);
-    }
-
-    public static Integer siteId(RawEvent rawEvent) {
-        return SojUtils.getSiteId(rawEvent);
-    }
-
-    public static String pageFamily(RawEvent rawEvent) {
-        return SojUtils.getPageFmly(SojUtils.getPageId(rawEvent));
-    }
-
-    private static final Logger LOG = LoggerFactory.getLogger(TdqProcessFunction.class);
-
-    // all opt in FlinkSqlOperatorTable SqlStdOperatorTable
-    // SqlFunctionUtils
-    // StringCallGen -> regexpExtract
-    public static String regexpExtract(String str, String regex, int extractIndex) {
-        if (str == null || regex == null) {
-            return null;
-        }
-        try {
-            Matcher m = Pattern.compile(regex).matcher(str);
-            if (m.find()) {
-                MatchResult mr = m.toMatchResult();
-                return mr.group(extractIndex);
-            }
-        } catch (Exception e) {
-            LOG.error(String.format("Exception in regexpExtract('%s', '%s', '%d')", str, regex, extractIndex), e);
-        }
-
-        return null;
-    }
-
-    // logical
-    public static int length(String str) {
-        return StringUtils.length(str);
-    }
-
-    public static Boolean and(Boolean left, Boolean right) {
-        return left && right;
-    }
-
-    public static Boolean or(Boolean left, Boolean right) {
-        return left || right;
-    }
-
-    public static Boolean not(Boolean opt) {
-        return !opt;
-    }
-
-    public static Boolean isNull(Object o) {
-        return o == null;
-    }
-
-    public static Boolean isNotNull(Object o) {
-        return o != null;
-    }
-
-    public static Boolean equals(Object left, Object right) {
-        return left.equals(right);
-    }
-
-    public static Number cast(String type, String value) {
-        switch (type) {
-            case "TINYINT":
-                return NumberUtils.toByte(value);
-            case "SMALLINT":
-                return NumberUtils.toShort(value);
-            case "INTEGER":
-                return NumberUtils.toInt(value);
-            case "BIGINT":
-                return NumberUtils.toLong(value);
-            case "DOUBLE":
-                return NumberUtils.toDouble(value);
-            case "FLOAT":
-                return NumberUtils.toFloat(value);
-            default:
-                return null;
-        }
-    }
 
 }

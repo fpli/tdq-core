@@ -1,0 +1,62 @@
+{
+  "id": "1",
+  "name": "tdq_1",
+  "sources": [],
+  "rules": [
+    {
+      "name": "rule_1",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "10s"
+      },
+      "profilers": [
+        {
+          "metric-name": "event_capture_publish_latency",
+          "comment": "Event Capture Publish Latency",
+          "dimensions": ["soj.p"],
+          "expression": {"operator": "Sum", "config": {"column": "soj.TDuration"}},
+          "filter": "soj.p in (1702898, 1677718) and clientData.contentLength > 30"
+        }
+      ]
+    },
+    {
+      "name": "rule_2",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "30s"
+      },
+      "profilers": [
+        {
+          "metric-name": "global_mandatory_tag_item_rate2",
+          "comment": "Global Mandatory Tag - Item Rate",
+          "dimensions": ["domain"],
+          "expression": {"operator": "Expr", "config": {"text": "xxx2 / xxx1"}},
+          "transformations": [
+            {
+              "alias": "domain",
+              "expression": {"operator": "Expr", "config": {"text": "soj.p"}}
+            },
+            {
+              "alias": "abc123",
+              "expression": {
+                "operator": "Expr",
+                "config": {
+                  "text": "case when LENGTH( REGEXP_EXTRACT(soj.itm, '^(\\d+(%2C)?)+$', 1) ) > 0 then 1 else 0 end"
+                }
+              }
+            },
+            {
+              "alias": "xxx1",
+              "expression": {"operator": "Count"}
+            },
+            {
+              "alias": "xxx2",
+              "expression": {"operator": "Sum", "config": {"arg0": "abc123"}}
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sinks": []
+}

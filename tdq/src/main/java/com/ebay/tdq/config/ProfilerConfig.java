@@ -2,7 +2,7 @@ package com.ebay.tdq.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,13 +20,13 @@ public class ProfilerConfig implements Serializable {
     @JsonProperty(index = 1)
     private ExpressionConfig           expression;
     @JsonProperty(index = 2)
-    private String                    filter;
+    private String                     filter;
     @JsonProperty(index = 3)
     @Singular
-    private Set<TransformationConfig> transformations;
+    private List<TransformationConfig> transformations;
     @JsonProperty(index = 4)
     @Singular
-    private Set<String>              dimensions;
+    private List<String>               dimensions;
     @JsonProperty(index = 5)
     private String                     comment;
 }
