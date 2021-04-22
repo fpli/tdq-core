@@ -7,7 +7,7 @@ flink:
       tdq-normalizer: 300
       metrics-collector: 150
       metrics-collector-post: 50
-      metrics-collector-final: 10
+      metric-final-collector: 5
     slot-sharing-group:
       source-event-lvs: tdq-lvs
       source-event-slc: tdq-slc
@@ -28,10 +28,10 @@ flink:
         slc: pathfinder-slc-tdq-source
     data-skew:
       is-filter: true
-      guid-set: []
-      pageid-set: []
+      guid-set: [ ]
+      pageid-set: [ ]
     checkpoint:
-      data-dir: /opt/sojourner-tdq/checkpoint
+      data-dir: /opt/tdq/checkpoint
       interval-ms: 300000
       timeout-ms: 900000
       min-pause-between-ms: 120000
@@ -48,7 +48,7 @@ kafka:
     stream: behavior.pathfinder
     topic:
       - behavior.pathfinder.events.total
-    group-id: sojourner-tdq
+    group-id: tdq-v2
     bootstrap-servers:
       rno:
         - rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
@@ -68,7 +68,7 @@ kafka:
         - rhs-swsvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
         - rhs-swsvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
         - rhs-swsvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
-
+    
     max-poll-records: 5000
     # 50MB, default value is 50MB
     fetch-max-bytes: 52428800

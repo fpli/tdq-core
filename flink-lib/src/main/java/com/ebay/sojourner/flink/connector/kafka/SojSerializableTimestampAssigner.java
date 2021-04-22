@@ -1,5 +1,6 @@
 package com.ebay.sojourner.flink.connector.kafka;
 
+import com.ebay.sojourner.common.model.RawEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 
@@ -12,7 +13,8 @@ public class SojSerializableTimestampAssigner<T> implements SerializableTimestam
     long field = System.currentTimeMillis();
 
     try {
-      field = TimestampFieldExtractor.getField(element);
+//      field = TimestampFieldExtractor.getField(element);
+      field = ((RawEvent) element).getEventTimestamp();
     } catch (Exception e) {
       log.warn("extract timestamp failed" + field);
     }

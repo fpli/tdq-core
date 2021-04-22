@@ -1,34 +1,30 @@
 package com.ebay.sojourner.tdq.function;
 
-import com.ebay.sojourner.common.model.PageIdTopicMapping;
 import com.ebay.sojourner.common.model.TdqConfigMapping;
-import com.ebay.sojourner.common.model.TopicPageIdMapping;
 import com.ebay.sojourner.common.util.RestClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Sets;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 @Slf4j
 public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping> {
 
-    private RestClient restClient;
-    private ObjectMapper objectMapper;
-    private final String baseURL;
-    private final Long interval;
-    private final String env;
+    private final String       baseURL;
+    private final Long         interval;
+    private final String       env;
+    private       RestClient   restClient;
+    private       ObjectMapper objectMapper;
 
     public TdqConfigSourceFunction(String baseURL, Long interval, String env) {
-        this.baseURL = baseURL;
+        this.baseURL  = baseURL;
         this.interval = interval;
-        this.env = env;
+        this.env      = env;
     }
 
     @Override
@@ -144,14 +140,14 @@ public class TdqConfigSourceFunction extends RichSourceFunction<TdqConfigMapping
     @Override
     public void cancel() {
         log.info("MappingSourceFunction cancelled");
-        restClient = null;
+        restClient   = null;
         objectMapper = null;
     }
 
     @Override
     public void open(Configuration parameters) throws Exception {
         super.open(parameters);
-        this.restClient = new RestClient(baseURL);
+        this.restClient   = new RestClient(baseURL);
         this.objectMapper = new ObjectMapper();
     }
 }

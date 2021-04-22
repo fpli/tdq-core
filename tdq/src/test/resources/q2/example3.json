@@ -7,7 +7,7 @@
       "name": "rule_1",
       "type": "realtime.rheos.profiler",
       "config": {
-        "window": "10s"
+        "window": "1min"
       },
       "profilers": [
         {
@@ -19,13 +19,13 @@
           "transformations": [
             {
               "alias": "page_id",
-              "expression": {"operator": "UDF", "config": {"text": "TAG_EXTRACT(__RAW_EVENT, 'p')"}}
+              "expression": {"operator": "UDF", "config": {"text": "TAG_EXTRACT('p')"}}
             },
             {
               "alias": "t_duration",
               "expression": {
                 "operator": "Expr",
-                "config": {"text": "CAST(TAG_EXTRACT(__RAW_EVENT, 'TDuration') AS DOUBLE)"}
+                "config": {"text": "CAST(TAG_EXTRACT('TDuration') AS DOUBLE)"}
               }
             },
             {
@@ -40,7 +40,7 @@
       "name": "rule_2",
       "type": "realtime.rheos.profiler",
       "config": {
-        "window": "30s"
+        "window": "5min"
       },
       "profilers": [
         {
@@ -52,13 +52,13 @@
           "transformations": [
             {
               "alias": "domain",
-              "expression": {"operator": "UDF", "config": {"text": "PAGE_FAMILY(__RAW_EVENT)"}}
+              "expression": {"operator": "UDF", "config": {"text": "PAGE_FAMILY(CAST(TAG_EXTRACT('p') AS INTEGER))"}}
             },
             {
               "alias": "item",
               "expression": {
                 "operator": "UDF",
-                "config": {"text": "TAG_EXTRACT(__RAW_EVENT, 'itm|itmid|itm_id|itmlist|litm')"}
+                "config": {"text": "TAG_EXTRACT('itm|itmid|itm_id|itmlist|litm')"}
               }
             },
             {
@@ -72,7 +72,7 @@
             },
             {
               "alias": "itm_cnt",
-              "expression": {"operator": "Count", "config": {}}
+              "expression": {"operator": "Count", "config": {"arg0": "1"}}
             },
             {
               "alias": "itm_valid_cnt",

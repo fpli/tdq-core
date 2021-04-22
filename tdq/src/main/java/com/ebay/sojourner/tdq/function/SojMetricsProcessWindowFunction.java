@@ -1,6 +1,8 @@
 package com.ebay.sojourner.tdq.function;
 
 import com.ebay.sojourner.common.model.SojMetrics;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.metrics.Gauge;
@@ -8,12 +10,9 @@ import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 public class SojMetricsProcessWindowFunction extends
         ProcessWindowFunction<SojMetrics, SojMetrics, Tuple, TimeWindow> {
-    private static final Map<String, Gauge> domainMetricGuageMap = new ConcurrentHashMap<>();
+    private static final Map<String, Gauge>  domainMetricGuageMap = new ConcurrentHashMap<>();
     private static final Map<String, Object> domainMetricValueMap = new ConcurrentHashMap<>();
 
     @Override
@@ -23,9 +22,9 @@ public class SojMetricsProcessWindowFunction extends
 
     @Override
     public void process(Tuple tuple, Context context, Iterable<SojMetrics> elements,
-                        Collector<SojMetrics> out) {
+            Collector<SojMetrics> out) {
         SojMetrics sojMetrics = elements.iterator().next();
-        Long eventTime = context.window().getEnd();
+        Long       eventTime  = context.window().getEnd();
         //        collectSojMetrics(sojMetrics, context.window().getEnd());
         int taskIndex = getRuntimeContext().getIndexOfThisSubtask();
         sojMetrics.setTaskIndex(taskIndex);

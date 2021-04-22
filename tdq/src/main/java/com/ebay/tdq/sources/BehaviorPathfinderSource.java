@@ -1,0 +1,69 @@
+package com.ebay.tdq.sources;
+
+import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.sojourner.common.util.Property;
+import com.ebay.sojourner.flink.common.FlinkEnvUtils;
+import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
+import com.ebay.sojourner.flink.connector.kafka.schema.RawEventDeserializationSchema;
+import com.ebay.sojourner.flink.connector.kafka.schema.RawEventKafkaDeserializationSchemaWrapper;
+import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+
+import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_FROM_TIMESTAMP;
+import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN;
+import static com.ebay.sojourner.flink.common.DataCenter.LVS;
+import static com.ebay.sojourner.flink.common.DataCenter.RNO;
+import static com.ebay.sojourner.flink.common.DataCenter.SLC;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
+
+/**
+ * @author juntzhang
+ */
+public class BehaviorPathfinderSource {
+    // 1. Rheos Consumer
+    // 1.1 Consume RawEvent from Rheos PathFinder topic
+    // 1.2 Assign timestamps and emit watermarks.
+    public static DataStream<RawEvent> build(final StreamExecutionEnvironment env) {
+        SourceDataStreamBuilder<RawEvent> dataStreamBuilder =
+                new SourceDataStreamBuilder<>(env);
+
+        DataStream<RawEvent> rawEventDataStreamForRNO = dataStreamBuilder
+                .dc(RNO)
+                .operatorName(getString(Property.SOURCE_OPERATOR_NAME_RNO))
+                .uid(getString(Property.SOURCE_UID_RNO))
+                .slotGroup(getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP))
+                .outOfOrderlessInMin(getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
+                .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+                .idleSourceTimeout(getInteger(Property.FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN))
+                .build(new RawEventKafkaDeserializationSchemaWrapper(
+                        FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
+                        new RawEventDeserializationSchema()));
+        DataStream<RawEvent> rawEventDataStreamForSLC = dataStreamBuilder
+                .dc(SLC)
+                .operatorName(getString(Property.SOURCE_OPERATOR_NAME_SLC))
+                .uid(getString(Property.SOURCE_UID_SLC))
+                .slotGroup(getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP))
+                .outOfOrderlessInMin(getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
+                .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+                .idleSourceTimeout(getInteger(Property.FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN))
+                .build(new RawEventKafkaDeserializationSchemaWrapper(
+                        FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
+                        new RawEventDeserializationSchema()));
+        DataStream<RawEvent> rawEventDataStreamForLVS = dataStreamBuilder
+                .dc(LVS)
+                .operatorName(getString(Property.SOURCE_OPERATOR_NAME_LVS))
+                .uid(getString(Property.SOURCE_UID_LVS))
+                .slotGroup(getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP))
+                .outOfOrderlessInMin(getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
+                .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+                .idleSourceTimeout(getInteger(Property.FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN))
+                .build(new RawEventKafkaDeserializationSchemaWrapper(
+                        FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
+                        new RawEventDeserializationSchema()));
+        // union ubiEvent from SLC/RNO/LVS
+        return rawEventDataStreamForRNO
+                .union(rawEventDataStreamForLVS)
+                .union(rawEventDataStreamForSLC);
+    }
+}

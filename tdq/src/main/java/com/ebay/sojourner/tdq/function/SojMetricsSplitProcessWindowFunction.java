@@ -1,7 +1,14 @@
 package com.ebay.sojourner.tdq.function;
 
-import com.ebay.sojourner.common.model.*;
+import com.ebay.sojourner.common.model.PageCntMetrics;
+import com.ebay.sojourner.common.model.SojMetrics;
+import com.ebay.sojourner.common.model.TagMissingCntMetrics;
+import com.ebay.sojourner.common.model.TagSumMetrics;
+import com.ebay.sojourner.common.model.TotalCntMetrics;
+import com.ebay.sojourner.common.model.TransformErrorMetrics;
 import com.ebay.sojourner.flink.common.OutputTagConstants;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.collections.MapUtils;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
@@ -10,14 +17,11 @@ import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import static java.util.Map.Entry;
 
 public class SojMetricsSplitProcessWindowFunction extends
         ProcessWindowFunction<SojMetrics, SojMetrics, Tuple, TimeWindow> {
-    private static final Map<String, Gauge> domainMetricGuageMap = new ConcurrentHashMap<>();
+    private static final Map<String, Gauge>  domainMetricGuageMap = new ConcurrentHashMap<>();
     private static final Map<String, Object> domainMetricValueMap = new ConcurrentHashMap<>();
 
     @Override
@@ -27,10 +31,10 @@ public class SojMetricsSplitProcessWindowFunction extends
 
     @Override
     public void process(Tuple tuple, Context context, Iterable<SojMetrics> elements,
-                        Collector<SojMetrics> out) {
+            Collector<SojMetrics> out) {
         SojMetrics sojMetrics = elements.iterator().next();
-        Long eventTime = sojMetrics.getEventTime();
-        int taskIndex = getRuntimeContext().getIndexOfThisSubtask();
+        Long       eventTime  = sojMetrics.getEventTime();
+        int        taskIndex  = getRuntimeContext().getIndexOfThisSubtask();
         sojMetrics.setTaskIndex(taskIndex);
         if (MapUtils.isNotEmpty(sojMetrics.getTagMissingCntMetricsMap())) {
             for (Entry<String, TagMissingCntMetrics> tagMissingCntMetricsEntry :

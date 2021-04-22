@@ -3,12 +3,14 @@ package com.ebay.tdq.sinks;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.time.FastDateFormat;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 
 /**
  * @author juntzhang
  */
+@Slf4j
 public class LocalFileSink extends RichSinkFunction<String> {
     private static final Object      lock = new Object();
     private static       File        file = null;
@@ -23,14 +25,16 @@ public class LocalFileSink extends RichSinkFunction<String> {
     }
 
     public static void createFile(String name, String header) {
-        file = new File("./tdq/target/" + name + "-" + getTimeStr(System.currentTimeMillis()) + ".csv");
+        file = new File("./tdq/target/" + name + "-" +
+                getTimeStr(System.currentTimeMillis()) + ".csv");
         if (file.exists()) {
-            System.out.println("delete file[" + file.toPath() + "]:" + file.delete());
+            log.info("delete file[" + file.toPath() + "]:" + file.delete());
         }
         try {
-            System.out.println("create new file[" + file.toPath() + "]: " + file.createNewFile());
+            log.info("create new file[" + file.toPath() + "]: " + file.createNewFile());
             out = new PrintWriter(file);
-        } catch (IOException ignore) {
+        } catch (IOException e) {
+            log.warn(e.getMessage());
         }
         write(header);
     }

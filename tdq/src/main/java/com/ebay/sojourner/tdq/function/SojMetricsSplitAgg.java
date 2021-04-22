@@ -1,10 +1,14 @@
 package com.ebay.sojourner.tdq.function;
 
-import com.ebay.sojourner.common.model.*;
+import com.ebay.sojourner.common.model.PageCntMetrics;
+import com.ebay.sojourner.common.model.SojMetrics;
+import com.ebay.sojourner.common.model.TagMissingCntMetrics;
+import com.ebay.sojourner.common.model.TagSumMetrics;
+import com.ebay.sojourner.common.model.TotalCntMetrics;
+import com.ebay.sojourner.common.model.TransformErrorMetrics;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.functions.AggregateFunction;
-
-import java.util.Map;
 
 import static java.util.Map.Entry;
 
@@ -19,7 +23,7 @@ public class SojMetricsSplitAgg implements AggregateFunction<SojMetrics, SojMetr
 
     @Override
     public SojMetrics add(SojMetrics inputSojMetrics,
-                          SojMetrics sojMetrics) {
+            SojMetrics sojMetrics) {
         addTagMissingCntMetrics(inputSojMetrics, sojMetrics);
         addTagSumMetrics(inputSojMetrics, sojMetrics);
         addTransformErrorCntMetrics(inputSojMetrics, sojMetrics);
@@ -40,10 +44,10 @@ public class SojMetricsSplitAgg implements AggregateFunction<SojMetrics, SojMetr
     }
 
     private void addTagMissingCntMetrics(SojMetrics inputSojMetrics,
-                                         SojMetrics sojMetrics) {
+            SojMetrics sojMetrics) {
         for (Entry<String, TagMissingCntMetrics> entry : inputSojMetrics
                 .getTagMissingCntMetricsMap().entrySet()) {
-            String metricKey = entry.getKey();
+            String               metricKey            = entry.getKey();
             TagMissingCntMetrics tagMissingCntMetrics = entry.getValue();
             if (sojMetrics.getTagMissingCntMetricsMap().containsKey(metricKey)) {
                 sojMetrics.getTagMissingCntMetricsMap().get(metricKey).getPageFamilySet()
@@ -54,13 +58,13 @@ public class SojMetricsSplitAgg implements AggregateFunction<SojMetrics, SojMetr
                         = sojMetrics.getTagMissingCntMetricsMap()
                         .get(metricKey).getTagCntMap();
                 for (Entry<String, Map<String, Long>> domainTagCnt : domainTagCntMap.entrySet()) {
-                    String domain = domainTagCnt.getKey();
+                    String            domain           = domainTagCnt.getKey();
                     Map<String, Long> tagMissingCntMap = domainTagCnt.getValue();
                     if (sojDomainTagCntMap.containsKey(domain)) {
                         Map<String, Long> sojTagCntMap = sojDomainTagCntMap.get(domain);
                         for (Entry<String, Long> tagCntEntry : tagMissingCntMap.entrySet()) {
                             String tagName = tagCntEntry.getKey();
-                            Long count = tagCntEntry.getValue();
+                            Long   count   = tagCntEntry.getValue();
                             if (sojTagCntMap.containsKey(tagName)) {
                                 sojTagCntMap.put(tagName, sojTagCntMap.get(tagName) + count);
                             } else {
@@ -80,7 +84,7 @@ public class SojMetricsSplitAgg implements AggregateFunction<SojMetrics, SojMetr
     private void addTagSumMetrics(SojMetrics inputSojMetrics, SojMetrics sojMetrics) {
         for (Entry<String, TagSumMetrics> entry
                 : inputSojMetrics.getTagSumMetricsMap().entrySet()) {
-            String metricKey = entry.getKey();
+            String        metricKey     = entry.getKey();
             TagSumMetrics tagSumMetrics = entry.getValue();
             if (sojMetrics.getTagSumMetricsMap().containsKey(metricKey)) {
                 Map<String, Map<String, Double>> domainTagSumMap = tagSumMetrics.getTagSumMap();
@@ -91,10 +95,10 @@ public class SojMetricsSplitAgg implements AggregateFunction<SojMetrics, SojMetr
                         : domainTagSumMap.entrySet()) {
                     String domain = tagCntEntry.getKey();
                     if (sojDomainTagSumMap.containsKey(domain)) {
-                        Map<String, Double> tagSum = tagCntEntry.getValue();
+                        Map<String, Double> tagSum       = tagCntEntry.getValue();
                         Map<String, Double> sojTagSumMap = sojDomainTagSumMap.get(domain);
                         for (Entry<String, Double> tagSumEntry : tagSum.entrySet()) {
-                            String tagName = tagSumEntry.getKey();
+                            String tagName  = tagSumEntry.getKey();
                             Double tagValue = tagSumEntry.getValue();
                             if (sojTagSumMap.containsKey(tagName)) {
                                 sojTagSumMap.put(tagName, sojTagSumMap.get(tagName) + tagValue);
@@ -115,7 +119,7 @@ public class SojMetricsSplitAgg implements AggregateFunction<SojMetrics, SojMetr
     private void addPageCntMetrics(SojMetrics inputSojMetrics, SojMetrics sojMetrics) {
         for (Entry<String, PageCntMetrics> entry
                 : inputSojMetrics.getPageCntMetricsMap().entrySet()) {
-            String metricKey = entry.getKey();
+            String         metricKey      = entry.getKey();
             PageCntMetrics pageCntMetrics = entry.getValue();
             if (sojMetrics.getPageCntMetricsMap().containsKey(metricKey)) {
                 Map<String, Map<Integer, Long>> sojDomainPageCntMap
@@ -126,11 +130,11 @@ public class SojMetricsSplitAgg implements AggregateFunction<SojMetrics, SojMetr
                         : domainPageCntMap.entrySet()) {
                     String domain = domainPageCntEntry.getKey();
                     if (sojDomainPageCntMap.containsKey(domain)) {
-                        Map<Integer, Long> pageCntMap = domainPageCntEntry.getValue();
+                        Map<Integer, Long> pageCntMap    = domainPageCntEntry.getValue();
                         Map<Integer, Long> sojPageCntMap = sojDomainPageCntMap.get(domain);
                         for (Entry<Integer, Long> pageCntEntry : pageCntMap.entrySet()) {
                             Integer pageId = pageCntEntry.getKey();
-                            Long count = pageCntEntry.getValue();
+                            Long    count  = pageCntEntry.getValue();
                             if (sojPageCntMap.containsKey(pageId)) {
                                 sojPageCntMap.put(pageId, sojPageCntMap.get(pageId) + count);
                             } else {
@@ -148,10 +152,10 @@ public class SojMetricsSplitAgg implements AggregateFunction<SojMetrics, SojMetr
     }
 
     private void addTransformErrorCntMetrics(SojMetrics inputSojMetrics,
-                                             SojMetrics sojMetrics) {
+            SojMetrics sojMetrics) {
         for (Entry<String, TransformErrorMetrics> entry
                 : inputSojMetrics.getTransformErrorMetricsMap().entrySet()) {
-            String metricKey = entry.getKey();
+            String                metricKey             = entry.getKey();
             TransformErrorMetrics transformErrorMetrics = entry.getValue();
             if (sojMetrics.getTransformErrorMetricsMap().containsKey(metricKey)) {
 
@@ -164,11 +168,11 @@ public class SojMetricsSplitAgg implements AggregateFunction<SojMetrics, SojMetr
                         : domainTagErrorCntMap.entrySet()) {
                     String domain = domainTagErrorCntEntry.getKey();
                     if (sojDomainTagErrorCntMap.containsKey(domain)) {
-                        Map<String, Long> tagErrorCntMap = domainTagErrorCntEntry.getValue();
+                        Map<String, Long> tagErrorCntMap    = domainTagErrorCntEntry.getValue();
                         Map<String, Long> sojTagErrorCntMap = sojDomainTagErrorCntMap.get(domain);
                         for (Entry<String, Long> tagCntEntry : tagErrorCntMap.entrySet()) {
                             String tagName = tagCntEntry.getKey();
-                            Long count = tagCntEntry.getValue();
+                            Long   count   = tagCntEntry.getValue();
                             if (sojTagErrorCntMap.containsKey(tagName)) {
                                 sojTagErrorCntMap.put(tagName,
                                         sojTagErrorCntMap.get(tagName) + count);
@@ -189,7 +193,7 @@ public class SojMetricsSplitAgg implements AggregateFunction<SojMetrics, SojMetr
     private void addTotalCntMetrics(SojMetrics inputSojMetrics, SojMetrics sojMetrics) {
         for (Entry<String, TotalCntMetrics> entry
                 : inputSojMetrics.getTotalCntMetricsMap().entrySet()) {
-            String metricKey = entry.getKey();
+            String          metricKey       = entry.getKey();
             TotalCntMetrics totalCntMetrics = entry.getValue();
             if (sojMetrics.getTotalCntMetricsMap().containsKey(metricKey)) {
                 Map<String, Long> sojDomainPageCntMap
@@ -200,9 +204,9 @@ public class SojMetricsSplitAgg implements AggregateFunction<SojMetrics, SojMetr
                         : domainTotalCntMap.entrySet()) {
                     String domain = domainTotalCntEntry.getKey();
                     if (sojDomainPageCntMap.containsKey(domain)) {
-                        Long totalCnt = domainTotalCntEntry.getValue();
+                        Long totalCnt    = domainTotalCntEntry.getValue();
                         Long sojTotalCnt = sojDomainPageCntMap.get(domain);
-                        sojDomainPageCntMap.put(domain,totalCnt+sojTotalCnt);
+                        sojDomainPageCntMap.put(domain, totalCnt + sojTotalCnt);
                     } else {
                         sojDomainPageCntMap.put(domain, domainTotalCntEntry.getValue());
                     }
@@ -215,9 +219,9 @@ public class SojMetricsSplitAgg implements AggregateFunction<SojMetrics, SojMetr
                         : domainTotalCntItmMap.entrySet()) {
                     String domain = domainTotalCntItmEntry.getKey();
                     if (sojDomainPageCntItmMap.containsKey(domain)) {
-                        Long totalCnt = domainTotalCntItmEntry.getValue();
+                        Long totalCnt    = domainTotalCntItmEntry.getValue();
                         Long sojTotalCnt = sojDomainPageCntItmMap.get(domain);
-                        sojDomainPageCntItmMap.put(domain,totalCnt+sojTotalCnt);
+                        sojDomainPageCntItmMap.put(domain, totalCnt + sojTotalCnt);
                     } else {
                         sojDomainPageCntItmMap.put(domain, domainTotalCntItmEntry.getValue());
                     }

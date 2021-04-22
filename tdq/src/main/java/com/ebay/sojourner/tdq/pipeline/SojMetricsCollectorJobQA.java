@@ -14,6 +14,7 @@ import com.ebay.sojourner.tdq.function.EmptyMetricFilterFunction;
 import com.ebay.sojourner.tdq.function.SojMetricsAgg;
 import com.ebay.sojourner.tdq.function.SojMetricsProcessWindowFunction;
 import com.ebay.sojourner.tdq.function.TdqConfigSourceFunction;
+import java.time.Duration;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
@@ -26,21 +27,23 @@ import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 
-import java.time.Duration;
-
 import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_FROM_TIMESTAMP;
 import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN;
-import static com.ebay.sojourner.flink.common.DataCenter.*;
-import static com.ebay.sojourner.flink.common.FlinkEnvUtils.*;
+import static com.ebay.sojourner.flink.common.DataCenter.LVS;
+import static com.ebay.sojourner.flink.common.DataCenter.RNO;
+import static com.ebay.sojourner.flink.common.DataCenter.SLC;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getLong;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
 
 public class SojMetricsCollectorJobQA {
 
     private static final String CONFIG_SOURCE_OP_NAME = "Tdq Config Mapping Source";
-    private static final String CONFIG_SOURCE_UID = "tdq-config-mapping-source";
-    private static final String CONNECTOR_OP_NAME = "Connector Operator";
-    private static final String CONNECTOR_OP_UID = "connector-operator";
-    private static final String FILTER_OP_NAME = "Filter Operator";
-    private static final String FILTER_OP_UID = "filter-operator";
+    private static final String CONFIG_SOURCE_UID     = "tdq-config-mapping-source";
+    private static final String CONNECTOR_OP_NAME     = "Connector Operator";
+    private static final String CONNECTOR_OP_UID      = "connector-operator";
+    private static final String FILTER_OP_NAME        = "Filter Operator";
+    private static final String FILTER_OP_UID         = "filter-operator";
 
     //soj Metrcis collector
     public static void main(String[] args) throws Exception {

@@ -1,6 +1,14 @@
 package com.ebay.sojourner.tdq.pipeline;
 
-import com.ebay.sojourner.common.model.*;
+import com.ebay.sojourner.common.model.PageCntMetrics;
+import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.sojourner.common.model.RawEventMetrics;
+import com.ebay.sojourner.common.model.SojMetrics;
+import com.ebay.sojourner.common.model.TagMissingCntMetrics;
+import com.ebay.sojourner.common.model.TagSumMetrics;
+import com.ebay.sojourner.common.model.TdqConfigMapping;
+import com.ebay.sojourner.common.model.TotalCntMetrics;
+import com.ebay.sojourner.common.model.TransformErrorMetrics;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import com.ebay.sojourner.flink.common.OutputTagConstants;
@@ -8,7 +16,14 @@ import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.flink.connector.kafka.schema.RawEventDeserializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.RawEventKafkaDeserializationSchemaWrapper;
 import com.ebay.sojourner.tdq.broadcast.RawEventProcessFunction;
-import com.ebay.sojourner.tdq.function.*;
+import com.ebay.sojourner.tdq.function.SojMetricsAgg;
+import com.ebay.sojourner.tdq.function.SojMetricsFinalProcessWindowFunction;
+import com.ebay.sojourner.tdq.function.SojMetricsPostAgg;
+import com.ebay.sojourner.tdq.function.SojMetricsProcessWindowFunction;
+import com.ebay.sojourner.tdq.function.SojMetricsSplitAgg;
+import com.ebay.sojourner.tdq.function.SojMetricsSplitProcessWindowFunction;
+import com.ebay.sojourner.tdq.function.TdqConfigSourceFunction;
+import java.time.Duration;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
@@ -21,23 +36,25 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 
-import java.time.Duration;
-
 import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_FROM_TIMESTAMP;
 import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN;
-import static com.ebay.sojourner.flink.common.DataCenter.*;
-import static com.ebay.sojourner.flink.common.FlinkEnvUtils.*;
+import static com.ebay.sojourner.flink.common.DataCenter.LVS;
+import static com.ebay.sojourner.flink.common.DataCenter.RNO;
+import static com.ebay.sojourner.flink.common.DataCenter.SLC;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getLong;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
 
 public class SojMetricsCollectorJob {
 
-    private static final String CONFIG_SOURCE_OP_NAME = "Tdq Config Mapping Source";
-    private static final String CONFIG_SOURCE_UID = "tdq-config-mapping-source";
+    private static final String CONFIG_SOURCE_OP_NAME  = "Tdq Config Mapping Source";
+    private static final String CONFIG_SOURCE_UID      = "tdq-config-mapping-source";
     private static final String CONFIG_SOURCE_OP_NAME2 = "Tdq Config Mapping Source2";
-    private static final String CONFIG_SOURCE_UID2 = "tdq-config-mapping-source2";
-    private static final String CONNECTOR_OP_NAME = "Connector Operator";
-    private static final String CONNECTOR_OP_UID = "connector-operator";
-    private static final String FILTER_OP_NAME = "Filter Operator";
-    private static final String FILTER_OP_UID = "filter-operator";
+    private static final String CONFIG_SOURCE_UID2     = "tdq-config-mapping-source2";
+    private static final String CONNECTOR_OP_NAME      = "Connector Operator";
+    private static final String CONNECTOR_OP_UID       = "connector-operator";
+    private static final String FILTER_OP_NAME         = "Filter Operator";
+    private static final String FILTER_OP_UID          = "filter-operator";
 
     //soj Metrcis collector
     public static void main(String[] args) throws Exception {
@@ -130,7 +147,7 @@ public class SojMetricsCollectorJob {
                         .name("sojourner metrics collector")
                         .uid("sojourner-metrics-collector");
         SingleOutputStreamOperator<SojMetrics> sojMetricsCollectorDataStreamPostAgg
-                = sojMetricsCollectorDataStream.keyBy("taskIndex","eventTime")
+                = sojMetricsCollectorDataStream.keyBy("taskIndex", "eventTime")
                 .window(TumblingEventTimeWindows.of(Time.minutes(1)))
                 .aggregate(new SojMetricsSplitAgg(), new SojMetricsSplitProcessWindowFunction())
                 .setParallelism(getInteger(Property.METRIICS_COLLECTOR_PARALLELISM))
@@ -184,7 +201,7 @@ public class SojMetricsCollectorJob {
                 .name("sojourner tansform error cnt metrics collector")
                 .uid("sojourner-tansform-error-cnt-metrics-collector");
 
-        totalCntMetricsDataStream.keyBy( "eventTime")
+        totalCntMetricsDataStream.keyBy("eventTime")
                 .window(TumblingEventTimeWindows.of(Time.minutes(1)))
                 .aggregate(
                         new SojMetricsPostAgg<TotalCntMetrics>(TotalCntMetrics.class),

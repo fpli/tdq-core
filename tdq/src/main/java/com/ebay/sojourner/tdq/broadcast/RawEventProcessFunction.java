@@ -1,8 +1,19 @@
 package com.ebay.sojourner.tdq.broadcast;
 
-import com.ebay.sojourner.common.model.*;
+import com.ebay.sojourner.common.model.MetricType;
+import com.ebay.sojourner.common.model.PageCntMetrics;
+import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.sojourner.common.model.RawEventMetrics;
+import com.ebay.sojourner.common.model.TagMissingCntMetrics;
+import com.ebay.sojourner.common.model.TagSumMetrics;
+import com.ebay.sojourner.common.model.TdqConfigMapping;
+import com.ebay.sojourner.common.model.TotalCntMetrics;
+import com.ebay.sojourner.common.model.TransformErrorMetrics;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.common.util.SojUtils;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.flink.api.common.state.BroadcastState;
@@ -10,10 +21,6 @@ import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.util.Collector;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 @Slf4j
 public class RawEventProcessFunction extends
@@ -27,7 +34,7 @@ public class RawEventProcessFunction extends
 
     @Override
     public void processElement(RawEvent rawEvent, ReadOnlyContext ctx,
-                               Collector<RawEventMetrics> out) throws Exception {
+            Collector<RawEventMetrics> out) throws Exception {
         ReadOnlyBroadcastState<String, TdqConfigMapping> broadcastState =
                 ctx.getBroadcastState(stateDescriptor);
         RawEventMetrics rawEventMetrics = new RawEventMetrics();
@@ -40,11 +47,11 @@ public class RawEventProcessFunction extends
 
     @Override
     public void processBroadcastElement(TdqConfigMapping mapping, Context ctx,
-                                        Collector<RawEventMetrics> out) throws Exception {
+            Collector<RawEventMetrics> out) throws Exception {
         log.info("process broadcast tdq config mapping: {}", mapping);
         BroadcastState<String, TdqConfigMapping> broadcastState =
                 ctx.getBroadcastState(stateDescriptor);
-        MetricType metricType = mapping.getMetricType();
+        MetricType    metricType = mapping.getMetricType();
         StringBuilder metricDesc = new StringBuilder();
         if (metricType != null) {
             metricDesc.append(metricType.name());
@@ -54,7 +61,7 @@ public class RawEventProcessFunction extends
     }
 
     private void calculateMetrics(RawEventMetrics rawEventMetrics, RawEvent rawEvent,
-                                  TdqConfigMapping tdqConfigMapping, String metricKey) {
+            TdqConfigMapping tdqConfigMapping, String metricKey) {
         MetricType metricType = tdqConfigMapping.getMetricType();
         switch (metricType) {
             case TAG_MISS_CNT:
@@ -81,18 +88,18 @@ public class RawEventProcessFunction extends
     }
 
     private void calculateTagMissingCntMetrics(RawEventMetrics rawEventMetrics, RawEvent rawEvent,
-                                               TdqConfigMapping tdqConfigMapping,
-                                               String metricKey) {
+            TdqConfigMapping tdqConfigMapping,
+            String metricKey) {
         Integer pageId = SojUtils.getPageId(rawEvent);
         Integer siteId = SojUtils.getSiteId(rawEvent);
         if (pageId != null) {
-            String pageFamily = SojUtils.getPageFmly(pageId);
-            boolean ifCountIn = SojUtils.checkIfCountIn(pageId);
+            String  pageFamily = SojUtils.getPageFmly(pageId);
+            boolean ifCountIn  = SojUtils.checkIfCountIn(pageId);
             if (ifCountIn && tdqConfigMapping.getPageFamilys() != null
                     && tdqConfigMapping.getPageFamilys().contains(pageFamily)) {
                 StringBuilder domain = new StringBuilder(pageFamily).append(Constants.DOMAIN_DEL)
                         .append(siteId == null ? "null" : siteId);
-                Set<String> tags = tdqConfigMapping.getTags();
+                Set<String>          tags                 = tdqConfigMapping.getTags();
                 TagMissingCntMetrics tagMissingCntMetrics = new TagMissingCntMetrics();
                 tagMissingCntMetrics.setMetricName(tdqConfigMapping.getMetricName());
                 tagMissingCntMetrics.setMetricType(tdqConfigMapping.getMetricType());
@@ -120,13 +127,13 @@ public class RawEventProcessFunction extends
     }
 
     private void calculateTagSumMetrics(RawEventMetrics rawEventMetrics, RawEvent rawEvent,
-                                        TdqConfigMapping tdqConfigMapping, String metricKey) {
-        Integer pageId = SojUtils.getPageId(rawEvent);
-        Integer siteId = SojUtils.getSiteId(rawEvent);
-        String pageFamily = SojUtils.getPageFmly(pageId);
+            TdqConfigMapping tdqConfigMapping, String metricKey) {
+        Integer pageId     = SojUtils.getPageId(rawEvent);
+        Integer siteId     = SojUtils.getSiteId(rawEvent);
+        String  pageFamily = SojUtils.getPageFmly(pageId);
         StringBuilder domain = new StringBuilder(pageFamily).append(Constants.DOMAIN_DEL)
                 .append(siteId == null ? "null" : siteId);
-        Set<String> tags = tdqConfigMapping.getTags();
+        Set<String>   tags          = tdqConfigMapping.getTags();
         TagSumMetrics tagSumMetrics = new TagSumMetrics();
         tagSumMetrics.setMetricName(tdqConfigMapping.getMetricName());
         tagSumMetrics.setMetricType(tdqConfigMapping.getMetricType());
@@ -142,14 +149,14 @@ public class RawEventProcessFunction extends
     }
 
     private void calculatePageCntMetrics(RawEventMetrics rawEventMetrics, RawEvent rawEvent,
-                                         TdqConfigMapping tdqConfigMapping, String metricKey) {
+            TdqConfigMapping tdqConfigMapping, String metricKey) {
         Integer pageId = SojUtils.getPageId(rawEvent);
         if (pageId != null) {
-            Integer siteId = SojUtils.getSiteId(rawEvent);
-            String pageFamily = SojUtils.getPageFmly(pageId);
+            Integer siteId     = SojUtils.getSiteId(rawEvent);
+            String  pageFamily = SojUtils.getPageFmly(pageId);
             StringBuilder domain = new StringBuilder(pageFamily).append(Constants.DOMAIN_DEL)
                     .append(siteId == null ? "null" : siteId);
-            Set<Integer> pageIds = tdqConfigMapping.getPageIds();
+            Set<Integer>   pageIds        = tdqConfigMapping.getPageIds();
             PageCntMetrics pageCntMetrics = new PageCntMetrics();
             pageCntMetrics.setMetricName(tdqConfigMapping.getMetricName());
             pageCntMetrics.setMetricType(tdqConfigMapping.getMetricType());
@@ -165,24 +172,24 @@ public class RawEventProcessFunction extends
     }
 
     private void calculateTransFormerErrorMetrics(RawEventMetrics rawEventMetrics,
-                                                  RawEvent rawEvent,
-                                                  TdqConfigMapping tdqConfigMapping,
-                                                  String metricKey) {
-        Integer pageId = SojUtils.getPageId(rawEvent);
-        Integer siteId = SojUtils.getSiteId(rawEvent);
-        String pageFamily = SojUtils.getPageFmly(pageId);
+            RawEvent rawEvent,
+            TdqConfigMapping tdqConfigMapping,
+            String metricKey) {
+        Integer pageId     = SojUtils.getPageId(rawEvent);
+        Integer siteId     = SojUtils.getSiteId(rawEvent);
+        String  pageFamily = SojUtils.getPageFmly(pageId);
         StringBuilder domain = new StringBuilder(pageFamily).append(Constants.DOMAIN_DEL)
                 .append(siteId == null ? "null" : siteId);
-        Set<String> tags = tdqConfigMapping.getTags();
+        Set<String>           tags                  = tdqConfigMapping.getTags();
         TransformErrorMetrics transformErrorMetrics = new TransformErrorMetrics();
         transformErrorMetrics.setMetricName(tdqConfigMapping.getMetricName());
         transformErrorMetrics.setMetricType(tdqConfigMapping.getMetricType());
         if (CollectionUtils.isNotEmpty(tags)) {
             Map<String, Long> tagWithCnt = new HashMap();
             for (String tagName : tags) {
-                String[] tagKV = tagName.split("-");
-                long cnt = 0L;
-                String tagValue = SojUtils.getTagValueStr(rawEvent, tagKV[0]);
+                String[] tagKV    = tagName.split("-");
+                long     cnt      = 0L;
+                String   tagValue = SojUtils.getTagValueStr(rawEvent, tagKV[0]);
                 if ("u".equals(tagKV[0])) {
                     cnt = SojUtils.checkFormatForU(tagKV[1], tagValue);
                 } else {
@@ -198,12 +205,12 @@ public class RawEventProcessFunction extends
     }
 
     private void calculateTotalCntMetrics(RawEventMetrics rawEventMetrics, RawEvent rawEvent,
-                                          TdqConfigMapping tdqConfigMapping, String metricKey) {
+            TdqConfigMapping tdqConfigMapping, String metricKey) {
         Integer pageId = SojUtils.getPageId(rawEvent);
         if (pageId != null) {
-            Integer siteId = SojUtils.getSiteId(rawEvent);
-            String pageFamily = SojUtils.getPageFmly(pageId);
-            boolean ifCountIn = SojUtils.checkIfCountIn(pageId);
+            Integer siteId     = SojUtils.getSiteId(rawEvent);
+            String  pageFamily = SojUtils.getPageFmly(pageId);
+            boolean ifCountIn  = SojUtils.checkIfCountIn(pageId);
             StringBuilder domain = new StringBuilder(pageFamily).append(Constants.DOMAIN_DEL)
                     .append(siteId == null ? "null" : siteId);
             TotalCntMetrics totalCntMetrics = new TotalCntMetrics();

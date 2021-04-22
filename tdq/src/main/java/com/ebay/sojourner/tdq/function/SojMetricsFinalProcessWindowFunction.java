@@ -1,8 +1,16 @@
 package com.ebay.sojourner.tdq.function;
 
-import com.ebay.sojourner.common.model.*;
+import com.ebay.sojourner.common.model.MetricType;
+import com.ebay.sojourner.common.model.PageCntMetrics;
+import com.ebay.sojourner.common.model.TagMissingCntMetrics;
+import com.ebay.sojourner.common.model.TagSumMetrics;
+import com.ebay.sojourner.common.model.TdqMetrics;
+import com.ebay.sojourner.common.model.TotalCntMetrics;
+import com.ebay.sojourner.common.model.TransformErrorMetrics;
 import com.ebay.sojourner.common.util.Constants;
 import com.ebay.sojourner.tdq.metrics.SojMetricsGauge;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.metrics.Gauge;
@@ -10,14 +18,11 @@ import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import static java.util.Map.Entry;
 
 public class SojMetricsFinalProcessWindowFunction<T extends TdqMetrics> extends
         ProcessWindowFunction<T, T, Tuple, TimeWindow> {
-    private static final Map<String, Gauge> domainMetricGuageMap = new ConcurrentHashMap<>();
+    private static final Map<String, Gauge>  domainMetricGuageMap = new ConcurrentHashMap<>();
     private static final Map<String, Object> domainMetricValueMap = new ConcurrentHashMap<>();
 
     @Override
@@ -27,7 +32,7 @@ public class SojMetricsFinalProcessWindowFunction<T extends TdqMetrics> extends
 
     @Override
     public void process(Tuple tuple, Context context, Iterable<T> elements,
-                        Collector<T> out) {
+            Collector<T> out) {
         T sojMetrics = elements.iterator().next();
         collectSojMetrics(sojMetrics);
         //        out.collect(null);
@@ -53,12 +58,12 @@ public class SojMetricsFinalProcessWindowFunction<T extends TdqMetrics> extends
                 = tagMissingCntMetrics.getTagCntMap();
         for (Entry<String, Map<String, Long>> domainTagMissingCntEntry
                 : domainTagMissingCntMap.entrySet()) {
-            String domain = domainTagMissingCntEntry.getKey();
-            String[] domainList = domain.split(Constants.DOMAIN_DEL);
+            String            domain           = domainTagMissingCntEntry.getKey();
+            String[]          domainList       = domain.split(Constants.DOMAIN_DEL);
             Map<String, Long> tagMissingCntMap = domainTagMissingCntEntry.getValue();
             for (Entry<String, Long> tagMissingCntEntry : tagMissingCntMap.entrySet()) {
-                String tagName = tagMissingCntEntry.getKey();
-                Long tagCount = tagMissingCntEntry.getValue();
+                String tagName  = tagMissingCntEntry.getKey();
+                Long   tagCount = tagMissingCntEntry.getValue();
                 StringBuilder sb = new StringBuilder(Constants.SOJ_METRICS_GROUP)
                         .append(metricKey).append(domain)
                         .append(tagMissingCntMetrics.getEventTime()).append(tagName);
@@ -89,15 +94,15 @@ public class SojMetricsFinalProcessWindowFunction<T extends TdqMetrics> extends
     }
 
     private void collectTagSumMetrics(TagSumMetrics tagSumMetrics) {
-        String metricKey = constructMetricKey(tagSumMetrics);
+        String                           metricKey       = constructMetricKey(tagSumMetrics);
         Map<String, Map<String, Double>> domainTagSumMap = tagSumMetrics.getTagSumMap();
         for (Entry<String, Map<String, Double>> domainTagSumEntry
                 : domainTagSumMap.entrySet()) {
-            String domain = domainTagSumEntry.getKey();
-            String[] domainList = domain.split(Constants.DOMAIN_DEL);
-            Map<String, Double> tagSumMap = domainTagSumEntry.getValue();
+            String              domain     = domainTagSumEntry.getKey();
+            String[]            domainList = domain.split(Constants.DOMAIN_DEL);
+            Map<String, Double> tagSumMap  = domainTagSumEntry.getValue();
             for (Entry<String, Double> tagSumEntry : tagSumMap.entrySet()) {
-                String tagName = tagSumEntry.getKey();
+                String tagName  = tagSumEntry.getKey();
                 Double tagCount = tagSumEntry.getValue();
                 StringBuilder sb = new StringBuilder(Constants.SOJ_METRICS_GROUP)
                         .append(metricKey).append(domain)
@@ -127,16 +132,16 @@ public class SojMetricsFinalProcessWindowFunction<T extends TdqMetrics> extends
     }
 
     private void collectPageCntMetrics(PageCntMetrics pageCntMetrics) {
-        String metricKey = constructMetricKey(pageCntMetrics);
+        String                          metricKey        = constructMetricKey(pageCntMetrics);
         Map<String, Map<Integer, Long>> domainPageCntMap = pageCntMetrics.getPageCntMap();
         for (Entry<String, Map<Integer, Long>> domainPageCntEntry :
                 domainPageCntMap.entrySet()) {
-            String domain = domainPageCntEntry.getKey();
-            String[] domainList = domain.split(Constants.DOMAIN_DEL);
+            String             domain     = domainPageCntEntry.getKey();
+            String[]           domainList = domain.split(Constants.DOMAIN_DEL);
             Map<Integer, Long> pageCntMap = domainPageCntEntry.getValue();
             for (Entry<Integer, Long> pageCntEntry : pageCntMap.entrySet()) {
-                Integer pageId = pageCntEntry.getKey();
-                Long pageCnt = pageCntEntry.getValue();
+                Integer pageId  = pageCntEntry.getKey();
+                Long    pageCnt = pageCntEntry.getValue();
                 StringBuilder sb = new StringBuilder(Constants.SOJ_METRICS_GROUP)
                         .append(metricKey).append(domain)
                         .append(pageCntMetrics.getEventTime()).append(pageId);
@@ -166,13 +171,13 @@ public class SojMetricsFinalProcessWindowFunction<T extends TdqMetrics> extends
     }
 
     private void collectTotalCntMetrics(TotalCntMetrics totalCntMetrics) {
-        String metricKey = constructMetricKey(totalCntMetrics);
+        String            metricKey         = constructMetricKey(totalCntMetrics);
         Map<String, Long> domainTotalCntMap = totalCntMetrics.getTotalCntMap();
         for (Entry<String, Long> domainTotalCntEntry :
                 domainTotalCntMap.entrySet()) {
-            String domain = domainTotalCntEntry.getKey();
+            String   domain     = domainTotalCntEntry.getKey();
             String[] domainList = domain.split(Constants.DOMAIN_DEL);
-            Long totalCnt = domainTotalCntEntry.getValue();
+            Long     totalCnt   = domainTotalCntEntry.getValue();
             StringBuilder sb = new StringBuilder(Constants.SOJ_METRICS_GROUP)
                     .append(metricKey).append(domain).append(Constants.SOJ_METRICS_TOTAL)
                     .append(totalCntMetrics.getEventTime());
@@ -201,9 +206,9 @@ public class SojMetricsFinalProcessWindowFunction<T extends TdqMetrics> extends
         Map<String, Long> domainTotalCntItmMap = totalCntMetrics.getTotalCntItmMap();
         for (Entry<String, Long> domainTotalCntItmEntry :
                 domainTotalCntItmMap.entrySet()) {
-            String domain = domainTotalCntItmEntry.getKey();
+            String   domain     = domainTotalCntItmEntry.getKey();
             String[] domainList = domain.split(Constants.DOMAIN_DEL);
-            Long totalCnt = domainTotalCntItmEntry.getValue();
+            Long     totalCnt   = domainTotalCntItmEntry.getValue();
             StringBuilder sb = new StringBuilder(Constants.SOJ_METRICS_GROUP)
                     .append(metricKey).append(domain).append(Constants.SOJ_METRICS_TOTAL_ITM)
                     .append(totalCntMetrics.getEventTime());
@@ -236,12 +241,12 @@ public class SojMetricsFinalProcessWindowFunction<T extends TdqMetrics> extends
                 = transformErrorMetrics.getTagErrorCntMap();
         for (Entry<String, Map<String, Long>> domainTransformErrorEntry :
                 domainTransformErrorMap.entrySet()) {
-            String domain = domainTransformErrorEntry.getKey();
-            String[] domainList = domain.split(Constants.DOMAIN_DEL);
+            String            domain            = domainTransformErrorEntry.getKey();
+            String[]          domainList        = domain.split(Constants.DOMAIN_DEL);
             Map<String, Long> transformErrorMap = domainTransformErrorEntry.getValue();
             for (Entry<String, Long> transformErrorEntry : transformErrorMap.entrySet()) {
-                String tagName = transformErrorEntry.getKey();
-                Long tagErrorCnt = transformErrorEntry.getValue();
+                String tagName     = transformErrorEntry.getKey();
+                Long   tagErrorCnt = transformErrorEntry.getValue();
                 StringBuilder sb = new StringBuilder(Constants.SOJ_METRICS_GROUP)
                         .append(metricKey).append(domain)
                         .append(transformErrorMetrics.getEventTime()).append(tagName);
@@ -272,7 +277,7 @@ public class SojMetricsFinalProcessWindowFunction<T extends TdqMetrics> extends
     }
 
     private String constructMetricKey(TdqMetrics tdqMetrics) {
-        MetricType metricType = tdqMetrics.getMetricType();
+        MetricType    metricType = tdqMetrics.getMetricType();
         StringBuilder metricDesc = new StringBuilder();
         if (metricType != null) {
             metricDesc.append(metricType.name());

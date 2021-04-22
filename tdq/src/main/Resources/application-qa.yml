@@ -1,10 +1,13 @@
 flink:
   app:
-    name: Sojourner Tdq - QA
+    name: TDQ V2 - QA
     parallelism:
+      default: 2
       source: 2
-      broadcast: 2
-      metrics: 2
+      metric-normalizer: 2
+      metric-pre-collector: 2
+      metric-collector-by-window: 2
+      metric-final-collector: 1
     data-skew:
       is-filter: false
       guid-list:[]
