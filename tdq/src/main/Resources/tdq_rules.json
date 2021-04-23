@@ -15,7 +15,7 @@
           "comment": "Event Capture Publish Latency",
           "dimensions": ["page_id"],
           "expression": {"operator": "Expr", "config": {"text": "t_duration_sum"}},
-          "filter": "page_id in (1702898, 1677718) and CAST(clientData.contentLength AS INTEGER) > 30",
+          "filter": "page_id in (2481888, 2047939, 2050601) and CAST(clientData.contentLength AS INTEGER) > 100",
           "transformations": [
             {
               "alias": "page_id",
@@ -51,6 +51,58 @@
       "profilers": [
         {
           "metric-name": "global_mandatory_tag_item_rate",
+          "comment": "Global Mandatory Tag - Item Rate",
+          "dimensions": ["domain"],
+          "expression": {"operator": "Expr", "config": {"text": "itm_valid_cnt / itm_cnt"}},
+          "filter": null,
+          "transformations": [
+            {
+              "alias": "domain",
+              "expression": {
+                "operator": "UDF",
+                "config": {"text": "PAGE_FAMILY(CAST(TAG_EXTRACT('p') AS INTEGER))"}
+              }
+            },
+            {
+              "alias": "item",
+              "expression": {
+                "operator": "UDF",
+                "config": {"text": "CAST(TAG_EXTRACT('itm|itmid|itm_id|itmlist|litm') AS INTEGER)"}
+              }
+            },
+            {
+              "alias": "itm_valid_ind",
+              "expression": {
+                "operator": "Expr",
+                "config": {
+                  "text": "case when item is not null then 1 else 0 end"
+                }
+              }
+            },
+            {
+              "alias": "itm_cnt",
+              "expression": {"operator": "Count", "config": {"arg0": "1"}}
+            },
+            {
+              "alias": "itm_valid_cnt",
+              "expression": {
+                "operator": "Sum", "config": {"arg0": "itm_valid_ind"}
+              },
+              "filter": "itm_valid_ind is not null"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rule_3",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "1h"
+      },
+      "profilers": [
+        {
+          "metric-name": "global_mandatory_tag_item_rate2",
           "comment": "Global Mandatory Tag - Item Rate",
           "dimensions": ["domain"],
           "expression": {"operator": "Expr", "config": {"text": "itm_valid_cnt / itm_cnt"}},

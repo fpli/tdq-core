@@ -4,10 +4,14 @@ flink:
     parallelism:
       default: 100
       source: 100
-      tdq-normalizer: 300
-      metrics-collector: 150
-      metrics-collector-post: 50
-      metric-final-collector: 5
+      metric-normalizer: 300
+      metric-pre-collector: 50
+      metric-collector-by-window: 10
+      metric-final-collector: 2
+    window:
+      supports: 1min,2min,5min,10min,1h
+      metric-pre-collector: 30s
+      metric-collector-by-window: 60s
     slot-sharing-group:
       source-event-lvs: tdq-lvs
       source-event-slc: tdq-slc

@@ -302,6 +302,9 @@ case class Cast(child: Expression, dataType: DataType, cacheKey: Option[String] 
       b => x.numeric.asInstanceOf[Numeric[Any]].toInt(b)
   }
 
+  // converting us to seconds
+  private[this] def timestampToLong(ts: Long): Long = math.floor(ts.toDouble / 1000000L).toLong
+
   // ShortConverter
   private[this] def castToShort(from: DataType): Any => Any = from match {
     case StringType =>
@@ -319,9 +322,6 @@ case class Cast(child: Expression, dataType: DataType, cacheKey: Option[String] 
     case x: NumericType =>
       b => x.numeric.asInstanceOf[Numeric[Any]].toInt(b).toShort
   }
-
-  // converting us to seconds
-  private[this] def timestampToLong(ts: Long): Long = math.floor(ts.toDouble / 1000000L).toLong
 
   // ByteConverter
   private[this] def castToByte(from: DataType): Any => Any = from match {
@@ -401,6 +401,11 @@ case class Cast(child: Expression, dataType: DataType, cacheKey: Option[String] 
       b => x.numeric.asInstanceOf[Numeric[Any]].toDouble(b)
   }
 
+  // converting us to seconds in double
+  private[this] def timestampToDouble(ts: Long): Double = {
+    ts / 1000000.0
+  }
+
   // FloatConverter
   private[this] def castToFloat(from: DataType): Any => Any = from match {
     case StringType =>
@@ -415,11 +420,6 @@ case class Cast(child: Expression, dataType: DataType, cacheKey: Option[String] 
       buildCast[Long](_, t => timestampToDouble(t).toFloat)
     case x: NumericType =>
       b => x.numeric.asInstanceOf[Numeric[Any]].toFloat(b)
-  }
-
-  // converting us to seconds in double
-  private[this] def timestampToDouble(ts: Long): Double = {
-    ts / 1000000.0
   }
 
   private[this] def changePrecision(d: String, decimalType: DecimalType,

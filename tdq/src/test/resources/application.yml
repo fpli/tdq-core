@@ -4,7 +4,6 @@ flink:
     parallelism:
       default: 100
       source: 100
-      tdq-normalizer: 300
       metric-normalizer: 3
       metric-pre-collector: 3
       metric-collector-by-window: 2

@@ -48,9 +48,6 @@ public class TdqMetric implements Serializable {
                 sj.add(e.getKey() + "=" + e.getValue());
             }
         }
-//        if (partition != -1) {
-//            sj.add("par=" + partition);
-//        }
         sb.append(sj).append("}");
         setUid(DigestUtils.md5Hex(sb.toString().getBytes()));
         return this;

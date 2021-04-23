@@ -112,6 +112,7 @@ case class PhysicalPlan(
       cacheData.put(k, v)
     }
     val input = InternalRow(Array(metric), cacheData)
-    metric.setValue(evaluation.call(input, fromCache = true).asInstanceOf[Number].doubleValue())
+    val v = evaluation.call(input, fromCache = true)
+    metric.setValue(if (v != null) v.asInstanceOf[Number].doubleValue() else 0d)
   }
 }

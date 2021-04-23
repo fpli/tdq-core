@@ -14,30 +14,30 @@ import org.apache.flink.util.OutputTag;
  */
 @Slf4j
 public class TdqMetricProcessWindowTagFunction
-        extends ProcessWindowFunction<TdqMetric, TdqMetric, String, TimeWindow> {
-    public final Map<Long, OutputTag<TdqMetric>> tagMap;
+    extends ProcessWindowFunction<TdqMetric, TdqMetric, String, TimeWindow> {
+  public final Map<Long, OutputTag<TdqMetric>> tagMap;
 
-    public TdqMetricProcessWindowTagFunction(Map<Long, OutputTag<TdqMetric>> tagMap) {
-        this.tagMap = tagMap;
-    }
+  public TdqMetricProcessWindowTagFunction(Map<Long, OutputTag<TdqMetric>> tagMap) {
+    this.tagMap = tagMap;
+  }
 
-    @Override
-    public void open(Configuration parameters) throws Exception {
-        super.open(parameters);
-    }
+  @Override
+  public void open(Configuration parameters) throws Exception {
+    super.open(parameters);
+  }
 
-    @Override
-    public void process(String tag, Context context,
-            Iterable<TdqMetric> iterable, Collector<TdqMetric> collector) {
-        collect(iterable.iterator().next(), context);
-    }
+  @Override
+  public void process(String tag, Context context,
+      Iterable<TdqMetric> iterable, Collector<TdqMetric> collector) {
+    collect(iterable.iterator().next(), context);
+  }
 
-    void collect(TdqMetric m, Context context) {
-        OutputTag<TdqMetric> outputTag = tagMap.get(m.getWindow());
-        if (outputTag != null) {
-            context.output(outputTag, m);
-        } else {
-            log.warn("Drop tdq metric{}, windows not supported!", m);
-        }
+  void collect(TdqMetric m, Context context) {
+    OutputTag<TdqMetric> outputTag = tagMap.get(m.getWindow());
+    if (outputTag != null) {
+      context.output(outputTag, m);
+    } else {
+      log.warn("Drop tdq metric{}, windows not supported!", m);
     }
+  }
 }

@@ -120,8 +120,6 @@ object DateTimeUtils {
     timestampToString(us, defaultTimeZone())
   }
 
-  def defaultTimeZone(): TimeZone = TimeZone.getDefault()
-
   // Converts Timestamp to string according to Hive TimestampWritable convention.
   def timestampToString(us: SQLTimestamp, timeZone: TimeZone): String = {
     val ts = toJavaTimestamp(us)
@@ -407,6 +405,10 @@ object DateTimeUtils {
     false
   }
 
+  private[this] def isLeapYear(year: Int): Boolean = {
+    (year % 4) == 0 && ((year % 100) != 0 || (year % 400) == 0)
+  }
+
   @tailrec
   final def stringToTime(s: String): java.util.Date = {
     val indexOfGMT = s.indexOf("GMT")
@@ -533,6 +535,23 @@ object DateTimeUtils {
     ((localTimestamp(microsec) / MICROS_PER_SECOND / 60) % 60).toInt
   }
 
+  private def localTimestamp(microsec: SQLTimestamp): SQLTimestamp = {
+    localTimestamp(microsec, defaultTimeZone())
+  }
+
+  def defaultTimeZone(): TimeZone = TimeZone.getDefault()
+
+  private def localTimestamp(microsec: SQLTimestamp, timeZone: TimeZone): SQLTimestamp = {
+    absoluteMicroSecond(microsec) + timeZone.getOffset(microsec / 1000) * 1000L
+  }
+
+  /**
+   * Returns the microseconds since year zero (-17999) from microseconds since epoch.
+   */
+  private def absoluteMicroSecond(microsec: SQLTimestamp): SQLTimestamp = {
+    microsec + toYearZero * MICROS_PER_DAY
+  }
+
   /**
    * Returns the minute value of a given timestamp value. The timestamp is expressed in
    * microseconds.
@@ -549,27 +568,12 @@ object DateTimeUtils {
     ((localTimestamp(microsec) / MICROS_PER_SECOND) % 60).toInt
   }
 
-  private def localTimestamp(microsec: SQLTimestamp): SQLTimestamp = {
-    localTimestamp(microsec, defaultTimeZone())
-  }
-
   /**
    * Returns the second value of a given timestamp value. The timestamp is expressed in
    * microseconds.
    */
   def getSeconds(microsec: SQLTimestamp, timeZone: TimeZone): Int = {
     ((localTimestamp(microsec, timeZone) / MICROS_PER_SECOND) % 60).toInt
-  }
-
-  private def localTimestamp(microsec: SQLTimestamp, timeZone: TimeZone): SQLTimestamp = {
-    absoluteMicroSecond(microsec) + timeZone.getOffset(microsec / 1000) * 1000L
-  }
-
-  /**
-   * Returns the microseconds since year zero (-17999) from microseconds since epoch.
-   */
-  private def absoluteMicroSecond(microsec: SQLTimestamp): SQLTimestamp = {
-    microsec + toYearZero * MICROS_PER_DAY
   }
 
   /**
@@ -828,10 +832,6 @@ object DateTimeUtils {
         }
       }
     }
-  }
-
-  private[this] def isLeapYear(year: Int): Boolean = {
-    (year % 4) == 0 && ((year % 100) != 0 || (year % 400) == 0)
   }
 
   /**

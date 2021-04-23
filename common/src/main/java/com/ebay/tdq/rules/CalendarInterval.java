@@ -8,23 +8,23 @@ import java.util.regex.Pattern;
  * The internal representation of interval type.
  */
 public final class CalendarInterval implements Serializable {
-    public static final long    MICROS_PER_MILLI  = 1000L;
-    public static final long    MICROS_PER_SECOND = MICROS_PER_MILLI * 1000;
-    public static final long    MICROS_PER_MINUTE = MICROS_PER_SECOND * 60;
-    public static final long    MICROS_PER_HOUR   = MICROS_PER_MINUTE * 60;
-    public static final long    MICROS_PER_DAY    = MICROS_PER_HOUR * 24;
-    public static final long    MICROS_PER_WEEK   = MICROS_PER_DAY * 7;
-    private static      Pattern p                 = Pattern.compile("interval" + unitRegex("year") + unitRegex("month"
+    public static final long MICROS_PER_MILLI = 1000L;
+    public static final long MICROS_PER_SECOND = MICROS_PER_MILLI * 1000;
+    public static final long MICROS_PER_MINUTE = MICROS_PER_SECOND * 60;
+    public static final long MICROS_PER_HOUR = MICROS_PER_MINUTE * 60;
+    public static final long MICROS_PER_DAY = MICROS_PER_HOUR * 24;
+    public static final long MICROS_PER_WEEK = MICROS_PER_DAY * 7;
+    private static Pattern p = Pattern.compile("interval" + unitRegex("year") + unitRegex("month"
     ) +
             unitRegex("week") + unitRegex("day") + unitRegex("hour") + unitRegex("minute") +
             unitRegex("second") + unitRegex("millisecond") + unitRegex("microsecond"));
-    private static      Pattern yearMonthPattern  =
+    private static Pattern yearMonthPattern =
             Pattern.compile("^(?:['|\"])?([+|-])?(\\d+)-(\\d+)(?:['|\"])?$");
-    private static      Pattern dayTimePattern    =
+    private static Pattern dayTimePattern =
             Pattern.compile("^(?:['|\"])?([+|-])?(\\d+) (\\d+):(\\d+):(\\d+)(\\.(\\d+))?(?:['|\"])?$");
-    private static      Pattern quoteTrimPattern  = Pattern.compile("^(?:['|\"])?(.*?)(?:['|\"])?$");
-    public final        int     months;
-    public final        long    microseconds;
+    private static Pattern quoteTrimPattern = Pattern.compile("^(?:['|\"])?(.*?)(?:['|\"])?$");
+    public final int months;
+    public final long microseconds;
 
     public CalendarInterval(int months, long microseconds) {
         this.months       = months;
@@ -62,7 +62,7 @@ public final class CalendarInterval implements Serializable {
         if (!m.matches() || s.equals("interval")) {
             return null;
         } else {
-            long months       = toLong(m.group(1)) * 12 + toLong(m.group(2));
+            long months = toLong(m.group(1)) * 12 + toLong(m.group(2));
             long microseconds = toLong(m.group(3)) * MICROS_PER_WEEK;
             microseconds += toLong(m.group(4)) * MICROS_PER_DAY;
             microseconds += toLong(m.group(5)) * MICROS_PER_HOUR;
@@ -91,7 +91,7 @@ public final class CalendarInterval implements Serializable {
         if (!m.matches() || s.equals("interval")) {
             return null;
         } else {
-            long months       = toLong(m.group(1)) * 12 + toLong(m.group(2));
+            long months = toLong(m.group(1)) * 12 + toLong(m.group(2));
             long microseconds = toLong(m.group(3)) * MICROS_PER_WEEK;
             microseconds += toLong(m.group(4)) * MICROS_PER_DAY;
             if (m.group(5) != null || m.group(6) != null || m.group(7) != null ||
@@ -133,8 +133,8 @@ public final class CalendarInterval implements Serializable {
                     "Interval string does not match year-month format of 'y-m': " + s);
         } else {
             try {
-                int sign   = m.group(1) != null && m.group(1).equals("-") ? -1 : 1;
-                int years  = (int) toLongWithRange("year", m.group(2), 0, Integer.MAX_VALUE);
+                int sign = m.group(1) != null && m.group(1).equals("-") ? -1 : 1;
+                int years = (int) toLongWithRange("year", m.group(2), 0, Integer.MAX_VALUE);
                 int months = (int) toLongWithRange("month", m.group(3), 0, 11);
                 result = new CalendarInterval(sign * (years * 12 + months), 0);
             } catch (Exception e) {
@@ -162,9 +162,9 @@ public final class CalendarInterval implements Serializable {
                     "Interval string does not match day-time format of 'd h:m:s.n': " + s);
         } else {
             try {
-                int  sign    = m.group(1) != null && m.group(1).equals("-") ? -1 : 1;
-                long days    = toLongWithRange("day", m.group(2), 0, Integer.MAX_VALUE);
-                long hours   = toLongWithRange("hour", m.group(3), 0, 23);
+                int sign = m.group(1) != null && m.group(1).equals("-") ? -1 : 1;
+                long days = toLongWithRange("day", m.group(2), 0, Integer.MAX_VALUE);
+                long hours = toLongWithRange("hour", m.group(3), 0, 23);
                 long minutes = toLongWithRange("minute", m.group(4), 0, 59);
                 long seconds = toLongWithRange("second", m.group(5), 0, 59);
                 // Hive allow nanosecond precision interval
@@ -274,13 +274,13 @@ public final class CalendarInterval implements Serializable {
     }
 
     public CalendarInterval add(CalendarInterval that) {
-        int  months       = this.months + that.months;
+        int months = this.months + that.months;
         long microseconds = this.microseconds + that.microseconds;
         return new CalendarInterval(months, microseconds);
     }
 
     public CalendarInterval subtract(CalendarInterval that) {
-        int  months       = this.months - that.months;
+        int months = this.months - that.months;
         long microseconds = this.microseconds - that.microseconds;
         return new CalendarInterval(months, microseconds);
     }

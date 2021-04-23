@@ -147,14 +147,6 @@ final class Decimal extends Ordered[Decimal] with Serializable {
     }
   }
 
-  def toLong: Long = {
-    if (decimalVal.eq(null)) {
-      longVal / POW_10(_scale)
-    } else {
-      decimalVal.longValue()
-    }
-  }
-
   def toUnscaledLong: Long = {
     if (decimalVal.ne(null)) {
       decimalVal.underlying().unscaledValue().longValueExact()
@@ -187,6 +179,14 @@ final class Decimal extends Ordered[Decimal] with Serializable {
 
   def toInt: Int = toLong.toInt
 
+  def toLong: Long = {
+    if (decimalVal.eq(null)) {
+      longVal / POW_10(_scale)
+    } else {
+      decimalVal.longValue()
+    }
+  }
+
   def toShort: Short = toLong.toShort
 
   def toByte: Byte = toLong.toByte
@@ -198,107 +198,6 @@ final class Decimal extends Ordered[Decimal] with Serializable {
    */
   def changePrecision(precision: Int, scale: Int): Boolean = {
     changePrecision(precision, scale, ROUND_HALF_UP)
-  }
-
-  override def equals(other: Any): Boolean = other match {
-    case d: Decimal =>
-      compare(d) == 0
-    case _ =>
-      false
-  }
-
-  override def hashCode(): Int = toBigDecimal.hashCode()
-
-  def +(that: Decimal): Decimal = {
-    if (decimalVal.eq(null) && that.decimalVal.eq(null) && scale == that.scale) {
-      Decimal(longVal + that.longVal, Math.max(precision, that.precision), scale)
-    } else {
-      Decimal(toBigDecimal + that.toBigDecimal)
-    }
-  }
-
-  def -(that: Decimal): Decimal = {
-    if (decimalVal.eq(null) && that.decimalVal.eq(null) && scale == that.scale) {
-      Decimal(longVal - that.longVal, Math.max(precision, that.precision), scale)
-    } else {
-      Decimal(toBigDecimal - that.toBigDecimal)
-    }
-  }
-
-  def precision: Int = _precision
-
-  def scale: Int = _scale
-
-  // TypeCoercion will take care of the precision, scale of result
-  def *(that: Decimal): Decimal =
-    Decimal(toJavaBigDecimal.multiply(that.toJavaBigDecimal, MATH_CONTEXT))
-
-  def toJavaBigDecimal: java.math.BigDecimal = {
-    if (decimalVal.ne(null)) {
-      decimalVal.underlying()
-    } else {
-      java.math.BigDecimal.valueOf(longVal, _scale)
-    }
-  }
-
-  def /(that: Decimal): Decimal =
-    if (that.isZero) null else Decimal(toJavaBigDecimal.divide(that.toJavaBigDecimal, MATH_CONTEXT))
-
-  def isZero: Boolean = if (decimalVal.ne(null)) decimalVal == BIG_DEC_ZERO else longVal == 0
-
-  def remainder(that: Decimal): Decimal = this % that
-
-  def %(that: Decimal): Decimal =
-    if (that.isZero) null
-    else Decimal(toJavaBigDecimal.remainder(that.toJavaBigDecimal, MATH_CONTEXT))
-
-  def abs: Decimal = if (this.compare(Decimal.ZERO) < 0) this.unary_- else this
-
-  override def compare(other: Decimal): Int = {
-    if (decimalVal.eq(null) && other.decimalVal.eq(null) && _scale == other._scale) {
-      if (longVal < other.longVal) -1 else if (longVal == other.longVal) 0 else 1
-    } else {
-      toBigDecimal.compare(other.toBigDecimal)
-    }
-  }
-
-  def unary_- : Decimal = {
-    if (decimalVal.ne(null)) {
-      Decimal(-decimalVal, precision, scale)
-    } else {
-      Decimal(-longVal, precision, scale)
-    }
-  }
-
-  def floor: Decimal = if (scale == 0) this else {
-    val newPrecision = DecimalType.bounded(precision - scale + 1, 0).precision
-    val res = toPrecision(newPrecision, 0, ROUND_FLOOR)
-    if (res == null) {
-      throw new Exception(s"Overflow when setting precision to $newPrecision")
-    }
-    res
-  }
-
-  def ceil: Decimal = if (scale == 0) this else {
-    val newPrecision = DecimalType.bounded(precision - scale + 1, 0).precision
-    val res = toPrecision(newPrecision, 0, ROUND_CEILING)
-    if (res == null) {
-      throw new Exception(s"Overflow when setting precision to $newPrecision")
-    }
-    res
-  }
-
-  /**
-   * Create new `Decimal` with given precision and scale.
-   *
-   * @return a non-null `Decimal` value if successful or `null` if overflow would occur.
-   */
-  def toPrecision(
-    precision: Int,
-    scale: Int,
-    roundMode: BigDecimal.RoundingMode.Value = ROUND_HALF_UP): Decimal = {
-    val copy = clone()
-    if (copy.changePrecision(precision, scale, roundMode)) copy else null
   }
 
   /**
@@ -380,6 +279,107 @@ final class Decimal extends Ordered[Decimal] with Serializable {
     _precision = precision
     _scale = scale
     true
+  }
+
+  override def equals(other: Any): Boolean = other match {
+    case d: Decimal =>
+      compare(d) == 0
+    case _ =>
+      false
+  }
+
+  override def hashCode(): Int = toBigDecimal.hashCode()
+
+  def +(that: Decimal): Decimal = {
+    if (decimalVal.eq(null) && that.decimalVal.eq(null) && scale == that.scale) {
+      Decimal(longVal + that.longVal, Math.max(precision, that.precision), scale)
+    } else {
+      Decimal(toBigDecimal + that.toBigDecimal)
+    }
+  }
+
+  def -(that: Decimal): Decimal = {
+    if (decimalVal.eq(null) && that.decimalVal.eq(null) && scale == that.scale) {
+      Decimal(longVal - that.longVal, Math.max(precision, that.precision), scale)
+    } else {
+      Decimal(toBigDecimal - that.toBigDecimal)
+    }
+  }
+
+  def precision: Int = _precision
+
+  def scale: Int = _scale
+
+  // TypeCoercion will take care of the precision, scale of result
+  def *(that: Decimal): Decimal =
+    Decimal(toJavaBigDecimal.multiply(that.toJavaBigDecimal, MATH_CONTEXT))
+
+  def /(that: Decimal): Decimal =
+    if (that.isZero) null else Decimal(toJavaBigDecimal.divide(that.toJavaBigDecimal, MATH_CONTEXT))
+
+  def remainder(that: Decimal): Decimal = this % that
+
+  def %(that: Decimal): Decimal =
+    if (that.isZero) null
+    else Decimal(toJavaBigDecimal.remainder(that.toJavaBigDecimal, MATH_CONTEXT))
+
+  def toJavaBigDecimal: java.math.BigDecimal = {
+    if (decimalVal.ne(null)) {
+      decimalVal.underlying()
+    } else {
+      java.math.BigDecimal.valueOf(longVal, _scale)
+    }
+  }
+
+  def isZero: Boolean = if (decimalVal.ne(null)) decimalVal == BIG_DEC_ZERO else longVal == 0
+
+  def abs: Decimal = if (this.compare(Decimal.ZERO) < 0) this.unary_- else this
+
+  override def compare(other: Decimal): Int = {
+    if (decimalVal.eq(null) && other.decimalVal.eq(null) && _scale == other._scale) {
+      if (longVal < other.longVal) -1 else if (longVal == other.longVal) 0 else 1
+    } else {
+      toBigDecimal.compare(other.toBigDecimal)
+    }
+  }
+
+  def unary_- : Decimal = {
+    if (decimalVal.ne(null)) {
+      Decimal(-decimalVal, precision, scale)
+    } else {
+      Decimal(-longVal, precision, scale)
+    }
+  }
+
+  def floor: Decimal = if (scale == 0) this else {
+    val newPrecision = DecimalType.bounded(precision - scale + 1, 0).precision
+    val res = toPrecision(newPrecision, 0, ROUND_FLOOR)
+    if (res == null) {
+      throw new Exception(s"Overflow when setting precision to $newPrecision")
+    }
+    res
+  }
+
+  def ceil: Decimal = if (scale == 0) this else {
+    val newPrecision = DecimalType.bounded(precision - scale + 1, 0).precision
+    val res = toPrecision(newPrecision, 0, ROUND_CEILING)
+    if (res == null) {
+      throw new Exception(s"Overflow when setting precision to $newPrecision")
+    }
+    res
+  }
+
+  /**
+   * Create new `Decimal` with given precision and scale.
+   *
+   * @return a non-null `Decimal` value if successful or `null` if overflow would occur.
+   */
+  def toPrecision(
+    precision: Int,
+    scale: Int,
+    roundMode: BigDecimal.RoundingMode.Value = ROUND_HALF_UP): Decimal = {
+    val copy = clone()
+    if (copy.changePrecision(precision, scale, roundMode)) copy else null
   }
 
   override def clone(): Decimal = new Decimal().set(this)
