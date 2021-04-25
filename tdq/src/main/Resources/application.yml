@@ -43,6 +43,7 @@ flink:
       tolerate-failure-number: 3
     hot-deploy: false
     source:
+      sample-fraction: 0.01
       from-timestamp: 0
       out-of-orderless-in-min: 3
       idle-source-timeout-in-min: 10

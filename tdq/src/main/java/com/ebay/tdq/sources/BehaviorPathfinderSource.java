@@ -20,7 +20,7 @@ import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
 /**
  * @author juntzhang
  */
-public class BehaviorPathfinderSource {
+public class BehaviorPathfinderSource extends AbstractSource {
   // 1. Rheos Consumer
   // 1.1 Consume RawEvent from Rheos PathFinder topic
   // 1.2 Assign timestamps and emit watermarks.
@@ -28,7 +28,7 @@ public class BehaviorPathfinderSource {
     SourceDataStreamBuilder<RawEvent> dataStreamBuilder =
         new SourceDataStreamBuilder<>(env);
 
-    DataStream<RawEvent> rawEventDataStreamForRNO = dataStreamBuilder
+    DataStream<RawEvent> rnoDS = dataStreamBuilder
         .dc(RNO)
         .operatorName(getString(Property.SOURCE_OPERATOR_NAME_RNO))
         .uid(getString(Property.SOURCE_UID_RNO))
@@ -39,7 +39,7 @@ public class BehaviorPathfinderSource {
         .build(new RawEventKafkaDeserializationSchemaWrapper(
             FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
             new RawEventDeserializationSchema()));
-    DataStream<RawEvent> rawEventDataStreamForSLC = dataStreamBuilder
+    DataStream<RawEvent> slcDS = dataStreamBuilder
         .dc(SLC)
         .operatorName(getString(Property.SOURCE_OPERATOR_NAME_SLC))
         .uid(getString(Property.SOURCE_UID_SLC))
@@ -50,7 +50,7 @@ public class BehaviorPathfinderSource {
         .build(new RawEventKafkaDeserializationSchemaWrapper(
             FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
             new RawEventDeserializationSchema()));
-    DataStream<RawEvent> rawEventDataStreamForLVS = dataStreamBuilder
+    DataStream<RawEvent> lvsDS = dataStreamBuilder
         .dc(LVS)
         .operatorName(getString(Property.SOURCE_OPERATOR_NAME_LVS))
         .uid(getString(Property.SOURCE_UID_LVS))
@@ -62,8 +62,11 @@ public class BehaviorPathfinderSource {
             FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
             new RawEventDeserializationSchema()));
     // union ubiEvent from SLC/RNO/LVS
-    return rawEventDataStreamForRNO
-        .union(rawEventDataStreamForLVS)
-        .union(rawEventDataStreamForSLC);
+
+    int p = getInteger(Property.SOURCE_PARALLELISM);
+    DataStream<RawEvent> r = sample(rnoDS, getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP), "RNO", p);
+    DataStream<RawEvent> l = sample(lvsDS, getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP), "LVS", p);
+    DataStream<RawEvent> s = sample(slcDS, getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP), "SLC", p);
+    return r.union(l).union(s);
   }
 }

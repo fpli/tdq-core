@@ -43,4 +43,20 @@ object TypeUtils {
   def getNumeric(t: DataType): Numeric[Any] =
     t.asInstanceOf[NumericType].numeric.asInstanceOf[Numeric[Any]]
 
+  def checkForSameTypeInputExpr(types: Seq[DataType], caller: String): TypeCheckResult = {
+    if (types.size <= 1) {
+      TypeCheckResult.TypeCheckSuccess
+    } else {
+      val firstType = types.head
+      types.foreach { t =>
+        if (!t.sameType(firstType)) {
+          return TypeCheckResult.TypeCheckFailure(
+            s"input to $caller should all be the same type, but it's " +
+              types.map(_.simpleString).mkString("[", ", ", "]"))
+        }
+      }
+      TypeCheckResult.TypeCheckSuccess
+    }
+  }
 }
+

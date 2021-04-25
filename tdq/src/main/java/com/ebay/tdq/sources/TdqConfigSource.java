@@ -13,7 +13,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 public class TdqConfigSource {
   public static DataStream<PhysicalPlan> build(final StreamExecutionEnvironment env) {
     return env
-        .addSource(new TdqConfigSourceFunction("", 30000L, "dev"))
+        .addSource(new TdqConfigSourceFunction("", 30L, "prod"))
         .name("Tdq Config Source")
         .uid("tdq-config-source")
         .assignTimestampsAndWatermarks(WatermarkStrategy

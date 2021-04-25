@@ -7,6 +7,7 @@ import com.ebay.tdq.expressions.Expression;
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.TdqMetric;
 import com.esotericsoftware.kryo.serializers.JavaSerializer;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.configuration.ConfigConstants;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.TaskManagerOptions;
@@ -16,6 +17,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 /**
  * @author juntzhang
  */
+@Slf4j
 public class FlinkEnvFactory {
   public static StreamExecutionEnvironment create(String[] args, boolean local) {
     StreamExecutionEnvironment env;
@@ -24,12 +26,7 @@ public class FlinkEnvFactory {
     } else {
       env = FlinkEnvUtils.prepare(args);
     }
-
-    env.registerTypeWithKryoSerializer(Expression.class, JavaSerializer.class);
-    env.registerTypeWithKryoSerializer(PhysicalPlan.class, JavaSerializer.class);
-    env.registerTypeWithKryoSerializer(TdqMetric.class, JavaSerializer.class);
-    env.registerTypeWithKryoSerializer(TransformationConfig.class, JavaSerializer.class);
-    env.registerTypeWithKryoSerializer(TdqConfig.class, JavaSerializer.class);
+    log.warn("===success==");
     return env;
   }
 
@@ -39,6 +36,12 @@ public class FlinkEnvFactory {
     conf.setInteger(TaskManagerOptions.NUM_TASK_SLOTS, 16);
     final StreamExecutionEnvironment env =
         StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);
+
+    env.registerTypeWithKryoSerializer(Expression.class, JavaSerializer.class);
+    env.registerTypeWithKryoSerializer(PhysicalPlan.class, JavaSerializer.class);
+    env.registerTypeWithKryoSerializer(TdqMetric.class, JavaSerializer.class);
+    env.registerTypeWithKryoSerializer(TransformationConfig.class, JavaSerializer.class);
+    env.registerTypeWithKryoSerializer(TdqConfig.class, JavaSerializer.class);
     env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
     return env;
   }

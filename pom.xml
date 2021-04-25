@@ -13,9 +13,9 @@
 
   <modules>
     <module>common</module>
-    <module>rt-pipeline</module>
-    <module>dumper</module>
-    <module>distributor</module>
+<!--    <module>rt-pipeline</module>-->
+<!--    <module>dumper</module>-->
+<!--    <module>distributor</module>-->
     <module>flink-lib</module>
     <module>business</module>
     <module>sql-dsl</module>

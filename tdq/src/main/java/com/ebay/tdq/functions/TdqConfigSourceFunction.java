@@ -36,7 +36,7 @@ public class TdqConfigSourceFunction extends RichSourceFunction<PhysicalPlan> {
         .readValue(TdqConfigSourceFunction.class
             .getResourceAsStream("/tdq_rules.json"));
     while (true) {
-      long t = System.currentTimeMillis() / 5000 * 5000;
+      long t = System.currentTimeMillis();
       for (RuleConfig ruleConfig : config.getRules()) {
         for (ProfilerConfig profilerConfig : ruleConfig.getProfilers()) {
           try {
@@ -46,6 +46,7 @@ public class TdqConfigSourceFunction extends RichSourceFunction<PhysicalPlan> {
             );
             PhysicalPlan plan = parser.parsePlan();
             plan.validatePlan();
+            log.warn("TdqConfigSourceFunction={}", plan);
             ctx.collectWithTimestamp(plan, t);
           } catch (Exception e) {
             log.warn("profilerConfig[" + profilerConfig + "] validate exception:"

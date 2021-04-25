@@ -9,6 +9,7 @@ import org.apache.flink.util.OutputTag;
 
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getStringOrDefault;
 
 /**
  * @author juntzhang
@@ -28,6 +29,9 @@ public class TdqConstant {
       DateUtils.toSeconds(getString("flink.app.window.metric-pre-collector"));
   public static Long WINDOW_METRIC_COLLECTOR_BY_WINDOW =
       DateUtils.toSeconds(getString("flink.app.window.metric-collector-by-window"));
+
+  public static Double SRC_SAMPLE_FRACTION = Double.valueOf(getStringOrDefault("flink.app.source.sample-fraction", "0"
+  ));
 
   static {
     for (String tag : getString("flink.app.window.supports")

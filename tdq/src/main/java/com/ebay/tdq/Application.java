@@ -121,11 +121,8 @@ public class Application {
     BroadcastStream<PhysicalPlan> broadcastStream =
         mappingSourceStream.broadcast(stateDescriptor);
 
-    return rawEventDataStream
-        .connect(broadcastStream)
-        .process(new TdqRawEventProcessFunction(
-            stateDescriptor, PARALLELISM_METRIC_NORMALIZER)
-        )
+    return rawEventDataStream.connect(broadcastStream)
+        .process(new TdqRawEventProcessFunction(stateDescriptor, PARALLELISM_METRIC_NORMALIZER))
         .name("Connector Operator")
         .uid("connector-operator")
         .slotSharingGroup("metric-normalizer")
@@ -134,8 +131,7 @@ public class Application {
             WatermarkStrategy
                 .<TdqMetric>forBoundedOutOfOrderness(Duration.ofSeconds(0))
                 .withTimestampAssigner(
-                    (SerializableTimestampAssigner<TdqMetric>)
-                        (event, timestamp) -> event.getEventTime())
+                    (SerializableTimestampAssigner<TdqMetric>) (event, timestamp) -> event.getEventTime())
                 .withIdleness(Duration.ofSeconds(1))
         )
         .name("Connector Watermark Operator")

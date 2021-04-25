@@ -47,8 +47,8 @@ public class MockTdqRawEventSourceFunction implements SourceFunction<RawEvent> {
       rawEvent.getSojA().put("itm", item);
       ctx.collect(rawEvent);
       try {
-        // Thread.sleep(5);
-        Thread.sleep(500 * (getInt() % 5 + 1));
+        Thread.sleep(5);
+        //        Thread.sleep(500 * (getInt() % 5 + 1));
       } catch (InterruptedException e) {
         log.error(e.getMessage(), e);
       }

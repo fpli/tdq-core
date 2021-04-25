@@ -12,17 +12,19 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 /**
  * @author juntzhang
  */
-public class MockBehaviorPathfinderSource {
+public class MockBehaviorPathfinderSource extends AbstractSource {
   public static DataStream<RawEvent> build(final StreamExecutionEnvironment env) {
     SingleOutputStreamOperator<RawEvent> src1 = env.addSource(new MockTdqRawEventSourceFunction())
         .name("Raw Event Src1")
         .uid("raw-event-src1")
+        .slotSharingGroup("src1")
         .assignTimestampsAndWatermarks(
             WatermarkStrategy
                 .<RawEvent>forBoundedOutOfOrderness(Duration.ofSeconds(0))
                 .withTimestampAssigner(new SojSerializableTimestampAssigner<>())
                 .withIdleness(Duration.ofSeconds(1))
         )
+        .slotSharingGroup("src1")
         .name("Raw Event Watermark Src1")
         .uid("raw-event-watermark-src1")
         .slotSharingGroup("src1");
@@ -30,16 +32,18 @@ public class MockBehaviorPathfinderSource {
     SingleOutputStreamOperator<RawEvent> src2 = env.addSource(new MockTdqRawEventSourceFunction())
         .name("Raw Event Src2")
         .uid("raw-event-src2")
+        .slotSharingGroup("src2")
         .assignTimestampsAndWatermarks(
             WatermarkStrategy
                 .<RawEvent>forBoundedOutOfOrderness(Duration.ofSeconds(0))
                 .withTimestampAssigner(new SojSerializableTimestampAssigner<>())
                 .withIdleness(Duration.ofSeconds(1))
         )
+        .slotSharingGroup("src2")
         .name("Raw Event Watermark Src2")
         .uid("raw-event-watermark-src2")
         .slotSharingGroup("src2");
 
-    return src1.union(src2);
+    return sample(src1, "src1", "1", 1).union(sample(src2, "src2", "2", 1));
   }
 }

@@ -5,6 +5,7 @@ import java.util.{HashMap => JHashMap}
 import com.ebay.sojourner.common.model.RawEvent
 import com.ebay.tdq.expressions._
 import com.ebay.tdq.expressions.aggregate.AggregateExpression
+import lombok.{Data, Setter}
 
 import scala.collection.JavaConverters.mapAsScalaMapConverter
 
@@ -32,11 +33,11 @@ case class PhysicalPlan(
 
   // todo validate
   def validatePlan(): Unit = {
-
   }
 
   def process(rawEvent: RawEvent): TdqMetric = {
     val cacheData = new JHashMap[String, Any]()
+
     val metric = new TdqMetric(metricKey, rawEvent.getEventTimestamp)
     metric.setWindow(window)
     metric.setPhysicalPlan(this)
