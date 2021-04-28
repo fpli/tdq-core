@@ -7,6 +7,9 @@ import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.ProfilingSqlParser;
 import com.ebay.tdq.util.DateUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 
@@ -28,32 +31,46 @@ public class TdqConfigSourceFunction extends RichSourceFunction<PhysicalPlan> {
     this.env      = env;
   }
 
-  @Override
-  public void run(SourceContext<PhysicalPlan> ctx) throws Exception {
+  private static TdqConfig getTdqConfig() throws IOException {
     ObjectMapper objectMapper = new ObjectMapper();
-    TdqConfig config = objectMapper
+    return objectMapper
         .reader().forType(TdqConfig.class)
         .readValue(TdqConfigSourceFunction.class
             .getResourceAsStream("/tdq_rules.json"));
-    while (true) {
-      long t = System.currentTimeMillis();
-      for (RuleConfig ruleConfig : config.getRules()) {
-        for (ProfilerConfig profilerConfig : ruleConfig.getProfilers()) {
-          try {
-            ProfilingSqlParser parser = new ProfilingSqlParser(
-                profilerConfig,
-                DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString())
-            );
-            PhysicalPlan plan = parser.parsePlan();
-            plan.validatePlan();
-            log.warn("TdqConfigSourceFunction={}", plan);
-            ctx.collectWithTimestamp(plan, t);
-          } catch (Exception e) {
-            log.warn("profilerConfig[" + profilerConfig + "] validate exception:"
-                + e.getMessage(), e);
-          }
+  }
+
+  public static Map<String, PhysicalPlan> getPhysicalPlanMap() throws IOException {
+    TdqConfig config = getTdqConfig();
+    Map<String, PhysicalPlan> planMap = new HashMap<>();
+    for (RuleConfig ruleConfig : config.getRules()) {
+      for (ProfilerConfig profilerConfig : ruleConfig.getProfilers()) {
+        try {
+          ProfilingSqlParser parser = new ProfilingSqlParser(
+              profilerConfig,
+              DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString())
+          );
+          PhysicalPlan plan = parser.parsePlan();
+          plan.validatePlan();
+          planMap.put(plan.metricKey(), plan);
+          log.warn("TdqConfigSourceFunction={}", plan);
+
+        } catch (Exception e) {
+          log.warn("profilerConfig[" + profilerConfig + "] validate exception:"
+              + e.getMessage(), e);
         }
       }
+    }
+    return planMap;
+  }
+
+  @Override
+  public void run(SourceContext<PhysicalPlan> ctx) throws Exception {
+    while (true) {
+      long t = System.currentTimeMillis();
+      for (PhysicalPlan plan : getPhysicalPlanMap().values()) {
+        ctx.collectWithTimestamp(plan, t);
+      }
+
       Thread.sleep(interval * 1000);
     }
   }

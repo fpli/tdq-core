@@ -92,9 +92,11 @@
       },
       "profilers": [
         {
-          "metric-name": "global_page_id_cnt",
+          "metric-name": "global_mandatory_tag_item_rate2",
+          "comment": "Global Mandatory Tag - Item Rate",
           "dimensions": ["page_id"],
-          "expression": {"operator": "Expr", "config": {"text": "page_cnt"}},
+          "filter": "page_id in (2481888, 2047939, 2050601)",
+          "expression": {"operator": "Expr", "config": {"text": "itm_valid_cnt / itm_cnt"}},
           "transformations": [
             {
               "alias": "page_id",
@@ -104,35 +106,30 @@
               }
             },
             {
-              "alias": "page_cnt",
-              "expression": {"operator": "Count", "config": {"arg0": "1"}}
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "rule_4",
-      "type": "realtime.rheos.profiler",
-      "config": {
-        "window": "2min"
-      },
-      "profilers": [
-        {
-          "metric-name": "global_site_id_cnt",
-          "dimensions": ["site_id"],
-          "expression": {"operator": "Expr", "config": {"text": "site_cnt"}},
-          "transformations": [
-            {
-              "alias": "site_id",
+              "alias": "item",
               "expression": {
                 "operator": "UDF",
-                "config": {"text": "CAST(TAG_EXTRACT('t') AS INTEGER)"}
+                "config": {"text": "CAST(TAG_EXTRACT('itm|itmid|itm_id|itmlist|litm') AS LONG)"}
               }
             },
             {
-              "alias": "site_cnt",
+              "alias": "itm_valid_ind",
+              "expression": {
+                "operator": "Expr",
+                "config": {
+                  "text": "case when item is not null then 1 else 0 end"
+                }
+              }
+            },
+            {
+              "alias": "itm_cnt",
               "expression": {"operator": "Count", "config": {"arg0": "1"}}
+            },
+            {
+              "alias": "itm_valid_cnt",
+              "expression": {
+                "operator": "Sum", "config": {"arg0": "itm_valid_ind"}
+              }
             }
           ]
         }

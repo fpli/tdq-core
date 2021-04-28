@@ -1,11 +1,5 @@
 package com.ebay.sojourner.flink.common;
 
-import static com.ebay.sojourner.common.util.Property.CHECKPOINT_INTERVAL_MS;
-import static com.ebay.sojourner.common.util.Property.CHECKPOINT_MAX_CONCURRENT;
-import static com.ebay.sojourner.common.util.Property.CHECKPOINT_MIN_PAUSE_BETWEEN_MS;
-import static com.ebay.sojourner.common.util.Property.CHECKPOINT_TIMEOUT_MS;
-import static com.ebay.sojourner.common.util.Property.TOLERATE_FAILURE_CHECKPOINT_NUMBER;
-
 import com.ebay.sojourner.common.env.EnvironmentUtils;
 import com.ebay.sojourner.flink.state.StateBackendFactory;
 import com.google.common.collect.Maps;
@@ -19,6 +13,12 @@ import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+
+import static com.ebay.sojourner.common.util.Property.CHECKPOINT_INTERVAL_MS;
+import static com.ebay.sojourner.common.util.Property.CHECKPOINT_MAX_CONCURRENT;
+import static com.ebay.sojourner.common.util.Property.CHECKPOINT_MIN_PAUSE_BETWEEN_MS;
+import static com.ebay.sojourner.common.util.Property.CHECKPOINT_TIMEOUT_MS;
+import static com.ebay.sojourner.common.util.Property.TOLERATE_FAILURE_CHECKPOINT_NUMBER;
 
 public class FlinkEnvUtils {
 

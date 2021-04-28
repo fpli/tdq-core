@@ -7,7 +7,7 @@
       "name": "rule_1",
       "type": "realtime.rheos.profiler",
       "config": {
-        "window": "10min"
+        "window": "2min"
       },
       "profilers": [
         {
@@ -46,27 +46,19 @@
       "name": "rule_2",
       "type": "realtime.rheos.profiler",
       "config": {
-        "window": "5min"
+        "window": "2min"
       },
       "profilers": [
         {
           "metric-name": "global_mandatory_tag_item_rate",
           "comment": "Global Mandatory Tag - Item Rate",
-          "dimensions": ["domain"],
           "expression": {"operator": "Expr", "config": {"text": "itm_valid_cnt / itm_cnt"}},
           "transformations": [
-            {
-              "alias": "domain",
-              "expression": {
-                "operator": "UDF",
-                "config": {"text": "PAGE_FAMILY(CAST(TAG_EXTRACT('p') AS INTEGER))"}
-              }
-            },
             {
               "alias": "item",
               "expression": {
                 "operator": "UDF",
-                "config": {"text": "CAST(TAG_EXTRACT('itm|itmid|itm_id|itmlist|litm') AS INTEGER)"}
+                "config": {"text": "CAST(TAG_EXTRACT('itm|itmid|itm_id|itmlist|litm') AS LONG)"}
               }
             },
             {
@@ -96,47 +88,83 @@
       "name": "rule_3",
       "type": "realtime.rheos.profiler",
       "config": {
-        "window": "1h"
+        "window": "2min"
       },
       "profilers": [
         {
-          "metric-name": "global_mandatory_tag_item_rate2",
-          "comment": "Global Mandatory Tag - Item Rate",
-          "dimensions": ["domain"],
-          "expression": {"operator": "Expr", "config": {"text": "itm_valid_cnt / itm_cnt"}},
+          "metric-name": "global_page_id_cnt",
+          "dimensions": ["page_id"],
+          "expression": {"operator": "Expr", "config": {"text": "page_cnt"}},
           "transformations": [
             {
-              "alias": "domain",
+              "alias": "page_id",
               "expression": {
                 "operator": "UDF",
-                "config": {"text": "PAGE_FAMILY(CAST(TAG_EXTRACT('p') AS INTEGER))"}
+                "config": {"text": "CAST(TAG_EXTRACT('p') AS INTEGER)"}
               }
             },
             {
-              "alias": "item",
+              "alias": "page_cnt",
+              "expression": {"operator": "Count", "config": {"arg0": "1"}}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rule_4",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "2min"
+      },
+      "profilers": [
+        {
+          "metric-name": "global_site_id_cnt",
+          "dimensions": ["site_id"],
+          "expression": {"operator": "Expr", "config": {"text": "site_cnt"}},
+          "transformations": [
+            {
+              "alias": "site_id",
               "expression": {
                 "operator": "UDF",
-                "config": {"text": "CAST(TAG_EXTRACT('itm|itmid|itm_id|itmlist|litm') AS INTEGER)"}
+                "config": {"text": "CAST(TAG_EXTRACT('t') AS INTEGER)"}
               }
             },
             {
-              "alias": "itm_valid_ind",
+              "alias": "site_cnt",
+              "expression": {"operator": "Count", "config": {"arg0": "1"}}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rule_5",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "2min"
+      },
+      "profilers": [
+        {
+          "metric-name": "event_capture_publish_latency5",
+          "comment": "Event Capture Publish Latency",
+          "dimensions": ["page_id"],
+          "expression": {"operator": "Expr", "config": {"text": "t_duration_sum"}},
+          "transformations": [
+            {
+              "alias": "page_id",
+              "expression": {"operator": "UDF", "config": {"text": "CAST(TAG_EXTRACT('p') as INTEGER)"}}
+            },
+            {
+              "alias": "t_duration",
               "expression": {
                 "operator": "Expr",
-                "config": {
-                  "text": "case when item is not null then 1 else 0 end"
-                }
+                "config": {"text": "CAST(TAG_EXTRACT('TDuration') AS DOUBLE)"}
               }
             },
             {
-              "alias": "itm_cnt",
-              "expression": {"operator": "Count", "config": {"arg0": "1"}}
-            },
-            {
-              "alias": "itm_valid_cnt",
-              "expression": {
-                "operator": "Sum", "config": {"arg0": "itm_valid_ind"}
-              }
+              "alias": "t_duration_sum",
+              "expression": {"operator": "SUM", "config": {"arg0": "t_duration"}}
             }
           ]
         }

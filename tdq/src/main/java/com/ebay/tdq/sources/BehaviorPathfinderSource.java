@@ -6,6 +6,8 @@ import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.flink.connector.kafka.schema.RawEventDeserializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.RawEventKafkaDeserializationSchemaWrapper;
+import com.google.common.collect.Lists;
+import java.util.List;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
@@ -24,7 +26,7 @@ public class BehaviorPathfinderSource extends AbstractSource {
   // 1. Rheos Consumer
   // 1.1 Consume RawEvent from Rheos PathFinder topic
   // 1.2 Assign timestamps and emit watermarks.
-  public static DataStream<RawEvent> build(final StreamExecutionEnvironment env) {
+  public static List<DataStream<RawEvent>> build(final StreamExecutionEnvironment env) {
     SourceDataStreamBuilder<RawEvent> dataStreamBuilder =
         new SourceDataStreamBuilder<>(env);
 
@@ -67,6 +69,7 @@ public class BehaviorPathfinderSource extends AbstractSource {
     DataStream<RawEvent> r = sample(rnoDS, getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP), "RNO", p);
     DataStream<RawEvent> l = sample(lvsDS, getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP), "LVS", p);
     DataStream<RawEvent> s = sample(slcDS, getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP), "SLC", p);
-    return r.union(l).union(s);
+    // return r.union(l).union(s);
+    return Lists.newArrayList(r, l, s);
   }
 }

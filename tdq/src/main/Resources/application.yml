@@ -5,21 +5,17 @@ flink:
       default: 100
       source: 100
       metric-normalizer: 300
-      metric-pre-collector: 50
-      metric-collector-by-window: 10
+      metric-pre-collector: 40
+      metric-collector-by-window: 4
       metric-final-collector: 2
     window:
-      supports: 1min,2min,5min,10min,1h
+      supports: 2min
       metric-pre-collector: 30s
       metric-collector-by-window: 60s
     slot-sharing-group:
       source-event-lvs: tdq-lvs
       source-event-slc: tdq-slc
       source-event-rno: tdq-rno
-      metrics-collector: metrics-collector
-      metrics-collector-post: metrics-collector-post
-      metrics-collector-final: metrics-collector-final
-      tdq-normalizer: tdq-normalizer
     operator-name:
       source:
         rno: Pathfinder RNO Tdq Source

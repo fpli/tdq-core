@@ -2,34 +2,30 @@ package com.ebay.tdq;
 
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.tdq.functions.TdqAggregateFunction;
+import com.ebay.tdq.functions.TdqMetricMapFunction;
 import com.ebay.tdq.functions.TdqMetricProcessWindowTagFunction;
-import com.ebay.tdq.functions.TdqRawEventProcessFunction;
-import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.sources.BehaviorPathfinderSource;
-import com.ebay.tdq.sources.TdqConfigSource;
 import com.ebay.tdq.utils.FlinkEnvFactory;
 import java.time.Duration;
 import java.util.List;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.common.state.MapStateDescriptor;
-import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.api.common.typeinfo.TypeHint;
-import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.jetbrains.annotations.NotNull;
 
 import static com.ebay.tdq.utils.TdqConstant.OUTPUT_TAG_MAP;
 import static com.ebay.tdq.utils.TdqConstant.PARALLELISM_METRIC_COLLECTOR_BY_WINDOW;
 import static com.ebay.tdq.utils.TdqConstant.PARALLELISM_METRIC_METRIC_FINAL_COLLECTOR;
+import static com.ebay.tdq.utils.TdqConstant.PARALLELISM_METRIC_PRE_COLLECTOR;
 import static com.ebay.tdq.utils.TdqConstant.WINDOW_METRIC_COLLECTOR_BY_WINDOW;
+import static com.ebay.tdq.utils.TdqConstant.WINDOW_METRIC_PRE_COLLECTOR;
 
-public class Application {
+public class Application1 {
   public void start(String[] args) throws Exception {
     // step0: prepare environment
     final StreamExecutionEnvironment env = FlinkEnvFactory.create(args, false);
@@ -38,7 +34,8 @@ public class Application {
     List<DataStream<RawEvent>> rawEventDataStream = BehaviorPathfinderSource.build(env);
 
     // step2: normalize event to metric
-    DataStream<TdqMetric> normalizeOperator = normalizeEvent(env, rawEventDataStream);
+    DataStream<TdqMetric> normalizeOperator = normalizeEvent(env,
+        rawEventDataStream);
 
     // step3: aggregate metric by key and window
     SingleOutputStreamOperator<TdqMetric> outputTagsOperator = reduceMetric(normalizeOperator);
@@ -81,16 +78,16 @@ public class Application {
   // aggregate metric by key and window
   protected SingleOutputStreamOperator<TdqMetric> reduceMetric(
       DataStream<TdqMetric> normalizeOperator) {
-    //DataStream<TdqMetric> collectorOperator = normalizeOperator
-    //    .keyBy("partition", "uid")
-    //    .window(TumblingEventTimeWindows.of(Time.seconds(WINDOW_METRIC_PRE_COLLECTOR)))
-    //    .aggregate(new TdqAggregateFunction())
-    //    .setParallelism(PARALLELISM_METRIC_PRE_COLLECTOR)
-    //    .slotSharingGroup("metric-pre-collector")
-    //    .name("Metric Pre Collector")
-    //    .uid("metric-pre-collector");
+    DataStream<TdqMetric> collectorOperator = normalizeOperator
+        .keyBy("partition", "uid")
+        .window(TumblingEventTimeWindows.of(Time.seconds(WINDOW_METRIC_PRE_COLLECTOR)))
+        .aggregate(new TdqAggregateFunction())
+        .setParallelism(PARALLELISM_METRIC_PRE_COLLECTOR)
+        .slotSharingGroup("metric-pre-collector")
+        .name("Metric Pre Collector")
+        .uid("metric-pre-collector");
 
-    return normalizeOperator
+    return collectorOperator
         .keyBy(TdqMetric::getUid)
         .window(TumblingEventTimeWindows.of(
             Time.seconds(WINDOW_METRIC_COLLECTOR_BY_WINDOW)
@@ -107,47 +104,35 @@ public class Application {
   protected DataStream<TdqMetric> normalizeEvent(
       StreamExecutionEnvironment env,
       List<DataStream<RawEvent>> rawEventDataStream) {
-    DataStream<PhysicalPlan> mappingSourceStream = TdqConfigSource.build(env);
 
-    MapStateDescriptor<String, PhysicalPlan> stateDescriptor = new MapStateDescriptor<>(
-        "tdqConfigMappingBroadcastState",
-        BasicTypeInfo.STRING_TYPE_INFO,
-        TypeInformation.of(new TypeHint<PhysicalPlan>() {
-        }));
-
-    BroadcastStream<PhysicalPlan> broadcastStream =
-        mappingSourceStream.broadcast(stateDescriptor);
-
-    DataStream<TdqMetric> ans = normalizeEvent(
-        rawEventDataStream.get(0),
-        stateDescriptor,
-        broadcastStream,
-        0);
-
+    DataStream<TdqMetric> ans = normalizeEvent(rawEventDataStream.get(0), 0);
 
     for (int i = 1; i < rawEventDataStream.size(); i++) {
-      ans = ans.union(normalizeEvent(
-          rawEventDataStream.get(i),
-          stateDescriptor,
-          broadcastStream,
-          i));
+      ans = ans.union(normalizeEvent(rawEventDataStream.get(i), i));
     }
     return ans;
   }
 
+  @NotNull
   private DataStream<TdqMetric> normalizeEvent(
       DataStream<RawEvent> rawEventDataStream,
-      MapStateDescriptor<String, PhysicalPlan> stateDescriptor,
-      BroadcastStream<PhysicalPlan> broadcastStream,
       int idx) {
     String slotSharingGroup = rawEventDataStream.getTransformation().getSlotSharingGroup();
     int parallelism = rawEventDataStream.getTransformation().getParallelism();
-    return rawEventDataStream.connect(broadcastStream)
-        .process(new TdqRawEventProcessFunction(stateDescriptor, 3000))
+
+    // return rawEventDataStream.connect(broadcastStream)
+    //     .process(new TdqRawEventProcessFunction(stateDescriptor))
+    //     .name("Connector" + idx + " Operator")
+    //     .uid("connector" + idx + "-operator")
+    //     .slotSharingGroup(slotSharingGroup)
+    //     .setParallelism(parallelism)
+
+    return rawEventDataStream
+        .flatMap(new TdqMetricMapFunction(parallelism, 3000))
         .name("Connector" + idx + " Operator")
         .uid("connector" + idx + "-operator")
-        .slotSharingGroup(slotSharingGroup)
         .setParallelism(parallelism)
+        .slotSharingGroup(slotSharingGroup)
         .assignTimestampsAndWatermarks(
             WatermarkStrategy
                 .<TdqMetric>forBoundedOutOfOrderness(Duration.ofSeconds(0))
@@ -159,6 +144,15 @@ public class Application {
         .uid("connector" + idx + "-watermark-operator")
         .slotSharingGroup(slotSharingGroup)
         .setParallelism(parallelism)
+
+        //.keyBy(TdqMetric::getUid)
+        //.window(TumblingEventTimeWindows.of(Time.seconds(WINDOW_METRIC_PRE_COLLECTOR)))
+        //.aggregate(new TdqAggregateFunction())
+        //.setParallelism(PARALLELISM_METRIC_PRE_COLLECTOR)
+        //.slotSharingGroup("metric" + idx + "-pre-collector")
+        //.name("Metric" + idx + " Pre Collector")
+        //.uid("metric" + idx + "-pre-collector")
+
         ;
   }
 }

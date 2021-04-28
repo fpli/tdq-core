@@ -5,7 +5,6 @@ import java.util.{HashMap => JHashMap}
 import com.ebay.sojourner.common.model.RawEvent
 import com.ebay.tdq.expressions._
 import com.ebay.tdq.expressions.aggregate.AggregateExpression
-import lombok.{Data, Setter}
 
 import scala.collection.JavaConverters.mapAsScalaMapConverter
 
@@ -19,8 +18,8 @@ case class PhysicalPlan(
   metricKey: String,
   window: Long,
   evaluation: Expression,
-  aggregations: Seq[AggrPhysicalPlan],
-  dimensions: Seq[Expression],
+  aggregations: Array[AggrPhysicalPlan],
+  dimensions: Array[Expression],
   filter: Expression
 ) extends Serializable {
   lazy val groupByEvent: DebugEvent = DebugEvent("groupBy")
@@ -37,10 +36,10 @@ case class PhysicalPlan(
 
   def process(rawEvent: RawEvent): TdqMetric = {
     val cacheData = new JHashMap[String, Any]()
-
     val metric = new TdqMetric(metricKey, rawEvent.getEventTimestamp)
     metric.setWindow(window)
     metric.setPhysicalPlan(this)
+
     cacheData.put("__RAW_EVENT", rawEvent)
     val input = InternalRow(Array(metric), cacheData)
     if (filter == null || where(input)) {
@@ -90,8 +89,17 @@ case class PhysicalPlan(
     }
   }
 
+  def copy(m: TdqMetric): TdqMetric ={
+//    m.setPhysicalPlan(null) // SerializationUtils deserialize exception
+//    val cloneM = m.copy
+////    m.setPhysicalPlan(this)
+////    cloneM.setPhysicalPlan(this)
+//    cloneM
+    m
+  }
+
   def merge(m1: TdqMetric, m2: TdqMetric): TdqMetric = {
-    val m = m1.copy
+    val m = copy(m1)
     if (m.getEventTime < m2.getEventTime) {
       m.setEventTime(m2.getEventTime)
     }

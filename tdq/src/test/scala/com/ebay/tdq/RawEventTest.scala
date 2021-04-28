@@ -31,6 +31,7 @@ object RawEventTest {
   def getItm: String = Seq[String]("123", "1abc", "", null)(getInt % 4)
 
   def getInt: Int = Math.abs(new Random().nextInt)
+  def getLong: Long = Math.abs(new Random().nextLong())
 
   def getSiteId: Int = Seq[Int](1, 2, 3, 4)(getInt % 1)
 

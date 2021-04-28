@@ -9,6 +9,7 @@ import org.apache.calcite.sql._
 import org.apache.calcite.sql.fun.{SqlCase, SqlStdOperatorTable}
 import org.apache.calcite.sql.parser.SqlParser
 import org.apache.calcite.tools.Frameworks
+import org.apache.commons.collections.CollectionUtils
 import org.apache.commons.lang3.StringUtils
 
 import scala.collection.JavaConverters.iterableAsScalaIterableConverter
@@ -20,7 +21,12 @@ import scala.collection.mutable.ArrayBuffer
  * @author juntzhang
  */
 class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
-  private lazy val dimensions = profilerConfig.getDimensions.asScala.toSet
+  private lazy val dimensions = if (CollectionUtils.isNotEmpty(profilerConfig.getDimensions)) {
+    profilerConfig.getDimensions.asScala.toSet
+  } else {
+    Set[String]()
+  }
+
   private val FRAMEWORK_CONFIG = Frameworks
     .newConfigBuilder
     .parserConfig(
@@ -62,9 +68,9 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
       filter = parseFilter(profilerConfig.getFilter),
       dimensions = expressionMap.filter { case (k, _) =>
         dimensions.contains(k)
-      }.values.toList,
+      }.values.toArray,
       evaluation = evaluation,
-      aggregations = aggregations
+      aggregations = aggregations.toArray
     )
 
     plan

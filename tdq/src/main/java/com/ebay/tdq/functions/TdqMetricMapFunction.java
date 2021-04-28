@@ -5,12 +5,13 @@ import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.flink.connector.kafka.TimestampFieldExtractor;
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.TdqMetric;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.flink.api.common.state.BroadcastState;
-import org.apache.flink.api.common.state.MapStateDescriptor;
-import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
+import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.dropwizard.metrics.DropwizardHistogramWrapper;
 import org.apache.flink.dropwizard.metrics.DropwizardMeterWrapper;
@@ -18,17 +19,28 @@ import org.apache.flink.metrics.Counter;
 import org.apache.flink.metrics.Gauge;
 import org.apache.flink.metrics.Histogram;
 import org.apache.flink.metrics.Meter;
-import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.util.Collector;
+
+import static com.ebay.tdq.functions.TdqConfigSourceFunction.getPhysicalPlanMap;
 
 /**
  * @author juntzhang
  */
 @Slf4j
-public class TdqRawEventProcessFunction
-    extends BroadcastProcessFunction<RawEvent, PhysicalPlan, TdqMetric> {
-  private final MapStateDescriptor<String, PhysicalPlan> stateDescriptor;
+public class TdqMetricMapFunction
+    extends RichFlatMapFunction<RawEvent, TdqMetric> {
+  private static final Map<String, PhysicalPlan> cfgMap;
+  static {
+    try {
+      cfgMap = getPhysicalPlanMap();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+  private final int partitions;
   private final int cacheCapacity;
+
+  private final Random random = new Random();
   private Counter tdqErrorEventsCount;
   private Counter tdqDroppedEventsCount;
   private Meter tdqProcessEventsMeter;
@@ -36,16 +48,11 @@ public class TdqRawEventProcessFunction
   private Meter tdqCollectMeter;
   private Histogram tdqProcessMetricHistogram;
   private Histogram tdqProcessElementHistogram;
-  public long logCurrentTimeMillis = 0L;
-  public Map<String, TdqMetric> cache;
-  public long cacheCurrentTimeMillis = System.currentTimeMillis();
 
-
-  public TdqRawEventProcessFunction(MapStateDescriptor<String, PhysicalPlan> descriptor,
-      int cacheCapacity) {
-    this.stateDescriptor = descriptor;
-    this.cacheCapacity   = cacheCapacity;
-    this.cache           = new HashMap<>(cacheCapacity);
+  public TdqMetricMapFunction(int partitions, int cacheCapacity) {
+    this.partitions    = partitions;
+    this.cacheCapacity = cacheCapacity;
+    this.cache         = new HashMap<>(cacheCapacity);
   }
 
   @Override
@@ -68,15 +75,34 @@ public class TdqRawEventProcessFunction
     getRuntimeContext().getMetricGroup().gauge("cacheSize", (Gauge<Integer>) () -> cache.size());
   }
 
+  private TdqMetric process(RawEvent event, PhysicalPlan plan) {
+    try {
+      return plan.process(event);
+    } catch (Exception e) {
+      tdqErrorEventsCount.inc();
+      if (tdqDroppedEventsCount.getCount() % 1000 == 0) {
+        log.warn(e.getMessage(), e);
+      }
+      return null;
+    }
+  }
+
+  public static Integer getInt() {
+    return (int) (Math.abs(UUID.randomUUID().hashCode() + System.nanoTime()) % 1000000);
+  }
+
+  public Map<String, TdqMetric> cache;
+  public long cacheCurrentTimeMillis = System.currentTimeMillis();
+  public long logCurrentTimeMillis = 0L;
 
   public boolean needCollect() {
     return cache.size() >= cacheCapacity || (System.currentTimeMillis() - cacheCurrentTimeMillis) > 1000;
   }
 
-  public void collect(PhysicalPlan plan, TdqMetric curr, Collector<TdqMetric> collector) {
+  public void collect(TdqMetric curr, Collector<TdqMetric> collector) {
     TdqMetric last = cache.get(curr.getMetricKey());
     if (last != null) {
-      curr = plan.merge(last, curr);
+      curr = cfgMap.get(curr.getMetricKey()).merge(last, curr);
     }
     cache.put(curr.getMetricKey(), curr);
 
@@ -90,21 +116,20 @@ public class TdqRawEventProcessFunction
     }
   }
 
-
   @Override
-  public void processElement(RawEvent event, ReadOnlyContext ctx,
-      Collector<TdqMetric> collector) throws Exception {
+  public void flatMap(RawEvent event, Collector<TdqMetric> collector) {
     long s1 = System.nanoTime();
-    ReadOnlyBroadcastState<String, PhysicalPlan> broadcastState =
-        ctx.getBroadcastState(stateDescriptor);
     boolean success = false;
     Long ts = TimestampFieldExtractor.getField(event);
-    for (Map.Entry<String, PhysicalPlan> entry : broadcastState.immutableEntries()) {
+    for (Map.Entry<String, PhysicalPlan> entry : cfgMap.entrySet()) {
       long s = System.nanoTime();
       TdqMetric metric = process(event, entry.getValue());
       if (metric != null) {
+        if (partitions != -1) {
+          metric.setPartition(getInt() % partitions);
+        }
         metric.setEventTime(ts);
-        collect(entry.getValue(), metric, collector);
+        collect(metric, collector);
         tdqProcessMetricHistogram.update(System.nanoTime() - s);
       }
       tdqProcessEventsMeter.markEvent();
@@ -119,30 +144,5 @@ public class TdqRawEventProcessFunction
     }
     tdqProcessElementMeter.markEvent();
     tdqProcessElementHistogram.update(System.nanoTime() - s1);
-  }
-
-
-  private TdqMetric process(RawEvent event, PhysicalPlan plan) {
-    try {
-      return plan.process(event);
-    } catch (Exception e) {
-      tdqErrorEventsCount.inc();
-      if ((System.currentTimeMillis() - logCurrentTimeMillis) > 30000) {
-        log.warn(e.getMessage(), e);
-        log.warn("Drop event={},plan={}", event, plan);
-        logCurrentTimeMillis = System.currentTimeMillis();
-      }
-      return null;
-    }
-  }
-
-
-  @Override
-  public void processBroadcastElement(PhysicalPlan plan,
-      Context ctx, Collector<TdqMetric> collector) throws Exception {
-    BroadcastState<String, PhysicalPlan> broadcastState =
-        ctx.getBroadcastState(stateDescriptor);
-    log.warn("processBroadcastElement {}", plan);
-    broadcastState.put(plan.uuid(), plan);
   }
 }

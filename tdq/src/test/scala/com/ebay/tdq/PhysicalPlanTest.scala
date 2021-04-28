@@ -1,5 +1,6 @@
 package com.ebay.tdq
 
+import java.io.{ByteArrayOutputStream, ObjectOutputStream}
 import java.util.{HashMap => JHashMap}
 
 import com.ebay.sojourner.common.model.{ClientData, RawEvent}
@@ -24,12 +25,17 @@ class PhysicalPlanTest {
       In(page_id, Seq(Literal(1702898, IntegerType), Literal(1677718, IntegerType))),
       GreaterThan(Cast(GetStructField("clientData.contentLength", StringType), IntegerType), Literal(30, IntegerType))
     )
-    val plan = new PhysicalPlan(
+    val plan = PhysicalPlan(
       "test", 5000, expr,
-      Seq(AggrPhysicalPlan(name = "t_duration_sum", evaluation = t_duration_sum)),
-      Seq(page_id),
+      Array(AggrPhysicalPlan(name = "t_duration_sum", evaluation = t_duration_sum)),
+      Array(page_id),
       filter
     )
+
+    //val arr = new ByteArrayOutputStream()
+    //val stream = new ObjectOutputStream(arr)
+    //stream.writeObject(plan)
+    //println(arr.size())
 
     val siteId: String = "1"
     val item: String = "123"
@@ -94,9 +100,9 @@ class PhysicalPlanTest {
     val plan = PhysicalPlan(
       "test", 5000,
       expr,
-      Seq(AggrPhysicalPlan(name = "itm_valid_cnt", evaluation = itmValidCntExpression),
+      Array(AggrPhysicalPlan(name = "itm_valid_cnt", evaluation = itmValidCntExpression),
         AggrPhysicalPlan(name = "itm_cnt", evaluation = itmCntExpression)),
-      Seq(pageIdExpression),
+      Array(pageIdExpression),
       filter
     )
 
