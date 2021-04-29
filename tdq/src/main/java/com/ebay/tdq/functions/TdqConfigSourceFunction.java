@@ -52,8 +52,6 @@ public class TdqConfigSourceFunction extends RichSourceFunction<PhysicalPlan> {
           PhysicalPlan plan = parser.parsePlan();
           plan.validatePlan();
           planMap.put(plan.metricKey(), plan);
-          log.warn("TdqConfigSourceFunction={}", plan);
-
         } catch (Exception e) {
           log.warn("profilerConfig[" + profilerConfig + "] validate exception:"
               + e.getMessage(), e);
@@ -68,6 +66,7 @@ public class TdqConfigSourceFunction extends RichSourceFunction<PhysicalPlan> {
     while (true) {
       long t = System.currentTimeMillis();
       for (PhysicalPlan plan : getPhysicalPlanMap().values()) {
+        log.warn("TdqConfigSourceFunction={}", plan);
         ctx.collectWithTimestamp(plan, t);
       }
 

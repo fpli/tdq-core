@@ -69,11 +69,11 @@ public class TdqRawEventProcessFunction
   }
 
 
-  public boolean needCollect() {
+  private boolean needCollect() {
     return cache.size() >= cacheCapacity || (System.currentTimeMillis() - cacheCurrentTimeMillis) > 1000;
   }
 
-  public void collect(PhysicalPlan plan, TdqMetric curr, Collector<TdqMetric> collector) {
+  private void collect(PhysicalPlan plan, TdqMetric curr, Collector<TdqMetric> collector) {
     TdqMetric last = cache.get(curr.getMetricKey());
     if (last != null) {
       curr = plan.merge(last, curr);
@@ -89,7 +89,6 @@ public class TdqRawEventProcessFunction
       cacheCurrentTimeMillis = System.currentTimeMillis();
     }
   }
-
 
   @Override
   public void processElement(RawEvent event, ReadOnlyContext ctx,
@@ -140,9 +139,7 @@ public class TdqRawEventProcessFunction
   @Override
   public void processBroadcastElement(PhysicalPlan plan,
       Context ctx, Collector<TdqMetric> collector) throws Exception {
-    BroadcastState<String, PhysicalPlan> broadcastState =
-        ctx.getBroadcastState(stateDescriptor);
-    log.warn("processBroadcastElement {}", plan);
+    BroadcastState<String, PhysicalPlan> broadcastState = ctx.getBroadcastState(stateDescriptor);
     broadcastState.put(plan.uuid(), plan);
   }
 }

@@ -8,6 +8,7 @@ import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.TdqMetric;
 import com.esotericsoftware.kryo.serializers.JavaSerializer;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.configuration.ConfigConstants;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.TaskManagerOptions;
@@ -36,13 +37,14 @@ public class FlinkEnvFactory {
     conf.setInteger(TaskManagerOptions.NUM_TASK_SLOTS, 16);
     final StreamExecutionEnvironment env =
         StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);
-
+    env.setParallelism(1);
     env.registerTypeWithKryoSerializer(Expression.class, JavaSerializer.class);
     env.registerTypeWithKryoSerializer(PhysicalPlan.class, JavaSerializer.class);
     env.registerTypeWithKryoSerializer(TdqMetric.class, JavaSerializer.class);
     env.registerTypeWithKryoSerializer(TransformationConfig.class, JavaSerializer.class);
     env.registerTypeWithKryoSerializer(TdqConfig.class, JavaSerializer.class);
     env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+    env.setRestartStrategy(RestartStrategies.noRestart());
     return env;
   }
 }

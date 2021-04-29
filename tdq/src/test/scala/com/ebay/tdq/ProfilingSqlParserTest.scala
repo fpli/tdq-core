@@ -4,7 +4,7 @@ import java.util.{HashMap => JHashMap}
 
 import com.ebay.sojourner.common.model.{ClientData, RawEvent}
 import com.ebay.tdq.config.TdqConfig
-import com.ebay.tdq.rules.ProfilingSqlParser
+import com.ebay.tdq.rules.{PhysicalPlan, ProfilingSqlParser}
 import com.ebay.tdq.util.DateUtils
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.scalatest.FunSuite
@@ -12,6 +12,18 @@ import org.scalatest.FunSuite
 /**
  * @author juntzhang
  */
+object ProfilingSqlParserTest {
+  def getPhysicalPlan(json: String): PhysicalPlan = {
+    val objectMapper = new ObjectMapper
+    val config: TdqConfig = objectMapper.reader.forType(classOf[TdqConfig]).readValue(json)
+    val parser = new ProfilingSqlParser(
+      config.getRules.get(0).getProfilers.get(0),
+      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString)
+    )
+    parser.parsePlan()
+  }
+}
+
 class ProfilingSqlParserTest extends FunSuite {
   test("process event_capture_publish_latency") {
     val json =
@@ -196,8 +208,8 @@ class ProfilingSqlParserTest extends FunSuite {
 
     println(s"100k process cast time ${System.currentTimeMillis() - s} ms")
     println(s"100k process cast time ${System.nanoTime() - s1} ns")
-//    assert(metric.getExprMap.get("itm_cnt") == 1)
-//    assert(metric.getExprMap.get("itm_valid_cnt") == 0)
+    //    assert(metric.getExprMap.get("itm_cnt") == 1)
+    //    assert(metric.getExprMap.get("itm_valid_cnt") == 0)
 
   }
 }

@@ -1,7 +1,7 @@
 package com.ebay.tdq.rules
 
 import com.ebay.tdq.expressions._
-import com.ebay.tdq.expressions.aggregate.{Count, Sum}
+import com.ebay.tdq.expressions.aggregate._
 import com.ebay.tdq.types._
 import org.apache.commons.lang3.StringUtils
 import org.apache.log4j.Logger
@@ -109,6 +109,12 @@ object ExpressionRegistry {
       case "SUM" =>
         assert(operands.length == 1)
         Sum(operands.head.asInstanceOf[Expression], cacheKey)
+      case "MAX" =>
+        assert(operands.length == 1)
+        Max(operands.head.asInstanceOf[Expression], cacheKey)
+      case "MIN" =>
+        assert(operands.length == 1)
+        Min(operands.head.asInstanceOf[Expression], cacheKey)
       case "COUNT" =>
         assert(operands.length == 1)
         Count(operands.head.asInstanceOf[Expression], cacheKey)

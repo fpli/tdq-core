@@ -2,12 +2,13 @@ package com.ebay.sojourner.common.model;
 
 import com.ebay.sojourner.common.util.CalTimeOfDay;
 import com.ebay.sojourner.common.util.PropertyUtils;
+import java.io.Serializable;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Data
 @Slf4j
-public class ClientData {
+public class ClientData implements Serializable {
 
   private String forwardFor;
   private String script;

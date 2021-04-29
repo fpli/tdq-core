@@ -23,6 +23,7 @@ public class TdqConstant {
       getInteger("flink.app.parallelism.metric-pre-collector");
   public static Integer PARALLELISM_METRIC_COLLECTOR_BY_WINDOW =
       getInteger("flink.app.parallelism.metric-collector-by-window");
+  public static Integer LOCAL_COMBINE_QUEUE_SIZE = getInteger("flink.app.local-combine-queue-size");
   public static Integer PARALLELISM_METRIC_METRIC_FINAL_COLLECTOR =
       getInteger("flink.app.parallelism.metric-final-collector");
   public static Long WINDOW_METRIC_PRE_COLLECTOR =

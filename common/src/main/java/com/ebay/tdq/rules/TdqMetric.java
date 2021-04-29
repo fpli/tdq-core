@@ -41,14 +41,14 @@ public class TdqMetric implements Serializable {
 
   public TdqMetric genUID() {
     StringBuilder sb = new StringBuilder(metricKey);
-    sb.append("{");
-    StringJoiner sj = new StringJoiner(",");
     if (MapUtils.isNotEmpty(tags)) {
+      sb.append("{");
+      StringJoiner sj = new StringJoiner(",");
       for (Map.Entry<String, Object> e : tags.entrySet()) {
         sj.add(e.getKey() + "=" + e.getValue());
       }
+      sb.append(sj).append("}");
     }
-    sb.append(sj).append("}");
     setUid(DigestUtils.md5Hex(sb.toString().getBytes()));
     return this;
   }
@@ -65,6 +65,11 @@ public class TdqMetric implements Serializable {
 
   public TdqMetric putExpr2(String k, Object v) {
     exprMap.put(k, v);
+    return this;
+  }
+
+  public TdqMetric setValue(Double d) {
+    this.value = d;
     return this;
   }
 

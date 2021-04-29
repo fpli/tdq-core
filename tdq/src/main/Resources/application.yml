@@ -38,6 +38,7 @@ flink:
       max-concurrent: 1
       tolerate-failure-number: 3
     hot-deploy: false
+    local-combine-queue-size: 3000
     source:
       sample-fraction: 0.01
       from-timestamp: 0
