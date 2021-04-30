@@ -31,6 +31,14 @@ public class TdqConstant {
   public static Long WINDOW_METRIC_COLLECTOR_BY_WINDOW =
       DateUtils.toSeconds(getString("flink.app.window.metric-collector-by-window"));
 
+  // source
+  public static String PRONTO_INDEX_PATTERN = getString("flink.app.source.pronto.index-pattern");
+  public static String PRONTO_SCHEME = getString("flink.app.source.pronto.scheme");
+  public static String PRONTO_HOSTNAME = getString("flink.app.source.pronto.hostname");
+  public static Integer PRONTO_PORT = getInteger("flink.app.source.pronto.port");
+  public static String PRONTO_USERNAME = getString("flink.app.source.pronto.username");
+  public static String PRONTO_PASSWORD = getString("flink.app.source.pronto.password");
+
   public static Double SRC_SAMPLE_FRACTION = Double.valueOf(getStringOrDefault("flink.app.source.sample-fraction", "0"
   ));
 

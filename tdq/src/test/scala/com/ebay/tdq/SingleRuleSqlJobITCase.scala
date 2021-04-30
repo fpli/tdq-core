@@ -8,7 +8,7 @@ import org.scalatest.fixture
 /**
  * @author juntzhang
  */
-class SingleRuleSqlJobTCase extends fixture.FreeSpec with fixture.TestDataFixture {
+class SingleRuleSqlJobITCase extends fixture.FreeSpec with fixture.TestDataFixture {
   "test_sum_by_page_id" in { param =>
     val id = param.name
     RheosJobTest(
@@ -379,14 +379,14 @@ class SingleRuleSqlJobTCase extends fixture.FreeSpec with fixture.TestDataFixtur
   }
 
 
-  private def getMetric(metricKey: String, time: String, v: Double): TdqMetric = {
+  protected def getMetric(metricKey: String, time: String, v: Double): TdqMetric = {
     val t = DateUtils.parseDate(time, Array[String]("yyyy-MM-dd HH:mm:ss")).getTime
     new TdqMetric(metricKey, t)
       .genUID
       .setValue(v)
   }
 
-  private def getMetric(metricKey: String, time: String, tagK: String, tagV: String, v: Double): TdqMetric = {
+  protected def getMetric(metricKey: String, time: String, tagK: String, tagV: String, v: Double): TdqMetric = {
     val t = DateUtils.parseDate(time, Array[String]("yyyy-MM-dd HH:mm:ss")).getTime
     new TdqMetric(metricKey, t)
       .putTag(tagK, tagV)

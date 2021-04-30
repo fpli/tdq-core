@@ -44,6 +44,13 @@ flink:
       from-timestamp: 0
       out-of-orderless-in-min: 3
       idle-source-timeout-in-min: 10
+      pronto:
+        index-pattern: tdq-metrics-test-
+        scheme: http
+        hostname: localhost
+        port: 9200
+        username:
+        password:
 
 kafka:
   consumer:

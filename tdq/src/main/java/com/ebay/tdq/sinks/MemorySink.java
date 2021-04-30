@@ -36,9 +36,15 @@ public class MemorySink extends RichSinkFunction<TdqMetric> {
   }
 
   public boolean check(List<TdqMetric> expectedList) {
-    assert expectedList.size() == collect.get(name).size();
+    System.out.println("memory=>");
+    collect.get(name).forEach(System.out::println);
+    return check0(collect.get(name), expectedList);
+  }
+
+  public static boolean check0(List<TdqMetric> actualList, List<TdqMetric> expectedList) {
+    assert expectedList.size() == actualList.size();
     Map<String, TdqMetric> m = new HashMap<>();
-    collect.get(name).forEach(v -> {
+    actualList.forEach(v -> {
       String time = DateFormatUtils.format(v.getEventTime(), "yyyy-MM-dd HH:mm:ss");
       m.put(v.getUid() + " " + time, v);
     });
