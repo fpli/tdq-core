@@ -36,7 +36,7 @@ public class MemorySink extends RichSinkFunction<TdqMetric> {
   }
 
   public boolean check(List<TdqMetric> expectedList) {
-    System.out.println("memory=>");
+    log.info("memory=>");
     collect.get(name).forEach(System.out::println);
     return check0(collect.get(name), expectedList);
   }

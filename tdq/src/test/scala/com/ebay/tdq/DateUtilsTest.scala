@@ -1,13 +1,14 @@
 package com.ebay.tdq
 
 import com.ebay.tdq.util.DateUtils.toSeconds
-import org.scalatest.FunSuite
+import org.junit.Test
 
 /**
  * @author juntzhang
  */
-class DateUtilsTest extends FunSuite {
-  test("to seconds") {
+class DateUtilsTest {
+  @Test
+  def test_toSeconds(): Unit = {
     assert(toSeconds("1day") == 86400L)
     assert(toSeconds("1d") == 86400L)
     assert(toSeconds("10min") == 600L)

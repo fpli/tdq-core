@@ -9,7 +9,7 @@ flink:
       metric-collector-by-window: 4
       metric-final-collector: 2
     window:
-      supports: 2min
+      supports: 2min,30min,1h
       metric-pre-collector: 30s
       metric-collector-by-window: 60s
     slot-sharing-group:
@@ -38,7 +38,7 @@ flink:
       max-concurrent: 1
       tolerate-failure-number: 3
     hot-deploy: false
-    local-combine-queue-size: 3000
+    local-combine-queue-size: 10000
     source:
       sample-fraction: 0.01
       from-timestamp: 0

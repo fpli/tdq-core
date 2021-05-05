@@ -89,17 +89,8 @@ case class PhysicalPlan(
     }
   }
 
-  def copy(m: TdqMetric): TdqMetric ={
-//    m.setPhysicalPlan(null) // SerializationUtils deserialize exception
-//    val cloneM = m.copy
-////    m.setPhysicalPlan(this)
-////    cloneM.setPhysicalPlan(this)
-//    cloneM
-    m
-  }
-
   def merge(m1: TdqMetric, m2: TdqMetric): TdqMetric = {
-    val m = copy(m1)
+    val m = m1
     if (m.getEventTime < m2.getEventTime) {
       m.setEventTime(m2.getEventTime)
     }

@@ -10,12 +10,10 @@ import com.ebay.tdq.types.{AbstractDataType, DataType}
 // TODO: need add to flink metric
 object TimeCost extends Serializable {
   val debug = new util.HashMap[Expression, Long]()
-
   def put(expr: Expression, s: Long): Unit = {
     val t = System.currentTimeMillis() - s
     debug.put(expr, debug.getOrDefault(expr, 0L) + t)
   }
-
 }
 
 trait Expression extends Serializable {
@@ -29,7 +27,6 @@ trait Expression extends Serializable {
 
   // TODO gen code instead of recursion, recursion performance is not very good!
   //  protected def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode
-
   final def call(input: InternalRow, fromCache: Boolean): Any = {
     val s1 = System.currentTimeMillis()
     try {

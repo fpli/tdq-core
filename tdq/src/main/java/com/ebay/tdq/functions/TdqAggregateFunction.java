@@ -25,7 +25,6 @@ public class TdqAggregateFunction implements AggregateFunction<TdqMetric, TdqMet
     if (m == null) {
       return null;
     }
-    //map.get(m.getMetricKey()).evaluate(m);
     ((PhysicalPlan) m.getPhysicalPlan()).evaluate(m);
     return m;
   }
@@ -43,7 +42,6 @@ public class TdqAggregateFunction implements AggregateFunction<TdqMetric, TdqMet
     } else if (m2 == null) {
       return m1;
     } else {
-      //return map.get(m1.getMetricKey()).merge(m1,m2);
       return ((PhysicalPlan) m1.getPhysicalPlan()).merge(m1, m2);
     }
   }

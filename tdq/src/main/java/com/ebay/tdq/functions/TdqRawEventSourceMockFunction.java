@@ -12,7 +12,7 @@ import org.apache.flink.streaming.api.functions.source.SourceFunction;
  * @author juntzhang
  */
 @Slf4j
-public class MockTdqRawEventSourceFunction implements SourceFunction<RawEvent> {
+public class TdqRawEventSourceMockFunction implements SourceFunction<RawEvent> {
   public static int getInt() {
     return Math.abs(new Random().nextInt());
   }

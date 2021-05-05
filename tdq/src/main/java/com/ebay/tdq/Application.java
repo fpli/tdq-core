@@ -78,7 +78,7 @@ public class Application {
 
   // output metric by window
   protected void outputMetricByWindow(Map<String, SingleOutputStreamOperator<TdqMetric>> outputTags) {
-    outputToPronto(outputTags);
+    print(outputTags);
   }
 
   protected void print(Map<String, SingleOutputStreamOperator<TdqMetric>> outputTags) {
@@ -173,7 +173,6 @@ public class Application {
       String key = Duration.ofSeconds(seconds).toString();
       ans.put(
           key,
-
           unifyDataStream
               .getSideOutput(tag)
               .keyBy(TdqMetric::getUid)

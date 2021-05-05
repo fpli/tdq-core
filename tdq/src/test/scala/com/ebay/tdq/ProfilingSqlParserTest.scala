@@ -7,7 +7,7 @@ import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.rules.{PhysicalPlan, ProfilingSqlParser}
 import com.ebay.tdq.util.DateUtils
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.scalatest.FunSuite
+import org.junit.Test
 
 /**
  * @author juntzhang
@@ -24,8 +24,9 @@ object ProfilingSqlParserTest {
   }
 }
 
-class ProfilingSqlParserTest extends FunSuite {
-  test("process event_capture_publish_latency") {
+class ProfilingSqlParserTest {
+  @Test
+  def event_capture_publish_latency(): Unit = {
     val json =
       """
         |{
@@ -43,7 +44,7 @@ class ProfilingSqlParserTest extends FunSuite {
         |          "comment": "Event Capture Publish Latency",
         |          "dimensions": ["page_id"],
         |          "expression": {"operator": "Expr", "config": {"text": "t_duration_sum"}},
-        |          "filter": "page_id in (1702898, 1677718) and CAST(clientData.contentLength AS double) > 30",
+        |          "filter": "page_id in (1702898, 1677718) and CAST(clientData.contentLength AS double) > 30.0",
         |          "transformations": [
         |            {
         |              "alias": "page_id",
@@ -106,7 +107,8 @@ class ProfilingSqlParserTest extends FunSuite {
 
   }
 
-  test("process global_mandatory_tag_item_rate") {
+  @Test
+  def global_mandatory_tag_item_rate(): Unit = {
     val json =
       """
         |{

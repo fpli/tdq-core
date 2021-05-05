@@ -90,7 +90,7 @@ class PhysicalPlanTest {
     )
 
     val itmValidCntExpression = Sum(itmValidIndExpression, Some("itm_valid_cnt"))
-    val itmCntExpression = Cast(Count(Literal(1L)), DoubleType, Some("itm_cnt"))
+    val itmCntExpression = Count(Literal(1L), Some("itm_cnt"))
 
     val expr = Divide(itmValidCntExpression, itmCntExpression)
     val filter = And(
@@ -100,8 +100,10 @@ class PhysicalPlanTest {
     val plan = PhysicalPlan(
       "test", 5000,
       expr,
-      Array(AggrPhysicalPlan(name = "itm_valid_cnt", evaluation = itmValidCntExpression),
-        AggrPhysicalPlan(name = "itm_cnt", evaluation = itmCntExpression)),
+      Array(
+        AggrPhysicalPlan(name = "itm_valid_cnt", evaluation = itmValidCntExpression),
+        AggrPhysicalPlan(name = "itm_cnt", evaluation = itmCntExpression)
+      ),
       Array(pageIdExpression),
       filter
     )
@@ -137,7 +139,7 @@ class PhysicalPlanTest {
     val v3 = plan.process(rawEvent)
     println(v3)
 
-    val ans = itmValidCntExpression.merge(v1, v3)
+    val ans = plan.merge(v1, v3)
     println(ans)
     //    plan.evaluate(ans)
     //    println(ans)

@@ -3,14 +3,19 @@ package com.ebay.tdq
 import com.ebay.tdq.RawEventTest.getRawEvent
 import com.ebay.tdq.rules.TdqMetric
 import org.apache.commons.lang.time.DateUtils
-import org.scalatest.fixture
+import org.junit.Test
 
 /**
  * @author juntzhang
  */
-class SingleRuleSqlJobITCase extends fixture.FreeSpec with fixture.TestDataFixture {
-  "test_sum_by_page_id" in { param =>
-    val id = param.name
+class SingleRuleSqlJobTest {
+
+  @Test
+  def test_sum_by_page_id(): Unit = {
+    sum_by_page_id("test_sum_by_page_id").submit()
+  }
+
+  def sum_by_page_id(id: String): RheosJobTest = {
     RheosJobTest(
       id = id,
       config =
@@ -68,11 +73,12 @@ class SingleRuleSqlJobITCase extends fixture.FreeSpec with fixture.TestDataFixtu
         getMetric(id, "2021-05-29 12:03:59", tagK = "page_id", tagV = "1", 11d),
         getMetric(id, "2021-05-29 12:04:01", tagK = "page_id", tagV = "2", 7d)
       )
-    ).submit()
+    )
   }
 
-  "test_avg_casewhen" in { param =>
-    val id = param.name
+  @Test
+  def test_avg_casewhen(): Unit = {
+    val id = "test_avg_casewhen"
     RheosJobTest(
       id = id,
       config =
@@ -139,10 +145,10 @@ class SingleRuleSqlJobITCase extends fixture.FreeSpec with fixture.TestDataFixtu
     ).submit()
   }
 
-  "test_count_by_domain" in { param =>
-    val id = param.name
-
-    val nullEvent = getRawEvent("2021-05-29 12:01:59")
+  @Test
+  def test_count_by_domain(): Unit = {
+    val id = "test_count_by_domain"
+    val nullEvent = getRawEvent("2021-05-29 12:01:51")
     nullEvent.getSojA.remove("p")
     RheosJobTest(
       id = id,
@@ -182,10 +188,10 @@ class SingleRuleSqlJobITCase extends fixture.FreeSpec with fixture.TestDataFixtu
            |}
            |""".stripMargin,
       events = List(
-        getRawEvent("2021-05-29 12:01:59", pageId = 711),
+        getRawEvent("2021-05-29 12:01:50", pageId = 711),
         nullEvent,
-        getRawEvent("2021-05-29 12:01:59", pageId = 711),
-        getRawEvent("2021-05-29 12:01:59", pageId = 1677718),
+        getRawEvent("2021-05-29 12:01:52", pageId = 711),
+        getRawEvent("2021-05-29 12:01:53", pageId = 1677718),
         getRawEvent("2021-05-29 12:01:59", pageId = 1),
         getRawEvent("2021-05-29 12:01:59", pageId = 1677718),
         getRawEvent("2021-05-29 12:01:59", pageId = 711)
@@ -198,8 +204,9 @@ class SingleRuleSqlJobITCase extends fixture.FreeSpec with fixture.TestDataFixtu
     ).submit()
   }
 
-  "test_count_by_page_id" in { param =>
-    val id = param.name
+  @Test
+  def test_count_by_page_id(): Unit = {
+    val id = "test_count_by_page_id"
     RheosJobTest(
       id = id,
       config =
@@ -257,8 +264,9 @@ class SingleRuleSqlJobITCase extends fixture.FreeSpec with fixture.TestDataFixtu
     ).submit()
   }
 
-  "test_max-min" in { param =>
-    val id = param.name
+  @Test
+  def test_max_min(): Unit = {
+    val id = "test_max_min"
     RheosJobTest(
       id = id,
       config =
@@ -315,8 +323,9 @@ class SingleRuleSqlJobITCase extends fixture.FreeSpec with fixture.TestDataFixtu
     ).submit()
   }
 
-  "test_max-min_by_page_id" in { param =>
-    val id = param.name
+  @Test
+  def test_max_min_by_page_id(): Unit = {
+    val id = "test_max_min_by_page_id"
     RheosJobTest(
       id = id,
       config =

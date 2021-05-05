@@ -9,15 +9,16 @@ import org.elasticsearch.action.search.SearchRequest
 import org.elasticsearch.client.Requests
 import org.elasticsearch.index.query.QueryBuilders
 import org.elasticsearch.search.builder.SearchSourceBuilder
-import org.scalatest.fixture
+import org.junit.Test
 
 import scala.collection.JavaConverters.asScalaIteratorConverter
 
 /**
  * @author juntzhang
  */
-class ESTest extends fixture.FreeSpec with fixture.TestDataFixture {
-  "basic test" in { _ =>
+class TdqElasticsearchResourceTest {
+  @Test
+  def test_basic_es(): Unit = {
     val elasticsearchResource = new TdqElasticsearchResource("es-test")
     elasticsearchResource.start()
     val client = elasticsearchResource.getClient
@@ -36,8 +37,8 @@ class ESTest extends fixture.FreeSpec with fixture.TestDataFixture {
 
     val searchRequest = new SearchRequest(index)
     val searchSourceBuilder = new SearchSourceBuilder()
-        searchSourceBuilder.query(QueryBuilders.matchAllQuery())
-//    searchSourceBuilder.query(QueryBuilders.matchQuery("tags.page_id", "2"))
+    searchSourceBuilder.query(QueryBuilders.matchAllQuery())
+    //    searchSourceBuilder.query(QueryBuilders.matchQuery("tags.page_id", "2"))
     searchSourceBuilder.size(10)
     searchSourceBuilder.from(0)
     println(searchSourceBuilder)

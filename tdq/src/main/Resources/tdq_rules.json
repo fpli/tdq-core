@@ -7,7 +7,7 @@
       "name": "rule_1",
       "type": "realtime.rheos.profiler",
       "config": {
-        "window": "2min"
+        "window": "1h"
       },
       "profilers": [
         {
@@ -88,7 +88,7 @@
       "name": "rule_3",
       "type": "realtime.rheos.profiler",
       "config": {
-        "window": "2min"
+        "window": "1h"
       },
       "profilers": [
         {
@@ -115,7 +115,7 @@
       "name": "rule_4",
       "type": "realtime.rheos.profiler",
       "config": {
-        "window": "2min"
+        "window": "30min"
       },
       "profilers": [
         {
@@ -142,7 +142,7 @@
       "name": "rule_5",
       "type": "realtime.rheos.profiler",
       "config": {
-        "window": "2min"
+        "window": "1h"
       },
       "profilers": [
         {

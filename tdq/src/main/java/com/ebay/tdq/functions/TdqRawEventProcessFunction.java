@@ -39,6 +39,7 @@ public class TdqRawEventProcessFunction
   public long logCurrentTimeMillis = 0L;
   public Map<String, TdqMetric> cache;
   public long cacheCurrentTimeMillis = System.currentTimeMillis();
+  public long earliestEventTimeMillis = 0L;
 
 
   public TdqRawEventProcessFunction(MapStateDescriptor<String, PhysicalPlan> descriptor,
@@ -69,24 +70,45 @@ public class TdqRawEventProcessFunction
   }
 
 
-  private boolean needCollect() {
+  private boolean needFlush() {
     return cache.size() >= cacheCapacity || (System.currentTimeMillis() - cacheCurrentTimeMillis) > 1000;
   }
 
-  private void collect(PhysicalPlan plan, TdqMetric curr, Collector<TdqMetric> collector) {
-    TdqMetric last = cache.get(curr.getMetricKey());
-    if (last != null) {
-      curr = plan.merge(last, curr);
-    }
-    cache.put(curr.getMetricKey(), curr);
+  // cache event time should be in whole minute, like 1:01:00 ~ 1:01:59
+  private boolean crossWindow(Long currentEventTime) {
+    return (earliestEventTimeMillis / 1000 / 60) != (currentEventTime / 1000 / 60);
+  }
 
-    if (needCollect()) {
+  private void collect(PhysicalPlan plan, TdqMetric curr, Collector<TdqMetric> collector) {
+    if (earliestEventTimeMillis == 0L || earliestEventTimeMillis > curr.getEventTime()) {
+      earliestEventTimeMillis = curr.getEventTime();
+    }
+
+    if (crossWindow(curr.getEventTime())) {
+      // flush cache
       for (TdqMetric m : cache.values()) {
         collector.collect(m);
       }
       tdqCollectMeter.markEvent();
       cache.clear();
-      cacheCurrentTimeMillis = System.currentTimeMillis();
+      earliestEventTimeMillis = 0L;
+    }
+
+    TdqMetric last = cache.get(curr.getUid());
+    if (last != null) {
+      curr = plan.merge(last, curr);
+    }
+    cache.put(curr.getUid(), curr);
+
+    if (needFlush()) {
+      // flush all
+      for (TdqMetric m : cache.values()) {
+        collector.collect(m);
+      }
+      tdqCollectMeter.markEvent();
+      cache.clear();
+      cacheCurrentTimeMillis  = System.currentTimeMillis();
+      earliestEventTimeMillis = 0L;
     }
   }
 
