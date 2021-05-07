@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>sojourner-parent</artifactId>
+        <groupId>com.ebay.sojourner</groupId>
+        <version>1.1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>tdq-svc-lib</artifactId>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <scala-211.major.version>2.11</scala-211.major.version>
+        <scala-212.major.version>2.12</scala-212.major.version>
+        <scala.major.version>${scala-211.major.version}</scala.major.version>
+        <scala.version>${scala.major.version}.10</scala.version>
+        <scala-maven-plugin.version>4.4.0</scala-maven-plugin.version>
+        <elasticsearch.version>7.5.1</elasticsearch.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.ebay.sojourner</groupId>
+            <artifactId>tdq-planner</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ebay.sojourner</groupId>
+            <artifactId>tdq-planner</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+            <classifier>tests</classifier>
+        </dependency>
+    </dependencies>
+
+</project>

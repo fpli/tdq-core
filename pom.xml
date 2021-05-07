@@ -15,11 +15,14 @@
     <module>common</module>
 <!--    <module>rt-pipeline</module>-->
 <!--    <module>dumper</module>-->
-<!--    <module>distributor</module>-->
+    <!--    <module>distributor</module>-->
     <module>flink-lib</module>
     <module>business</module>
     <module>sql-dsl</module>
-    <module>tdq</module>
+    <module>tdq-job</module>
+    <module>tdq-common</module>
+    <module>tdq-planner</module>
+    <module>tdq-svc-lib</module>
   </modules>
 
   <properties>
