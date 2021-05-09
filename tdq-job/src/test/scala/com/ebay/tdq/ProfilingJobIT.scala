@@ -8,7 +8,7 @@ import com.ebay.sojourner.flink.connector.kafka.SojSerializableTimestampAssigner
 import com.ebay.tdq.rules.{PhysicalPlan, TdqMetric}
 import com.ebay.tdq.sinks.MemorySink
 import com.ebay.tdq.utils.{FlinkEnvFactory, TdqConstant}
-import com.google.common.collect.Lists
+import com.google.common.collect.{Lists, Sets}
 import org.apache.commons.lang.time.DateFormatUtils
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
 import org.apache.flink.streaming.api.datastream.DataStream
@@ -29,6 +29,7 @@ case class ProfilingJobIT(
   id: String, config: String, events: List[RawEvent], expects: List[TdqMetric]) extends ProfilingJob {
 
   def submit(): Unit = {
+    TdqConstant.SINK_TYPES = Sets.newHashSet("console")
     // step0: prepare environment
     val env: StreamExecutionEnvironment = FlinkEnvFactory.create(null, true)
     // step1: build data source
@@ -48,6 +49,7 @@ case class ProfilingJobIT(
   }
 
   def submit2Pronto(): Unit = {
+    TdqConstant.SINK_TYPES = Sets.newHashSet("pronto")
     val elasticsearchResource = new TdqElasticsearchResource("es-test")
     elasticsearchResource.start()
 

@@ -2,12 +2,14 @@ package com.ebay.sojourner.common.model;
 
 import com.ebay.sojourner.common.util.CalTimeOfDay;
 import com.ebay.sojourner.common.util.PropertyUtils;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Data
 @Slf4j
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClientData implements Serializable {
 
   private String forwardFor;

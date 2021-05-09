@@ -54,9 +54,6 @@ flink:
       local-combine:
         queue-size: 1000
         flush-timeout: 5000
-      aggregate:
-        out-of-orderless-in-min: 5
-        idle-timeout-in-min: 5
 
 kafka:
   consumer:

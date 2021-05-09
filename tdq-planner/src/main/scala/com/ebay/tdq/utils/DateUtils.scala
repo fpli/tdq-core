@@ -1,4 +1,4 @@
-package com.ebay.tdq.util
+package com.ebay.tdq.utils
 
 import scala.concurrent.duration.Duration
 

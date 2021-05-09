@@ -27,8 +27,7 @@ public class BehaviorPathfinderSource extends AbstractSource {
   // 1.1 Consume RawEvent from Rheos PathFinder topic
   // 1.2 Assign timestamps and emit watermarks.
   public static List<DataStream<RawEvent>> build(final StreamExecutionEnvironment env) {
-    SourceDataStreamBuilder<RawEvent> dataStreamBuilder =
-        new SourceDataStreamBuilder<>(env);
+    SourceDataStreamBuilder<RawEvent> dataStreamBuilder = new SourceDataStreamBuilder<>(env);
 
     DataStream<RawEvent> rnoDS = dataStreamBuilder
         .dc(RNO)

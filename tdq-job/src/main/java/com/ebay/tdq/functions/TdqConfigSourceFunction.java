@@ -5,12 +5,13 @@ import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.ProfilingSqlParser;
-import com.ebay.tdq.util.DateUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ebay.tdq.utils.DateUtils;
+import com.ebay.tdq.utils.JsonUtils;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 
 /**
@@ -32,11 +33,15 @@ public class TdqConfigSourceFunction extends RichSourceFunction<PhysicalPlan> {
   }
 
   private static TdqConfig getTdqConfig() throws IOException {
-    ObjectMapper objectMapper = new ObjectMapper();
-    return objectMapper
-        .reader().forType(TdqConfig.class)
-        .readValue(TdqConfigSourceFunction.class
-            .getResourceAsStream("/tdq_rules.json"));
+    return JsonUtils.parseObject(
+        IOUtils.toString(TdqConfigSourceFunction.class.getResourceAsStream("/tdq_rules.json")),
+        TdqConfig.class
+    );
+    //ObjectMapper objectMapper = new ObjectMapper();
+    //return objectMapper
+    //    .reader().forType(TdqConfig.class)
+    //    .readValue(TdqConfigSourceFunction.class
+    //        .getResourceAsStream("/tdq_rules.json"));
   }
 
   public static Map<String, PhysicalPlan> getPhysicalPlanMap() throws IOException {

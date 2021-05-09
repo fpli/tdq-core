@@ -27,7 +27,6 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.util.OutputTag;
 
 import static com.ebay.tdq.utils.TdqConstant.OUTPUT_TAG_MAP;
-import static com.ebay.tdq.utils.TdqConstant.OUT_OF_ORDERLESS_IN_MIN;
 import static com.ebay.tdq.utils.TdqConstant.PARALLELISM_METRIC_COLLECTOR_BY_WINDOW;
 import static com.ebay.tdq.utils.TdqConstant.PARALLELISM_METRIC_METRIC_FINAL_COLLECTOR;
 import static com.ebay.tdq.utils.TdqConstant.SINK_TYPES;
@@ -80,7 +79,7 @@ public class ProfilingJob {
     SingleOutputStreamOperator<TdqMetric> unifyDataStream = normalizeOperator
         .keyBy(TdqMetric::getUid)
         .window(TumblingEventTimeWindows.of(Time.seconds(WINDOW_METRIC_COLLECTOR_BY_WINDOW)))
-        .allowedLateness(Time.minutes(OUT_OF_ORDERLESS_IN_MIN))
+        //.allowedLateness(Time.minutes(OUT_OF_ORDERLESS_IN_MIN))
         .sideOutputLateData(lateDataTag)
         .aggregate(new TdqAggregateFunction(), new TdqMetricProcessWindowTagFunction(OUTPUT_TAG_MAP))
         .setParallelism(PARALLELISM_METRIC_COLLECTOR_BY_WINDOW)
@@ -99,7 +98,6 @@ public class ProfilingJob {
               .getSideOutput(tag)
               .keyBy(TdqMetric::getUid)
               .window(TumblingEventTimeWindows.of(Time.seconds(seconds)))
-              .allowedLateness(Time.minutes(OUT_OF_ORDERLESS_IN_MIN))
               .aggregate(new TdqAggregateFunction())
               .slotSharingGroup("metric-final-collector")
               .setParallelism(PARALLELISM_METRIC_METRIC_FINAL_COLLECTOR)

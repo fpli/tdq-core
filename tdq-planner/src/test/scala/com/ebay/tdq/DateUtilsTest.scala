@@ -1,6 +1,6 @@
 package com.ebay.tdq
 
-import com.ebay.tdq.util.DateUtils.toSeconds
+import com.ebay.tdq.utils.DateUtils.toSeconds
 import org.apache.commons.lang3.time.DateFormatUtils
 import org.junit.Test
 

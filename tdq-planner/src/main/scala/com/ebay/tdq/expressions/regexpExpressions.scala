@@ -4,7 +4,7 @@ import java.util.Locale
 import java.util.regex.{MatchResult, Pattern}
 
 import com.ebay.tdq.types._
-import com.ebay.tdq.util.StringUtils
+import com.ebay.tdq.utils.StringUtils
 
 /**
  * @author juntzhang

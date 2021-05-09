@@ -1,7 +1,7 @@
 package com.ebay.tdq.utils;
 
 import com.ebay.tdq.rules.TdqMetric;
-import com.ebay.tdq.util.DateUtils;
+import com.ebay.tdq.utils.DateUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -22,10 +22,6 @@ public class TdqConstant {
       getInteger("flink.app.parallelism.metric-collector-by-window");
   public static Integer LOCAL_COMBINE_QUEUE_SIZE = getInteger("flink.app.advance.local-combine.queue-size");
   public static Integer LOCAL_COMBINE_FLUSH_TIMEOUT = getInteger("flink.app.advance.local-combine.flush-timeout");
-  public static Integer OUT_OF_ORDERLESS_IN_MIN = getInteger(
-      "flink.app.advance.aggregate.out-of-orderless-in-min");
-  public static Integer IDLE_TIMEOUT_IN_MIN = getInteger(
-      "flink.app.advance.aggregate.idle-timeout-in-min");
   public static Integer PARALLELISM_METRIC_METRIC_FINAL_COLLECTOR =
       getInteger("flink.app.parallelism.metric-final-collector");
   public static Long WINDOW_METRIC_COLLECTOR_BY_WINDOW =

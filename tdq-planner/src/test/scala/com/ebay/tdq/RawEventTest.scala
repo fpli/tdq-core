@@ -2,6 +2,7 @@ package com.ebay.tdq
 
 import com.ebay.sojourner.common.model.{ClientData, RawEvent}
 import com.ebay.sojourner.common.util.SojTimestamp
+import com.ebay.tdq.utils.JsonUtils
 import org.apache.commons.lang.time.DateUtils
 
 import scala.util.Random
@@ -40,6 +41,7 @@ object RawEventTest {
     rawEvent.getSojA.put("t", siteId)
     rawEvent.getSojA.put("TDuration", tDuration)
     rawEvent.getSojA.put("itm", item)
+    println(JsonUtils.toJSONString(rawEvent))
     rawEvent
   }
 
@@ -53,7 +55,7 @@ object RawEventTest {
     rawEvent.setClientData(new ClientData)
     rawEvent.getClientData.setContentLength(contentLength)
     rawEvent.setEventTimestamp(SojTimestamp.getSojTimestamp(System.currentTimeMillis))
-    rawEvent.setEventTimestamp(System.currentTimeMillis)
+    //rawEvent.setEventTimestamp(System.currentTimeMillis)
     rawEvent.setSojA(new java.util.HashMap[String, String])
     rawEvent.setSojK(new java.util.HashMap[String, String])
     rawEvent.setSojC(new java.util.HashMap[String, String])
@@ -72,4 +74,7 @@ object RawEventTest {
 
   def getSiteId: Int = Seq[Int](1, 2, 3, 4)(getInt % 1)
 
+  def main(args: Array[String]): Unit = {
+    getRawEvent(System.currentTimeMillis())
+  }
 }

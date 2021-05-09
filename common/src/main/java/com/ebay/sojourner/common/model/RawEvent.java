@@ -1,5 +1,6 @@
 package com.ebay.sojourner.common.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RawEvent implements Serializable {
 
   private RheosHeader rheosHeader;

@@ -53,13 +53,11 @@ flink:
     sink:
       types:
         - console
+        - pronto
     advance:
       local-combine:
         queue-size: 0
         flush-timeout: 5000
-      aggregate:
-        out-of-orderless-in-min: 0
-        idle-timeout-in-min: 1
 
 kafka:
   consumer:

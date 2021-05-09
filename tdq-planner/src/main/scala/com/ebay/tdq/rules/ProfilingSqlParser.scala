@@ -20,13 +20,7 @@ import scala.collection.mutable.ArrayBuffer
 /**
  * @author juntzhang
  */
-class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
-  private lazy val dimensions = if (CollectionUtils.isNotEmpty(profilerConfig.getDimensions)) {
-    profilerConfig.getDimensions.asScala.toSet
-  } else {
-    Set[String]()
-  }
-
+object ProfilingSqlParser {
   private val FRAMEWORK_CONFIG = Frameworks
     .newConfigBuilder
     .parserConfig(
@@ -37,6 +31,29 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
     )
     .operatorTable(SqlStdOperatorTable.instance)
     .build
+
+  def getSql(sql: String): SqlSelect = {
+    val parser = SqlParser.create(sql, FRAMEWORK_CONFIG.getParserConfig)
+    parser.parseStmt.asInstanceOf[SqlSelect]
+  }
+
+  def getExpr(str: String): SqlNode = {
+    val parser = SqlParser.create("SELECT " + str, FRAMEWORK_CONFIG.getParserConfig)
+    parser.parseStmt.asInstanceOf[SqlSelect].getSelectList.get(0)
+  }
+}
+
+class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
+
+  import ProfilingSqlParser._
+
+  private lazy val dimensions = if (CollectionUtils.isNotEmpty(profilerConfig.getDimensions)) {
+    profilerConfig.getDimensions.asScala.toSet
+  } else {
+    Set[String]()
+  }
+
+
   private val aliasTransformationConfigMap = profilerConfig
     .getTransformations
     .asScala
@@ -76,15 +93,6 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
     plan
   }
 
-  private def getSql(sql: String): SqlSelect = {
-    val parser = SqlParser.create(sql, FRAMEWORK_CONFIG.getParserConfig)
-    parser.parseStmt.asInstanceOf[SqlSelect]
-  }
-
-  private def getExpr(str: String): SqlNode = {
-    val parser = SqlParser.create("SELECT " + str, FRAMEWORK_CONFIG.getParserConfig)
-    parser.parseStmt.asInstanceOf[SqlSelect].getSelectList.get(0)
-  }
 
   // TODO need add more rule:
   //  1.Casts types according to the expected input types for [[Expression]]s. like spark ImplicitTypeCasts

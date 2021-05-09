@@ -4,7 +4,7 @@ import java.math.{BigDecimal => JavaBigDecimal}
 
 import com.ebay.tdq.rules.CalendarInterval
 import com.ebay.tdq.types._
-import com.ebay.tdq.util.StringUtils
+import com.ebay.tdq.utils.StringUtils
 import org.apache.commons.lang.math.NumberUtils
 
 /**
