@@ -1,7 +1,6 @@
 package com.ebay.tdq.utils;
 
 import com.ebay.tdq.rules.TdqMetric;
-import com.ebay.tdq.utils.DateUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -30,6 +29,7 @@ public class TdqConstant {
 
   // source
   public static String PRONTO_INDEX_PATTERN = getString("flink.app.source.pronto.index-pattern");
+  public static String PRONTO_LATENCY_INDEX_PATTERN = getString("flink.app.source.pronto.latency-index-pattern");
   public static String PRONTO_SCHEME = getString("flink.app.source.pronto.scheme");
   public static String PRONTO_HOSTNAME = getString("flink.app.source.pronto.hostname");
   public static Integer PRONTO_PORT = getInteger("flink.app.source.pronto.port");

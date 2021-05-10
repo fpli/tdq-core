@@ -15,13 +15,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TdqResult {
-  @Getter
-  @AllArgsConstructor
-  public enum Code {
-    OK(0), FAILED(1), TIMEOUT(2), EXCEPTION(3);
-    private final int code;
-  }
-
   @Builder.Default
   private Code code = Code.OK;
   private Exception exception;
@@ -47,5 +40,12 @@ public class TdqResult {
     this.exception = e;
     this.msg       = e.getMessage();
     return this;
+  }
+
+  @Getter
+  @AllArgsConstructor
+  public enum Code {
+    OK(0), FAILED(1), TIMEOUT(2), EXCEPTION(3);
+    private final int code;
   }
 }

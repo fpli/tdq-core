@@ -24,23 +24,6 @@ public class MemorySink extends RichSinkFunction<TdqMetric> {
     }
   }
 
-  @Override
-  public void invoke(TdqMetric metric, Context context) {
-    collect.compute(name, (k, v) -> {
-      if (v == null) {
-        v = new ArrayList<>();
-      }
-      v.add(metric);
-      return v;
-    });
-  }
-
-  public boolean check(List<TdqMetric> expectedList) {
-    log.info("memory=>");
-    collect.get(name).forEach(System.out::println);
-    return check0(collect.get(name), expectedList);
-  }
-
   public static boolean check0(List<TdqMetric> actualList, List<TdqMetric> expectedList) {
     assert expectedList.size() == actualList.size();
     Map<String, TdqMetric> m = new HashMap<>();
@@ -64,5 +47,22 @@ public class MemorySink extends RichSinkFunction<TdqMetric> {
       }
     }
     return success;
+  }
+
+  @Override
+  public void invoke(TdqMetric metric, Context context) {
+    collect.compute(name, (k, v) -> {
+      if (v == null) {
+        v = new ArrayList<>();
+      }
+      v.add(metric);
+      return v;
+    });
+  }
+
+  public boolean check(List<TdqMetric> expectedList) {
+    log.info("memory=>");
+    collect.get(name).forEach(System.out::println);
+    return check0(collect.get(name), expectedList);
   }
 }

@@ -26,14 +26,17 @@ import static com.ebay.tdq.utils.TdqConstant.LOCAL_COMBINE_QUEUE_SIZE;
 
 /**
  * todo add Checkpoint Function
- *  https://stackoverflow.com/questions/47825565/apache-flink-how-can-i-compute-windows-with-local-pre-aggregation
- *  when started broadcast cause event dropped
+ * https://stackoverflow.com/questions/47825565/apache-flink-how-can-i-compute-windows-with-local-pre-aggregation
+ * when started broadcast cause event dropped
+ *
  * @author juntzhang
  */
 @Slf4j
 public class TdqRawEventProcessFunction
     extends BroadcastProcessFunction<RawEvent, PhysicalPlan, TdqMetric> {
   private final MapStateDescriptor<String, PhysicalPlan> stateDescriptor;
+  protected long cacheCurrentTimeMillis = System.currentTimeMillis();
+  protected long logCurrentTimeMillis = 0L;
   private Counter tdqErrorEventsCount;
   private Counter tdqDroppedEventsCount;
   private Counter flush;
@@ -46,8 +49,6 @@ public class TdqRawEventProcessFunction
   private Histogram tdqProcessMetricHistogram;
   private Histogram tdqProcessElementHistogram;
   private transient Map<String, TdqMetric> cache;
-  protected long cacheCurrentTimeMillis = System.currentTimeMillis();
-  protected long logCurrentTimeMillis = 0L;
 
 
   public TdqRawEventProcessFunction(MapStateDescriptor<String, PhysicalPlan> descriptor) {

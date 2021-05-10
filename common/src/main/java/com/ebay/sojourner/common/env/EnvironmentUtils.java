@@ -26,7 +26,6 @@ public class EnvironmentUtils {
     for (AbstractEnvironment propSource : PROP_SOURCES) {
       propSource.sourceProps();
     }
-
   }
 
   public static void activateProfile(String profile) {

@@ -1,0 +1,8 @@
+pronto:
+  index-pattern: tdq-metrics-test-
+  latency-index-pattern: tdq-latency-metrics-test-
+  scheme: http
+  hostname: localhost
+  port: 9200
+  username:
+  password:

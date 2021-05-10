@@ -18,15 +18,15 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QueryProfilerResult extends TdqResult {
+  private QueryProfilerParam param;
+  @Singular
+  private List<Record> records;
+
   @Data
   @RequiredArgsConstructor
   public static class Record {
     private final long timestamp;
     private final double value;
   }
-
-  private QueryProfilerParam param;
-  @Singular
-  private List<Record> records;
 
 }

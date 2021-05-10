@@ -12,7 +12,7 @@ import lombok.Value;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class SinkConfig {
-    private String              name;
-    private String              type;
-    private Map<String, Object> config;
+  private String name;
+  private String type;
+  private Map<String, Object> config;
 }

@@ -42,6 +42,7 @@ flink:
       idle-source-timeout-in-min: 5
       pronto:
         index-pattern: tdq-metrics-test-
+        latency-index-pattern: tdq-latency-metrics-test-
         scheme: https
         hostname: esgro-datarno.vip.ebay.com
         port: 443

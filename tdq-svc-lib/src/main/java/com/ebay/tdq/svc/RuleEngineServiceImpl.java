@@ -34,12 +34,10 @@ import org.apache.commons.io.IOUtils;
  */
 @Slf4j
 public class RuleEngineServiceImpl implements RuleEngineService {
-  public static RuleEngineService instance = new RuleEngineServiceImpl();
-
   private final ExecutorService executor;
   private final List<RawEvent> sample;
 
-  private RuleEngineServiceImpl() {
+  RuleEngineServiceImpl() {
     try {
       executor = new ThreadPoolExecutor(
           5, 50, 60L, TimeUnit.SECONDS, new SynchronousQueue<>());

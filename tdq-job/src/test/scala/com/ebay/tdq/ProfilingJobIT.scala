@@ -7,15 +7,15 @@ import com.ebay.sojourner.common.model.RawEvent
 import com.ebay.sojourner.flink.connector.kafka.SojSerializableTimestampAssigner
 import com.ebay.tdq.rules.{PhysicalPlan, TdqMetric}
 import com.ebay.tdq.sinks.MemorySink
-import com.ebay.tdq.utils.{FlinkEnvFactory, TdqConstant}
+import com.ebay.tdq.utils.{DateUtils, FlinkEnvFactory, TdqConstant}
 import com.google.common.collect.{Lists, Sets}
-import org.apache.commons.lang.time.DateFormatUtils
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
 import org.apache.flink.streaming.api.datastream.DataStream
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.functions.source.{RichSourceFunction, SourceFunction}
 import org.apache.flink.streaming.connectors.elasticsearch.TdqElasticsearchResource
 import org.elasticsearch.action.search.SearchRequest
+import org.elasticsearch.client.Client
 import org.elasticsearch.index.query.QueryBuilders
 import org.elasticsearch.search.builder.SearchSourceBuilder
 import org.junit.Assert
@@ -72,8 +72,8 @@ case class ProfilingJobIT(
     Assert.assertTrue(collect.check(expects.asJava))
 
     Thread.sleep(1000)
-    val client = elasticsearchResource.getClient
-    val suffix = DateFormatUtils.format(expects.head.getEventTime, "yyyy.MM.dd")
+    val client: Client = elasticsearchResource.getClient
+    val suffix = DateUtils.calculateIndexDate(expects.head.getEventTime)
     val searchRequest = new SearchRequest(s"${TdqConstant.PRONTO_INDEX_PATTERN}$suffix")
     val searchSourceBuilder = new SearchSourceBuilder()
     searchSourceBuilder.query(QueryBuilders.matchAllQuery())
@@ -92,7 +92,7 @@ case class ProfilingJobIT(
     }).toList
     println("expects=>")
     expects.foreach(println)
-
+    Thread.sleep(10000000)
     println("pronto=>")
     resultInPronto.foreach(println)
     Assert.assertTrue(MemorySink.check0(resultInPronto.asJava, expects.asJava))

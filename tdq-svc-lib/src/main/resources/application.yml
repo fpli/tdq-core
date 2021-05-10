@@ -1,0 +1,8 @@
+pronto:
+  index-pattern: tdq-metrics-test-
+  latency-index-pattern: tdq-latency-metrics-test-
+  scheme: https
+  hostname: esgro-datarno.vip.ebay.com
+  port: 443
+  username: 4b538a6e7d4043b68d7da1f0c62ac304
+  password: Te9xhZfDEkl6cEZ1jCx1akuxObSbUu75puv9mU6qNi7383nvKphEsDBzaHcGGUlr

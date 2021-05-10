@@ -9,6 +9,18 @@ import org.apache.flink.api.common.functions.AggregateFunction;
  * @author juntzhang
  */
 public class TdqAggregateFunction implements AggregateFunction<TdqMetric, TdqMetric, TdqMetric> {
+  public static TdqMetric merge0(TdqMetric m1, TdqMetric m2) {
+    if (m1 == null && m2 == null) {
+      return null;
+    } else if (m1 == null) {
+      return m2;
+    } else if (m2 == null) {
+      return m1;
+    } else {
+      return ((PhysicalPlan) m1.getPhysicalPlan()).merge(m1, m2);
+    }
+  }
+
   @Override
   public TdqMetric createAccumulator() {
     return null;
@@ -32,17 +44,5 @@ public class TdqAggregateFunction implements AggregateFunction<TdqMetric, TdqMet
   @Override
   public TdqMetric merge(TdqMetric m1, TdqMetric m2) {
     return merge0(m1, m2);
-  }
-
-  public static TdqMetric merge0(TdqMetric m1, TdqMetric m2) {
-    if (m1 == null && m2 == null) {
-      return null;
-    } else if (m1 == null) {
-      return m2;
-    } else if (m2 == null) {
-      return m1;
-    } else {
-      return ((PhysicalPlan) m1.getPhysicalPlan()).merge(m1, m2);
-    }
   }
 }

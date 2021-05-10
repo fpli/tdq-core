@@ -79,6 +79,10 @@ class SingleRuleSqlJobTest {
   @Test
   def test_avg_casewhen(): Unit = {
     val id = "test_avg_casewhen"
+    test_avg_casewhen(id).submit()
+  }
+
+  def test_avg_casewhen(id: String) = {
     ProfilingJobIT(
       id = id,
       config =
@@ -142,7 +146,7 @@ class SingleRuleSqlJobTest {
       expects = List(
         getMetric(id, time = "2021-05-29 12:02:00", v = 4d / 7d)
       )
-    ).submit()
+    )
   }
 
   @Test

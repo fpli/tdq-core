@@ -29,6 +29,8 @@ import org.apache.flink.util.OutputTag;
 import static com.ebay.tdq.utils.TdqConstant.OUTPUT_TAG_MAP;
 import static com.ebay.tdq.utils.TdqConstant.PARALLELISM_METRIC_COLLECTOR_BY_WINDOW;
 import static com.ebay.tdq.utils.TdqConstant.PARALLELISM_METRIC_METRIC_FINAL_COLLECTOR;
+import static com.ebay.tdq.utils.TdqConstant.PRONTO_INDEX_PATTERN;
+import static com.ebay.tdq.utils.TdqConstant.PRONTO_LATENCY_INDEX_PATTERN;
 import static com.ebay.tdq.utils.TdqConstant.SINK_TYPES;
 import static com.ebay.tdq.utils.TdqConstant.WINDOW_METRIC_COLLECTOR_BY_WINDOW;
 
@@ -58,11 +60,11 @@ public class ProfilingJob {
   // output metric by window
   protected void outputMetricByWindow(Map<String, SingleOutputStreamOperator<TdqMetric>> outputTags) {
     outputTags.forEach((key, ds) -> {
-      output(ds, "final_" + key);
+      output(ds, "final_" + key, false);
     });
   }
 
-  private void output(DataStream<TdqMetric> ds, String uid) {
+  private void output(DataStream<TdqMetric> ds, String uid, boolean isLateData) {
     if (SINK_TYPES.contains("console")) {
       ds.print(uid.toUpperCase())
           .uid(uid)
@@ -70,7 +72,11 @@ public class ProfilingJob {
           .setParallelism(PARALLELISM_METRIC_METRIC_FINAL_COLLECTOR);
     }
     if (SINK_TYPES.contains("pronto")) {
-      ProntoSink.output(ds, uid, PARALLELISM_METRIC_METRIC_FINAL_COLLECTOR);
+      if (isLateData) {
+        ProntoSink.output(ds, uid, PARALLELISM_METRIC_METRIC_FINAL_COLLECTOR, PRONTO_LATENCY_INDEX_PATTERN);
+      } else {
+        ProntoSink.output(ds, uid, PARALLELISM_METRIC_METRIC_FINAL_COLLECTOR, PRONTO_INDEX_PATTERN);
+      }
     }
   }
 
@@ -87,7 +93,7 @@ public class ProfilingJob {
         .name("Metric Split by Window Collector")
         .uid("metric_split_by_window_collector");
 
-    output(unifyDataStream.getSideOutput(lateDataTag), "collector_by_window_late");
+    output(unifyDataStream.getSideOutput(lateDataTag), "collector_by_window_late", true);
 
     Map<String, SingleOutputStreamOperator<TdqMetric>> ans = Maps.newHashMap();
     OUTPUT_TAG_MAP.forEach((seconds, tag) -> {

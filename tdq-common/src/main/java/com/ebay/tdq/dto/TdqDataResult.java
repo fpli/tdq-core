@@ -12,7 +12,6 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-final public class TdqDataResult<T> extends TdqResult {
+public class TdqDataResult<T> extends TdqResult {
   private T data;
-
 }

@@ -18,17 +18,17 @@ import lombok.Value;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class TdqConfig implements Serializable {
-    @JsonProperty(index = 0)
-    private String             id;
-    @JsonProperty(index = 1)
-    private String             name;
-    @JsonProperty(index = 2)
-    @Singular
-    private List<SourceConfig> sources;
-    @JsonProperty(index = 3)
-    @Singular
-    private List<RuleConfig>   rules;
-    @JsonProperty(index = 4)
-    @Singular
-    private List<SinkConfig>   sinks;
+  @JsonProperty(index = 0)
+  private String id;
+  @JsonProperty(index = 1)
+  private String name;
+  @JsonProperty(index = 2)
+  @Singular
+  private List<SourceConfig> sources;
+  @JsonProperty(index = 3)
+  @Singular
+  private List<RuleConfig> rules;
+  @JsonProperty(index = 4)
+  @Singular
+  private List<SinkConfig> sinks;
 }

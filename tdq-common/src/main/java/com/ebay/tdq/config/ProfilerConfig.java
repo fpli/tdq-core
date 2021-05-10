@@ -15,18 +15,18 @@ import lombok.Value;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class ProfilerConfig implements Serializable {
-    @JsonProperty(value = "metric-name", index = 0)
-    private String                     metricName;
-    @JsonProperty(index = 1)
-    private ExpressionConfig           expression;
-    @JsonProperty(index = 2)
-    private String                     filter;
-    @JsonProperty(index = 3)
-    @Singular
-    private List<TransformationConfig> transformations;
-    @JsonProperty(index = 4)
-    @Singular
-    private List<String>               dimensions;
-    @JsonProperty(index = 5)
-    private String                     comment;
+  @JsonProperty(value = "metric-name", index = 0)
+  private String metricName;
+  @JsonProperty(index = 1)
+  private ExpressionConfig expression;
+  @JsonProperty(index = 2)
+  private String filter;
+  @JsonProperty(index = 3)
+  @Singular
+  private List<TransformationConfig> transformations;
+  @JsonProperty(index = 4)
+  @Singular
+  private List<String> dimensions;
+  @JsonProperty(index = 5)
+  private String comment;
 }

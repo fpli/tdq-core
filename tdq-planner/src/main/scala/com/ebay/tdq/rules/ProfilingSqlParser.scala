@@ -77,15 +77,18 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
       }
     }.filter(_ != null).toList
 
+    val dimArr = expressionMap.filter { case (k, _) => dimensions.contains(k) }.values.toArray
+    if (dimArr.length != dimensions.size) {
+      throw new IllegalArgumentException("dimensions config illegal!")
+    }
+
     val evaluation = parseExpressionPlan(profilerConfig.getExpression, "")
 
     val plan = PhysicalPlan(
       metricKey = profilerConfig.getMetricName,
       window = window,
       filter = parseFilter(profilerConfig.getFilter),
-      dimensions = expressionMap.filter { case (k, _) =>
-        dimensions.contains(k)
-      }.values.toArray,
+      dimensions = dimArr,
       evaluation = evaluation,
       aggregations = aggregations.toArray
     )
