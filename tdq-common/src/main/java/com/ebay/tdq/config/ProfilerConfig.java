@@ -1,5 +1,6 @@
 package com.ebay.tdq.config;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.List;
@@ -28,5 +29,6 @@ public class ProfilerConfig implements Serializable {
   @Singular
   private List<String> dimensions;
   @JsonProperty(index = 5)
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private String comment;
 }

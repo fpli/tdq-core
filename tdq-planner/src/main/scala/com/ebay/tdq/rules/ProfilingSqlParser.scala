@@ -41,6 +41,45 @@ object ProfilingSqlParser {
     val parser = SqlParser.create("SELECT " + str, FRAMEWORK_CONFIG.getParserConfig)
     parser.parseStmt.asInstanceOf[SqlSelect].getSelectList.get(0)
   }
+
+  def getExprIdentifiers(str: String): Array[SqlIdentifier] = {
+    val parser = SqlParser.create("SELECT " + str, FRAMEWORK_CONFIG.getParserConfig)
+    val buffer = new ArrayBuffer[SqlIdentifier]()
+    parser.parseStmt.asInstanceOf[SqlSelect].getSelectList.get(0) match {
+      case call: SqlBasicCall => baseCallIdentifiers(call, buffer)
+      case sqlCase: SqlCase => sqlCaseIdentifiers(sqlCase, buffer)
+      case identifier: SqlIdentifier => buffer += identifier
+      case _ =>
+    }
+    buffer.toArray
+  }
+
+  private def baseCallIdentifiers(call: SqlBasicCall, buffer: ArrayBuffer[SqlIdentifier]): Unit = {
+    call.operands.foreach {
+      case c: SqlBasicCall =>
+        baseCallIdentifiers(c, buffer)
+      case list: SqlNodeList =>
+        list.asScala.foreach {
+          case ii: SqlIdentifier => buffer += ii
+          case n: SqlBasicCall => baseCallIdentifiers(n, buffer)
+        }
+      case i: SqlIdentifier =>
+        buffer += i
+      case _ =>
+    }
+  }
+
+  private def sqlCaseIdentifiers(sqlCase: SqlCase, buffer: ArrayBuffer[SqlIdentifier]): Unit = {
+    for (i <- 0 until sqlCase.getWhenOperands.size) {
+      baseCallIdentifiers(sqlCase.getWhenOperands.get(i).asInstanceOf[SqlBasicCall], buffer)
+    }
+  }
+
+  def getFilterIdentifiers(filter: String): Array[SqlIdentifier] = {
+    val buffer = new ArrayBuffer[SqlIdentifier]()
+    baseCallIdentifiers(getSql("SELECT 1 FROM T where " + filter).getWhere.asInstanceOf[SqlBasicCall],buffer)
+    buffer.toArray
+  }
 }
 
 class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
@@ -139,6 +178,8 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
     val ans = new Array[Any](operands.length)
     for (i <- operands.indices) {
       operands(i) match {
+        case c: SqlCase =>
+          ans(i) = transformSqlCase(c, "")
         case call: SqlBasicCall =>
           ans(i) = transformSqlBaseCall(call, "")
         case list: SqlNodeList =>

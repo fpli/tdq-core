@@ -1,10 +1,13 @@
 package com.ebay.tdq.svc;
 
 import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.tdq.config.ExpressionConfig;
 import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;
+import com.ebay.tdq.config.TransformationConfig;
 import com.ebay.tdq.dto.IDoMetricConfig;
+import com.ebay.tdq.dto.IDoMetricConfigSchema;
 import com.ebay.tdq.dto.TdqDataResult;
 import com.ebay.tdq.dto.TdqResult;
 import com.ebay.tdq.rules.PhysicalPlan;
@@ -15,7 +18,9 @@ import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.JsonUtils;
 import com.google.common.collect.Maps;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -26,8 +31,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.calcite.sql.SqlIdentifier;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author juntzhang
@@ -42,18 +50,139 @@ public class RuleEngineServiceImpl implements RuleEngineService {
       executor = new ThreadPoolExecutor(
           5, 50, 60L, TimeUnit.SECONDS, new SynchronousQueue<>());
       sample   = new ArrayList<>();
-      for (String json :
-          IOUtils.readLines(RuleEngineServiceImpl.class.getResourceAsStream("/pathfinder_raw_event.txt"))) {
-        sample.add(JsonUtils.parseObject(json, RawEvent.class));
+      for (String json : getSampleData()) {
+        RawEvent event = JsonUtils.parseObject(json, RawEvent.class);
+        event.setEventTimestamp(System.currentTimeMillis());
+        sample.add(event);
       }
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
 
+  public static List<String> getSampleData() throws IOException {
+    try (InputStream is = ServiceFactory.class.getResourceAsStream("/pathfinder_raw_event.txt")) {
+      return IOUtils.readLines(is);
+    }
+  }
+
+  public static String getIDoConfigSchema() throws IOException {
+    try (InputStream is = ServiceFactory.class.getResourceAsStream("/iDo_config_schema.json")) {
+      return IOUtils.toString(is);
+    }
+  }
+
+  // replace field placeholder
+  private String replaceFieldPattern(IDoMetricConfigSchema schema, IDoMetricConfig iDoMetricConfig, String field,
+      List<TransformationConfig> transformations) throws IllegalAccessException {
+    String[] arr = field.split("\\.");
+    if (arr.length == 1) {
+      TransformationConfig c = schema.getTransformations().get(arr[0]);
+      if (c == null) {
+        throw new IllegalAccessException(field + " is not define in schema!");
+      }
+      addTransformations(transformations, c);
+      return arr[0];
+    } else if (arr.length == 2) {
+      String pattern = schema.getFieldPatterns().get(arr[0]);
+      if (StringUtils.isBlank(pattern)) {
+        throw new IllegalAccessException(field + " is illegal!");
+      }
+      return iDoMetricConfig.cast(pattern.replace("__TDQ_PLACEHOLDER", arr[1]), field);
+    } else {
+      throw new IllegalAccessException(field + " is illegal!");
+    }
+  }
+
+  private void addTransformations(List<TransformationConfig> transformations, TransformationConfig transformation) {
+    if (transformations.stream().noneMatch(t -> t.getAlias().equals(transformation.getAlias()))) {
+      transformations.add(transformation);
+    }
+  }
+
   @Override
   public TdqDataResult<String> translateConfig(IDoMetricConfig iDoMetricConfig) {
-    return null;
+    TdqDataResult<String> result = new TdqDataResult<>();
+    try {
+      IDoMetricConfigSchema schema = JsonUtils.parseObject(getIDoConfigSchema(), IDoMetricConfigSchema.class);
+      IDoMetricConfigSchema.Aggregate aggregate = schema.getAggregates().get(iDoMetricConfig.getOperator());
+      if (aggregate == null) {
+        throw new IllegalAccessException("iDoMetricConfig.getOperator() is not defined!");
+      }
+      List<TransformationConfig> transformations = new ArrayList<>();
+
+      // transfer defined fields
+      String filter = iDoMetricConfig.getFilter();
+      for (SqlIdentifier identifier : ProfilingSqlParser.getFilterIdentifiers(iDoMetricConfig.getFilter())) {
+        String fieldName = identifier.toString();
+        String definedField = replaceFieldPattern(schema, iDoMetricConfig, fieldName, transformations);
+        filter = filter.replace(fieldName, definedField);
+      }
+
+      for (String d : iDoMetricConfig.getDimensions()) {
+        TransformationConfig c = schema.getTransformations().get(d);
+        if (c == null) {
+          throw new IllegalAccessException(d + " is not define in schema!");
+        }
+        addTransformations(transformations, c);
+      }
+
+      for (int i = 0; i < iDoMetricConfig.getExpressions().size(); i++) {
+        String expr = iDoMetricConfig.getExpressions().get(i);
+        for (SqlIdentifier identifier : ProfilingSqlParser.getExprIdentifiers(expr)) {
+          String fieldName = identifier.toString();
+          String definedField = replaceFieldPattern(schema, iDoMetricConfig, fieldName, transformations);
+          expr = expr.replace(fieldName, definedField);
+        }
+
+        for (TransformationConfig c : aggregate.getParams()) {
+          String originalTest = ((String) c.getExpression().getConfig().get("text"));
+          if (StringUtils.isNotBlank(originalTest)) {
+            String text = originalTest.replace("__TDQ_PLACEHOLDER_" + (i + 1), "(" + expr + ")");
+            c.getExpression().getConfig().put("text", text);
+          } else {
+            String originalArg0 = ((String) c.getExpression().getConfig().get("arg0"));
+            if (StringUtils.isNotBlank(originalArg0)) {
+              String arg0 = originalArg0.replace("__TDQ_PLACEHOLDER_" + (i + 1), "(" + expr + ")");
+              c.getExpression().getConfig().put("arg0", arg0);
+            }
+          }
+          addTransformations(transformations, c);
+        }
+      }
+
+      ProfilerConfig profilerConfig = new ProfilerConfig(
+          iDoMetricConfig.getMetricName(),
+          ExpressionConfig.expr(aggregate.getExpr()),
+          filter,
+          transformations,
+          iDoMetricConfig.getDimensions(),
+          iDoMetricConfig.getComment()
+      );
+
+      Map<String, Object> config = new HashMap<>();
+      config.put("window", iDoMetricConfig.getWindow());
+      String id = RandomStringUtils.randomAlphabetic(1) + RandomStringUtils.randomAlphanumeric(9);
+
+      RuleConfig ruleConfig = RuleConfig.builder()
+          .name("r_" + id)
+          .profiler(profilerConfig)
+          .type("realtime.rheos.profiler")
+          .config(config)
+          .build();
+
+      TdqConfig tdqConfig = TdqConfig.builder()
+          .id(id)
+          .name("cfg_" + id)
+          .rule(ruleConfig)
+          .build();
+      result.setData(JsonUtils.toJSONString(tdqConfig));
+      return result;
+    } catch (Exception e) {
+      log.warn(e.getMessage(), e);
+      result.exception(e).failed();
+      return result;
+    }
   }
 
   @Override
@@ -111,17 +240,21 @@ public class RuleEngineServiceImpl implements RuleEngineService {
         while (i > 0) {
           for (RawEvent event : sample) {
             TdqMetric newMetric = plan.process(event);
-            map.compute(newMetric.getUid(), (key, old) -> {
-              if (old != null) {
-                return plan.merge(newMetric, old);
-              } else {
-                return newMetric;
-              }
-            });
+            if (newMetric != null) {
+              map.compute(newMetric.getUid(), (key, old) -> {
+                if (old != null) {
+                  return plan.merge(newMetric, old);
+                } else {
+                  return newMetric;
+                }
+              });
+            }
           }
           i--;
         }
+        map.values().forEach(System.out::println);
       } catch (Exception e) {
+        log.warn(e.getMessage(), e);
         result.exception(e);
       }
       return System.currentTimeMillis() - s;
@@ -133,9 +266,11 @@ public class RuleEngineServiceImpl implements RuleEngineService {
       result.timeout();
       result.setException(e);
     } catch (ExecutionException e) {
+      log.warn(e.getMessage(), e);
       result.exception(e);
       result.setMsg("execute failed");
     } catch (InterruptedException e) {
+      log.warn(e.getMessage(), e);
       result.exception(e);
       result.setMsg("interrupted");
     } finally {

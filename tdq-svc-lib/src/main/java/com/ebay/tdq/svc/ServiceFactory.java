@@ -4,7 +4,9 @@ import com.ebay.sojourner.common.env.EnvironmentUtils;
 import com.ebay.tdq.service.ProfilerService;
 import com.ebay.tdq.service.RuleEngineService;
 import java.io.IOException;
+import java.io.InputStream;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -30,6 +32,7 @@ public class ServiceFactory {
   protected static String PRONTO_PASSWORD = EnvironmentUtils.get("pronto.password");
 
   private static final RuleEngineService ruleEngineService = new RuleEngineServiceImpl();
+
   private static final ProfilerService profilerService = new ProfilerServiceImpl(restHighLevelClient());
 
   public static RuleEngineService getRuleEngine() {

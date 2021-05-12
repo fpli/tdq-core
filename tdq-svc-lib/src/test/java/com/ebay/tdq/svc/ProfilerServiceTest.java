@@ -74,7 +74,7 @@ public class ProfilerServiceTest {
     double a2 = m.get(DateUtils.parseDate("2021-05-29 12:04:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime());
     Assert.assertEquals(5d / 9d, a1, 0.0001);
     Assert.assertEquals(2d / 3d, a2, 0.0001);
-    Thread.sleep(10000000);
+    //Thread.sleep(10000000);
 
     ServiceFactory.close();
     elasticsearchResource.close();

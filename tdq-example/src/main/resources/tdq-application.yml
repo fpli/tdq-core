@@ -1,3 +1,4 @@
+# This file is not normally required, only if you want to change es env
 pronto:
   index-pattern: tdq-metrics-test-
   latency-index-pattern: tdq-latency-metrics-test-

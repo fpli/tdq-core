@@ -1,9 +1,14 @@
 package com.ebay.tdq.svc;
 
+import com.ebay.tdq.dto.IDoMetricConfig;
+import com.ebay.tdq.dto.TdqDataResult;
 import com.ebay.tdq.dto.TdqResult;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.assertj.core.util.Lists;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -45,5 +50,54 @@ public class RuleEngineServiceTest {
 
   public static String get(String name) throws IOException {
     return IOUtils.toString(RuleEngineServiceTest.class.getResourceAsStream("/" + name + ".json"));
+  }
+
+  @Test
+  public void testTranslateConfig() {
+    IDoMetricConfig metricConfig = new IDoMetricConfig();
+    metricConfig.setMetricName("test");
+    metricConfig.setWindow("2min");
+    metricConfig.setOperator("avg");
+    metricConfig.setExpressions(Lists.newArrayList("case when item is not null then 1 else 0 end"));
+    metricConfig.setDimensions(Lists.newArrayList("page_id"));
+    metricConfig.setFilter("soj_tag.TDuration > 30.0 AND client_data_tag.contentLength > 100");
+    Map<String, IDoMetricConfig.FieldType> dataTypes = new HashMap<>();
+    dataTypes.put("soj_tag.TDuration", IDoMetricConfig.FieldType.DOUBLE);
+    dataTypes.put("client_data_tag.contentLength", IDoMetricConfig.FieldType.INTEGER);
+    metricConfig.setDataTypes(dataTypes);
+    TdqDataResult<String> result = ServiceFactory.getRuleEngine().translateConfig(
+        metricConfig
+    );
+    String json = result.getData();
+    System.out.println(json);
+    TdqResult tdqResult = ServiceFactory.getRuleEngine().verifyTdqConfig(json);
+    System.out.println(tdqResult);
+    Assert.assertTrue(result.isOk());
+  }
+
+  @Test
+  public void testTranslateDivideConfig() {
+    IDoMetricConfig metricConfig = new IDoMetricConfig();
+    metricConfig.setMetricName("test");
+    metricConfig.setWindow("2min");
+    metricConfig.setOperator("divide");
+    metricConfig.setExpressions(Lists.newArrayList(
+        "case when item is not null then 1 else 0 end",
+        "case when client_data_tag.contentLength > 150 then 1 else 0 end"
+    ));
+    metricConfig.setDimensions(Lists.newArrayList("page_id"));
+    metricConfig.setFilter("soj_tag.TDuration > 30.0 AND client_data_tag.contentLength > 100");
+    Map<String, IDoMetricConfig.FieldType> dataTypes = new HashMap<>();
+    dataTypes.put("soj_tag.TDuration", IDoMetricConfig.FieldType.DOUBLE);
+    dataTypes.put("client_data_tag.contentLength", IDoMetricConfig.FieldType.INTEGER);
+    metricConfig.setDataTypes(dataTypes);
+    TdqDataResult<String> result = ServiceFactory.getRuleEngine().translateConfig(
+        metricConfig
+    );
+    System.out.println(result.getData());
+
+    TdqResult tdqResult = ServiceFactory.getRuleEngine().verifyTdqConfig(result.getData());
+    System.out.println(tdqResult);
+    Assert.assertTrue(result.isOk());
   }
 }

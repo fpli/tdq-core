@@ -25,9 +25,9 @@ import static com.ebay.tdq.utils.TdqConstant.LOCAL_COMBINE_FLUSH_TIMEOUT;
 import static com.ebay.tdq.utils.TdqConstant.LOCAL_COMBINE_QUEUE_SIZE;
 
 /**
- * todo add Checkpoint Function
+ * todo add Checkpoint Function, add check cache size for dims
  * https://stackoverflow.com/questions/47825565/apache-flink-how-can-i-compute-windows-with-local-pre-aggregation
- * when started broadcast cause event dropped
+ * when started broadcast cause event dropped,
  *
  * @author juntzhang
  */
