@@ -140,25 +140,6 @@
           ]
         }
       ]
-    },
-    {
-      "name": "rule_6",
-      "type": "realtime.rheos.profiler",
-      "config": {
-        "window": "5min"
-      },
-      "profilers": [
-        {
-          "metric-name": "global_cnt_by_5min",
-          "expression": {"operator": "Expr", "config": {"text": "p1"}},
-          "transformations": [
-            {
-              "alias": "p1",
-              "expression": {"operator": "Count", "config": {"arg0": "1.0"}}
-            }
-          ]
-        }
-      ]
     }
   ],
   "sinks": []

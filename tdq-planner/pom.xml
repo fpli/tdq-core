@@ -10,19 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
     <name>TDQ - Planner</name>
     <artifactId>tdq-planner</artifactId>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-
-        <scala-211.major.version>2.11</scala-211.major.version>
-        <scala-212.major.version>2.12</scala-212.major.version>
-        <scala.major.version>${scala-211.major.version}</scala.major.version>
-        <scala.version>${scala.major.version}.10</scala.version>
-        <scala-maven-plugin.version>4.4.0</scala-maven-plugin.version>
-        <elasticsearch.version>7.5.1</elasticsearch.version>
-        <calcite.version>1.22.0</calcite.version>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -51,6 +38,12 @@
             <artifactId>scala-compiler</artifactId>
             <version>${scala.version}</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>scala-library</artifactId>
+                    <groupId>org.scala-lang</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -58,6 +51,16 @@
             <artifactId>scalatest_${scala.major.version}</artifactId>
             <version>3.0.1</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>scala-library</artifactId>
+                    <groupId>org.scala-lang</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>scala-reflect</artifactId>
+                    <groupId>org.scala-lang</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

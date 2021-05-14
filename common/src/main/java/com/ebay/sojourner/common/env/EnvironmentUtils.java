@@ -31,7 +31,7 @@ public class EnvironmentUtils {
   public static void activateProfile(String profile) {
     Preconditions.checkNotNull(profile);
 
-    String configFileName = "tdq-application-" + profile;
+    String configFileName = "application-" + profile;
     PropertySource propertySource = new PropertySource(configFileName, 3);
     propertySource.sourceProps();
     PROP_SOURCES.add(propertySource);

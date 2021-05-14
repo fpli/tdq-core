@@ -10,7 +10,6 @@ import org.apache.flink.util.OutputTag;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getSet;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
-import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getStringOrDefault;
 
 /**
  * @author juntzhang
@@ -36,9 +35,7 @@ public class TdqConstant {
   public static String PRONTO_USERNAME = getString("flink.app.source.pronto.username");
   public static String PRONTO_PASSWORD = getString("flink.app.source.pronto.password");
 
-  public static Double SRC_SAMPLE_FRACTION = Double.valueOf(
-      getStringOrDefault("flink.app.source.sample-fraction", "0")
-  );
+  public static Double SRC_SAMPLE_FRACTION = Double.valueOf(getString("flink.app.source.sample-fraction"));
 
   static {
     for (String tag : getString("flink.app.window.supports")

@@ -11,18 +11,6 @@
 
     <artifactId>tdq-svc-lib</artifactId>
     <name>TDQ - Service Lib</name>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-
-        <scala-211.major.version>2.11</scala-211.major.version>
-        <scala-212.major.version>2.12</scala-212.major.version>
-        <scala.major.version>${scala-211.major.version}</scala.major.version>
-        <scala.version>${scala.major.version}.10</scala.version>
-        <scala-maven-plugin.version>4.4.0</scala-maven-plugin.version>
-        <elasticsearch.version>7.5.1</elasticsearch.version>
-    </properties>
 
     <dependencies>
         <dependency>

@@ -29,7 +29,7 @@ public class TdqMetricProcessWindowTagFunction
   @Override
   public void process(String tag, Context context,
       Iterable<TdqMetric> iterable, Collector<TdqMetric> collector) {
-    collect(iterable.iterator().next(), context);
+    iterable.forEach(tdqMetric -> collect(tdqMetric, context));
   }
 
   void collect(TdqMetric m, Context context) {

@@ -34,6 +34,16 @@ public class RuleEngineServiceTest {
   }
 
   @Test
+  public void testVerifyTdqConfigs() throws IOException {
+    TdqResult result = ServiceFactory.getRuleEngine().verifyTdqConfig(get("tdq_rules"));
+    log.info("SUCCESS=>{}", result);
+    if(!result.isOk()){
+      result.getException().printStackTrace();
+    }
+    Assert.assertTrue(result.isOk());
+  }
+
+  @Test
   public void testVerifyTdqConfig() throws IOException {
     TdqResult result = ServiceFactory.getRuleEngine().verifyTdqConfig(get("testVerifyTdqConfig_success"));
     log.info("SUCCESS=>{}", result);

@@ -92,7 +92,7 @@ case class ProfilingJobIT(
     }).toList
     println("expects=>")
     expects.foreach(println)
-    Thread.sleep(10000000)
+    //Thread.sleep(10000000)
     println("pronto=>")
     resultInPronto.foreach(println)
     Assert.assertTrue(MemorySink.check0(resultInPronto.asJava, expects.asJava))

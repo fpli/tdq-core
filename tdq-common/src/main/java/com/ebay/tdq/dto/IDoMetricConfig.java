@@ -13,10 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IDoMetricConfig {
-  public enum FieldType {
-    STRING, LONG, INTEGER, DOUBLE, BOOLEAN, DATE, TIMESTAMP
-  }
-
   private String metricName;
   private String window;
   private List<String> dimensions;
@@ -27,11 +23,15 @@ public class IDoMetricConfig {
   private Map<String, FieldType> dataTypes;
   private String comment;
 
-  public String cast(String field,String originalFiled) {
+  public String cast(String field, String originalFiled) {
     FieldType fieldType = dataTypes.get(originalFiled);
     if (fieldType != null) {
       return "cast(" + field + " AS " + fieldType.name() + ")";
     }
     return field;
+  }
+
+  public enum FieldType {
+    STRING, LONG, INTEGER, DOUBLE, BOOLEAN, DATE, TIMESTAMP
   }
 }

@@ -1,14 +1,14 @@
 flink:
   app:
-    name: TDQ-V2
+    name: TDQ-V2-pathfinder
     parallelism:
       default: 100
       source: 100
       metric-collector-by-window: 61
       metric-final-collector: 2
     window:
-      supports: 10min,30min,1h,1d
-      metric-collector-by-window: 5min
+      supports: 5min,10min,30min,1h,1d
+      metric-collector-by-window: 1min
     slot-sharing-group:
       source-event-lvs: tdq-lvs
       source-event-slc: tdq-slc
@@ -36,25 +36,31 @@ flink:
       tolerate-failure-number: 3
     hot-deploy: false
     source:
-      sample-fraction: 0.01
+      sample-fraction: 0
       from-timestamp: 0
       out-of-orderless-in-min: 3
-      idle-source-timeout-in-min: 5
+      idle-source-timeout-in-min: 10
       pronto:
         index-pattern: tdq-metrics-test-
         latency-index-pattern: tdq-latency-metrics-test-
         scheme: https
-        hostname: esgro-datarno.vip.ebay.com
+        hostname: estdq-datalvs.vip.ebay.com
         port: 443
-        username: 4b538a6e7d4043b68d7da1f0c62ac304
-        password: Te9xhZfDEkl6cEZ1jCx1akuxObSbUu75puv9mU6qNi7383nvKphEsDBzaHcGGUlr
+        username: _TDQ_SVC_USER
+        password: "@BxHqFyz+Gzeq+2D"
     sink:
       types:
-        - console
+        - pronto
     advance:
       local-combine:
         queue-size: 1000
         flush-timeout: 5000
+mysql:
+  jdbc:
+    url: jdbc:mysql://mysql-master-svc-qa.ido-ns.svc.57.tess.io:3306/tdq?verifyServerCertificate=false&useSSL=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    user: dataops
+    password: dataops#123
 
 kafka:
   consumer:

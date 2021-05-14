@@ -236,7 +236,7 @@ public class RuleEngineServiceImpl implements RuleEngineService {
       long s = System.currentTimeMillis();
       Map<String, TdqMetric> map = Maps.newHashMap();
       try {
-        int i = 10000;
+        int i = 100;
         while (i > 0) {
           for (RawEvent event : sample) {
             TdqMetric newMetric = plan.process(event);
@@ -257,14 +257,16 @@ public class RuleEngineServiceImpl implements RuleEngineService {
         log.warn(e.getMessage(), e);
         result.exception(e);
       }
+      log.warn(plan.metricKey()+" cost time {}ms", (System.currentTimeMillis() - s));
       return System.currentTimeMillis() - s;
     });
 
     try {
-      result.setData(result.getData() + future.get(1, TimeUnit.SECONDS));
+      result.setData(result.getData() + future.get(3, TimeUnit.SECONDS));
     } catch (TimeoutException e) {
       result.timeout();
       result.setException(e);
+      result.setMsg("pls check rule maybe have some performance issue!");
     } catch (ExecutionException e) {
       log.warn(e.getMessage(), e);
       result.exception(e);

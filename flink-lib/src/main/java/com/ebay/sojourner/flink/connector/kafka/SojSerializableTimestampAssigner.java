@@ -15,7 +15,12 @@ public class SojSerializableTimestampAssigner<T> implements SerializableTimestam
       field = TimestampFieldExtractor.getField(element);
     } catch (Exception e) {
       log.warn("extract timestamp failed" + field);
-    }
+    }/* finally {
+      if (field > System.currentTimeMillis()) {
+        log.error("Watermark error field=" + field + ", larger than current time!");
+        field = System.currentTimeMillis();
+      }
+    }*/
 
     return field;
   }

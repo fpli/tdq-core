@@ -2,10 +2,12 @@ package com.ebay.tdq.sinks;
 
 import com.ebay.tdq.rules.TdqMetric;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -32,12 +34,15 @@ import static com.ebay.tdq.utils.TdqConstant.PRONTO_USERNAME;
 /**
  * @author juntzhang
  */
+@Slf4j
 public class ProntoSink {
   public static ElasticsearchSink<TdqMetric> build(String indexPattern) {
     String username = PRONTO_USERNAME;
     String password = PRONTO_PASSWORD;
     List<HttpHost> httpHosts = new ArrayList<>();
-    httpHosts.add(new HttpHost(PRONTO_HOSTNAME, PRONTO_PORT, PRONTO_SCHEME));
+    HttpHost httpHost = new HttpHost(PRONTO_HOSTNAME, PRONTO_PORT, PRONTO_SCHEME);
+    log.info("httpHost={},username={}", httpHost, username);
+    httpHosts.add(httpHost);
     ElasticsearchSink.Builder<TdqMetric> esSinkBuilder = new ElasticsearchSink.Builder<>(
         httpHosts,
         (TdqMetric element, RuntimeContext ctx, RequestIndexer indexer) ->
@@ -46,6 +51,7 @@ public class ProntoSink {
     esSinkBuilder.setFailureHandler(new CustomFailureHandler());
     esSinkBuilder.setBulkFlushMaxActions(1);
     if (StringUtils.isNotBlank(username)) {
+      System.out.println("=== with UsernamePasswordCredentials ===");
       esSinkBuilder.setRestClientFactory(restClientBuilder -> {
         restClientBuilder.setDefaultHeaders(
             new BasicHeader[]{new BasicHeader("Content-Type", "application/json")});
@@ -67,18 +73,33 @@ public class ProntoSink {
   }
 
   private static IndexRequest createIndexRequest(TdqMetric element, String indexPattern) {
-    Map<String, Object> json = new HashMap<>();
-    json.put("metric_key", element.getMetricKey());
-    json.put("event_time", element.getEventTime());
-    Map<String, String> tags = new HashMap<>();
-    element.getTags().forEach((k, v) -> tags.put(k, v.toString()));
-    json.put("tags", tags);
-    Map<String, Double> expr = new HashMap<>();
-    element.getExprMap().forEach((k, v) -> expr.put(k, Double.valueOf(v.toString())));
-    json.put("expr", expr);
-    json.put("value", element.getValue());
     String index = indexPattern + calculateIndexDate(element.getEventTime());
-    return Requests.indexRequest().index(index).source(json);
+    try {
+      Map<String, Object> json = new HashMap<>();
+      json.put("metric_key", element.getMetricKey());
+      json.put("event_time", element.getEventTime());
+      json.put("event_time_fmt", new Date(element.getEventTime()));
+      json.put("process_time", new Date());
+      Map<String, String> tags = new HashMap<>();
+      if (MapUtils.isNotEmpty(element.getTags())) {
+        element.getTags().forEach((k, v) -> tags.put(k, v.toString()));
+        json.put("tags", tags);
+      }
+      Map<String, Double> expr = new HashMap<>();
+      element.getExprMap().forEach((k, v) -> {
+        if (v != null) {
+          expr.put(k, Double.valueOf(v.toString()));
+        } else {
+          expr.put(k, 0d);
+        }
+      });
+      json.put("expr", expr);
+      json.put("value", element.getValue());
+      return Requests.indexRequest().index(index).source(json);
+    } catch (Exception e) {
+      log.error("metric={}, msg={}, index={}", element, e.getMessage(), index);
+      throw e;
+    }
   }
 
   @Slf4j

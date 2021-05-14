@@ -11,14 +11,14 @@ import lombok.Data;
  */
 @Data
 public class IDoMetricConfigSchema {
+  @JsonProperty(value = "field_patterns", index = 0)
+  private Map<String, String> fieldPatterns;
+  private Map<String, TransformationConfig> transformations;
+  private Map<String, Aggregate> aggregates;
+
   @Data
   public static class Aggregate {
     private String expr;
     private List<TransformationConfig> params;
   }
-
-  @JsonProperty(value = "field_patterns", index = 0)
-  private Map<String, String> fieldPatterns;
-  private Map<String, TransformationConfig> transformations;
-  private Map<String, Aggregate> aggregates;
 }

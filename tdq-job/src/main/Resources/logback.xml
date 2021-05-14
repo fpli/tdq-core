@@ -14,8 +14,8 @@
         <file>${log.path}</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${log.path}/sojourner-tdq-%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>30</maxHistory>
-            <totalSizeCap>1GB</totalSizeCap>
+            <maxHistory>100</maxHistory>
+            <totalSizeCap>100MB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%.-15t] %-5level %logger{40} - %msg%n</pattern>
@@ -23,10 +23,10 @@
     </appender>
 
     <logger name="com.ebay.sojourner" level="INFO"/>
+    <logger name="com.ebay.tdq" level="INFO"/>
 
     <root level="INFO">
         <appender-ref ref="console"/>
-        <appender-ref ref="file"/>
     </root>
 
 </configuration>

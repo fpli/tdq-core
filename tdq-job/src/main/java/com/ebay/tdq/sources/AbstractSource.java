@@ -15,13 +15,15 @@ public abstract class AbstractSource {
       String slotSharingGroup,
       String id,
       int parallelism) {
+    String uid = "src_sample_operator_" + id.toLowerCase();
     if (SRC_SAMPLE_FRACTION > 0 && SRC_SAMPLE_FRACTION < 1) {
+      final double sampleFraction = SRC_SAMPLE_FRACTION;
       return rawEventDataStream
           .filter(r -> {
-            return Math.abs(new Random().nextDouble()) < SRC_SAMPLE_FRACTION;
+            return Math.abs(new Random().nextDouble()) < sampleFraction;
           })
-          .name("Src Sample Operator " + id)
-          .uid("src-sample-" + id.toLowerCase() + "-operator")
+          .name(uid)
+          .uid(uid)
           .slotSharingGroup(slotSharingGroup)
           .setParallelism(parallelism);
     }

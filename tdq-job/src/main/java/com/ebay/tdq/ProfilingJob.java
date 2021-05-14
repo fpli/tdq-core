@@ -1,6 +1,7 @@
 package com.ebay.tdq;
 
 import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.sojourner.common.util.Property;
 import com.ebay.tdq.functions.TdqAggregateFunction;
 import com.ebay.tdq.functions.TdqMetricProcessWindowTagFunction;
 import com.ebay.tdq.functions.TdqRawEventProcessFunction;
@@ -14,6 +15,9 @@ import com.google.common.collect.Maps;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeHint;
@@ -22,10 +26,15 @@ import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
+import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
 import static com.ebay.tdq.utils.TdqConstant.OUTPUT_TAG_MAP;
 import static com.ebay.tdq.utils.TdqConstant.PARALLELISM_METRIC_COLLECTOR_BY_WINDOW;
 import static com.ebay.tdq.utils.TdqConstant.PARALLELISM_METRIC_METRIC_FINAL_COLLECTOR;
@@ -34,27 +43,29 @@ import static com.ebay.tdq.utils.TdqConstant.PRONTO_LATENCY_INDEX_PATTERN;
 import static com.ebay.tdq.utils.TdqConstant.SINK_TYPES;
 import static com.ebay.tdq.utils.TdqConstant.WINDOW_METRIC_COLLECTOR_BY_WINDOW;
 
+@Slf4j
 public class ProfilingJob {
-  OutputTag<TdqMetric> lateDataTag = new OutputTag<TdqMetric>("late") {
-  };
-
-  public void start(String[] args) throws Exception {
+  public void start(String[] args) {
     // step0: prepare environment
     final StreamExecutionEnvironment env = FlinkEnvFactory.create(args, false);
 
-    // step1: build data source
-    List<DataStream<RawEvent>> rawEventDataStream = BehaviorPathfinderSource.build(env);
+    try {
+      // step1: build data source
+      List<DataStream<RawEvent>> rawEventDataStream = BehaviorPathfinderSource.build(env);
 
-    // step2: normalize event to metric
-    DataStream<TdqMetric> normalizeOperator = normalizeEvent(env, rawEventDataStream);
+      // step2: normalize event to metric
+      DataStream<TdqMetric> normalizeOperator = normalizeEvent(env, rawEventDataStream);
 
-    // step3: aggregate metric by key and window
-    Map<String, SingleOutputStreamOperator<TdqMetric>> outputTags = reduceMetric(normalizeOperator);
+      // step3: aggregate metric by key and window
+      Map<String, SingleOutputStreamOperator<TdqMetric>> outputTags = reduceMetric(normalizeOperator);
 
-    // step4: output metric by window
-    outputMetricByWindow(outputTags);
+      // step4: output metric by window
+      outputMetricByWindow(outputTags);
 
-    env.execute("Tdq Job [topic=behavior.pathfinder]");
+      env.execute(getString(Property.FLINK_APP_NAME));
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+    }
   }
 
   // output metric by window
@@ -82,15 +93,16 @@ public class ProfilingJob {
 
   // aggregate metric by key and window
   protected Map<String, SingleOutputStreamOperator<TdqMetric>> reduceMetric(DataStream<TdqMetric> normalizeOperator) {
+    OutputTag<TdqMetric> lateDataTag = new OutputTag<TdqMetric>("late") {
+    };
     SingleOutputStreamOperator<TdqMetric> unifyDataStream = normalizeOperator
         .keyBy(TdqMetric::getUid)
         .window(TumblingEventTimeWindows.of(Time.seconds(WINDOW_METRIC_COLLECTOR_BY_WINDOW)))
-        //.allowedLateness(Time.minutes(OUT_OF_ORDERLESS_IN_MIN))
         .sideOutputLateData(lateDataTag)
         .aggregate(new TdqAggregateFunction(), new TdqMetricProcessWindowTagFunction(OUTPUT_TAG_MAP))
         .setParallelism(PARALLELISM_METRIC_COLLECTOR_BY_WINDOW)
         .slotSharingGroup("metric-collector-by-window")
-        .name("Metric Split by Window Collector")
+        .name("metric_split_by_window_collector")
         .uid("metric_split_by_window_collector");
 
     output(unifyDataStream.getSideOutput(lateDataTag), "collector_by_window_late", true);
@@ -104,7 +116,17 @@ public class ProfilingJob {
               .getSideOutput(tag)
               .keyBy(TdqMetric::getUid)
               .window(TumblingEventTimeWindows.of(Time.seconds(seconds)))
-              .aggregate(new TdqAggregateFunction())
+              .aggregate(new TdqAggregateFunction(), new ProcessWindowFunction<TdqMetric, TdqMetric, String,
+                  TimeWindow>() {
+                @Override
+                public void process(String s, Context context, Iterable<TdqMetric> elements,
+                    Collector<TdqMetric> out) {
+                  elements.forEach(tdqMetric -> {
+                    tdqMetric.setEventTime(context.window().getEnd());
+                    out.collect(tdqMetric);
+                  });
+                }
+              })
               .slotSharingGroup("metric-final-collector")
               .setParallelism(PARALLELISM_METRIC_METRIC_FINAL_COLLECTOR)
               .name("Metrics Final Collector Window[" + key + "]")
@@ -156,11 +178,23 @@ public class ProfilingJob {
       int idx) {
     String slotSharingGroup = rawEventDataStream.getTransformation().getSlotSharingGroup();
     int parallelism = rawEventDataStream.getTransformation().getParallelism();
-
+    String uid = "connector" + idx + "_operator";
     return rawEventDataStream.connect(broadcastStream)
         .process(new TdqRawEventProcessFunction(stateDescriptor))
-        .name("Connector" + idx + " Operator")
-        .uid("connector" + idx + "-operator")
+        .name(uid)
+        .uid(uid)
+        .slotSharingGroup(slotSharingGroup)
+        .setParallelism(parallelism)
+        .assignTimestampsAndWatermarks(
+            WatermarkStrategy
+                .<TdqMetric>forBoundedOutOfOrderness(
+                    Duration.ofMinutes(getInteger(Property.FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN)))
+                .withTimestampAssigner(
+                    (SerializableTimestampAssigner<TdqMetric>) (event, timestamp) -> event.getEventTime())
+                .withIdleness(Duration.ofMinutes(getInteger(Property.FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN)))
+        )
+        .name(uid + "_operator")
+        .uid(uid + "_operator")
         .slotSharingGroup(slotSharingGroup)
         .setParallelism(parallelism)
         ;
