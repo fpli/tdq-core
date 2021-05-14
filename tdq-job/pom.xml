@@ -200,7 +200,6 @@
                 <transformer
                         implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                   <resource>application.yml</resource>
-                  <resource>tdq_rules.json</resource>
                   <resource>logback.xml</resource>
                 </transformer>
               </transformers>
