@@ -49,8 +49,8 @@ flink:
         scheme: http
         hostname: localhost
         port: 9200
-        username:
-        password:
+        username: ""
+        password: ""
     sink:
       types:
         - console

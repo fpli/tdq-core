@@ -33,13 +33,13 @@
               "expression": {
                 "operator": "Expr",
                 "config": {
-                  "text": "case when item is not null then 1 else 0 end"
+                  "text": "case when item is not null then 1.0 else 0.0 end"
                 }
               }
             },
             {
               "alias": "itm_cnt",
-              "expression": {"operator": "Count", "config": {"arg0": "1"}}
+              "expression": {"operator": "Count", "config": {"arg0": "1.0"}}
             },
             {
               "alias": "itm_valid_cnt",

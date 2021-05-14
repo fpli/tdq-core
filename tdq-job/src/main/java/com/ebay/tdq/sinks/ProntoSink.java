@@ -51,7 +51,7 @@ public class ProntoSink {
     esSinkBuilder.setFailureHandler(new CustomFailureHandler());
     esSinkBuilder.setBulkFlushMaxActions(1);
     if (StringUtils.isNotBlank(username)) {
-      System.out.println("=== with UsernamePasswordCredentials ===");
+      log.info("=== with UsernamePasswordCredentials ===");
       esSinkBuilder.setRestClientFactory(restClientBuilder -> {
         restClientBuilder.setDefaultHeaders(
             new BasicHeader[]{new BasicHeader("Content-Type", "application/json")});
