@@ -59,6 +59,12 @@ flink:
       local-combine:
         queue-size: 0
         flush-timeout: 5000
+mysql:
+  jdbc:
+    url:
+    driver-class-name:
+    user:
+    password:
 
 kafka:
   consumer:

@@ -5,11 +5,15 @@ import java.util.{HashMap => JMap, List => JList}
 
 import com.ebay.sojourner.common.model.RawEvent
 import com.ebay.sojourner.flink.connector.kafka.SojSerializableTimestampAssigner
-import com.ebay.tdq.rules.{PhysicalPlan, TdqMetric}
+import com.ebay.tdq.config.TdqConfig
+import com.ebay.tdq.functions.TdqRawEventProcessFunction
+import com.ebay.tdq.rules.{PhysicalPlans, TdqMetric}
 import com.ebay.tdq.sinks.MemorySink
-import com.ebay.tdq.utils.{DateUtils, FlinkEnvFactory, TdqConstant}
+import com.ebay.tdq.utils._
 import com.google.common.collect.{Lists, Sets}
+import org.apache.commons.io.IOUtils
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
+import org.apache.flink.api.common.state.MapStateDescriptor
 import org.apache.flink.streaming.api.datastream.DataStream
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.functions.source.{RichSourceFunction, SourceFunction}
@@ -46,6 +50,15 @@ case class ProfilingJobIT(
       .uid("test_result")
     env.execute("Tdq Job [id=" + id + "]")
     Assert.assertTrue(collect.check(expects.asJava))
+  }
+
+  override def getTdqRawEventProcessFunction(
+    descriptor: MapStateDescriptor[Integer, PhysicalPlans]): TdqRawEventProcessFunction = {
+    new TdqRawEventProcessFunction(descriptor) {
+      override protected def getPhysicalPlans: PhysicalPlans = PhysicalPlanFactory.getPhysicalPlans(
+        Lists.newArrayList(JsonUtils.parseObject(config, classOf[TdqConfig]))
+      )
+    }
   }
 
   def submit2Pronto(): Unit = {
@@ -101,8 +114,7 @@ case class ProfilingJobIT(
   }
 
   private def getMetric0(metricKey: String, t: Long, tags: JMap[String, String], v: Double): TdqMetric = {
-    val m = new TdqMetric(metricKey, t)
-      .setValue(v)
+    val m = new TdqMetric(metricKey, t).setValue(v)
     tags.asScala.foreach { case (k, v) =>
       m.putTag(k, v)
     }
@@ -133,10 +145,10 @@ case class ProfilingJobIT(
       .slotSharingGroup("src1"))
   }
 
-  override protected def getConfigDS(env: StreamExecutionEnvironment): DataStream[PhysicalPlan] = {
-    env.addSource(new RichSourceFunction[PhysicalPlan]() {
+  override protected def getConfigDS(env: StreamExecutionEnvironment): DataStream[PhysicalPlans] = {
+    env.addSource(new RichSourceFunction[PhysicalPlans]() {
       @throws[Exception]
-      override def run(ctx: SourceFunction.SourceContext[PhysicalPlan]): Unit = {
+      override def run(ctx: SourceFunction.SourceContext[PhysicalPlans]): Unit = {
         ctx.collectWithTimestamp(ProfilingSqlParserTest.getPhysicalPlan(config), System.currentTimeMillis)
       }
 
@@ -144,7 +156,7 @@ case class ProfilingJobIT(
     }).name("Tdq Config Source")
       .uid("tdq-config-source")
       .assignTimestampsAndWatermarks(
-        WatermarkStrategy.forBoundedOutOfOrderness[PhysicalPlan](Duration.ofMinutes(0))
+        WatermarkStrategy.forBoundedOutOfOrderness[PhysicalPlans](Duration.ofMinutes(0))
           .withIdleness(Duration.ofSeconds(1))
       )
       .setParallelism(1)

@@ -71,7 +71,7 @@ class SingleRuleSqlJobTest {
         getMetric(id, "2021-05-29 12:02:00", tagK = "page_id", tagV = "1", 4d),
         getMetric(id, "2021-05-29 12:02:00", tagK = "page_id", tagV = "2", 3d),
         getMetric(id, "2021-05-29 12:04:00", tagK = "page_id", tagV = "1", 11d),
-        getMetric(id, "2021-05-29 12:05:00", tagK = "page_id", tagV = "2", 7d)
+        getMetric(id, "2021-05-29 12:06:00", tagK = "page_id", tagV = "2", 7d)
       )
     )
   }
@@ -113,13 +113,13 @@ class SingleRuleSqlJobTest {
            |              "expression": {
            |                "operator": "Expr",
            |                "config": {
-           |                  "text": "case when item is not null then 1 else 0 end"
+           |                  "text": "case when item is not null then 1.0 else 0.0 end"
            |                }
            |              }
            |            },
            |            {
            |              "alias": "itm_cnt",
-           |              "expression": {"operator": "Count", "config": {"arg0": "1"}}
+           |              "expression": {"operator": "Count", "config": {"arg0": "1.0"}}
            |            },
            |            {
            |              "alias": "itm_valid_cnt",
@@ -182,7 +182,7 @@ class SingleRuleSqlJobTest {
            |            },
            |            {
            |              "alias": "pv",
-           |              "expression": {"operator": "Count", "config": {"arg0": "1"}}
+           |              "expression": {"operator": "Count", "config": {"arg0": "1.0"}}
            |            }
            |          ]
            |        }
@@ -239,7 +239,7 @@ class SingleRuleSqlJobTest {
            |            },
            |            {
            |              "alias": "page_cnt",
-           |              "expression": {"operator": "Count", "config": {"arg0": "1"}}
+           |              "expression": {"operator": "Count", "config": {"arg0": "1.0"}}
            |            }
            |          ]
            |        }
@@ -263,7 +263,7 @@ class SingleRuleSqlJobTest {
         getMetric(id, "2021-05-29 12:02:00", tagK = "page_id", tagV = "1", 3d),
         getMetric(id, "2021-05-29 12:02:00", tagK = "page_id", tagV = "2", 1d),
         getMetric(id, "2021-05-29 12:04:00", tagK = "page_id", tagV = "2", 2d),
-        getMetric(id, "2021-05-29 12:05:00", tagK = "page_id", tagV = "2", 1d)
+        getMetric(id, "2021-05-29 12:06:00", tagK = "page_id", tagV = "2", 1d)
       )
     ).submit()
   }

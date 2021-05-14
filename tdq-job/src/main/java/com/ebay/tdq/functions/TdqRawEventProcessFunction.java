@@ -5,16 +5,15 @@ import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.RheosHeader;
 import com.ebay.sojourner.flink.connector.kafka.TimestampFieldExtractor;
 import com.ebay.tdq.rules.PhysicalPlan;
+import com.ebay.tdq.rules.PhysicalPlans;
 import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.utils.JdbcConfig;
 import com.ebay.tdq.utils.JsonUtils;
 import com.ebay.tdq.utils.PhysicalPlanFactory;
-import com.google.common.collect.Lists;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
@@ -40,11 +39,11 @@ import static com.ebay.tdq.utils.TdqConstant.LOCAL_COMBINE_QUEUE_SIZE;
  */
 @Slf4j
 public class TdqRawEventProcessFunction
-    extends BroadcastProcessFunction<RawEvent, PhysicalPlan, TdqMetric> {
-  private final MapStateDescriptor<String, PhysicalPlan> stateDescriptor;
+    extends BroadcastProcessFunction<RawEvent, PhysicalPlans, TdqMetric> {
+  protected final JdbcConfig jdbcConfig;
+  private final MapStateDescriptor<Integer, PhysicalPlans> stateDescriptor;
   private final int localCombineFlushTimeout;
   private final int localCombineQueueSize;
-  private final JdbcConfig jdbcConfig;
   protected long cacheCurrentTimeMillis = System.currentTimeMillis();
   protected long logCurrentTimeMillis = 0L;
   private Counter tdqErrorEventsCount;
@@ -58,9 +57,9 @@ public class TdqRawEventProcessFunction
   private Histogram tdqProcessMetricHistogram;
   private Histogram tdqProcessElementHistogram;
   private transient Map<String, TdqMetric> cache;
-  private List<PhysicalPlan> physicalPlans;
+  private PhysicalPlans physicalPlans;
 
-  public TdqRawEventProcessFunction(MapStateDescriptor<String, PhysicalPlan> descriptor) {
+  public TdqRawEventProcessFunction(MapStateDescriptor<Integer, PhysicalPlans> descriptor) {
     this.stateDescriptor          = descriptor;
     this.localCombineFlushTimeout = LOCAL_COMBINE_FLUSH_TIMEOUT;
     this.localCombineQueueSize    = LOCAL_COMBINE_QUEUE_SIZE;
@@ -94,7 +93,12 @@ public class TdqRawEventProcessFunction
     final Map<String, TdqMetric> _cache = new HashMap<>(localCombineQueueSize + 16);
     this.cache = _cache;
     getRuntimeContext().getMetricGroup().gauge("cacheSize", (Gauge<Integer>) () -> _cache.size());
-    this.physicalPlans = Lists.newArrayList(PhysicalPlanFactory.getPhysicalPlanMap(this.jdbcConfig).values());
+    this.physicalPlans = getPhysicalPlans();
+  }
+
+
+  protected PhysicalPlans getPhysicalPlans() {
+    return PhysicalPlanFactory.getPhysicalPlans(PhysicalPlanFactory.getTdqConfigs(this.jdbcConfig));
   }
 
 
@@ -130,17 +134,20 @@ public class TdqRawEventProcessFunction
   @Override
   public void processElement(RawEvent event, ReadOnlyContext ctx, Collector<TdqMetric> collector) throws Exception {
     long s1 = System.nanoTime();
-    ReadOnlyBroadcastState<String, PhysicalPlan> broadcastState = ctx.getBroadcastState(stateDescriptor);
-    for (Map.Entry<String, PhysicalPlan> entry : broadcastState.immutableEntries()) {
-      this.physicalPlans.clear();
-      this.physicalPlans.add(entry.getValue());
+    ReadOnlyBroadcastState<Integer, PhysicalPlans> broadcastState = ctx.getBroadcastState(stateDescriptor);
+    Iterator<Map.Entry<Integer, PhysicalPlans>> iter = broadcastState.immutableEntries().iterator();
+    if (iter.hasNext()) {
+      Map.Entry<Integer, PhysicalPlans> entry = iter.next();
+      if (entry.getKey() > 0) {
+        this.physicalPlans = entry.getValue();
+      }
     }
 
-    if (CollectionUtils.isEmpty(physicalPlans)) {
+    if (physicalPlans == null || physicalPlans.plans().length == 0) {
       throw new Exception("physical plans is empty!");
     }
 
-    for (PhysicalPlan plan : physicalPlans) {
+    for (PhysicalPlan plan : physicalPlans.plans()) {
       long s = System.nanoTime();
       TdqMetric metric = process(event, plan);
       if (metric != null) {
@@ -178,9 +185,9 @@ public class TdqRawEventProcessFunction
 
 
   @Override
-  public void processBroadcastElement(PhysicalPlan plan,
+  public void processBroadcastElement(PhysicalPlans plan,
       Context ctx, Collector<TdqMetric> collector) throws Exception {
-    BroadcastState<String, PhysicalPlan> broadcastState = ctx.getBroadcastState(stateDescriptor);
-    broadcastState.put(plan.uuid(), plan);
+    BroadcastState<Integer, PhysicalPlans> broadcastState = ctx.getBroadcastState(stateDescriptor);
+    broadcastState.put(plan.plans().length, plan);
   }
 }

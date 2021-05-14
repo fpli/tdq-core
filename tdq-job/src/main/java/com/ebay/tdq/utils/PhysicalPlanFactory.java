@@ -4,14 +4,13 @@ import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.rules.PhysicalPlan;
+import com.ebay.tdq.rules.PhysicalPlans;
 import com.ebay.tdq.rules.ProfilingSqlParser;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -19,9 +18,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class PhysicalPlanFactory {
-  public static Map<String, PhysicalPlan> getPhysicalPlanMap(JdbcConfig jdbcConfig) {
-    List<TdqConfig> configs = getTdqConfigs(jdbcConfig);
-    Map<String, PhysicalPlan> planMap = new HashMap<>();
+  public static PhysicalPlans getPhysicalPlans(List<TdqConfig> configs) {
+    List<PhysicalPlan> plans = new ArrayList<>();
     for (TdqConfig config : configs) {
       for (RuleConfig ruleConfig : config.getRules()) {
         for (ProfilerConfig profilerConfig : ruleConfig.getProfilers()) {
@@ -32,17 +30,18 @@ public class PhysicalPlanFactory {
             );
             PhysicalPlan plan = parser.parsePlan();
             plan.validatePlan();
-            planMap.put(plan.metricKey(), plan);
+            log.warn("TdqConfigSourceFunction={}", plan);
+            plans.add(plan);
           } catch (Exception e) {
             log.warn("profilerConfig[" + profilerConfig + "] validate exception:" + e.getMessage(), e);
           }
         }
       }
     }
-    return planMap;
+    return PhysicalPlans.apply(plans.toArray(new PhysicalPlan[0]));
   }
 
-  private static List<TdqConfig> getTdqConfigs(JdbcConfig jdbc) {
+  public static List<TdqConfig> getTdqConfigs(JdbcConfig jdbc) {
     try {
       List<TdqConfig> tdqConfigList = new ArrayList<>();
       Class.forName(jdbc.getDriverClassName());
@@ -50,6 +49,7 @@ public class PhysicalPlanFactory {
       ResultSet rs = conn.createStatement().executeQuery("select config from rules_rhs_config where status='ACTIVE'");
       while (rs.next()) {
         String json = rs.getString("config");
+        log.warn("getTdqConfigs={}", json);
         tdqConfigList.add(JsonUtils.parseObject(json, TdqConfig.class));
       }
       conn.close();

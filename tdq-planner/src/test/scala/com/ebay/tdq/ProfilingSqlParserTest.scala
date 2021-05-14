@@ -4,9 +4,8 @@ import java.util.{HashMap => JHashMap}
 
 import com.ebay.sojourner.common.model.{ClientData, RawEvent}
 import com.ebay.tdq.config.TdqConfig
-import com.ebay.tdq.rules.{PhysicalPlan, ProfilingSqlParser}
-import com.ebay.tdq.utils.DateUtils
-import com.ebay.tdq.utils.JsonUtils
+import com.ebay.tdq.rules.{PhysicalPlans, ProfilingSqlParser}
+import com.ebay.tdq.utils.{DateUtils, JsonUtils}
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.Test
 
@@ -14,14 +13,14 @@ import org.junit.Test
  * @author juntzhang
  */
 object ProfilingSqlParserTest {
-  def getPhysicalPlan(json: String): PhysicalPlan = {
+  def getPhysicalPlan(json: String): PhysicalPlans = {
     val objectMapper = new ObjectMapper
     val config: TdqConfig = objectMapper.reader.forType(classOf[TdqConfig]).readValue(json)
     val parser = new ProfilingSqlParser(
       config.getRules.get(0).getProfilers.get(0),
       window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString)
     )
-    parser.parsePlan()
+    PhysicalPlans(Array(parser.parsePlan()))
   }
 }
 
@@ -69,7 +68,7 @@ class ProfilingSqlParserTest {
         |  ]
         |}
         |""".stripMargin
-    val config = JsonUtils.parseObject(json,classOf[TdqConfig])
+    val config = JsonUtils.parseObject(json, classOf[TdqConfig])
     val parser = new ProfilingSqlParser(
       config.getRules.get(0).getProfilers.get(0),
       window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString)
@@ -167,7 +166,7 @@ class ProfilingSqlParserTest {
         |  ]
         |}
         |""".stripMargin
-    val config = JsonUtils.parseObject(json,classOf[TdqConfig])
+    val config = JsonUtils.parseObject(json, classOf[TdqConfig])
     val parser = new ProfilingSqlParser(
       config.getRules.get(0).getProfilers.get(0),
       window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString)

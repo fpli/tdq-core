@@ -14,6 +14,10 @@ import scala.collection.JavaConverters.mapAsScalaMapConverter
 
 case class AggrPhysicalPlan(name: String, filter: Expression = null, evaluation: Expression)
 
+case class PhysicalPlans(
+  plans: Array[PhysicalPlan]
+)
+
 case class PhysicalPlan(
   metricKey: String,
   window: Long,

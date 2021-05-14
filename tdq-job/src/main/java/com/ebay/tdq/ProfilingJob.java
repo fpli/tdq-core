@@ -5,7 +5,7 @@ import com.ebay.sojourner.common.util.Property;
 import com.ebay.tdq.functions.TdqAggregateFunction;
 import com.ebay.tdq.functions.TdqMetricProcessWindowTagFunction;
 import com.ebay.tdq.functions.TdqRawEventProcessFunction;
-import com.ebay.tdq.rules.PhysicalPlan;
+import com.ebay.tdq.rules.PhysicalPlans;
 import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.sinks.ProntoSink;
 import com.ebay.tdq.sources.BehaviorPathfinderSource;
@@ -136,7 +136,7 @@ public class ProfilingJob {
     return ans;
   }
 
-  protected DataStream<PhysicalPlan> getConfigDS(StreamExecutionEnvironment env) {
+  protected DataStream<PhysicalPlans> getConfigDS(StreamExecutionEnvironment env) {
     return TdqConfigSource.build(env);
   }
 
@@ -145,42 +145,38 @@ public class ProfilingJob {
       StreamExecutionEnvironment env,
       List<DataStream<RawEvent>> rawEventDataStream) {
 
-    MapStateDescriptor<String, PhysicalPlan> stateDescriptor = new MapStateDescriptor<>(
+    MapStateDescriptor<Integer, PhysicalPlans> stateDescriptor = new MapStateDescriptor<>(
         "tdqConfigMappingBroadcastState",
-        BasicTypeInfo.STRING_TYPE_INFO,
-        TypeInformation.of(new TypeHint<PhysicalPlan>() {
+        BasicTypeInfo.INT_TYPE_INFO,
+        TypeInformation.of(new TypeHint<PhysicalPlans>() {
         }));
 
-    BroadcastStream<PhysicalPlan> broadcastStream =
-        getConfigDS(env).broadcast(stateDescriptor);
+    BroadcastStream<PhysicalPlans> broadcastStream = getConfigDS(env).broadcast(stateDescriptor);
 
-    DataStream<TdqMetric> ans = normalizeEvent(
-        rawEventDataStream.get(0),
-        stateDescriptor,
-        broadcastStream,
-        0);
+    DataStream<TdqMetric> ans = normalizeEvent(rawEventDataStream.get(0), stateDescriptor, broadcastStream, 0);
 
 
     for (int i = 1; i < rawEventDataStream.size(); i++) {
-      ans = ans.union(normalizeEvent(
-          rawEventDataStream.get(i),
-          stateDescriptor,
-          broadcastStream,
-          i));
+      ans = ans.union(normalizeEvent(rawEventDataStream.get(i), stateDescriptor, broadcastStream, i));
     }
     return ans;
   }
 
+  protected TdqRawEventProcessFunction getTdqRawEventProcessFunction(
+      MapStateDescriptor<Integer, PhysicalPlans> stateDescriptor) {
+    return new TdqRawEventProcessFunction(stateDescriptor);
+  }
+
   private DataStream<TdqMetric> normalizeEvent(
       DataStream<RawEvent> rawEventDataStream,
-      MapStateDescriptor<String, PhysicalPlan> stateDescriptor,
-      BroadcastStream<PhysicalPlan> broadcastStream,
+      MapStateDescriptor<Integer, PhysicalPlans> stateDescriptor,
+      BroadcastStream<PhysicalPlans> broadcastStream,
       int idx) {
     String slotSharingGroup = rawEventDataStream.getTransformation().getSlotSharingGroup();
     int parallelism = rawEventDataStream.getTransformation().getParallelism();
     String uid = "connector" + idx + "_operator";
     return rawEventDataStream.connect(broadcastStream)
-        .process(new TdqRawEventProcessFunction(stateDescriptor))
+        .process(getTdqRawEventProcessFunction(stateDescriptor))
         .name(uid)
         .uid(uid)
         .slotSharingGroup(slotSharingGroup)
