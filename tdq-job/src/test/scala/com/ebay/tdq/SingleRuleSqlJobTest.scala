@@ -41,6 +41,10 @@ class SingleRuleSqlJobTest {
            |              "expression": {"operator": "UDF", "config": {"text": "CAST(TAG_EXTRACT('p') AS INTEGER)"}}
            |            },
            |            {
+           |              "alias": "p1",
+           |              "expression": {"operator": "Count", "config": {"arg0": "1.0"}}
+           |            },
+           |            {
            |              "alias": "t_duration",
            |              "expression": {
            |                "operator": "Expr",
@@ -387,6 +391,59 @@ class SingleRuleSqlJobTest {
       expects = List(
         getMetric(id, "2021-05-29 12:02:00", tagK = "page_id", tagV = "1", 5d),
         getMetric(id, "2021-05-29 12:02:00", tagK = "page_id", tagV = "2", 8d)
+      )
+    ).submit()
+  }
+
+
+  @Test
+  def test_global_cnt_by_10min(): Unit = {
+    val id = "global_cnt_by_10min"
+    ProfilingJobIT(
+      id = id,
+      config =
+        s"""
+           |{
+           |  "id": "8",
+           |  "name": "cfg_8",
+           |  "rules": [
+           |    {
+           |      "name": "rule_8",
+           |      "type": "realtime.rheos.profiler",
+           |      "config": {
+           |        "window": "10min"
+           |      },
+           |      "profilers": [
+           |        {
+           |          "metric-name": "global_cnt_by_10min",
+           |          "expression": {"operator": "Expr", "config": {"text": "p1"}},
+           |          "transformations": [
+           |            {
+           |              "alias": "p1",
+           |              "expression": {"operator": "Count", "config": {"arg0": "1.0"}}
+           |            }
+           |          ]
+           |        }
+           |      ]
+           |    }
+           |  ]
+           |}
+           |""".stripMargin,
+      events = List(
+        getRawEvent("2021-05-29 12:01:50", pageId = 1),
+        getRawEvent("2021-05-29 12:01:52", pageId = 1),
+        getRawEvent("2021-05-29 12:01:59", pageId = 2),
+        getRawEvent("2021-05-29 12:01:59", pageId = 1),
+
+        getRawEvent("2021-05-29 12:12:00", pageId = 2),
+        getRawEvent("2021-05-29 12:13:59", pageId = 2),
+
+        getRawEvent("2021-05-29 12:24:01", pageId = 2)
+      ),
+      expects = List(
+        getMetric(id, "2021-05-29 12:10:00", 4d),
+        getMetric(id, "2021-05-29 12:20:00", 2d),
+        getMetric(id, "2021-05-29 12:30:00", 1d)
       )
     ).submit()
   }

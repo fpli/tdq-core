@@ -11,7 +11,6 @@ import com.ebay.tdq.rules.{PhysicalPlans, TdqMetric}
 import com.ebay.tdq.sinks.MemorySink
 import com.ebay.tdq.utils._
 import com.google.common.collect.{Lists, Sets}
-import org.apache.commons.io.IOUtils
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
 import org.apache.flink.api.common.state.MapStateDescriptor
 import org.apache.flink.streaming.api.datastream.DataStream
@@ -45,15 +44,18 @@ case class ProfilingJobIT(
     // step4: output metric by window
     print(outputTags)
     val collect = new MemorySink(id)
-    outputTags.values.iterator.next.addSink(collect)
-      .name("test result")
-      .uid("test_result")
+    outputTags.asScala.foreach { case (k, v) =>
+      val uid = "console_out_" + k
+      v.addSink(collect)
+        .name(uid)
+        .uid(uid)
+    }
     env.execute("Tdq Job [id=" + id + "]")
     Assert.assertTrue(collect.check(expects.asJava))
   }
 
   override def getTdqRawEventProcessFunction(
-    descriptor: MapStateDescriptor[Integer, PhysicalPlans]): TdqRawEventProcessFunction = {
+    descriptor: MapStateDescriptor[String, PhysicalPlans]): TdqRawEventProcessFunction = {
     new TdqRawEventProcessFunction(descriptor) {
       override protected def getPhysicalPlans: PhysicalPlans = PhysicalPlanFactory.getPhysicalPlans(
         Lists.newArrayList(JsonUtils.parseObject(config, classOf[TdqConfig]))
@@ -78,9 +80,12 @@ case class ProfilingJobIT(
     outputMetricByWindow(outputTags)
 
     val collect = new MemorySink(id)
-    outputTags.values.iterator.next.addSink(collect)
-      .name("test result")
-      .uid("test_result")
+    outputTags.asScala.foreach { case (k, v) =>
+      val uid = "console_out_" + k
+      v.addSink(collect)
+        .name(uid)
+        .uid(uid)
+    }
     env.execute("Tdq Job [id=" + id + "]")
     Assert.assertTrue(collect.check(expects.asJava))
 
@@ -127,6 +132,7 @@ case class ProfilingJobIT(
       override def run(ctx: SourceFunction.SourceContext[RawEvent]): Unit = {
         Thread.sleep(1000)
         events.foreach(ctx.collect)
+        //Thread.sleep(10000000)
       }
 
       override def cancel(): Unit = {}

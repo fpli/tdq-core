@@ -47,7 +47,7 @@ public class ProfilerServiceTest {
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "711", 1d, 1d))).get();
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "1677718", 1d, 2d))).get();
     client.index(Requests.indexRequest().index(latencyIndex).source(getMap("2021-05-29 12:02:00", "711", 1d, 2d))).get();
-    Thread.sleep(1000);
+    Thread.sleep(3000);
   }
 
   @Test

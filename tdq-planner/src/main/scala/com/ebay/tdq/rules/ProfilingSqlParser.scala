@@ -62,10 +62,28 @@ object ProfilingSqlParser {
         list.asScala.foreach {
           case ii: SqlIdentifier => buffer += ii
           case n: SqlBasicCall => baseCallIdentifiers(n, buffer)
+          case _: SqlLiteral => // ignore
         }
       case i: SqlIdentifier =>
         buffer += i
       case _ =>
+    }
+  }
+
+  // TODO need add more rule:
+  //  1.Casts types according to the expected input types for [[Expression]]s. like spark ImplicitTypeCasts
+  private def transformLiteral(literal: SqlLiteral): Expression = {
+    literal match {
+      case snl: SqlNumericLiteral =>
+        // TODO: currently only support integer and double, you can explicit use cast coerce types
+        //  if column1 is DECIMAL,`column1 > cast(10 as DECIMAL)`
+        if (snl.isInteger) {
+          Literal.apply(snl.getValueAs(classOf[Integer]))
+        } else {
+          Literal.apply(literal.getValueAs(classOf[Number]).doubleValue())
+        }
+      case _: SqlCharStringLiteral => Literal.apply(literal.getValueAs(classOf[String]))
+      case _ => throw new IllegalStateException("Unexpected literal: " + literal)
     }
   }
 
@@ -133,24 +151,6 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
     )
 
     plan
-  }
-
-
-  // TODO need add more rule:
-  //  1.Casts types according to the expected input types for [[Expression]]s. like spark ImplicitTypeCasts
-  private def transformLiteral(literal: SqlLiteral): Expression = {
-    literal match {
-      case snl: SqlNumericLiteral =>
-        // TODO: currently only support integer and double, you can explicit use cast coerce types
-        //  if column1 is DECIMAL,`column1 > cast(10 as DECIMAL)`
-        if (snl.isInteger) {
-          Literal.apply(snl.getValueAs(classOf[Integer]))
-        } else {
-          Literal.apply(literal.getValueAs(classOf[Number]).doubleValue())
-        }
-      case _: SqlCharStringLiteral => Literal.apply(literal.getValueAs(classOf[String]))
-      case _ => throw new IllegalStateException("Unexpected literal: " + literal)
-    }
   }
 
   private def transformIdentifier(identifier: SqlIdentifier): Expression = {

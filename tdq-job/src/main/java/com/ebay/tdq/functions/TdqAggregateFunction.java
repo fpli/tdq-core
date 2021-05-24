@@ -2,7 +2,6 @@ package com.ebay.tdq.functions;
 
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.TdqMetric;
-import lombok.SneakyThrows;
 import org.apache.flink.api.common.functions.AggregateFunction;
 
 /**
@@ -31,7 +30,6 @@ public class TdqAggregateFunction implements AggregateFunction<TdqMetric, TdqMet
     return merge0(m1, m2);
   }
 
-  @SneakyThrows
   @Override
   public TdqMetric getResult(TdqMetric m) {
     if (m == null) {

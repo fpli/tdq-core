@@ -33,6 +33,7 @@ import java.util.concurrent.TimeoutException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.calcite.sql.SqlIdentifier;
 import org.apache.calcite.sql.SqlNode;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -113,18 +114,22 @@ public class RuleEngineServiceImpl implements RuleEngineService {
 
       // transfer defined fields
       String filter = iDoMetricConfig.getFilter();
-      for (SqlIdentifier identifier : ProfilingSqlParser.getFilterIdentifiers(iDoMetricConfig.getFilter())) {
-        String fieldName = identifier.toString();
-        String definedField = replaceFieldPattern(schema, iDoMetricConfig, fieldName, transformations);
-        filter = filter.replace(fieldName, definedField);
+      if (StringUtils.isNotBlank(filter)) {
+        for (SqlIdentifier identifier : ProfilingSqlParser.getFilterIdentifiers(iDoMetricConfig.getFilter())) {
+          String fieldName = identifier.toString();
+          String definedField = replaceFieldPattern(schema, iDoMetricConfig, fieldName, transformations);
+          filter = filter.replace(fieldName, definedField);
+        }
       }
 
-      for (String d : iDoMetricConfig.getDimensions()) {
-        TransformationConfig c = schema.getTransformations().get(d);
-        if (c == null) {
-          throw new IllegalAccessException(d + " is not define in schema!");
+      if (CollectionUtils.isNotEmpty(iDoMetricConfig.getDimensions())) {
+        for (String d : iDoMetricConfig.getDimensions()) {
+          TransformationConfig c = schema.getTransformations().get(d);
+          if (c == null) {
+            throw new IllegalAccessException(d + " is not define in schema!");
+          }
+          addTransformations(transformations, c);
         }
-        addTransformations(transformations, c);
       }
 
       for (int i = 0; i < iDoMetricConfig.getExpressions().size(); i++) {
@@ -236,7 +241,7 @@ public class RuleEngineServiceImpl implements RuleEngineService {
       long s = System.currentTimeMillis();
       Map<String, TdqMetric> map = Maps.newHashMap();
       try {
-        int i = 100;
+        int i = 1;
         while (i > 0) {
           for (RawEvent event : sample) {
             TdqMetric newMetric = plan.process(event);
@@ -257,12 +262,13 @@ public class RuleEngineServiceImpl implements RuleEngineService {
         log.warn(e.getMessage(), e);
         result.exception(e);
       }
-      log.warn(plan.metricKey()+" cost time {}ms", (System.currentTimeMillis() - s));
+      log.warn(plan.metricKey() + " cost time {}ms", (System.currentTimeMillis() - s));
       return System.currentTimeMillis() - s;
     });
 
     try {
       result.setData(result.getData() + future.get(3, TimeUnit.SECONDS));
+      //result.setData(result.getData() + future.get());
     } catch (TimeoutException e) {
       result.timeout();
       result.setException(e);

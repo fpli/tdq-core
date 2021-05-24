@@ -1,2 +1,0 @@
-# ignore local test job
-src/main/java/com/ebay/sojourner/distributor/pipeline/*Local.java

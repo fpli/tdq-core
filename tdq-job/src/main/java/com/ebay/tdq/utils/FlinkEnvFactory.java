@@ -9,7 +9,6 @@ import com.ebay.tdq.rules.TdqMetric;
 import com.esotericsoftware.kryo.serializers.JavaSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
-import org.apache.flink.configuration.ConfigConstants;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.streaming.api.TimeCharacteristic;
@@ -32,8 +31,8 @@ public class FlinkEnvFactory {
 
   public static StreamExecutionEnvironment createLocal() {
     Configuration conf = new Configuration();
-    conf.setBoolean(ConfigConstants.LOCAL_START_WEBSERVER, true);
     conf.setInteger(TaskManagerOptions.NUM_TASK_SLOTS, 16);
+    conf.setInteger("rest.port", 18080);
     final StreamExecutionEnvironment env =
         StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);
     env.setParallelism(1);

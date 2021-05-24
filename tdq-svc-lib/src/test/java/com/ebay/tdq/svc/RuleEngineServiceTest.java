@@ -68,9 +68,12 @@ public class RuleEngineServiceTest {
     metricConfig.setMetricName("test");
     metricConfig.setWindow("2min");
     metricConfig.setOperator("avg");
-    metricConfig.setExpressions(Lists.newArrayList("case when item is not null then 1 else 0 end"));
-    metricConfig.setDimensions(Lists.newArrayList("page_id"));
-    metricConfig.setFilter("soj_tag.TDuration > 30.0 AND client_data_tag.contentLength > 100");
+    metricConfig.setExpressions(Lists.newArrayList("case when LENGTH( REGEXP_EXTRACT(TAG_EXTRACT('itm|itmid|itm_id|itmlist|litm'), '^(\\d+(%2C)?)+$', 1) ) > 0 then 1 else 0 end"));
+//    metricConfig.setExpressions(Lists.newArrayList("case when item is not null then 1 else 0 end"));
+//    metricConfig.setExpressions(Lists.newArrayList("client_data_tag.contentLength"));
+//    metricConfig.setDimensions(Lists.newArrayList("page_id"));
+//    metricConfig.setFilter("soj_tag.TDuration > 30.0 AND client_data_tag.contentLength > 100");
+    metricConfig.setFilter("PAGE_FAMILY(CAST(TAG_EXTRACT('p') AS INTEGER)) in ('BID','VI')");
     Map<String, IDoMetricConfig.FieldType> dataTypes = new HashMap<>();
     dataTypes.put("soj_tag.TDuration", IDoMetricConfig.FieldType.DOUBLE);
     dataTypes.put("client_data_tag.contentLength", IDoMetricConfig.FieldType.INTEGER);

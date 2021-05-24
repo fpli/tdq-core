@@ -106,6 +106,9 @@ object ExpressionRegistry {
       case "CHAR_LENGTH" | "CHARACTER_LENGTH" | "LENGTH" =>
         assert(operands.length == 1)
         Length(child = operands.head.asInstanceOf[Expression], cacheKey = cacheKey)
+//      case "TRIM" =>
+//        assert(operands.length == 1)
+//        StringTrim(operands.head.asInstanceOf[Expression], None, cacheKey = cacheKey)
       case "SUM" =>
         assert(operands.length == 1)
         Sum(operands.head.asInstanceOf[Expression], cacheKey)

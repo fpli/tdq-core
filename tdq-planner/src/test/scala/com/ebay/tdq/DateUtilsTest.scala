@@ -1,13 +1,20 @@
 package com.ebay.tdq
 
-import com.ebay.tdq.utils.DateUtils.toSeconds
-import org.apache.commons.lang3.time.DateFormatUtils
+import com.ebay.tdq.utils.DateUtils._
+import org.apache.commons.lang3.time.{DateFormatUtils, FastDateFormat}
 import org.junit.Test
 
 /**
  * @author juntzhang
  */
 class DateUtilsTest {
+  @Test
+  def test_getMinBuckets(): Unit = {
+    println(FastDateFormat.getInstance("yyyyMMddHHmm").format(1621391339604L))
+    assert(getMinBuckets(1621391339604L, 10) == "202105191020")
+    assert(getMinBuckets(1621391339604L, 5) == "202105191025")
+  }
+
   @Test
   def test_toSeconds(): Unit = {
     assert(toSeconds("1day") == 86400L)

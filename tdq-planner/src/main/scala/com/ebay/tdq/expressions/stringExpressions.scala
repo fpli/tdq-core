@@ -74,3 +74,45 @@ case class Length(child: Expression, cacheKey: Option[String] = None) extends Un
     case BinaryType => value.asInstanceOf[Array[Byte]].length
   }
 }
+
+trait String2TrimExpression extends Expression with ImplicitCastInputTypes {
+
+  override def dataType: DataType = StringType
+
+  override def inputTypes: Seq[AbstractDataType] = Seq.fill(children.size)(StringType)
+
+  override def nullable: Boolean = children.exists(_.nullable)
+}
+
+case class StringTrim(
+  srcStr: Expression,
+  trimStr: Option[Expression] = None,
+  cacheKey: Option[String] = None)
+  extends String2TrimExpression {
+
+  def this(trimStr: Expression, srcStr: Expression) = this(srcStr, Option(trimStr))
+
+  def this(srcStr: Expression) = this(srcStr, None)
+
+  override def prettyName: String = "trim"
+
+  override def children: Seq[Expression] = if (trimStr.isDefined) {
+    srcStr :: trimStr.get :: Nil
+  } else {
+    srcStr :: Nil
+  }
+
+  override def eval(input: InternalRow, fromCache: Boolean): Any = {
+    val srcString = srcStr.call(input, fromCache).asInstanceOf[UTF8String]
+    if (srcString == null) {
+      null
+    } else {
+      if (trimStr.isDefined) {
+        new RuntimeException("not supported!")
+        //srcString.trim(trimStr.get.call(input, fromCache).asInstanceOf[UTF8String])
+      } else {
+        srcString.trim()
+      }
+    }
+  }
+}

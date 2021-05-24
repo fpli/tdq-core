@@ -16,14 +16,12 @@ import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
  */
 public class TdqConstant {
   public static final Map<Long, OutputTag<TdqMetric>> OUTPUT_TAG_MAP = new HashMap<>();
-  public static Integer PARALLELISM_METRIC_COLLECTOR_BY_WINDOW =
-      getInteger("flink.app.parallelism.metric-collector-by-window");
+  public static Integer METRIC_1ST_AGGR_PARALLELISM = getInteger("flink.app.parallelism.metric-1st-aggr");
   public static Integer LOCAL_COMBINE_QUEUE_SIZE = getInteger("flink.app.advance.local-combine.queue-size");
   public static Integer LOCAL_COMBINE_FLUSH_TIMEOUT = getInteger("flink.app.advance.local-combine.flush-timeout");
-  public static Integer PARALLELISM_METRIC_METRIC_FINAL_COLLECTOR =
-      getInteger("flink.app.parallelism.metric-final-collector");
-  public static Long WINDOW_METRIC_COLLECTOR_BY_WINDOW =
-      DateUtils.toSeconds(getString("flink.app.window.metric-collector-by-window"));
+  public static Integer METRIC_2ND_AGGR_PARALLELISM = getInteger("flink.app.parallelism.metric-2nd-aggr");
+  public static String METRIC_1ST_AGGR_W = getString("flink.app.window.metric-1st-aggr");
+  public static Long METRIC_1ST_AGGR_W_MILLI = DateUtils.toSeconds(METRIC_1ST_AGGR_W);
   public static Set<String> SINK_TYPES = getSet("flink.app.sink.types");
 
   // source

@@ -99,9 +99,9 @@ case class PhysicalPlan(
 
   def merge(m1: TdqMetric, m2: TdqMetric): TdqMetric = {
     val m = m1
-    if (m.getEventTime < m2.getEventTime) {
-      m.setEventTime(m2.getEventTime)
-    }
+    //if (m.getEventTime < m2.getEventTime) {
+    //  m.setEventTime(m2.getEventTime)
+    //}
     aggregations.foreach {
       case AggrPhysicalPlan(name, _, expression) =>
         m.putExpr2(name,

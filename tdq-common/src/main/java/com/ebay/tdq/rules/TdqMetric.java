@@ -23,14 +23,14 @@ public class TdqMetric implements Serializable {
   private String metricKey;
   private Object physicalPlan;
   private Map<String, Object> tags = Maps.newTreeMap();
-  private Long eventTime;
+  private long eventTime;
   private Map<String, Object> exprMap = Maps.newHashMap();
   private Double value = 0d;
 
   public TdqMetric() {
   }
 
-  public TdqMetric(String metricKey, Long eventTime) {
+  public TdqMetric(String metricKey, long eventTime) {
     this.metricKey = metricKey;
     this.eventTime = eventTime;
   }
@@ -54,9 +54,7 @@ public class TdqMetric implements Serializable {
   }
 
   public String getCacheId() {
-    // 1:01:01 => 1:01:59
-    // 1:01:59 => 1:01:59
-    return uid + "_" + getEventTime() / 1000 / 60 * 60 + 59;
+    return uid + "_" + getEventTime();
   }
 
   public TdqMetric putTag(String k, Object v) {

@@ -334,7 +334,7 @@ public class SojUtils {
                 }
             }
         }
-        return "null";
+        return null;
     }
 
     public static boolean checkIfCountIn(Integer pageId) {

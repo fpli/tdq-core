@@ -4,11 +4,11 @@ flink:
     parallelism:
       default: 100
       source: 100
-      metric-collector-by-window: 61
-      metric-final-collector: 2
+      metric-1st-aggr: 61
+      metric-2nd-aggr: 2
     window:
-      supports: 5min,10min,30min,1h,1d
-      metric-collector-by-window: 1min
+      metric-1st-aggr: 1min
+      supports: 1min,5min,10min,30min,1h,1d
     slot-sharing-group:
       source-event-lvs: tdq-lvs
       source-event-slc: tdq-slc
@@ -52,6 +52,9 @@ flink:
       types:
         - pronto
     advance:
+      watermark:
+        out-of-orderless: 5min
+        idle-source-timeout: 10min
       local-combine:
         queue-size: 1000
         flush-timeout: 5000
