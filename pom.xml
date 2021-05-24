@@ -6,7 +6,7 @@
   <groupId>com.ebay.tdq</groupId>
   <artifactId>tdq-parent</artifactId>
   <!-- DO NOT change version manually, this is managed by change_pom_version.sh script -->
-  <version>1.1.0-SNAPSHOT</version>
+  <version>2.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>TDQ - Parent</name>
@@ -666,14 +666,18 @@
   </profiles>
 
   <distributionManagement>
-    <repository>
+    <snapshotRepository>
+      <id>ebay-qa-server</id>
+      <url>https://ebaycentral.qa.ebay.com/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <!--<repository>
       <id>ebay-data-releases</id>
       <url>http://nxrepository.corp.ebay.com/nexus/content/repositories/ebay.data.releases</url>
     </repository>
     <snapshotRepository>
       <id>ebay-data-snapshots</id>
       <url>http://nxrepository.corp.ebay.com/nexus/content/repositories/ebay.data.snapshots</url>
-    </snapshotRepository>
+    </snapshotRepository>-->
   </distributionManagement>
 
   <build>
