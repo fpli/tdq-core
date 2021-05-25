@@ -124,7 +124,7 @@ class LocalCacheTest {
         .genUID()
       run(m)
 
-      val k = m.getUid + format(m.getEventTime)
+      val k = m.getTagId + format(m.getEventTime)
       val old = rawData.get(k)
       if (old.isDefined) {
         rawData.put(k, old.get + 1d)

@@ -46,127 +46,35 @@ object ProfilingJobLocalTest extends ProfilingJob {
 
   val config: String =
     """
-      |{
-      |  "id": "18",
-      |  "name": "cfg_18",
-      |  "rules": [
-      |    {
-      |      "name": "rule_18",
+      |{ "id": "20", "name": "cfg_20", "rules": [ { "name": "rule_20",
       |      "type": "realtime.rheos.profiler",
       |      "config": {"window": "1min"},
       |      "profilers": [
       |        {
-      |          "metric-name": "1min_metrics_aggr_params",
-      |          "expression": {"operator": "Expr", "config": {"text": "total_cnt"}},
-      |          "dimensions": ["domain", "site_id", "app"],
+      |          "metric-name": "sch_tags_cpnip_rate",
+      |          "expression": {"operator": "Expr", "config": {"text": "cpnip_cnt / total_cnt"}},
+      |          "dimensions": ["site_id", "page_id"],
+      |          "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and TAG_EXTRACT('eactn') is not null)",
       |          "transformations": [
-      |            {
-      |              "alias": "domain",
-      |              "expression": {"operator": "UDF", "config": {"text": "PAGE_FAMILY(CAST(TAG_EXTRACT('p') AS INTEGER))"}}
-      |            },
       |            {
       |              "alias": "site_id",
       |              "expression": {"operator": "UDF", "config": {"text": "CAST(TAG_EXTRACT('t') AS INTEGER)"}}
       |            },
-      |            {"alias": "app", "expression": {"operator": "UDF", "config": {"text": "TAG_EXTRACT('app')"}}},
       |            {
       |              "alias": "page_id",
       |              "expression": {"operator": "UDF", "config": {"text": "CAST(TAG_EXTRACT('p') AS INTEGER)"}}
       |            },
       |            {"alias": "total_cnt", "expression": {"operator": "Count", "config": {"arg0": "1.0"}}},
       |            {
-      |              "alias": "duration_sum",
-      |              "expression": {"operator": "SUM", "config": {"arg0": "CAST(TAG_EXTRACT('TDuration') AS DOUBLE)"}}
-      |            },
-      |            {
-      |              "alias": "gm_t_usr_cnt",
+      |              "alias": "cpnip_cnt",
       |              "expression": {
       |                "operator": "Sum",
-      |                "config": {"arg0": "case when LENGTH(TAG_EXTRACT('p')) > 0 then 1.0 else 0.0 end"}
+      |                "config": {"arg0": "case when TAG_EXTRACT('cpnip') is not null then 1.0 else 0.0 end"}
       |              }
-      |            },
-      |            {
-      |              "alias": "gm_t_itm_cnt",
-      |              "expression": {
-      |                "operator": "Sum",
-      |                "config": {
-      |                  "arg0": "case when LENGTH( REGEXP_EXTRACT(TAG_EXTRACT('itm|itmid|itm_id|itmlist|litm'), '^(\\d+(%2C)?)+$', 1) ) > 0 then 1.0 else 0.0 end"
-      |                }
-      |              }
-      |            },
-      |            {
-      |              "alias": "gm_t_dn_cnt",
-      |              "expression": {
-      |                "operator": "Sum",
-      |                "config": {"arg0": "case when LENGTH(TAG_EXTRACT('dn')) > 0 then 1.0 else 0.0 end"}
-      |              }
-      |            },
-      |            {
-      |              "alias": "gm_t_mav_cnt",
-      |              "expression": {
-      |                "operator": "Sum",
-      |                "config": {"arg0": "case when LENGTH(TAG_EXTRACT('mav')) > 0 then 1.0 else 0.0 end"}
-      |              }
-      |            },
-      |            {
-      |              "alias": "gm_t_mos_cnt",
-      |              "expression": {
-      |                "operator": "Sum",
-      |                "config": {"arg0": "case when LENGTH(TAG_EXTRACT('mos')) > 0 then 1.0 else 0.0 end"}
-      |              }
-      |            },
-      |            {
-      |              "alias": "gm_t_osv_cnt",
-      |              "expression": {
-      |                "operator": "Sum",
-      |                "config": {"arg0": "case when LENGTH(TAG_EXTRACT('osv')) > 0 then 1.0 else 0.0 end"}
-      |              }
-      |            },
-      |            {
-      |              "alias": "ep_site_icr_cnt",
-      |              "expression": {
-      |                "operator": "Sum",
-      |                "config": {"arg0": "case when length(TAG_EXTRACT('t'))>0 and length(TAG_EXTRACT('es'))>0 and TAG_EXTRACT('t') = TAG_EXTRACT('es') then 0.0 else 1.0 end"}
-      |              }
-      |            },
-      |            {
-      |              "alias": "sch_t_cpnip_cnt",
-      |              "expression": {
-      |                "operator": "Sum",
-      |                "config": {"arg0": "case when LENGTH(TAG_EXTRACT('cpnip')) > 0 then 1.0 else 0.0 end"}
-      |              },
-      |              "filter": "page_id in (2047936,2054032,2053742,2045573,2351460,2381081) and LENGTH(TAG_EXTRACT('eactn')) > 0"
-      |            },
-      |            {
-      |              "alias": "sch_t_prof_cnt",
-      |              "expression": {
-      |                "operator": "Sum",
-      |                "config": {"arg0": "case when LENGTH(TAG_EXTRACT('prof')) > 0 then 1.0 else 0.0 end"}
-      |              },
-      |              "filter": "page_id in (2047936,2054032,2053742,2045573,2351460,2381081) and LENGTH(TAG_EXTRACT('eactn')) > 0"
-      |            },
-      |            {
-      |              "alias": "sch_t_icpp_cnt",
-      |              "expression": {
-      |                "operator": "Sum",
-      |                "config": {"arg0": "case when LENGTH(TAG_EXTRACT('icpp')) > 0 then 1.0 else 0.0 end"}
-      |              },
-      |              "filter": "page_id in (2047936,2054032,2053742,2045573,2351460,2381081) and LENGTH(TAG_EXTRACT('eactn')) > 0"
-      |            },
-      |            {
-      |              "alias": "sch_t_clktrack_cnt",
-      |              "expression": {
-      |                "operator": "Sum",
-      |                "config": {"arg0": "case when LENGTH(TAG_EXTRACT('clktrack')) > 0 then 1.0 else 0.0 end"}
-      |              },
-      |              "filter": "page_id in (2047936,2054032,2053742,2045573,2351460,2381081) and LENGTH(TAG_EXTRACT('eactn')) > 0"
       |            }
       |          ]
       |        }
-      |      ]
-      |    }
-      |  ]
-      |}
+      |      ]} ] }
       |""".stripMargin
 
   override protected def getConfigDS(env: StreamExecutionEnvironment): DataStream[PhysicalPlans] = {

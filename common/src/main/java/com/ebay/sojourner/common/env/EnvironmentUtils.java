@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class EnvironmentUtils {
+  public static final String PROFILE = "tdq-profile";
 
   private static final Set<AbstractEnvironment> PROP_SOURCES =
       Sets.newTreeSet(Comparator.comparing(AbstractEnvironment::order));

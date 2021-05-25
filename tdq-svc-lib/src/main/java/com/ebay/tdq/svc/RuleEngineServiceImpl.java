@@ -246,7 +246,7 @@ public class RuleEngineServiceImpl implements RuleEngineService {
           for (RawEvent event : sample) {
             TdqMetric newMetric = plan.process(event);
             if (newMetric != null) {
-              map.compute(newMetric.getUid(), (key, old) -> {
+              map.compute(newMetric.getTagId(), (key, old) -> {
                 if (old != null) {
                   return plan.merge(newMetric, old);
                 } else {

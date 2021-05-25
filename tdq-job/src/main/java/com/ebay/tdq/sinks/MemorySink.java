@@ -29,12 +29,12 @@ public class MemorySink extends RichSinkFunction<TdqMetric> {
     Map<String, TdqMetric> m = new HashMap<>();
     actualList.forEach(v -> {
       String time = DateFormatUtils.format(v.getEventTime(), "yyyy-MM-dd HH:mm:ss");
-      m.put(v.getUid() + " " + time, v);
+      m.put(v.getTagId() + " " + time, v);
     });
     boolean success = true;
     for (TdqMetric expected : expectedList) {
       String time = DateFormatUtils.format(expected.getEventTime(), "yyyy-MM-dd HH:mm:ss");
-      TdqMetric actual = m.get(expected.getUid() + " " + time);
+      TdqMetric actual = m.get(expected.getTagId() + " " + time);
       if (actual == null) {
         log.error("can not find, expected=>{}", expected);
         success = false;

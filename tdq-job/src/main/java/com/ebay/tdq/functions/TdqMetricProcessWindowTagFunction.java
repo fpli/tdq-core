@@ -1,6 +1,7 @@
 package com.ebay.tdq.functions;
 
 import com.ebay.tdq.rules.TdqMetric;
+import com.ebay.tdq.utils.DateUtils;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -48,11 +49,10 @@ public class TdqMetricProcessWindowTagFunction
   }
 
   void collect(TdqMetric m, Context context) {
-    //if (m.getExprMap() != null && m.getExprMap().get("p1") != null) {
-    //  inc(DateUtils.getMinBuckets(m.getEventTime(), 10) + "_" + m.getMetricKey(),
-    //      (long) (double) m.getExprMap().get("p1"));
-    //}
-    //m.setEventTime(context.window().getEnd());
+    if (m.getExprMap() != null && m.getExprMap().get("p1") != null) {
+      inc(DateUtils.getMinBuckets(m.getEventTime(), 5) + "_" + m.getMetricKey(),
+          (long) (double) m.getExprMap().get("p1"));
+    }
     OutputTag<TdqMetric> outputTag = tagMap.get(m.getWindow());
     if (outputTag != null) {
       context.output(outputTag, m);

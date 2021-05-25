@@ -17,6 +17,8 @@ import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
 
 /**
+ * env: tdq-profile=tdq-pre-prod|tdq-prod [default is test]
+ *
  * @author juntzhang
  */
 @Slf4j
@@ -28,6 +30,13 @@ public class ServiceFactory {
   protected static int PRONTO_PORT = EnvironmentUtils.getInteger("pronto.port");
   protected static String PRONTO_USERNAME = EnvironmentUtils.get("pronto.username");
   protected static String PRONTO_PASSWORD = EnvironmentUtils.get("pronto.password");
+
+  static {
+    String profile = System.getenv(EnvironmentUtils.PROFILE);
+    if (StringUtils.isNotBlank(profile)) {
+      EnvironmentUtils.activateProfile(profile);
+    }
+  }
 
   private static final RuleEngineService ruleEngineService = new RuleEngineServiceImpl();
 

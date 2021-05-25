@@ -1,6 +1,6 @@
 flink:
   app:
-    name: TDQ-V2-pathfinder-test
+    name: TDQ-V2-pathfinder-prod
     parallelism:
       default: 100
       source: 100
@@ -28,7 +28,7 @@ flink:
       guid-set: [ ]
       pageid-set: [ ]
     checkpoint:
-      data-dir: /opt/tdq-test/checkpoint
+      data-dir: /opt/tdq-prod/checkpoint
       interval-ms: 300000
       timeout-ms: 900000
       min-pause-between-ms: 120000
@@ -36,13 +36,13 @@ flink:
       tolerate-failure-number: 3
     hot-deploy: false
     source:
-      sample-fraction: 0.01
+      sample-fraction: 0
       from-timestamp: 0
       out-of-orderless-in-min: 3
       idle-source-timeout-in-min: 10
       pronto:
-        index-pattern: tdq-metrics-test-
-        latency-index-pattern: tdq-metrics-test-latency-
+        index-pattern: tdq-metrics-prod-
+        latency-index-pattern: tdq-metrics-prod-latency-
         scheme: https
         hostname: estdq-datalvs.vip.ebay.com
         port: 443

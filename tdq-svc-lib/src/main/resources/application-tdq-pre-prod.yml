@@ -1,6 +1,6 @@
 pronto:
-  index-pattern: tdq-metrics-test-
-  latency-index-pattern: tdq-metrics-test-latency-
+  index-pattern: tdq-metrics-pre-prod-
+  latency-index-pattern: tdq-metrics-pre-prod-latency-
   scheme: https
   hostname: esgro-datarno.vip.ebay.com
   port: 443

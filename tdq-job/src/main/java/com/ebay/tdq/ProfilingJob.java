@@ -50,6 +50,9 @@ import static com.ebay.tdq.utils.TdqConstant.PRONTO_INDEX_PATTERN;
 import static com.ebay.tdq.utils.TdqConstant.PRONTO_LATENCY_INDEX_PATTERN;
 import static com.ebay.tdq.utils.TdqConstant.SINK_TYPES;
 
+/**
+ * --tdq-profile tdq-pre-prod|tdq-prod [default is test]
+ */
 @Slf4j
 public class ProfilingJob {
   public void start(String[] args) {
@@ -107,7 +110,7 @@ public class ProfilingJob {
     OutputTag<TdqMetric> lateDataTag = new OutputTag<TdqMetric>("1st_aggr_w_latency") {
     };
     SingleOutputStreamOperator<TdqMetric> unifyDataStream = normalizeOperator
-        .keyBy(TdqMetric::getUid)
+        .keyBy(TdqMetric::getTagId)
         .window(TumblingEventTimeWindows.of(Time.seconds(METRIC_1ST_AGGR_W_MILLI)))
         .sideOutputLateData(lateDataTag)
         .aggregate(new TdqAggregateFunction(), new TdqMetricProcessWindowTagFunction(OUTPUT_TAG_MAP))
@@ -125,7 +128,7 @@ public class ProfilingJob {
       String tagLatencyUid = "2nd_aggr_w_" + key + "_latency";
       OutputTag<TdqMetric> latency = new OutputTag<TdqMetric>(tagUid + "_latency") {
       };
-      SingleOutputStreamOperator<TdqMetric> ds = unifyDataStream.getSideOutput(tag).keyBy(TdqMetric::getUid)
+      SingleOutputStreamOperator<TdqMetric> ds = unifyDataStream.getSideOutput(tag).keyBy(TdqMetric::getTagId)
           .window(TumblingEventTimeWindows.of(Time.seconds(seconds)))
           .sideOutputLateData(latency)
           .aggregate(new TdqAggregateFunction(), new ProcessWindowFunction<TdqMetric, TdqMetric, String,
@@ -163,6 +166,7 @@ public class ProfilingJob {
           .setParallelism(METRIC_2ND_AGGR_PARALLELISM)
           .name(tagUid)
           .uid(tagUid);
+
       ds.getSideOutput(latency).addSink(new RichSinkFunction<TdqMetric>() {
         private MetricGroup group;
         private final Map<String, Counter> counterMap = new HashMap<>();

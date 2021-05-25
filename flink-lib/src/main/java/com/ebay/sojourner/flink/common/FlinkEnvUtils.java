@@ -24,13 +24,11 @@ public class FlinkEnvUtils {
 
   private static final Map<String, String> CONFIG = Maps.newHashMap();
 
-  private static final String PROFILE = "profile";
-
   private static void load(String[] args) {
     ParameterTool parameterTool = ParameterTool.fromArgs(args);
-    String profile = parameterTool.get(PROFILE);
+    String profile = parameterTool.get(EnvironmentUtils.PROFILE);
     if (StringUtils.isNotBlank(profile)) {
-      CONFIG.put(PROFILE, profile);
+      CONFIG.put(EnvironmentUtils.PROFILE, profile);
       EnvironmentUtils.activateProfile(profile);
     }
     EnvironmentUtils.fromProperties(parameterTool.getProperties());

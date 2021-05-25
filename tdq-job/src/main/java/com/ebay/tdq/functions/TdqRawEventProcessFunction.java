@@ -77,7 +77,6 @@ public class TdqRawEventProcessFunction
       Context ctx, Collector<TdqMetric> collector) throws Exception {
     BroadcastState<String, PhysicalPlans> broadcastState = ctx.getBroadcastState(stateDescriptor);
     broadcastState.put(cfgPlan, plan);
-    //log.info("plan => {}", StringUtils.join(plan.plans(), "\n"));
     metricGroup.inc("processBroadcastElement");
   }
 
@@ -98,7 +97,7 @@ public class TdqRawEventProcessFunction
     initialize();
     if (context.isRestored()) {
       metricGroup.inc("restored");
-      cacheState.get().forEach(v -> localCache.put(v.getCacheId(), v));
+      cacheState.get().forEach(v -> localCache.put(v.getTagIdWithET(), v));
     }
   }
 

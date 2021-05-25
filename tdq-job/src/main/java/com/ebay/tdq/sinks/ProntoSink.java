@@ -105,7 +105,12 @@ public class ProntoSink implements Serializable {
       this.indexPattern = indexPattern;
     }
 
-    public void inc(RuntimeContext runtimeContext,String key, long v) {
+    public void inc(RuntimeContext runtimeContext, String key, long v) {
+      if (indexPattern.contains("latency")) {
+        key = key + "_latency";
+      } else {
+        key = key + "_current";
+      }
       Counter counter = counterMap.get(key);
       if (counter == null) {
         counter = runtimeContext.getMetricGroup().addGroup("tdq3").counter(key);
@@ -113,6 +118,7 @@ public class ProntoSink implements Serializable {
       }
       counter.inc(v);
     }
+
     @Override
     public void process(TdqMetric m, RuntimeContext runtimeContext, RequestIndexer indexer) {
       if (m.getExprMap() != null && m.getExprMap().get("p1") != null) {
@@ -121,7 +127,12 @@ public class ProntoSink implements Serializable {
             (long) (double) m.getExprMap().get("p1")
         );
       }
-      indexer.add(createIndexRequest(m, indexPattern));
+      try {
+        indexer.add(createIndexRequest(m, indexPattern));
+      } catch (Throwable e) {
+        inc(runtimeContext, "pronto_index_error", 1);
+        throw e;
+      }
     }
 
     private static IndexRequest createIndexRequest(TdqMetric element, String indexPattern) {
@@ -151,9 +162,7 @@ public class ProntoSink implements Serializable {
         });
         json.put("expr", expr);
         json.put("value", element.getValue());
-        IndexRequest ir = Requests.indexRequest().index(index).source(json);
-        log.info("pronto index=> {}", ir);
-        return ir;
+        return Requests.indexRequest().id(element.getUuid()).index(index).source(json);
       } catch (Exception e) {
         log.error("metric={}, msg={}, index={}", element, e.getMessage(), index);
         throw e;
@@ -171,8 +180,8 @@ public class ProntoSink implements Serializable {
       if (ExceptionUtils.findThrowable(failure, EsRejectedExecutionException.class).isPresent()) {
         // full queue; re-add document for indexing
         if (action instanceof IndexRequest) {
-          indexer.add((IndexRequest) action);
           log.error("onFailure => {}, restStatusCode={}, because of {}", action, restStatusCode, failure);
+          indexer.add((IndexRequest) action);
         }
       } else if (ExceptionUtils.findThrowable(failure, ElasticsearchParseException.class).isPresent()) {
         // malformed document; simply drop request without failing sink

@@ -94,7 +94,10 @@
     "id": "18", "name": "cfg_18",
     "rules": [
       {
-        "name": "rule_18", "type": "realtime.rheos.profiler", "config": {"window": "1min"}, "profilers": [
+        "name": "rule_18",
+        "type": "realtime.rheos.profiler",
+        "config": {"window": "1min"},
+        "profilers": [
         {
           "metric-name": "sch_tags_rate",
           "expression": {"operator": "Expr", "config": {"text": "t_cpnip_cnt / total_cnt"}},

@@ -46,11 +46,11 @@ public class LocalCache {
   public void flush(PhysicalPlan plan, TdqMetric curr, Collector<TdqMetric> collector) {
     if (curr == null) return;
     metricGroup.inc(curr.getMetricKey() + "_" + DateUtils.getMinBuckets(curr.getEventTime(), 5));
-    TdqMetric last = cache.get(curr.getCacheId());
+    TdqMetric last = cache.get(curr.getTagIdWithET());
     if (last != null) {
       curr = plan.merge(last, curr);
     }
-    cache.put(curr.getCacheId(), curr);
+    cache.put(curr.getTagIdWithET(), curr);
 
     if (needFlush(curr)) {
       metricGroup.inc("flush");
