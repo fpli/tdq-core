@@ -2,7 +2,7 @@ package com.ebay.tdq.sources;
 
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.flink.connector.kafka.SojSerializableTimestampAssigner;
-import com.ebay.tdq.functions.TdqRawEventSourceMockFunction;
+import com.ebay.tdq.functions.RawEventSourceMockFunction;
 import com.google.common.collect.Lists;
 import java.time.Duration;
 import java.util.List;
@@ -16,7 +16,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
  */
 public class MockBehaviorPathfinderSource extends AbstractSource {
   public static List<DataStream<RawEvent>> build(final StreamExecutionEnvironment env) {
-    SingleOutputStreamOperator<RawEvent> src1 = env.addSource(new TdqRawEventSourceMockFunction())
+    SingleOutputStreamOperator<RawEvent> src1 = env.addSource(new RawEventSourceMockFunction())
         .name("Raw Event Src1")
         .uid("raw-event-src1")
         .slotSharingGroup("src1")
@@ -31,7 +31,7 @@ public class MockBehaviorPathfinderSource extends AbstractSource {
         .uid("raw-event-watermark-src1")
         .slotSharingGroup("src1");
 
-    SingleOutputStreamOperator<RawEvent> src2 = env.addSource(new TdqRawEventSourceMockFunction())
+    SingleOutputStreamOperator<RawEvent> src2 = env.addSource(new RawEventSourceMockFunction())
         .name("Raw Event Src2")
         .uid("raw-event-src2")
         .slotSharingGroup("src2")
@@ -46,7 +46,7 @@ public class MockBehaviorPathfinderSource extends AbstractSource {
         .uid("raw-event-watermark-src2")
         .slotSharingGroup("src2");
 
-    SingleOutputStreamOperator<RawEvent> src3 = env.addSource(new TdqRawEventSourceMockFunction())
+    SingleOutputStreamOperator<RawEvent> src3 = env.addSource(new RawEventSourceMockFunction())
         .name("Raw Event Src3")
         .uid("raw-event-src3")
         .slotSharingGroup("src3")
@@ -61,7 +61,7 @@ public class MockBehaviorPathfinderSource extends AbstractSource {
         .uid("raw-event-watermark-src3")
         .slotSharingGroup("src3");
 
-    SingleOutputStreamOperator<RawEvent> src4 = env.addSource(new TdqRawEventSourceMockFunction())
+    SingleOutputStreamOperator<RawEvent> src4 = env.addSource(new RawEventSourceMockFunction())
         .name("Raw Event Src4")
         .uid("raw-event-src4")
         .slotSharingGroup("src4")

@@ -1,6 +1,7 @@
 package com.ebay.tdq.sinks;
 
 import com.ebay.tdq.rules.TdqMetric;
+import com.google.common.annotations.VisibleForTesting;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
  * @author juntzhang
  */
 @Slf4j
+@VisibleForTesting
 public class MemorySink extends RichSinkFunction<TdqMetric> {
   private static final Map<String, List<TdqMetric>> collect = new HashMap<>();
   private final String name;

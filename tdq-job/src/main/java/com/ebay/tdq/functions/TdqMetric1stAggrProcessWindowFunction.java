@@ -17,13 +17,13 @@ import org.apache.flink.util.OutputTag;
  * @author juntzhang
  */
 @Slf4j
-public class TdqMetricProcessWindowTagFunction
+public class TdqMetric1stAggrProcessWindowFunction
     extends ProcessWindowFunction<TdqMetric, TdqMetric, String, TimeWindow> {
   public final Map<Long, OutputTag<TdqMetric>> tagMap;
-  private final Map<String, Counter> counterMap = new HashMap<>();
-  private MetricGroup group;
+  private transient Map<String, Counter> counterMap;
+  private transient MetricGroup group;
 
-  public TdqMetricProcessWindowTagFunction(Map<Long, OutputTag<TdqMetric>> tagMap) {
+  public TdqMetric1stAggrProcessWindowFunction(Map<Long, OutputTag<TdqMetric>> tagMap) {
     this.tagMap = tagMap;
   }
 
@@ -38,7 +38,8 @@ public class TdqMetricProcessWindowTagFunction
 
   @Override
   public void open(Configuration parameters) throws Exception {
-    group = this.getRuntimeContext().getMetricGroup().addGroup("tdq1");
+    counterMap = new HashMap<>();
+    group      = this.getRuntimeContext().getMetricGroup().addGroup("tdq1");
     super.open(parameters);
   }
 

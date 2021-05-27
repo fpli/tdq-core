@@ -1,5 +1,6 @@
 package com.ebay.tdq.sinks;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,6 +12,7 @@ import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
  * @author juntzhang
  */
 @Slf4j
+@VisibleForTesting
 public class LocalFileSink extends RichSinkFunction<String> {
   private static final Object lock = new Object();
   private static File file = null;

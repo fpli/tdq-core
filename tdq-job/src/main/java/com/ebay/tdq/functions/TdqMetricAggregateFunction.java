@@ -7,7 +7,7 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 /**
  * @author juntzhang
  */
-public class TdqAggregateFunction implements AggregateFunction<TdqMetric, TdqMetric, TdqMetric> {
+public class TdqMetricAggregateFunction implements AggregateFunction<TdqMetric, TdqMetric, TdqMetric> {
   public static TdqMetric merge0(TdqMetric m1, TdqMetric m2) {
     if (m1 == null && m2 == null) {
       return null;

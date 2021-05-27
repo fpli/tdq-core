@@ -1,22 +1,15 @@
 package com.ebay.tdq.sinks;
 
+import com.ebay.tdq.functions.ProntoSinkFunction;
 import com.ebay.tdq.rules.TdqMetric;
-import com.ebay.tdq.utils.DateUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.flink.api.common.functions.RuntimeContext;
-import org.apache.flink.metrics.Counter;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.connectors.elasticsearch.ActionRequestFailureHandler;
 import org.apache.flink.streaming.connectors.elasticsearch.ElasticsearchSinkBase;
-import org.apache.flink.streaming.connectors.elasticsearch.ElasticsearchSinkFunction;
 import org.apache.flink.streaming.connectors.elasticsearch.RequestIndexer;
 import org.apache.flink.streaming.connectors.elasticsearch7.ElasticsearchSink;
 import org.apache.flink.util.ExceptionUtils;
@@ -29,10 +22,8 @@ import org.apache.http.message.BasicHeader;
 import org.elasticsearch.ElasticsearchParseException;
 import org.elasticsearch.action.ActionRequest;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.client.Requests;
 import org.elasticsearch.common.util.concurrent.EsRejectedExecutionException;
 
-import static com.ebay.tdq.utils.DateUtils.calculateIndexDate;
 import static com.ebay.tdq.utils.TdqConstant.PRONTO_HOSTNAME;
 import static com.ebay.tdq.utils.TdqConstant.PRONTO_PASSWORD;
 import static com.ebay.tdq.utils.TdqConstant.PRONTO_PORT;
@@ -95,79 +86,6 @@ public class ProntoSink implements Serializable {
         .uid(uid)
         .name(uid)
         .setParallelism(parallelism);
-  }
-
-  private static class ProntoSinkFunction implements ElasticsearchSinkFunction<TdqMetric> {
-    private final String indexPattern;
-    private final Map<String, Counter> counterMap = new HashMap<>();
-
-    ProntoSinkFunction(String indexPattern) {
-      this.indexPattern = indexPattern;
-    }
-
-    public void inc(RuntimeContext runtimeContext, String key, long v) {
-      if (indexPattern.contains("latency")) {
-        key = key + "_latency";
-      } else {
-        key = key + "_current";
-      }
-      Counter counter = counterMap.get(key);
-      if (counter == null) {
-        counter = runtimeContext.getMetricGroup().addGroup("tdq3").counter(key);
-        counterMap.put(key, counter);
-      }
-      counter.inc(v);
-    }
-
-    @Override
-    public void process(TdqMetric m, RuntimeContext runtimeContext, RequestIndexer indexer) {
-      if (m.getExprMap() != null && m.getExprMap().get("p1") != null) {
-        inc(runtimeContext,
-            m.getMetricKey() + "_" + DateUtils.getMinBuckets(m.getEventTime(), 5),
-            (long) (double) m.getExprMap().get("p1")
-        );
-      }
-      try {
-        indexer.add(createIndexRequest(m, indexPattern));
-      } catch (Throwable e) {
-        inc(runtimeContext, "pronto_index_error", 1);
-        throw e;
-      }
-    }
-
-    private static IndexRequest createIndexRequest(TdqMetric element, String indexPattern) {
-      String index = indexPattern + calculateIndexDate(element.getEventTime());
-      try {
-        Map<String, Object> json = new HashMap<>();
-        json.put("metric_key", element.getMetricKey());
-        json.put("event_time", element.getEventTime());
-        json.put("event_time_fmt", new Date(element.getEventTime()));
-        json.put("process_time", new Date());
-        Map<String, String> tags = new HashMap<>();
-        if (MapUtils.isNotEmpty(element.getTags())) {
-          element.getTags().forEach((k, v) -> {
-            if (v != null && k != null) {
-              tags.put(k, v.toString());
-            }
-          });
-          json.put("tags", tags);
-        }
-        Map<String, Double> expr = new HashMap<>();
-        element.getExprMap().forEach((k, v) -> {
-          if (v != null) {
-            expr.put(k, Double.valueOf(v.toString()));
-          } else {
-            expr.put(k, 0d);
-          }
-        });
-        json.put("expr", expr);
-        json.put("value", element.getValue());
-        return Requests.indexRequest().id(element.getUuid()).index(index).source(json);
-      } catch (Exception e) {
-        log.error("metric={}, msg={}, index={}", element, e.getMessage(), index);
-        throw e;
-      }
-    }
   }
 
   @Slf4j

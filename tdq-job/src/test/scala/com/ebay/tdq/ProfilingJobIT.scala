@@ -6,7 +6,7 @@ import java.util.{HashMap => JMap, List => JList}
 import com.ebay.sojourner.common.model.RawEvent
 import com.ebay.sojourner.flink.connector.kafka.SojSerializableTimestampAssigner
 import com.ebay.tdq.config.TdqConfig
-import com.ebay.tdq.functions.TdqRawEventProcessFunction
+import com.ebay.tdq.functions.RawEventProcessFunction
 import com.ebay.tdq.rules.{PhysicalPlans, TdqMetric}
 import com.ebay.tdq.sinks.MemorySink
 import com.ebay.tdq.utils._
@@ -55,8 +55,8 @@ case class ProfilingJobIT(
   }
 
   override def getTdqRawEventProcessFunction(
-    descriptor: MapStateDescriptor[String, PhysicalPlans]): TdqRawEventProcessFunction = {
-    new TdqRawEventProcessFunction(descriptor) {
+    descriptor: MapStateDescriptor[String, PhysicalPlans]): RawEventProcessFunction = {
+    new RawEventProcessFunction(descriptor) {
       override protected def getPhysicalPlans: PhysicalPlans = PhysicalPlanFactory.getPhysicalPlans(
         Lists.newArrayList(JsonUtils.parseObject(config, classOf[TdqConfig]))
       )

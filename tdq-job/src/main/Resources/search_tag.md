@@ -59,11 +59,11 @@ config
 es timelion
 ```
 .es(
-index=tdq-metrics-*prod-*,
+index=tdq-metrics-prod-*,
 timefield=event_time_fmt,
 metric=sum:expr.cpnip_cnt,
 q='metric_key.keyword :sch_tags_cpnip_rate').divide(.es(
-index=tdq-metrics-*prod-*,
+index=tdq-metrics-prod-*,
 timefield=event_time_fmt,
 metric=sum:expr.total_cnt,
 q='metric_key.keyword :sch_tags_cpnip_rate')).color(green).lines(fill=1,width=1).label('Mav Tag Rate').yaxis(units="custom::%",tickDecimals=2).precision(5).multiply(100)

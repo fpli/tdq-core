@@ -16,7 +16,7 @@ import static com.ebay.tdq.utils.PhysicalPlanFactory.getTdqConfigs;
 public class TdqConfigSourceFunction extends RichSourceFunction<PhysicalPlans> {
   private final Long interval;
   private final JdbcConfig jdbcConfig;
-  private boolean running = true;
+  private volatile boolean running = true;
 
   public TdqConfigSourceFunction(Long interval) {
     this.interval = interval;

@@ -30,9 +30,9 @@ import static com.ebay.tdq.utils.TdqConstant.LOCAL_COMBINE_QUEUE_SIZE;
  * @author juntzhang
  */
 @Slf4j
-public class TdqRawEventProcessFunction
+public class RawEventProcessFunction
     extends BroadcastProcessFunction<RawEvent, PhysicalPlans, TdqMetric> implements CheckpointedFunction {
-  protected final JdbcConfig jdbcConfig;
+  private final JdbcConfig jdbcConfig;
   private final MapStateDescriptor<String, PhysicalPlans> stateDescriptor;
   private final int localCombineFlushTimeout;
   private final int localCombineQueueSize;
@@ -44,7 +44,7 @@ public class TdqRawEventProcessFunction
   private transient PhysicalPlans physicalPlans;
   private transient LocalCache localCache;
 
-  public TdqRawEventProcessFunction(MapStateDescriptor<String, PhysicalPlans> descriptor) {
+  public RawEventProcessFunction(MapStateDescriptor<String, PhysicalPlans> descriptor) {
     this.stateDescriptor          = descriptor;
     this.localCombineFlushTimeout = LOCAL_COMBINE_FLUSH_TIMEOUT;
     this.localCombineQueueSize    = LOCAL_COMBINE_QUEUE_SIZE;

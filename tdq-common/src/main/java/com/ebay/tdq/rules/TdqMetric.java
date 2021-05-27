@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.StringJoiner;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -17,7 +16,6 @@ import org.apache.commons.lang3.time.FastDateFormat;
 @AllArgsConstructor
 @Data
 public class TdqMetric implements Serializable {
-  private String uuid;       // uuid
   private String tagId;      // metricKey + tags
   private Integer partition = -1;
   private Long window;      // seconds
@@ -47,7 +45,6 @@ public class TdqMetric implements Serializable {
       sb.append(sj).append("}");
     }
     setTagId(DigestUtils.md5Hex(sb.toString().getBytes()));
-    setUuid(UUID.randomUUID().toString());
     return this;
   }
 
@@ -85,7 +82,6 @@ public class TdqMetric implements Serializable {
     exprMap.forEach((k, v) -> sj.add("e-" + k + "=" + v));
     sj.add("window" + "=" + window);
     sj.add("partition" + "=" + partition);
-    sj.add("uuid" + "=" + uuid);
     sj.add("tag_id" + "=" + tagId);
     sj.add("eventTime" + "=" + FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").format(eventTime));
     sb.append(sj).append("}").append(" ").append(value);

@@ -2,9 +2,11 @@ package com.ebay.tdq;
 
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.util.Property;
-import com.ebay.tdq.functions.TdqAggregateFunction;
-import com.ebay.tdq.functions.TdqMetricProcessWindowTagFunction;
-import com.ebay.tdq.functions.TdqRawEventProcessFunction;
+import com.ebay.tdq.functions.LatencyTdqMetricRichSinkFunction;
+import com.ebay.tdq.functions.RawEventProcessFunction;
+import com.ebay.tdq.functions.TdqMetric1stAggrProcessWindowFunction;
+import com.ebay.tdq.functions.TdqMetric2ndAggrProcessWindowFunction;
+import com.ebay.tdq.functions.TdqMetricAggregateFunction;
 import com.ebay.tdq.rules.PhysicalPlans;
 import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.sinks.ProntoSink;
@@ -14,7 +16,6 @@ import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.FlinkEnvFactory;
 import com.google.common.collect.Maps;
 import java.time.Duration;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -24,19 +25,12 @@ import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.configuration.Configuration;
-import org.apache.flink.metrics.Counter;
-import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
-import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
-import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
@@ -113,7 +107,7 @@ public class ProfilingJob {
         .keyBy(TdqMetric::getTagId)
         .window(TumblingEventTimeWindows.of(Time.seconds(METRIC_1ST_AGGR_W_MILLI)))
         .sideOutputLateData(lateDataTag)
-        .aggregate(new TdqAggregateFunction(), new TdqMetricProcessWindowTagFunction(OUTPUT_TAG_MAP))
+        .aggregate(new TdqMetricAggregateFunction(), new TdqMetric1stAggrProcessWindowFunction(OUTPUT_TAG_MAP))
         .setParallelism(METRIC_1ST_AGGR_PARALLELISM)
         .slotSharingGroup("metric-1st-aggr")
         .name(uid)
@@ -131,66 +125,12 @@ public class ProfilingJob {
       SingleOutputStreamOperator<TdqMetric> ds = unifyDataStream.getSideOutput(tag).keyBy(TdqMetric::getTagId)
           .window(TumblingEventTimeWindows.of(Time.seconds(seconds)))
           .sideOutputLateData(latency)
-          .aggregate(new TdqAggregateFunction(), new ProcessWindowFunction<TdqMetric, TdqMetric, String,
-              TimeWindow>() {
-            private final Map<String, Counter> counterMap = new HashMap<>();
-            private MetricGroup group;
-
-            @Override
-            public void open(Configuration parameters) throws Exception {
-              group = this.getRuntimeContext().getMetricGroup().addGroup("tdq2");
-              super.open(parameters);
-            }
-
-            public void inc(String key, long v) {
-              Counter counter = counterMap.get(key);
-              if (counter == null) {
-                counter = group.counter(key);
-                counterMap.put(key, counter);
-              }
-              counter.inc(v);
-            }
-
-            @Override
-            public void process(String s, Context context, Iterable<TdqMetric> elements,
-                Collector<TdqMetric> out) {
-              elements.forEach(metric -> {
-                if (metric.getExprMap() != null && metric.getExprMap().get("p1") != null) {
-                  inc(DateUtils.getMinBuckets(metric.getEventTime(), 5) + "_" + metric.getMetricKey(),
-                      (long) (double) metric.getExprMap().get("p1"));
-                }
-                out.collect(metric);
-              });
-            }
-          })
+          .aggregate(new TdqMetricAggregateFunction(), new TdqMetric2ndAggrProcessWindowFunction())
           .setParallelism(METRIC_2ND_AGGR_PARALLELISM)
           .name(tagUid)
           .uid(tagUid);
 
-      ds.getSideOutput(latency).addSink(new RichSinkFunction<TdqMetric>() {
-        private MetricGroup group;
-        private final Map<String, Counter> counterMap = new HashMap<>();
-
-        @Override
-        public void open(Configuration parameters) throws Exception {
-          super.open(parameters);
-          group = this.getRuntimeContext().getMetricGroup().addGroup("tdq2");
-        }
-
-        public void inc(String key, long v) {
-          Counter counter = counterMap.get(key);
-          if (counter == null) {
-            counter = group.counter(key);
-            counterMap.put(key, counter);
-          }
-          counter.inc(v);
-        }
-
-        @Override
-        public void invoke(TdqMetric metric, Context context) {
-          inc("tag_latency", 1);
-        }
-      })
+      ds.getSideOutput(latency).addSink(new LatencyTdqMetricRichSinkFunction())
           .setParallelism(METRIC_2ND_AGGR_PARALLELISM)
           .uid(tagLatencyUid)
           .name(tagLatencyUid);
@@ -225,9 +165,9 @@ public class ProfilingJob {
     return ans;
   }
 
-  protected TdqRawEventProcessFunction getTdqRawEventProcessFunction(
+  protected RawEventProcessFunction getTdqRawEventProcessFunction(
       MapStateDescriptor<String, PhysicalPlans> stateDescriptor) {
-    return new TdqRawEventProcessFunction(stateDescriptor);
+    return new RawEventProcessFunction(stateDescriptor);
   }
 
   private DataStream<TdqMetric> normalizeEvent(
@@ -244,6 +184,7 @@ public class ProfilingJob {
         .uid(uid)
         .slotSharingGroup(slotSharingGroup)
         .setParallelism(parallelism);
+
     long orderless = DateUtils.toSeconds(getStringOrDefault("flink.app.advance.watermark.out-of-orderless", "0min"));
     long timeout = DateUtils.toSeconds(getStringOrDefault("flink.app.advance.watermark.idle-source-timeout", "0min"));
     if (orderless > 0 && timeout > 0) {
