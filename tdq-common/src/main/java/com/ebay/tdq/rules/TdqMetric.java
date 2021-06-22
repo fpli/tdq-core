@@ -18,7 +18,7 @@ import org.apache.commons.lang3.time.FastDateFormat;
 public class TdqMetric implements Serializable {
   private String tagId;      // metricKey + tags
   private Integer partition = -1;
-  private Long window;      // seconds
+  private Long window;       // seconds
   private String metricKey;
   private Object physicalPlan;
   private Map<String, Object> tags = Maps.newTreeMap();

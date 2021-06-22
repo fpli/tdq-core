@@ -11,7 +11,7 @@ from (
     from ubi_v.ubi_event a
     left join ACCESS_VIEWS.dw_soj_lkp_page b on a.page_id=b.page_id
     where session_start_dt = '2021-04-01'
-    and ( page_id in (2047936,2054032,2053742,2045573) or ( age_id in (2351460,2381081) and sojlib.soj_nvl(soj,'eactn') is not null ) )
+    and ( page_id in (2047936,2054032,2053742,2045573) or ( page_id in (2351460,2381081) and sojlib.soj_nvl(soj,'eactn') is not null ) )
 ) group by 1
 ```
 

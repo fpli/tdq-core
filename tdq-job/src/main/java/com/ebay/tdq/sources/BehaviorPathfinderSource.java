@@ -62,13 +62,10 @@ public class BehaviorPathfinderSource extends AbstractSource {
         .build(new RawEventKafkaDeserializationSchemaWrapper(
             FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
             new RawEventDeserializationSchema()));
-    // union ubiEvent from SLC/RNO/LVS
-
     int p = getInteger(Property.SOURCE_PARALLELISM);
     DataStream<RawEvent> r = sample(rnoDS, getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP), "RNO", p);
     DataStream<RawEvent> l = sample(lvsDS, getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP), "LVS", p);
     DataStream<RawEvent> s = sample(slcDS, getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP), "SLC", p);
-    // return r.union(l).union(s);
     return Lists.newArrayList(r, l, s);
   }
 }
