@@ -204,7 +204,8 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
     sqlNode match {
       case call: SqlBasicCall => transformSqlBaseCall(call, alias)
       case sqlCase: SqlCase => transformSqlCase(sqlCase, alias)
-      case literal: SqlLiteral => transformLiteral(literal)
+      case literal: SqlLiteral =>
+        transformLiteral(literal)
       case identifier: SqlIdentifier => transformIdentifier(identifier)
       case _ => throw new IllegalStateException("Unexpected SqlCall: " + sqlNode)
     }
@@ -236,11 +237,21 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
 
   private def parseExpressionPlan(cfg: ExpressionConfig, alias: String): Expression = {
     val operator = cfg.getOperator
-    if (operator.equalsIgnoreCase("UDF") || operator.equalsIgnoreCase("Expr")) {
+    val expr = if (operator.equalsIgnoreCase("UDF") || operator.equalsIgnoreCase("Expr")) {
       val sqlNode = getExpr(cfg.getConfig.get("text").asInstanceOf[String])
       transformSqlNode(sqlNode, alias)
     }
-    else transformSqlNode(getExpr(operator + "(" + cfg.getConfig.get("arg0") + ")"), alias)
+    else if (cfg.getConfig.get("arg0") != null) {
+      transformSqlNode(getExpr(operator + "(" + cfg.getConfig.get("arg0") + ")"), alias)
+    } else {
+      throw new IllegalStateException("Unexpected operator: " + operator)
+    }
+
+    if (!expressionMap.isDefinedAt(alias) && StringUtils.isNotBlank(alias)) {
+      expressionMap.put(alias, expr)
+    }
+
+    expr
   }
 
   private def parseTransformationPlan(cfg: TransformationConfig): Expression = {

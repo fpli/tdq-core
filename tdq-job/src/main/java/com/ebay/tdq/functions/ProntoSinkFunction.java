@@ -90,7 +90,7 @@ public class ProntoSinkFunction implements ElasticsearchSinkFunction<TdqMetric> 
         }
       });
       json.put("expr", expr);
-      json.put("value", element.getValue());
+      // json.put("value", element.getValue());
       IndexRequest ir;
       if (indexPattern.contains("latency")) {
         // TODO latency data at least once

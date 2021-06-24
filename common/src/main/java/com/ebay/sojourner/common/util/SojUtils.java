@@ -1,14 +1,19 @@
 package com.ebay.sojourner.common.util;
 
-import com.ebay.sojourner.common.model.*;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
-
+import com.codahale.metrics.Histogram;
+import com.codahale.metrics.SlidingWindowReservoir;
+import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.sojourner.common.model.SojEvent;
+import com.ebay.sojourner.common.model.SojSession;
+import com.ebay.sojourner.common.model.UbiEvent;
+import com.ebay.sojourner.common.model.UbiSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
 public class SojUtils {
@@ -226,13 +231,17 @@ public class SojUtils {
         map.putAll(rawEvent.getSojA());
         map.putAll(rawEvent.getSojK());
         map.putAll(rawEvent.getSojC());
+        String clientDataStr = null;
 
         String[] tags = tagName.split(SPLIT_DEL);
         for (String tag : tags) {
             if (map.get(tag) != null) {
                 return 0;
-            } else if (SOJParseClientInfo.getClientInfo(
-                    rawEvent.getClientData().toString(), tag) != null) {
+            }
+            if (clientDataStr == null) {
+                clientDataStr = rawEvent.getClientData().toString();
+            }
+            if (SOJParseClientInfo.getClientInfo(clientDataStr, tag) != null) {
                 return 0;
             }
         }
@@ -244,7 +253,7 @@ public class SojUtils {
         map.putAll(rawEvent.getSojA());
         map.putAll(rawEvent.getSojK());
         map.putAll(rawEvent.getSojC());
-
+        String clientDataStr = null;
         String[] tags = tagName.split(SPLIT_DEL);
         for (String tag : tags) {
             if (StringUtils.isNotBlank(map.get(tag))) {
@@ -254,11 +263,14 @@ public class SojUtils {
                     log.error("cant convert into double");
                     return 0.0;
                 }
-            } else if (StringUtils.isNotBlank(SOJParseClientInfo
-                    .getClientInfo(rawEvent.getClientData().toString(), tag))) {
+            }
+            if (clientDataStr == null) {
+                clientDataStr = rawEvent.getClientData().toString();
+            }
+            if (StringUtils.isNotBlank(SOJParseClientInfo
+                    .getClientInfo(clientDataStr, tag))) {
                 try {
-                    return Double.parseDouble(SOJParseClientInfo
-                            .getClientInfo(rawEvent.getClientData().toString(), tag));
+                    return Double.parseDouble(SOJParseClientInfo.getClientInfo(clientDataStr, tag));
                 } catch (Exception e) {
                     log.error("cant convert into double");
                     return 0.0;
@@ -267,21 +279,36 @@ public class SojUtils {
         }
         return 0.0;
     }
+//    static Histogram toStringHistogram = new Histogram(new SlidingWindowReservoir(10));
+//    static Histogram mapHistogram = new Histogram(new SlidingWindowReservoir(10));
+//    static long s  =System.currentTimeMillis();
 
     public static String getTagValueStr(RawEvent rawEvent, String tagName) {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>(100);
         map.putAll(rawEvent.getSojA());
         map.putAll(rawEvent.getSojK());
         map.putAll(rawEvent.getSojC());
+//        mapHistogram.update(map.size());
         String[] tags = tagName.split(SPLIT_DEL);
+        String clientDataStr = null;
         for (String tag : tags) {
             if (StringUtils.isNotBlank(map.get(tag))) {
                 return map.get(tag);
-            } else if (StringUtils.isNotBlank(SOJParseClientInfo
-                    .getClientInfo(rawEvent.getClientData().toString(), tag))) {
-                return SOJParseClientInfo.getClientInfo(rawEvent.getClientData().toString(), tag);
+            }
+            if (clientDataStr == null) {
+                clientDataStr = rawEvent.getClientData().toString();
+//                if (clientDataStr != null) toStringHistogram.update(clientDataStr.length());
+            }
+            if (StringUtils.isNotBlank(SOJParseClientInfo
+                    .getClientInfo(clientDataStr, tag))) {
+                return SOJParseClientInfo.getClientInfo(clientDataStr, tag);
             }
         }
+//        if (System.currentTimeMillis() - s > 1000 * 5) {
+//            System.out.println("toString:" + toStringHistogram.getSnapshot().get95thPercentile());
+//            System.out.println("map:" + mapHistogram.getSnapshot().get95thPercentile());
+//            s = System.currentTimeMillis();
+//        }
         return null;
     }
 

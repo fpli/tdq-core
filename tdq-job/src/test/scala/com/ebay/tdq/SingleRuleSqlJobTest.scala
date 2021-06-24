@@ -41,19 +41,8 @@ class SingleRuleSqlJobTest {
            |              "expression": {"operator": "UDF", "config": {"text": "CAST(TAG_EXTRACT('p') AS INTEGER)"}}
            |            },
            |            {
-           |              "alias": "p1",
-           |              "expression": {"operator": "Count", "config": {"arg0": "1.0"}}
-           |            },
-           |            {
-           |              "alias": "t_duration",
-           |              "expression": {
-           |                "operator": "Expr",
-           |                "config": {"text": "CAST(TAG_EXTRACT('TDuration') AS DOUBLE)"}
-           |              }
-           |            },
-           |            {
            |              "alias": "t_duration_sum",
-           |              "expression": {"operator": "SUM", "config": {"arg0": "t_duration"}}
+           |              "expression": {"operator": "SUM", "config": {"arg0": "CAST(TAG_EXTRACT('TDuration') AS DOUBLE)"}}
            |            }
            |          ]
            |        }
@@ -72,10 +61,10 @@ class SingleRuleSqlJobTest {
         getRawEvent("2021-05-29 12:04:00", contentLength = 31, pageId = 2, tDuration = 7d)
       ),
       expects = List(
-        getMetric(id, "2021-05-29 12:02:00", tagK = "page_id", tagV = "1", 4d),
-        getMetric(id, "2021-05-29 12:02:00", tagK = "page_id", tagV = "2", 3d),
-        getMetric(id, "2021-05-29 12:04:00", tagK = "page_id", tagV = "1", 11d),
-        getMetric(id, "2021-05-29 12:06:00", tagK = "page_id", tagV = "2", 7d)
+        getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "1", 4d),
+        getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "2", 3d),
+        getMetric(id, "2021-05-29 12:03:59", tagK = "page_id", tagV = "1", 11d),
+        getMetric(id, "2021-05-29 12:05:59", tagK = "page_id", tagV = "2", 7d)
       )
     )
   }
@@ -148,7 +137,7 @@ class SingleRuleSqlJobTest {
         getRawEvent("2021-05-29 12:01:59", itm = "7")
       ),
       expects = List(
-        getMetric(id, time = "2021-05-29 12:02:00", v = 4d / 7d)
+        getMetric(id, time = "2021-05-29 12:01:59", v = 4d / 7d)
       )
     )
   }
@@ -205,9 +194,10 @@ class SingleRuleSqlJobTest {
         getRawEvent("2021-05-29 12:01:59", pageId = 711)
       ),
       expects = List(
-        getMetric(id, time = "2021-05-29 12:02:00", tagK = "domain", tagV = "ASQ", v = 3d),
-        getMetric(id, time = "2021-05-29 12:02:00", tagK = "domain", tagV = "VI", v = 2d),
-        getMetric(id, time = "2021-05-29 12:02:00", tagK = "domain", tagV = null, v = 2d)
+        getMetric(id, time = "2021-05-29 12:01:59", tagK = "domain", tagV = "ASQ", v = 3d),
+        getMetric(id, time = "2021-05-29 12:01:59", tagK = "domain", tagV = "VI", v = 2d),
+        getMetric(id, time = "2021-05-29 12:01:59", tagK = "domain", tagV = "NOTI", v = 1d),
+        getMetric(id, time = "2021-05-29 12:01:59", tagK = "domain", tagV = "BID", v = 1d)
       )
     ).submit()
   }
@@ -264,10 +254,10 @@ class SingleRuleSqlJobTest {
         getRawEvent("2021-05-29 12:04:01", pageId = 2)
       ),
       expects = List(
-        getMetric(id, "2021-05-29 12:02:00", tagK = "page_id", tagV = "1", 3d),
-        getMetric(id, "2021-05-29 12:02:00", tagK = "page_id", tagV = "2", 1d),
-        getMetric(id, "2021-05-29 12:04:00", tagK = "page_id", tagV = "2", 2d),
-        getMetric(id, "2021-05-29 12:06:00", tagK = "page_id", tagV = "2", 1d)
+        getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "1", 3d),
+        getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "2", 1d),
+        getMetric(id, "2021-05-29 12:03:59", tagK = "page_id", tagV = "2", 2d),
+        getMetric(id, "2021-05-29 12:05:59", tagK = "page_id", tagV = "2", 1d)
       )
     ).submit()
   }
@@ -325,8 +315,8 @@ class SingleRuleSqlJobTest {
         getRawEvent("2021-05-29 12:03:59", tDuration = 10d)
       ),
       expects = List(
-        getMetric(id, "2021-05-29 12:02:00", 3d),
-        getMetric(id, "2021-05-29 12:04:00", 5d)
+        getMetric(id, "2021-05-29 12:01:59", 3d),
+        getMetric(id, "2021-05-29 12:03:59", 5d)
       )
     ).submit()
   }
@@ -389,8 +379,8 @@ class SingleRuleSqlJobTest {
         getRawEvent("2021-05-29 12:01:59", pageId = 2, tDuration = 10d)
       ),
       expects = List(
-        getMetric(id, "2021-05-29 12:02:00", tagK = "page_id", tagV = "1", 5d),
-        getMetric(id, "2021-05-29 12:02:00", tagK = "page_id", tagV = "2", 8d)
+        getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "1", 5d),
+        getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "2", 8d)
       )
     ).submit()
   }
@@ -441,9 +431,9 @@ class SingleRuleSqlJobTest {
         getRawEvent("2021-05-29 12:24:01", pageId = 2)
       ),
       expects = List(
-        getMetric(id, "2021-05-29 12:10:00", 4d),
-        getMetric(id, "2021-05-29 12:20:00", 2d),
-        getMetric(id, "2021-05-29 12:30:00", 1d)
+        getMetric(id, "2021-05-29 12:09:59", 4d),
+        getMetric(id, "2021-05-29 12:19:59", 2d),
+        getMetric(id, "2021-05-29 12:29:59", 1d)
       )
     ).submit()
   }

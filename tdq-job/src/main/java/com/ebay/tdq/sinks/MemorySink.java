@@ -42,11 +42,19 @@ public class MemorySink extends RichSinkFunction<TdqMetric> {
         success = false;
         continue;
       }
-      if (actual.getValue() - expected.getValue() > 0.0001d) {
-        log.error("actual=>{}", actual);
-        log.error("expected=>{}", expected);
-        success = false;
-      }
+      //      if (actual.getValue() - expected.getValue() > 0.0001d) {
+      //        log.error("actual=>{}", actual);
+      //        log.error("expected=>{}", expected);
+      //        success = false;
+      //      }
+
+      //      for (val e : actual.getAggrExpresses().entrySet()) {
+      //        if (actual.getExprMap().get(e.getKey()) - expected.getExprMap().get(e.getKey()) > 0.0001d) {
+      //          log.error("actual=>{}", actual);
+      //          log.error("expected=>{}", expected);
+      //          success = false;
+      //        }
+      //      }
     }
     return success;
   }

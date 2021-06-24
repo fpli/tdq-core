@@ -20,10 +20,10 @@ public class TdqMetric implements Serializable {
   private Integer partition = -1;
   private Long window;       // seconds
   private String metricKey;
-  private Object physicalPlan;
+  private Map<String, String> aggrExpresses = Maps.newHashMap();
   private Map<String, Object> tags = Maps.newTreeMap();
   private long eventTime;
-  private Map<String, Object> exprMap = Maps.newHashMap();
+  private Map<String, Double> exprMap = Maps.newHashMap();
   private Double value = 0d;
 
   public TdqMetric() {
@@ -62,8 +62,8 @@ public class TdqMetric implements Serializable {
     return this;
   }
 
-  public TdqMetric putExpr2(String k, Object v) {
-    exprMap.put(k, v);
+  public TdqMetric putAggrExpress(String k, String v) {
+    aggrExpresses.put(k, v);
     return this;
   }
 

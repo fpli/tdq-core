@@ -84,9 +84,9 @@ class ProntoSinkJobTest extends SingleRuleSqlJobTest {
         getRawEvent("2021-05-29 12:03:59", pageId = 1677718, itm = "")
       ),
       expects = List(
-        getMetric(id, time = "2021-05-29 12:02:00", tagK = "page_id", tagV = "711", v = 4d / 7d),
-        getMetric(id, time = "2021-05-29 12:04:00", tagK = "page_id", tagV = "711", v = 1d / 1d),
-        getMetric(id, time = "2021-05-29 12:04:00", tagK = "page_id", tagV = "1677718", v = 1d / 2d)
+        getMetric(id, time = "2021-05-29 12:01:59", tagK = "page_id", tagV = "711", v = 4d / 7d),
+        getMetric(id, time = "2021-05-29 12:03:59", tagK = "page_id", tagV = "711", v = 1d / 1d),
+        getMetric(id, time = "2021-05-29 12:03:59", tagK = "page_id", tagV = "1677718", v = 1d / 2d)
       )
     ).submit2Pronto()
   }

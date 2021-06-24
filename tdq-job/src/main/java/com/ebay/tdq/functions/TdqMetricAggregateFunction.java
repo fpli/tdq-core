@@ -1,6 +1,6 @@
 package com.ebay.tdq.functions;
 
-import com.ebay.tdq.rules.PhysicalPlan;
+import com.ebay.tdq.rules.ExpressionRegistry;
 import com.ebay.tdq.rules.TdqMetric;
 import org.apache.flink.api.common.functions.AggregateFunction;
 
@@ -16,7 +16,16 @@ public class TdqMetricAggregateFunction implements AggregateFunction<TdqMetric, 
     } else if (m2 == null) {
       return m1;
     } else {
-      return ((PhysicalPlan) m1.getPhysicalPlan()).merge(m1, m2);
+      m1.getAggrExpresses().putAll(m2.getAggrExpresses());
+      m1.getAggrExpresses().forEach((expr, operatorName) -> {
+        Double newV = ExpressionRegistry.aggregateOperator(
+            operatorName,
+            m1.getExprMap().getOrDefault(expr, 0d),
+            m2.getExprMap().getOrDefault(expr, 0d)
+        );
+        m1.putExpr(expr, newV);
+      });
+      return m1;
     }
   }
 
@@ -32,10 +41,6 @@ public class TdqMetricAggregateFunction implements AggregateFunction<TdqMetric, 
 
   @Override
   public TdqMetric getResult(TdqMetric m) {
-    if (m == null) {
-      return null;
-    }
-    ((PhysicalPlan) m.getPhysicalPlan()).evaluate(m);
     return m;
   }
 

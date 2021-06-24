@@ -7,15 +7,6 @@ import com.ebay.tdq.types.{AbstractDataType, DataType}
 /**
  * @author juntzhang
  */
-// TODO: need add to flink metric
-object TimeCost extends Serializable {
-  val debug = new util.HashMap[Expression, Long]()
-  def put(expr: Expression, s: Long): Unit = {
-    val t = System.currentTimeMillis() - s
-    debug.put(expr, debug.getOrDefault(expr, 0L) + t)
-  }
-}
-
 trait Expression extends Serializable {
   def dataType: DataType
 
@@ -25,25 +16,18 @@ trait Expression extends Serializable {
 
   def cacheKey: Option[String]
 
-  // TODO gen code instead of recursion, recursion performance is not very good!
-  //  protected def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode
   final def call(input: InternalRow, fromCache: Boolean): Any = {
-    val s1 = System.currentTimeMillis()
-    try {
-      var t: Any = null
-      val cacheInd = fromCache && cacheKey.isDefined && cacheKey.get.nonEmpty
-      if (cacheInd) {
-        t = input.cachedData.get(cacheKey.get)
-      }
-      if (cacheInd || t != null) {
-        return t
-      }
-      val v = eval(input, fromCache)
-      input.cache(cacheKey, v)
-      v
-    } finally {
-      TimeCost.put(this, s1)
+    var t: Any = null
+    val cacheInd = cacheKey.isDefined && cacheKey.get.nonEmpty
+    if (cacheInd) {
+      t = input.cachedData.get(cacheKey.get)
     }
+    if (cacheInd || t != null) {
+      return t
+    }
+    val v = eval(input, fromCache)
+    input.cache(cacheKey, v)
+    v
   }
 
   def nodeName: String = getClass.getSimpleName

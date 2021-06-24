@@ -5,8 +5,9 @@ import java.util.{HashMap => JHashMap}
 import com.ebay.sojourner.common.model.RawEvent
 import com.ebay.tdq.expressions._
 import com.ebay.tdq.expressions.aggregate.AggregateExpression
+import com.google.common.collect.Maps
 
-import scala.collection.JavaConverters.mapAsScalaMapConverter
+import scala.collection.JavaConverters.{mapAsJavaMapConverter, mapAsScalaMapConverter}
 
 /**
  * @author juntzhang
@@ -14,9 +15,7 @@ import scala.collection.JavaConverters.mapAsScalaMapConverter
 
 case class AggrPhysicalPlan(name: String, filter: Expression = null, evaluation: Expression)
 
-case class PhysicalPlans(
-  plans: Array[PhysicalPlan]
-)
+case class PhysicalPlans(plans: Array[PhysicalPlan])
 
 case class PhysicalPlan(
   metricKey: String,
@@ -46,7 +45,10 @@ case class PhysicalPlan(
     val cacheData = new JHashMap[String, Any]()
     val metric = new TdqMetric(metricKey, eventTime)
     metric.setWindow(window)
-    metric.setPhysicalPlan(this)
+    val aggrExpresses = aggregations.map(aggr => {
+      aggr.name -> aggr.evaluation.asInstanceOf[AggregateExpression].getClass.getSimpleName.split("\\$")(0)
+    }).toMap.asJava
+    metric.setAggrExpresses(Maps.newHashMap(aggrExpresses))
 
     cacheData.put("__RAW_EVENT", rawEvent)
     val input = InternalRow(Array(metric), cacheData)
@@ -71,41 +73,29 @@ case class PhysicalPlan(
   }
 
   private def groupBy(metric: TdqMetric, input: InternalRow, aggr: AggrPhysicalPlan): Unit = {
-    val s = System.currentTimeMillis()
-    try {
-      metric.getExprMap.put(aggr.evaluation.cacheKey.get, aggr.evaluation.call(input, fromCache = false).asInstanceOf[Number])
-    } finally {
-      TimeCost.put(groupByEvent, s)
+    val t = aggr.evaluation.call(input, fromCache = false)
+    if (t != null) {
+      metric.putExpr(aggr.evaluation.cacheKey.get, t.asInstanceOf[Number].doubleValue())
     }
   }
 
   private def where(input: InternalRow): Boolean = {
-    val s = System.currentTimeMillis()
-    try {
-      filter != null && filter.call(input, fromCache = false).asInstanceOf[Boolean]
-    } finally {
-      TimeCost.put(filterEvent, s)
-    }
+    filter != null && filter.call(input, fromCache = false).asInstanceOf[Boolean]
   }
 
   private def where(input: InternalRow, aggr: AggrPhysicalPlan): Boolean = {
-    val s = System.currentTimeMillis()
-    try {
-      aggr.filter.call(input, fromCache = false).asInstanceOf[Boolean]
-    } finally {
-      TimeCost.put(aggrFilterEvent, s)
-    }
+    aggr.filter.call(input, fromCache = false).asInstanceOf[Boolean]
   }
 
   def merge(m1: TdqMetric, m2: TdqMetric): TdqMetric = {
     val m = m1
     aggregations.foreach {
       case AggrPhysicalPlan(name, _, expression) =>
-        m.putExpr2(name,
+        m.putExpr(name,
           expression.asInstanceOf[AggregateExpression].merge(
             m1.getExprMap.get(name),
             m2.getExprMap.get(name)
-          ).asInstanceOf[Number]
+          ).asInstanceOf[Number].doubleValue()
         )
     }
     m

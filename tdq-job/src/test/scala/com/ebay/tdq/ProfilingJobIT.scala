@@ -105,6 +105,7 @@ case class ProfilingJobIT(
         f.getSourceAsMap.get("metric_key").asInstanceOf[String],
         f.getSourceAsMap.get("event_time").asInstanceOf[Long],
         f.getSourceAsMap.get("tags").asInstanceOf[JMap[String, String]],
+        f.getSourceAsMap.get("expr").asInstanceOf[JMap[String, Double]],
         f.getSourceAsMap.get("value").asInstanceOf[Double]
       )
     }).toList
@@ -118,10 +119,13 @@ case class ProfilingJobIT(
     elasticsearchResource.stop()
   }
 
-  private def getMetric0(metricKey: String, t: Long, tags: JMap[String, String], v: Double): TdqMetric = {
+  private def getMetric0(metricKey: String, t: Long, tags: JMap[String, String], expr: JMap[String, Double], v: Double): TdqMetric = {
     val m = new TdqMetric(metricKey, t).setValue(v)
     tags.asScala.foreach { case (k, v) =>
       m.putTag(k, v)
+    }
+    expr.asScala.foreach { case (k, v) =>
+      m.putExpr(k, v)
     }
     m.genUID
   }

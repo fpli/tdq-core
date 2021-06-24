@@ -143,10 +143,8 @@ class PhysicalPlanTest {
     //    plan.evaluate(ans)
     //    println(ans)
 
-    TimeCost.debug.clear()
     val s = System.currentTimeMillis()
     (0 to 100000).foreach(_ => plan.process(rawEvent))
     println(s"100k process cast time ${System.currentTimeMillis() - s} ms")
-    println(TimeCost.debug)
   }
 }

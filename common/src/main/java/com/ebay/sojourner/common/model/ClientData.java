@@ -40,7 +40,7 @@ public class ClientData implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder clientInfo = new StringBuilder();
+    StringBuilder clientInfo = new StringBuilder(1000);
 
     clientInfo.append("TPayload=").append(tPayload);
 
