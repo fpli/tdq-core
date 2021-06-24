@@ -73,6 +73,6 @@ case class Literal(value: Any, dataType: DataType) extends LeafExpression {
 
   override def cacheKey: Option[String] = None
 
-  protected override def eval(input: InternalRow, fromCache: Boolean): Any = value
+  protected override def eval(input: InternalRow): Any = value
 }
 

@@ -8,8 +8,8 @@ import com.ebay.tdq.types.{AbstractDataType, DataType, DoubleType, FloatType, Ty
 case class IsNull(child: Expression) extends UnaryExpression with Predicate {
   override def nullable: Boolean = false
 
-  override def eval(input: InternalRow, fromCache: Boolean): Any = {
-    child.call(input, fromCache) == null
+  protected override def eval(input: InternalRow): Any = {
+    child.call(input) == null
   }
 
   override def sql: String = s"(${child.sql} IS NULL)"
@@ -19,8 +19,8 @@ case class IsNull(child: Expression) extends UnaryExpression with Predicate {
 case class IsNotNull(child: Expression) extends UnaryExpression with Predicate {
   override def nullable: Boolean = false
 
-  override def eval(input: InternalRow, fromCache: Boolean): Any = {
-    child.call(input, fromCache) != null
+  protected override def eval(input: InternalRow): Any = {
+    child.call(input) != null
   }
 
   override def sql: String = s"(${child.sql} IS NOT NULL)"
@@ -42,11 +42,11 @@ case class Coalesce(children: Seq[Expression], cacheKey: Option[String]) extends
 
   override def dataType: DataType = children.head.dataType
 
-  override def eval(input: InternalRow, fromCache: Boolean): Any = {
+  protected override def eval(input: InternalRow): Any = {
     var result: Any = null
     val childIterator = children.iterator
     while (childIterator.hasNext && result == null) {
-      result = childIterator.next().call(input, fromCache)
+      result = childIterator.next().call(input)
     }
     result
   }
@@ -59,8 +59,8 @@ case class IsNaN(child: Expression) extends UnaryExpression
 
   override def nullable: Boolean = false
 
-  override def eval(input: InternalRow, fromCache: Boolean): Any = {
-    val value = child.call(input, fromCache)
+  protected override def eval(input: InternalRow): Any = {
+    val value = child.call(input)
     if (value == null) {
       false
     } else {

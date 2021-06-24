@@ -75,12 +75,12 @@ case class Divide(left: Expression, right: Expression, cacheKey: Option[String] 
 
   override def nullable: Boolean = true
 
-  protected override def eval(input: InternalRow, fromCache: Boolean): Any = {
-    val input2 = right.call(input, fromCache)
+  protected override def eval(input: InternalRow): Any = {
+    val input2 = right.call(input)
     if (input2 == null || input2 == 0) {
       null
     } else {
-      val input1 = left.call(input, fromCache)
+      val input1 = left.call(input)
       if (input1 == null) {
         null
       } else {
@@ -124,12 +124,12 @@ case class Remainder(left: Expression, right: Expression, cacheKey: Option[Strin
 
   override def nullable: Boolean = true
 
-  protected override def eval(input: InternalRow, fromCache: Boolean): Any = {
-    val input2 = right.call(input, fromCache)
+  protected override def eval(input: InternalRow): Any = {
+    val input2 = right.call(input)
     if (input2 == null || input2 == 0) {
       null
     } else {
-      val input1 = left.call(input, fromCache)
+      val input1 = left.call(input)
       if (input1 == null) {
         null
       } else {

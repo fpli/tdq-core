@@ -1,7 +1,5 @@
 package com.ebay.tdq.expressions
 
-import java.util
-
 import com.ebay.tdq.types.{AbstractDataType, DataType}
 
 /**
@@ -16,17 +14,12 @@ trait Expression extends Serializable {
 
   def cacheKey: Option[String]
 
-  final def call(input: InternalRow, fromCache: Boolean): Any = {
-    var t: Any = null
-    val cacheInd = cacheKey.isDefined && cacheKey.get.nonEmpty
-    if (cacheInd) {
-      t = input.cachedData.get(cacheKey.get)
+  final def call(input: InternalRow): Any = {
+    if (input.containsKey(cacheKey)) {
+      return input.getCache(cacheKey.get)
     }
-    if (cacheInd || t != null) {
-      return t
-    }
-    val v = eval(input, fromCache)
-    input.cache(cacheKey, v)
+    val v = eval(input)
+    input.putCache(cacheKey, v)
     v
   }
 
@@ -41,7 +34,7 @@ trait Expression extends Serializable {
 
   def checkInputDataTypes(): TypeCheckResult = TypeCheckResult.TypeCheckSuccess
 
-  protected def eval(input: InternalRow, fromCache: Boolean): Any
+  protected def eval(input: InternalRow): Any
 
 }
 
@@ -63,8 +56,8 @@ abstract class UnaryExpression extends Expression {
 
   override def nullable: Boolean = child.nullable
 
-  protected override def eval(input: InternalRow, fromCache: Boolean): Any = {
-    val value = child.call(input, fromCache)
+  protected override def eval(input: InternalRow): Any = {
+    val value = child.call(input)
     if (value == null) {
       null
     } else {
@@ -85,12 +78,12 @@ abstract class BinaryExpression extends Expression {
 
   override def nullable: Boolean = left.nullable || right.nullable
 
-  protected override def eval(input: InternalRow, fromCache: Boolean): Any = {
-    val value1 = left.call(input, fromCache)
+  protected override def eval(input: InternalRow): Any = {
+    val value1 = left.call(input)
     if (value1 == null) {
       null
     } else {
-      val value2 = right.call(input, fromCache)
+      val value2 = right.call(input)
       if (value2 == null) {
         null
       } else {
@@ -125,13 +118,13 @@ abstract class TernaryExpression extends Expression {
    * Default behavior of evaluation according to the default nullability of TernaryExpression.
    * If subclass of TernaryExpression override nullable, probably should also override this.
    */
-  protected override def eval(input: InternalRow, fromCache: Boolean): Any = {
+  protected override def eval(input: InternalRow): Any = {
     val exprs = children
-    val value1 = exprs.head.call(input, fromCache)
+    val value1 = exprs.head.call(input)
     if (value1 != null) {
-      val value2 = exprs(1).call(input, fromCache)
+      val value2 = exprs(1).call(input)
       if (value2 != null) {
-        val value3 = exprs(2).call(input, fromCache)
+        val value3 = exprs(2).call(input)
         if (value3 != null) {
           return nullSafeEval(value1, value2, value3)
         }

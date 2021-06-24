@@ -56,14 +56,14 @@ case class In(value: Expression, list: Seq[Expression]) extends Predicate {
     s"($valueSQL IN ($listSQL))"
   }
 
-  protected override def eval(input: InternalRow, fromCache: Boolean): Any = {
-    val evaluatedValue = value.call(input, fromCache)
+  protected override def eval(input: InternalRow): Any = {
+    val evaluatedValue = value.call(input)
     if (evaluatedValue == null) {
       null
     } else {
       var hasNull = false
       list.foreach { e =>
-        val v = e.call(input, fromCache)
+        val v = e.call(input)
         if (v == null) {
           hasNull = true
         } else if (ordering.equiv(v, evaluatedValue)) {
@@ -95,12 +95,12 @@ case class And(left: Expression, right: Expression) extends BinaryOperator with 
   // | FALSE   | FALSE   | FALSE   | FALSE   |
   // | UNKNOWN | UNKNOWN | FALSE   | UNKNOWN |
   // +---------+---------+---------+---------+
-  protected override def eval(input: InternalRow, fromCache: Boolean): Any = {
-    val input1 = left.call(input, fromCache)
+  protected override def eval(input: InternalRow): Any = {
+    val input1 = left.call(input)
     if (input1 == false) {
       false
     } else {
-      val input2 = right.call(input, fromCache)
+      val input2 = right.call(input)
       if (input2 == false) {
         false
       } else {
@@ -128,12 +128,12 @@ case class Or(left: Expression, right: Expression) extends BinaryOperator with P
   // | FALSE   | TRUE    | FALSE   | UNKNOWN |
   // | UNKNOWN | TRUE    | UNKNOWN | UNKNOWN |
   // +---------+---------+---------+---------+
-  protected override def eval(input: InternalRow, fromCache: Boolean): Any = {
-    val input1 = left.call(input, fromCache)
+  protected override def eval(input: InternalRow): Any = {
+    val input1 = left.call(input)
     if (input1 == true) {
       true
     } else {
-      val input2 = right.call(input, fromCache)
+      val input2 = right.call(input)
       if (input2 == true) {
         true
       } else {

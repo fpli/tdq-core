@@ -31,11 +31,11 @@ case class If(predicate: Expression, trueValue: Expression, falseValue: Expressi
 
   override def toString: String = s"if ($predicate) $trueValue else $falseValue"
 
-  protected override def eval(input: InternalRow, fromCache: Boolean): Any = {
-    if (java.lang.Boolean.TRUE.equals(predicate.call(input, fromCache))) {
-      trueValue.call(input, fromCache)
+  protected override def eval(input: InternalRow): Any = {
+    if (java.lang.Boolean.TRUE.equals(predicate.call(input))) {
+      trueValue.call(input)
     } else {
-      falseValue.call(input, fromCache)
+      falseValue.call(input)
     }
   }
 }
@@ -94,17 +94,17 @@ case class CaseWhen(
     "CASE" + cases + elseCase + " END"
   }
 
-  protected override def eval(input: InternalRow, fromCache: Boolean): Any = {
+  protected override def eval(input: InternalRow): Any = {
     var i = 0
     val size = branches.size
     while (i < size) {
-      if (java.lang.Boolean.TRUE.equals(branches(i)._1.call(input, fromCache))) {
-        return branches(i)._2.call(input, fromCache)
+      if (java.lang.Boolean.TRUE.equals(branches(i)._1.call(input))) {
+        return branches(i)._2.call(input)
       }
       i += 1
     }
     if (elseValue.isDefined) {
-      elseValue.get.call(input, fromCache)
+      elseValue.get.call(input)
     } else {
       null
     }

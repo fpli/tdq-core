@@ -559,7 +559,6 @@ object ProfilingJobLocalTest extends ProfilingJob {
       @throws[InterruptedException]
       override def run(ctx: SourceFunction.SourceContext[RawEvent]): Unit = {
         while (true) {
-          Thread.sleep(500)
           val sample = getSampleData
           sample.foreach(e => {
             ctx.collect(e)

@@ -33,7 +33,7 @@ case class PhysicalPlan(
     s"${metricKey}_$window"
   }
 
-  // todo validate
+  // TODO validate
   def validatePlan(): Unit = {
   }
 
@@ -48,13 +48,16 @@ case class PhysicalPlan(
     val aggrExpresses = aggregations.map(aggr => {
       aggr.name -> aggr.evaluation.asInstanceOf[AggregateExpression].getClass.getSimpleName.split("\\$")(0)
     }).toMap.asJava
+
     metric.setAggrExpresses(Maps.newHashMap(aggrExpresses))
 
     cacheData.put("__RAW_EVENT", rawEvent)
+
     val input = InternalRow(Array(metric), cacheData)
+
     if (filter == null || where(input)) {
       dimensions.foreach(dim => {
-        metric.putTag(dim.cacheKey.get, dim.call(input, fromCache = false))
+        metric.putTag(dim.cacheKey.get, dim.call(input))
       })
       aggregations.foreach(aggr => {
         if (aggr.filter != null) {
@@ -73,18 +76,18 @@ case class PhysicalPlan(
   }
 
   private def groupBy(metric: TdqMetric, input: InternalRow, aggr: AggrPhysicalPlan): Unit = {
-    val t = aggr.evaluation.call(input, fromCache = false)
+    val t = aggr.evaluation.call(input)
     if (t != null) {
       metric.putExpr(aggr.evaluation.cacheKey.get, t.asInstanceOf[Number].doubleValue())
     }
   }
 
   private def where(input: InternalRow): Boolean = {
-    filter != null && filter.call(input, fromCache = false).asInstanceOf[Boolean]
+    filter != null && filter.call(input).asInstanceOf[Boolean]
   }
 
   private def where(input: InternalRow, aggr: AggrPhysicalPlan): Boolean = {
-    aggr.filter.call(input, fromCache = false).asInstanceOf[Boolean]
+    aggr.filter.call(input).asInstanceOf[Boolean]
   }
 
   def merge(m1: TdqMetric, m2: TdqMetric): TdqMetric = {
@@ -107,7 +110,7 @@ case class PhysicalPlan(
       cacheData.put(k, v)
     }
     val input = InternalRow(Array(metric), cacheData)
-    val v = evaluation.call(input, fromCache = true)
+    val v = evaluation.call(input)
     metric.setValue(if (v != null) v.asInstanceOf[Number].doubleValue() else 0d)
   }
 }

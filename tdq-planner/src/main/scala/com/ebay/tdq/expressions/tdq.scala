@@ -11,12 +11,12 @@ import org.apache.commons.beanutils.PropertyUtils
 case class GetStructField(name: String, dataType: DataType = StringType, cacheKey: Option[String] = None) extends LeafExpression {
   override def nullable: Boolean = true
 
-  protected override def eval(input: InternalRow, fromCache: Boolean): Any = {
-    val o = input.cachedData.get(name)
+  protected override def eval(input: InternalRow): Any = {
+    val o = input.getCache(name)
     if (o != null) {
       return o
     }
-    PropertyUtils.getProperty(input.cachedData.get("__RAW_EVENT"), name)
+    PropertyUtils.getProperty(input.getCache("__RAW_EVENT"), name)
   }
 }
 
@@ -24,8 +24,8 @@ case class ExtractTag(subject: GetRawEvent, tag: String, dataType: DataType, cac
 
   override def nullable: Boolean = true
 
-  protected override def eval(input: InternalRow, fromCache: Boolean): Any = SojUtils.getTagValueStr(
-    subject.call(input, fromCache).asInstanceOf[RawEvent], tag
+  protected override def eval(input: InternalRow): Any = SojUtils.getTagValueStr(
+    subject.call(input).asInstanceOf[RawEvent], tag
   )
 }
 
@@ -34,8 +34,8 @@ case class GetRawEvent(cacheKey: Option[String] = None) extends LeafExpression {
 
   override def dataType: DataType = ObjectType(classOf[RawEvent])
 
-  protected override def eval(input: InternalRow, fromCache: Boolean): Any = {
-    input.cachedData.get("__RAW_EVENT")
+  protected override def eval(input: InternalRow): Any = {
+    input.getCache("__RAW_EVENT")
   }
 }
 
@@ -44,8 +44,8 @@ case class PageFamily(subject: Expression, cacheKey: Option[String] = None) exte
 
   override def dataType: DataType = StringType
 
-  protected override def eval(input: InternalRow, fromCache: Boolean): Any = {
-    SojUtils.getPageFmly(subject.call(input, fromCache).asInstanceOf[Int])
+  protected override def eval(input: InternalRow): Any = {
+    SojUtils.getPageFmly(subject.call(input).asInstanceOf[Int])
   }
 }
 
@@ -56,7 +56,7 @@ case class DebugEvent(name: String) extends LeafExpression {
 
   def cacheKey: Option[String] = None
 
-  protected override def eval(input: InternalRow, fromCache: Boolean): Any = {
+  protected override def eval(input: InternalRow): Any = {
     true
   }
 }

@@ -1,7 +1,5 @@
 package com.ebay.sojourner.common.util;
 
-import com.codahale.metrics.Histogram;
-import com.codahale.metrics.SlidingWindowReservoir;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.model.SojEvent;
 import com.ebay.sojourner.common.model.SojSession;
@@ -279,16 +277,12 @@ public class SojUtils {
         }
         return 0.0;
     }
-//    static Histogram toStringHistogram = new Histogram(new SlidingWindowReservoir(10));
-//    static Histogram mapHistogram = new Histogram(new SlidingWindowReservoir(10));
-//    static long s  =System.currentTimeMillis();
 
     public static String getTagValueStr(RawEvent rawEvent, String tagName) {
         Map<String, String> map = new HashMap<>(100);
         map.putAll(rawEvent.getSojA());
         map.putAll(rawEvent.getSojK());
         map.putAll(rawEvent.getSojC());
-//        mapHistogram.update(map.size());
         String[] tags = tagName.split(SPLIT_DEL);
         String clientDataStr = null;
         for (String tag : tags) {
@@ -297,18 +291,12 @@ public class SojUtils {
             }
             if (clientDataStr == null) {
                 clientDataStr = rawEvent.getClientData().toString();
-//                if (clientDataStr != null) toStringHistogram.update(clientDataStr.length());
             }
             if (StringUtils.isNotBlank(SOJParseClientInfo
                     .getClientInfo(clientDataStr, tag))) {
                 return SOJParseClientInfo.getClientInfo(clientDataStr, tag);
             }
         }
-//        if (System.currentTimeMillis() - s > 1000 * 5) {
-//            System.out.println("toString:" + toStringHistogram.getSnapshot().get95thPercentile());
-//            System.out.println("map:" + mapHistogram.getSnapshot().get95thPercentile());
-//            s = System.currentTimeMillis();
-//        }
         return null;
     }
 

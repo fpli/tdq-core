@@ -102,8 +102,8 @@ case class StringTrim(
     srcStr :: Nil
   }
 
-  override def eval(input: InternalRow, fromCache: Boolean): Any = {
-    val srcString = srcStr.call(input, fromCache).asInstanceOf[UTF8String]
+  protected override def eval(input: InternalRow): Any = {
+    val srcString = srcStr.call(input).asInstanceOf[UTF8String]
     if (srcString == null) {
       null
     } else {

@@ -27,8 +27,8 @@ abstract class NumberAggregate extends AggregateExpression {
 
   override def dataType: DataType = resultType
 
-  override protected def eval(input: InternalRow, fromCache: Boolean): Any = {
-    _child.call(input, fromCache)
+  override protected def eval(input: InternalRow): Any = {
+    _child.call(input)
   }
 
   def _child: Expression = {
