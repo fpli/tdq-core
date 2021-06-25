@@ -29,6 +29,19 @@ public class EnvironmentUtils {
     }
   }
 
+  public static void print(){
+    // checkstyle.off: Regexp
+    Long t = System.currentTimeMillis();
+    System.out.println("=============== " + t + " start =================");
+    for (AbstractEnvironment propSource : PROP_SOURCES) {
+      System.out.println(propSource.getClass().getName());
+      propSource.props.forEach((k, v) -> System.out.println(k + "=" + v));
+      System.out.println();
+    }
+    System.out.println("=============== " + t + " end =================\n\n");
+    // checkstyle.on: Regexp
+  }
+
   public static void activateProfile(String profile) {
     Preconditions.checkNotNull(profile);
 

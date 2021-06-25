@@ -26,7 +26,7 @@ public class TdqMetricGroup {
   }
 
   public TdqMetricGroup(MetricGroup _group) {
-    group                 = _group.addGroup("tdq");
+    group                      = _group.addGroup("tdq");
     tdqProcessEventsMeter      = group.meter("processEventsMeter",
         new DropwizardMeterWrapper(new com.codahale.metrics.Meter()));
     tdqProcessElementMeter     = group.meter("processElementMeter",

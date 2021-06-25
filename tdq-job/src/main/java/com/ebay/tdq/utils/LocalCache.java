@@ -5,30 +5,29 @@ import com.ebay.tdq.rules.TdqMetric;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import org.apache.flink.util.Collector;
 
 /**
  * @author juntzhang
  */
 public class LocalCache {
+  private final TdqEnv tdqEnv;
   private final Map<String, TdqMetric> cache;
-  private final int localCombineQueueSize;
-  private final int localCombineFlushTimeout;
   private final TdqMetricGroup metricGroup;
+  private final Random random = new Random();
   private long cacheCurrentTimeMillis;
 
-  public LocalCache(int localCombineQueueSize, int localCombineFlushTimeout,
-      TdqMetricGroup metricGroup) {
-    this.localCombineQueueSize    = localCombineQueueSize;
-    this.cacheCurrentTimeMillis   = System.currentTimeMillis();
-    this.localCombineFlushTimeout = localCombineFlushTimeout;
-    this.metricGroup              = metricGroup;
-    this.cache                    = new HashMap<>(localCombineQueueSize + 16);
+  public LocalCache(TdqEnv tdqEnv, TdqMetricGroup metricGroup) {
+    this.tdqEnv                 = tdqEnv;
+    this.cacheCurrentTimeMillis = System.currentTimeMillis();
+    this.metricGroup            = metricGroup;
+    this.cache                  = new HashMap<>(tdqEnv.getLocalCombineQueueSize() + 16);
   }
 
   protected boolean needFlush(TdqMetric curr) {
-    return cache.size() >= localCombineQueueSize
-        || (System.currentTimeMillis() - cacheCurrentTimeMillis) > localCombineFlushTimeout;
+    return cache.size() >= tdqEnv.getLocalCombineQueueSize()
+        || (System.currentTimeMillis() - cacheCurrentTimeMillis) > tdqEnv.getLocalCombineFlushTimeout();
   }
 
   public Collection<TdqMetric> values() {
@@ -54,18 +53,15 @@ public class LocalCache {
 
     if (needFlush(curr)) {
       metricGroup.inc("flush");
-      if (cache.size() >= localCombineQueueSize) {
+      if (cache.size() >= tdqEnv.getLocalCombineQueueSize()) {
         metricGroup.inc("sizeFlush");
       } else {
         metricGroup.inc("flushTimeout");
       }
       for (TdqMetric m : cache.values()) {
-        if (m.getExprMap() != null && m.getExprMap().get("p1") != null) {
-          metricGroup.inc(
-              m.getMetricKey() + "_" + DateUtils.getMinBuckets(m.getEventTime(), 5) + "_2",
-              (long) (double) m.getExprMap().get("p1")
-          );
-        }
+        m.setPartition(Math.abs(random.nextInt()) % tdqEnv.getMetric1stAggrPartitions());
+        metricGroup.inc("localCachePartition" + m.getPartition());
+        metricGroup.inc("collect");
         collector.collect(m);
       }
       metricGroup.markEvent();

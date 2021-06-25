@@ -4,8 +4,9 @@ flink:
     parallelism:
       default: 100
       source: 100
-      metric-1st-aggr: 200
-      metric-2nd-aggr: 5
+      metric-1st-aggr: 300
+      metric-1st-aggr-partitions: 47
+      metric-2nd-aggr: 2
     window:
       metric-1st-aggr: 1min
       supports: 1min,5min,10min,30min,1h,1d

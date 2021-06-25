@@ -7,7 +7,7 @@ import com.ebay.sojourner.common.model.RawEvent
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.functions.RawEventProcessFunction
 import com.ebay.tdq.rules.PhysicalPlans
-import com.ebay.tdq.utils.{FlinkEnvFactory, JsonUtils, PhysicalPlanFactory, TdqConstant}
+import com.ebay.tdq.utils._
 import com.google.common.collect.{Lists, Sets}
 import org.apache.commons.io.IOUtils
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
@@ -24,9 +24,11 @@ import scala.util.Random
  */
 object ProfilingJobLocalTest extends ProfilingJob {
   def main(args: Array[String]): Unit = {
-    TdqConstant.SINK_TYPES = Sets.newHashSet("console")
     // step0: prepare environment
     val env: StreamExecutionEnvironment = FlinkEnvFactory.create(null, true)
+    val tdqEnv = new TdqEnv
+    tdqEnv.setSinkTypes(Sets.newHashSet("console"))
+    setTdqEnv(tdqEnv)
     // step1: build data source
     val rawEventDataStream = buildSource(env)
     // step2: normalize event to metric
@@ -151,7 +153,7 @@ object ProfilingJobLocalTest extends ProfilingJob {
 
   override def getTdqRawEventProcessFunction(
     descriptor: MapStateDescriptor[String, PhysicalPlans]): RawEventProcessFunction = {
-    new RawEventProcessFunction(descriptor) {
+    new RawEventProcessFunction(descriptor, new TdqEnv()) {
       override protected def getPhysicalPlans: PhysicalPlans = PhysicalPlanFactory.getPhysicalPlans(
         Lists.newArrayList(JsonUtils.parseObject(config, classOf[TdqConfig]))
       )
@@ -183,26 +185,26 @@ object ProfilingJobLocalTest extends ProfilingJob {
             ctx.collect(e)
           })
         }
-//        Thread.sleep(10000000)
+        //        Thread.sleep(10000000)
       }
 
       override def cancel(): Unit = {}
     }).name("Raw Event Src1")
       .uid("raw-event-src1")
       .slotSharingGroup("src1")
-//      .assignTimestampsAndWatermarks(
-//        WatermarkStrategy
-//          .forBoundedOutOfOrderness[RawEvent](Duration.ofMinutes(5))
-//          .withTimestampAssigner(new SerializableTimestampAssigner[RawEvent] {
-//            override def extractTimestamp(element: RawEvent, recordTimestamp: Long): Long = {
-//              element.getEventTimestamp
-//            }
-//          })
-//      )
-//      .slotSharingGroup("src1")
-//      .name("Raw Event Watermark Src1")
-//      .uid("raw-event-watermark-src1")
-//      .slotSharingGroup("src1")
+      //      .assignTimestampsAndWatermarks(
+      //        WatermarkStrategy
+      //          .forBoundedOutOfOrderness[RawEvent](Duration.ofMinutes(5))
+      //          .withTimestampAssigner(new SerializableTimestampAssigner[RawEvent] {
+      //            override def extractTimestamp(element: RawEvent, recordTimestamp: Long): Long = {
+      //              element.getEventTimestamp
+      //            }
+      //          })
+      //      )
+      //      .slotSharingGroup("src1")
+      //      .name("Raw Event Watermark Src1")
+      //      .uid("raw-event-watermark-src1")
+      //      .slotSharingGroup("src1")
     )
   }
 }

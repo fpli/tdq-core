@@ -1,7 +1,6 @@
 package com.ebay.tdq;
 
 import com.ebay.sojourner.common.model.RawEvent;
-import com.ebay.sojourner.common.util.Property;
 import com.ebay.tdq.functions.LatencyTdqMetricRichSinkFunction;
 import com.ebay.tdq.functions.RawEventProcessFunction;
 import com.ebay.tdq.functions.TdqMetric1stAggrProcessWindowFunction;
@@ -14,10 +13,13 @@ import com.ebay.tdq.sources.BehaviorPathfinderSource;
 import com.ebay.tdq.sources.TdqConfigSource;
 import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.FlinkEnvFactory;
+import com.ebay.tdq.utils.TdqEnv;
 import com.google.common.collect.Maps;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -25,6 +27,7 @@ import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -33,26 +36,28 @@ import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindo
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.util.OutputTag;
 
-import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getStringOrDefault;
 import static com.ebay.tdq.utils.TdqConstant.METRIC_1ST_AGGR_PARALLELISM;
 import static com.ebay.tdq.utils.TdqConstant.METRIC_1ST_AGGR_W;
 import static com.ebay.tdq.utils.TdqConstant.METRIC_1ST_AGGR_W_MILLI;
 import static com.ebay.tdq.utils.TdqConstant.METRIC_2ND_AGGR_PARALLELISM;
-import static com.ebay.tdq.utils.TdqConstant.OUTPUT_TAG_MAP;
 import static com.ebay.tdq.utils.TdqConstant.PRONTO_INDEX_PATTERN;
 import static com.ebay.tdq.utils.TdqConstant.PRONTO_LATENCY_INDEX_PATTERN;
-import static com.ebay.tdq.utils.TdqConstant.SINK_TYPES;
 
 /**
  * --tdq-profile tdq-pre-prod|tdq-prod [default is test]
  */
 @Slf4j
+@Getter
+@Setter
 public class ProfilingJob {
+  private TdqEnv tdqEnv;
+
   public void start(String[] args) {
     try {
       // step0: prepare environment
       final StreamExecutionEnvironment env = FlinkEnvFactory.create(args, false);
+      setTdqEnv(new TdqEnv());
 
       // step1: build data source
       List<DataStream<RawEvent>> rawEventDataStream = BehaviorPathfinderSource.build(env);
@@ -66,7 +71,7 @@ public class ProfilingJob {
       // step4: output metric by window
       outputMetricByWindow(outputTags);
 
-      env.execute(getString(Property.FLINK_APP_NAME));
+      env.execute(tdqEnv.getJobName());
     } catch (Exception e) {
       log.error(e.getMessage(), e);
     }
@@ -80,14 +85,14 @@ public class ProfilingJob {
   }
 
   private void output(DataStream<TdqMetric> ds, String id, boolean isLateData) {
-    if (SINK_TYPES.contains("console")) {
+    if (tdqEnv.getSinkTypes().contains("console")) {
       String uid = id + "_std";
       ds.print(uid.toUpperCase())
           .uid(uid)
           .name(uid)
           .setParallelism(METRIC_2ND_AGGR_PARALLELISM);
     }
-    if (SINK_TYPES.contains("pronto")) {
+    if (tdqEnv.getSinkTypes().contains("pronto")) {
       String uid = id + "_pronto";
       if (isLateData) {
         new ProntoSink(uid, METRIC_2ND_AGGR_PARALLELISM, PRONTO_LATENCY_INDEX_PATTERN, 10)
@@ -104,10 +109,11 @@ public class ProfilingJob {
     OutputTag<TdqMetric> lateDataTag = new OutputTag<TdqMetric>("1st_aggr_w_latency") {
     };
     SingleOutputStreamOperator<TdqMetric> unifyDataStream = normalizeOperator
-        .keyBy(TdqMetric::getTagId)
+        .keyBy((KeySelector<TdqMetric, String>) m -> m.getPartition() + "#" + m.getTagId())
         .window(TumblingEventTimeWindows.of(Time.seconds(METRIC_1ST_AGGR_W_MILLI)))
         .sideOutputLateData(lateDataTag)
-        .aggregate(new TdqMetricAggregateFunction(), new TdqMetric1stAggrProcessWindowFunction(OUTPUT_TAG_MAP))
+        .aggregate(new TdqMetricAggregateFunction(),
+            new TdqMetric1stAggrProcessWindowFunction(tdqEnv.getOutputTagMap()))
         .setParallelism(METRIC_1ST_AGGR_PARALLELISM)
         .slotSharingGroup("metric-1st-aggr")
         .name(uid)
@@ -116,10 +122,10 @@ public class ProfilingJob {
     output(unifyDataStream.getSideOutput(lateDataTag), "1st_aggr_w_latency_o", true);
 
     Map<String, SingleOutputStreamOperator<TdqMetric>> ans = Maps.newHashMap();
-    OUTPUT_TAG_MAP.forEach((seconds, tag) -> {
+    tdqEnv.getOutputTagMap().forEach((seconds, tag) -> {
       String key = Duration.ofSeconds(seconds).toString().toLowerCase();
-      String tagUid = "2nd_aggr_w_" + key;
-      String tagLatencyUid = "2nd_aggr_w_" + key + "_latency";
+      String tagUid = "aggr_w_" + key;
+      String tagLatencyUid = "aggr_w_" + key + "_latency";
       OutputTag<TdqMetric> latency = new OutputTag<TdqMetric>(tagUid + "_latency") {
       };
       SingleOutputStreamOperator<TdqMetric> ds = unifyDataStream.getSideOutput(tag).keyBy(TdqMetric::getTagId)
@@ -167,7 +173,7 @@ public class ProfilingJob {
 
   protected RawEventProcessFunction getTdqRawEventProcessFunction(
       MapStateDescriptor<String, PhysicalPlans> stateDescriptor) {
-    return new RawEventProcessFunction(stateDescriptor);
+    return new RawEventProcessFunction(stateDescriptor, tdqEnv);
   }
 
   private DataStream<TdqMetric> normalizeEvent(

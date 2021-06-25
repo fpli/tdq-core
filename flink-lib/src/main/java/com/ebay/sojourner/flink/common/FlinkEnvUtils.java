@@ -32,6 +32,7 @@ public class FlinkEnvUtils {
       EnvironmentUtils.activateProfile(profile);
     }
     EnvironmentUtils.fromProperties(parameterTool.getProperties());
+    EnvironmentUtils.print();
   }
 
   public static StreamExecutionEnvironment prepare(String[] args) {

@@ -1,7 +1,7 @@
 package com.ebay.tdq
 
 import com.ebay.tdq.rules.{PhysicalPlans, TdqMetric}
-import com.ebay.tdq.utils.{LocalCache, TdqMetricGroup}
+import com.ebay.tdq.utils.{LocalCache, TdqEnv, TdqMetricGroup}
 import org.apache.commons.lang.time.DateFormatUtils
 import org.apache.commons.lang3.time.DateUtils
 import org.junit.Test
@@ -93,7 +93,10 @@ class LocalCacheTest {
     }
 
     val mock = new TdqMetricGroupMock
-    val cache = new LocalCache(12, 1000, mock)
+    val env = new TdqEnv()
+    env.setLocalCombineQueueSize(12)
+    env.setLocalCombineFlushTimeout(1000)
+    val cache = new LocalCache(env, mock)
     val rawData = new mutable.HashMap[String, Double]()
     val mergeData = new mutable.HashMap[String, Double]()
 

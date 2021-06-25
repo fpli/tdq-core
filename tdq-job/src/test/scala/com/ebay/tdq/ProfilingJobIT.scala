@@ -32,9 +32,12 @@ case class ProfilingJobIT(
   id: String, config: String, events: List[RawEvent], expects: List[TdqMetric]) extends ProfilingJob {
 
   def submit(): Unit = {
-    TdqConstant.SINK_TYPES = Sets.newHashSet("console")
     // step0: prepare environment
     val env: StreamExecutionEnvironment = FlinkEnvFactory.create(null, true)
+    val tdqEnv = new TdqEnv
+    tdqEnv.setSinkTypes(Sets.newHashSet("console"))
+    setTdqEnv(tdqEnv)
+
     // step1: build data source
     val rawEventDataStream = buildSource(env)
     // step2: normalize event to metric
@@ -56,7 +59,7 @@ case class ProfilingJobIT(
 
   override def getTdqRawEventProcessFunction(
     descriptor: MapStateDescriptor[String, PhysicalPlans]): RawEventProcessFunction = {
-    new RawEventProcessFunction(descriptor) {
+    new RawEventProcessFunction(descriptor,new TdqEnv()) {
       override protected def getPhysicalPlans: PhysicalPlans = PhysicalPlanFactory.getPhysicalPlans(
         Lists.newArrayList(JsonUtils.parseObject(config, classOf[TdqConfig]))
       )
@@ -64,12 +67,14 @@ case class ProfilingJobIT(
   }
 
   def submit2Pronto(): Unit = {
-    TdqConstant.SINK_TYPES = Sets.newHashSet("pronto")
     val elasticsearchResource = new TdqElasticsearchResource("es-test")
     elasticsearchResource.start()
 
     // step0: prepare environment
     val env: StreamExecutionEnvironment = FlinkEnvFactory.create(null, true)
+    val tdqEnv = new TdqEnv
+    tdqEnv.setSinkTypes(Sets.newHashSet("pronto"))
+    setTdqEnv(tdqEnv)
     // step1: build data source
     val rawEventDataStream = buildSource(env)
     // step2: normalize event to metric

@@ -8,6 +8,7 @@ import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.utils.JdbcConfig;
 import com.ebay.tdq.utils.LocalCache;
 import com.ebay.tdq.utils.PhysicalPlanFactory;
+import com.ebay.tdq.utils.TdqEnv;
 import com.ebay.tdq.utils.TdqMetricGroup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.state.BroadcastState;
@@ -23,9 +24,6 @@ import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.util.Collector;
 
-import static com.ebay.tdq.utils.TdqConstant.LOCAL_COMBINE_FLUSH_TIMEOUT;
-import static com.ebay.tdq.utils.TdqConstant.LOCAL_COMBINE_QUEUE_SIZE;
-
 /**
  * @author juntzhang
  */
@@ -34,8 +32,7 @@ public class RawEventProcessFunction
     extends BroadcastProcessFunction<RawEvent, PhysicalPlans, TdqMetric> implements CheckpointedFunction {
   private final JdbcConfig jdbcConfig;
   private final MapStateDescriptor<String, PhysicalPlans> stateDescriptor;
-  private final int localCombineFlushTimeout;
-  private final int localCombineQueueSize;
+  private final TdqEnv tdqEnv;
   private final String cfgPlan = "CFG_PLAN";
 
   private transient long logCurrentTimeMillis;
@@ -44,12 +41,11 @@ public class RawEventProcessFunction
   private transient PhysicalPlans physicalPlans;
   private transient LocalCache localCache;
 
-  public RawEventProcessFunction(MapStateDescriptor<String, PhysicalPlans> descriptor) {
-    this.stateDescriptor          = descriptor;
-    this.localCombineFlushTimeout = LOCAL_COMBINE_FLUSH_TIMEOUT;
-    this.localCombineQueueSize    = LOCAL_COMBINE_QUEUE_SIZE;
-    if (LOCAL_COMBINE_FLUSH_TIMEOUT > 59000) {
-      throw new RuntimeException("flink.app.advance.local-combine.flush-timeout must less than 59s!");
+  public RawEventProcessFunction(MapStateDescriptor<String, PhysicalPlans> descriptor, TdqEnv tdqEnv) {
+    this.stateDescriptor = descriptor;
+    this.tdqEnv          = tdqEnv;
+    if (tdqEnv.getLocalCombineFlushTimeout() > 60000) {
+      throw new RuntimeException("flink.app.advance.local-combine.flush-timeout must less than 60s!");
     }
     this.jdbcConfig = new JdbcConfig();
   }
@@ -105,7 +101,7 @@ public class RawEventProcessFunction
     logCurrentTimeMillis = 0L;
     metricGroup          = new TdqMetricGroup(getRuntimeContext().getMetricGroup());
     physicalPlans        = getPhysicalPlans();
-    localCache           = new LocalCache(localCombineQueueSize, localCombineFlushTimeout, metricGroup);
+    localCache           = new LocalCache(tdqEnv, metricGroup);
     metricGroup.gauge(localCache);
   }
 

@@ -36,6 +36,7 @@ public class FlinkEnvFactory {
     final StreamExecutionEnvironment env =
         StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);
     env.setParallelism(1);
+    env.registerTypeWithKryoSerializer(TdqEnv.class, JavaSerializer.class);
     env.registerTypeWithKryoSerializer(Expression.class, JavaSerializer.class);
     env.registerTypeWithKryoSerializer(PhysicalPlan.class, JavaSerializer.class);
     env.registerTypeWithKryoSerializer(TdqMetric.class, JavaSerializer.class);

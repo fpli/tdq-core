@@ -1,28 +1,21 @@
 package com.ebay.tdq.utils;
 
-import com.ebay.tdq.rules.TdqMetric;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.util.OutputTag;
-
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
-import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getSet;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
 
 /**
+ * use TdqEnv
  * @author juntzhang
  */
+@Deprecated
 public class TdqConstant {
-  public static final Map<Long, OutputTag<TdqMetric>> OUTPUT_TAG_MAP = new HashMap<>();
   public static Integer METRIC_1ST_AGGR_PARALLELISM = getInteger("flink.app.parallelism.metric-1st-aggr");
+  public static Integer METRIC_1ST_AGGR_PARTITIONS = getInteger("flink.app.parallelism.metric-1st-aggr-partitions");
   public static Integer LOCAL_COMBINE_QUEUE_SIZE = getInteger("flink.app.advance.local-combine.queue-size");
   public static Integer LOCAL_COMBINE_FLUSH_TIMEOUT = getInteger("flink.app.advance.local-combine.flush-timeout");
   public static Integer METRIC_2ND_AGGR_PARALLELISM = getInteger("flink.app.parallelism.metric-2nd-aggr");
   public static String METRIC_1ST_AGGR_W = getString("flink.app.window.metric-1st-aggr");
   public static Long METRIC_1ST_AGGR_W_MILLI = DateUtils.toSeconds(METRIC_1ST_AGGR_W);
-  public static Set<String> SINK_TYPES = getSet("flink.app.sink.types");
 
   // source
   public static String PRONTO_INDEX_PATTERN = getString("flink.app.source.pronto.index-pattern");
@@ -34,15 +27,5 @@ public class TdqConstant {
   public static String PRONTO_PASSWORD = getString("flink.app.source.pronto.password");
 
   public static Double SRC_SAMPLE_FRACTION = Double.valueOf(getString("flink.app.source.sample-fraction"));
-
-  static {
-    for (String tag : getString("flink.app.window.supports")
-        .split(",")) {
-      Long seconds = DateUtils.toSeconds(tag);
-      OUTPUT_TAG_MAP.put(seconds,
-          new OutputTag<>(String.valueOf(seconds), TypeInformation.of(TdqMetric.class)));
-    }
-
-  }
 
 }
