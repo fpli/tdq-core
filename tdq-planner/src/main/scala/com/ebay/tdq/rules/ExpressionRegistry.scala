@@ -14,7 +14,7 @@ object ExpressionRegistry {
 
   def parse(operatorName: String, operands: Array[Any], alias: String): Expression = {
     val cacheKey = Some(alias).filter(StringUtils.isNotBlank)
-    LOG.info(s"operatorName=[$operatorName], operands=[${operands.mkString(",")}], alias=[$alias]")
+    LOG.debug(s"operatorName=[$operatorName], operands=[${operands.mkString(",")}], alias=[$alias]")
     operatorName.toUpperCase() match {
       case "REGEXP_EXTRACT" =>
         if (operands.length > 2) {

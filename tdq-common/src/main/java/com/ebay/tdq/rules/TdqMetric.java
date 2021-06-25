@@ -1,6 +1,5 @@
 package com.ebay.tdq.rules;
 
-import com.google.common.collect.Maps;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
