@@ -12,6 +12,8 @@ trait Expression extends Serializable {
 
   def nullable: Boolean
 
+  lazy val simpleName = this.getClass.getSimpleName.split("\\$")(0)
+
   def cacheKey: Option[String]
 
   final def call(input: InternalRow): Any = {

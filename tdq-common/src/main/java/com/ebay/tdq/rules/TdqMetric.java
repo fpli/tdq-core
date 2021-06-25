@@ -2,8 +2,10 @@ package com.ebay.tdq.rules;
 
 import com.google.common.collect.Maps;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.TreeMap;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -20,10 +22,10 @@ public class TdqMetric implements Serializable {
   private Integer partition = -1;
   private Long window;       // seconds
   private String metricKey;
-  private Map<String, String> aggrExpresses = Maps.newHashMap();
-  private Map<String, Object> tags = Maps.newTreeMap();
+  private Map<String, String> aggrExpresses = new HashMap<>();
+  private Map<String, Object> tags = new TreeMap<>();
   private long eventTime;
-  private Map<String, Double> exprMap = Maps.newHashMap();
+  private Map<String, Double> exprMap = new HashMap<>();
   private Double value = 0d;
 
   public TdqMetric() {

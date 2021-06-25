@@ -36,14 +36,14 @@ object ExpressionRegistry {
       case "TAG_EXTRACT" =>
         assert(operands.length == 1)
         ExtractTag(
-          subject = GetRawEvent(),
+          subject = GetRawEvent(Some("__RAW_EVENT")),
           tag = operands.head.asInstanceOf[Literal].value.asInstanceOf[String],
           dataType = StringType,
           cacheKey = cacheKey
         )
       case "SITE_ID" =>
         ExtractTag(
-          subject = GetRawEvent(),
+          subject = GetRawEvent(Some("__RAW_EVENT")),
           tag = "t",
           dataType = StringType,
           cacheKey = cacheKey

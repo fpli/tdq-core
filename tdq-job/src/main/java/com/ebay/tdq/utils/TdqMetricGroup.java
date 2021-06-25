@@ -25,23 +25,23 @@ public class TdqMetricGroup {
   protected TdqMetricGroup() {
   }
 
-  public TdqMetricGroup(MetricGroup group) {
-    this.group                 = group.addGroup("tdq");
-    tdqProcessEventsMeter      = group.meter("ProcessEventsMeter",
+  public TdqMetricGroup(MetricGroup _group) {
+    group                 = _group.addGroup("tdq");
+    tdqProcessEventsMeter      = group.meter("processEventsMeter",
         new DropwizardMeterWrapper(new com.codahale.metrics.Meter()));
-    tdqProcessElementMeter     = group.meter("ProcessElementMeter",
+    tdqProcessElementMeter     = group.meter("processElementMeter",
         new DropwizardMeterWrapper(new com.codahale.metrics.Meter()));
-    tdqProcessMetricHistogram  = group.histogram("ProcessMetricHistogram",
+    tdqProcessMetricHistogram  = group.histogram("processMetricHistogram",
         new DropwizardHistogramWrapper(
             new com.codahale.metrics.Histogram(new SlidingWindowReservoir(10))));
-    tdqProcessElementHistogram = group.histogram("ProcessElementHistogram",
+    tdqProcessElementHistogram = group.histogram("processElementHistogram",
         new DropwizardHistogramWrapper(
             new com.codahale.metrics.Histogram(new SlidingWindowReservoir(10))));
     counterMap                 = new HashMap<>();
   }
 
   public void gauge(LocalCache cache) {
-    group.gauge("CacheSize", (Gauge<Integer>) cache::size);
+    group.gauge("cacheSize", (Gauge<Integer>) cache::size);
   }
 
   public void markEvent() {
