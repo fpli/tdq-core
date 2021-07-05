@@ -59,7 +59,7 @@ public class TdqMetric1stAggrProcessWindowFunction
       context.output(outputTag, m);
     } else {
       inc("drop_metric", 1);
-      log.warn("Drop tdq metric{}, windows not supported!", m);
+      log.warn("Drop tdq metric {}, windows not supported!", m);
     }
   }
 }

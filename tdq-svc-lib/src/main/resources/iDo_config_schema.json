@@ -1,6 +1,6 @@
 {
   "field_patterns": {
-    "soj_tag": "TAG_EXTRACT('__TDQ_PLACEHOLDER')",
+    "soj_tag": " SOJ_NVL('__TDQ_PLACEHOLDER')",
     "client_data_tag": "clientData.__TDQ_PLACEHOLDER"
   },
   "transformations": {
@@ -8,28 +8,28 @@
       "alias": "page_id",
       "expression": {
         "operator": "UDF",
-        "config": {"text": "CAST(TAG_EXTRACT('p') AS INTEGER)"}
+        "config": {"text": "CAST( SOJ_NVL('p') AS INTEGER)"}
       }
     },
     "site": {
       "alias": "site",
       "expression": {
         "operator": "UDF",
-        "config": {"text": "CAST(TAG_EXTRACT('t') AS INTEGER)"}
+        "config": {"text": "CAST( SOJ_NVL('t') AS INTEGER)"}
       }
     },
     "domain": {
       "alias": "domain",
       "expression": {
         "operator": "UDF",
-        "config": {"text": "PAGE_FAMILY(CAST(TAG_EXTRACT('p') AS INTEGER))"}
+        "config": {"text": " SOJ_PAGE_FAMILY(CAST( SOJ_NVL('p') AS INTEGER))"}
       }
     },
     "item": {
       "alias": "item",
       "expression": {
         "operator": "UDF",
-        "config": {"text": "CAST(TAG_EXTRACT('itm|itmid|itm_id|itmlist|litm') AS LONG)"}
+        "config": {"text": "CAST( SOJ_NVL('itm|itmid|itm_id|itmlist|litm') AS LONG)"}
       }
     }
   },

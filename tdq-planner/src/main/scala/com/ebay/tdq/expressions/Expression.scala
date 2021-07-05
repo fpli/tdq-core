@@ -12,11 +12,16 @@ trait Expression extends Serializable {
 
   def nullable: Boolean
 
+  def foldable: Boolean = false
+
   lazy val simpleName = this.getClass.getSimpleName.split("\\$")(0)
 
   def cacheKey: Option[String]
 
-  final def call(input: InternalRow): Any = {
+  final def call(input: InternalRow = null): Any = {
+    if (input == null) {
+      return eval(input)
+    }
     if (input.containsKey(cacheKey)) {
       return input.getCache(cacheKey.get)
     }
@@ -111,6 +116,14 @@ abstract class BinaryOperator extends BinaryExpression with ExpectsInputTypes {
   override def sql: String = s"(${left.sql} $sqlOperator ${right.sql})"
 
   def sqlOperator: String = symbol
+
+  def copy: this.type ={
+    this
+  }
+}
+
+object BinaryOperator {
+  def unapply(e: BinaryOperator): Option[(Expression, Expression)] = Some((e.left, e.right))
 }
 
 abstract class TernaryExpression extends Expression {

@@ -66,6 +66,24 @@ abstract class IntegralType extends NumericType {
   val integral: Integral[InternalType]
 }
 
+object IntegralType extends AbstractDataType {
+  /**
+   * Enables matching against IntegralType for expressions:
+   * {{{
+   *   case Cast(child @ IntegralType(), StringType) =>
+   *     ...
+   * }}}
+   */
+  def unapply(e: Expression): Boolean = e.dataType.isInstanceOf[IntegralType]
+
+  override def defaultConcreteType: DataType = IntegerType
+
+  override def simpleString: String = "integral"
+
+  override def acceptsType(other: DataType): Boolean = other.isInstanceOf[IntegralType]
+}
+
+
 abstract class FractionalType extends NumericType {
   val fractional: Fractional[InternalType]
   val asIntegral: Integral[InternalType]

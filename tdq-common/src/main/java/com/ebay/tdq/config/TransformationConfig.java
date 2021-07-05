@@ -15,7 +15,10 @@ import lombok.Value;
 public class TransformationConfig implements Serializable {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private String alias;
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private ExpressionConfig expression;
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private String expr;
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private String filter;
 }

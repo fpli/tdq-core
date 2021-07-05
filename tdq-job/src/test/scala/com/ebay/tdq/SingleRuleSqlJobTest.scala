@@ -38,11 +38,11 @@ class SingleRuleSqlJobTest {
            |          "transformations": [
            |            {
            |              "alias": "page_id",
-           |              "expression": {"operator": "UDF", "config": {"text": "CAST(TAG_EXTRACT('p') AS INTEGER)"}}
+           |              "expression": {"operator": "UDF", "config": {"text": "CAST( SOJ_NVL('p') AS INTEGER)"}}
            |            },
            |            {
            |              "alias": "t_duration_sum",
-           |              "expression": {"operator": "SUM", "config": {"arg0": "CAST(TAG_EXTRACT('TDuration') AS DOUBLE)"}}
+           |              "expression": {"operator": "SUM", "config": {"arg0": "CAST( SOJ_NVL('TDuration') AS DOUBLE)"}}
            |            }
            |          ]
            |        }
@@ -98,7 +98,7 @@ class SingleRuleSqlJobTest {
            |              "alias": "item",
            |              "expression": {
            |                "operator": "UDF",
-           |                "config": {"text": "CAST(TAG_EXTRACT('itm|itmid|itm_id|itmlist|litm') AS LONG)"}
+           |                "config": {"text": "CAST( SOJ_NVL('itm|itmid|itm_id|itmlist|litm') AS LONG)"}
            |              }
            |            },
            |            {
@@ -112,7 +112,7 @@ class SingleRuleSqlJobTest {
            |            },
            |            {
            |              "alias": "itm_cnt",
-           |              "expression": {"operator": "Count", "config": {"arg0": "1.0"}}
+           |              "expression": {"operator": "Count", "config": {"arg0": "1"}}
            |            },
            |            {
            |              "alias": "itm_valid_cnt",
@@ -170,7 +170,7 @@ class SingleRuleSqlJobTest {
            |              "alias": "domain",
            |              "expression": {
            |                "operator": "UDF",
-           |                "config": {"text": "PAGE_FAMILY(CAST(TAG_EXTRACT('p') AS INTEGER))"}
+           |                "config": {"text": " SOJ_PAGE_FAMILY(CAST( SOJ_NVL('p') AS INTEGER))"}
            |              }
            |            },
            |            {
@@ -228,7 +228,7 @@ class SingleRuleSqlJobTest {
            |              "alias": "page_id",
            |              "expression": {
            |                "operator": "UDF",
-           |                "config": {"text": "CAST(TAG_EXTRACT('p') AS INTEGER)"}
+           |                "config": {"text": "CAST( SOJ_NVL('p') AS INTEGER)"}
            |              }
            |            },
            |            {
@@ -287,7 +287,7 @@ class SingleRuleSqlJobTest {
            |              "alias": "t_duration",
            |              "expression": {
            |                "operator": "Expr",
-           |                "config": {"text": "CAST(TAG_EXTRACT('TDuration') AS DOUBLE)"}
+           |                "config": {"text": "CAST( SOJ_NVL('TDuration') AS DOUBLE)"}
            |              }
            |            },
            |            {
@@ -315,8 +315,8 @@ class SingleRuleSqlJobTest {
         getRawEvent("2021-05-29 12:03:59", tDuration = 10d)
       ),
       expects = List(
-        getMetric(id, "2021-05-29 12:01:59", 3d),
-        getMetric(id, "2021-05-29 12:03:59", 5d)
+        getMetric(id, "2021-05-29 12:01:59", 4d - 1d),
+        getMetric(id, "2021-05-29 12:03:59", 10d - 5d)
       )
     ).submit()
   }
@@ -345,13 +345,13 @@ class SingleRuleSqlJobTest {
            |          "transformations": [
            |           {
            |              "alias": "page_id",
-           |              "expression": {"operator": "UDF", "config": {"text": "CAST(TAG_EXTRACT('p') AS INTEGER)"}}
+           |              "expression": {"operator": "UDF", "config": {"text": "CAST( SOJ_NVL('p') AS INTEGER)"}}
            |            },
            |            {
            |              "alias": "t_duration",
            |              "expression": {
            |                "operator": "Expr",
-           |                "config": {"text": "CAST(TAG_EXTRACT('TDuration') AS DOUBLE)"}
+           |                "config": {"text": "CAST( SOJ_NVL('TDuration') AS DOUBLE)"}
            |              }
            |            },
            |            {
@@ -379,8 +379,8 @@ class SingleRuleSqlJobTest {
         getRawEvent("2021-05-29 12:01:59", pageId = 2, tDuration = 10d)
       ),
       expects = List(
-        getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "1", 5d),
-        getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "2", 8d)
+        getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "1", 6d-1d),
+        getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "2", 10d-2d)
       )
     ).submit()
   }

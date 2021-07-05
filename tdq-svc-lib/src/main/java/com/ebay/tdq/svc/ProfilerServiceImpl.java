@@ -7,7 +7,7 @@ import com.ebay.tdq.dto.QueryProfilerParam;
 import com.ebay.tdq.dto.QueryProfilerResult;
 import com.ebay.tdq.expressions.aggregate.Max;
 import com.ebay.tdq.expressions.aggregate.Min;
-import com.ebay.tdq.rules.AggrPhysicalPlan;
+import com.ebay.tdq.rules.Transformation;
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.ProfilingSqlParser;
 import com.ebay.tdq.rules.TdqMetric;
@@ -86,10 +86,10 @@ public class ProfilerServiceImpl implements ProfilerService {
       AggregationBuilder aggregation = AggregationBuilders.dateHistogram("agg").field("event_time")
           .fixedInterval(DateHistogramInterval.seconds(window));
 
-      for (AggrPhysicalPlan aggPlan : physicalPlan.aggregations()) {
-        if (aggPlan.evaluation() instanceof Max) {
+      for (Transformation aggPlan : physicalPlan.aggregations()) {
+        if (aggPlan.expr() instanceof Max) {
           aggregation.subAggregation(AggregationBuilders.max(aggPlan.name()).field("expr." + aggPlan.name()));
-        } else if (aggPlan.evaluation() instanceof Min) {
+        } else if (aggPlan.expr() instanceof Min) {
           aggregation.subAggregation(AggregationBuilders.min(aggPlan.name()).field("expr." + aggPlan.name()));
         } else {
           aggregation.subAggregation(AggregationBuilders.sum(aggPlan.name()).field("expr." + aggPlan.name()));
@@ -108,7 +108,7 @@ public class ProfilerServiceImpl implements ProfilerService {
       for (Histogram.Bucket entry : agg.getBuckets()) {
         long eventTime = Long.parseLong(entry.getKeyAsString());
         TdqMetric tdqMetric = new TdqMetric(physicalPlan.metricKey(), eventTime);
-        for (AggrPhysicalPlan aggPlan : physicalPlan.aggregations()) {
+        for (Transformation aggPlan : physicalPlan.aggregations()) {
           tdqMetric.putExpr(aggPlan.name(),
               ((NumericMetricsAggregation.SingleValue) entry.getAggregations().get(aggPlan.name())).value());
         }

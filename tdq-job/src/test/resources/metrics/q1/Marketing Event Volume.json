@@ -1,0 +1,24 @@
+{
+  "id": "30", "name": "cfg_30", "rules": [
+  {
+    "name": "30", "type": "realtime.rheos.profiler", "config": {"window": "5min"}, "profilers": [
+    {
+      "metric-name": "common_metric",
+      "comment": "Latency of Event Capture & Publish",
+      "expr": "total_cnt",
+      "filter": "page_id in (2547208, 2483445)",
+      "dimensions": ["domain", "site_id", "page_id"],
+      "transformations": [
+        {"alias": "soj_tag_p",        "expr": "soj_nvl('p')"},
+        {"alias": "soj_tag_t",        "expr": "soj_nvl('t')"},
+        {"alias": "soj_tag_u",        "expr": "soj_nvl('u')"},
+
+        {"alias": "site_id",          "expr": "CAST(soj_tag_t AS INTEGER)"},
+        {"alias": "page_id",          "expr": "CAST(soj_tag_p AS INTEGER)"},
+        {"alias": "domain",           "expr": "soj_page_family(page_id)"},
+
+        {"alias": "total_cnt",        "expr": "count(1)"}
+      ]
+    }
+  ]}
+]}

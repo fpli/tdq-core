@@ -158,7 +158,7 @@ public class RuleEngineServiceImpl implements RuleEngineService {
 
       ProfilerConfig profilerConfig = new ProfilerConfig(
           iDoMetricConfig.getMetricName(),
-          ExpressionConfig.expr(aggregate.getExpr()),
+          null,ExpressionConfig.expr(aggregate.getExpr()),
           filter,
           transformations,
           iDoMetricConfig.getDimensions(),

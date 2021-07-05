@@ -42,6 +42,7 @@ object Literal {
 
 
 case class Literal(value: Any, dataType: DataType) extends LeafExpression {
+  override def foldable: Boolean = true
   override def nullable: Boolean = value == null
 
   override def toString: String = value match {

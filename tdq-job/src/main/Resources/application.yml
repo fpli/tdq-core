@@ -44,6 +44,7 @@ flink:
       pronto:
         index-pattern: tdq-metrics-test-
         latency-index-pattern: tdq-metrics-test-latency-
+        log-index-pattern: tdq.log.{table_name}.pre-prod.
         scheme: https
         hostname: estdq-datalvs.vip.ebay.com
         port: 443

@@ -13,23 +13,23 @@
         "transformations": [
           {
             "alias": "domain",
-            "expression": {"operator": "UDF", "config": {"text": "PAGE_FAMILY(CAST(TAG_EXTRACT('p') AS INTEGER))"}}
+            "expression": {"operator": "UDF", "config": {"text": " SOJ_PAGE_FAMILY(CAST( SOJ_NVL('p') AS INTEGER))"}}
           },
           {
             "alias": "site_id",
-            "expression": {"operator": "UDF", "config": {"text": "CAST(TAG_EXTRACT('t') AS INTEGER)"}}
+            "expression": {"operator": "UDF", "config": {"text": "CAST( SOJ_NVL('t') AS INTEGER)"}}
           },
-          {"alias": "app", "expression": {"operator": "UDF", "config": {"text": "TAG_EXTRACT('app')"}}},
+          {"alias": "app", "expression": {"operator": "UDF", "config": {"text": " SOJ_NVL('app')"}}},
           {
             "alias": "page_id",
-            "expression": {"operator": "UDF", "config": {"text": "CAST(TAG_EXTRACT('p') AS INTEGER)"}}
+            "expression": {"operator": "UDF", "config": {"text": "CAST( SOJ_NVL('p') AS INTEGER)"}}
           },
           {"alias": "p2", "expression": {"operator": "Count", "config": {"arg0": "1.0"}}},
           {
             "alias": "p1",
             "expression": {
               "operator": "Sum",
-              "config": {"arg0": "case when LENGTH(TAG_EXTRACT('dn')) > 0 then 1.0 else 0.0 end"}
+              "config": {"arg0": "case when LENGTH( SOJ_NVL('dn')) > 0 then 1.0 else 0.0 end"}
             }
           }
         ]

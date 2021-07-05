@@ -125,21 +125,12 @@ public class ProfilingJob {
     tdqEnv.getOutputTagMap().forEach((seconds, tag) -> {
       String key = Duration.ofSeconds(seconds).toString().toLowerCase();
       String tagUid = "aggr_w_" + key;
-      String tagLatencyUid = "aggr_w_" + key + "_latency";
-      OutputTag<TdqMetric> latency = new OutputTag<TdqMetric>(tagUid + "_latency") {
-      };
       SingleOutputStreamOperator<TdqMetric> ds = unifyDataStream.getSideOutput(tag).keyBy(TdqMetric::getTagId)
           .window(TumblingEventTimeWindows.of(Time.seconds(seconds)))
-          .sideOutputLateData(latency)
           .aggregate(new TdqMetricAggregateFunction(), new TdqMetric2ndAggrProcessWindowFunction())
           .setParallelism(METRIC_2ND_AGGR_PARALLELISM)
           .name(tagUid)
           .uid(tagUid);
-
-      ds.getSideOutput(latency).addSink(new LatencyTdqMetricRichSinkFunction())
-          .setParallelism(METRIC_2ND_AGGR_PARALLELISM)
-          .uid(tagLatencyUid)
-          .name(tagLatencyUid);
       ans.put(key, ds);
     });
     return ans;
@@ -184,12 +175,15 @@ public class ProfilingJob {
     String slotSharingGroup = rawEventDataStream.getTransformation().getSlotSharingGroup();
     int parallelism = rawEventDataStream.getTransformation().getParallelism();
     String uid = "normalize_evt_" + idx;
-    DataStream<TdqMetric> ds = rawEventDataStream.connect(broadcastStream)
+    SingleOutputStreamOperator<TdqMetric> ds = rawEventDataStream.connect(broadcastStream)
         .process(getTdqRawEventProcessFunction(stateDescriptor))
         .name(uid)
         .uid(uid)
         .slotSharingGroup(slotSharingGroup)
         .setParallelism(parallelism);
+
+    //    ds.getSideOutput(tdqEnv.getExceptionOutputTag()).print();
+    //    ds.getSideOutput(tdqEnv.getSampleOutputTag()).print();
 
     long orderless = DateUtils.toSeconds(getStringOrDefault("flink.app.advance.watermark.out-of-orderless", "0min"));
     long timeout = DateUtils.toSeconds(getStringOrDefault("flink.app.advance.watermark.idle-source-timeout", "0min"));

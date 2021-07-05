@@ -53,6 +53,11 @@ public class TdqMetric implements Serializable {
     return tagId + "_" + getEventTime();
   }
 
+  public TdqMetric removeTag(String k) {
+    tags.remove(k);
+    return this;
+  }
+
   public TdqMetric putTag(String k, Object v) {
     tags.put(k, v);
     return this;

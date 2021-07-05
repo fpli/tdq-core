@@ -1,11 +1,11 @@
 package com.ebay.tdq.functions;
 
 import com.ebay.sojourner.common.model.RawEvent;
-import com.ebay.sojourner.flink.connector.kafka.SojSerializableTimestampAssigner;
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.PhysicalPlans;
+import com.ebay.tdq.rules.TdqErrorMsg;
 import com.ebay.tdq.rules.TdqMetric;
-import com.ebay.tdq.utils.JdbcConfig;
+import com.ebay.tdq.rules.TdqSampleData;
 import com.ebay.tdq.utils.LocalCache;
 import com.ebay.tdq.utils.PhysicalPlanFactory;
 import com.ebay.tdq.utils.TdqEnv;
@@ -30,7 +30,6 @@ import org.apache.flink.util.Collector;
 @Slf4j
 public class RawEventProcessFunction
     extends BroadcastProcessFunction<RawEvent, PhysicalPlans, TdqMetric> implements CheckpointedFunction {
-  private final JdbcConfig jdbcConfig;
   private final MapStateDescriptor<String, PhysicalPlans> stateDescriptor;
   private final TdqEnv tdqEnv;
   private final String cfgPlan = "CFG_PLAN";
@@ -47,7 +46,6 @@ public class RawEventProcessFunction
     if (tdqEnv.getLocalCombineFlushTimeout() > 60000) {
       throw new RuntimeException("flink.app.advance.local-combine.flush-timeout must less than 60s!");
     }
-    this.jdbcConfig = new JdbcConfig();
   }
 
   @Override
@@ -107,7 +105,7 @@ public class RawEventProcessFunction
 
 
   protected PhysicalPlans getPhysicalPlans() {
-    return PhysicalPlanFactory.getPhysicalPlans(PhysicalPlanFactory.getTdqConfigs(this.jdbcConfig));
+    return PhysicalPlanFactory.getPhysicalPlans(PhysicalPlanFactory.getTdqConfigs(this.tdqEnv.getJdbcConfig()));
   }
 
   private void processElement0(RawEvent event,
@@ -118,27 +116,31 @@ public class RawEventProcessFunction
     for (PhysicalPlan plan : physicalPlans.plans()) {
       metricGroup.inc(plan.metricKey());
       long s = System.nanoTime();
-      TdqMetric metric = process(event, plan);
-      localCache.flush(plan, metric, collector);
-      metricGroup.updateEventHistogram(s);
-    }
-  }
-
-  private TdqMetric process(RawEvent event, PhysicalPlan plan) {
-    try {
-      return plan.process(event, getEventTime(event));
-    } catch (Exception e) {
-      metricGroup.inc("errorEvent");
-      if ((System.currentTimeMillis() - logCurrentTimeMillis) > 30000) {
-        log.warn(e.getMessage(), e);
-        log.warn("Drop event={},plan={}", event, plan);
-        logCurrentTimeMillis = System.currentTimeMillis();
+      try {
+        TdqMetric metric = plan.process(event);
+        sampleData(ctx, event, metric, plan);
+        localCache.flush(plan, metric, collector);
+        metricGroup.updateEventHistogram(s);
+      } catch (Exception e) {
+        errorMsg(ctx, event, e, plan);
       }
-      return null;
     }
   }
 
-  private long getEventTime(RawEvent event) {
-    return SojSerializableTimestampAssigner.getEventTime(event);
+  private void sampleData(ReadOnlyContext ctx, RawEvent event, TdqMetric metric, PhysicalPlan plan) {
+    if (plan.sampling()) {
+      ctx.output(tdqEnv.getSampleOutputTag(), new TdqSampleData(
+          event, metric, plan.metricKey(), plan.cxt().get().toString())
+      );
+    }
+  }
+
+  private void errorMsg(ReadOnlyContext ctx, RawEvent event, Exception e, PhysicalPlan plan) {
+    metricGroup.inc("errorEvent_" + plan.metricKey());
+    if ((System.currentTimeMillis() - logCurrentTimeMillis) > 5000) {
+      log.warn("Drop event={},plan={}", event, plan);
+      ctx.output(tdqEnv.getExceptionOutputTag(), new TdqErrorMsg(event, e, plan.metricKey()));
+      logCurrentTimeMillis = System.currentTimeMillis();
+    }
   }
 }

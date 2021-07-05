@@ -3,7 +3,7 @@ package com.ebay.tdq.rules
 import com.ebay.tdq.config.{ExpressionConfig, ProfilerConfig, TransformationConfig}
 import com.ebay.tdq.expressions._
 import com.ebay.tdq.expressions.aggregate.AggregateExpression
-import com.ebay.tdq.types.DataType
+import com.ebay.tdq.types.{DataType, TimestampType}
 import org.apache.calcite.avatica.util.{Casing, Quoting}
 import org.apache.calcite.sql._
 import org.apache.calcite.sql.fun.{SqlCase, SqlStdOperatorTable}
@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils
 import scala.collection.JavaConverters.iterableAsScalaIterableConverter
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
+import scala.util.matching.Regex
 
 
 /**
@@ -71,14 +72,17 @@ object ProfilingSqlParser {
   }
 
   // TODO need add more rule:
-  //  1.Casts types according to the expected input types for [[Expression]]s. like spark ImplicitTypeCasts
+  //  1.Casts types according to the expected input types for [[Expression]]s. like spark `ImplicitTypeCasts`
   private def transformLiteral(literal: SqlLiteral): Expression = {
     literal match {
       case snl: SqlNumericLiteral =>
-        // TODO: currently only support integer and double, you can explicit use cast coerce types
-        //  if column1 is DECIMAL,`column1 > cast(10 as DECIMAL)`
         if (snl.isInteger) {
-          Literal.apply(snl.getValueAs(classOf[Integer]))
+          val v = snl.getValueAs(classOf[Number]).longValue()
+          if (v > Integer.MIN_VALUE && v < Integer.MAX_VALUE) {
+            Literal.apply(v.toInt)
+          } else {
+            Literal.apply(v)
+          }
         } else {
           Literal.apply(literal.getValueAs(classOf[Number]).doubleValue())
         }
@@ -104,13 +108,6 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
 
   import ProfilingSqlParser._
 
-  private lazy val dimensions = if (CollectionUtils.isNotEmpty(profilerConfig.getDimensions)) {
-    profilerConfig.getDimensions.asScala.toSet
-  } else {
-    Set[String]()
-  }
-
-
   private val aliasTransformationConfigMap = profilerConfig
     .getTransformations
     .asScala
@@ -119,37 +116,52 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
       transformationConfig.getAlias -> transformationConfig
     }).toMap
   private val expressionMap = new mutable.HashMap[String, Expression]
+  lazy val physicalPlanContext: Option[PhysicalPlanContext] = {
+    if (profilerConfig.getConfig == null) {
+      None
+    } else {
+      Some(PhysicalPlanContext(sampling = profilerConfig.getConfig.get("sampling").toString.toBoolean,
+        samplingFraction = profilerConfig.getConfig.get("sampling-fraction").toString.toDouble))
+    }
+  }
 
   def parsePlan(): PhysicalPlan = {
-    val aggregations = profilerConfig.getTransformations.asScala.map { cfg =>
-      val expr = parseTransformationPlan(cfg)
-      if (expr.isInstanceOf[AggregateExpression]) {
-        AggrPhysicalPlan(
-          cfg.getAlias,
-          parseFilter(cfg.getFilter),
-          parseTransformationPlan(cfg)
-        )
-      } else {
-        null
-      }
-    }.filter(_ != null).toList
-
-    val dimArr = expressionMap.filter { case (k, _) => dimensions.contains(k) }.values.toArray
-    if (dimArr.length != dimensions.size) {
-      throw new IllegalArgumentException("dimensions config illegal!")
+    val transformations = profilerConfig.getTransformations.asScala.map { cfg =>
+      Transformation(
+        cfg.getAlias,
+        parseFilter(cfg.getFilter),
+        parseTransformationPlan(cfg)
+      )
     }
 
-    val evaluation = parseExpressionPlan(profilerConfig.getExpression, "")
+    val dimensions = if (CollectionUtils.isNotEmpty(profilerConfig.getDimensions)) {
+      val set = profilerConfig.getDimensions.asScala.toSet
+      val ans = transformations.filter(t => {
+        set.contains(t.name)
+      }).toArray
+      if (ans.length != set.size) {
+        throw new IllegalArgumentException("dimensions config illegal!")
+      }
+      ans
+    } else {
+      Array[Transformation]()
+    }
+
+    val evaluation = if (StringUtils.isNotBlank(profilerConfig.getExpr)) {
+      parseExpressionPlan(profilerConfig.getExpr, "")
+    } else {
+      parseExpressionPlan(profilerConfig.getExpression, "")
+    }
 
     val plan = PhysicalPlan(
       metricKey = profilerConfig.getMetricName,
       window = window,
       filter = parseFilter(profilerConfig.getFilter),
-      dimensions = dimArr,
+      dimensions = dimensions,
       evaluation = evaluation,
-      aggregations = aggregations.toArray
+      aggregations = transformations.filter(_.expr.isInstanceOf[AggregateExpression]).toArray,
+      cxt = physicalPlanContext
     )
-
     plan
   }
 
@@ -167,8 +179,20 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
       }
     } else {
       // get from raw event todo data type
-      GetStructField(name)
+      name match {
+        case ci"EVENT_TIMESTAMP" =>
+          TdqTimestamp("event_timestamp", TimestampType)
+        case ci"EVENT_TIME_MILLIS" =>
+          TdqTimestamp()
+        case ci"SOJ_TIMESTAMP" =>
+          TdqTimestamp("soj_timestamp")
+        case _ =>
+          GetStructField(name)
+      }
     }
+  }
+  implicit class CaseInsensitiveRegex(sc: StringContext) {
+    def ci: Regex = ( "(?i)" + sc.parts.mkString ).r
   }
 
   private def transformOperands(operands: Seq[SqlNode]): Array[Any] = {
@@ -235,13 +259,23 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
     expression
   }
 
+  private def parseExpressionPlan(exprStr: String, alias: String): Expression = {
+    val expr = transformSqlNode(getExpr(exprStr), alias)
+    if (!expressionMap.isDefinedAt(alias) && StringUtils.isNotBlank(alias)) {
+      expressionMap.put(alias, expr)
+    }
+    expr
+  }
+
   private def parseExpressionPlan(cfg: ExpressionConfig, alias: String): Expression = {
     val operator = cfg.getOperator
-    val expr = if (operator.equalsIgnoreCase("UDF") || operator.equalsIgnoreCase("Expr")) {
+    val expr = if (
+        operator.equalsIgnoreCase("UDAF") ||
+        operator.equalsIgnoreCase("UDF") ||
+        operator.equalsIgnoreCase("Expr")) {
       val sqlNode = getExpr(cfg.getConfig.get("text").asInstanceOf[String])
       transformSqlNode(sqlNode, alias)
-    }
-    else if (cfg.getConfig.get("arg0") != null) {
+    } else if (cfg.getConfig.get("arg0") != null) {
       transformSqlNode(getExpr(operator + "(" + cfg.getConfig.get("arg0") + ")"), alias)
     } else {
       throw new IllegalStateException("Unexpected operator: " + operator)
@@ -250,13 +284,16 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
     if (!expressionMap.isDefinedAt(alias) && StringUtils.isNotBlank(alias)) {
       expressionMap.put(alias, expr)
     }
-
     expr
   }
 
   private def parseTransformationPlan(cfg: TransformationConfig): Expression = {
     val alias = cfg.getAlias
-    parseExpressionPlan(cfg.getExpression, alias)
+    if (StringUtils.isNotBlank(cfg.getExpr)) {
+      parseExpressionPlan(cfg.getExpr, alias)
+    } else {
+      parseExpressionPlan(cfg.getExpression, alias)
+    }
   }
 
   private def parseFilter(filter: String): Expression = {

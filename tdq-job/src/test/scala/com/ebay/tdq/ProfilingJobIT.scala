@@ -141,7 +141,7 @@ case class ProfilingJobIT(
       override def run(ctx: SourceFunction.SourceContext[RawEvent]): Unit = {
         Thread.sleep(1000)
         events.foreach(ctx.collect)
-        //Thread.sleep(10000000)
+//        Thread.sleep(10000000)
       }
 
       override def cancel(): Unit = {}
@@ -164,7 +164,7 @@ case class ProfilingJobIT(
     env.addSource(new RichSourceFunction[PhysicalPlans]() {
       @throws[Exception]
       override def run(ctx: SourceFunction.SourceContext[PhysicalPlans]): Unit = {
-        ctx.collectWithTimestamp(ProfilingSqlParserTest.getPhysicalPlan(config), System.currentTimeMillis)
+        ctx.collectWithTimestamp(ProfilingSqlParserTest.getPhysicalPlans(config), System.currentTimeMillis)
       }
 
       override def cancel(): Unit = {}

@@ -1,10 +1,10 @@
 package com.ebay.tdq.rules
 
-import java.util.{HashMap => JHashMap}
+import java.util.{Random, HashMap => JHashMap}
 
 import com.ebay.sojourner.common.model.RawEvent
+import com.ebay.sojourner.common.util.SojTimestamp
 import com.ebay.tdq.expressions._
-import com.ebay.tdq.expressions.aggregate.AggregateExpression
 
 import scala.collection.JavaConverters.mapAsScalaMapConverter
 
@@ -12,58 +12,76 @@ import scala.collection.JavaConverters.mapAsScalaMapConverter
  * @author juntzhang
  */
 
-case class AggrPhysicalPlan(name: String, filter: Expression = null, evaluation: Expression)
+case class Transformation(name: String, filter: Expression = null, expr: Expression)
 
 case class PhysicalPlans(plans: Array[PhysicalPlan])
+
+case class PhysicalPlanContext(
+  sampling: Boolean = false,
+  samplingFraction: Double = 0.0001
+)
 
 case class PhysicalPlan(
   metricKey: String,
   window: Long,
   evaluation: Expression,
-  aggregations: Array[AggrPhysicalPlan],
-  dimensions: Array[Expression],
-  filter: Expression
+  aggregations: Array[Transformation],
+  dimensions: Array[Transformation],
+  filter: Expression,
+  cxt: Option[PhysicalPlanContext] = None
 ) extends Serializable {
   lazy val groupByEvent: DebugEvent = DebugEvent("groupBy")
   lazy val filterEvent: DebugEvent = DebugEvent("filter")
   lazy val aggrFilterEvent: DebugEvent = DebugEvent("aggr.filter")
+  lazy val random = new Random()
 
   def uuid(): String = {
     s"${metricKey}_$window"
   }
 
+  def sampling(): Boolean = {
+    cxt.isDefined && cxt.get.sampling && cxt.get.samplingFraction > 0 && cxt.get.samplingFraction < 1 &&
+      Math.abs(random.nextDouble) < cxt.get.samplingFraction
+  }
+
   // TODO validate
-  def validatePlan(): Unit = {
+  def validatePlan(): Unit = {}
+
+  def getEventTime(rawEvent: RawEvent): Long = {
+    var field = System.currentTimeMillis
+    try {
+      field = SojTimestamp.getSojTimestampToUnixTimestamp(rawEvent.getEventTimestamp)
+    } catch {
+      case _: Exception =>
+      // ignore todo add metric
+    }
+    field
   }
 
   def process(rawEvent: RawEvent): TdqMetric = {
-    process(rawEvent, rawEvent.getEventTimestamp)
-  }
-
-  def process(rawEvent: RawEvent, eventTime: Long): TdqMetric = {
     val cacheData = new JHashMap[String, Any]()
-    val metric = new TdqMetric(metricKey, eventTime)
+    val eventTimeMillis = getEventTime(rawEvent)
+    val metric = new TdqMetric(metricKey, (eventTimeMillis / 60000) * 60000)
     metric.setWindow(window)
-
     aggregations.foreach(aggr => {
-      metric.putAggrExpress(aggr.name, aggr.evaluation.simpleName)
+      metric.putAggrExpress(aggr.name, aggr.expr.simpleName)
     })
-
     cacheData.put("__RAW_EVENT", rawEvent)
+    cacheData.put("soj_timestamp", rawEvent.getEventTimestamp)
+    cacheData.put("event_timestamp", eventTimeMillis * 1000)
+    cacheData.put("event_time_millis", eventTimeMillis)
 
     val input = InternalRow(Array(metric), cacheData)
-
-    if (filter == null || where(input)) {
-      dimensions.foreach(dim => {
-        metric.putTag(dim.cacheKey.get, dim.call(input))
+    if (where(input, filter)) {
+      dimensions.foreach(d => {
+        metric.putTag(d.name, d.expr.call(input))
+        if (!where(input, d.filter)) {
+          metric.removeTag(d.name)
+        }
       })
-      aggregations.foreach(aggr => {
-        if (aggr.filter != null) {
-          if (where(input, aggr)) {
-            groupBy(metric, input, aggr)
-          }
-        } else {
-          groupBy(metric, input, aggr)
+      aggregations.foreach(a => {
+        if (where(input, a.filter)) {
+          groupBy(metric, input, a)
         }
       })
       metric.genUID()
@@ -73,31 +91,27 @@ case class PhysicalPlan(
     }
   }
 
-  private def groupBy(metric: TdqMetric, input: InternalRow, aggr: AggrPhysicalPlan): Unit = {
-    val t = aggr.evaluation.call(input)
+  private def groupBy(metric: TdqMetric, input: InternalRow, aggr: Transformation): Unit = {
+    val t = aggr.expr.call(input)
     if (t != null) {
-      metric.putExpr(aggr.evaluation.cacheKey.get, t.asInstanceOf[Number].doubleValue())
+      metric.putExpr(aggr.expr.cacheKey.get, t.asInstanceOf[Number].doubleValue())
     }
   }
 
-  private def where(input: InternalRow): Boolean = {
-    filter != null && filter.call(input).asInstanceOf[Boolean]
-  }
-
-  private def where(input: InternalRow, aggr: AggrPhysicalPlan): Boolean = {
-    aggr.filter.call(input).asInstanceOf[Boolean]
+  private def where(input: InternalRow, filter: Expression): Boolean = {
+    filter == null || (filter != null && filter.call(input).asInstanceOf[Boolean])
   }
 
   def merge(m1: TdqMetric, m2: TdqMetric): TdqMetric = {
     val m = m1
     aggregations.foreach {
-      case AggrPhysicalPlan(name, _, expression) =>
-        m.putExpr(name,
-          expression.asInstanceOf[AggregateExpression].merge(
-            m1.getExprMap.get(name),
-            m2.getExprMap.get(name)
-          ).asInstanceOf[Number].doubleValue()
+      case Transformation(name, _, expression) =>
+        val newV = ExpressionRegistry.aggregateOperator(
+          expression.simpleName,
+          m1.getExprMap.getOrDefault(name, 0d),
+          m2.getExprMap.getOrDefault(name, 0d)
         )
+        m1.putExpr(name, newV)
     }
     m
   }

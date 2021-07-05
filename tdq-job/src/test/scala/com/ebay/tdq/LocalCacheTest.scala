@@ -84,7 +84,7 @@ class LocalCacheTest {
       |  ]
       |}
       |""".stripMargin
-  val plans: PhysicalPlans = ProfilingSqlParserTest.getPhysicalPlan(config)
+  val plans: PhysicalPlans = ProfilingSqlParserTest.getPhysicalPlans(config)
 
   @Test
   def test(): Unit = {

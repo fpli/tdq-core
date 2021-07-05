@@ -1,0 +1,31 @@
+{
+  "id": "30", "name": "cfg_30", "rules": [
+  {
+    "name": "30", "type": "realtime.rheos.profiler", "config": {"window": "5min"}, "profilers": [
+    {
+      "metric-name": "common_metric",
+      "expr": "nt_mav_cnt / total_cnt",
+      "filter": "app in ('2571','1462','2878')",
+      "dimensions": ["domain", "site_id", "app"],
+      "transformations": [
+        {"alias": "soj_tag_p",        "expr": "soj_nvl('p')"},
+        {"alias": "soj_tag_t",        "expr": "soj_nvl('t')"},
+        {"alias": "soj_tag_mav",      "expr": "soj_nvl('mav')"},
+        {"alias": "soj_tag_dn",          "expr": "soj_nvl('dn')"},
+        {"alias": "soj_tag_mos",         "expr": "soj_nvl('mos')"},
+        {"alias": "soj_tag_osv",         "expr": "soj_nvl('osv')"},
+        {"alias": "soj_tag_es",          "expr": "soj_nvl('es')"},
+
+        {"alias": "app",              "expr": "soj_nvl('app')"},
+        {"alias": "domain",           "expr": "soj_page_family(CAST(soj_tag_p AS INTEGER))"},
+        {"alias": "site_id",          "expr": "CAST(soj_tag_t AS INTEGER)"},
+
+        {"alias": "total_cnt",           "expr": "count(1)"},
+        {"alias": "nt_dn_cnt",           "expr": "sum(case when LENGTH(soj_tag_dn) > 0 then 1.0 else 0.0 end)"  },
+        {"alias": "nt_mav_cnt",          "expr": "sum(case when LENGTH(soj_tag_mav) > 0 then 1.0 else 0.0 end)" },
+        {"alias": "nt_mos_cnt",          "expr": "sum(case when LENGTH(soj_tag_mos) > 0 then 1.0 else 0.0 end)" },
+        {"alias": "nt_osv_cnt",          "expr": "sum(case when LENGTH(soj_tag_osv) > 0 then 1.0 else 0.0 end)" }
+      ]
+    }
+  ]}
+]}

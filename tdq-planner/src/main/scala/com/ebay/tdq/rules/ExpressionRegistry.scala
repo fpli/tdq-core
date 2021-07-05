@@ -2,7 +2,9 @@ package com.ebay.tdq.rules
 
 import com.ebay.tdq.expressions._
 import com.ebay.tdq.expressions.aggregate._
+import com.ebay.tdq.expressions.analysis.TypeCoercionRule
 import com.ebay.tdq.types._
+import com.google.common.base.Preconditions
 import org.apache.commons.lang3.StringUtils
 import org.apache.log4j.Logger
 
@@ -15,7 +17,93 @@ object ExpressionRegistry {
   def parse(operatorName: String, operands: Array[Any], alias: String): Expression = {
     val cacheKey = Some(alias).filter(StringUtils.isNotBlank)
     LOG.debug(s"operatorName=[$operatorName], operands=[${operands.mkString(",")}], alias=[$alias]")
-    operatorName.toUpperCase() match {
+    val expr = operatorName.toUpperCase() match {
+
+
+      case "SOJ_PARSE_RLOGID" =>
+        Preconditions.checkArgument(operands.length == 2)
+        SojParseRlogid(
+          operands.head.asInstanceOf[Expression],
+          operands(1).asInstanceOf[Expression],
+          cacheKey
+        )
+      case "SOJ_NVL" =>
+        Preconditions.checkArgument(operands.length == 1)
+        SojNvl(
+          subject = GetRawEvent(Some("__RAW_EVENT")),
+          tag = operands.head.asInstanceOf[Literal].value.asInstanceOf[String],
+          dataType = StringType,
+          cacheKey = cacheKey
+        )
+      case "SOJ_PAGE_FAMILY" =>
+        Preconditions.checkArgument(operands.length == 1)
+        SojPageFamily(
+          subject = operands.head.asInstanceOf[Expression],
+          cacheKey = cacheKey
+        )
+      case "SOJ_TIMESTAMP" =>
+        TdqTimestamp("soj_timestamp")
+
+      case "EVENT_TIMESTAMP" =>
+        TdqTimestamp("event_timestamp", TimestampType)
+      case "EVENT_TIME_MILLIS" =>
+        TdqTimestamp()
+
+      case "CURRENT_TIMESTAMP" =>
+        CurrentTimestamp()
+      case "UNIX_TIMESTAMP" =>
+        if (operands.length == 0) {
+          new UnixTimestamp(cacheKey)
+        } else if (operands.length == 1) {
+          new UnixTimestamp(operands.head.asInstanceOf[Expression], cacheKey)
+        } else if (operands.length == 2) {
+          new UnixTimestamp(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression], cacheKey)
+        } else {
+          UnixTimestamp(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression], Some(operands(2).asInstanceOf[String]), cacheKey)
+        }
+      case "TO_TIMESTAMP" =>
+        val left = operands.head.asInstanceOf[Expression]
+        if (operands.length == 1) {
+          new ParseToTimestamp(left, cacheKey)
+        } else if (operands.length == 2) {
+          new ParseToTimestamp(left, operands(1).asInstanceOf[Expression], cacheKey)
+        } else {
+          ParseToTimestamp(left, Option(operands(1).asInstanceOf[Expression]), operands(2).asInstanceOf[Expression], cacheKey)
+        }
+
+      // https://stackoverflow.com/questions/51860219/how-to-use-apache-calcite-like-regex
+      // https://calcite.apache.org/docs/reference.html#keywords
+      case "NOT RLIKE" | "NOT SIMILAR TO" =>
+        Not(
+          RLike(
+            left = operands.head.asInstanceOf[Expression],
+            right = operands(1).asInstanceOf[Expression],
+            cacheKey = cacheKey
+          )
+        )
+      case "RLIKE" | "SIMILAR TO" =>
+        Preconditions.checkArgument(operands.length == 2)
+        RLike(
+          left = operands.head.asInstanceOf[Expression],
+          right = operands(1).asInstanceOf[Expression],
+          cacheKey = cacheKey
+        )
+      case "LIKE" =>
+        Preconditions.checkArgument(operands.length == 2)
+        Like(
+          left = operands.head.asInstanceOf[Expression],
+          right = operands(1).asInstanceOf[Expression],
+          cacheKey = cacheKey
+        )
+      case "NOT LIKE" =>
+        Preconditions.checkArgument(operands.length == 2)
+        Not(
+          Like(
+            left = operands.head.asInstanceOf[Expression],
+            right = operands(1).asInstanceOf[Expression],
+            cacheKey = cacheKey
+          )
+        )
       case "REGEXP_EXTRACT" =>
         if (operands.length > 2) {
           RegExpExtract(
@@ -33,29 +121,8 @@ object ExpressionRegistry {
         } else {
           throw new IllegalStateException("Unexpected operator[REGEXP_EXTRACT] args")
         }
-      case "TAG_EXTRACT" =>
-        assert(operands.length == 1)
-        ExtractTag(
-          subject = GetRawEvent(Some("__RAW_EVENT")),
-          tag = operands.head.asInstanceOf[Literal].value.asInstanceOf[String],
-          dataType = StringType,
-          cacheKey = cacheKey
-        )
-      case "SITE_ID" =>
-        ExtractTag(
-          subject = GetRawEvent(Some("__RAW_EVENT")),
-          tag = "t",
-          dataType = StringType,
-          cacheKey = cacheKey
-        )
-      case "PAGE_FAMILY" =>
-        assert(operands.length == 1)
-        PageFamily(
-          subject = operands.head.asInstanceOf[Expression],
-          cacheKey = cacheKey
-        )
       case "-" =>
-        assert(operands.length == 2)
+        Preconditions.checkArgument(operands.length == 2)
         Subtract(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression], cacheKey = cacheKey)
       case "+" =>
         Add(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression], cacheKey = cacheKey)
@@ -72,58 +139,60 @@ object ExpressionRegistry {
       case "NOT" =>
         Not(operands.head.asInstanceOf[Expression])
       case "OR" =>
-        assert(operands.length == 2)
+        Preconditions.checkArgument(operands.length == 2)
         Or(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression])
       case "AND" =>
         And(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression])
       case "IS NULL" =>
-        assert(operands.length == 1)
+        Preconditions.checkArgument(operands.length == 1)
         IsNull(operands.head.asInstanceOf[Expression])
       case "IS NOT NULL" =>
-        assert(operands.length == 1)
+        Preconditions.checkArgument(operands.length == 1)
         IsNotNull(operands.head.asInstanceOf[Expression])
       case "IN" =>
-        assert(operands.length == 2)
+        Preconditions.checkArgument(operands.length == 2)
         // type match check
         In(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Seq[Expression]])
       case "NOT IN" =>
         Not(In(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Seq[Expression]]))
       case "=" =>
-        assert(operands.length == 2)
+        Preconditions.checkArgument(operands.length == 2)
         EqualTo(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression])
       case ">" =>
-        assert(operands.length == 2)
+        Preconditions.checkArgument(operands.length == 2)
         GreaterThan(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression])
       case ">=" =>
-        assert(operands.length == 2)
+        Preconditions.checkArgument(operands.length == 2)
         GreaterThanOrEqual(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression])
       case "<" =>
-        assert(operands.length == 2)
+        Preconditions.checkArgument(operands.length == 2)
         LessThan(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression])
       case "<=" =>
-        assert(operands.length == 2)
+        Preconditions.checkArgument(operands.length == 2)
         LessThanOrEqual(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression])
       case "CHAR_LENGTH" | "CHARACTER_LENGTH" | "LENGTH" =>
-        assert(operands.length == 1)
+        Preconditions.checkArgument(operands.length == 1)
         Length(child = operands.head.asInstanceOf[Expression], cacheKey = cacheKey)
       //      case "TRIM" =>
-      //        assert(operands.length == 1)
+      //        Preconditions.checkArgument(operands.length == 1)
       //        StringTrim(operands.head.asInstanceOf[Expression], None, cacheKey = cacheKey)
       case "SUM" =>
-        assert(operands.length == 1)
+        Preconditions.checkArgument(operands.length == 1)
         Sum(operands.head.asInstanceOf[Expression], cacheKey)
       case "MAX" =>
-        assert(operands.length == 1)
+        Preconditions.checkArgument(operands.length == 1)
         Max(operands.head.asInstanceOf[Expression], cacheKey)
       case "MIN" =>
-        assert(operands.length == 1)
+        Preconditions.checkArgument(operands.length == 1)
         Min(operands.head.asInstanceOf[Expression], cacheKey)
       case "COUNT" =>
-        assert(operands.length == 1)
+        Preconditions.checkArgument(operands.length == 1)
         Count(operands.head.asInstanceOf[Expression], cacheKey)
       case _ =>
         throw new IllegalStateException("Unexpected operator: " + operatorName)
     }
+
+    TypeCoercionRule.coerceTypes(expr)
   }
 
   def aggregateOperator(operatorName: String, v1: Double, v2: Double): Double = {

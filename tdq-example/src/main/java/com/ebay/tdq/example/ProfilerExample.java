@@ -37,14 +37,14 @@ public class ProfilerExample {
             "          \"transformations\": [\n" +
             "            {\n" +
             "              \"alias\": \"page_id\",\n" +
-            "              \"expression\": {\"operator\": \"UDF\", \"config\": {\"text\": \"CAST(TAG_EXTRACT('p') AS " +
+            "              \"expression\": {\"operator\": \"UDF\", \"config\": {\"text\": \"CAST( SOJ_NVL('p') AS " +
             "INTEGER)\"}}\n" +
             "            },\n" +
             "            {\n" +
             "              \"alias\": \"item\",\n" +
             "              \"expression\": {\n" +
             "                \"operator\": \"UDF\",\n" +
-            "                \"config\": {\"text\": \"CAST(TAG_EXTRACT('itm|itmid|itm_id|itmlist|litm') AS LONG)\"}\n" +
+            "                \"config\": {\"text\": \"CAST( SOJ_NVL('itm|itmid|itm_id|itmlist|litm') AS LONG)\"}\n" +
             "              }\n" +
             "            },\n" +
             "            {\n" +

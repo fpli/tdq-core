@@ -57,6 +57,11 @@ public class SojTimestamp {
     return ts;
   }
 
+  public static Long getUnixTimestampToSojTimestamp(Long s) {
+    long ts = s * Constants.MILLI2MICRO + Constants.OFFSET;
+    return ts;
+  }
+
   /**
    * Get Sojourner default Calendar for being used.
    */
