@@ -3,21 +3,26 @@ package com.ebay.tdq.svc;
 import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;
+import com.ebay.tdq.dto.QueryDropdownParam;
+import com.ebay.tdq.dto.QueryDropdownResult;
 import com.ebay.tdq.dto.QueryProfilerParam;
 import com.ebay.tdq.dto.QueryProfilerResult;
 import com.ebay.tdq.expressions.aggregate.Max;
 import com.ebay.tdq.expressions.aggregate.Min;
-import com.ebay.tdq.rules.Transformation;
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.ProfilingSqlParser;
 import com.ebay.tdq.rules.TdqMetric;
+import com.ebay.tdq.rules.Transformation;
 import com.ebay.tdq.service.ProfilerService;
 import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.JsonUtils;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.elasticsearch.action.search.SearchRequest;
@@ -29,13 +34,14 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.BucketOrder;
 import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
 import org.elasticsearch.search.aggregations.bucket.histogram.Histogram;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.elasticsearch.search.aggregations.metrics.NumericMetricsAggregation;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import static com.ebay.tdq.svc.ServiceFactory.INDEX_PREFIX;
-import static com.ebay.tdq.svc.ServiceFactory.LATENCY_INDEX_PREFIX;
 import static com.ebay.tdq.utils.DateUtils.calculateIndexDate;
 
 /**
@@ -53,8 +59,6 @@ public class ProfilerServiceImpl implements ProfilerService {
   public QueryProfilerResult query(QueryProfilerParam param) {
     final QueryProfilerResult.QueryProfilerResultBuilder<?, ?> resultBuilder =
         QueryProfilerResult.builder().param(param);
-    ProfilerConfig profilerConfig;
-    int window;
     try {
       Validate.isTrue(param.getFrom() <= param.getTo(), "from must be earlier than to");
 
@@ -64,9 +68,9 @@ public class ProfilerServiceImpl implements ProfilerService {
       RuleConfig ruleConfig = config.getRules().get(0);
       Validate.isTrue(ruleConfig.getProfilers().size() == 1, "currently only support one profiler.");
 
-      profilerConfig = ruleConfig.getProfilers().get(0);
+      ProfilerConfig profilerConfig = ruleConfig.getProfilers().get(0);
       Validate.isTrue(StringUtils.isNotEmpty(profilerConfig.getMetricName()), "metric name is required.");
-      window = (int) DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString());
+      int window = (int) DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString());
 
       PhysicalPlan physicalPlan = new ProfilingSqlParser(profilerConfig, window).parsePlan();
 
@@ -78,7 +82,7 @@ public class ProfilerServiceImpl implements ProfilerService {
 
       if (MapUtils.isNotEmpty(param.getDimensions())) {
         param.getDimensions().forEach((k, v) -> {
-          rootBuilder.must(QueryBuilders.termsQuery("tags." + k, v));
+          rootBuilder.must(QueryBuilders.termsQuery("tags." + k + ".raw", v));
         });
       }
       builder.query(rootBuilder);
@@ -123,16 +127,79 @@ public class ProfilerServiceImpl implements ProfilerService {
     }
   }
 
+  @Override
+  public QueryDropdownResult dropdown(QueryDropdownParam param) {
+    final QueryDropdownResult.QueryDropdownResultBuilder<?, ?> resultBuilder =
+        QueryDropdownResult.builder().param(param);
+    try {
+      Validate.isTrue(param.getFrom() <= param.getTo(), "from must be earlier than to");
+
+      TdqConfig config = JsonUtils.parseObject(param.getTdqConfig(), TdqConfig.class);
+      Validate.isTrue(config.getRules().size() == 1, "currently only support one rule.");
+
+      RuleConfig ruleConfig = config.getRules().get(0);
+      Validate.isTrue(ruleConfig.getProfilers().size() == 1, "currently only support one profiler.");
+
+      ProfilerConfig profilerConfig = ruleConfig.getProfilers().get(0);
+      Validate.isTrue(StringUtils.isNotEmpty(profilerConfig.getMetricName()), "metric name is required.");
+      int window = (int) DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString());
+
+      PhysicalPlan physicalPlan = new ProfilingSqlParser(profilerConfig, window).parsePlan();
+      if (ArrayUtils.isEmpty(physicalPlan.dimensions())) {
+        return resultBuilder.build();
+      }
+
+      SearchSourceBuilder builder = new SearchSourceBuilder();
+      BoolQueryBuilder rootBuilder = QueryBuilders.boolQuery();
+
+      rootBuilder.must(QueryBuilders.rangeQuery("event_time").gte(param.getFrom()).lte(param.getTo()));
+      rootBuilder.must(QueryBuilders.termQuery("metric_key", profilerConfig.getMetricName()));
+      //      rootBuilder.must(QueryBuilders.termsQuery("tags." + k, v));
+      builder.query(rootBuilder);
+      for (Transformation t : physicalPlan.dimensions()) {
+        resultBuilder.record(dropdown(param, builder, t.name()));
+      }
+      return resultBuilder.build();
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      resultBuilder.exception(e);
+      return resultBuilder.build();
+    }
+  }
+
+  private QueryDropdownResult.Record dropdown(QueryDropdownParam param, SearchSourceBuilder builder,
+      String dimension) throws IOException {
+    AggregationBuilder aggregation = AggregationBuilders
+        .terms("agg")
+        .field("tags." + dimension + ".raw")
+        .size(1000)
+        .order(BucketOrder.key(true));
+
+    builder.aggregation(aggregation);
+    builder.size(0);
+    log.info("search request {}", builder);
+    SearchRequest searchRequest = new SearchRequest(calculateIndexes(param.getFrom(), param.getTo()), builder);
+    searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
+
+    SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+    ParsedStringTerms agg = searchResponse.getAggregations().get("agg");
+    final QueryDropdownResult.Record.RecordBuilder record = QueryDropdownResult.Record.builder().name(dimension);
+    for (val entry : agg.getBuckets()) {
+      record.item(entry.getKeyAsString());
+    }
+    return record.build();
+  }
+
   private String[] calculateIndexes(long from, long end) {
     Set<String> results = new HashSet<>();
     long next = from;
     while (end >= next) {
       results.add(INDEX_PREFIX + calculateIndexDate(next));
-      results.add(LATENCY_INDEX_PREFIX + calculateIndexDate(next));
+      // results.add(LATENCY_INDEX_PREFIX + calculateIndexDate(next));
       next = next + 86400 * 1000;
     }
     results.add(INDEX_PREFIX + calculateIndexDate(end));
-    results.add(LATENCY_INDEX_PREFIX + calculateIndexDate(end));
+    // results.add(LATENCY_INDEX_PREFIX + calculateIndexDate(end));
     log.info("search request indexes=>{}", StringUtils.join(results, ","));
     return results.toArray(new String[0]);
   }

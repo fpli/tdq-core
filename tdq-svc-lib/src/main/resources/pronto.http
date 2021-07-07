@@ -1,41 +1,46 @@
+GET http://localhost:9200/tdq-metrics-test-2021*
+###
+GET http://localhost:9200/_template/tdq-metrics
+
+###
 GET http://localhost:9200/tdq-metrics-test-*/_search
 Accept: application/json
 Content-Type: application/json
 
 {
-  "query": {
+  "query":        {
     "bool": {
-      "must": [
+      "must":                 [
         {
           "range": {
             "event_time": {
-              "from": 1622260920000,
-              "to": 1622261040000,
+              "from":          1622260920000,
+              "to":            1622261040000,
               "include_lower": true,
               "include_upper": true,
-              "boost": 1.0
+              "boost":         1.0
             }
           }
         },
         {"term": {"metric_key": {"value": "global_mandatory_tag_item_rate1", "boost": 1.0}}},
-        {"terms": {"tags.page_id": ["711", "1677718"], "boost": 1.0}}
+        {"terms": {"tags.page_id.raw": ["711"], "boost": 1.0}}
       ],
       "adjust_pure_negative": true,
-      "boost": 1.0
+      "boost":                1.0
     }
   },
   "aggregations": {
     "agg": {
       "date_histogram": {
-        "field": "event_time",
+        "field":          "event_time",
         "fixed_interval": "120s",
-        "offset": 0,
-        "order": {"_key": "asc"},
-        "keyed": false,
-        "min_doc_count": 0
+        "offset":         0,
+        "order":          {"_key": "asc"},
+        "keyed":          false,
+        "min_doc_count":  0
       },
-      "aggregations": {
-        "itm_cnt": {"sum": {"field": "expr.itm_cnt"}},
+      "aggregations":   {
+        "itm_cnt":       {"sum": {"field": "expr.itm_cnt"}},
         "itm_valid_cnt": {"sum": {"field": "expr.itm_valid_cnt"}}
       }
     }
@@ -44,3 +49,17 @@ Content-Type: application/json
 
 
 ###
+
+GET http://localhost:9200/tdq-metrics-test-*/_search
+Content-Type: application/json
+
+{
+  "size": 0,
+  "aggregations": {
+    "agg": {
+      "terms": {
+        "field": "tags.page_id.raw"
+      }
+    }
+  }
+}

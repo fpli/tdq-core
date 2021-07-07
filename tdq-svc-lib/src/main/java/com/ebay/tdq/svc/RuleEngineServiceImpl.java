@@ -162,7 +162,8 @@ public class RuleEngineServiceImpl implements RuleEngineService {
           filter,
           transformations,
           iDoMetricConfig.getDimensions(),
-          iDoMetricConfig.getComment()
+          iDoMetricConfig.getComment(),
+          null
       );
 
       Map<String, Object> config = new HashMap<>();

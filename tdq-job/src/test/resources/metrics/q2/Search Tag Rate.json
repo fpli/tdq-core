@@ -11,7 +11,7 @@
         {"alias": "soj_tag_p",         "expr": "soj_nvl('p')"},
         {"alias": "soj_tag_t",         "expr": "soj_nvl('t')"},
         {"alias": "soj_tag_app",       "expr": "soj_nvl('app')"},
-        {"alias": "soj_tag_eactn",       "expr": "soj_nvl('eactn')"},
+        {"alias": "soj_tag_eactn",     "expr": "soj_nvl('eactn')"},
 
         {"alias": "soj_tag_cpnip",     "expr": "soj_nvl('cpnip')"},
         {"alias": "soj_tag_icpp",      "expr": "soj_nvl('icpp')"},

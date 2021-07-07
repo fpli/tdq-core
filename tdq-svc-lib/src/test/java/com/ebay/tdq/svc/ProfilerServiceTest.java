@@ -1,9 +1,13 @@
 package com.ebay.tdq.svc;
 
+import com.ebay.tdq.dto.QueryDropdownParam;
+import com.ebay.tdq.dto.QueryDropdownResult;
 import com.ebay.tdq.dto.QueryProfilerParam;
 import com.ebay.tdq.dto.QueryProfilerResult;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.sun.tools.javac.util.List;
+import java.io.File;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,9 +15,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.time.DateUtils;
+import org.elasticsearch.action.admin.indices.template.put.PutIndexTemplateRequest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.Requests;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -43,10 +50,17 @@ public class ProfilerServiceTest {
   public void createData(Client client) throws Exception {
     val index = ServiceFactory.INDEX_PREFIX + "2021.05.28";
     val latencyIndex = ServiceFactory.LATENCY_INDEX_PREFIX + "2021.05.28";
+
+    PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics");
+    request.patterns(List.of(ServiceFactory.INDEX_PREFIX+"*"));
+    String source = IOUtils.toString(this.getClass().getResourceAsStream("/tdq-metrics-template.json"));
+    request.source(source, XContentType.JSON);
+    client.admin().indices().putTemplate(request).get();
+
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", 4d, 7d))).get();
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "711", 1d, 1d))).get();
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "1677718", 1d, 2d))).get();
-    client.index(Requests.indexRequest().index(latencyIndex).source(getMap("2021-05-29 12:02:00", "711", 1d, 2d))).get();
+    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", 1d, 2d))).get();
     Thread.sleep(3000);
   }
 
@@ -74,8 +88,26 @@ public class ProfilerServiceTest {
     double a2 = m.get(DateUtils.parseDate("2021-05-29 12:04:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime());
     Assert.assertEquals(5d / 9d, a1, 0.0001);
     Assert.assertEquals(2d / 3d, a2, 0.0001);
-    //Thread.sleep(10000000);
+    ServiceFactory.close();
+    elasticsearchResource.close();
+  }
 
+  @Test
+  public void testDropdown() throws Exception {
+    val elasticsearchResource = new EmbeddedElasticsearch();
+    elasticsearchResource.start("es-test");
+    createData(elasticsearchResource.getClient());
+    QueryDropdownParam param = new QueryDropdownParam(
+        RuleEngineServiceTest.get("global_mandatory_tag_item_rate1"),
+        DateUtils.parseDate("2021-05-29 12:02:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime(),
+        DateUtils.parseDate("2021-05-29 12:04:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime()
+    );
+
+    QueryDropdownResult result = ServiceFactory.getProfiler().dropdown(param);
+    final QueryDropdownResult.Record rec = result.getRecords().get(0);
+    System.out.println(rec);
+    Assert.assertEquals(2, rec.getItems().size());
+    Assert.assertEquals("page_id", rec.getName());
     ServiceFactory.close();
     elasticsearchResource.close();
   }
