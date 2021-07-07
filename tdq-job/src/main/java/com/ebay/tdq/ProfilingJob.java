@@ -1,7 +1,6 @@
 package com.ebay.tdq;
 
 import com.ebay.sojourner.common.model.RawEvent;
-import com.ebay.tdq.functions.LatencyTdqMetricRichSinkFunction;
 import com.ebay.tdq.functions.RawEventProcessFunction;
 import com.ebay.tdq.functions.TdqMetric1stAggrProcessWindowFunction;
 import com.ebay.tdq.functions.TdqMetric2ndAggrProcessWindowFunction;

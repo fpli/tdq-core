@@ -4,10 +4,9 @@ import com.ebay.tdq.dto.QueryDropdownParam;
 import com.ebay.tdq.dto.QueryDropdownResult;
 import com.ebay.tdq.dto.QueryProfilerParam;
 import com.ebay.tdq.dto.QueryProfilerResult;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.sun.tools.javac.util.List;
-import java.io.File;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +51,7 @@ public class ProfilerServiceTest {
     val latencyIndex = ServiceFactory.LATENCY_INDEX_PREFIX + "2021.05.28";
 
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics");
-    request.patterns(List.of(ServiceFactory.INDEX_PREFIX+"*"));
+    request.patterns(Lists.newArrayList(ServiceFactory.INDEX_PREFIX + "*"));
     String source = IOUtils.toString(this.getClass().getResourceAsStream("/tdq-metrics-template.json"));
     request.source(source, XContentType.JSON);
     client.admin().indices().putTemplate(request).get();

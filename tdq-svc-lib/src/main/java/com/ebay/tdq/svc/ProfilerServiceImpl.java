@@ -60,6 +60,8 @@ public class ProfilerServiceImpl implements ProfilerService {
     final QueryProfilerResult.QueryProfilerResultBuilder<?, ?> resultBuilder =
         QueryProfilerResult.builder().param(param);
     try {
+      Validate.isTrue(StringUtils.isNotBlank(param.getTdqConfig()), "TDQ config is empty");
+
       Validate.isTrue(param.getFrom() <= param.getTo(), "from must be earlier than to");
 
       TdqConfig config = JsonUtils.parseObject(param.getTdqConfig(), TdqConfig.class);
@@ -132,6 +134,8 @@ public class ProfilerServiceImpl implements ProfilerService {
     final QueryDropdownResult.QueryDropdownResultBuilder<?, ?> resultBuilder =
         QueryDropdownResult.builder().param(param);
     try {
+      Validate.isTrue(StringUtils.isNotBlank(param.getTdqConfig()), "TDQ config is empty");
+
       Validate.isTrue(param.getFrom() <= param.getTo(), "from must be earlier than to");
 
       TdqConfig config = JsonUtils.parseObject(param.getTdqConfig(), TdqConfig.class);

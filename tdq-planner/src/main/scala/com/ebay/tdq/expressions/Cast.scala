@@ -397,8 +397,12 @@ case class Cast(child: Expression, dataType: DataType, cacheKey: Option[String] 
       buildCast[Int](_, d => null)
     case TimestampType =>
       buildCast[Long](_, t => timestampToDouble(t))
-    case x: NumericType =>
-      b => x.numeric.asInstanceOf[Numeric[Any]].toDouble(b)
+    case x: NumericType => {
+      case d: Double =>
+        d
+      case b =>
+        x.numeric.asInstanceOf[Numeric[Any]].toDouble(b)
+    }
   }
 
   // converting us to seconds in double
