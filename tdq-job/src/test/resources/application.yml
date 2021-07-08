@@ -47,8 +47,8 @@ flink:
         scheme: http
         hostname: localhost
         port: 9200
-        username: ""
-        password: ""
+        api-key: ""
+        api-value: ""
     sink:
       types:
         - console
@@ -64,8 +64,8 @@ mysql:
   jdbc:
     url:
     driver-class-name:
-    user:
-    password:
+    u:
+    p:
 
 kafka:
   consumer:

@@ -28,8 +28,8 @@ public class ServiceFactory {
   protected static String PRONTO_SCHEME = EnvironmentUtils.get("pronto.scheme");
   protected static String PRONTO_HOSTNAME = EnvironmentUtils.get("pronto.hostname");
   protected static int PRONTO_PORT = EnvironmentUtils.getInteger("pronto.port");
-  protected static String PRONTO_USERNAME = EnvironmentUtils.get("pronto.username");
-  protected static String PRONTO_PASSWORD = EnvironmentUtils.get("pronto.password");
+  protected static String PRONTO_USERNAME = EnvironmentUtils.get("pronto.api-key");
+  protected static String PRONTO_PASSWORD = EnvironmentUtils.get("pronto.api-value");
 
   static {
     String profile = System.getenv(EnvironmentUtils.PROFILE);

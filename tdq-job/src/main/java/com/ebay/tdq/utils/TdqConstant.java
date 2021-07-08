@@ -23,8 +23,8 @@ public class TdqConstant {
   public static String PRONTO_SCHEME = getString("flink.app.source.pronto.scheme");
   public static String PRONTO_HOSTNAME = getString("flink.app.source.pronto.hostname");
   public static Integer PRONTO_PORT = getInteger("flink.app.source.pronto.port");
-  public static String PRONTO_USERNAME = getString("flink.app.source.pronto.username");
-  public static String PRONTO_PASSWORD = getString("flink.app.source.pronto.password");
+  public static String PRONTO_USERNAME = getString("flink.app.source.pronto.api-key");
+  public static String PRONTO_PASSWORD = getString("flink.app.source.pronto.api-value");
 
   public static Double SRC_SAMPLE_FRACTION = Double.valueOf(getString("flink.app.source.sample-fraction"));
 

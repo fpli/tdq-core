@@ -10,7 +10,6 @@ import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.sinks.ProntoSink;
 import com.ebay.tdq.sources.BehaviorPathfinderSource;
 import com.ebay.tdq.sources.TdqConfigSource;
-import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.FlinkEnvFactory;
 import com.ebay.tdq.utils.TdqEnv;
 import com.google.common.collect.Maps;
@@ -20,8 +19,6 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
-import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeHint;
@@ -35,7 +32,6 @@ import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindo
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.util.OutputTag;
 
-import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getStringOrDefault;
 import static com.ebay.tdq.utils.TdqConstant.METRIC_1ST_AGGR_PARALLELISM;
 import static com.ebay.tdq.utils.TdqConstant.METRIC_1ST_AGGR_W;
 import static com.ebay.tdq.utils.TdqConstant.METRIC_1ST_AGGR_W_MILLI;
@@ -183,23 +179,6 @@ public class ProfilingJob {
 
     //    ds.getSideOutput(tdqEnv.getExceptionOutputTag()).print();
     //    ds.getSideOutput(tdqEnv.getSampleOutputTag()).print();
-
-    long orderless = DateUtils.toSeconds(getStringOrDefault("flink.app.advance.watermark.out-of-orderless", "0min"));
-    long timeout = DateUtils.toSeconds(getStringOrDefault("flink.app.advance.watermark.idle-source-timeout", "0min"));
-    if (orderless > 0 && timeout > 0) {
-      final SerializableTimestampAssigner<TdqMetric> assigner =
-          (SerializableTimestampAssigner<TdqMetric>) (event, timestamp) -> event.getEventTime();
-      ds = ds.assignTimestampsAndWatermarks(
-          WatermarkStrategy
-              .<TdqMetric>forBoundedOutOfOrderness(Duration.ofSeconds(orderless))
-              .withTimestampAssigner(assigner)
-              .withIdleness(Duration.ofSeconds(timeout))
-      )
-          .name(uid + "_wk")
-          .uid(uid + "_wk")
-          .slotSharingGroup(slotSharingGroup)
-          .setParallelism(parallelism);
-    }
     return ds;
   }
 }

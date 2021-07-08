@@ -16,8 +16,8 @@ public class JdbcConfig implements Serializable {
   private String url;
 
   public JdbcConfig() {
-    this.user            = getString("mysql.jdbc.user");
-    this.password        = getString("mysql.jdbc.password");
+    this.user            = getString("mysql.jdbc.u");
+    this.password        = getString("mysql.jdbc.p");
     this.driverClassName = getString("mysql.jdbc.driver-class-name");
     this.url             = getString("mysql.jdbc.url");
   }

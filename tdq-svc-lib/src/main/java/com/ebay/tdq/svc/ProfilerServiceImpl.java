@@ -7,6 +7,7 @@ import com.ebay.tdq.dto.QueryDropdownParam;
 import com.ebay.tdq.dto.QueryDropdownResult;
 import com.ebay.tdq.dto.QueryProfilerParam;
 import com.ebay.tdq.dto.QueryProfilerResult;
+import com.ebay.tdq.dto.TdqResult;
 import com.ebay.tdq.expressions.aggregate.Max;
 import com.ebay.tdq.expressions.aggregate.Min;
 import com.ebay.tdq.rules.PhysicalPlan;
@@ -16,7 +17,6 @@ import com.ebay.tdq.rules.Transformation;
 import com.ebay.tdq.service.ProfilerService;
 import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.JsonUtils;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -124,7 +124,7 @@ public class ProfilerServiceImpl implements ProfilerService {
       return resultBuilder.build();
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-      resultBuilder.exception(e);
+      resultBuilder.exception(e).code(TdqResult.Code.FAILED);
       return resultBuilder.build();
     }
   }
@@ -161,37 +161,37 @@ public class ProfilerServiceImpl implements ProfilerService {
       //      rootBuilder.must(QueryBuilders.termsQuery("tags." + k, v));
       builder.query(rootBuilder);
       for (Transformation t : physicalPlan.dimensions()) {
-        resultBuilder.record(dropdown(param, builder, t.name()));
+        String dimension = t.name();
+        AggregationBuilder aggregation = AggregationBuilders
+            .terms("agg_" + dimension)
+            .field("tags." + dimension + ".raw")
+            .size(1000)
+            .order(BucketOrder.key(true));
+
+        builder.aggregation(aggregation);
+        builder.size(0);
+      }
+      log.info("search request {}", builder);
+      SearchRequest searchRequest = new SearchRequest(calculateIndexes(param.getFrom(), param.getTo()), builder);
+      searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
+
+      SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+
+      for (Transformation t : physicalPlan.dimensions()) {
+        String dimension = t.name();
+        ParsedStringTerms agg = searchResponse.getAggregations().get("agg_" + dimension);
+        final QueryDropdownResult.Record.RecordBuilder record = QueryDropdownResult.Record.builder().name(dimension);
+        for (val entry : agg.getBuckets()) {
+          record.item(entry.getKeyAsString());
+        }
+        resultBuilder.record(record.build());
       }
       return resultBuilder.build();
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-      resultBuilder.exception(e);
+      resultBuilder.exception(e).code(TdqResult.Code.FAILED);
       return resultBuilder.build();
     }
-  }
-
-  private QueryDropdownResult.Record dropdown(QueryDropdownParam param, SearchSourceBuilder builder,
-      String dimension) throws IOException {
-    AggregationBuilder aggregation = AggregationBuilders
-        .terms("agg")
-        .field("tags." + dimension + ".raw")
-        .size(1000)
-        .order(BucketOrder.key(true));
-
-    builder.aggregation(aggregation);
-    builder.size(0);
-    log.info("search request {}", builder);
-    SearchRequest searchRequest = new SearchRequest(calculateIndexes(param.getFrom(), param.getTo()), builder);
-    searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
-
-    SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-    ParsedStringTerms agg = searchResponse.getAggregations().get("agg");
-    final QueryDropdownResult.Record.RecordBuilder record = QueryDropdownResult.Record.builder().name(dimension);
-    for (val entry : agg.getBuckets()) {
-      record.item(entry.getKeyAsString());
-    }
-    return record.build();
   }
 
   private String[] calculateIndexes(long from, long end) {

@@ -16,7 +16,6 @@ import org.apache.flink.util.OutputTag;
 
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getSet;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
-import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getStringOrDefault;
 import static com.ebay.tdq.utils.TdqConstant.LOCAL_COMBINE_FLUSH_TIMEOUT;
 import static com.ebay.tdq.utils.TdqConstant.LOCAL_COMBINE_QUEUE_SIZE;
 import static com.ebay.tdq.utils.TdqConstant.METRIC_1ST_AGGR_PARTITIONS;
@@ -28,19 +27,18 @@ import static com.ebay.tdq.utils.TdqConstant.METRIC_1ST_AGGR_PARTITIONS;
 @Slf4j
 public class TdqEnv implements Serializable {
   private final JdbcConfig jdbcConfig;
+  private final ProntoConfig prontoConfig;
   private Map<Long, OutputTag<TdqMetric>> outputTagMap = new HashMap<>();
   private int localCombineFlushTimeout;
   private int localCombineQueueSize;
   private int metric1stAggrPartitions;
   private String jobName;
-  private boolean debug;
   private Set<String> sinkTypes;
   private OutputTag<TdqErrorMsg> exceptionOutputTag;
   private OutputTag<TdqSampleData> sampleOutputTag;
 
   public TdqEnv() {
-    this.debug = Boolean.parseBoolean(getStringOrDefault("flink.app.debug", "false").toLowerCase());
-
+    this.prontoConfig             = new ProntoConfig();
     this.jdbcConfig               = new JdbcConfig();
     this.localCombineFlushTimeout = LOCAL_COMBINE_FLUSH_TIMEOUT;
     this.localCombineQueueSize    = LOCAL_COMBINE_QUEUE_SIZE;
