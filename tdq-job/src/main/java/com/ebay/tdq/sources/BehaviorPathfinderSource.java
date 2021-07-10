@@ -6,6 +6,7 @@ import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import com.ebay.sojourner.flink.connector.kafka.schema.RawEventDeserializationSchema;
 import com.ebay.sojourner.flink.connector.kafka.schema.RawEventKafkaDeserializationSchemaWrapper;
+import com.ebay.tdq.utils.TdqEnv;
 import com.google.common.collect.Lists;
 import java.util.List;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -23,10 +24,23 @@ import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
  * @author juntzhang
  */
 public class BehaviorPathfinderSource extends AbstractSource {
+  private final TdqEnv tdqEnv;
+  private final StreamExecutionEnvironment env;
+
+  @Override
+  public TdqEnv getTdqEnv() {
+    return tdqEnv;
+  }
+
+  public BehaviorPathfinderSource(TdqEnv tdqEnv, StreamExecutionEnvironment env) {
+    this.tdqEnv = tdqEnv;
+    this.env    = env;
+  }
+
   // 1. Rheos Consumer
   // 1.1 Consume RawEvent from Rheos PathFinder topic
   // 1.2 Assign timestamps and emit watermarks.
-  public static List<DataStream<RawEvent>> build(final StreamExecutionEnvironment env) {
+  public List<DataStream<RawEvent>> build() {
     SourceDataStreamBuilder<RawEvent> dataStreamBuilder = new SourceDataStreamBuilder<>(env);
 
     DataStream<RawEvent> rnoDS = dataStreamBuilder

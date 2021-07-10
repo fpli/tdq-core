@@ -1,6 +1,6 @@
 flink:
   app:
-    name: TDQ-V2-pathfinder-prod
+    profile: prod
     parallelism:
       default: 100
       source: 100
@@ -8,7 +8,7 @@ flink:
       metric-2nd-aggr: 2
     window:
       metric-1st-aggr: 1min
-      supports: 1min,5min,10min,30min,1h,1d
+      supports: 1min,5min
     slot-sharing-group:
       source-event-lvs: tdq-lvs
       source-event-slc: tdq-slc

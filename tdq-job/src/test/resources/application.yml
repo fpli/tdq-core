@@ -1,6 +1,7 @@
 flink:
   app:
-    name: TDQ V2
+    profile: test
+    name: TDQ-V2-pathfinder
     parallelism:
       default: 1
       source: 1

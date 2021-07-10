@@ -1,6 +1,7 @@
 package com.ebay.tdq.rules;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -49,7 +50,7 @@ public class TdqMetric implements Serializable {
     return this;
   }
 
-  public String getTagIdWithET() {
+  public String getTagIdWithEventTime() {
     return tagId + "_" + getEventTime();
   }
 
@@ -92,5 +93,34 @@ public class TdqMetric implements Serializable {
     sj.add("eventTime" + "=" + FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").format(eventTime));
     sb.append(sj).append("}").append(" ").append(value);
     return sb.toString();
+  }
+
+
+  public Map<String, Object> toIndexRequest(Long processTime) {
+    Map<String, Object> json = new HashMap<>();
+    json.put("metric_key", getMetricKey());
+    json.put("event_time", getEventTime());
+    json.put("event_time_fmt", new Date(getEventTime()));
+    json.put("process_time", new Date(processTime));
+    Map<String, String> tags = new HashMap<>();
+    if (MapUtils.isNotEmpty(getTags())) {
+      getTags().forEach((k, v) -> {
+        if (v != null && k != null) {
+          tags.put(k, v.toString());
+        }
+      });
+      json.put("tags", tags);
+    }
+    Map<String, Double> expr = new HashMap<>();
+    getExprMap().forEach((k, v) -> {
+      if (v != null) {
+        expr.put(k, Double.valueOf(v.toString()));
+      } else {
+        expr.put(k, 0d);
+      }
+    });
+    json.put("expr", expr);
+    // json.put("value", element.getValue());
+    return json;
   }
 }

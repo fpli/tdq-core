@@ -45,7 +45,6 @@ case class ProfilingJobIT(
     // step3: aggregate metric by key and window
     val outputTags = reduceMetric(normalizeOperator)
     // step4: output metric by window
-    print(outputTags)
     val collect = new MemorySink(id)
     outputTags.asScala.foreach { case (k, v) =>
       val uid = "console_out_" + k
@@ -59,7 +58,7 @@ case class ProfilingJobIT(
 
   override def getTdqRawEventProcessFunction(
     descriptor: MapStateDescriptor[String, PhysicalPlans]): RawEventProcessFunction = {
-    new RawEventProcessFunction(descriptor,new TdqEnv()) {
+    new RawEventProcessFunction(descriptor, new TdqEnv()) {
       override protected def getPhysicalPlans: PhysicalPlans = PhysicalPlanFactory.getPhysicalPlans(
         Lists.newArrayList(JsonUtils.parseObject(config, classOf[TdqConfig]))
       )
@@ -97,7 +96,7 @@ case class ProfilingJobIT(
     Thread.sleep(1000)
     val client: Client = elasticsearchResource.getClient
     val suffix = DateUtils.calculateIndexDate(expects.head.getEventTime)
-    val searchRequest = new SearchRequest(s"${TdqConstant.PRONTO_INDEX_PATTERN}$suffix")
+    val searchRequest = new SearchRequest(s"${tdqEnv.getProntoConfig.getIndexPattern}$suffix")
     val searchSourceBuilder = new SearchSourceBuilder()
     searchSourceBuilder.query(QueryBuilders.matchAllQuery())
     searchSourceBuilder.size(100)
@@ -141,7 +140,7 @@ case class ProfilingJobIT(
       override def run(ctx: SourceFunction.SourceContext[RawEvent]): Unit = {
         Thread.sleep(1000)
         events.foreach(ctx.collect)
-//        Thread.sleep(10000000)
+        //        Thread.sleep(10000000)
       }
 
       override def cancel(): Unit = {}

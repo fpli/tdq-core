@@ -7,9 +7,10 @@ import com.ebay.tdq.functions.TdqMetric2ndAggrProcessWindowFunction;
 import com.ebay.tdq.functions.TdqMetricAggregateFunction;
 import com.ebay.tdq.rules.PhysicalPlans;
 import com.ebay.tdq.rules.TdqMetric;
-import com.ebay.tdq.sinks.ProntoSink;
+import com.ebay.tdq.sinks.TdqSinks;
 import com.ebay.tdq.sources.BehaviorPathfinderSource;
 import com.ebay.tdq.sources.TdqConfigSource;
+import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.FlinkEnvFactory;
 import com.ebay.tdq.utils.TdqEnv;
 import com.google.common.collect.Maps;
@@ -19,6 +20,8 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeHint;
@@ -30,14 +33,8 @@ import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.util.OutputTag;
 
-import static com.ebay.tdq.utils.TdqConstant.METRIC_1ST_AGGR_PARALLELISM;
-import static com.ebay.tdq.utils.TdqConstant.METRIC_1ST_AGGR_W;
-import static com.ebay.tdq.utils.TdqConstant.METRIC_1ST_AGGR_W_MILLI;
-import static com.ebay.tdq.utils.TdqConstant.METRIC_2ND_AGGR_PARALLELISM;
-import static com.ebay.tdq.utils.TdqConstant.PRONTO_INDEX_PATTERN;
-import static com.ebay.tdq.utils.TdqConstant.PRONTO_LATENCY_INDEX_PATTERN;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getStringOrDefault;
 
 /**
  * --tdq-profile tdq-pre-prod|tdq-prod [default is test]
@@ -55,7 +52,7 @@ public class ProfilingJob {
       setTdqEnv(new TdqEnv());
 
       // step1: build data source
-      List<DataStream<RawEvent>> rawEventDataStream = BehaviorPathfinderSource.build(env);
+      List<DataStream<RawEvent>> rawEventDataStream = new BehaviorPathfinderSource(tdqEnv, env).build();
 
       // step2: normalize event to metric
       DataStream<TdqMetric> normalizeOperator = normalizeEvent(env, rawEventDataStream);
@@ -75,46 +72,28 @@ public class ProfilingJob {
   // output metric by window
   protected void outputMetricByWindow(Map<String, SingleOutputStreamOperator<TdqMetric>> outputTags) {
     outputTags.forEach((key, ds) -> {
-      output(ds, key + "_o", false);
+      TdqSinks.sinkNormalMetric(key + "_o", tdqEnv, ds);
     });
-  }
-
-  private void output(DataStream<TdqMetric> ds, String id, boolean isLateData) {
-    if (tdqEnv.getSinkTypes().contains("console")) {
-      String uid = id + "_std";
-      ds.print(uid.toUpperCase())
-          .uid(uid)
-          .name(uid)
-          .setParallelism(METRIC_2ND_AGGR_PARALLELISM);
-    }
-    if (tdqEnv.getSinkTypes().contains("pronto")) {
-      String uid = id + "_pronto";
-      if (isLateData) {
-        new ProntoSink(uid, METRIC_2ND_AGGR_PARALLELISM, PRONTO_LATENCY_INDEX_PATTERN, 10)
-            .output(ds);
-      } else {
-        new ProntoSink(uid, METRIC_2ND_AGGR_PARALLELISM, PRONTO_INDEX_PATTERN).output(ds);
-      }
-    }
   }
 
   // aggregate metric by key and window
   protected Map<String, SingleOutputStreamOperator<TdqMetric>> reduceMetric(DataStream<TdqMetric> normalizeOperator) {
-    String uid = "1st_aggr_w_" + METRIC_1ST_AGGR_W;
-    OutputTag<TdqMetric> lateDataTag = new OutputTag<TdqMetric>("1st_aggr_w_latency") {
-    };
+    String uid = "1st_aggr_w_" + tdqEnv.getMetric1stAggrW();
     SingleOutputStreamOperator<TdqMetric> unifyDataStream = normalizeOperator
         .keyBy((KeySelector<TdqMetric, String>) m -> m.getPartition() + "#" + m.getTagId())
-        .window(TumblingEventTimeWindows.of(Time.seconds(METRIC_1ST_AGGR_W_MILLI)))
-        .sideOutputLateData(lateDataTag)
+        .window(TumblingEventTimeWindows.of(Time.seconds(tdqEnv.getMetric1stAggrWMilli())))
+        .sideOutputLateData(tdqEnv.getEventLatencyOutputTag())
         .aggregate(new TdqMetricAggregateFunction(),
             new TdqMetric1stAggrProcessWindowFunction(tdqEnv.getOutputTagMap()))
-        .setParallelism(METRIC_1ST_AGGR_PARALLELISM)
+        .setParallelism(tdqEnv.getMetric1stAggrParallelism())
         .slotSharingGroup("metric-1st-aggr")
         .name(uid)
         .uid(uid);
 
-    output(unifyDataStream.getSideOutput(lateDataTag), "1st_aggr_w_latency_o", true);
+    TdqSinks.sinkException(tdqEnv, unifyDataStream);
+    TdqSinks.sinkSampleLog(tdqEnv, unifyDataStream);
+    TdqSinks.sinkDebugLog(tdqEnv, unifyDataStream);
+    TdqSinks.sinkLatencyMetric(tdqEnv, unifyDataStream);
 
     Map<String, SingleOutputStreamOperator<TdqMetric>> ans = Maps.newHashMap();
     tdqEnv.getOutputTagMap().forEach((seconds, tag) -> {
@@ -123,7 +102,7 @@ public class ProfilingJob {
       SingleOutputStreamOperator<TdqMetric> ds = unifyDataStream.getSideOutput(tag).keyBy(TdqMetric::getTagId)
           .window(TumblingEventTimeWindows.of(Time.seconds(seconds)))
           .aggregate(new TdqMetricAggregateFunction(), new TdqMetric2ndAggrProcessWindowFunction())
-          .setParallelism(METRIC_2ND_AGGR_PARALLELISM)
+          .setParallelism(tdqEnv.getMetric2ndAggrParallelism())
           .name(tagUid)
           .uid(tagUid);
       ans.put(key, ds);
@@ -177,8 +156,22 @@ public class ProfilingJob {
         .slotSharingGroup(slotSharingGroup)
         .setParallelism(parallelism);
 
-    //    ds.getSideOutput(tdqEnv.getExceptionOutputTag()).print();
-    //    ds.getSideOutput(tdqEnv.getSampleOutputTag()).print();
+    long orderless = DateUtils.toSeconds(getStringOrDefault("flink.app.advance.watermark.out-of-orderless", "0min"));
+    long timeout = DateUtils.toSeconds(getStringOrDefault("flink.app.advance.watermark.idle-source-timeout", "0min"));
+    if (orderless > 0 && timeout > 0) {
+      final SerializableTimestampAssigner<TdqMetric> assigner =
+          (SerializableTimestampAssigner<TdqMetric>) (event, timestamp) -> event.getEventTime();
+      ds = ds.assignTimestampsAndWatermarks(
+          WatermarkStrategy
+              .<TdqMetric>forBoundedOutOfOrderness(Duration.ofSeconds(orderless))
+              .withTimestampAssigner(assigner)
+              .withIdleness(Duration.ofSeconds(timeout))
+      )
+          .name(uid + "_wk")
+          .uid(uid + "_wk")
+          .slotSharingGroup(slotSharingGroup)
+          .setParallelism(parallelism);
+    }
     return ds;
   }
 }

@@ -29,6 +29,6 @@ class TdqMetricTest {
       .genUID()
       .setValue(22d)
 
-    assert(m.getTagIdWithET == m2.getTagIdWithET)
+    assert(m.getTagIdWithEventTime == m2.getTagIdWithEventTime)
   }
 }

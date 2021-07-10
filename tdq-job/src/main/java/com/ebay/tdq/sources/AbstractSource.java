@@ -1,23 +1,24 @@
 package com.ebay.tdq.sources;
 
 import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.tdq.utils.TdqEnv;
 import java.util.Random;
 import org.apache.flink.streaming.api.datastream.DataStream;
-
-import static com.ebay.tdq.utils.TdqConstant.SRC_SAMPLE_FRACTION;
 
 /**
  * @author juntzhang
  */
 public abstract class AbstractSource {
-  protected static DataStream<RawEvent> sample(
+  public abstract TdqEnv getTdqEnv();
+
+  protected DataStream<RawEvent> sample(
       DataStream<RawEvent> rawEventDataStream,
       String slotSharingGroup,
       String id,
       int parallelism) {
-    String uid = "src_sample_operator_" + id.toLowerCase();
-    if (SRC_SAMPLE_FRACTION > 0 && SRC_SAMPLE_FRACTION < 1) {
-      final double sampleFraction = SRC_SAMPLE_FRACTION;
+    String uid = "src_sample_opt_" + id.toLowerCase();
+    final double sampleFraction = getTdqEnv().getSrcSampleFraction();
+    if (sampleFraction > 0 && sampleFraction < 1) {
       return rawEventDataStream
           .filter(r -> {
             return Math.abs(new Random().nextDouble()) < sampleFraction;
