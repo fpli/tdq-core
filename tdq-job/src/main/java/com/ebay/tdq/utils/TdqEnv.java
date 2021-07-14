@@ -29,6 +29,7 @@ public class TdqEnv implements Serializable {
   private String profile;
   private final JdbcConfig jdbcConfig;
   private final ProntoConfig prontoConfig;
+  private final HdfsConfig hdfsConfig;
   private int localCombineFlushTimeout;
   private int localCombineQueueSize;
   private int metric1stAggrPartitions;
@@ -71,6 +72,7 @@ public class TdqEnv implements Serializable {
     }
     this.prontoConfig = new ProntoConfig(getProfile());
     this.jdbcConfig   = new JdbcConfig();
+    this.hdfsConfig   = new HdfsConfig();
     // checkstyle.off: Regexp
     System.out.println(this.toString());
     // checkstyle.on: Regexp

@@ -1,20 +1,20 @@
 package com.ebay.tdq.utils;
 
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
+import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
+
 import java.io.Serializable;
 import java.util.StringJoiner;
 import java.util.TimeZone;
 import lombok.Data;
 import org.apache.commons.lang3.time.FastDateFormat;
 
-import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
-import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
-
 /**
  * @author juntzhang
  */
 @Data
 public class ProntoConfig implements Serializable {
-  private TdqEnv tdqEnv;
+
   private String indexPattern;
   private String latencyIndexPattern;
   private String exceptionIndexPattern;
@@ -28,15 +28,15 @@ public class ProntoConfig implements Serializable {
 
   public ProntoConfig(String profile) {
     this.exceptionIndexPattern = "tdq." + profile + ".log.exception.";
-    this.sampleIndexPattern    = "tdq." + profile + ".log.sample.";
-    this.debugIndexPattern     = "tdq." + profile + ".log.debug.";
-    this.indexPattern          = getString("flink.app.source.pronto.index-pattern");
-    this.latencyIndexPattern   = getString("flink.app.source.pronto.latency-index-pattern");
-    this.schema                = getString("flink.app.source.pronto.scheme");
-    this.hostname              = getString("flink.app.source.pronto.hostname");
-    this.port                  = getInteger("flink.app.source.pronto.port");
-    this.username              = getString("flink.app.source.pronto.api-key");
-    this.password              = getString("flink.app.source.pronto.api-value");
+    this.sampleIndexPattern = "tdq." + profile + ".log.sample.";
+    this.debugIndexPattern = "tdq." + profile + ".log.debug.";
+    this.indexPattern = getString("flink.app.source.pronto.index-pattern");
+    this.latencyIndexPattern = getString("flink.app.source.pronto.latency-index-pattern");
+    this.schema = getString("flink.app.source.pronto.scheme");
+    this.hostname = getString("flink.app.source.pronto.hostname");
+    this.port = getInteger("flink.app.source.pronto.port");
+    this.username = getString("flink.app.source.pronto.api-key");
+    this.password = getString("flink.app.source.pronto.api-value");
   }
 
   public String getIndexDateSuffix(long ts) {

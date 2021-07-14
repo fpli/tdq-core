@@ -64,7 +64,7 @@ class ExpressionTest {
   def test_not_rlike(): Unit = {
     val soj = new JHashMap[String, String]
     test("case when soj_nvl('u') not similar to '\\\\d+' then 1 else 0 end", soj, metric => {
-      assert(metric.getExprMap.get("p1") == 0)
+      assert(metric.getValues.get("p1") == 0)
     })
   }
 
@@ -73,7 +73,7 @@ class ExpressionTest {
     val soj = new JHashMap[String, String]
     soj.put("u", "11111")
     test("case when soj_nvl('u') similar to '\\\\d+' then 1 else 0 end", soj, metric => {
-      assert(metric.getExprMap.get("p1") == 1)
+      assert(metric.getValues.get("p1") == 1)
     })
   }
 
@@ -82,10 +82,10 @@ class ExpressionTest {
     val soj = new JHashMap[String, String]
     soj.put("u", "12")
     test("case when soj_nvl('u') like '1%' then 1 else 0 end", soj, metric => {
-      assert(metric.getExprMap.get("p1") == 1)
+      assert(metric.getValues.get("p1") == 1)
     })
     test("case when soj_nvl('u') not like '2%' then 1 else 0 end", soj, metric => {
-      assert(metric.getExprMap.get("p1") == 1)
+      assert(metric.getValues.get("p1") == 1)
     })
   }
 }

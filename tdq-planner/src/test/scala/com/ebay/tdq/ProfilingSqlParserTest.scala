@@ -112,7 +112,7 @@ class ProfilingSqlParserTest {
 
     var metric = plan.process(rawEvent)
     assert(metric != null)
-    assert(metric.getExprMap.get("t_duration_sum") == 155d)
+    assert(metric.getValues.get("t_duration_sum") == 155d)
 
     rawEvent.getClientData.setContentLength("25")
     metric = plan.process(rawEvent)
@@ -121,7 +121,7 @@ class ProfilingSqlParserTest {
     rawEvent.getClientData.setContentLength("35")
     rawEvent.getSojA.put("TDuration", "10")
     metric = plan.process(rawEvent)
-    assert(metric.getExprMap.get("t_duration_sum") == 10d)
+    assert(metric.getValues.get("t_duration_sum") == 10d)
 
   }
 
@@ -207,13 +207,13 @@ class ProfilingSqlParserTest {
     rawEvent.getSojA.put("itm", item)
 
     var metric = plan.process(rawEvent)
-    assert(metric.getExprMap.get("itm_cnt") == 1)
-    assert(metric.getExprMap.get("itm_valid_cnt") == 1)
+    assert(metric.getValues.get("itm_cnt") == 1)
+    assert(metric.getValues.get("itm_valid_cnt") == 1)
 
     rawEvent.getSojA.put("itm", "123a")
     metric = plan.process(rawEvent)
-    assert(metric.getExprMap.get("itm_cnt") == 1)
-    assert(metric.getExprMap.get("itm_valid_cnt") == 0)
+    assert(metric.getValues.get("itm_cnt") == 1)
+    assert(metric.getValues.get("itm_valid_cnt") == 0)
 
     rawEvent.getSojA.remove("itm")
     val s = System.currentTimeMillis()
@@ -276,12 +276,12 @@ class ProfilingSqlParserTest {
 
     var metric = plan.process(rawEvent)
     assert(metric.getTags.get("page_id") == 2547208)
-    assert(metric.getExprMap.get("total_cnt") == 1)
+    assert(metric.getValues.get("total_cnt") == 1)
 
     rawEvent.getSojA.put("p", "123")
     metric = plan.process(rawEvent)
     assert(metric.getTags.get("page_id") == null)
-    assert(metric.getExprMap.get("total_cnt") == 1)
+    assert(metric.getValues.get("total_cnt") == 1)
   }
 
   @Test
@@ -369,14 +369,14 @@ class ProfilingSqlParserTest {
 
     var metric = plan.process(rawEvent)
     println(metric)
-    assert(metric.getExprMap.get("total_cnt") == 1)
-    assert(metric.getExprMap.get("qualified_events_cnt") == 0)
+    assert(metric.getValues.get("total_cnt") == 1)
+    assert(metric.getValues.get("qualified_events_cnt") == 0)
 
     rawEvent.setEventTimestamp(SojTimestamp.getUnixTimestampToSojTimestamp(SojTimestamp.getSojTimestampToUnixTimestamp(3829847994095000L) + 1000 * 5))
     metric = plan.process(rawEvent)
     println(metric)
-    assert(metric.getExprMap.get("total_cnt") == 1)
-    assert(metric.getExprMap.get("qualified_events_cnt") == 1)
+    assert(metric.getValues.get("total_cnt") == 1)
+    assert(metric.getValues.get("qualified_events_cnt") == 1)
   }
 
   @Test

@@ -7,6 +7,7 @@ import com.ebay.sojourner.common.model.RawEvent
 import com.ebay.sojourner.flink.connector.kafka.SojSerializableTimestampAssigner
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.functions.RawEventProcessFunction
+import com.ebay.tdq.jobs.ProfilingJob
 import com.ebay.tdq.rules.{PhysicalPlans, TdqMetric}
 import com.ebay.tdq.sinks.MemorySink
 import com.ebay.tdq.utils._
@@ -33,15 +34,15 @@ case class ProfilingJobIT(
 
   def submit(): Unit = {
     // step0: prepare environment
-    val env: StreamExecutionEnvironment = FlinkEnvFactory.create(null, true)
-    val tdqEnv = new TdqEnv
+    env = FlinkEnvFactory.create(null, true)
+    tdqEnv = new TdqEnv
     tdqEnv.setSinkTypes(Sets.newHashSet("console"))
     setTdqEnv(tdqEnv)
 
     // step1: build data source
     val rawEventDataStream = buildSource(env)
     // step2: normalize event to metric
-    val normalizeOperator = normalizeEvent(env, rawEventDataStream)
+    val normalizeOperator = normalizeMetric(env, rawEventDataStream)
     // step3: aggregate metric by key and window
     val outputTags = reduceMetric(normalizeOperator)
     // step4: output metric by window
@@ -77,7 +78,7 @@ case class ProfilingJobIT(
     // step1: build data source
     val rawEventDataStream = buildSource(env)
     // step2: normalize event to metric
-    val normalizeOperator: DataStream[TdqMetric] = normalizeEvent(env, rawEventDataStream)
+    val normalizeOperator: DataStream[TdqMetric] = normalizeMetric(env, rawEventDataStream)
     // step3: aggregate metric by key and window
     val outputTags = reduceMetric(normalizeOperator)
     // step4: output metric by window

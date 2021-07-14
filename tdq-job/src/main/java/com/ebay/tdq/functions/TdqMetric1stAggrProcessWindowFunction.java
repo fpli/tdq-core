@@ -50,9 +50,9 @@ public class TdqMetric1stAggrProcessWindowFunction
   }
 
   void collect(TdqMetric m, Context context) {
-    if (m.getExprMap() != null && m.getExprMap().get("p1") != null) {
+    if (m.getValues() != null && m.getValues().get("p1") != null) {
       inc(DateUtils.getMinBuckets(m.getEventTime(), 5) + "_" + m.getMetricKey(),
-          (long) (double) m.getExprMap().get("p1"));
+          (long) (double) m.getValues().get("p1"));
     }
     OutputTag<TdqMetric> outputTag = tagMap.get(m.getWindow());
     if (outputTag != null) {

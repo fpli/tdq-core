@@ -30,10 +30,10 @@ flink:
       guid-set: [ ]
       pageid-set: [ ]
     checkpoint:
-      data-dir: /opt/tdq/checkpoint
-      interval-ms: 300000
-      timeout-ms: 900000
-      min-pause-between-ms: 120000
+      data-dir: /tmp/tdq/checkpoint
+      interval-ms: 10000
+      timeout-ms: 60000
+      min-pause-between-ms: 60000
       max-concurrent: 1
       tolerate-failure-number: 3
     hot-deploy: false
@@ -50,6 +50,8 @@ flink:
         port: 9200
         api-key: ""
         api-value: ""
+      hdfs:
+        normal-metric: target/test/normal-metric
     sink:
       types:
         - console
@@ -94,14 +96,14 @@ kafka:
         - rhs-swsvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
         - rhs-swsvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
     
-    max-poll-records: 5000
-    # 50MB, default value is 50MB
-    fetch-max-bytes: 52428800
-    # 8MB, default value is 64KB
-    receive-buffer: 8388608
-    fetch-max-wait-ms: 100
-    # 10MB, default value is 1MB
-    max-partitions-fetch-bytes: 10485760
+    max-poll-records: 2
+    # 1KB, default value is 50MB
+    fetch-max-bytes: 1024
+    # 1KB, default value is 64KB
+    receive-buffer: 1024
+    fetch-max-wait-ms: 10
+    # 1KB, default value is 1MB
+    max-partitions-fetch-bytes: 1024
     auto-offset-reset: latest
 
 rheos:

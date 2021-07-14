@@ -67,11 +67,11 @@ class SOJlibUDFTest {
     val soj = new JHashMap[String, String]
     soj.put("udid", "1")
     test("case when length(p2)>0 then 1 else 0 end", "soj_nvl('udid')", soj, metric => {
-      assert(metric.getExprMap.get("p1") == 1)
+      assert(metric.getValues.get("p1") == 1)
     })
 
     test("case when length(p2)>0 then 1 else 0 end", "soj_nvl('udid_test')", soj, metric => {
-      assert(metric.getExprMap.get("p1") == 0)
+      assert(metric.getValues.get("p1") == 0)
     })
   }
 
@@ -80,7 +80,7 @@ class SOJlibUDFTest {
     val soj = new JHashMap[String, String]
     soj.put("p", "5780")
     test("case when length(p2)>0 then 1 else 0 end", "soj_page_family(cast(soj_nvl('p') AS INTEGER))", soj, metric => {
-      assert(metric.getExprMap.get("p1") == 1)
+      assert(metric.getValues.get("p1") == 1)
       assert(metric.getTags.get("p2").toString.toUpperCase().equals("GR"))
     })
 
@@ -95,12 +95,12 @@ class SOJlibUDFTest {
     val soj = new JHashMap[String, String]
     test(s"case when p2 is not null then 1 else 0 end", "unix_timestamp(event_timestamp)", soj, metric => {
       println(metric)
-      assert(metric.getExprMap.get("p1") == 1)
+      assert(metric.getValues.get("p1") == 1)
     })
 
     test(s"case when p2 is not null then 1 else 0 end", "unix_timestamp(event_timestamp)", soj, metric => {
       println(metric)
-      assert(metric.getExprMap.get("p1") == 1)
+      assert(metric.getValues.get("p1") == 1)
     })
   }
 
@@ -259,12 +259,12 @@ class SOJlibUDFTest {
     soj.put("eprlogid", "t6ulcpjqcj9%253Fjqpsobtlrbn%2528q%257Fr3k*w%2560ut351%253E-179643d1077-0x177")
     test(s"case when p2=0 then 0 else 1 end", "unix_timestamp(event_timestamp) - unix_timestamp(to_timestamp(soj_parse_rlogid(soj_nvl('eprlogid'), 'timestamp')))", soj, metric => {
       println(metric)
-      assert(metric.getExprMap.get("p1") == 0)
+      assert(metric.getValues.get("p1") == 0)
     })
 
     test(s"case when p2=0 then 0 else 1 end", "unix_timestamp(event_timestamp) - unix_timestamp(to_timestamp(soj_parse_rlogid(soj_nvl('eprlogid'), 'timestamp')))", soj, metric => {
       println(metric)
-      assert(metric.getExprMap.get("p1") == 1)
+      assert(metric.getValues.get("p1") == 1)
       assert(metric.getTags.get("p2") == 5)
     }, eventTime = 3829847994095000L + 5000000)
   }

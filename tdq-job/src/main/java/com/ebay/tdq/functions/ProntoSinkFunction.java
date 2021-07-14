@@ -43,10 +43,10 @@ public class ProntoSinkFunction implements ElasticsearchSinkFunction<TdqMetric> 
 
   @Override
   public void process(TdqMetric m, RuntimeContext runtimeContext, RequestIndexer indexer) {
-    if (m.getExprMap() != null && m.getExprMap().get("p1") != null) {
+    if (m.getValues() != null && m.getValues().get("p1") != null) {
       inc(runtimeContext,
           m.getMetricKey() + "_" + DateUtils.getMinBuckets(m.getEventTime(), 5),
-          (long) (double) m.getExprMap().get("p1")
+          (long) (double) m.getValues().get("p1")
       );
     }
     try {

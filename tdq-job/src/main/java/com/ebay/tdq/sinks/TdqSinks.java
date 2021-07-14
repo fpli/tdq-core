@@ -1,9 +1,12 @@
 package com.ebay.tdq.sinks;
 
+import com.ebay.tdq.common.model.TdqAvroMetric;
 import com.ebay.tdq.functions.ProntoSinkFunction;
 import com.ebay.tdq.rules.TdqErrorMsg;
 import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.rules.TdqSampleData;
+import com.ebay.tdq.sources.HdfsConnectorFactory;
+import com.ebay.tdq.sources.TdqMetricDateTimeBucketAssigner;
 import com.ebay.tdq.utils.ProntoConfig;
 import com.ebay.tdq.utils.TdqEnv;
 import java.io.Serializable;
@@ -14,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
+import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 import org.apache.flink.streaming.connectors.elasticsearch.ActionRequestFailureHandler;
 import org.apache.flink.streaming.connectors.elasticsearch.ElasticsearchSinkBase;
 import org.apache.flink.streaming.connectors.elasticsearch.ElasticsearchSinkFunction;
@@ -54,6 +58,7 @@ public class TdqSinks implements Serializable {
           .name(id + "_pronto")
           .setParallelism(tdqEnv.getMetric2ndAggrParallelism());
     }
+    sinkHDFS(id, tdqEnv, ds);
   }
 
   public static void sinkLatencyMetric(TdqEnv tdqEnv, SingleOutputStreamOperator<TdqMetric> ds) {
@@ -158,7 +163,7 @@ public class TdqSinks implements Serializable {
         tdqEnv.getProntoConfig().getSchema()
     );
     httpHosts.add(httpHost);
-    ElasticsearchSink.Builder<T> builder = new ElasticsearchSink.Builder<T>(httpHosts, function);
+    ElasticsearchSink.Builder<T> builder = new ElasticsearchSink.Builder<>(httpHosts, function);
     builder.setFailureHandler(new ProntoActionRequestFailureHandler());
     builder.setBulkFlushMaxActions(numMaxActions);
     builder.setBulkFlushBackoff(true);
@@ -181,6 +186,7 @@ public class TdqSinks implements Serializable {
 
   @Slf4j
   private static class ProntoActionRequestFailureHandler implements ActionRequestFailureHandler {
+
     private static final long serialVersionUID = 942269087742453482L;
 
     @Override
@@ -201,5 +207,23 @@ public class TdqSinks implements Serializable {
         throw failure;
       }
     }
+  }
+
+
+  public static void sinkHDFS(String id, TdqEnv tdqEnv, DataStream<TdqMetric> ds) {
+    StreamingFileSink<TdqAvroMetric> sink = HdfsConnectorFactory
+        .createWithParquet(tdqEnv.getHdfsConfig().getNormalMetricPath(),
+            TdqAvroMetric.class, new TdqMetricDateTimeBucketAssigner());
+    ds.map(TdqMetric::toTdqAvroMetric)
+        .uid(id + "_avro_transformer")
+        .name(id + "_avro_transformer")
+        .setParallelism(1)
+        .slotSharingGroup(id + "_hdfs")
+        .addSink(sink)
+        .uid(id + "_hdfs")
+        .name(id + "_hdfs")
+        .slotSharingGroup(id + "_hdfs")
+        .setParallelism(1);
+
   }
 }

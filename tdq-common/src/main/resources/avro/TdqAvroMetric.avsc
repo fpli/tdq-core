@@ -1,0 +1,13 @@
+{
+  "type": "record",
+  "name": "TdqAvroMetric",
+  "namespace": "com.ebay.tdq.common.model",
+  "fields": [
+    { "name": "metricId",    "type": [ "null", "string" ],                                      "doc": "metric key"   },
+    { "name": "metricName",  "type": [ "null", "string" ],                                      "doc": "metric key"   },
+    { "name": "eventTime",   "type": "long",                                                    "doc": "event time"  },
+    { "name": "processTime", "type": "long",                                                    "doc": "process time"  },
+    { "name": "tags",        "type": [ "null", { "type": "map", "values": "string" }]                                 },
+    { "name": "values",      "type": { "type": "map", "values": "double"}                                             }
+  ]
+}
