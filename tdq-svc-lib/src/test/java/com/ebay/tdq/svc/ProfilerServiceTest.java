@@ -50,11 +50,11 @@ public class ProfilerServiceTest {
   }
 
   public void createData(Client client) throws Exception {
-    val index = ServiceFactory.INDEX_PREFIX + "2021.05.28";
-    val latencyIndex = ServiceFactory.LATENCY_INDEX_PREFIX + "2021.05.28";
+    val index = ServiceFactory.prontoConfig.getIndexPattern() + "2021.05.28";
+    val latencyIndex = ServiceFactory.prontoConfig.getLatencyIndexPattern() + "2021.05.28";
 
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics");
-    request.patterns(Lists.newArrayList(ServiceFactory.INDEX_PREFIX + "*"));
+    request.patterns(Lists.newArrayList(ServiceFactory.prontoConfig.getIndexPattern() + "*"));
     String source = IOUtils.toString(this.getClass().getResourceAsStream("/tdq-metrics-template.json"));
     request.source(source, XContentType.JSON);
     client.admin().indices().putTemplate(request).get();

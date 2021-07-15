@@ -1,6 +1,7 @@
 package com.ebay.tdq.svc;
 
 import com.ebay.sojourner.common.env.EnvironmentUtils;
+import com.ebay.tdq.config.ProntoConfig;
 import com.ebay.tdq.service.ProfilerService;
 import com.ebay.tdq.service.RuleEngineService;
 import java.io.IOException;
@@ -23,18 +24,15 @@ import org.elasticsearch.client.RestHighLevelClient;
  */
 @Slf4j
 public class ServiceFactory {
-  protected static String INDEX_PREFIX = EnvironmentUtils.get("pronto.index-pattern");
-  protected static String LATENCY_INDEX_PREFIX = EnvironmentUtils.get("pronto.latency-index-pattern");
-  protected static String PRONTO_SCHEME = EnvironmentUtils.get("pronto.scheme");
-  protected static String PRONTO_HOSTNAME = EnvironmentUtils.get("pronto.hostname");
-  protected static int PRONTO_PORT = EnvironmentUtils.getInteger("pronto.port");
-  protected static String PRONTO_USERNAME = EnvironmentUtils.get("pronto.api-key");
-  protected static String PRONTO_PASSWORD = EnvironmentUtils.get("pronto.api-value");
+  protected static ProntoConfig prontoConfig;
 
   static {
-    String profile = System.getenv(EnvironmentUtils.PROFILE);
-    if (StringUtils.isNotBlank(profile)) {
-      EnvironmentUtils.activateProfile(profile);
+    synchronized (ServiceFactory.class) {
+      String profile = System.getenv(EnvironmentUtils.PROFILE);
+      if (StringUtils.isNotBlank(profile)) {
+        EnvironmentUtils.activateProfile(profile);
+      }
+      prontoConfig = new ProntoConfig();
     }
   }
 
@@ -55,11 +53,12 @@ public class ServiceFactory {
   }
 
   protected static RestHighLevelClient restHighLevelClient() {
-    RestClientBuilder builder = RestClient.builder(new HttpHost(PRONTO_HOSTNAME, PRONTO_PORT, PRONTO_SCHEME));
-    if (StringUtils.isNotBlank(PRONTO_USERNAME)) {
+    RestClientBuilder builder = RestClient.builder(new HttpHost(
+        prontoConfig.getHostname(), prontoConfig.getPort(), prontoConfig.getSchema()));
+    if (StringUtils.isNotBlank(prontoConfig.getHostname())) {
       final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-      credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(PRONTO_USERNAME,
-          PRONTO_PASSWORD));
+      credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(
+          prontoConfig.getUsername(), prontoConfig.getPassword()));
       builder.setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
         @Override
         public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {

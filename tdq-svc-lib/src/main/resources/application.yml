@@ -1,8 +1,15 @@
-pronto:
-  index-pattern: tdq-metrics-test-
-  latency-index-pattern: tdq-metrics-test-latency-
-  scheme: https
-  hostname: estdq-datalvs.vip.ebay.com
-  port: 443
-  api-key: 76361a1177564b72bdba1ddb23d17c58
-  api-value: 1tIU7GQSADe4bCGGifWLfYYJSZGA8Szlc3ZWDMnd3gMhk43XPLUpw9Mv5viYQZ73
+flink:
+  app:
+    profile: test
+    source:
+      pronto:
+        index-pattern: tdq.${flink.app.profile}.metric.normal.
+        latency-index-pattern: tdq.${flink.app.profile}.metric.latency.
+        debug-index-pattern: tdq.${flink.app.profile}.log.debug.
+        sample-index-pattern: tdq.${flink.app.profile}.log.sample.
+        exception-index-pattern: tdq.${flink.app.profile}.log.exception.
+        scheme: https
+        hostname: estdq-datalvs.vip.ebay.com
+        port: 443
+        api-key: 76361a1177564b72bdba1ddb23d17c58
+        api-value: 1tIU7GQSADe4bCGGifWLfYYJSZGA8Szlc3ZWDMnd3gMhk43XPLUpw9Mv5viYQZ73

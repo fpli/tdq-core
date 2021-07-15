@@ -1,14 +1,14 @@
 flink:
   app:
-    profile: pre-prod
+    profile: test
     parallelism:
-      metric-1st-aggr: 200
-      metric-1st-aggr-partitions: 47
-      metric-2nd-aggr: 2
+      metric-1st-aggr: 50
+      metric-1st-aggr-partitions: 3
+      metric-2nd-aggr: 1
     window:
       supports: 1min,5min
     source:
-      sample-fraction: 0
+      sample-fraction: 0.01
     advance:
       watermark:
         out-of-orderless: 5min

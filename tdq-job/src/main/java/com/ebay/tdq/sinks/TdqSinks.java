@@ -1,13 +1,16 @@
 package com.ebay.tdq.sinks;
 
+import static com.ebay.tdq.utils.TdqEnv.LATENCY_METRIC;
+import static com.ebay.tdq.utils.TdqEnv.NORMAL_METRIC;
+
 import com.ebay.tdq.common.model.TdqAvroMetric;
+import com.ebay.tdq.config.ProntoConfig;
 import com.ebay.tdq.functions.ProntoSinkFunction;
 import com.ebay.tdq.rules.TdqErrorMsg;
 import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.rules.TdqSampleData;
 import com.ebay.tdq.sources.HdfsConnectorFactory;
 import com.ebay.tdq.sources.TdqMetricDateTimeBucketAssigner;
-import com.ebay.tdq.utils.ProntoConfig;
 import com.ebay.tdq.utils.TdqEnv;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -43,7 +46,7 @@ import org.elasticsearch.common.util.concurrent.EsRejectedExecutionException;
 public class TdqSinks implements Serializable {
 
   public static void sinkNormalMetric(String id, TdqEnv tdqEnv, DataStream<TdqMetric> ds) {
-    if (tdqEnv.getSinkTypes().contains("console")) {
+    if (tdqEnv.isNormalMetricSink("console")) {
       String uid = id + "_std";
       ds
           .print(uid.toUpperCase())
@@ -51,25 +54,27 @@ public class TdqSinks implements Serializable {
           .name(uid)
           .setParallelism(tdqEnv.getMetric2ndAggrParallelism());
     }
-    if (tdqEnv.getSinkTypes().contains("pronto")) {
+    if (tdqEnv.isNormalMetricSink("pronto")) {
       ds
           .addSink(buildPronto(tdqEnv, 1, new ProntoSinkFunction(tdqEnv.getProntoConfig().getIndexPattern())))
           .uid(id + "_pronto")
           .name(id + "_pronto")
           .setParallelism(tdqEnv.getMetric2ndAggrParallelism());
     }
-    sinkHDFS(id, tdqEnv, ds);
+    if (tdqEnv.isNormalMetricSink("hdfs")) {
+      sinkHDFS(id, NORMAL_METRIC, tdqEnv, ds);
+    }
   }
 
   public static void sinkLatencyMetric(TdqEnv tdqEnv, SingleOutputStreamOperator<TdqMetric> ds) {
-    if (tdqEnv.getSinkTypes().contains("console")) {
+    if (tdqEnv.isLatencyMetricSink("console")) {
       ds
           .print("EVT_LATENCY_O_STD")
           .uid("evt_latency_o_std")
           .name("evt_latency_o_std")
           .setParallelism(tdqEnv.getMetric2ndAggrParallelism());
     }
-    if (tdqEnv.getSinkTypes().contains("pronto")) {
+    if (tdqEnv.isLatencyMetricSink("pronto")) {
       ds.getSideOutput(tdqEnv.getEventLatencyOutputTag())
           .addSink(buildPronto(tdqEnv, 10,
               new ElasticsearchSinkFunction<TdqMetric>() {
@@ -88,10 +93,13 @@ public class TdqSinks implements Serializable {
           .name("evt_latency_o_pronto")
           .setParallelism(tdqEnv.getMetric2ndAggrParallelism());
     }
+    if (tdqEnv.isLatencyMetricSink("hdfs")) {
+      sinkHDFS("evt_latency", LATENCY_METRIC, tdqEnv, ds);
+    }
   }
 
   public static void sinkDebugLog(TdqEnv tdqEnv, SingleOutputStreamOperator<TdqMetric> ds) {
-    if (tdqEnv.getSinkTypes().contains("pronto")) {
+    if (tdqEnv.isDebugLogSink("pronto")) {
       ds.getSideOutput(tdqEnv.getDebugOutputTag())
           .addSink(buildPronto(tdqEnv, 1,
               new ElasticsearchSinkFunction<TdqSampleData>() {
@@ -112,7 +120,7 @@ public class TdqSinks implements Serializable {
   }
 
   public static void sinkSampleLog(TdqEnv tdqEnv, SingleOutputStreamOperator<TdqMetric> ds) {
-    if (tdqEnv.getSinkTypes().contains("pronto")) {
+    if (tdqEnv.isSampleLogSink("pronto")) {
       ds.getSideOutput(tdqEnv.getSampleOutputTag())
           .addSink(buildPronto(tdqEnv, 20,
               new ElasticsearchSinkFunction<TdqSampleData>() {
@@ -133,7 +141,7 @@ public class TdqSinks implements Serializable {
   }
 
   public static void sinkException(TdqEnv tdqEnv, SingleOutputStreamOperator<TdqMetric> ds) {
-    if (tdqEnv.getSinkTypes().contains("pronto")) {
+    if (tdqEnv.isExceptionLogSink("pronto")) {
       ds.getSideOutput(tdqEnv.getExceptionOutputTag())
           .addSink(buildPronto(tdqEnv, 1,
               new ElasticsearchSinkFunction<TdqErrorMsg>() {
@@ -210,13 +218,16 @@ public class TdqSinks implements Serializable {
   }
 
 
-  public static void sinkHDFS(String id, TdqEnv tdqEnv, DataStream<TdqMetric> ds) {
-    StreamingFileSink<TdqAvroMetric> sink = HdfsConnectorFactory
-        .createWithParquet(tdqEnv.getHdfsConfig().getNormalMetricPath(),
-            TdqAvroMetric.class, new TdqMetricDateTimeBucketAssigner());
+  public static void sinkHDFS(String id, String scene, TdqEnv tdqEnv, DataStream<TdqMetric> ds) {
+    String path = tdqEnv.getHdfsConfig().getNormalMetricPath();
+    if (scene.equals(LATENCY_METRIC)) {
+      path = tdqEnv.getHdfsConfig().getLatencyMetricPath();
+    }
+    StreamingFileSink<TdqAvroMetric> sink = HdfsConnectorFactory.createWithParquet(
+        path, TdqAvroMetric.class, new TdqMetricDateTimeBucketAssigner());
     ds.map(TdqMetric::toTdqAvroMetric)
-        .uid(id + "_avro_transformer")
-        .name(id + "_avro_transformer")
+        .uid(id + "_avro")
+        .name(id + "_avro")
         .setParallelism(1)
         .slotSharingGroup(id + "_hdfs")
         .addSink(sink)

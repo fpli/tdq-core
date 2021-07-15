@@ -13,7 +13,7 @@
         {"alias": "soj_tag_t",        "expr": "soj_nvl('t')"},
         {"alias": "domain",           "expr": "soj_page_family(CAST(soj_tag_p AS INTEGER))"},
         {"alias": "site_id",          "expr": "CAST(soj_tag_t AS INTEGER)"},
-        {"alias": "gmt_total_cnt",        "expr": "count(1)"},
+        {"alias": "gmt_total_cnt",    "expr": "count(1)"},
         {"alias": "gmt_usr_cnt",      "expr": "sum(case when LENGTH(soj_tag_u) > 0 then 1.0 else 0.0 end)" }
       ]
     }

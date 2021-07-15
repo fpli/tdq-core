@@ -11,7 +11,7 @@ import com.ebay.tdq.jobs.ProfilingJob
 import com.ebay.tdq.rules.{PhysicalPlans, TdqMetric}
 import com.ebay.tdq.sinks.MemorySink
 import com.ebay.tdq.utils._
-import com.google.common.collect.{Lists, Sets}
+import com.google.common.collect.Lists
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
 import org.apache.flink.api.common.state.MapStateDescriptor
 import org.apache.flink.streaming.api.datastream.DataStream
@@ -34,9 +34,8 @@ case class ProfilingJobIT(
 
   def submit(): Unit = {
     // step0: prepare environment
-    env = FlinkEnvFactory.create(null, true)
+    env = FlinkEnvFactory.create(Array[String](), true)
     tdqEnv = new TdqEnv
-    tdqEnv.setSinkTypes(Sets.newHashSet("console"))
     setTdqEnv(tdqEnv)
 
     // step1: build data source
@@ -71,9 +70,11 @@ case class ProfilingJobIT(
     elasticsearchResource.start()
 
     // step0: prepare environment
-    val env: StreamExecutionEnvironment = FlinkEnvFactory.create(null, true)
-    val tdqEnv = new TdqEnv
-    tdqEnv.setSinkTypes(Sets.newHashSet("pronto"))
+    env = FlinkEnvFactory.create(Array[String](), true)
+    tdqEnv = new TdqEnv
+    tdqEnv.getSinkTypes.asScala.foreach { case (_, v) =>
+      v.add("pronto")
+    }
     setTdqEnv(tdqEnv)
     // step1: build data source
     val rawEventDataStream = buildSource(env)

@@ -1,6 +1,6 @@
 flink:
   app:
-    profile: test
+    profile: dev
     name: TDQ-V2-pathfinder
     parallelism:
       default: 1
@@ -30,7 +30,7 @@ flink:
       guid-set: [ ]
       pageid-set: [ ]
     checkpoint:
-      data-dir: /tmp/tdq/checkpoint
+      data-dir: /tmp/tdq-${flink.app.profile}/checkpoint
       interval-ms: 10000
       timeout-ms: 60000
       min-pause-between-ms: 60000
@@ -51,11 +51,23 @@ flink:
         api-key: ""
         api-value: ""
       hdfs:
-        normal-metric: target/test/normal-metric
+        normal-metric: target/${flink.app.profile}/metric/normal
+        latency-metric: target/${flink.app.profile}/metric/latency/
+        debug-log: target/${flink.app.profile}/log/debug/
+        sample-log: target/${flink.app.profile}/log/sample/
+        exception-log: target/${flink.app.profile}/log/exception/
     sink:
       types:
-        - console
-        - pronto
+        normal-metric:
+          - console
+        latency-metric:
+          - console
+        debug-log:
+          - console
+        sample-log:
+          - console
+        exception-log:
+          - console
     advance:
       watermark:
         out-of-orderless: 5min
@@ -120,7 +132,3 @@ rest-client:
   config:
     pull-interval: 30000
     env: prod
-missing-cnt-exclude:
-  u:
-    - VI
-ua-parser-env: prod

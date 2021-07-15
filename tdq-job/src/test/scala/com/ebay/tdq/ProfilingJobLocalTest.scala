@@ -30,7 +30,6 @@ object ProfilingJobLocalTest extends ProfilingJob {
     // step0: prepare environment
     env = FlinkEnvFactory.create(null, true)
     tdqEnv = new TdqEnv
-    tdqEnv.setSinkTypes(Sets.newHashSet("console"))
 
     // step1: build data source
     val rawEventDataStream = buildSource(env)

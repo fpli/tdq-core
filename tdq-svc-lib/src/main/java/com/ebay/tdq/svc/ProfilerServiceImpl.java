@@ -1,5 +1,7 @@
 package com.ebay.tdq.svc;
 
+import static com.ebay.tdq.utils.DateUtils.calculateIndexDate;
+
 import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;
@@ -41,14 +43,12 @@ import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.elasticsearch.search.aggregations.metrics.NumericMetricsAggregation;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
-import static com.ebay.tdq.svc.ServiceFactory.INDEX_PREFIX;
-import static com.ebay.tdq.utils.DateUtils.calculateIndexDate;
-
 /**
  * @author juntzhang
  */
 @Slf4j
 public class ProfilerServiceImpl implements ProfilerService {
+
   final RestHighLevelClient client;
 
   ProfilerServiceImpl(RestHighLevelClient client) {
@@ -107,7 +107,6 @@ public class ProfilerServiceImpl implements ProfilerService {
       log.info("search request {}", builder);
       SearchRequest searchRequest = new SearchRequest(calculateIndexes(param.getFrom(), param.getTo()), builder);
       searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
-
 
       SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
       Histogram agg = searchResponse.getAggregations().get("agg");
@@ -198,11 +197,11 @@ public class ProfilerServiceImpl implements ProfilerService {
     Set<String> results = new HashSet<>();
     long next = from;
     while (end >= next) {
-      results.add(INDEX_PREFIX + calculateIndexDate(next));
+      results.add(ServiceFactory.prontoConfig.getIndexPattern() + calculateIndexDate(next));
       // results.add(LATENCY_INDEX_PREFIX + calculateIndexDate(next));
       next = next + 86400 * 1000;
     }
-    results.add(INDEX_PREFIX + calculateIndexDate(end));
+    results.add(ServiceFactory.prontoConfig.getIndexPattern() + calculateIndexDate(end));
     // results.add(LATENCY_INDEX_PREFIX + calculateIndexDate(end));
     log.info("search request indexes=>{}", StringUtils.join(results, ","));
     return results.toArray(new String[0]);
