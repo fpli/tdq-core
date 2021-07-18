@@ -44,6 +44,8 @@ under the License.
   <suppress checks=".*"
     files="/src/main/java/com/ebay/sojourner/common/model/Guid.java"/>
 
+  <suppress checks=".*" files="/src/main/java/com/ebay/tdq/common/model/.*.java"/>
+
   <!--  Below are the legacy code that will disable firstly to pass style checker-->
   <suppress checks="EmptyCatchBlock"
     files="src/main/java/com/ebay/sojourner/common/util/PropertyUtils.java"/>
@@ -66,4 +68,6 @@ under the License.
     files="src/main/java/com/ebay/sojourner/distributor/pipeline/.*.java$"/>
   <suppress checks="UncommentedMain"
             files="src/main/java/com/ebay/sojourner/tdq/pipeline/.*.java$"/>
+  <suppress checks="UncommentedMain"
+            files="src/main/java/com/ebay/tdq/jobs/.*.java$"/>
 </suppressions>

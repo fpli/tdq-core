@@ -11,6 +11,8 @@ import com.ebay.tdq.utils.PhysicalPlanFactory;
 import com.ebay.tdq.utils.TdqEnv;
 import com.ebay.tdq.utils.TdqMetricGroup;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.ListState;
 import org.apache.flink.api.common.state.ListStateDescriptor;
@@ -33,8 +35,8 @@ public class RawEventProcessFunction
   private final MapStateDescriptor<String, PhysicalPlans> stateDescriptor;
   private final TdqEnv tdqEnv;
   private final String cfgPlan = "CFG_PLAN";
-
-  private transient long logCurrentTimeMillis;
+  private transient long debugCurrentTimeMillis;
+  private transient long errorMsgCurrentTimeMillis;
   private transient TdqMetricGroup metricGroup;
   private transient ListState<TdqMetric> cacheState;
   private transient PhysicalPlans physicalPlans;
@@ -53,7 +55,7 @@ public class RawEventProcessFunction
     long s1 = System.nanoTime();
     ReadOnlyBroadcastState<String, PhysicalPlans> broadcastState = ctx.getBroadcastState(stateDescriptor);
     PhysicalPlans plans = broadcastState.get(cfgPlan);
-    if (plans != null) {
+    if (plans != null && ArrayUtils.isNotEmpty(plans.plans())) {
       metricGroup.inc("broadcastConfig");
       metricGroup.inc("broadcastConfig_" + plans.plans().length);
       if (plans.plans().length > 0) {
@@ -91,15 +93,16 @@ public class RawEventProcessFunction
     initialize();
     if (context.isRestored()) {
       metricGroup.inc("restored");
-      cacheState.get().forEach(v -> localCache.put(v.getTagIdWithET(), v));
+      cacheState.get().forEach(v -> localCache.put(v.getTagIdWithEventTime(), v));
     }
   }
 
   private void initialize() {
-    logCurrentTimeMillis = 0L;
-    metricGroup          = new TdqMetricGroup(getRuntimeContext().getMetricGroup());
-    physicalPlans        = getPhysicalPlans();
-    localCache           = new LocalCache(tdqEnv, metricGroup);
+    errorMsgCurrentTimeMillis = 0L;
+    debugCurrentTimeMillis    = 0L;
+    metricGroup               = new TdqMetricGroup(getRuntimeContext().getMetricGroup());
+    physicalPlans             = getPhysicalPlans();
+    localCache                = new LocalCache(tdqEnv, metricGroup);
     metricGroup.gauge(localCache);
   }
 
@@ -115,9 +118,13 @@ public class RawEventProcessFunction
     }
     for (PhysicalPlan plan : physicalPlans.plans()) {
       metricGroup.inc(plan.metricKey());
+      if (plan.metricKey().equals("exception")) {
+        throw new RuntimeException("this is debugging exception, checking checkpoint recovery.");
+      }
       long s = System.nanoTime();
       try {
         TdqMetric metric = plan.process(event);
+        debug(ctx, event, metric, plan);
         sampleData(ctx, event, metric, plan);
         localCache.flush(plan, metric, collector);
         metricGroup.updateEventHistogram(s);
@@ -127,8 +134,24 @@ public class RawEventProcessFunction
     }
   }
 
+
+  private void debug(ReadOnlyContext ctx, RawEvent event, TdqMetric metric, PhysicalPlan plan) {
+    if ((metric != null && metric.getEventTime() - ctx.currentWatermark() != 0)) {
+      metricGroup.inc("debugEvent_" + plan.metricKey());
+      if ((System.currentTimeMillis() - debugCurrentTimeMillis) > 5000) {
+        String param = "watermark=" + ctx.currentWatermark();
+        if (ctx.currentWatermark() > 0) {
+          param += ("\nwatermarkFmt=" + DateFormatUtils.format(ctx.currentWatermark(), "yyyy-MM-dd HH:mm:ss"));
+        }
+        ctx.output(tdqEnv.getDebugOutputTag(), new TdqSampleData(event, metric, plan.metricKey(), param));
+      }
+      debugCurrentTimeMillis = System.currentTimeMillis();
+    }
+  }
+
   private void sampleData(ReadOnlyContext ctx, RawEvent event, TdqMetric metric, PhysicalPlan plan) {
     if (plan.sampling()) {
+      metricGroup.inc("sampleEvent_" + plan.metricKey());
       ctx.output(tdqEnv.getSampleOutputTag(), new TdqSampleData(
           event, metric, plan.metricKey(), plan.cxt().get().toString())
       );
@@ -137,10 +160,10 @@ public class RawEventProcessFunction
 
   private void errorMsg(ReadOnlyContext ctx, RawEvent event, Exception e, PhysicalPlan plan) {
     metricGroup.inc("errorEvent_" + plan.metricKey());
-    if ((System.currentTimeMillis() - logCurrentTimeMillis) > 5000) {
-      log.warn("Drop event={},plan={}", event, plan);
+    if ((System.currentTimeMillis() - errorMsgCurrentTimeMillis) > 5000) {
+      log.warn("Drop event={},plan={},exception={}", event, plan, e);
       ctx.output(tdqEnv.getExceptionOutputTag(), new TdqErrorMsg(event, e, plan.metricKey()));
-      logCurrentTimeMillis = System.currentTimeMillis();
+      errorMsgCurrentTimeMillis = System.currentTimeMillis();
     }
   }
 }

@@ -108,8 +108,8 @@ case class PhysicalPlan(
       case Transformation(name, _, expression) =>
         val newV = ExpressionRegistry.aggregateOperator(
           expression.simpleName,
-          m1.getExprMap.getOrDefault(name, 0d),
-          m2.getExprMap.getOrDefault(name, 0d)
+          m1.getValues.getOrDefault(name, 0d),
+          m2.getValues.getOrDefault(name, 0d)
         )
         m1.putExpr(name, newV)
     }
@@ -118,7 +118,7 @@ case class PhysicalPlan(
 
   def evaluate(metric: TdqMetric): Unit = {
     val cacheData = new JHashMap[String, Any]()
-    metric.getExprMap.asScala.foreach { case (k: String, v) =>
+    metric.getValues.asScala.foreach { case (k: String, v) =>
       cacheData.put(k, v)
     }
     val input = InternalRow(Array(metric), cacheData)

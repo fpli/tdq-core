@@ -1,5 +1,7 @@
 package com.ebay.tdq.svc;
 
+import static com.ebay.tdq.utils.DateUtils.calculateIndexDate;
+
 import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;
@@ -7,6 +9,7 @@ import com.ebay.tdq.dto.QueryDropdownParam;
 import com.ebay.tdq.dto.QueryDropdownResult;
 import com.ebay.tdq.dto.QueryProfilerParam;
 import com.ebay.tdq.dto.QueryProfilerResult;
+import com.ebay.tdq.dto.TdqResult;
 import com.ebay.tdq.expressions.aggregate.Max;
 import com.ebay.tdq.expressions.aggregate.Min;
 import com.ebay.tdq.rules.PhysicalPlan;
@@ -16,7 +19,6 @@ import com.ebay.tdq.rules.Transformation;
 import com.ebay.tdq.service.ProfilerService;
 import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.JsonUtils;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -41,14 +43,12 @@ import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.elasticsearch.search.aggregations.metrics.NumericMetricsAggregation;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
-import static com.ebay.tdq.svc.ServiceFactory.INDEX_PREFIX;
-import static com.ebay.tdq.utils.DateUtils.calculateIndexDate;
-
 /**
  * @author juntzhang
  */
 @Slf4j
 public class ProfilerServiceImpl implements ProfilerService {
+
   final RestHighLevelClient client;
 
   ProfilerServiceImpl(RestHighLevelClient client) {
@@ -108,7 +108,6 @@ public class ProfilerServiceImpl implements ProfilerService {
       SearchRequest searchRequest = new SearchRequest(calculateIndexes(param.getFrom(), param.getTo()), builder);
       searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
 
-      client.search(searchRequest,RequestOptions.DEFAULT);
       SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
       Histogram agg = searchResponse.getAggregations().get("agg");
       for (Histogram.Bucket entry : agg.getBuckets()) {
@@ -124,7 +123,7 @@ public class ProfilerServiceImpl implements ProfilerService {
       return resultBuilder.build();
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-      resultBuilder.exception(e);
+      resultBuilder.exception(e).code(TdqResult.Code.FAILED);
       return resultBuilder.build();
     }
   }
@@ -161,48 +160,48 @@ public class ProfilerServiceImpl implements ProfilerService {
       //      rootBuilder.must(QueryBuilders.termsQuery("tags." + k, v));
       builder.query(rootBuilder);
       for (Transformation t : physicalPlan.dimensions()) {
-        resultBuilder.record(dropdown(param, builder, t.name()));
+        String dimension = t.name();
+        AggregationBuilder aggregation = AggregationBuilders
+            .terms("agg_" + dimension)
+            .field("tags." + dimension + ".raw")
+            .size(1000)
+            .order(BucketOrder.key(true));
+
+        builder.aggregation(aggregation);
+        builder.size(0);
+      }
+      log.info("search request {}", builder);
+      SearchRequest searchRequest = new SearchRequest(calculateIndexes(param.getFrom(), param.getTo()), builder);
+      searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
+
+      SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+
+      for (Transformation t : physicalPlan.dimensions()) {
+        String dimension = t.name();
+        ParsedStringTerms agg = searchResponse.getAggregations().get("agg_" + dimension);
+        final QueryDropdownResult.Record.RecordBuilder record = QueryDropdownResult.Record.builder().name(dimension);
+        for (val entry : agg.getBuckets()) {
+          record.item(entry.getKeyAsString());
+        }
+        resultBuilder.record(record.build());
       }
       return resultBuilder.build();
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-      resultBuilder.exception(e);
+      resultBuilder.exception(e).code(TdqResult.Code.FAILED);
       return resultBuilder.build();
     }
-  }
-
-  private QueryDropdownResult.Record dropdown(QueryDropdownParam param, SearchSourceBuilder builder,
-      String dimension) throws IOException {
-    AggregationBuilder aggregation = AggregationBuilders
-        .terms("agg")
-        .field("tags." + dimension + ".raw")
-        .size(1000)
-        .order(BucketOrder.key(true));
-
-    builder.aggregation(aggregation);
-    builder.size(0);
-    log.info("search request {}", builder);
-    SearchRequest searchRequest = new SearchRequest(calculateIndexes(param.getFrom(), param.getTo()), builder);
-    searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
-
-    SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-    ParsedStringTerms agg = searchResponse.getAggregations().get("agg");
-    final QueryDropdownResult.Record.RecordBuilder record = QueryDropdownResult.Record.builder().name(dimension);
-    for (val entry : agg.getBuckets()) {
-      record.item(entry.getKeyAsString());
-    }
-    return record.build();
   }
 
   private String[] calculateIndexes(long from, long end) {
     Set<String> results = new HashSet<>();
     long next = from;
     while (end >= next) {
-      results.add(INDEX_PREFIX + calculateIndexDate(next));
+      results.add(ServiceFactory.prontoConfig.getIndexPattern() + calculateIndexDate(next));
       // results.add(LATENCY_INDEX_PREFIX + calculateIndexDate(next));
       next = next + 86400 * 1000;
     }
-    results.add(INDEX_PREFIX + calculateIndexDate(end));
+    results.add(ServiceFactory.prontoConfig.getIndexPattern() + calculateIndexDate(end));
     // results.add(LATENCY_INDEX_PREFIX + calculateIndexDate(end));
     log.info("search request indexes=>{}", StringUtils.join(results, ","));
     return results.toArray(new String[0]);

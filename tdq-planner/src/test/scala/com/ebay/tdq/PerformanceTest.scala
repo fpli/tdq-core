@@ -146,7 +146,7 @@ class PerformanceTest {
 
     val metric = plan.process(rawEvent)
     assert(metric != null)
-    println(metric.getExprMap)
+    println(metric.getValues)
 
   }
 }

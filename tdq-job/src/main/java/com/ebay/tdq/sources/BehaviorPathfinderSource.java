@@ -1,16 +1,5 @@
 package com.ebay.tdq.sources;
 
-import com.ebay.sojourner.common.model.RawEvent;
-import com.ebay.sojourner.common.util.Property;
-import com.ebay.sojourner.flink.common.FlinkEnvUtils;
-import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
-import com.ebay.sojourner.flink.connector.kafka.schema.RawEventDeserializationSchema;
-import com.ebay.sojourner.flink.connector.kafka.schema.RawEventKafkaDeserializationSchemaWrapper;
-import com.google.common.collect.Lists;
-import java.util.List;
-import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-
 import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_FROM_TIMESTAMP;
 import static com.ebay.sojourner.common.util.Property.FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN;
 import static com.ebay.sojourner.flink.common.DataCenter.LVS;
@@ -19,14 +8,39 @@ import static com.ebay.sojourner.flink.common.DataCenter.SLC;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
 
+import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.sojourner.common.util.Property;
+import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
+import com.ebay.sojourner.flink.connector.kafka.schema.RawEventDeserializationSchema;
+import com.ebay.sojourner.flink.connector.kafka.schema.RawEventKafkaDeserializationSchemaWrapper;
+import com.ebay.tdq.utils.TdqEnv;
+import com.google.common.collect.Lists;
+import java.util.List;
+import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+
 /**
  * @author juntzhang
  */
 public class BehaviorPathfinderSource extends AbstractSource {
+
+  private final TdqEnv tdqEnv;
+  private final StreamExecutionEnvironment env;
+
+  @Override
+  public TdqEnv getTdqEnv() {
+    return tdqEnv;
+  }
+
+  public BehaviorPathfinderSource(TdqEnv tdqEnv, StreamExecutionEnvironment env) {
+    this.tdqEnv = tdqEnv;
+    this.env = env;
+  }
+
   // 1. Rheos Consumer
   // 1.1 Consume RawEvent from Rheos PathFinder topic
   // 1.2 Assign timestamps and emit watermarks.
-  public static List<DataStream<RawEvent>> build(final StreamExecutionEnvironment env) {
+  public List<DataStream<RawEvent>> build() {
     SourceDataStreamBuilder<RawEvent> dataStreamBuilder = new SourceDataStreamBuilder<>(env);
 
     DataStream<RawEvent> rnoDS = dataStreamBuilder
@@ -38,7 +52,6 @@ public class BehaviorPathfinderSource extends AbstractSource {
         .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
         .idleSourceTimeout(getInteger(Property.FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN))
         .build(new RawEventKafkaDeserializationSchemaWrapper(
-            FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
             new RawEventDeserializationSchema()));
     DataStream<RawEvent> slcDS = dataStreamBuilder
         .dc(SLC)
@@ -49,7 +62,6 @@ public class BehaviorPathfinderSource extends AbstractSource {
         .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
         .idleSourceTimeout(getInteger(Property.FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN))
         .build(new RawEventKafkaDeserializationSchemaWrapper(
-            FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
             new RawEventDeserializationSchema()));
     DataStream<RawEvent> lvsDS = dataStreamBuilder
         .dc(LVS)
@@ -60,7 +72,6 @@ public class BehaviorPathfinderSource extends AbstractSource {
         .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
         .idleSourceTimeout(getInteger(Property.FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN))
         .build(new RawEventKafkaDeserializationSchemaWrapper(
-            FlinkEnvUtils.getSet(Property.FILTER_GUID_SET),
             new RawEventDeserializationSchema()));
     int p = getInteger(Property.SOURCE_PARALLELISM);
     DataStream<RawEvent> r = sample(rnoDS, getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP), "RNO", p);

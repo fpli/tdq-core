@@ -1,5 +1,11 @@
 package com.ebay.sojourner.flink.common;
 
+import static com.ebay.sojourner.common.util.Property.CHECKPOINT_INTERVAL_MS;
+import static com.ebay.sojourner.common.util.Property.CHECKPOINT_MAX_CONCURRENT;
+import static com.ebay.sojourner.common.util.Property.CHECKPOINT_MIN_PAUSE_BETWEEN_MS;
+import static com.ebay.sojourner.common.util.Property.CHECKPOINT_TIMEOUT_MS;
+import static com.ebay.sojourner.common.util.Property.TOLERATE_FAILURE_CHECKPOINT_NUMBER;
+
 import com.ebay.sojourner.common.env.EnvironmentUtils;
 import com.ebay.sojourner.flink.state.StateBackendFactory;
 import com.google.common.collect.Maps;
@@ -7,6 +13,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
@@ -14,17 +22,12 @@ import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
-import static com.ebay.sojourner.common.util.Property.CHECKPOINT_INTERVAL_MS;
-import static com.ebay.sojourner.common.util.Property.CHECKPOINT_MAX_CONCURRENT;
-import static com.ebay.sojourner.common.util.Property.CHECKPOINT_MIN_PAUSE_BETWEEN_MS;
-import static com.ebay.sojourner.common.util.Property.CHECKPOINT_TIMEOUT_MS;
-import static com.ebay.sojourner.common.util.Property.TOLERATE_FAILURE_CHECKPOINT_NUMBER;
-
 public class FlinkEnvUtils {
 
   private static final Map<String, String> CONFIG = Maps.newHashMap();
+  private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$\\{(.*?)}");
 
-  private static void load(String[] args) {
+  public static void load(String[] args) {
     ParameterTool parameterTool = ParameterTool.fromArgs(args);
     String profile = parameterTool.get(EnvironmentUtils.PROFILE);
     if (StringUtils.isNotBlank(profile)) {
@@ -125,5 +128,11 @@ public class FlinkEnvUtils {
     String value = EnvironmentUtils.get(key);
     CONFIG.put(key, value);
     return EnvironmentUtils.getStringList(key, delimiter);
+  }
+
+  public static String getStringWithPattern(String key) {
+    String value = EnvironmentUtils.getStringWithPattern(key);
+    CONFIG.put(key, value);
+    return value;
   }
 }

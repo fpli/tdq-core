@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,7 +30,8 @@ import org.junit.Test;
 @Slf4j
 public class ProfilerServiceTest {
 
-  public HashMap<String, Object> getMap(String event_time, String pageId, Double itm_valid_cnt, Double itm_cnt) throws ParseException {
+  public HashMap<String, Object> getMap(String event_time, String pageId, String siteId, Double itm_valid_cnt,
+      Double itm_cnt) throws ParseException {
     HashMap<String, Object> json = Maps.newHashMap();
     Map<String, Double> expr = Maps.newHashMap();
     Map<String, String> tags = Maps.newHashMap();
@@ -38,6 +40,7 @@ public class ProfilerServiceTest {
     expr.put("itm_valid_cnt", itm_valid_cnt);
 
     tags.put("page_id", pageId);
+    tags.put("site", siteId);
 
     json.put("metric_key", "global_mandatory_tag_item_rate1");
     json.put("event_time", DateUtils.parseDate(event_time, new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime());
@@ -47,19 +50,19 @@ public class ProfilerServiceTest {
   }
 
   public void createData(Client client) throws Exception {
-    val index = ServiceFactory.INDEX_PREFIX + "2021.05.28";
-    val latencyIndex = ServiceFactory.LATENCY_INDEX_PREFIX + "2021.05.28";
+    val index = ServiceFactory.prontoConfig.getIndexPattern() + "2021.05.28";
+    val latencyIndex = ServiceFactory.prontoConfig.getLatencyIndexPattern() + "2021.05.28";
 
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics");
-    request.patterns(Lists.newArrayList(ServiceFactory.INDEX_PREFIX + "*"));
+    request.patterns(Lists.newArrayList(ServiceFactory.prontoConfig.getIndexPattern() + "*"));
     String source = IOUtils.toString(this.getClass().getResourceAsStream("/tdq-metrics-template.json"));
     request.source(source, XContentType.JSON);
     client.admin().indices().putTemplate(request).get();
 
-    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", 4d, 7d))).get();
-    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "711", 1d, 1d))).get();
-    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "1677718", 1d, 2d))).get();
-    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", 1d, 2d))).get();
+    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", "1", 4d, 7d))).get();
+    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "711", "2", 1d, 1d))).get();
+    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "1677718", "1", 1d, 2d))).get();
+    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", "1", 1d, 2d))).get();
     Thread.sleep(3000);
   }
 
@@ -97,16 +100,17 @@ public class ProfilerServiceTest {
     elasticsearchResource.start("es-test");
     createData(elasticsearchResource.getClient());
     QueryDropdownParam param = new QueryDropdownParam(
-        RuleEngineServiceTest.get("global_mandatory_tag_item_rate1"),
+        RuleEngineServiceTest.get("global_mandatory_tag_item_rate2"),
         DateUtils.parseDate("2021-05-29 12:02:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime(),
         DateUtils.parseDate("2021-05-29 12:04:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime()
     );
 
     QueryDropdownResult result = ServiceFactory.getProfiler().dropdown(param);
-    final QueryDropdownResult.Record rec = result.getRecords().get(0);
-    System.out.println(rec);
-    Assert.assertEquals(2, rec.getItems().size());
-    Assert.assertEquals("page_id", rec.getName());
+    List<QueryDropdownResult.Record> records = result.getRecords();
+    System.out.println(records);
+    Assert.assertEquals(2, records.size());
+    Assert.assertEquals(2, records.get(0).getItems().size());
+    Assert.assertEquals(2, records.get(1).getItems().size());
     ServiceFactory.close();
     elasticsearchResource.close();
   }

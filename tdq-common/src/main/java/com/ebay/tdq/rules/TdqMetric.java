@@ -1,6 +1,9 @@
 package com.ebay.tdq.rules;
 
+import com.ebay.tdq.common.model.TdqAvroMetric;
+import com.ebay.tdq.common.model.TdqAvroMetric.Builder;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -17,14 +20,15 @@ import org.apache.commons.lang3.time.FastDateFormat;
 @AllArgsConstructor
 @Data
 public class TdqMetric implements Serializable {
+
   private String tagId;      // metricKey + tags
   private Integer partition = 0;
   private Long window;       // seconds
+  private Long eventTime;
   private String metricKey;
   private Map<String, String> aggrExpresses = new HashMap<>();
   private Map<String, Object> tags = new TreeMap<>();
-  private long eventTime;
-  private Map<String, Double> exprMap = new HashMap<>();
+  private Map<String, Double> values = new HashMap<>();
   private Double value = 0d;
 
   public TdqMetric() {
@@ -49,7 +53,7 @@ public class TdqMetric implements Serializable {
     return this;
   }
 
-  public String getTagIdWithET() {
+  public String getTagIdWithEventTime() {
     return tagId + "_" + getEventTime();
   }
 
@@ -64,7 +68,7 @@ public class TdqMetric implements Serializable {
   }
 
   public TdqMetric putExpr(String k, Double v) {
-    exprMap.put(k, v);
+    values.put(k, v);
     return this;
   }
 
@@ -85,12 +89,77 @@ public class TdqMetric implements Serializable {
     sb.append(metricKey).append("{");
     StringJoiner sj = new StringJoiner(",");
     tags.forEach((k, v) -> sj.add("t-" + k + "=" + v));
-    exprMap.forEach((k, v) -> sj.add("e-" + k + "=" + v));
+    values.forEach((k, v) -> sj.add("e-" + k + "=" + v));
     sj.add("window" + "=" + window);
     sj.add("partition" + "=" + partition);
     sj.add("tag_id" + "=" + tagId);
     sj.add("eventTime" + "=" + FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").format(eventTime));
     sb.append(sj).append("}").append(" ").append(value);
     return sb.toString();
+  }
+
+
+  public Map<String, Object> toIndexRequest(Long processTime) {
+    Map<String, Object> json = new HashMap<>();
+    json.put("metric_key", getMetricKey());
+    json.put("event_time", getEventTime());
+    json.put("event_time_fmt", new Date(getEventTime()));
+    json.put("process_time", new Date(processTime));
+    Map<String, String> tags = new HashMap<>();
+    if (MapUtils.isNotEmpty(getTags())) {
+      getTags().forEach((k, v) -> {
+        if (v != null && k != null) {
+          tags.put(k, v.toString());
+        }
+      });
+      json.put("tags", tags);
+    }
+    Map<String, Double> expr = new HashMap<>();
+    getValues().forEach((k, v) -> {
+      if (v != null) {
+        expr.put(k, Double.valueOf(v.toString()));
+      } else {
+        expr.put(k, 0d);
+      }
+    });
+    json.put("expr", expr);
+    // json.put("value", element.getValue());
+    return json;
+  }
+
+  public TdqAvroMetric toTdqAvroMetric() {
+    final Builder builder = TdqAvroMetric.newBuilder();
+
+    Map<String, String> tags = new HashMap<>();
+    getTags().forEach((k, v) -> {
+      if (v != null && k != null) {
+        tags.put(k, v.toString());
+      }
+    });
+
+    Map<String, Double> values = new HashMap<>();
+    getValues().forEach((k, v) -> {
+      if (v != null) {
+        values.put(k, Double.valueOf(v.toString()));
+      } else {
+        values.put(k, 0d);
+      }
+    });
+
+    return builder
+        .setTags(tags)
+        .setValues(values)
+        .setMetricName(getMetricKey())
+        .setMetricId(getTagId())
+        .setProcessTime(System.currentTimeMillis())
+        .setEventTime(getEventTime())
+        .build();
+    //m.setRheosHeader(RheosHeader.newBuilder()
+    //    .setEventCreateTimestamp(System.currentTimeMillis())
+    //    .setEventSentTimestamp(System.currentTimeMillis())
+    //    .setSchemaId(100)
+    //    .setEventId("101")
+    //    .setProducerId("102")
+    //    .build());
   }
 }

@@ -48,11 +48,10 @@ public class FetchMetricsMsMtcServiceTest  {
     elasticsearchResource = new EmbeddedElasticsearch();
     elasticsearchResource.start("es-test");
     Client client=elasticsearchResource.getClient();
-    val index = ServiceFactory.INDEX_PREFIX + "tag_miss_cnt_glabal_mandotory_tag_rate";
-    val latencyIndex = ServiceFactory.LATENCY_INDEX_PREFIX + "2021.05.28";
+    val index = ServiceFactory.prontoConfig.getIndexPattern() + "tag_miss_cnt_glabal_mandotory_tag_rate";
 
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics-pronto");
-    request.patterns(Lists.newArrayList(ServiceFactory.INDEX_PREFIX + "*"));
+    request.patterns(Lists.newArrayList(ServiceFactory.prontoConfig.getIndexPattern()  + "*"));
     String source = IOUtils.toString(this.getClass().getResourceAsStream("/tdq-metrics-template2.json"));
     request.source(source, XContentType.JSON);
     client.admin().indices().putTemplate(request).get();

@@ -20,8 +20,8 @@ public class TdqMetricAggregateFunction implements AggregateFunction<TdqMetric, 
       m1.getAggrExpresses().forEach((expr, operatorName) -> {
         Double newV = ExpressionRegistry.aggregateOperator(
             operatorName,
-            m1.getExprMap().getOrDefault(expr, 0d),
-            m2.getExprMap().getOrDefault(expr, 0d)
+            m1.getValues().getOrDefault(expr, 0d),
+            m2.getValues().getOrDefault(expr, 0d)
         );
         m1.putExpr(expr, newV);
       });

@@ -1,6 +1,7 @@
 flink:
   app:
-    name: TDQ V2
+    profile: dev
+    name: TDQ-V2-pathfinder
     parallelism:
       default: 1
       source: 1
@@ -29,10 +30,10 @@ flink:
       guid-set: [ ]
       pageid-set: [ ]
     checkpoint:
-      data-dir: /opt/tdq/checkpoint
-      interval-ms: 300000
-      timeout-ms: 900000
-      min-pause-between-ms: 120000
+      data-dir: /tmp/tdq-${flink.app.profile}/checkpoint
+      interval-ms: 10000
+      timeout-ms: 60000
+      min-pause-between-ms: 60000
       max-concurrent: 1
       tolerate-failure-number: 3
     hot-deploy: false
@@ -47,12 +48,26 @@ flink:
         scheme: http
         hostname: localhost
         port: 9200
-        username: ""
-        password: ""
+        api-key: ""
+        api-value: ""
+      hdfs:
+        normal-metric: target/${flink.app.profile}/metric/normal
+        latency-metric: target/${flink.app.profile}/metric/latency/
+        debug-log: target/${flink.app.profile}/log/debug/
+        sample-log: target/${flink.app.profile}/log/sample/
+        exception-log: target/${flink.app.profile}/log/exception/
     sink:
       types:
-        - console
-        - pronto
+        normal-metric:
+          - console
+        latency-metric:
+          - console
+        debug-log:
+          - console
+        sample-log:
+          - console
+        exception-log:
+          - console
     advance:
       watermark:
         out-of-orderless: 5min
@@ -64,8 +79,8 @@ mysql:
   jdbc:
     url:
     driver-class-name:
-    user:
-    password:
+    u:
+    p:
 
 kafka:
   consumer:
@@ -93,14 +108,14 @@ kafka:
         - rhs-swsvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
         - rhs-swsvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
     
-    max-poll-records: 5000
-    # 50MB, default value is 50MB
-    fetch-max-bytes: 52428800
-    # 8MB, default value is 64KB
-    receive-buffer: 8388608
-    fetch-max-wait-ms: 100
-    # 10MB, default value is 1MB
-    max-partitions-fetch-bytes: 10485760
+    max-poll-records: 2
+    # 1KB, default value is 50MB
+    fetch-max-bytes: 1024
+    # 1KB, default value is 64KB
+    receive-buffer: 1024
+    fetch-max-wait-ms: 10
+    # 1KB, default value is 1MB
+    max-partitions-fetch-bytes: 1024
     auto-offset-reset: latest
 
 rheos:
@@ -117,7 +132,3 @@ rest-client:
   config:
     pull-interval: 30000
     env: prod
-missing-cnt-exclude:
-  u:
-    - VI
-ua-parser-env: prod

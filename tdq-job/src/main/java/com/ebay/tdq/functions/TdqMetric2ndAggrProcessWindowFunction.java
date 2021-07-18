@@ -41,9 +41,9 @@ public class TdqMetric2ndAggrProcessWindowFunction
   public void process(String s, Context context, Iterable<TdqMetric> elements,
       Collector<TdqMetric> out) {
     elements.forEach(metric -> {
-      if (metric.getExprMap() != null && metric.getExprMap().get("p1") != null) {
+      if (metric.getValues() != null && metric.getValues().get("p1") != null) {
         inc(DateUtils.getMinBuckets(metric.getEventTime(), 5) + "_" + metric.getMetricKey(),
-            (long) (double) metric.getExprMap().get("p1"));
+            (long) (double) metric.getValues().get("p1"));
       }
       metric.setEventTime(context.window().getEnd() - 1);
       out.collect(metric);

@@ -109,9 +109,9 @@ class LocalCacheTest {
             val k = p.uuid() + format(record.getEventTime)
             val old = mergeData.get(k)
             if (old.isDefined) {
-              mergeData.put(k, old.get + record.getExprMap.get("p1").asInstanceOf[Double])
+              mergeData.put(k, old.get + record.getValues.get("p1").asInstanceOf[Double])
             } else {
-              mergeData.put(k, record.getExprMap.get("p1").asInstanceOf[Double])
+              mergeData.put(k, record.getValues.get("p1").asInstanceOf[Double])
             }
           }
 

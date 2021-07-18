@@ -1,0 +1,29 @@
+{
+  "id": "1",
+  "rules": [
+    {
+      "name": "rule_1",
+      "type": "realtime.rheos.profiler",
+      "config": {"window": "2min"},
+      "profilers": [
+        {
+          "metric-name": "global_mandatory_tag_item_rate1",
+          "dimensions": ["page_id","site"],
+          "expr": "itm_valid_cnt / itm_cnt",
+          "transformations": [
+            {
+              "alias": "page_id",
+              "expr": "CAST( SOJ_NVL('p') AS INTEGER)"
+            },
+            {
+              "alias": "site",
+              "expr": "SOJ_NVL('t')"
+            },
+            {"alias": "itm_cnt", "expr": "count(1)"},
+            {"alias": "itm_valid_cnt", "expr": "Sum(case when CAST( SOJ_NVL('itm|itmid|itm_id|itmlist|litm') AS LONG) is not null then 1 else 0 end)"}
+          ]
+        }
+      ]
+    }
+  ]
+}

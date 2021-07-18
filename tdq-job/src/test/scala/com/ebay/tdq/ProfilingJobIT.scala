@@ -7,10 +7,11 @@ import com.ebay.sojourner.common.model.RawEvent
 import com.ebay.sojourner.flink.connector.kafka.SojSerializableTimestampAssigner
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.functions.RawEventProcessFunction
+import com.ebay.tdq.jobs.ProfilingJob
 import com.ebay.tdq.rules.{PhysicalPlans, TdqMetric}
 import com.ebay.tdq.sinks.MemorySink
 import com.ebay.tdq.utils._
-import com.google.common.collect.{Lists, Sets}
+import com.google.common.collect.Lists
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
 import org.apache.flink.api.common.state.MapStateDescriptor
 import org.apache.flink.streaming.api.datastream.DataStream
@@ -33,19 +34,17 @@ case class ProfilingJobIT(
 
   def submit(): Unit = {
     // step0: prepare environment
-    val env: StreamExecutionEnvironment = FlinkEnvFactory.create(null, true)
-    val tdqEnv = new TdqEnv
-    tdqEnv.setSinkTypes(Sets.newHashSet("console"))
+    env = FlinkEnvFactory.create(Array[String](), true)
+    tdqEnv = new TdqEnv
     setTdqEnv(tdqEnv)
 
     // step1: build data source
     val rawEventDataStream = buildSource(env)
     // step2: normalize event to metric
-    val normalizeOperator = normalizeEvent(env, rawEventDataStream)
+    val normalizeOperator = normalizeMetric(env, rawEventDataStream)
     // step3: aggregate metric by key and window
     val outputTags = reduceMetric(normalizeOperator)
     // step4: output metric by window
-    print(outputTags)
     val collect = new MemorySink(id)
     outputTags.asScala.foreach { case (k, v) =>
       val uid = "console_out_" + k
@@ -59,7 +58,7 @@ case class ProfilingJobIT(
 
   override def getTdqRawEventProcessFunction(
     descriptor: MapStateDescriptor[String, PhysicalPlans]): RawEventProcessFunction = {
-    new RawEventProcessFunction(descriptor,new TdqEnv()) {
+    new RawEventProcessFunction(descriptor, new TdqEnv()) {
       override protected def getPhysicalPlans: PhysicalPlans = PhysicalPlanFactory.getPhysicalPlans(
         Lists.newArrayList(JsonUtils.parseObject(config, classOf[TdqConfig]))
       )
@@ -71,14 +70,16 @@ case class ProfilingJobIT(
     elasticsearchResource.start()
 
     // step0: prepare environment
-    val env: StreamExecutionEnvironment = FlinkEnvFactory.create(null, true)
-    val tdqEnv = new TdqEnv
-    tdqEnv.setSinkTypes(Sets.newHashSet("pronto"))
+    env = FlinkEnvFactory.create(Array[String](), true)
+    tdqEnv = new TdqEnv
+    tdqEnv.getSinkTypes.asScala.foreach { case (_, v) =>
+      v.add("pronto")
+    }
     setTdqEnv(tdqEnv)
     // step1: build data source
     val rawEventDataStream = buildSource(env)
     // step2: normalize event to metric
-    val normalizeOperator: DataStream[TdqMetric] = normalizeEvent(env, rawEventDataStream)
+    val normalizeOperator: DataStream[TdqMetric] = normalizeMetric(env, rawEventDataStream)
     // step3: aggregate metric by key and window
     val outputTags = reduceMetric(normalizeOperator)
     // step4: output metric by window
@@ -97,7 +98,7 @@ case class ProfilingJobIT(
     Thread.sleep(1000)
     val client: Client = elasticsearchResource.getClient
     val suffix = DateUtils.calculateIndexDate(expects.head.getEventTime)
-    val searchRequest = new SearchRequest(s"${TdqConstant.PRONTO_INDEX_PATTERN}$suffix")
+    val searchRequest = new SearchRequest(s"${tdqEnv.getProntoConfig.getIndexPattern}$suffix")
     val searchSourceBuilder = new SearchSourceBuilder()
     searchSourceBuilder.query(QueryBuilders.matchAllQuery())
     searchSourceBuilder.size(100)
@@ -141,7 +142,7 @@ case class ProfilingJobIT(
       override def run(ctx: SourceFunction.SourceContext[RawEvent]): Unit = {
         Thread.sleep(1000)
         events.foreach(ctx.collect)
-//        Thread.sleep(10000000)
+        //        Thread.sleep(10000000)
       }
 
       override def cancel(): Unit = {}

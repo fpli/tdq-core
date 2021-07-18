@@ -22,6 +22,7 @@ public class FlinkEnvFactory {
   public static StreamExecutionEnvironment create(String[] args, boolean local) {
     StreamExecutionEnvironment env;
     if (local) {
+      FlinkEnvUtils.load(args);
       env = createLocal();
     } else {
       env = FlinkEnvUtils.prepare(args);

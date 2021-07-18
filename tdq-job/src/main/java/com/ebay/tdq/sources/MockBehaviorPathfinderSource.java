@@ -3,6 +3,7 @@ package com.ebay.tdq.sources;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.flink.connector.kafka.SojSerializableTimestampAssigner;
 import com.ebay.tdq.functions.RawEventSourceMockFunction;
+import com.ebay.tdq.utils.TdqEnv;
 import com.google.common.collect.Lists;
 import java.time.Duration;
 import java.util.List;
@@ -15,7 +16,20 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
  * @author juntzhang
  */
 public class MockBehaviorPathfinderSource extends AbstractSource {
-  public static List<DataStream<RawEvent>> build(final StreamExecutionEnvironment env) {
+  private final TdqEnv tdqEnv;
+  private final StreamExecutionEnvironment env;
+
+  @Override
+  public TdqEnv getTdqEnv() {
+    return tdqEnv;
+  }
+
+  public MockBehaviorPathfinderSource(TdqEnv tdqEnv, StreamExecutionEnvironment env) {
+    this.tdqEnv = tdqEnv;
+    this.env    = env;
+  }
+
+  public List<DataStream<RawEvent>> build() {
     SingleOutputStreamOperator<RawEvent> src1 = env.addSource(new RawEventSourceMockFunction())
         .name("Raw Event Src1")
         .uid("raw-event-src1")

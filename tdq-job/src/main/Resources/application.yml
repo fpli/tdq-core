@@ -1,11 +1,11 @@
 flink:
   app:
-    name: TDQ-V2-pathfinder-test
+    name: TDQ-V2-pathfinder
     parallelism:
       default: 100
       source: 100
-      metric-1st-aggr: 300
-      metric-1st-aggr-partitions: 47
+      metric-1st-aggr: 200
+      metric-1st-aggr-partitions: 48
       metric-2nd-aggr: 2
     window:
       metric-1st-aggr: 1min
@@ -24,35 +24,48 @@ flink:
         rno: pathfinder-rno-tdq-source
         lvs: pathfinder-lvs-tdq-source
         slc: pathfinder-slc-tdq-source
-    data-skew:
-      is-filter: true
-      guid-set: [ ]
-      pageid-set: [ ]
     checkpoint:
-      data-dir: /opt/tdq-test/checkpoint
+      data-dir: /opt/tdq-${flink.app.profile}/checkpoint
       interval-ms: 300000
       timeout-ms: 900000
       min-pause-between-ms: 120000
       max-concurrent: 1
       tolerate-failure-number: 3
-    hot-deploy: false
     source:
-      sample-fraction: 0.01
+      sample-fraction: 0
       from-timestamp: 0
       out-of-orderless-in-min: 3
-      idle-source-timeout-in-min: 10
+      idle-source-timeout-in-min: 5
       pronto:
-        index-pattern: tdq-metrics-test-
-        latency-index-pattern: tdq-metrics-test-latency-
-        log-index-pattern: tdq.log.{table_name}.pre-prod.
+        index-pattern: tdq.${flink.app.profile}.metric.normal.
+        latency-index-pattern: tdq.${flink.app.profile}.metric.latency.
+        debug-index-pattern: tdq.${flink.app.profile}.log.debug.
+        sample-index-pattern: tdq.${flink.app.profile}.log.sample.
+        exception-index-pattern: tdq.${flink.app.profile}.log.exception.
         scheme: https
         hostname: estdq-datalvs.vip.ebay.com
         port: 443
-        username: _TDQ_SVC_USER
-        password: "@BxHqFyz+Gzeq+2D"
+        api-key: 76361a1177564b72bdba1ddb23d17c58
+        api-value: 1tIU7GQSADe4bCGGifWLfYYJSZGA8Szlc3ZWDMnd3gMhk43XPLUpw9Mv5viYQZ73
+      hdfs:
+        normal-metric: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/metric/normal/
+        latency-metric: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/metric/latency/
+        debug-log: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/log/debug/
+        sample-log: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/log/sample/
+        exception-log: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/log/exception/
     sink:
       types:
-        - pronto
+        normal-metric:
+          - pronto
+          - hdfs
+        latency-metric:
+          - hdfs
+        debug-log:
+          - pronto
+        sample-log:
+          - pronto
+        exception-log:
+          - pronto
     advance:
       watermark:
         out-of-orderless: 5min
@@ -64,8 +77,8 @@ mysql:
   jdbc:
     url: jdbc:mysql://mysql-master-svc-qa.ido-ns.svc.57.tess.io:3306/tdq?verifyServerCertificate=false&useSSL=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf8
     driver-class-name: com.mysql.cj.jdbc.Driver
-    user: dataops
-    password: dataops#123
+    u: dataops
+    p: dataops#123
 
 kafka:
   consumer:
@@ -110,14 +123,3 @@ rheos:
     iaf:
       secret: c4bb6fca-7ac5-46dd-b218-a49cb6307dbc
       env: production
-
-rest-client:
-  base-url: https://sojubdportalservice.vip.ebay.com
-  username: soj-flink-app
-  config:
-    pull-interval: 30000
-    env: prod
-missing-cnt-exclude:
-  u:
-    - VI
-ua-parser-env: prod
