@@ -3,7 +3,7 @@
 if [ "$#" -ne 1 ]; then
   echo "Usage: $0 <MODULE_NAME>"
   exit 1
-fi
+fiFileFilter
 
 MODULE=$1
 

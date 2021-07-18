@@ -108,7 +108,7 @@ public class ProfilerServiceImpl implements ProfilerService {
       SearchRequest searchRequest = new SearchRequest(calculateIndexes(param.getFrom(), param.getTo()), builder);
       searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
 
-
+      client.search(searchRequest,RequestOptions.DEFAULT);
       SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
       Histogram agg = searchResponse.getAggregations().get("agg");
       for (Histogram.Bucket entry : agg.getBuckets()) {

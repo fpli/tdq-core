@@ -1,6 +1,6 @@
 pronto:
-  index-pattern: tdq-metrics-test-
-  latency-index-pattern: tdq-latency-metrics-test-
+  index-pattern: tdq-metrics-pronto-
+  latency-index-pattern: tdq-latency-metrics-pronto-
   scheme: http
   hostname: localhost
   port: 9200
