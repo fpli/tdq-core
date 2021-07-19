@@ -47,20 +47,9 @@ case class PhysicalPlan(
   // TODO validate
   def validatePlan(): Unit = {}
 
-  def getEventTime(rawEvent: RawEvent): Long = {
-    var field = System.currentTimeMillis
-    try {
-      field = SojTimestamp.getSojTimestampToUnixTimestamp(rawEvent.getEventTimestamp)
-    } catch {
-      case _: Exception =>
-      // ignore todo add metric
-    }
-    field
-  }
-
   def process(rawEvent: RawEvent): TdqMetric = {
     val cacheData = new JHashMap[String, Any]()
-    val eventTimeMillis = getEventTime(rawEvent)
+    val eventTimeMillis = rawEvent.getUnixEventTimestamp
     val metric = new TdqMetric(metricKey, (eventTimeMillis / 60000) * 60000)
     metric.setWindow(window)
     aggregations.foreach(aggr => {

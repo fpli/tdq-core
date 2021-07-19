@@ -1,6 +1,7 @@
 package com.ebay.tdq.svc;
 
 import com.ebay.tdq.dto.*;
+import com.ebay.tdq.utils.ProntoUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -48,10 +49,10 @@ public class FetchMetricsMsMtcServiceTest  {
     elasticsearchResource = new EmbeddedElasticsearch();
     elasticsearchResource.start("es-test");
     Client client=elasticsearchResource.getClient();
-    val index = ServiceFactory.prontoConfig.getIndexPattern() + "tag_miss_cnt_glabal_mandotory_tag_rate";
+    val index = ProntoUtils.INDEX_PREFIX + "tag_miss_cnt_glabal_mandotory_tag_rate";
 
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics-pronto");
-    request.patterns(Lists.newArrayList(ServiceFactory.prontoConfig.getIndexPattern()  + "*"));
+    request.patterns(Lists.newArrayList(ProntoUtils.INDEX_PREFIX  + "*"));
     String source = IOUtils.toString(this.getClass().getResourceAsStream("/tdq-metrics-template2.json"));
     request.source(source, XContentType.JSON);
     client.admin().indices().putTemplate(request).get();
@@ -87,6 +88,7 @@ public class FetchMetricsMsMtcServiceTest  {
             .metricType("tag_miss_cnt").from(1626364800000L)
             .to(1626368400000L).precision(2)
             .aggMethod(AggMethod.SUM)
+            .metricsMethod(MetricsMethod.PERCENTAGE)
             .build();
 
     TdqMtrcQryRs result = (TdqMtrcQryRs)ServiceFactory.getFetchMetricsService().fetchMetrics(param);

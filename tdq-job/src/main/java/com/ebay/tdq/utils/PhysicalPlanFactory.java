@@ -1,5 +1,6 @@
 package com.ebay.tdq.utils;
 
+import com.ebay.tdq.common.env.JdbcEnv;
 import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;
@@ -41,7 +42,7 @@ public class PhysicalPlanFactory {
     return PhysicalPlans.apply(plans.toArray(new PhysicalPlan[0]));
   }
 
-  public static List<TdqConfig> getTdqConfigs(JdbcConfig jdbc) {
+  public static List<TdqConfig> getTdqConfigs(JdbcEnv jdbc) {
     try {
       List<TdqConfig> tdqConfigList = new ArrayList<>();
       Class.forName(jdbc.getDriverClassName());

@@ -1,4 +1,4 @@
-package com.ebay.tdq.config;
+package com.ebay.tdq.common.env;
 
 import static com.ebay.sojourner.common.env.EnvironmentUtils.get;
 import static com.ebay.sojourner.common.env.EnvironmentUtils.getInteger;
@@ -14,7 +14,7 @@ import org.apache.commons.lang3.time.FastDateFormat;
  * @author juntzhang
  */
 @Data
-public class ProntoConfig implements Serializable {
+public class ProntoEnv implements Serializable {
 
   private String indexPattern;
   private String latencyIndexPattern;
@@ -27,7 +27,7 @@ public class ProntoConfig implements Serializable {
   private String username;
   private String password;
 
-  public ProntoConfig() {
+  public ProntoEnv() {
     this.indexPattern = getStringWithPattern("flink.app.source.pronto.index-pattern");
     this.latencyIndexPattern = getStringWithPattern("flink.app.source.pronto.latency-index-pattern");
 
@@ -47,7 +47,7 @@ public class ProntoConfig implements Serializable {
 
   @Override
   public String toString() {
-    return new StringJoiner(", ", ProntoConfig.class.getSimpleName() + "[", "]")
+    return new StringJoiner(", ", ProntoEnv.class.getSimpleName() + "[", "]")
         .add("indexPattern='" + indexPattern + "'")
         .add("latencyIndexPattern='" + latencyIndexPattern + "'")
         .add("exceptionIndexPattern='" + exceptionIndexPattern + "'")
@@ -59,5 +59,9 @@ public class ProntoConfig implements Serializable {
         .add("username='" + username + "'")
         .add("password='******'")
         .toString();
+  }
+
+  public String getNormalMetricIndex(Long eventTime) {
+    return indexPattern + getIndexDateSuffix(eventTime);
   }
 }

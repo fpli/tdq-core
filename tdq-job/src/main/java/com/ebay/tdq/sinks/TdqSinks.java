@@ -1,10 +1,11 @@
 package com.ebay.tdq.sinks;
 
-import static com.ebay.tdq.utils.TdqEnv.LATENCY_METRIC;
-import static com.ebay.tdq.utils.TdqEnv.NORMAL_METRIC;
 
+import static com.ebay.tdq.common.env.TdqConstant.LATENCY_METRIC;
+import static com.ebay.tdq.common.env.TdqConstant.NORMAL_METRIC;
+
+import com.ebay.tdq.common.env.ProntoEnv;
 import com.ebay.tdq.common.model.TdqAvroMetric;
-import com.ebay.tdq.config.ProntoConfig;
 import com.ebay.tdq.functions.ProntoSinkFunction;
 import com.ebay.tdq.rules.TdqErrorMsg;
 import com.ebay.tdq.rules.TdqMetric;
@@ -56,7 +57,7 @@ public class TdqSinks implements Serializable {
     }
     if (tdqEnv.isNormalMetricSink("pronto")) {
       ds
-          .addSink(buildPronto(tdqEnv, 1, new ProntoSinkFunction(tdqEnv.getProntoConfig().getIndexPattern())))
+          .addSink(buildPronto(tdqEnv, 1, new ProntoSinkFunction(tdqEnv.getProntoEnv())))
           .uid(id + "_pronto")
           .name(id + "_pronto")
           .setParallelism(tdqEnv.getMetric2ndAggrParallelism());
@@ -78,7 +79,7 @@ public class TdqSinks implements Serializable {
       ds.getSideOutput(tdqEnv.getEventLatencyOutputTag())
           .addSink(buildPronto(tdqEnv, 10,
               new ElasticsearchSinkFunction<TdqMetric>() {
-                private final ProntoConfig cfg = tdqEnv.getProntoConfig();
+                private final ProntoEnv cfg = tdqEnv.getProntoEnv();
 
                 @Override
                 public void process(TdqMetric tdqMetric, RuntimeContext runtimeContext,
@@ -103,7 +104,7 @@ public class TdqSinks implements Serializable {
       ds.getSideOutput(tdqEnv.getDebugOutputTag())
           .addSink(buildPronto(tdqEnv, 1,
               new ElasticsearchSinkFunction<TdqSampleData>() {
-                private final ProntoConfig cfg = tdqEnv.getProntoConfig();
+                private final ProntoEnv cfg = tdqEnv.getProntoEnv();
 
                 @Override
                 public void process(TdqSampleData tdqSampleData, RuntimeContext runtimeContext,
@@ -124,7 +125,7 @@ public class TdqSinks implements Serializable {
       ds.getSideOutput(tdqEnv.getSampleOutputTag())
           .addSink(buildPronto(tdqEnv, 20,
               new ElasticsearchSinkFunction<TdqSampleData>() {
-                private final ProntoConfig cfg = tdqEnv.getProntoConfig();
+                private final ProntoEnv cfg = tdqEnv.getProntoEnv();
 
                 @Override
                 public void process(TdqSampleData tdqSampleData, RuntimeContext runtimeContext,
@@ -145,7 +146,7 @@ public class TdqSinks implements Serializable {
       ds.getSideOutput(tdqEnv.getExceptionOutputTag())
           .addSink(buildPronto(tdqEnv, 1,
               new ElasticsearchSinkFunction<TdqErrorMsg>() {
-                private final ProntoConfig cfg = tdqEnv.getProntoConfig();
+                private final ProntoEnv cfg = tdqEnv.getProntoEnv();
 
                 @Override
                 public void process(TdqErrorMsg tdqErrorMsg, RuntimeContext runtimeContext,
@@ -162,13 +163,13 @@ public class TdqSinks implements Serializable {
 
   private static <T> ElasticsearchSink<T> buildPronto(TdqEnv tdqEnv, int numMaxActions,
       ElasticsearchSinkFunction<T> function) {
-    String username = tdqEnv.getProntoConfig().getUsername();
-    String password = tdqEnv.getProntoConfig().getPassword();
+    String username = tdqEnv.getProntoEnv().getUsername();
+    String password = tdqEnv.getProntoEnv().getPassword();
     List<HttpHost> httpHosts = new ArrayList<>();
     HttpHost httpHost = new HttpHost(
-        tdqEnv.getProntoConfig().getHostname(),
-        tdqEnv.getProntoConfig().getPort(),
-        tdqEnv.getProntoConfig().getSchema()
+        tdqEnv.getProntoEnv().getHostname(),
+        tdqEnv.getProntoEnv().getPort(),
+        tdqEnv.getProntoEnv().getSchema()
     );
     httpHosts.add(httpHost);
     ElasticsearchSink.Builder<T> builder = new ElasticsearchSink.Builder<>(httpHosts, function);

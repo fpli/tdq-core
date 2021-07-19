@@ -1,5 +1,6 @@
 package com.ebay.tdq.functions;
 
+import com.ebay.tdq.common.env.ProntoEnv;
 import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.utils.DateUtils;
 import java.util.HashMap;
@@ -12,18 +13,17 @@ import org.apache.flink.streaming.connectors.elasticsearch.RequestIndexer;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.Requests;
 
-import static com.ebay.tdq.utils.DateUtils.calculateIndexDate;
-
 /**
  * @author juntzhang
  */
 @Slf4j
 public class ProntoSinkFunction implements ElasticsearchSinkFunction<TdqMetric> {
-  private final String indexPattern;
+
+  private final ProntoEnv prontoEnv;
   private transient Map<String, Counter> counterMap;
 
-  public ProntoSinkFunction(String indexPattern) {
-    this.indexPattern = indexPattern;
+  public ProntoSinkFunction(ProntoEnv prontoEnv) {
+    this.prontoEnv = prontoEnv;
   }
 
   @Override
@@ -50,15 +50,15 @@ public class ProntoSinkFunction implements ElasticsearchSinkFunction<TdqMetric> 
       );
     }
     try {
-      indexer.add(createIndexRequest(m, indexPattern));
+      indexer.add(createIndexRequest(m));
     } catch (Throwable e) {
       inc(runtimeContext, "pronto_index_error", 1);
       throw e;
     }
   }
 
-  private static IndexRequest createIndexRequest(TdqMetric tdqMetric, String indexPattern) {
-    String index = indexPattern + calculateIndexDate(tdqMetric.getEventTime());
+  private IndexRequest createIndexRequest(TdqMetric tdqMetric) {
+    String index = prontoEnv.getNormalMetricIndex(tdqMetric.getEventTime());
     try {
       return Requests.indexRequest()
           .id(tdqMetric.getTagIdWithEventTime())

@@ -1,5 +1,6 @@
 package com.ebay.sojourner.common.model;
 
+import com.ebay.sojourner.common.util.SojTimestamp;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 import java.util.Map;
@@ -26,5 +27,14 @@ public class RawEvent implements Serializable {
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+  }
+
+  public long getUnixEventTimestamp() {
+    long t = System.currentTimeMillis();
+    try {
+      return SojTimestamp.getSojTimestampToUnixTimestamp(this.getEventTimestamp());
+    } catch (Exception ignore) {
+      return t;
+    }
   }
 }

@@ -126,6 +126,11 @@ public class EnvironmentUtils {
     throw new IllegalStateException("Cannot find property " + key);
   }
 
+  public static Set<String> getSet(String key) {
+    List<String> list = get(key, List.class);
+    return new HashSet<>(list);
+  }
+
   public static String getStringWithPattern(String key) {
     String str = get(key);
     Matcher m = VARIABLE_PATTERN.matcher(str);

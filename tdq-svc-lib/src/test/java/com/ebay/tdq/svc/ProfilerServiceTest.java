@@ -50,9 +50,7 @@ public class ProfilerServiceTest {
   }
 
   public void createData(Client client) throws Exception {
-    val index = ServiceFactory.prontoConfig.getIndexPattern() + "2021.05.28";
-    val latencyIndex = ServiceFactory.prontoConfig.getLatencyIndexPattern() + "2021.05.28";
-
+    val index = ServiceFactory.prontoConfig.getIndexPattern() + "2021-05-28";
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics");
     request.patterns(Lists.newArrayList(ServiceFactory.prontoConfig.getIndexPattern() + "*"));
     String source = IOUtils.toString(this.getClass().getResourceAsStream("/tdq-metrics-template.json"));
@@ -61,7 +59,8 @@ public class ProfilerServiceTest {
 
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", "1", 4d, 7d))).get();
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "711", "2", 1d, 1d))).get();
-    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "1677718", "1", 1d, 2d))).get();
+    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "1677718", "1", 1d, 2d)))
+        .get();
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", "1", 1d, 2d))).get();
     Thread.sleep(3000);
   }

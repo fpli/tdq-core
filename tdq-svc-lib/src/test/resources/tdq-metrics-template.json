@@ -1,7 +1,7 @@
 {
   "order": 10,
   "index_patterns": [
-    "tdq-metrics-*"
+    "tdq.*.metric.*"
   ],
   "mappings": {
     "_doc": {

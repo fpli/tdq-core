@@ -30,7 +30,7 @@ import scala.collection.JavaConverters._
  * @author juntzhang
  */
 case class ProfilingJobIT(
-  id: String, config: String, events: List[RawEvent], expects: List[TdqMetric]) extends ProfilingJob {
+                           id: String, config: String, events: List[RawEvent], expects: List[TdqMetric]) extends ProfilingJob {
 
   def submit(): Unit = {
     // step0: prepare environment
@@ -57,7 +57,7 @@ case class ProfilingJobIT(
   }
 
   override def getTdqRawEventProcessFunction(
-    descriptor: MapStateDescriptor[String, PhysicalPlans]): RawEventProcessFunction = {
+                                              descriptor: MapStateDescriptor[String, PhysicalPlans]): RawEventProcessFunction = {
     new RawEventProcessFunction(descriptor, new TdqEnv()) {
       override protected def getPhysicalPlans: PhysicalPlans = PhysicalPlanFactory.getPhysicalPlans(
         Lists.newArrayList(JsonUtils.parseObject(config, classOf[TdqConfig]))
@@ -97,8 +97,7 @@ case class ProfilingJobIT(
 
     Thread.sleep(1000)
     val client: Client = elasticsearchResource.getClient
-    val suffix = DateUtils.calculateIndexDate(expects.head.getEventTime)
-    val searchRequest = new SearchRequest(s"${tdqEnv.getProntoConfig.getIndexPattern}$suffix")
+    val searchRequest = new SearchRequest(s"${tdqEnv.getProntoEnv.getNormalMetricIndex(expects.head.getEventTime)}")
     val searchSourceBuilder = new SearchSourceBuilder()
     searchSourceBuilder.query(QueryBuilders.matchAllQuery())
     searchSourceBuilder.size(100)

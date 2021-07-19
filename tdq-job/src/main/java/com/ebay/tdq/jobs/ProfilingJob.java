@@ -51,7 +51,7 @@ public class ProfilingJob {
     try {
       // step0: prepare environment
       env = FlinkEnvFactory.create(args, false);
-      tdqEnv = new TdqEnv();
+      tdqEnv = new TdqEnv(args);
 
       // step1: build data source
       List<DataStream<RawEvent>> rawEventDataStream = new BehaviorPathfinderSource(tdqEnv, env).build();

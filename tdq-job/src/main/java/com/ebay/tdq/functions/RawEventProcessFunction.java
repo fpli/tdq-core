@@ -32,6 +32,7 @@ import org.apache.flink.util.Collector;
 @Slf4j
 public class RawEventProcessFunction
     extends BroadcastProcessFunction<RawEvent, PhysicalPlans, TdqMetric> implements CheckpointedFunction {
+
   private final MapStateDescriptor<String, PhysicalPlans> stateDescriptor;
   private final TdqEnv tdqEnv;
   private final String cfgPlan = "CFG_PLAN";
@@ -44,7 +45,7 @@ public class RawEventProcessFunction
 
   public RawEventProcessFunction(MapStateDescriptor<String, PhysicalPlans> descriptor, TdqEnv tdqEnv) {
     this.stateDescriptor = descriptor;
-    this.tdqEnv          = tdqEnv;
+    this.tdqEnv = tdqEnv;
     if (tdqEnv.getLocalCombineFlushTimeout() > 60000) {
       throw new RuntimeException("flink.app.advance.local-combine.flush-timeout must less than 60s!");
     }
@@ -99,22 +100,26 @@ public class RawEventProcessFunction
 
   private void initialize() {
     errorMsgCurrentTimeMillis = 0L;
-    debugCurrentTimeMillis    = 0L;
-    metricGroup               = new TdqMetricGroup(getRuntimeContext().getMetricGroup());
-    physicalPlans             = getPhysicalPlans();
-    localCache                = new LocalCache(tdqEnv, metricGroup);
+    debugCurrentTimeMillis = 0L;
+    metricGroup = new TdqMetricGroup(getRuntimeContext().getMetricGroup());
+    physicalPlans = getPhysicalPlans();
+    localCache = new LocalCache(tdqEnv, metricGroup);
     metricGroup.gauge(localCache);
   }
 
 
   protected PhysicalPlans getPhysicalPlans() {
-    return PhysicalPlanFactory.getPhysicalPlans(PhysicalPlanFactory.getTdqConfigs(this.tdqEnv.getJdbcConfig()));
+    return PhysicalPlanFactory.getPhysicalPlans(PhysicalPlanFactory.getTdqConfigs(this.tdqEnv.getJdbcEnv()));
   }
 
   private void processElement0(RawEvent event,
       PhysicalPlans physicalPlans, ReadOnlyContext ctx, Collector<TdqMetric> collector) throws Exception {
     if (physicalPlans == null || physicalPlans.plans().length == 0) {
       throw new Exception("physical plans is empty!");
+    }
+    if (tdqEnv.getKafkaSourceEnv().isTimestampBefore(event.getEventTimestamp())) {
+      metricGroup.inc("isTimestampBefore");
+      return;
     }
     for (PhysicalPlan plan : physicalPlans.plans()) {
       metricGroup.inc(plan.metricKey());

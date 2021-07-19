@@ -13,8 +13,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
@@ -22,10 +20,10 @@ import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
+@Deprecated
 public class FlinkEnvUtils {
 
   private static final Map<String, String> CONFIG = Maps.newHashMap();
-  private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$\\{(.*?)}");
 
   public static void load(String[] args) {
     ParameterTool parameterTool = ParameterTool.fromArgs(args);
