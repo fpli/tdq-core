@@ -33,6 +33,7 @@ import static com.ebay.tdq.utils.ProntoUtils.*;
  * @since 2021/7/14 1:17 AM
  */
 @Slf4j
+@Deprecated
 public class FetchMetricsMsMtcServiceImpl implements
         FetchMetricsService<TdqMtrcQryParam, TdqMtrcQryRs> {
     final RestHighLevelClient client;

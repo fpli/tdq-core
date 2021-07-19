@@ -20,7 +20,7 @@ class TdqMetricTest {
       .genUID()
       .setValue(2d)
     val m2 = new TdqMetric(
-      "a", DateUtils.parseDate("2021-05-06 12:05:01", "yyyy-MM-dd HH:mm:ss").getTime
+      "a", DateUtils.parseDate("2021-05-06 12:05:00", "yyyy-MM-dd HH:mm:ss").getTime
     )
       .putTag("a1", "1")
       .putTag("a2", "2")

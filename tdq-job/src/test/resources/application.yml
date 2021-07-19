@@ -43,8 +43,11 @@ flink:
       out-of-orderless-in-min: 3
       idle-source-timeout-in-min: 3
       pronto:
-        index-pattern: tdq-metrics-test-
-        latency-index-pattern: tdq-latency-metrics-test-
+        index-pattern: tdq.${flink.app.profile}.metric.normal.
+        latency-index-pattern: tdq.${flink.app.profile}.metric.latency.
+        debug-index-pattern: tdq.${flink.app.profile}.log.debug.
+        sample-index-pattern: tdq.${flink.app.profile}.log.sample.
+        exception-index-pattern: tdq.${flink.app.profile}.log.exception.
         scheme: http
         hostname: localhost
         port: 9200
