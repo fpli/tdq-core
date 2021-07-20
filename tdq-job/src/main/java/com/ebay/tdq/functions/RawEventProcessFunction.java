@@ -117,7 +117,7 @@ public class RawEventProcessFunction
     if (physicalPlans == null || physicalPlans.plans().length == 0) {
       throw new Exception("physical plans is empty!");
     }
-    if (tdqEnv.getKafkaSourceEnv().isTimestampBefore(event.getEventTimestamp())) {
+    if (tdqEnv.getKafkaSourceEnv().isTimestampBefore(event.getUnixEventTimestamp())) {
       metricGroup.inc("isTimestampBefore");
       return;
     }
@@ -164,6 +164,7 @@ public class RawEventProcessFunction
   }
 
   private void errorMsg(ReadOnlyContext ctx, RawEvent event, Exception e, PhysicalPlan plan) {
+    metricGroup.inc("errorEvent");
     metricGroup.inc("errorEvent_" + plan.metricKey());
     if ((System.currentTimeMillis() - errorMsgCurrentTimeMillis) > 5000) {
       log.warn("Drop event={},plan={},exception={}", event, plan, e);

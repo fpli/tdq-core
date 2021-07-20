@@ -59,6 +59,7 @@ flink:
           - pronto
           - hdfs
         latency-metric:
+          - pronto
           - hdfs
         debug-log:
           - pronto

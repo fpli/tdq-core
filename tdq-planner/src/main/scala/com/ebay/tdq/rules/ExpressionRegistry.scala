@@ -27,6 +27,14 @@ object ExpressionRegistry {
           operands(1).asInstanceOf[Expression],
           cacheKey
         )
+      case "SOJ_TAG" =>
+        Preconditions.checkArgument(operands.length == 1)
+        SojTag(
+          subject = GetRawEvent(Some("__RAW_EVENT")),
+          tag = operands.head.asInstanceOf[Literal].value.asInstanceOf[String],
+          dataType = StringType,
+          cacheKey = cacheKey
+        )
       case "SOJ_NVL" =>
         Preconditions.checkArgument(operands.length == 1)
         SojNvl(
@@ -43,6 +51,13 @@ object ExpressionRegistry {
         )
       case "SOJ_TIMESTAMP" =>
         TdqTimestamp("soj_timestamp")
+
+      case "IS_BBWOA_PAGE_WITH_ITM" =>
+        Preconditions.checkArgument(operands.length == 1)
+        IsBBWOAPageWithItm(
+          subject = operands.head.asInstanceOf[Expression],
+          cacheKey = cacheKey
+        )
 
       case "EVENT_TIMESTAMP" =>
         TdqTimestamp("event_timestamp", TimestampType)

@@ -41,6 +41,10 @@ class SOJlibUDFTest {
   }
 
   def test(expr1: String, expr2: String, soj: JHashMap[String, String], assertFunction: TdqMetric => Unit, eventTime: Long = 3829847994095000L): Unit = {
+    test0(expr1, expr2, soj, assertFunction, _ => {}, eventTime)
+  }
+
+  def test0(expr1: String, expr2: String, soj: JHashMap[String, String], assertFunction: TdqMetric => Unit, rawEventFunction: RawEvent => Unit, eventTime: Long = 3829847994095000L): Unit = {
     val config = getTdqConfig(expr1, expr2)
     val parser = new ProfilingSqlParser(
       config.getRules.get(0).getProfilers.get(0),
@@ -51,11 +55,13 @@ class SOJlibUDFTest {
     val rawEvent = new RawEvent
     rawEvent.setClientData(new ClientData)
     rawEvent.getClientData.setContentLength("55")
+    rawEvent.getClientData.setRemoteIP("100.10.1.1")
     rawEvent.setEventTimestamp(eventTime)
     rawEvent.setSojA(new JHashMap[String, String])
     rawEvent.setSojK(new JHashMap[String, String])
     rawEvent.setSojC(new JHashMap[String, String])
     rawEvent.getSojA.putAll(soj)
+    rawEventFunction(rawEvent)
 
     val metric = plan.process(rawEvent)
     assert(metric != null)
@@ -76,6 +82,20 @@ class SOJlibUDFTest {
   }
 
   @Test
+  def test_is_bbwoa_page(): Unit = {
+    val soj = new JHashMap[String, String]
+    soj.put("p", "2492448")
+    test("case when IS_BBWOA_PAGE_WITH_ITM(p2) then 1 else 0 end", "cast(soj_nvl('p') AS INTEGER)", soj, metric => {
+      assert(metric.getValues.get("p1") == 1)
+    })
+
+    soj.put("p", "111111111")
+    test("case when IS_BBWOA_PAGE_WITH_ITM(p2) then 1 else 0 end", "cast(soj_nvl('p') AS INTEGER)", soj, metric => {
+      assert(metric.getValues.get("p1") == 0)
+    })
+  }
+
+  @Test
   def test_soj_page_family(): Unit = {
     val soj = new JHashMap[String, String]
     soj.put("p", "5780")
@@ -87,6 +107,16 @@ class SOJlibUDFTest {
     soj.put("p", "578000000")
     test("case when length(p2)>0 then 1 else 0 end", "soj_page_family(cast(soj_nvl('p') AS INTEGER))", soj, metric => {
       assert(metric.getTags.get("p2") == null)
+    })
+  }
+
+  @Test
+  def test_ebay_ip(): Unit = {
+    val soj = new JHashMap[String, String]
+    test0("case when clientData.remoteIP like '10.%' then 1 else 0 end", "clientData.remoteIP", soj, metric => {
+      println(metric)
+    }, rawEvent => {
+      rawEvent.getClientData.setRemoteIP("10.10.1.1")
     })
   }
 

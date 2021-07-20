@@ -1,8 +1,10 @@
 package com.ebay.tdq.expressions
 
-import com.ebay.sojourner.common.model.RawEvent
-import com.ebay.sojourner.common.util.SojUtils
-import com.ebay.tdq.types.{DataType, StringType}
+import com.ebay.sojourner.common.model.{ClientData, RawEvent}
+import com.ebay.sojourner.common.util.{LkpManager, SojUtils}
+import com.ebay.tdq.types.{BooleanType, DataType, StringType}
+import org.apache.commons.beanutils.PropertyUtils
+import org.apache.commons.lang3.StringUtils
 
 /**
  * @author juntzhang
@@ -16,12 +18,52 @@ case class SojParseRlogid(subject: Expression, infoType: Expression, cacheKey: O
     .evaluate(subject.call(input).asInstanceOf[String], infoType.call(input).asInstanceOf[String])
 }
 
-case class SojNvl(subject: GetRawEvent, tag: String, dataType: DataType, cacheKey: Option[String] = None) extends LeafExpression {
+object SojTag {
+  val SPLIT_DEL = "\\|"
+
+  def eval(rawEvent: RawEvent, tag: String): String = {
+    val tags = tag.split(SPLIT_DEL)
+    for (t <- tags) {
+      if (StringUtils.isNotBlank(rawEvent.getSojA.get(t))) return rawEvent.getSojA.get(t)
+      if (StringUtils.isNotBlank(rawEvent.getSojC.get(t))) return rawEvent.getSojC.get(t)
+      if (StringUtils.isNotBlank(rawEvent.getSojK.get(t))) return rawEvent.getSojK.get(t)
+    }
+    null
+  }
+}
+
+case class SojTag(subject: GetRawEvent, tag: String, dataType: DataType, cacheKey: Option[String] = None) extends LeafExpression {
   override def nullable: Boolean = true
 
-  protected override def eval(input: InternalRow): Any = SojUtils.getTagValueStr(
-    subject.call(input).asInstanceOf[RawEvent], tag
-  )
+  protected override def eval(input: InternalRow): Any = {
+    val rawEvent = subject.call(input).asInstanceOf[RawEvent]
+    SojTag.eval(rawEvent, tag)
+  }
+}
+
+case class SojNvl(subject: GetRawEvent, tag: String,
+                  dataType: DataType, cacheKey: Option[String] = None) extends LeafExpression {
+  override def nullable: Boolean = true
+
+  protected override def eval(input: InternalRow): Any = {
+    val rawEvent = subject.call(input).asInstanceOf[RawEvent]
+    val v = SojTag.eval(rawEvent, tag)
+    if (StringUtils.isNotBlank(v)) {
+      v
+    } else {
+      val tags = tag.split(SojTag.SPLIT_DEL)
+      for (t <- tags) {
+        if (!ClientData.FIELDS.contains(t)) {
+          return null
+        }
+        val v = PropertyUtils.getProperty(input.getCache("__RAW_EVENT"), s"clientData.$t")
+        if (v != null) {
+          return v
+        }
+      }
+      null
+    }
+  }
 }
 
 case class SojPageFamily(subject: Expression, cacheKey: Option[String] = None) extends LeafExpression {
@@ -31,5 +73,17 @@ case class SojPageFamily(subject: Expression, cacheKey: Option[String] = None) e
 
   protected override def eval(input: InternalRow): Any = {
     SojUtils.getPageFmly(subject.call(input).asInstanceOf[Int])
+  }
+}
+
+// p_alfu_t.bbwoa_pages_with_itm
+case class IsBBWOAPageWithItm(subject: Expression, cacheKey: Option[String] = None) extends LeafExpression {
+  override def nullable: Boolean = true
+
+  override def dataType: DataType = BooleanType
+
+  protected override def eval(input: InternalRow): Any = {
+    val pageIds = LkpManager.getInstance.getItmPages
+    pageIds.contains(subject.call(input).asInstanceOf[Int])
   }
 }

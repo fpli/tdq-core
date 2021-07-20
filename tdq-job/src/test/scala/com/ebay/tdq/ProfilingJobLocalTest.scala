@@ -1,19 +1,17 @@
 package com.ebay.tdq
 
 import java.io.File
-import java.net.URLEncoder
 import java.time.Duration
 import java.util.{List => JList}
 
 import com.ebay.sojourner.common.model.RawEvent
-import com.ebay.sojourner.flink.connector.kafka.SojSerializableTimestampAssigner
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.functions.RawEventProcessFunction
 import com.ebay.tdq.jobs.ProfilingJob
 import com.ebay.tdq.rules.PhysicalPlans
 import com.ebay.tdq.utils._
-import com.google.common.collect.{Lists, Sets}
-import org.apache.commons.io.{FileUtils, IOUtils}
+import com.google.common.collect.Lists
+import org.apache.commons.io.IOUtils
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
 import org.apache.flink.api.common.state.MapStateDescriptor
 import org.apache.flink.streaming.api.datastream.DataStream
@@ -28,8 +26,8 @@ import scala.collection.JavaConverters._
 object ProfilingJobLocalTest extends ProfilingJob {
   def main(args: Array[String]): Unit = {
     // step0: prepare environment
-    env = FlinkEnvFactory.create(null, true)
     tdqEnv = new TdqEnv
+    env = FlinkEnvFactory.create(null, true)
 
     // step1: build data source
     val rawEventDataStream = buildSource(env)
@@ -54,7 +52,7 @@ object ProfilingJobLocalTest extends ProfilingJob {
     env.addSource(new RichSourceFunction[PhysicalPlans]() {
       @throws[Exception]
       override def run(ctx: SourceFunction.SourceContext[PhysicalPlans]): Unit = {
-         val plans = ProfilingSqlParserTest.getPhysicalPlans(config)
+        val plans = ProfilingSqlParserTest.getPhysicalPlans(config)
         ctx.collectWithTimestamp(plans, System.currentTimeMillis)
       }
 
@@ -71,7 +69,7 @@ object ProfilingJobLocalTest extends ProfilingJob {
   }
 
   override def getTdqRawEventProcessFunction(
-    descriptor: MapStateDescriptor[String, PhysicalPlans]): RawEventProcessFunction = {
+                                              descriptor: MapStateDescriptor[String, PhysicalPlans]): RawEventProcessFunction = {
     new RawEventProcessFunction(descriptor, new TdqEnv()) {
       override protected def getPhysicalPlans: PhysicalPlans = PhysicalPlanFactory.getPhysicalPlans(
         Lists.newArrayList(JsonUtils.parseObject(config, classOf[TdqConfig]))
@@ -84,10 +82,6 @@ object ProfilingJobLocalTest extends ProfilingJob {
     try {
       IOUtils.readLines(is).asScala.map(json => {
         val event = JsonUtils.parseObject(json, classOf[RawEvent])
-        event.setEventTimestamp(
-          SojSerializableTimestampAssigner.getEventTime(event))
-        //          System.currentTimeMillis() +
-        //            60000L * (Math.abs(new Random().nextInt()) % 5))
         event
       })
     } finally if (is != null) is.close()
@@ -104,7 +98,7 @@ object ProfilingJobLocalTest extends ProfilingJob {
           ctx.collect(e)
         })
         //        }
-//        Thread.sleep(10000000)
+        //        Thread.sleep(10000000)
       }
 
       override def cancel(): Unit = {}

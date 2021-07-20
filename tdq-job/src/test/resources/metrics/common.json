@@ -21,67 +21,63 @@
           "transformations": [
             {
               "alias": "soj_tag_p",
-              "expr": "soj_nvl('p')"
+              "expr": "soj_tag('p')"
             },
             {
               "alias": "soj_tag_u",
-              "expr": "soj_nvl('u')"
+              "expr": "soj_tag('u')"
             },
             {
               "alias": "soj_tag_t",
-              "expr": "soj_nvl('t')"
+              "expr": "soj_tag('t')"
             },
             {
               "alias": "soj_tag_itm",
-              "expr": "soj_nvl('itm|itmid|itm_id|itmlist|litm')"
+              "expr": "soj_tag('itm|itmid|itm_id|itmlist|litm')"
             },
             {
               "alias": "soj_tag_mav",
-              "expr": "soj_nvl('mav')"
+              "expr": "soj_tag('mav')"
             },
             {
               "alias": "soj_tag_dn",
-              "expr": "soj_nvl('dn')"
+              "expr": "soj_tag('dn')"
             },
             {
               "alias": "soj_tag_mos",
-              "expr": "soj_nvl('mos')"
+              "expr": "soj_tag('mos')"
             },
             {
               "alias": "soj_tag_osv",
-              "expr": "soj_nvl('osv')"
+              "expr": "soj_tag('osv')"
             },
             {
               "alias": "soj_tag_es",
-              "expr": "soj_nvl('es')"
+              "expr": "soj_tag('es')"
             },
             {
               "alias": "soj_tag_app",
-              "expr": "soj_nvl('app')"
-            },
-            {
-              "alias": "soj_tag_duration",
-              "expr": "soj_nvl('TDuration')"
+              "expr": "soj_tag('app')"
             },
             {
               "alias": "soj_tag_cpnip",
-              "expr": "soj_nvl('cpnip')"
+              "expr": "soj_tag('cpnip')"
             },
             {
               "alias": "soj_tag_icpp",
-              "expr": "soj_nvl('icpp')"
+              "expr": "soj_tag('icpp')"
             },
             {
               "alias": "soj_tag_prof",
-              "expr": "soj_nvl('prof')"
+              "expr": "soj_tag('prof')"
             },
             {
               "alias": "soj_tag_clktrack",
-              "expr": "soj_nvl('!clktrack')"
+              "expr": "soj_tag('!clktrack')"
             },
             {
               "alias": "soj_tag_eactn",
-              "expr": "soj_nvl('eactn')"
+              "expr": "soj_tag('eactn')"
             },
             {
               "alias": "app",
@@ -111,22 +107,37 @@
             },
             {
               "alias": "duration_sum",
-              "expr": "sum(CAST(soj_tag_duration AS DOUBLE))"
+              "expr": "sum(CAST(clientData.TDuration AS DOUBLE))"
             },
             {
-              "alias": "gmt_total_cnt",
+              "alias": "gmt_usr_total_cnt",
               "expr": "count(1)",
-              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','VI','WTCH','XO')"
+              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id)"
             },
             {
               "alias": "gmt_usr_cnt",
               "expr": "sum(case when LENGTH(soj_tag_u) > 0 then 1 else 0 end)",
-              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','VI','WTCH','XO')"
+              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id)"
+            },
+            {
+              "alias": "gmt_itm_total_cnt",
+              "expr": "count(1)",
+              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','VI','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%'"
             },
             {
               "alias": "gmt_itm_cnt",
               "expr": "sum(case when LENGTH(soj_tag_itm) > 0 then 1 else 0 end)",
-              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','VI','WTCH','XO')"
+              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','VI','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id)"
+            },
+            {
+              "alias": "ebay_ip_cnt",
+              "expr": "count(1)",
+              "filter": "clientData.remoteIP like '10.%'"
+            },
+            {
+              "alias": "bbwoa_pwi_cnt",
+              "expr": "count(1)",
+              "filter": "IS_BBWOA_PAGE_WITH_ITM(page_id)"
             },
             {
               "alias": "nt_dn_cnt",

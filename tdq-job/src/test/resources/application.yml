@@ -10,7 +10,7 @@ flink:
       metric-2nd-aggr: 1
     window:
       metric-1st-aggr: 60s
-      supports: 1min,2min,10min
+      supports: 1min,2min,5min,10min
     slot-sharing-group:
       source-event-lvs: tdq-lvs
       source-event-slc: tdq-slc

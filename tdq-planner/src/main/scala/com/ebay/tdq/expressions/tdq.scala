@@ -29,7 +29,11 @@ case class GetStructField(name: String, dataType: DataType = StringType, cacheKe
     if (o != null) {
       return o
     }
-    PropertyUtils.getProperty(input.getCache("__RAW_EVENT"), name)
+    try {
+      PropertyUtils.getProperty(input.getCache("__RAW_EVENT"), name)
+    } catch {
+      case _: NoSuchMethodException => null
+    }
   }
 }
 

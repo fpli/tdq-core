@@ -10,11 +10,10 @@
       "transformations": [
         {"alias": "soj_tag_p", "expr": "soj_nvl('p')"},
         {"alias": "soj_tag_t", "expr": "soj_nvl('t')"},
-        {"alias": "soj_tag_duration", "expr": "soj_nvl('TDuration')"},
         {"alias": "domain", "expr": "soj_page_family(CAST(soj_tag_p AS INTEGER))"},
         {"alias": "site_id", "expr": "CAST(soj_tag_t AS INTEGER)"},
         {"alias": "total_cnt", "expr": "count(1)"},
-        {"alias": "duration_sum", "expr": "sum(CAST(soj_tag_duration AS DOUBLE))"}
+        {"alias": "duration_sum", "expr": "sum(CAST(clientData.TDuration AS DOUBLE))"}
       ]
     }
   ]

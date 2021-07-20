@@ -30,11 +30,10 @@ public class RawEvent implements Serializable {
   }
 
   public long getUnixEventTimestamp() {
-    long t = System.currentTimeMillis();
     try {
       return SojTimestamp.getSojTimestampToUnixTimestamp(this.getEventTimestamp());
     } catch (Exception ignore) {
-      return t;
+      return System.currentTimeMillis();
     }
   }
 }

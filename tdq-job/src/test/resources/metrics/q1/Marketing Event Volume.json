@@ -7,7 +7,7 @@
       "comment": "Latency of Event Capture & Publish",
       "expr": "total_cnt",
       "filter": "page_id in (2547208, 2483445)",
-      "dimensions": ["domain", "site_id", "page_id"],
+      "dimensions": ["domain", "site_id"],
       "transformations": [
         {"alias": "soj_tag_p",        "expr": "soj_nvl('p')"},
         {"alias": "soj_tag_t",        "expr": "soj_nvl('t')"},

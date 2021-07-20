@@ -3,7 +3,9 @@ package com.ebay.sojourner.common.model;
 import com.ebay.sojourner.common.util.CalTimeOfDay;
 import com.ebay.sojourner.common.util.PropertyUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.collect.Sets;
 import java.io.Serializable;
+import java.util.Set;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,6 +13,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClientData implements Serializable {
+  // TODO through reflection
+  public static Set<String> FIELDS = Sets.newHashSet(
+      "forwardFor", "script", "server", "TMachine",
+      "TStamp", "TName", "t", "colo", "pool", "agent", "remoteIP", "TType",
+      "TPool", "TStatus", "corrId", "contentLength", "nodeId",
+      "requestGuid", "urlQueryString", "referrer", "rlogid",
+      "acceptEncoding", "TDuration", "encoding", "TPayload"
+  );
 
   private String forwardFor;
   private String script;

@@ -68,8 +68,25 @@ public class TdqSinks implements Serializable {
   }
 
   public static void sinkLatencyMetric(TdqEnv tdqEnv, SingleOutputStreamOperator<TdqMetric> ds) {
+    //    ds = ds.getSideOutput(tdqEnv.getEventLatencyOutputTag()).process(new ProcessFunction<TdqMetric, TdqMetric>() {
+    //      private Counter evtLatencyCounter;
+    //
+    //      @Override
+    //      public void open(Configuration parameters) throws Exception {
+    //        super.open(parameters);
+    //        MetricGroup group = this.getRuntimeContext().getMetricGroup().addGroup("tdq");
+    //        evtLatencyCounter = group.counter("evtLatency");
+    //      }
+    //
+    //      @Override
+    //      public void processElement(TdqMetric value, Context ctx, Collector<TdqMetric> out) {
+    //        evtLatencyCounter.inc();
+    //        out.collect(value);
+    //      }
+    //    }).uid("evt_latency_proc").name("evt_latency_proc");
+    //
     if (tdqEnv.isLatencyMetricSink("console")) {
-      ds
+      ds.getSideOutput(tdqEnv.getEventLatencyOutputTag())
           .print("EVT_LATENCY_O_STD")
           .uid("evt_latency_o_std")
           .name("evt_latency_o_std")
@@ -95,7 +112,7 @@ public class TdqSinks implements Serializable {
           .setParallelism(tdqEnv.getMetric2ndAggrParallelism());
     }
     if (tdqEnv.isLatencyMetricSink("hdfs")) {
-      sinkHDFS("evt_latency", LATENCY_METRIC, tdqEnv, ds);
+      sinkHDFS("evt_latency", LATENCY_METRIC, tdqEnv, ds.getSideOutput(tdqEnv.getEventLatencyOutputTag()));
     }
   }
 
@@ -232,8 +249,8 @@ public class TdqSinks implements Serializable {
         .setParallelism(1)
         .slotSharingGroup(id + "_hdfs")
         .addSink(sink)
-        .uid(id + "_hdfs")
-        .name(id + "_hdfs")
+        .uid(id + "_o_hdfs")
+        .name(id + "_o_hdfs")
         .slotSharingGroup(id + "_hdfs")
         .setParallelism(1);
 

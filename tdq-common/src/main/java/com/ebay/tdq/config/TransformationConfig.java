@@ -21,4 +21,6 @@ public class TransformationConfig implements Serializable {
   private String expr;
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private String filter;
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private String comment;
 }
