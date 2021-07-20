@@ -51,6 +51,7 @@ public class TdqEnv implements Serializable {
   private String metric1stAggrW;
   private Long metric1stAggrWMilli;
   private Double srcSampleFraction;
+  private final Long tdqConfigRefreshInterval = 60L;
 
   private final Map<Long, OutputTag<TdqMetric>> outputTagMap = new HashMap<>();
   private final OutputTag<TdqErrorMsg> exceptionOutputTag;

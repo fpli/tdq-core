@@ -13,3 +13,5 @@ flink:
         port: 9200
         api-key: ""
         api-value: ""
+a:
+  b:

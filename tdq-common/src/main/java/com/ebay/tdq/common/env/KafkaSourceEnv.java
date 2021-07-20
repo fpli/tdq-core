@@ -4,6 +4,7 @@ import static com.ebay.sojourner.common.env.EnvironmentUtils.get;
 
 import java.io.Serializable;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author juntzhang
@@ -13,6 +14,7 @@ public class KafkaSourceEnv implements Serializable {
 
   private String startupMode;  // TIMESTAMP,LATEST,EARLIEST
   private Long fromTimestamp = 0L;
+  private Long endTimestamp = 0L;
 
   public KafkaSourceEnv() {
     String fromTimestamp = get("flink.app.source.from-timestamp");
@@ -26,10 +28,24 @@ public class KafkaSourceEnv implements Serializable {
     } else {
       throw new IllegalArgumentException("Cannot parse fromTimestamp value");
     }
+
+    String endTimestampStr = get("flink.app.source.end-timestamp");
+    if (StringUtils.isNotBlank(endTimestampStr)) {
+      endTimestamp = Long.valueOf(endTimestampStr);
+    }
   }
 
   // ignore event before fromTimestamp
   public boolean isTimestampBefore(long t) {
     return startupMode.equals("TIMESTAMP") && this.fromTimestamp > 0 && t < this.fromTimestamp;
+  }
+
+
+  public boolean isTimestampEnded(long t) {
+    return this.endTimestamp > 0 && t > this.endTimestamp;
+  }
+
+  public boolean isBackFill() {
+    return this.endTimestamp > 0;
   }
 }

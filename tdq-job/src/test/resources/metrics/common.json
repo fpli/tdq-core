@@ -112,12 +112,12 @@
             {
               "alias": "gmt_usr_total_cnt",
               "expr": "count(1)",
-              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id)"
+              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%'"
             },
             {
               "alias": "gmt_usr_cnt",
               "expr": "sum(case when LENGTH(soj_tag_u) > 0 then 1 else 0 end)",
-              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id)"
+              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%'"
             },
             {
               "alias": "gmt_itm_total_cnt",
@@ -127,7 +127,7 @@
             {
               "alias": "gmt_itm_cnt",
               "expr": "sum(case when LENGTH(soj_tag_itm) > 0 then 1 else 0 end)",
-              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','VI','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id)"
+              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','VI','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%'"
             },
             {
               "alias": "ebay_ip_cnt",

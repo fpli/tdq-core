@@ -11,8 +11,8 @@ import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
-import com.ebay.sojourner.flink.connector.kafka.schema.RawEventDeserializationSchema;
-import com.ebay.sojourner.flink.connector.kafka.schema.RawEventKafkaDeserializationSchemaWrapper;
+import com.ebay.tdq.connector.kafka.schema.PathFinderRawEventDeserializationSchema;
+import com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchemaWrapper;
 import com.ebay.tdq.utils.TdqEnv;
 import com.google.common.collect.Lists;
 import java.util.List;
@@ -51,8 +51,8 @@ public class BehaviorPathfinderSource extends AbstractSource {
         .outOfOrderlessInMin(getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
         .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
         .idleSourceTimeout(getInteger(Property.FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN))
-        .build(new RawEventKafkaDeserializationSchemaWrapper(
-            new RawEventDeserializationSchema()));
+        .build(new PathFinderRawEventKafkaDeserializationSchemaWrapper(
+            new PathFinderRawEventDeserializationSchema(tdqEnv)));
     DataStream<RawEvent> slcDS = dataStreamBuilder
         .dc(SLC)
         .operatorName(getString(Property.SOURCE_OPERATOR_NAME_SLC))
@@ -61,8 +61,8 @@ public class BehaviorPathfinderSource extends AbstractSource {
         .outOfOrderlessInMin(getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
         .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
         .idleSourceTimeout(getInteger(Property.FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN))
-        .build(new RawEventKafkaDeserializationSchemaWrapper(
-            new RawEventDeserializationSchema()));
+        .build(new PathFinderRawEventKafkaDeserializationSchemaWrapper(
+            new PathFinderRawEventDeserializationSchema(tdqEnv)));
     DataStream<RawEvent> lvsDS = dataStreamBuilder
         .dc(LVS)
         .operatorName(getString(Property.SOURCE_OPERATOR_NAME_LVS))
@@ -71,8 +71,8 @@ public class BehaviorPathfinderSource extends AbstractSource {
         .outOfOrderlessInMin(getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
         .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
         .idleSourceTimeout(getInteger(Property.FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN))
-        .build(new RawEventKafkaDeserializationSchemaWrapper(
-            new RawEventDeserializationSchema()));
+        .build(new PathFinderRawEventKafkaDeserializationSchemaWrapper(
+            new PathFinderRawEventDeserializationSchema(tdqEnv)));
     int p = getInteger(Property.SOURCE_PARALLELISM);
     DataStream<RawEvent> r = sample(rnoDS, getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP), "RNO", p);
     DataStream<RawEvent> l = sample(lvsDS, getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP), "LVS", p);

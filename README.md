@@ -1,5 +1,9 @@
-# sojourner
-Sojourner Unified Bot Detection
+# TDQ
+Tracking Data Quality
+
+## Regenerate Metric
+
+--tdq-profile tdq-backfill --flink.app.profile pre-prod --kafka.consumer.group-id tdq-v2-1626667200000 --flink.app.source.from-timestamp 1626667200000 --flink.app.source.end-timestamp 1626667800000
 
 ## Features
 * A common library for core business and bot logic

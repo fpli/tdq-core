@@ -128,6 +128,9 @@ public class EnvironmentUtils {
 
   public static Set<String> getSet(String key) {
     List<String> list = get(key, List.class);
+    if (list == null) {
+      return new HashSet<>();
+    }
     return new HashSet<>(list);
   }
 

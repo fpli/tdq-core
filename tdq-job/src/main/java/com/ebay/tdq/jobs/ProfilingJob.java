@@ -113,7 +113,7 @@ public class ProfilingJob {
   }
 
   protected DataStream<PhysicalPlans> getConfigDS(StreamExecutionEnvironment env) {
-    return TdqConfigSource.build(env);
+    return TdqConfigSource.build(env, tdqEnv);
   }
 
   // normalize event to metric

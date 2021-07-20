@@ -4,11 +4,17 @@
     {
       "name": "rule_1",
       "type": "realtime.rheos.profiler",
-      "config": {"window": "2min"},
+      "config": {
+        "window": "2min"
+      },
       "profilers": [
         {
           "metric-name": "global_mandatory_tag_item_rate1",
-          "dimensions": ["page_id","site"],
+          "dimensions": [
+            "domain",
+            "site"
+          ],
+          "filter": "domain in ('ASQ', 'BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','VI','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%' and site not in('3','4')",
           "expr": "itm_valid_cnt / itm_cnt",
           "transformations": [
             {
@@ -16,11 +22,21 @@
               "expr": "CAST( SOJ_NVL('p') AS INTEGER)"
             },
             {
+              "alias": "domain",
+              "expr": "soj_page_family(page_id)"
+            },
+            {
               "alias": "site",
               "expr": "SOJ_NVL('t')"
             },
-            {"alias": "itm_cnt", "expr": "count(1)"},
-            {"alias": "itm_valid_cnt", "expr": "Sum(case when CAST( SOJ_NVL('itm|itmid|itm_id|itmlist|litm') AS LONG) is not null then 1 else 0 end)"}
+            {
+              "alias": "itm_cnt",
+              "expr": "count(1)"
+            },
+            {
+              "alias": "itm_valid_cnt",
+              "expr": "Sum(case when CAST( SOJ_NVL('itm|itmid|itm_id|itmlist|litm') AS LONG) is not null then 1 else 0 end)"
+            }
           ]
         }
       ]
