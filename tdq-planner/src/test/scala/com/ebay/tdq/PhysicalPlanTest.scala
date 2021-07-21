@@ -1,150 +1,140 @@
-//package com.ebay.tdq
-//
-//import java.util.{HashMap => JHashMap}
-//
-//import com.ebay.sojourner.common.model.{ClientData, RawEvent}
-//import com.ebay.tdq.expressions._
-//import com.ebay.tdq.expressions.aggregate.{Count, Sum}
-//import com.ebay.tdq.rules.{AggrPhysicalPlan, PhysicalPlan}
-//import com.ebay.tdq.types._
-//import org.junit.Test
-//
-///**
-// * @author juntzhang
-// */
-//class PhysicalPlanTest {
-//  @Test
-//  def event_capture_publish_latency(): Unit = {
-//    val event = GetRawEvent()
-//    val page_id = Cast(ExtractTag(event, "p", StringType), IntegerType, Some("page_id"))
-//    val TDuration = Cast(ExtractTag(event, "TDuration", StringType), DoubleType, Some("t_duration"))
-//    val t_duration_sum = Sum(TDuration, Some("t_duration_sum"))
-//    val expr = GetStructField("t_duration_sum", DoubleType)
-//    val filter = And(
-//      In(page_id, Seq(Literal(1702898, IntegerType), Literal(1677718, IntegerType))),
-//      GreaterThan(Cast(GetStructField("clientData.contentLength", StringType), IntegerType), Literal(30, IntegerType))
-//    )
-//    val plan = PhysicalPlan(
-//      "test", 5000, expr,
-//      Array(AggrPhysicalPlan(name = "t_duration_sum", evaluation = t_duration_sum)),
-//      Array(page_id),
-//      filter
-//    )
-//
-//    //val arr = new ByteArrayOutputStream()
-//    //val stream = new ObjectOutputStream(arr)
-//    //stream.writeObject(plan)
-//    //println(arr.size())
-//
-//    val siteId: String = "1"
-//    val item: String = "123"
-//    val pageId: String = "1702898"
-//    val contentLength: String = "55"
-//    val tDuration: String = "155"
-//    val rawEvent = new RawEvent
-//    rawEvent.setClientData(new ClientData)
-//    rawEvent.getClientData.setContentLength(contentLength)
-//    rawEvent.setEventTimestamp(System.currentTimeMillis)
-//    rawEvent.setSojA(new JHashMap[String, String])
-//    rawEvent.setSojK(new JHashMap[String, String])
-//    rawEvent.setSojC(new JHashMap[String, String])
-//    rawEvent.getSojA.put("p", pageId)
-//    rawEvent.getSojA.put("t", siteId)
-//    rawEvent.getSojA.put("TDuration", tDuration)
-//    rawEvent.getSojA.put("itm", item)
-//
-//    val v1 = plan.process(rawEvent)
-//    println(v1)
-//
-//
-//    rawEvent.getClientData.setContentLength("25")
-//    rawEvent.getSojA.put("TDuration", "125")
-//    val v2 = plan.process(rawEvent)
-//    assert(v2 == null)
-//
-//    rawEvent.getClientData.setContentLength("35")
-//    rawEvent.getSojA.put("TDuration", "135")
-//    val v3 = plan.process(rawEvent)
-//    println(v3)
-//
-//    //    val ans = t_duration_sum.merge(v1, v3)
-//    //    plan.evaluate(ans)
-//    //    println(ans)
-//    //
-//    //    val s = System.currentTimeMillis()
-//    //    (0 to 100000).foreach(_ => plan.process(rawEvent))
-//    //    println(s"100k process cast time ${System.currentTimeMillis() - s} ms")
-//  }
-//
-//  @Test
-//  def global_mandatory_tag_item_rate(): Unit = {
-//    val eventExpression = GetRawEvent()
-//    val pageIdExpression = Cast(ExtractTag(eventExpression, "p", StringType), IntegerType, Some("page_id"))
-//    val itemExpression = ExtractTag(eventExpression, "itm|itmid|itm_id|itmlist|litm", StringType, Some("item"))
-//    val itmValidIndExpression = Cast(
-//      CaseWhen(
-//        Seq((GreaterThan(Length(RegExpExtract(itemExpression, Literal("^(\\d+(%2C)?)+$"))), Literal(0)), Literal(1))),
-//        Some(Literal(0d))
-//      ), DoubleType, Some("itm_valid_ind")
-//    )
-//
-//    val itmValidCntExpression = Sum(itmValidIndExpression, Some("itm_valid_cnt"))
-//    val itmCntExpression = Count(Literal(1d), Some("itm_cnt"))
-//
-//    val expr = Divide(itmValidCntExpression, itmCntExpression)
-//    val filter = And(
-//      In(pageIdExpression, Seq(Literal(1702898, IntegerType), Literal(1677718, IntegerType))),
-//      GreaterThan(Cast(GetStructField("clientData.contentLength", StringType), IntegerType), Literal(30))
-//    )
-//    val plan = PhysicalPlan(
-//      "test", 5000,
-//      expr,
-//      Array(
-//        AggrPhysicalPlan(name = "itm_valid_cnt", evaluation = itmValidCntExpression),
-//        AggrPhysicalPlan(name = "itm_cnt", evaluation = itmCntExpression)
-//      ),
-//      Array(pageIdExpression),
-//      filter
-//    )
-//
-//    val siteId: String = "1"
-//    val item: String = "123"
-//    val pageId: String = "1702898"
-//    val contentLength: String = "55"
-//    val tDuration: String = "155"
-//    val rawEvent = new RawEvent
-//    rawEvent.setClientData(new ClientData)
-//    rawEvent.getClientData.setContentLength(contentLength)
-//    rawEvent.setEventTimestamp(System.currentTimeMillis)
-//    rawEvent.setSojA(new JHashMap[String, String])
-//    rawEvent.setSojK(new JHashMap[String, String])
-//    rawEvent.setSojC(new JHashMap[String, String])
-//    rawEvent.getSojA.put("p", pageId)
-//    rawEvent.getSojA.put("t", siteId)
-//    rawEvent.getSojA.put("TDuration", tDuration)
-//    rawEvent.getSojA.put("itm", item)
-//
-//    val v1 = plan.process(rawEvent)
-//    println(v1)
-//
-//
-//    rawEvent.getClientData.setContentLength("25")
-//    rawEvent.getSojA.put("itm", "123")
-//    val v2 = plan.process(rawEvent)
-//    assert(v2 == null)
-//
-//    rawEvent.getClientData.setContentLength("35")
-//    rawEvent.getSojA.put("itm", "123a")
-//    val v3 = plan.process(rawEvent)
-//    println(v3)
-//
-//    val ans = plan.merge(v1, v3)
-//    println(ans)
-//    //    plan.evaluate(ans)
-//    //    println(ans)
-//
-//    val s = System.currentTimeMillis()
-//    (0 to 100000).foreach(_ => plan.process(rawEvent))
-//    println(s"100k process cast time ${System.currentTimeMillis() - s} ms")
-//  }
-//}
+package com.ebay.tdq
+
+import com.ebay.tdq.config.TdqConfig
+import com.ebay.tdq.rules.ProfilingSqlParser
+import com.ebay.tdq.utils.{DateUtils, JsonUtils}
+import org.junit.Test
+
+/**
+ * @author juntzhang
+ */
+class PhysicalPlanTest {
+  @Test
+  def testFindDimensionValues(): Unit = {
+    val json =
+      """
+        |{
+        |  "id": "1",
+        |  "rules": [
+        |    {
+        |      "name": "rule_1",
+        |      "type": "realtime.rheos.profiler",
+        |      "config": {
+        |        "window": "2min"
+        |      },
+        |      "profilers": [
+        |        {
+        |          "metric-name": "global_mandatory_tag_item_rate1",
+        |          "dimensions": [
+        |            "domain",
+        |            "site"
+        |          ],
+        |          "filter": "domain in ('ASQ', 'BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','VI','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%' and site not in('3','4')",
+        |          "expr": "itm_valid_cnt / itm_cnt",
+        |          "transformations": [
+        |            {
+        |              "alias": "page_id",
+        |              "expr": "CAST( SOJ_NVL('p') AS INTEGER)"
+        |            },
+        |            {
+        |              "alias": "domain",
+        |              "expr": "soj_page_family(page_id)"
+        |            },
+        |            {
+        |              "alias": "site",
+        |              "expr": "SOJ_NVL('t')"
+        |            },
+        |            {
+        |              "alias": "itm_cnt",
+        |              "expr": "count(1)"
+        |            },
+        |            {
+        |              "alias": "itm_valid_cnt",
+        |              "expr": "Sum(case when CAST( SOJ_NVL('itm|itmid|itm_id|itmlist|litm') AS LONG) is not null then 1 else 0 end)"
+        |            }
+        |          ]
+        |        }
+        |      ]
+        |    }
+        |  ]
+        |}
+        |""".stripMargin
+    val config = JsonUtils.parseObject(json, classOf[TdqConfig])
+    val parser = new ProfilingSqlParser(
+      config.getRules.get(0).getProfilers.get(0),
+      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString)
+    )
+    val plan = parser.parsePlan()
+    println(plan)
+
+    val map = plan.findDimensionValues()
+    assert(map.size() == 1)
+    assert(map.get("domain").size() == 11)
+
+  }
+
+  @Test
+  def testFindDimensionValues2(): Unit = {
+    val json =
+      """
+        |{
+        |  "id": "1",
+        |  "rules": [
+        |    {
+        |      "name": "rule_1",
+        |      "type": "realtime.rheos.profiler",
+        |      "config": {
+        |        "window": "2min"
+        |      },
+        |      "profilers": [
+        |        {
+        |          "metric-name": "global_mandatory_tag_item_rate1",
+        |          "dimensions": [
+        |            "domain",
+        |            "site"
+        |          ],
+        |          "expr": "itm_valid_cnt / itm_cnt",
+        |          "transformations": [
+        |            {
+        |              "alias": "page_id",
+        |              "expr": "CAST( SOJ_NVL('p') AS INTEGER)"
+        |            },
+        |            {
+        |              "alias": "domain",
+        |              "expr": "soj_page_family(page_id)",
+        |              "filter": "domain in ('ASQ', 'BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','VI','WTCH','XO')"
+        |            },
+        |            {
+        |              "alias": "site",
+        |              "expr": "SOJ_NVL('t')",
+        |              "filter": "site not in('3','4')"
+        |            },
+        |            {
+        |              "alias": "itm_cnt",
+        |              "expr": "count(1)"
+        |            },
+        |            {
+        |              "alias": "itm_valid_cnt",
+        |              "expr": "Sum(case when CAST( SOJ_NVL('itm|itmid|itm_id|itmlist|litm') AS LONG) is not null then 1 else 0 end)"
+        |            }
+        |          ]
+        |        }
+        |      ]
+        |    }
+        |  ]
+        |}
+        |""".stripMargin
+    val config = JsonUtils.parseObject(json, classOf[TdqConfig])
+    val parser = new ProfilingSqlParser(
+      config.getRules.get(0).getProfilers.get(0),
+      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString)
+    )
+    val plan = parser.parsePlan()
+    println(plan)
+
+    val map = plan.findDimensionValues()
+    assert(map.size() == 1)
+    assert(map.get("domain").size() == 11)
+
+  }
+}

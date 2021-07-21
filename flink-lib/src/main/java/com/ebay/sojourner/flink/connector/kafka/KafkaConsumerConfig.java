@@ -68,11 +68,6 @@ public class KafkaConsumerConfig {
     return config;
   }
 
-  public static KafkaConsumerConfig ofDC(String dataCenter) {
-    DataCenter dc = DataCenter.of(dataCenter);
-    return ofDC(dc);
-  }
-
   private static String getBrokersForDC(DataCenter dc) {
     String propKey = KAFKA_CONSUMER_BOOTSTRAP_SERVERS + "." + dc.getValue().toLowerCase();
     return getListString(propKey);

@@ -20,6 +20,7 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 /**
+ * todo need dynamic config json file
  * @author juntzhang
  */
 public class BehaviorPathfinderSource extends AbstractSource {
@@ -59,7 +60,7 @@ public class BehaviorPathfinderSource extends AbstractSource {
         .uid(getString(Property.SOURCE_UID_SLC))
         .slotGroup(getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP))
         .outOfOrderlessInMin(getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
-        .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+        .fromTimestamp(getString(Property.FLINK_APP_SOURCE_FROM_TIMESTAMP))
         .idleSourceTimeout(getInteger(Property.FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN))
         .build(new PathFinderRawEventKafkaDeserializationSchemaWrapper(
             new PathFinderRawEventDeserializationSchema(tdqEnv)));
@@ -69,14 +70,50 @@ public class BehaviorPathfinderSource extends AbstractSource {
         .uid(getString(Property.SOURCE_UID_LVS))
         .slotGroup(getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP))
         .outOfOrderlessInMin(getInteger(FLINK_APP_SOURCE_OUT_OF_ORDERLESS_IN_MIN))
-        .fromTimestamp(getString(FLINK_APP_SOURCE_FROM_TIMESTAMP))
+        .fromTimestamp(getString(Property.FLINK_APP_SOURCE_FROM_TIMESTAMP))
         .idleSourceTimeout(getInteger(Property.FLINK_APP_IDLE_SOURCE_TIMEOUT_IN_MIN))
         .build(new PathFinderRawEventKafkaDeserializationSchemaWrapper(
             new PathFinderRawEventDeserializationSchema(tdqEnv)));
     int p = getInteger(Property.SOURCE_PARALLELISM);
-    DataStream<RawEvent> r = sample(rnoDS, getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP), "RNO", p);
-    DataStream<RawEvent> l = sample(lvsDS, getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP), "LVS", p);
-    DataStream<RawEvent> s = sample(slcDS, getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP), "SLC", p);
+    DataStream<RawEvent> r = sample(rnoDS, getString(Property.SOURCE_EVENT_RNO_SLOT_SHARE_GROUP), "RNO");
+    DataStream<RawEvent> l = sample(lvsDS, getString(Property.SOURCE_EVENT_LVS_SLOT_SHARE_GROUP), "LVS");
+    DataStream<RawEvent> s = sample(slcDS, getString(Property.SOURCE_EVENT_SLC_SLOT_SHARE_GROUP), "SLC");
     return Lists.newArrayList(r, l, s);
   }
+
+  //  public DataStream<RawEvent> build(DataCenter dc, String operatorName, int parallelism, String uid, String slotGroup) {
+  //    Preconditions.checkNotNull(dc);
+  //
+  //    KafkaConsumerConfig config = KafkaConsumerConfig.ofDC(dc);
+  //
+  //    FlinkKafkaConsumer<RawEvent> flinkKafkaConsumer = new FlinkKafkaConsumer<>(
+  //        config.getTopics(),
+  //        new PathFinderRawEventKafkaDeserializationSchemaWrapper(
+  //            new PathFinderRawEventDeserializationSchema(tdqEnv)),
+  //        config.getProperties());
+  //
+  //    KafkaSourceEnv sourceEnv = tdqEnv.getKafkaSourceEnv();
+  //
+  //    switch (sourceEnv.getStartupMode()) {
+  //      case "EARLIEST":
+  //        flinkKafkaConsumer.setStartFromEarliest();
+  //        break;
+  //      case "LATEST":
+  //        flinkKafkaConsumer.setStartFromLatest();
+  //        break;
+  //      case "TIMESTAMP":
+  //        flinkKafkaConsumer.setStartFromTimestamp(sourceEnv.getFromTimestamp());
+  //        break;
+  //      default:
+  //        throw new IllegalArgumentException("Cannot parse fromTimestamp value");
+  //    }
+  //
+  //    return env
+  //        .addSource(flinkKafkaConsumer)
+  //        .setParallelism(parallelism)
+  //        .slotSharingGroup(slotGroup)
+  //        .name(operatorName)
+  //        .uid(uid);
+  //  }
+
 }

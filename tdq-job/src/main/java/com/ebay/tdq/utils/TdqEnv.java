@@ -31,6 +31,7 @@ import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.util.OutputTag;
 
 /**
+ * todo need classify by application.yml
  * @author juntzhang
  */
 @Data

@@ -9,12 +9,12 @@
       },
       "profilers": [
         {
-          "metric-name": "global_mandatory_tag_item_rate1",
+          "metric-name": "global_mandatory_tag_item_rate2",
           "dimensions": [
             "domain",
             "site"
           ],
-          "filter": "domain in ('ASQ', 'BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','VI','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%' and site not in('3','4')",
+          "filter": "(domain in ('ASQ') or domain in ('VI','WTCH','XO')) and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%' and site in('1','3')",
           "expr": "itm_valid_cnt / itm_cnt",
           "transformations": [
             {

@@ -155,7 +155,11 @@ public class ProfilerServiceImpl implements ProfilerService {
 
       rootBuilder.must(QueryBuilders.rangeQuery("event_time").gte(param.getFrom()).lte(param.getTo()));
       rootBuilder.must(QueryBuilders.termQuery("metric_key", profilerConfig.getMetricName()));
-      //      rootBuilder.must(QueryBuilders.termsQuery("tags." + k, v));
+
+      physicalPlan.findDimensionValues().forEach((k, v) -> {
+        rootBuilder.must(QueryBuilders.termsQuery("tags." + k + ".raw", v));
+      });
+
       builder.query(rootBuilder);
       for (Transformation t : physicalPlan.dimensions()) {
         String dimension = t.name();

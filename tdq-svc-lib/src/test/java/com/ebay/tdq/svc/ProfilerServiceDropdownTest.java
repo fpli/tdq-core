@@ -91,7 +91,7 @@ public class ProfilerServiceDropdownTest {
     System.out.println(records);
     Assert.assertEquals(2, records.size());
     Assert.assertEquals(2, records.get(0).getItems().size());
-    Assert.assertEquals(2, records.get(1).getItems().size());
+    Assert.assertEquals(1, records.get(1).getItems().size());
     ServiceFactory.close();
     elasticsearchResource.close();
   }

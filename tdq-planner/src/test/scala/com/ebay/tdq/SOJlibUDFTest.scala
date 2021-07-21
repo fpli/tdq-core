@@ -84,7 +84,7 @@ class SOJlibUDFTest {
   @Test
   def test_is_bbwoa_page(): Unit = {
     val soj = new JHashMap[String, String]
-    soj.put("p", "2492448")
+    soj.put("p", "2545343")
     test("case when IS_BBWOA_PAGE_WITH_ITM(p2) then 1 else 0 end", "cast(soj_nvl('p') AS INTEGER)", soj, metric => {
       assert(metric.getValues.get("p1") == 1)
     })
