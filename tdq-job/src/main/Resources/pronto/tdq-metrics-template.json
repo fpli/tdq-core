@@ -16,7 +16,7 @@
           "match_mapping_type": "double",
           "mapping": {
             "type": "double",
-            "index": false
+            "index": true
           }
         }
       },
@@ -25,7 +25,7 @@
           "match_mapping_type": "long",
           "mapping": {
             "type": "long",
-            "index": false
+            "index": true
           }
         }
       },

@@ -5,6 +5,9 @@
     {
       "metric-name": "common_metric",
       "comment": "Latency of Event Capture & Publish",
+      "config": {
+        "pronto-dropdown": "tags.page_id.raw in (2547208, 2483445)"
+      },
       "expr": "total_cnt",
       "filter": "page_id in (2547208, 2483445)",
       "dimensions": ["domain", "site_id"],

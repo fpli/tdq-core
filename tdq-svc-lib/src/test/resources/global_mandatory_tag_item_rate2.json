@@ -14,7 +14,10 @@
             "domain",
             "site"
           ],
-          "filter": "(domain in ('ASQ') or domain in ('VI','WTCH','XO')) and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%' and site in('1','3')",
+          "config": {
+            "pronto-dropdown": "expr.itm_cnt > 0 and tags.domain.raw in ('ASQ','VI','WTCH','XO')"
+          },
+          "filter": "domain in ('ASQ','VI','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%' and site in('1','3')",
           "expr": "itm_valid_cnt / itm_cnt",
           "transformations": [
             {

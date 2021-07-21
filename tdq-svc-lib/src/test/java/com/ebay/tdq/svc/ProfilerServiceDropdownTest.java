@@ -69,9 +69,9 @@ public class ProfilerServiceDropdownTest {
 
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "1450", "1", 4d, 7d))).get();
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", "1", 4d, 7d))).get();
-    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "711", "2", 1d, 1d))).get();
+    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "711", "1", 1d, 1d))).get();
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "1677718", "1", 1d, 2d))).get();
-    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", "1", 1d, 2d))).get();
+    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", "2", 0d, 0d))).get();
     Thread.sleep(3000);
   }
 

@@ -4,6 +4,9 @@
     "name": "30", "type": "realtime.rheos.profiler", "config": {"window": "5min"}, "profilers": [
     {
       "metric-name": "common_metric",
+      "config": {
+        "pronto-dropdown": "tags.app.raw in ('2571','1462','2878')"
+      },
       "expr": "nt_mav_cnt / total_cnt",
       "filter": "app in ('2571','1462','2878')",
       "dimensions": ["domain", "site_id", "app"],

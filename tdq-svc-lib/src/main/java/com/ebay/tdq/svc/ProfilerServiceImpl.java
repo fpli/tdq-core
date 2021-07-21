@@ -145,7 +145,8 @@ public class ProfilerServiceImpl implements ProfilerService {
       Validate.isTrue(StringUtils.isNotEmpty(profilerConfig.getMetricName()), "metric name is required.");
       int window = (int) DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString());
 
-      PhysicalPlan physicalPlan = new ProfilingSqlParser(profilerConfig, window).parsePlan();
+      ProfilingSqlParser parser = new ProfilingSqlParser(profilerConfig, window);
+      PhysicalPlan physicalPlan = parser.parsePlan();
       if (ArrayUtils.isEmpty(physicalPlan.dimensions())) {
         return resultBuilder.build();
       }
@@ -156,9 +157,7 @@ public class ProfilerServiceImpl implements ProfilerService {
       rootBuilder.must(QueryBuilders.rangeQuery("event_time").gte(param.getFrom()).lte(param.getTo()));
       rootBuilder.must(QueryBuilders.termQuery("metric_key", profilerConfig.getMetricName()));
 
-      physicalPlan.findDimensionValues().forEach((k, v) -> {
-        rootBuilder.must(QueryBuilders.termsQuery("tags." + k + ".raw", v));
-      });
+      new ProntoQueryBuilder(rootBuilder, parser.parseProntoSqlNode()).submit();
 
       builder.query(rootBuilder);
       for (Transformation t : physicalPlan.dimensions()) {

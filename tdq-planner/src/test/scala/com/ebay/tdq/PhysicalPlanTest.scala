@@ -9,6 +9,7 @@ import org.junit.Test
  * @author juntzhang
  */
 class PhysicalPlanTest {
+
   @Test
   def testFindDimensionValues(): Unit = {
     val json =
@@ -29,6 +30,9 @@ class PhysicalPlanTest {
         |            "domain",
         |            "site"
         |          ],
+        |          "config": {
+        |             "pronto-dropdown": "expr.itm_cnt > 0"
+        |           },
         |          "filter": "domain in ('ASQ', 'BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','VI','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%' and site not in('3','4')",
         |          "expr": "itm_valid_cnt / itm_cnt",
         |          "transformations": [
@@ -135,6 +139,5 @@ class PhysicalPlanTest {
     val map = plan.findDimensionValues()
     assert(map.size() == 1)
     assert(map.get("domain").size() == 11)
-
   }
 }

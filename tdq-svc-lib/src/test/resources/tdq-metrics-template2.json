@@ -10,7 +10,7 @@
           "unindexed_doubles" : {
             "match_mapping_type" : "double",
             "mapping" : {
-              "index" : false,
+              "index" : true,
               "type" : "double"
             }
           }
@@ -19,7 +19,7 @@
           "unindexed_longs" : {
             "match_mapping_type" : "long",
             "mapping" : {
-              "index" : false,
+              "index" : true,
               "type" : "long"
             }
           }

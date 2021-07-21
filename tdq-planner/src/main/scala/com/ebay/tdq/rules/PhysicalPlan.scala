@@ -17,7 +17,8 @@ case class PhysicalPlans(plans: Array[PhysicalPlan])
 
 case class PhysicalPlanContext(
   sampling: Boolean = false,
-  samplingFraction: Double = 0.0001
+  samplingFraction: Double = 0.0001,
+  prontoDropdownExpr:String
 )
 
 case class PhysicalPlan(

@@ -11,6 +11,9 @@
       "profilers": [
         {
           "metric-name": "common_metric",
+          "config": {
+            "pronto-dropdown": "expr.ep_site_total_cnt > 0"
+          },
           "expr": "1 - ep_site_incon_cnt / ep_site_total_cnt",
           "dimensions": [
             "domain",

@@ -4,6 +4,9 @@
     "name": "30", "type": "realtime.rheos.profiler", "config": {"window": "1h"}, "profilers": [
     {
       "metric-name": "common_metric",
+      "config": {
+        "pronto-dropdown": "expr.gmt_itm_total_cnt > 0"
+      },
       "expr": "gmt_itm_cnt / gmt_itm_total_cnt",
       "dimensions": ["domain", "site_id"],
       "filter": "domain in ('ASQ', 'BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','VI','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%'",

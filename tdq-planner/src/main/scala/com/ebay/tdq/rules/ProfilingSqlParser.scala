@@ -120,8 +120,20 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
     if (profilerConfig.getConfig == null) {
       None
     } else {
-      Some(PhysicalPlanContext(sampling = profilerConfig.getConfig.get("sampling").toString.toBoolean,
-        samplingFraction = profilerConfig.getConfig.get("sampling-fraction").toString.toDouble))
+      Some(PhysicalPlanContext(
+        sampling = profilerConfig.getSampling,
+        samplingFraction = profilerConfig.getSamplingFraction,
+        prontoDropdownExpr = profilerConfig.getProntoDropdownExpr
+      ))
+    }
+  }
+
+  def parseProntoSqlNode(): SqlNode = {
+    if (physicalPlanContext.isDefined) {
+      val expr = physicalPlanContext.get.prontoDropdownExpr
+      getExpr(expr)
+    } else {
+      null
     }
   }
 
@@ -228,8 +240,7 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
     sqlNode match {
       case call: SqlBasicCall => transformSqlBaseCall(call, alias)
       case sqlCase: SqlCase => transformSqlCase(sqlCase, alias)
-      case literal: SqlLiteral =>
-        transformLiteral(literal)
+      case literal: SqlLiteral => transformLiteral(literal)
       case identifier: SqlIdentifier => transformIdentifier(identifier)
       case _ => throw new IllegalStateException("Unexpected SqlCall: " + sqlNode)
     }
