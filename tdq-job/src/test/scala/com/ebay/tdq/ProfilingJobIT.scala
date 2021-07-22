@@ -1,19 +1,20 @@
 package com.ebay.tdq
 
+import java.sql.DriverManager
 import java.time.Duration
 import java.util.{HashMap => JMap, List => JList}
 
 import com.ebay.sojourner.common.model.RawEvent
 import com.ebay.sojourner.flink.connector.kafka.SojSerializableTimestampAssigner
-import com.ebay.tdq.config.TdqConfig
-import com.ebay.tdq.functions.RawEventProcessFunction
+import com.ebay.tdq.common.env.JdbcEnv
 import com.ebay.tdq.jobs.ProfilingJob
 import com.ebay.tdq.rules.{PhysicalPlans, TdqMetric}
 import com.ebay.tdq.sinks.MemorySink
 import com.ebay.tdq.utils._
 import com.google.common.collect.Lists
+import org.apache.commons.io.IOUtils
+import org.apache.commons.lang3.StringUtils
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
-import org.apache.flink.api.common.state.MapStateDescriptor
 import org.apache.flink.streaming.api.datastream.DataStream
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.functions.source.{RichSourceFunction, SourceFunction}
@@ -38,6 +39,8 @@ case class ProfilingJobIT(
     tdqEnv = new TdqEnv
     setTdqEnv(tdqEnv)
 
+    ProfilingJobIT.setupDB(config)
+
     // step1: build data source
     val rawEventDataStream = buildSource(env)
     // step2: normalize event to metric
@@ -56,15 +59,6 @@ case class ProfilingJobIT(
     Assert.assertTrue(collect.check(expects.asJava))
   }
 
-  override def getTdqRawEventProcessFunction(
-                                              descriptor: MapStateDescriptor[String, PhysicalPlans]): RawEventProcessFunction = {
-    new RawEventProcessFunction(descriptor, new TdqEnv()) {
-      override protected def getPhysicalPlans: PhysicalPlans = PhysicalPlanFactory.getPhysicalPlans(
-        Lists.newArrayList(JsonUtils.parseObject(config, classOf[TdqConfig]))
-      )
-    }
-  }
-
   def submit2Pronto(): Unit = {
     val elasticsearchResource = new TdqElasticsearchResource("es-test")
     elasticsearchResource.start()
@@ -76,6 +70,9 @@ case class ProfilingJobIT(
       v.add("pronto")
     }
     setTdqEnv(tdqEnv)
+
+    ProfilingJobIT.setupDB(config)
+
     // step1: build data source
     val rawEventDataStream = buildSource(env)
     // step2: normalize event to metric
@@ -177,5 +174,26 @@ case class ProfilingJobIT(
       .setParallelism(1)
       .name("Tdq Config Watermark Source")
       .uid("tdq-config-watermark-source")
+  }
+}
+
+object ProfilingJobIT {
+  def setupDB(config: String): Unit = {
+    val jdbc = new JdbcEnv
+    Class.forName(jdbc.getDriverClassName)
+    val conn = DriverManager.getConnection(jdbc.getUrl, jdbc.getUser, jdbc.getPassword)
+    conn.createStatement().execute("drop table if exists rhs_config")
+    conn.createStatement().execute("CREATE TABLE `rhs_config` (`config` mediumtext NOT NULL,`status` varchar(10) NOT NULL DEFAULT 'ACTIVE')")
+    val ps = conn.prepareStatement("INSERT INTO rhs_config (config) VALUES (?)")
+    ps.setString(1, config)
+    ps.addBatch()
+    ps.executeBatch
+
+    val is = classOf[ProfilingJobIT].getResourceAsStream("/rhs_lkp_table.sql")
+    val sql = IOUtils.toString(is)
+    for (s <- sql.split(";")) {
+      if (StringUtils.isNotBlank(s)) conn.createStatement().execute(s)
+    }
+    ps.close()
   }
 }

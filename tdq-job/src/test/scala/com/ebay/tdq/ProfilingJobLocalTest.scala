@@ -28,7 +28,7 @@ object ProfilingJobLocalTest extends ProfilingJob {
     // step0: prepare environment
     tdqEnv = new TdqEnv
     env = FlinkEnvFactory.create(null, true)
-
+    ProfilingJobIT.setupDB(config)
     // step1: build data source
     val rawEventDataStream = buildSource(env)
     // step2: normalize event to metric
@@ -66,15 +66,6 @@ object ProfilingJobLocalTest extends ProfilingJob {
       .setParallelism(1)
       .name("Tdq Config Watermark Source")
       .uid("tdq-config-watermark-source")
-  }
-
-  override def getTdqRawEventProcessFunction(
-                                              descriptor: MapStateDescriptor[String, PhysicalPlans]): RawEventProcessFunction = {
-    new RawEventProcessFunction(descriptor, new TdqEnv()) {
-      override protected def getPhysicalPlans: PhysicalPlans = PhysicalPlanFactory.getPhysicalPlans(
-        Lists.newArrayList(JsonUtils.parseObject(config, classOf[TdqConfig]))
-      )
-    }
   }
 
   def getSampleData: Seq[RawEvent] = try {

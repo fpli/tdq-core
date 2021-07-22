@@ -1,5 +1,6 @@
 package com.ebay.tdq
 
+import com.ebay.tdq.common.env.JdbcEnv
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.rules.ProfilingSqlParser
 import com.ebay.tdq.utils.{DateUtils, JsonUtils}
@@ -66,7 +67,8 @@ class PhysicalPlanTest {
     val config = JsonUtils.parseObject(json, classOf[TdqConfig])
     val parser = new ProfilingSqlParser(
       config.getRules.get(0).getProfilers.get(0),
-      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString)
+      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString),
+      new JdbcEnv()
     )
     val plan = parser.parsePlan()
     println(plan)
@@ -131,7 +133,8 @@ class PhysicalPlanTest {
     val config = JsonUtils.parseObject(json, classOf[TdqConfig])
     val parser = new ProfilingSqlParser(
       config.getRules.get(0).getProfilers.get(0),
-      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString)
+      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString),
+      new JdbcEnv()
     )
     val plan = parser.parsePlan()
     println(plan)

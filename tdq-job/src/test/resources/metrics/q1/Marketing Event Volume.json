@@ -1,10 +1,10 @@
 {
   "id": "30", "name": "cfg_30", "rules": [
   {
-    "name": "30", "type": "realtime.rheos.profiler", "config": {"window": "5min"}, "profilers": [
+    "name": "30", "type": "realtime.rheos.profiler", "config": {"window": "1h"}, "profilers": [
     {
       "metric-name": "common_metric",
-      "comment": "Latency of Event Capture & Publish",
+      "comment": "Marketing Event Volume",
       "config": {
         "pronto-dropdown": "tags.page_id.raw in (2547208, 2483445)"
       },

@@ -137,11 +137,6 @@ public class ProfilingJob {
     return ans;
   }
 
-  protected RawEventProcessFunction getTdqRawEventProcessFunction(
-      MapStateDescriptor<String, PhysicalPlans> stateDescriptor) {
-    return new RawEventProcessFunction(stateDescriptor, tdqEnv);
-  }
-
   private DataStream<TdqMetric> normalizeMetric(
       DataStream<RawEvent> rawEventDataStream,
       MapStateDescriptor<String, PhysicalPlans> stateDescriptor,
@@ -151,7 +146,7 @@ public class ProfilingJob {
     int parallelism = rawEventDataStream.getTransformation().getParallelism();
     String uid = "normalize_evt_" + idx;
     SingleOutputStreamOperator<TdqMetric> ds = rawEventDataStream.connect(broadcastStream)
-        .process(getTdqRawEventProcessFunction(stateDescriptor))
+        .process(new RawEventProcessFunction(stateDescriptor, tdqEnv))
         .name(uid)
         .uid(uid)
         .slotSharingGroup(slotSharingGroup)

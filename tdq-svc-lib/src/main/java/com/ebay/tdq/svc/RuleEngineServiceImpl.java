@@ -218,7 +218,8 @@ public class RuleEngineServiceImpl implements RuleEngineService {
         try {
           ProfilingSqlParser parser = new ProfilingSqlParser(
               profilerConfig,
-              DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString())
+              DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString()),
+              null
           );
           final PhysicalPlan plan = parser.parsePlan();
           plan.validatePlan();

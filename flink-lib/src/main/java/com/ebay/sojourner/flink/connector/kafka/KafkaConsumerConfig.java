@@ -10,6 +10,7 @@ import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getListString;
 import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getString;
 
+import com.ebay.sojourner.common.env.EnvironmentUtils;
 import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.common.DataCenter;
 import com.ebay.sojourner.flink.common.FlinkEnvUtils;
@@ -41,7 +42,7 @@ public class KafkaConsumerConfig {
     config.setDc(dataCenter);
 
     final List<String> topics = FlinkEnvUtils.getList(KAFKA_CONSUMER_TOPIC);
-    final String groupId = getString(KAFKA_CONSUMER_GROUP_ID);
+    final String groupId = EnvironmentUtils.getStringWithPattern(KAFKA_CONSUMER_GROUP_ID);
 
     Preconditions.checkState(CollectionUtils.isNotEmpty(topics));
     Preconditions.checkState(StringUtils.isNotBlank(groupId));

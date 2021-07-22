@@ -60,9 +60,9 @@ public class ProfilerServiceDropdownTest {
   }
 
   public void createData(Client client) throws Exception {
-    val index = ServiceFactory.prontoConfig.getIndexPattern() + "2021-05-28";
+    val index = ServiceFactory.prontoEnv.getIndexPattern() + "2021-05-28";
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics");
-    request.patterns(Lists.newArrayList(ServiceFactory.prontoConfig.getIndexPattern() + "*"));
+    request.patterns(Lists.newArrayList(ServiceFactory.prontoEnv.getIndexPattern() + "*"));
     String source = IOUtils.toString(this.getClass().getResourceAsStream("/tdq-metrics-template.json"));
     request.source(source, XContentType.JSON);
     client.admin().indices().putTemplate(request).get();

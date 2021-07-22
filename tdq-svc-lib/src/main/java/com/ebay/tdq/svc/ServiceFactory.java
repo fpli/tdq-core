@@ -26,7 +26,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 @Slf4j
 public class ServiceFactory {
 
-  protected static ProntoEnv prontoConfig;
+  protected static ProntoEnv prontoEnv;
 
   static {
     synchronized (ServiceFactory.class) {
@@ -34,7 +34,7 @@ public class ServiceFactory {
       if (StringUtils.isNotBlank(profile)) {
         EnvironmentUtils.activateProfile(profile);
       }
-      prontoConfig = new ProntoEnv();
+      prontoEnv = new ProntoEnv();
     }
   }
 
@@ -64,11 +64,11 @@ public class ServiceFactory {
 
   protected static RestHighLevelClient restHighLevelClient() {
     RestClientBuilder builder = RestClient.builder(new HttpHost(
-        prontoConfig.getHostname(), prontoConfig.getPort(), prontoConfig.getSchema()));
-    if (StringUtils.isNotBlank(prontoConfig.getHostname())) {
+        prontoEnv.getHostname(), prontoEnv.getPort(), prontoEnv.getSchema()));
+    if (StringUtils.isNotBlank(prontoEnv.getHostname())) {
       final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
       credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(
-          prontoConfig.getUsername(), prontoConfig.getPassword()));
+          prontoEnv.getUsername(), prontoEnv.getPassword()));
       builder.setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
         @Override
         public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {

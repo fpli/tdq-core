@@ -1,5 +1,6 @@
 package com.ebay.tdq.rules
 
+import com.ebay.tdq.common.env.JdbcEnv
 import com.ebay.tdq.expressions._
 import com.ebay.tdq.expressions.aggregate._
 import com.ebay.tdq.expressions.analysis.TypeCoercionRule
@@ -11,7 +12,7 @@ import org.apache.log4j.Logger
 /**
  * @author juntzhang
  */
-object ExpressionRegistry {
+case class ExpressionRegistry(jdbcEnv: JdbcEnv) {
   val LOG: Logger = Logger.getLogger("ExpressionRegistry")
 
   def parse(operatorName: String, operands: Array[Any], alias: String): Expression = {
@@ -47,7 +48,8 @@ object ExpressionRegistry {
         Preconditions.checkArgument(operands.length == 1)
         SojPageFamily(
           subject = operands.head.asInstanceOf[Expression],
-          cacheKey = cacheKey
+          cacheKey = cacheKey,
+          jdbcEnv
         )
       case "SOJ_TIMESTAMP" =>
         TdqTimestamp("soj_timestamp")
@@ -56,7 +58,8 @@ object ExpressionRegistry {
         Preconditions.checkArgument(operands.length == 1)
         IsBBWOAPageWithItm(
           subject = operands.head.asInstanceOf[Expression],
-          cacheKey = cacheKey
+          cacheKey = cacheKey,
+          jdbcEnv
         )
 
       case "EVENT_TIMESTAMP" =>
@@ -210,6 +213,8 @@ object ExpressionRegistry {
     TypeCoercionRule.coerceTypes(expr)
   }
 
+}
+object ExpressionRegistry{
   def aggregateOperator(operatorName: String, v1: Double, v2: Double): Double = {
     operatorName.toUpperCase() match {
       case "COUNT" =>

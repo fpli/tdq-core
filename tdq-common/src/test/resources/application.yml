@@ -1,0 +1,6 @@
+mysql:
+  jdbc:
+    url: jdbc:h2:mem:tdq_unit_test;MODE=MYSQL;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    u:
+    p:

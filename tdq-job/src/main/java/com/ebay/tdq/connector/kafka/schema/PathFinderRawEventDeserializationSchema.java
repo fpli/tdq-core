@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -502,20 +501,16 @@ public class PathFinderRawEventDeserializationSchema implements DeserializationS
   }
 
   // ignore second during comparing
-  private Long getMicroSecondInterval(Long microts1, Long microts2) throws ParseException {
-    Long v1, v2;
+  private Long getMicroSecondInterval(Long microts1, Long microts2) {
+    long v1, v2;
     v1 = dateMinsFormatter.parseDateTime(dateMinsFormatter.print(microts1 / 1000)).getMillis();
     v2 = dateMinsFormatter.parseDateTime(dateMinsFormatter.print(microts2 / 1000)).getMillis();
     return (v1 - v2) * 1000;
   }
 
-  private String getString(Object o) {
-    return (o != null) ? o.toString() : null;
-  }
-
   @Override
   public boolean isEndOfStream(RawEvent nextElement) {
-    return tdqEnv.getKafkaSourceEnv().isTimestampEnded(nextElement.getUnixEventTimestamp());
+    return tdqEnv.getKafkaSourceEnv().isEndOfStream(nextElement.getUnixEventTimestamp());
   }
 
   @Override

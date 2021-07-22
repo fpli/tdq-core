@@ -81,7 +81,8 @@ public class BehaviorPathfinderSource extends AbstractSource {
     return Lists.newArrayList(r, l, s);
   }
 
-  //  public DataStream<RawEvent> build(DataCenter dc, String operatorName, int parallelism, String uid, String slotGroup) {
+  //  public DataStream<RawEvent> build(DataCenter dc, String operatorName,
+  //  int parallelism, String uid, String slotGroup) {
   //    Preconditions.checkNotNull(dc);
   //
   //    KafkaConsumerConfig config = KafkaConsumerConfig.ofDC(dc);

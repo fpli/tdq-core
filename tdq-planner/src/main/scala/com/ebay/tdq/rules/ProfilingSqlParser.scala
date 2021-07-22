@@ -1,5 +1,6 @@
 package com.ebay.tdq.rules
 
+import com.ebay.tdq.common.env.JdbcEnv
 import com.ebay.tdq.config.{ExpressionConfig, ProfilerConfig, TransformationConfig}
 import com.ebay.tdq.expressions._
 import com.ebay.tdq.expressions.aggregate.AggregateExpression
@@ -99,15 +100,16 @@ object ProfilingSqlParser {
 
   def getFilterIdentifiers(filter: String): Array[SqlIdentifier] = {
     val buffer = new ArrayBuffer[SqlIdentifier]()
-    baseCallIdentifiers(getSql("SELECT 1 FROM T where " + filter).getWhere.asInstanceOf[SqlBasicCall],buffer)
+    baseCallIdentifiers(getSql("SELECT 1 FROM T where " + filter).getWhere.asInstanceOf[SqlBasicCall], buffer)
     buffer.toArray
   }
 }
 
-class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
+class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, jdbcEnv: JdbcEnv) {
 
   import ProfilingSqlParser._
 
+  private val expressionRegistry = ExpressionRegistry(jdbcEnv)
   private val aliasTransformationConfigMap = profilerConfig
     .getTransformations
     .asScala
@@ -203,8 +205,9 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
       }
     }
   }
+
   implicit class CaseInsensitiveRegex(sc: StringContext) {
-    def ci: Regex = ( "(?i)" + sc.parts.mkString ).r
+    def ci: Regex = ("(?i)" + sc.parts.mkString).r
   }
 
   private def transformOperands(operands: Seq[SqlNode]): Array[Any] = {
@@ -248,7 +251,7 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
 
   private def transformSqlBaseCall(call: SqlBasicCall, alias: String): Expression = {
     val operator = call.getOperator.getName
-    val expression = ExpressionRegistry.parse(operator, transformOperands(call.getOperands), alias)
+    val expression = expressionRegistry.parse(operator, transformOperands(call.getOperands), alias)
     if (StringUtils.isNotBlank(alias)) expressionMap.put(alias, expression)
     expression
   }
@@ -281,7 +284,7 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long) {
   private def parseExpressionPlan(cfg: ExpressionConfig, alias: String): Expression = {
     val operator = cfg.getOperator
     val expr = if (
-        operator.equalsIgnoreCase("UDAF") ||
+      operator.equalsIgnoreCase("UDAF") ||
         operator.equalsIgnoreCase("UDF") ||
         operator.equalsIgnoreCase("Expr")) {
       val sqlNode = getExpr(cfg.getConfig.get("text").asInstanceOf[String])

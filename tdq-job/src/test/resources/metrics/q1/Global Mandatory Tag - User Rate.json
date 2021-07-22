@@ -9,7 +9,7 @@
       },
       "expr": "gmt_usr_cnt / gmt_usr_total_cnt",
       "dimensions": ["domain", "site_id"],
-      "filter": "domain in ('ASQ', 'BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','VI','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%'",
+      "filter": "domain in ('ASQ', 'BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH', 'WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%'",
       "transformations": [
         {"alias": "soj_tag_p",           "expr": "soj_nvl('p')"},
         {"alias": "soj_tag_u",           "expr": "soj_nvl('u')"},

@@ -19,11 +19,4 @@ class EnvironmentUtilsTest {
       EnvironmentUtils.getStringWithPattern("flink.app.checkpoint.data-dir") == "/tmp/tdq-test/checkpoint")
   }
 
-
-  @Test
-  def testKafkaSourceEnv(): Unit = {
-    TdqEnv.load(Array("--tdq-profile", "tdq-test", "--flink.app.source.from-timestamp", "1626678000000"))
-    val tdqEnv = new TdqEnv()
-    Assert.assertTrue(tdqEnv.getKafkaSourceEnv.isTimestampBefore(1626677759999L))
-  }
 }

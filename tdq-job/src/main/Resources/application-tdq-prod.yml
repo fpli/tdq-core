@@ -18,7 +18,7 @@ flink:
         flush-timeout: 5000
 mysql:
   jdbc:
-    url: jdbc:mysql://mysql-master-svc-qa.ido-ns.svc.57.tess.io:3306/tdq?verifyServerCertificate=false&useSSL=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://mysqlidodb.db.stratus.ebay.com:3306/tdq?verifyServerCertificate=false&useSSL=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
-    u: dataops
-    p: dataops#123
+    u: uc4_user
+    p: uc4_user

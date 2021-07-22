@@ -44,6 +44,7 @@ public class ProntoQueryBuilder {
         break;
       case "NOT IN":
         rootBuilder.mustNot(QueryBuilders.termsQuery((String) operands.get(0), operands.subList(1, operands.size())));
+        break;
       case "AND":
         for (Object operand : operands) {
           parseSqlBasicCall((SqlBasicCall) operand);

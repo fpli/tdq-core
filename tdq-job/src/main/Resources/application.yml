@@ -86,7 +86,7 @@ kafka:
     stream: behavior.pathfinder
     topic:
       - behavior.pathfinder.events.total
-    group-id: tdq-v2
+    group-id: tdq-v2-${flink.app.profile}
     bootstrap-servers:
       rno:
         - rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092

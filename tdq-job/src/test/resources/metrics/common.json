@@ -87,7 +87,7 @@
             {
               "alias": "page_id",
               "expr": "CAST(soj_tag_p AS INTEGER)",
-              "filter": "page_id in (2547208, 2483445)"
+              "filter": "page_id in (2547208,2483445,2047936,2054032,2053742,2045573,2351460,2381081)"
             },
             {
               "alias": "domain",

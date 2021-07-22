@@ -109,7 +109,7 @@ public class RawEventProcessFunction
 
 
   protected PhysicalPlans getPhysicalPlans() {
-    return PhysicalPlanFactory.getPhysicalPlans(PhysicalPlanFactory.getTdqConfigs(this.tdqEnv.getJdbcEnv()));
+    return PhysicalPlanFactory.getPhysicalPlans(this.tdqEnv.getJdbcEnv());
   }
 
   private void processElement0(RawEvent event,
@@ -117,8 +117,8 @@ public class RawEventProcessFunction
     if (physicalPlans == null || physicalPlans.plans().length == 0) {
       throw new Exception("physical plans is empty!");
     }
-    if (tdqEnv.getKafkaSourceEnv().isTimestampBefore(event.getUnixEventTimestamp())) {
-      metricGroup.inc("isTimestampBefore");
+    if (tdqEnv.getKafkaSourceEnv().isNotProcessElement(event.getUnixEventTimestamp())) {
+      metricGroup.inc("isNotProcessElement");
       return;
     }
     for (PhysicalPlan plan : physicalPlans.plans()) {

@@ -9,7 +9,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import java.text.ParseException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -50,9 +49,9 @@ public class ProfilerServiceQueryTest {
   }
 
   public void createData(Client client) throws Exception {
-    val index = ServiceFactory.prontoConfig.getIndexPattern() + "2021-05-28";
+    val index = ServiceFactory.prontoEnv.getIndexPattern() + "2021-05-28";
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics");
-    request.patterns(Lists.newArrayList(ServiceFactory.prontoConfig.getIndexPattern() + "*"));
+    request.patterns(Lists.newArrayList(ServiceFactory.prontoEnv.getIndexPattern() + "*"));
     String source = IOUtils.toString(this.getClass().getResourceAsStream("/tdq-metrics-template.json"));
     request.source(source, XContentType.JSON);
     client.admin().indices().putTemplate(request).get();

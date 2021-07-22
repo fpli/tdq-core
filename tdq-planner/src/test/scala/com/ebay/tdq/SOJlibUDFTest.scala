@@ -3,6 +3,7 @@ package com.ebay.tdq
 import java.util.{HashMap => JHashMap}
 
 import com.ebay.sojourner.common.model.{ClientData, RawEvent}
+import com.ebay.tdq.common.env.JdbcEnv
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.rules.{ProfilingSqlParser, TdqMetric}
 import com.ebay.tdq.utils.{DateUtils, JsonUtils}
@@ -48,7 +49,8 @@ class SOJlibUDFTest {
     val config = getTdqConfig(expr1, expr2)
     val parser = new ProfilingSqlParser(
       config.getRules.get(0).getProfilers.get(0),
-      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString)
+      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString),
+      new JdbcEnv()
     )
     val plan = parser.parsePlan()
     println(plan)

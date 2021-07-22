@@ -72,7 +72,7 @@ public class ProfilerServiceImpl implements ProfilerService {
       Validate.isTrue(StringUtils.isNotEmpty(profilerConfig.getMetricName()), "metric name is required.");
       int window = (int) DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString());
 
-      PhysicalPlan physicalPlan = new ProfilingSqlParser(profilerConfig, window).parsePlan();
+      PhysicalPlan physicalPlan = new ProfilingSqlParser(profilerConfig, window, null).parsePlan();
 
       SearchSourceBuilder builder = new SearchSourceBuilder();
       BoolQueryBuilder rootBuilder = QueryBuilders.boolQuery();
@@ -145,7 +145,7 @@ public class ProfilerServiceImpl implements ProfilerService {
       Validate.isTrue(StringUtils.isNotEmpty(profilerConfig.getMetricName()), "metric name is required.");
       int window = (int) DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString());
 
-      ProfilingSqlParser parser = new ProfilingSqlParser(profilerConfig, window);
+      ProfilingSqlParser parser = new ProfilingSqlParser(profilerConfig, window, null);
       PhysicalPlan physicalPlan = parser.parsePlan();
       if (ArrayUtils.isEmpty(physicalPlan.dimensions())) {
         return resultBuilder.build();
@@ -198,10 +198,10 @@ public class ProfilerServiceImpl implements ProfilerService {
     Set<String> results = new HashSet<>();
     long next = from;
     while (end >= next) {
-      results.add(ServiceFactory.prontoConfig.getNormalMetricIndex(next));
+      results.add(ServiceFactory.prontoEnv.getNormalMetricIndex(next));
       next = next + 86400 * 1000;
     }
-    results.add(ServiceFactory.prontoConfig.getNormalMetricIndex(end));
+    results.add(ServiceFactory.prontoEnv.getNormalMetricIndex(end));
     log.info("search request indexes=>{}", StringUtils.join(results, ","));
     return results.toArray(new String[0]);
   }

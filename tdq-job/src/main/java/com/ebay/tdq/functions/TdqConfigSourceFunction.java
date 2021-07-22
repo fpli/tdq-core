@@ -1,9 +1,7 @@
 package com.ebay.tdq.functions;
 
 import static com.ebay.tdq.utils.PhysicalPlanFactory.getPhysicalPlans;
-import static com.ebay.tdq.utils.PhysicalPlanFactory.getTdqConfigs;
 
-import com.ebay.tdq.common.env.JdbcEnv;
 import com.ebay.tdq.rules.PhysicalPlans;
 import com.ebay.tdq.utils.TdqEnv;
 import java.util.concurrent.TimeUnit;
@@ -17,12 +15,10 @@ import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 public class TdqConfigSourceFunction extends RichSourceFunction<PhysicalPlans> {
 
   private final TdqEnv tdqEnv;
-  private final JdbcEnv jdbcConfig;
   private volatile boolean running = true;
 
   public TdqConfigSourceFunction(TdqEnv tdqEnv) {
     this.tdqEnv = tdqEnv;
-    jdbcConfig = new JdbcEnv();
   }
 
 
@@ -30,7 +26,7 @@ public class TdqConfigSourceFunction extends RichSourceFunction<PhysicalPlans> {
   public void run(SourceContext<PhysicalPlans> ctx) throws Exception {
     while (running) {
       long t = System.currentTimeMillis();
-      ctx.collectWithTimestamp(getPhysicalPlans(getTdqConfigs(jdbcConfig)), t);
+      ctx.collectWithTimestamp(getPhysicalPlans(tdqEnv.getJdbcEnv()), t);
       TimeUnit.SECONDS.sleep(tdqEnv.getTdqConfigRefreshInterval());
       if (tdqEnv.getKafkaSourceEnv().isBackFill()) {
         cancel();

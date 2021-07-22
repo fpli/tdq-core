@@ -1,8 +1,11 @@
 package com.ebay.tdq
 
+import com.ebay.sojourner.common.util.LkpManager
 import com.ebay.tdq.utils.DateUtils._
 import org.apache.commons.lang3.time.{DateFormatUtils, FastDateFormat}
 import org.junit.Test
+
+import scala.collection.JavaConverters.asScalaSetConverter
 
 /**
  * @author juntzhang
@@ -10,8 +13,9 @@ import org.junit.Test
 class DateUtilsTest {
   @Test
   def test_getMinBuckets(): Unit = {
-    println(FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").parse("2021-07-19 01:00:00").getTime)
-    println(FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").parse("2021-07-19 12:00:00").getTime)
+    println(FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").parse("2021-07-22 19:00:00").getTime)
+    println(FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").parse("2021-07-19 21:00:00").getTime)
+    println(FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").parse("2021-07-20 00:00:00").getTime)
     println(FastDateFormat.getInstance("yyyyMMddHHmm").format(1621391339604L))
     assert(getMinBuckets(1621391339604L, 10) == "202105191020")
     assert(getMinBuckets(1621391339604L, 5) == "202105191025")
@@ -19,6 +23,8 @@ class DateUtilsTest {
 
   @Test
   def test_toSeconds(): Unit = {
+    LkpManager.getInstance().getItmPages.asScala.foreach(println)
+
     assert(toSeconds("1day") == 86400L)
     assert(toSeconds("1d") == 86400L)
     assert(toSeconds("10min") == 600L)
