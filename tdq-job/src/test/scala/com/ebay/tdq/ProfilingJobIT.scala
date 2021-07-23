@@ -8,7 +8,7 @@ import com.ebay.sojourner.common.model.RawEvent
 import com.ebay.sojourner.flink.connector.kafka.SojSerializableTimestampAssigner
 import com.ebay.tdq.common.env.JdbcEnv
 import com.ebay.tdq.jobs.ProfilingJob
-import com.ebay.tdq.rules.{PhysicalPlans, TdqMetric}
+import com.ebay.tdq.rules.TdqMetric
 import com.ebay.tdq.sinks.MemorySink
 import com.ebay.tdq.utils._
 import com.google.common.collect.Lists
@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
 import org.apache.flink.streaming.api.datastream.DataStream
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
-import org.apache.flink.streaming.api.functions.source.{RichSourceFunction, SourceFunction}
+import org.apache.flink.streaming.api.functions.source.SourceFunction
 import org.apache.flink.streaming.connectors.elasticsearch.TdqElasticsearchResource
 import org.elasticsearch.action.search.SearchRequest
 import org.elasticsearch.client.Client
@@ -155,25 +155,6 @@ case class ProfilingJobIT(
       .name("Raw Event Watermark Src1")
       .uid("raw-event-watermark-src1")
       .slotSharingGroup("src1"))
-  }
-
-  override protected def getConfigDS(env: StreamExecutionEnvironment): DataStream[PhysicalPlans] = {
-    env.addSource(new RichSourceFunction[PhysicalPlans]() {
-      @throws[Exception]
-      override def run(ctx: SourceFunction.SourceContext[PhysicalPlans]): Unit = {
-        ctx.collectWithTimestamp(ProfilingSqlParserTest.getPhysicalPlans(config), System.currentTimeMillis)
-      }
-
-      override def cancel(): Unit = {}
-    }).name("Tdq Config Source")
-      .uid("tdq-config-source")
-      .assignTimestampsAndWatermarks(
-        WatermarkStrategy.forBoundedOutOfOrderness[PhysicalPlans](Duration.ofMinutes(0))
-          .withIdleness(Duration.ofSeconds(1))
-      )
-      .setParallelism(1)
-      .name("Tdq Config Watermark Source")
-      .uid("tdq-config-watermark-source")
   }
 }
 

@@ -7,11 +7,9 @@ import com.ebay.tdq.functions.RawEventProcessFunction;
 import com.ebay.tdq.functions.TdqMetric1stAggrProcessWindowFunction;
 import com.ebay.tdq.functions.TdqMetric2ndAggrProcessWindowFunction;
 import com.ebay.tdq.functions.TdqMetricAggregateFunction;
-import com.ebay.tdq.rules.PhysicalPlans;
 import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.sinks.TdqSinks;
 import com.ebay.tdq.sources.BehaviorPathfinderSource;
-import com.ebay.tdq.sources.TdqConfigSource;
 import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.FlinkEnvFactory;
 import com.ebay.tdq.utils.TdqEnv;
@@ -24,12 +22,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.common.state.MapStateDescriptor;
-import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.api.common.typeinfo.TypeHint;
-import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.functions.KeySelector;
-import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -44,6 +37,7 @@ import org.apache.flink.streaming.runtime.operators.TdqTimestampsAndWatermarksOp
 @Getter
 @Setter
 public class ProfilingJob {
+
   protected TdqEnv tdqEnv;
   protected transient StreamExecutionEnvironment env;
 
@@ -112,41 +106,24 @@ public class ProfilingJob {
     return ans;
   }
 
-  protected DataStream<PhysicalPlans> getConfigDS(StreamExecutionEnvironment env) {
-    return TdqConfigSource.build(env, tdqEnv);
-  }
-
   // normalize event to metric
-  protected DataStream<TdqMetric> normalizeMetric(
-      StreamExecutionEnvironment env,
+  protected DataStream<TdqMetric> normalizeMetric(StreamExecutionEnvironment env,
       List<DataStream<RawEvent>> rawEventDataStream) {
 
-    MapStateDescriptor<String, PhysicalPlans> stateDescriptor = new MapStateDescriptor<>(
-        "tdqConfigMappingBroadcastState",
-        BasicTypeInfo.STRING_TYPE_INFO,
-        TypeInformation.of(new TypeHint<PhysicalPlans>() {
-        }));
-
-    BroadcastStream<PhysicalPlans> broadcastStream = getConfigDS(env).broadcast(stateDescriptor);
-
-    DataStream<TdqMetric> ans = normalizeMetric(rawEventDataStream.get(0), stateDescriptor, broadcastStream, 0);
+    DataStream<TdqMetric> ans = normalizeMetric(rawEventDataStream.get(0), 0);
 
     for (int i = 1; i < rawEventDataStream.size(); i++) {
-      ans = ans.union(normalizeMetric(rawEventDataStream.get(i), stateDescriptor, broadcastStream, i));
+      ans = ans.union(normalizeMetric(rawEventDataStream.get(i), i));
     }
     return ans;
   }
 
-  private DataStream<TdqMetric> normalizeMetric(
-      DataStream<RawEvent> rawEventDataStream,
-      MapStateDescriptor<String, PhysicalPlans> stateDescriptor,
-      BroadcastStream<PhysicalPlans> broadcastStream,
-      int idx) {
+  private DataStream<TdqMetric> normalizeMetric(DataStream<RawEvent> rawEventDataStream, int idx) {
     String slotSharingGroup = rawEventDataStream.getTransformation().getSlotSharingGroup();
     int parallelism = rawEventDataStream.getTransformation().getParallelism();
     String uid = "normalize_evt_" + idx;
-    SingleOutputStreamOperator<TdqMetric> ds = rawEventDataStream.connect(broadcastStream)
-        .process(new RawEventProcessFunction(stateDescriptor, tdqEnv))
+    SingleOutputStreamOperator<TdqMetric> ds = rawEventDataStream
+        .process(new RawEventProcessFunction(tdqEnv))
         .name(uid)
         .uid(uid)
         .slotSharingGroup(slotSharingGroup)

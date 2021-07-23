@@ -125,12 +125,22 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, jdbcEnv: 
       Some(PhysicalPlanContext(
         sampling = profilerConfig.getSampling,
         samplingFraction = profilerConfig.getSamplingFraction,
-        prontoDropdownExpr = profilerConfig.getProntoDropdownExpr
+        prontoDropdownExpr = profilerConfig.getProntoDropdownExpr,
+        prontoFilterExpr = profilerConfig.getProntoFilterExpr
       ))
     }
   }
 
-  def parseProntoSqlNode(): SqlNode = {
+  def parseProntoFilterExpr(): SqlNode = {
+    if (physicalPlanContext.isDefined) {
+      val expr = physicalPlanContext.get.prontoFilterExpr
+      getExpr(expr)
+    } else {
+      null
+    }
+  }
+
+  def parseProntoDropdownExpr(): SqlNode = {
     if (physicalPlanContext.isDefined) {
       val expr = physicalPlanContext.get.prontoDropdownExpr
       getExpr(expr)

@@ -9,6 +9,9 @@
         {
           "metric-name": "global_mandatory_tag_item_rate1",
           "dimensions": ["page_id"],
+          "config": {
+            "pronto-filter": "expr.itm_cnt > 0"
+          },
           "expression": {"operator": "Expr", "config": {"text": "itm_valid_cnt / itm_cnt"}},
           "transformations": [
             {

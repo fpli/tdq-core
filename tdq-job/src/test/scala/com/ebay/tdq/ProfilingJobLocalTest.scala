@@ -1,22 +1,15 @@
 package com.ebay.tdq
 
-import java.io.File
-import java.time.Duration
 import java.util.{List => JList}
 
 import com.ebay.sojourner.common.model.RawEvent
-import com.ebay.tdq.config.TdqConfig
-import com.ebay.tdq.functions.RawEventProcessFunction
 import com.ebay.tdq.jobs.ProfilingJob
-import com.ebay.tdq.rules.PhysicalPlans
 import com.ebay.tdq.utils._
 import com.google.common.collect.Lists
 import org.apache.commons.io.IOUtils
-import org.apache.flink.api.common.eventtime.WatermarkStrategy
-import org.apache.flink.api.common.state.MapStateDescriptor
 import org.apache.flink.streaming.api.datastream.DataStream
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
-import org.apache.flink.streaming.api.functions.source.{RichSourceFunction, SourceFunction}
+import org.apache.flink.streaming.api.functions.source.SourceFunction
 
 import scala.collection.JavaConverters._
 
@@ -28,7 +21,8 @@ object ProfilingJobLocalTest extends ProfilingJob {
     // step0: prepare environment
     tdqEnv = new TdqEnv
     env = FlinkEnvFactory.create(null, true)
-    ProfilingJobIT.setupDB(config)
+    ProfilingJobIT.setupDB(IOUtils.toString(
+      classOf[ProfilingJob].getResourceAsStream("/metrics/q2/Qualification Age - NQT.json")))
     // step1: build data source
     val rawEventDataStream = buildSource(env)
     // step2: normalize event to metric
@@ -44,28 +38,6 @@ object ProfilingJobLocalTest extends ProfilingJob {
         .uid(uid)
     }
     env.execute("Tdq Job")
-  }
-
-  val config: String = IOUtils.toString(new File("/Users/juntzhang/src/TDQ/tdq-parent/tdq-job/src/test/resources/metrics/q2/Qualification Age - NQT.json").toURI)
-
-  override protected def getConfigDS(env: StreamExecutionEnvironment): DataStream[PhysicalPlans] = {
-    env.addSource(new RichSourceFunction[PhysicalPlans]() {
-      @throws[Exception]
-      override def run(ctx: SourceFunction.SourceContext[PhysicalPlans]): Unit = {
-        val plans = ProfilingSqlParserTest.getPhysicalPlans(config)
-        ctx.collectWithTimestamp(plans, System.currentTimeMillis)
-      }
-
-      override def cancel(): Unit = {}
-    }).name("Tdq Config Source")
-      .uid("tdq-config-source")
-      .assignTimestampsAndWatermarks(
-        WatermarkStrategy.forBoundedOutOfOrderness[PhysicalPlans](Duration.ofMinutes(0))
-          .withIdleness(Duration.ofSeconds(1))
-      )
-      .setParallelism(1)
-      .name("Tdq Config Watermark Source")
-      .uid("tdq-config-watermark-source")
   }
 
   def getSampleData: Seq[RawEvent] = try {

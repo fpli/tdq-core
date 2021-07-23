@@ -1,7 +1,6 @@
-package com.ebay.tdq.common;
+package com.ebay.tdq.planner;
 
 import com.ebay.tdq.common.env.JdbcEnv;
-import com.ebay.tdq.utils.LkpManager;
 import com.google.common.collect.Lists;
 import java.io.InputStream;
 import java.sql.Connection;

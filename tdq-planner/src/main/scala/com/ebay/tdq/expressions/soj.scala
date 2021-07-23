@@ -2,8 +2,8 @@ package com.ebay.tdq.expressions
 
 import com.ebay.sojourner.common.model.{ClientData, RawEvent}
 import com.ebay.tdq.common.env.JdbcEnv
+import com.ebay.tdq.planner.LkpManager
 import com.ebay.tdq.types.{BooleanType, DataType, StringType}
-import com.ebay.tdq.utils.LkpManager
 import org.apache.commons.beanutils.PropertyUtils
 import org.apache.commons.lang3.StringUtils
 

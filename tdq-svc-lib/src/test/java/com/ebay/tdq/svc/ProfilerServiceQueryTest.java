@@ -57,7 +57,7 @@ public class ProfilerServiceQueryTest {
     client.admin().indices().putTemplate(request).get();
 
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", "1", 4d, 7d))).get();
-    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "711", "2", 1d, 1d))).get();
+    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "711", "2", 0d, 0d))).get();
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "1677718", "1", 1d, 2d)))
         .get();
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", "1", 1d, 2d))).get();
@@ -87,7 +87,7 @@ public class ProfilerServiceQueryTest {
     double a1 = m.get(DateUtils.parseDate("2021-05-29 12:02:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime());
     double a2 = m.get(DateUtils.parseDate("2021-05-29 12:04:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime());
     Assert.assertEquals(5d / 9d, a1, 0.0001);
-    Assert.assertEquals(2d / 3d, a2, 0.0001);
+    Assert.assertEquals(1d / 2d, a2, 0.0001);
     ServiceFactory.close();
     elasticsearchResource.close();
   }

@@ -85,6 +85,9 @@ public class ProfilerServiceImpl implements ProfilerService {
           rootBuilder.must(QueryBuilders.termsQuery("tags." + k + ".raw", v));
         });
       }
+      ProfilingSqlParser parser = new ProfilingSqlParser(profilerConfig, window, null);
+      new ProntoQueryBuilder(rootBuilder, parser.parseProntoFilterExpr()).submit();
+
       builder.query(rootBuilder);
 
       AggregationBuilder aggregation = AggregationBuilders.dateHistogram("agg").field("event_time")
@@ -157,7 +160,7 @@ public class ProfilerServiceImpl implements ProfilerService {
       rootBuilder.must(QueryBuilders.rangeQuery("event_time").gte(param.getFrom()).lte(param.getTo()));
       rootBuilder.must(QueryBuilders.termQuery("metric_key", profilerConfig.getMetricName()));
 
-      new ProntoQueryBuilder(rootBuilder, parser.parseProntoSqlNode()).submit();
+      new ProntoQueryBuilder(rootBuilder, parser.parseProntoDropdownExpr()).submit();
 
       builder.query(rootBuilder);
       for (Transformation t : physicalPlan.dimensions()) {

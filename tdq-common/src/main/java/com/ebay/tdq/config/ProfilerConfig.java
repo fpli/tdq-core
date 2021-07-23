@@ -60,6 +60,10 @@ public class ProfilerConfig implements Serializable {
     return getConfig("pronto-dropdown");
   }
 
+  public String getProntoFilterExpr() {
+    return getConfig("pronto-filter");
+  }
+
   private String getConfig(String key) {
     if (config != null && config.get(key) != null) {
       return config.get(key).toString();

@@ -13,9 +13,8 @@ import scala.collection.JavaConverters.asScalaSetConverter
 class DateUtilsTest {
   @Test
   def test_getMinBuckets(): Unit = {
-    println(FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").parse("2021-07-22 19:00:00").getTime)
-    println(FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").parse("2021-07-19 21:00:00").getTime)
-    println(FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").parse("2021-07-20 00:00:00").getTime)
+    println(FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").parse("2021-07-21 23:00:00").getTime)
+    println(FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").parse("2021-07-22 00:00:00").getTime)
     println(FastDateFormat.getInstance("yyyyMMddHHmm").format(1621391339604L))
     assert(getMinBuckets(1621391339604L, 10) == "202105191020")
     assert(getMinBuckets(1621391339604L, 5) == "202105191025")

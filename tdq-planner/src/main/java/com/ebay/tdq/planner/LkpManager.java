@@ -1,7 +1,13 @@
-package com.ebay.tdq.utils;
+package com.ebay.tdq.planner;
 
 import com.ebay.tdq.common.env.JdbcEnv;
+import com.ebay.tdq.config.ProfilerConfig;
+import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;
+import com.ebay.tdq.rules.PhysicalPlan;
+import com.ebay.tdq.rules.ProfilingSqlParser;
+import com.ebay.tdq.utils.DateUtils;
+import com.ebay.tdq.utils.JsonUtils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -31,6 +37,7 @@ public class LkpManager {
   private Set<Integer> bbwoaPagesWithItm = new CopyOnWriteArraySet<>();
   private Map<Integer, String> pageFmlyAllMap = new ConcurrentHashMap<>();
   private List<TdqConfig> tdqConfigs = new CopyOnWriteArrayList<>();
+  private List<PhysicalPlan> physicalPlans = new CopyOnWriteArrayList<>();
   private final LkpRefreshTimeTask lkpRefreshTimeTask;
   private final JdbcEnv jdbc;
 
@@ -150,6 +157,29 @@ public class LkpManager {
       }
       conn.close();
       this.tdqConfigs = tdqConfigList;
+
+      List<PhysicalPlan> plans = new CopyOnWriteArrayList<>();
+      for (TdqConfig config : tdqConfigList) {
+        for (RuleConfig ruleConfig : config.getRules()) {
+          for (ProfilerConfig profilerConfig : ruleConfig.getProfilers()) {
+            try {
+              ProfilingSqlParser parser = new ProfilingSqlParser(
+                  profilerConfig,
+                  DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString()),
+                  jdbc
+              );
+              PhysicalPlan plan = parser.parsePlan();
+              plan.validatePlan();
+              log.warn("TdqConfigSourceFunction={}", plan);
+              plans.add(plan);
+            } catch (Exception e) {
+              log.warn("profilerConfig[" + profilerConfig + "] validate exception:" + e.getMessage(), e);
+            }
+          }
+        }
+      }
+
+      this.physicalPlans = plans;
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -160,7 +190,7 @@ public class LkpManager {
   }
 
   public boolean isBBWOAPagesWithItm(Integer pageId) {
-    return bbwoaPagesWithItm.contains(pageId);
+    return pageId == null && bbwoaPagesWithItm.contains(pageId);
   }
 
   public String getPageFmlyByPageId(Integer pageId) {
@@ -169,5 +199,9 @@ public class LkpManager {
 
   public List<TdqConfig> getTdqConfigs() {
     return tdqConfigs;
+  }
+
+  public List<PhysicalPlan> getPhysicalPlans() {
+    return physicalPlans;
   }
 }

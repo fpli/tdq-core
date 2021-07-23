@@ -1,6 +1,6 @@
 flink:
   app:
-    name: TDQ-V2-pathfinder
+    name: TDQ-V2
     parallelism:
       default: 125
       source: 125
