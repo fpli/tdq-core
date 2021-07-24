@@ -1,7 +1,8 @@
 package com.ebay.tdq
 
 import com.ebay.sojourner.common.env.EnvironmentUtils
-import com.ebay.tdq.utils.TdqEnv
+import com.ebay.tdq.common.env.TdqEnv
+import com.ebay.tdq.utils.TdqContext
 import org.junit.{Assert, Test}
 
 /**
@@ -10,10 +11,9 @@ import org.junit.{Assert, Test}
 class EnvironmentUtilsTest {
   @Test
   def test(): Unit = {
-    new TdqEnv(Array("--tdq-profile", "tdq-test"))
+    new TdqContext(Array("--tdq-profile", "tdq-test"))
     Assert.assertTrue(
-      EnvironmentUtils.getStringWithPattern("flink.app.source.hdfs."
-        + com.ebay.tdq.common.env.TdqConstant.NORMAL_METRIC) == "target/test/metric/normal")
+      EnvironmentUtils.getStringWithPattern("flink.app.sink.normal-metric.hdfs-path") == "target/test/metric/normal")
 
     Assert.assertTrue(
       EnvironmentUtils.getStringWithPattern("flink.app.checkpoint.data-dir") == "/tmp/tdq-test/checkpoint")

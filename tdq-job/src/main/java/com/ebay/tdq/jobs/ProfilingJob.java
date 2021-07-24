@@ -12,7 +12,8 @@ import com.ebay.tdq.sinks.TdqSinks;
 import com.ebay.tdq.sources.BehaviorPathfinderSource;
 import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.FlinkEnvFactory;
-import com.ebay.tdq.utils.TdqEnv;
+import com.ebay.tdq.utils.TdqContext;
+import com.ebay.tdq.common.env.TdqEnv;
 import com.google.common.collect.Maps;
 import java.time.Duration;
 import java.util.List;
@@ -39,11 +40,13 @@ import org.apache.flink.streaming.runtime.operators.TdqTimestampsAndWatermarksOp
 public class ProfilingJob {
 
   protected TdqEnv tdqEnv;
+  protected TdqContext tdqCxt;
   protected transient StreamExecutionEnvironment env;
 
   protected void setup(String[] args) {
     // step0: prepare environment
-    tdqEnv = new TdqEnv(args);
+    tdqCxt = new TdqContext(args);
+    tdqEnv = tdqCxt.getTdqEnv();
     env = FlinkEnvFactory.create(tdqEnv);
   }
 
@@ -73,7 +76,7 @@ public class ProfilingJob {
   // output metric by window
   protected void outputMetricByWindow(Map<String, SingleOutputStreamOperator<TdqMetric>> outputTags) {
     outputTags.forEach((key, ds) -> {
-      TdqSinks.sinkNormalMetric(key + "_o", tdqEnv, ds);
+      TdqSinks.sinkNormalMetric(key + "_o", tdqCxt, ds);
     });
   }
 
@@ -83,21 +86,20 @@ public class ProfilingJob {
     SingleOutputStreamOperator<TdqMetric> unifyDataStream = normalizeOperator
         .keyBy((KeySelector<TdqMetric, String>) m -> m.getPartition() + "#" + m.getTagId())
         .window(TumblingEventTimeWindows.of(Time.seconds(tdqEnv.getMetric1stAggrWMilli())))
-        .sideOutputLateData(tdqEnv.getEventLatencyOutputTag())
+        .sideOutputLateData(tdqCxt.getEventLatencyOutputTag())
         .aggregate(new TdqMetricAggregateFunction(),
-            new TdqMetric1stAggrProcessWindowFunction(tdqEnv.getOutputTagMap()))
+            new TdqMetric1stAggrProcessWindowFunction(tdqCxt.getOutputTagMap()))
         .setParallelism(tdqEnv.getMetric1stAggrParallelism())
         .slotSharingGroup("metric-1st-aggr")
         .name(uid)
         .uid(uid);
 
-    TdqSinks.sinkException(tdqEnv, unifyDataStream);
-    TdqSinks.sinkSampleLog(tdqEnv, unifyDataStream);
-    TdqSinks.sinkDebugLog(tdqEnv, unifyDataStream);
-    TdqSinks.sinkLatencyMetric(tdqEnv, unifyDataStream);
+    TdqSinks.sinkException(tdqCxt, unifyDataStream);
+    TdqSinks.sinkSampleLog(tdqCxt, unifyDataStream);
+    TdqSinks.sinkLatencyMetric(tdqCxt, unifyDataStream);
 
     Map<String, SingleOutputStreamOperator<TdqMetric>> ans = Maps.newHashMap();
-    tdqEnv.getOutputTagMap().forEach((seconds, tag) -> {
+    tdqCxt.getOutputTagMap().forEach((seconds, tag) -> {
       String key = Duration.ofSeconds(seconds).toString().toLowerCase();
       String tagUid = "aggr_w_" + key;
       SingleOutputStreamOperator<TdqMetric> ds = unifyDataStream.getSideOutput(tag).keyBy(TdqMetric::getTagId)
@@ -127,7 +129,7 @@ public class ProfilingJob {
     int parallelism = rawEventDataStream.getTransformation().getParallelism();
     String uid = "normalize_evt_" + idx;
     SingleOutputStreamOperator<TdqMetric> ds = rawEventDataStream
-        .process(new RawEventProcessFunction(tdqEnv))
+        .process(new RawEventProcessFunction(tdqCxt))
         .name(uid)
         .uid(uid)
         .slotSharingGroup(slotSharingGroup)

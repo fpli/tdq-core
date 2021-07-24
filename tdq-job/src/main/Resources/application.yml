@@ -5,27 +5,29 @@ flink:
       default: 125
       source: 125
       metric-1st-aggr: 200
-      metric-1st-aggr-partitions: 48
       metric-2nd-aggr: 2
-      hdfs:
-        raw-data: 50
+
     window:
       metric-1st-aggr: 1min
-      supports: 1min,5min,10min,30min,1h,1d
+      supports: 1min,5min
+
     slot-sharing-group:
       source-event-lvs: tdq-lvs
       source-event-slc: tdq-slc
       source-event-rno: tdq-rno
+
     operator-name:
       source:
         rno: Pathfinder RNO Tdq Source
         lvs: Pathfinder LVS Tdq Source
         slc: Pathfinder SLC Tdq Source
+
     uid:
       source:
         rno: pathfinder-rno-tdq-source
         lvs: pathfinder-lvs-tdq-source
         slc: pathfinder-slc-tdq-source
+
     checkpoint:
       data-dir: /opt/tdq-${flink.app.profile}/checkpoint
       interval-ms: 300000
@@ -33,43 +35,25 @@ flink:
       min-pause-between-ms: 120000
       max-concurrent: 1
       tolerate-failure-number: 3
+
+    local-cache:
+      queue-size: 1000
+      flush-timeout: 5s
+      output-partitions: 61
+
     source:
       sample-fraction: 0
       from-timestamp: 0
-      out-of-orderless-in-min: 3
-      idle-source-timeout-in-min: 5
-      pronto:
-        index-pattern: tdq.${flink.app.profile}.metric.normal.
-        latency-index-pattern: tdq.${flink.app.profile}.metric.latency.
-        debug-index-pattern: tdq.${flink.app.profile}.log.debug.
-        sample-index-pattern: tdq.${flink.app.profile}.log.sample.
-        exception-index-pattern: tdq.${flink.app.profile}.log.exception.
-        scheme: https
-        hostname: estdq-datalvs.vip.ebay.com
-        port: 443
-        api-key: 76361a1177564b72bdba1ddb23d17c58
-        api-value: 1tIU7GQSADe4bCGGifWLfYYJSZGA8Szlc3ZWDMnd3gMhk43XPLUpw9Mv5viYQZ73
-      hdfs:
-        normal-metric: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/metric/normal
-        latency-metric: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/metric/latency
-        debug-log: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/log/debug
-        sample-log: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/log/sample
-        exception-log: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/log/exception
-        raw-data: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/raw-data
-    sink:
-      types:
-        normal-metric: pronto,hdfs
-        latency-metric: pronto,hdfs
-        debug-log: pronto
-        sample-log: pronto
-        exception-log: pronto
-    advance:
-      watermark:
-        out-of-orderless: 5min
-        idle-source-timeout: 10min
-      local-combine:
-        queue-size: 1000
-        flush-timeout: 5000
+      out-of-orderless: 5min
+      idle-source-timeout: 5min
+
+pronto:
+  scheme: https
+  hostname: estdq-datalvs.vip.ebay.com
+  port: 443
+  api-key: 76361a1177564b72bdba1ddb23d17c58
+  api-value: 1tIU7GQSADe4bCGGifWLfYYJSZGA8Szlc3ZWDMnd3gMhk43XPLUpw9Mv5viYQZ73
+
 mysql:
   jdbc:
     url: jdbc:mysql://mysql-master-svc-qa.ido-ns.svc.57.tess.io:3306/tdq?verifyServerCertificate=false&useSSL=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf8

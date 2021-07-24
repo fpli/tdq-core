@@ -1,18 +1,6 @@
 flink:
   app:
     profile: pre-prod
-    parallelism:
-      metric-1st-aggr: 200
-      metric-1st-aggr-partitions: 47
-      metric-2nd-aggr: 2
-    window:
-      supports: 1min,5min
-    source:
-      sample-fraction: 0
-    advance:
-      watermark:
-        out-of-orderless: 5min
-        idle-source-timeout: 10min
-      local-combine:
-        queue-size: 2000
-        flush-timeout: 5000
+    sink:
+      normal-metric:
+        pronto-index-pattern: tdq.${flink.app.profile}.metric.normal.

@@ -13,7 +13,7 @@ import com.ebay.sojourner.common.util.Property;
 import com.ebay.sojourner.flink.connector.kafka.SourceDataStreamBuilder;
 import com.ebay.tdq.connector.kafka.schema.PathFinderRawEventDeserializationSchema;
 import com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchemaWrapper;
-import com.ebay.tdq.utils.TdqEnv;
+import com.ebay.tdq.common.env.TdqEnv;
 import com.google.common.collect.Lists;
 import java.util.List;
 import org.apache.flink.streaming.api.datastream.DataStream;

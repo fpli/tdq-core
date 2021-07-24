@@ -1,6 +1,7 @@
 package com.ebay.tdq.utils;
 
 import com.ebay.sojourner.flink.common.FlinkEnvUtils;
+import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.config.TransformationConfig;
 import com.ebay.tdq.expressions.Expression;

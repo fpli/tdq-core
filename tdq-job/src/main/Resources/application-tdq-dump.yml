@@ -1,0 +1,7 @@
+flink:
+  app:
+    name: TDQ-V2-Dumper
+    profile: prod
+    sink:
+      raw-data:
+        hdfs-path: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/data/raw

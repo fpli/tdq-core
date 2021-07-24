@@ -1,12 +1,11 @@
 flink:
   app:
     profile: dev
-    name: TDQ-V2-pathfinder
+    name: TDQ-V2
     parallelism:
       default: 1
       source: 1
       metric-1st-aggr: 2
-      metric-1st-aggr-partitions: 2
       metric-2nd-aggr: 1
     window:
       metric-1st-aggr: 60s
@@ -25,10 +24,6 @@ flink:
         rno: pathfinder-rno-tdq-source
         lvs: pathfinder-lvs-tdq-source
         slc: pathfinder-slc-tdq-source
-    data-skew:
-      is-filter: true
-      guid-set: [ ]
-      pageid-set: [ ]
     checkpoint:
       data-dir: /tmp/tdq-${flink.app.profile}/checkpoint
       interval-ms: 10000
@@ -36,43 +31,27 @@ flink:
       min-pause-between-ms: 60000
       max-concurrent: 1
       tolerate-failure-number: 3
-    hot-deploy: false
+    local-cache:
+      queue-size: 0
+      flush-timeout: 5s
+      output-partitions: 2
     source:
       sample-fraction: 0
       from-timestamp: 0
-      out-of-orderless-in-min: 3
-      idle-source-timeout-in-min: 3
-      pronto:
-        index-pattern: tdq.${flink.app.profile}.metric.normal.
-        latency-index-pattern: tdq.${flink.app.profile}.metric.latency.
-        debug-index-pattern: tdq.${flink.app.profile}.log.debug.
-        sample-index-pattern: tdq.${flink.app.profile}.log.sample.
-        exception-index-pattern: tdq.${flink.app.profile}.log.exception.
-        scheme: http
-        hostname: localhost
-        port: 9200
-        api-key: ""
-        api-value: ""
-      hdfs:
-        normal-metric: target/${flink.app.profile}/metric/normal
-        latency-metric: target/${flink.app.profile}/metric/latency/
-        debug-log: target/${flink.app.profile}/log/debug/
-        sample-log: target/${flink.app.profile}/log/sample/
-        exception-log: target/${flink.app.profile}/log/exception/
+      out-of-orderless: 3min
+      idle-source-timeout: 3min
     sink:
-      types:
-        normal-metric: console
-        latency-metric: console
-        debug-log: console
-        sample-log: console
-        exception-log: console
-    advance:
-      watermark:
-        out-of-orderless: 5min
-        idle-source-timeout: 10min
-      local-combine:
-        queue-size: 0
-        flush-timeout: 5000
+      normal-metric:
+        std-name: normal
+        hdfs-path: target/test/metric/normal
+
+pronto:
+  scheme: http
+  hostname: localhost
+  port: 9200
+  api-key: ""
+  api-value: ""
+
 mysql:
   jdbc:
     url: jdbc:h2:mem:tdq_unit_test;MODE=MYSQL;DB_CLOSE_DELAY=-1

@@ -1,5 +1,6 @@
 package com.ebay.tdq.utils;
 
+import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.TdqMetric;
 import java.util.Collection;
@@ -12,6 +13,7 @@ import org.apache.flink.util.Collector;
  * @author juntzhang
  */
 public class LocalCache {
+
   private final TdqEnv tdqEnv;
   private final Map<String, TdqMetric> cache;
   private final TdqMetricGroup metricGroup;
@@ -19,15 +21,16 @@ public class LocalCache {
   private long cacheCurrentTimeMillis;
 
   public LocalCache(TdqEnv tdqEnv, TdqMetricGroup metricGroup) {
-    this.tdqEnv                 = tdqEnv;
+    this.tdqEnv = tdqEnv;
     this.cacheCurrentTimeMillis = System.currentTimeMillis();
-    this.metricGroup            = metricGroup;
-    this.cache                  = new HashMap<>(tdqEnv.getLocalCombineQueueSize() + 16);
+    this.metricGroup = metricGroup;
+    this.cache = new HashMap<>(tdqEnv.getLocalCacheEnv().getLocalCombineQueueSize() + 16);
   }
 
   protected boolean needFlush(TdqMetric curr) {
-    return cache.size() >= tdqEnv.getLocalCombineQueueSize()
-        || (System.currentTimeMillis() - cacheCurrentTimeMillis) > tdqEnv.getLocalCombineFlushTimeout();
+    return cache.size() >= tdqEnv.getLocalCacheEnv().getLocalCombineQueueSize()
+        || (System.currentTimeMillis() - cacheCurrentTimeMillis) > tdqEnv.getLocalCacheEnv()
+        .getLocalCombineFlushTimeout();
   }
 
   public Collection<TdqMetric> values() {
@@ -43,7 +46,9 @@ public class LocalCache {
   }
 
   public void flush(PhysicalPlan plan, TdqMetric curr, Collector<TdqMetric> collector) {
-    if (curr == null) return;
+    if (curr == null) {
+      return;
+    }
     metricGroup.inc(curr.getMetricKey() + "_" + DateUtils.getMinBuckets(curr.getEventTime(), 5));
     TdqMetric last = cache.get(curr.getTagIdWithEventTime());
     if (last != null) {
@@ -53,13 +58,13 @@ public class LocalCache {
 
     if (needFlush(curr)) {
       metricGroup.inc("flush");
-      if (cache.size() >= tdqEnv.getLocalCombineQueueSize()) {
+      if (cache.size() >= tdqEnv.getLocalCacheEnv().getLocalCombineQueueSize()) {
         metricGroup.inc("sizeFlush");
       } else {
         metricGroup.inc("flushTimeout");
       }
       for (TdqMetric m : cache.values()) {
-        m.setPartition(Math.abs(random.nextInt()) % tdqEnv.getMetric1stAggrPartitions());
+        m.setPartition(Math.abs(random.nextInt()) % tdqEnv.getLocalCacheEnv().getOutputPartitions());
         metricGroup.inc("localCachePartition" + m.getPartition());
         metricGroup.inc("collect");
         collector.collect(m);

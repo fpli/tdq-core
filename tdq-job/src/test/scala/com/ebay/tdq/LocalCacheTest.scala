@@ -1,7 +1,8 @@
 package com.ebay.tdq
 
-import com.ebay.tdq.rules.{PhysicalPlans, TdqMetric}
-import com.ebay.tdq.utils.{LocalCache, TdqEnv, TdqMetricGroup}
+import com.ebay.tdq.common.env.TdqEnv
+import com.ebay.tdq.rules.{PhysicalPlan, TdqMetric}
+import com.ebay.tdq.utils.{LocalCache, TdqMetricGroup}
 import org.apache.commons.lang.time.DateFormatUtils
 import org.apache.commons.lang3.time.DateUtils
 import org.junit.Test
@@ -84,7 +85,7 @@ class LocalCacheTest {
       |  ]
       |}
       |""".stripMargin
-  val plans: PhysicalPlans = ProfilingSqlParserTest.getPhysicalPlans(config)
+  val physicalPlan: PhysicalPlan = PhysicalPlanFactory.getPhysicalPlan(config)
 
   @Test
   def test(): Unit = {
@@ -94,30 +95,28 @@ class LocalCacheTest {
 
     val mock = new TdqMetricGroupMock
     val env = new TdqEnv()
-    env.setLocalCombineQueueSize(12)
-    env.setLocalCombineFlushTimeout(1000)
+    env.getLocalCacheEnv.setLocalCombineQueueSize(12)
+    env.getLocalCacheEnv.setLocalCombineFlushTimeout(1000)
     val cache = new LocalCache(env, mock)
     val rawData = new mutable.HashMap[String, Double]()
     val mergeData = new mutable.HashMap[String, Double]()
 
     def run(metric: TdqMetric): Unit = {
-      plans.plans.foreach(p => {
-        metric.setMetricKey(p.metricKey)
-        metric.genUID()
-        cache.flush(p, metric, new org.apache.flink.util.Collector[TdqMetric] {
-          override def collect(record: TdqMetric): Unit = {
-            val k = p.uuid() + format(record.getEventTime)
-            val old = mergeData.get(k)
-            if (old.isDefined) {
-              mergeData.put(k, old.get + record.getValues.get("p1").asInstanceOf[Double])
-            } else {
-              mergeData.put(k, record.getValues.get("p1").asInstanceOf[Double])
-            }
+      metric.setMetricKey(physicalPlan.metricKey)
+      metric.genUID()
+      cache.flush(physicalPlan, metric, new org.apache.flink.util.Collector[TdqMetric] {
+        override def collect(record: TdqMetric): Unit = {
+          val k = physicalPlan.uuid() + format(record.getEventTime)
+          val old = mergeData.get(k)
+          if (old.isDefined) {
+            mergeData.put(k, old.get + record.getValues.get("p1").asInstanceOf[Double])
+          } else {
+            mergeData.put(k, record.getValues.get("p1").asInstanceOf[Double])
           }
+        }
 
-          override def close(): Unit = {
-          }
-        })
+        override def close(): Unit = {
+        }
       })
     }
 

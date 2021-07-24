@@ -60,9 +60,10 @@ public class ProfilerServiceDropdownTest {
   }
 
   public void createData(Client client) throws Exception {
-    val index = ServiceFactory.getProntoEnv().getIndexPattern() + "2021-05-28";
+    val pattern = ServiceFactory.getTdqEnv().getSinkEnv().getNormalMetricProntoIndexPattern();
+    val index = pattern + "2021-05-28";
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics");
-    request.patterns(Lists.newArrayList(ServiceFactory.getProntoEnv().getIndexPattern() + "*"));
+    request.patterns(Lists.newArrayList(pattern + "*"));
     String source = IOUtils.toString(this.getClass().getResourceAsStream("/tdq-metrics-template.json"));
     request.source(source, XContentType.JSON);
     client.admin().indices().putTemplate(request).get();
@@ -70,7 +71,8 @@ public class ProfilerServiceDropdownTest {
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "1450", "1", 4d, 7d))).get();
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", "1", 4d, 7d))).get();
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "711", "1", 1d, 1d))).get();
-    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "1677718", "1", 1d, 2d))).get();
+    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "1677718", "1", 1d, 2d)))
+        .get();
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", "2", 0d, 0d))).get();
     Thread.sleep(3000);
   }

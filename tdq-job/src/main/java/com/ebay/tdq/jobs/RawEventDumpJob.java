@@ -1,12 +1,13 @@
 package com.ebay.tdq.jobs;
 
 import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.common.model.RawEventAvro;
 import com.ebay.tdq.sources.BehaviorPathfinderSource;
 import com.ebay.tdq.sources.HdfsConnectorFactory;
 import com.ebay.tdq.sources.RawEventDateTimeBucketAssigner;
 import com.ebay.tdq.utils.FlinkEnvFactory;
-import com.ebay.tdq.utils.TdqEnv;
+import com.ebay.tdq.utils.TdqContext;
 import java.util.List;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -40,15 +41,17 @@ public class RawEventDumpJob {
   }
 
   public void submit(String[] args) throws Exception {
-    env = FlinkEnvFactory.create(new TdqEnv(args));
+    TdqContext tdqContext = new TdqContext(args);
+    tdqEnv = tdqContext.getTdqEnv();
+    env = FlinkEnvFactory.create(tdqEnv);
 
     // step1: build data source
     List<DataStream<RawEvent>> rawEventDataStream = new BehaviorPathfinderSource(tdqEnv, env).build();
     for (int i = 0; i < rawEventDataStream.size(); i++) {
       DataStream<RawEvent> ds = rawEventDataStream.get(0);
       StreamingFileSink<RawEventAvro> sink = HdfsConnectorFactory.createWithParquet(
-          tdqEnv.getHdfsEnv().getRawDataPath() + "/i=" + i,
-          RawEventAvro.class, new RawEventDateTimeBucketAssigner(tdqEnv.getTimeZone().toZoneId()));
+          tdqEnv.getSinkEnv().getRawDataPath() + "/i=" + i,
+          RawEventAvro.class, new RawEventDateTimeBucketAssigner(tdqEnv.getSinkEnv().getTimeZone().toZoneId()));
       ds
           .map(raw -> RawEventAvro.newBuilder()
               .setSojA(raw.getSojA())

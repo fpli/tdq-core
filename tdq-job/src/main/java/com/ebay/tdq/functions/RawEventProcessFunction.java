@@ -1,13 +1,14 @@
 package com.ebay.tdq.functions;
 
 import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.planner.LkpManager;
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.TdqErrorMsg;
 import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.rules.TdqSampleData;
 import com.ebay.tdq.utils.LocalCache;
-import com.ebay.tdq.utils.TdqEnv;
+import com.ebay.tdq.utils.TdqContext;
 import com.ebay.tdq.utils.TdqMetricGroup;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -28,14 +29,16 @@ import org.apache.flink.util.Collector;
 public class RawEventProcessFunction extends ProcessFunction<RawEvent, TdqMetric> implements CheckpointedFunction {
 
   private final TdqEnv tdqEnv;
+  private final TdqContext tdqCxt;
   private transient long errorMsgCurrentTimeMillis;
   private transient TdqMetricGroup metricGroup;
   private transient ListState<TdqMetric> cacheState;
   private transient LocalCache localCache;
 
-  public RawEventProcessFunction(TdqEnv tdqEnv) {
-    this.tdqEnv = tdqEnv;
-    if (tdqEnv.getLocalCombineFlushTimeout() > 60000) {
+  public RawEventProcessFunction(TdqContext tdqCxt) {
+    this.tdqCxt = tdqCxt;
+    this.tdqEnv = tdqCxt.getTdqEnv();
+    if (tdqEnv.getLocalCacheEnv().getLocalCombineFlushTimeout() > 60000) {
       throw new RuntimeException("flink.app.advance.local-combine.flush-timeout must less than 60s!");
     }
   }
@@ -105,7 +108,7 @@ public class RawEventProcessFunction extends ProcessFunction<RawEvent, TdqMetric
   private void sampleData(Context ctx, RawEvent event, TdqMetric metric, PhysicalPlan plan) {
     if (plan.sampling()) {
       metricGroup.inc("sampleEvent_" + plan.metricKey());
-      ctx.output(tdqEnv.getSampleOutputTag(), new TdqSampleData(
+      ctx.output(tdqCxt.getSampleOutputTag(), new TdqSampleData(
           event, metric, plan.metricKey(), plan.cxt().get().toString())
       );
     }
@@ -116,7 +119,7 @@ public class RawEventProcessFunction extends ProcessFunction<RawEvent, TdqMetric
     metricGroup.inc("errorEvent_" + plan.metricKey());
     if ((System.currentTimeMillis() - errorMsgCurrentTimeMillis) > 5000) {
       log.warn("Drop event={},plan={},exception={}", event, plan, e);
-      ctx.output(tdqEnv.getExceptionOutputTag(), new TdqErrorMsg(event, e, plan.metricKey()));
+      ctx.output(tdqCxt.getExceptionOutputTag(), new TdqErrorMsg(event, e, plan.metricKey()));
       errorMsgCurrentTimeMillis = System.currentTimeMillis();
     }
   }

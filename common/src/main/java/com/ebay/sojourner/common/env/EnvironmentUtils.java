@@ -87,6 +87,24 @@ public class EnvironmentUtils {
     return defaultValue;
   }
 
+  public static int getIntegerOrDefault(String key, int defaultValue) {
+    for (AbstractEnvironment propSource : PROP_SOURCES) {
+      if (propSource.contains(key)) {
+        return Integer.valueOf(propSource.getProperty(key));
+      }
+    }
+    return defaultValue;
+  }
+
+  public static double getDoubleOrDefault(String key, double defaultValue) {
+    for (AbstractEnvironment propSource : PROP_SOURCES) {
+      if (propSource.contains(key)) {
+        return Double.valueOf(propSource.getProperty(key));
+      }
+    }
+    return defaultValue;
+  }
+
   public static String getStringOrDefault(String key, String defaultValue) {
     for (AbstractEnvironment propSource : PROP_SOURCES) {
       if (propSource.contains(key)) {

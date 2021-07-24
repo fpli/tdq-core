@@ -13,8 +13,6 @@ import scala.collection.JavaConverters.mapAsScalaMapConverter
 
 case class Transformation(name: String, filter: Expression = null, expr: Expression)
 
-case class PhysicalPlans(plans: Array[PhysicalPlan])
-
 case class PhysicalPlanContext(
   sampling: Boolean = false,
   samplingFraction: Double = 0.0001,

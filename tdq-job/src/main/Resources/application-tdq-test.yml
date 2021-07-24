@@ -3,16 +3,16 @@ flink:
     profile: test
     parallelism:
       metric-1st-aggr: 50
-      metric-1st-aggr-partitions: 3
       metric-2nd-aggr: 1
-    window:
-      supports: 1min,5min
+
+    local-cache:
+      queue-size: 1000
+      flush-timeout: 5s
+      output-partitions: 3
+
     source:
       sample-fraction: 0.01
-    advance:
-      watermark:
-        out-of-orderless: 5min
-        idle-source-timeout: 10min
-      local-combine:
-        queue-size: 2000
-        flush-timeout: 5000
+
+    sink:
+      normal-metric:
+        pronto-index-pattern: tdq.${flink.app.profile}.metric.normal.

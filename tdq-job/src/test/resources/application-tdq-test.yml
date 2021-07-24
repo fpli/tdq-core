@@ -1,3 +1,12 @@
 flink:
   app:
     profile: test
+    sink:
+      normal-metric:
+        hdfs-path: target/test/metric/normal
+      latency-metric:
+        std-name: latency
+      sample-log:
+        std-name: sample
+      exception-log:
+        std-name: exception

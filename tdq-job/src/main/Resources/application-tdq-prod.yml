@@ -1,21 +1,17 @@
 flink:
   app:
     profile: prod
-    parallelism:
-      metric-1st-aggr: 200
-      metric-1st-aggr-partitions: 61
-      metric-2nd-aggr: 2
-    window:
-      supports: 1min,5min
-    source:
-      sample-fraction: 0
-    advance:
-      watermark:
-        out-of-orderless: 5min
-        idle-source-timeout: 10min
-      local-combine:
-        queue-size: 2000
-        flush-timeout: 5000
+    sink:
+      normal-metric:
+        hdfs-path: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/metric/normal
+        pronto-index-pattern: tdq.${flink.app.profile}.metric.normal.
+      latency-metric:
+        hdfs-path: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/metric/latency
+        pronto-index-pattern: tdq.${flink.app.profile}.metric.latency.
+      sample-log:
+        pronto-index-pattern: tdq.${flink.app.profile}.log.sample.
+      exception-log:
+        pronto-index-pattern: tdq.${flink.app.profile}.log.exception.
 mysql:
   jdbc:
     url: jdbc:mysql://mysqlidodb.db.stratus.ebay.com:3306/tdq?verifyServerCertificate=false&useSSL=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC

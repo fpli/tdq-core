@@ -1,10 +1,18 @@
 package com.ebay.tdq.svc;
 
-import com.ebay.tdq.dto.*;
+import com.ebay.tdq.dto.AggMethod;
+import com.ebay.tdq.dto.MetricsMethod;
+import com.ebay.tdq.dto.TdqMtrcQryParam;
+import com.ebay.tdq.dto.TdqMtrcQryRs;
 import com.ebay.tdq.utils.ProntoUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import java.text.ParseException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.io.IOUtils;
@@ -18,17 +26,17 @@ import org.junit.Test;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 
-import java.text.ParseException;
-import java.util.*;
-
 /**
  * @author juntzhang
  */
 @Slf4j
-public class FetchMetricsMsMtcServiceTest  {
-  EmbeddedElasticsearch elasticsearchResource =null;
-  private HashMap<String, Object> getMap(String event_time, String page_family,String site_id,
-                                         long tag_cnt, long total_cnt,String tag_name) throws ParseException {
+@Deprecated
+public class FetchMetricsMsMtcServiceTest {
+
+  EmbeddedElasticsearch elasticsearchResource = null;
+
+  private HashMap<String, Object> getMap(String event_time, String page_family, String site_id,
+      long tag_cnt, long total_cnt, String tag_name) throws ParseException {
     HashMap<String, Object> json = Maps.newHashMap();
     System.out.println(DateUtils.parseDate(event_time, new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime());
     json.put("metric_name", "Glabal_Mandotory_Tag_Rate");
@@ -48,29 +56,29 @@ public class FetchMetricsMsMtcServiceTest  {
   public void createData() throws Exception {
     elasticsearchResource = new EmbeddedElasticsearch();
     elasticsearchResource.start("es-test");
-    Client client=elasticsearchResource.getClient();
+    Client client = elasticsearchResource.getClient();
     val index = ProntoUtils.INDEX_PREFIX + "tag_miss_cnt_glabal_mandotory_tag_rate";
 
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics-pronto");
-    request.patterns(Lists.newArrayList(ProntoUtils.INDEX_PREFIX  + "*"));
+    request.patterns(Lists.newArrayList(ProntoUtils.INDEX_PREFIX + "*"));
     String source = IOUtils.toString(this.getClass().getResourceAsStream("/tdq-metrics-template2.json"));
     request.source(source, XContentType.JSON);
     client.admin().indices().putTemplate(request).get();
 
     client.index(Requests.indexRequest().index(index).source(
-            getMap("2021-07-16 00:05:00", "UNWTCH", "77",
-                    1,2,"u"
-            ))).get();
+        getMap("2021-07-16 00:05:00", "UNWTCH", "77",
+            1, 2, "u"
+        ))).get();
     client.index(Requests.indexRequest().index(index).source(
-            getMap("2021-07-16 00:05:00", "VI", "16",
-                    947,948,"u"
-            ))).get();
+        getMap("2021-07-16 00:05:00", "VI", "16",
+            947, 948, "u"
+        ))).get();
     client.index(Requests.indexRequest().index(index).source(
-            getMap("2021-07-16 01:05:00", " VI", "16",
-                    947,948,"u"))).get();
+        getMap("2021-07-16 01:05:00", " VI", "16",
+            947, 948, "u"))).get();
     client.index(Requests.indexRequest().index(index).source(
-            getMap("2021-07-16 01:05:00", " VI", "16",
-                    2,3,"u"))).get();
+        getMap("2021-07-16 01:05:00", " VI", "16",
+            2, 3, "u"))).get();
     Thread.sleep(3000);
   }
 
@@ -83,15 +91,15 @@ public class FetchMetricsMsMtcServiceTest  {
     dimensions.put("page_id", Sets.newHashSet("711", "1677718"));
 
     TdqMtrcQryParam param = TdqMtrcQryParam.builder().pageFmy("VI")
-             .tagMetrics(Arrays.asList("tag_cnt","total_cnt")).tags( Arrays.asList("u"))
-            .siteId("16").metricName("Glabal_Mandotory_Tag_Rate")
-            .metricType("tag_miss_cnt").from(1626364800000L)
-            .to(1626368400000L).precision(2)
-            .aggMethod(AggMethod.SUM)
-            .metricsMethod(MetricsMethod.PERCENTAGE)
-            .build();
+        .tagMetrics(Arrays.asList("tag_cnt", "total_cnt")).tags(Arrays.asList("u"))
+        .siteId("16").metricName("Glabal_Mandotory_Tag_Rate")
+        .metricType("tag_miss_cnt").from(1626364800000L)
+        .to(1626368400000L).precision(2)
+        .aggMethod(AggMethod.SUM)
+        .metricsMethod(MetricsMethod.PERCENTAGE)
+        .build();
 
-    TdqMtrcQryRs result = (TdqMtrcQryRs)ServiceFactory.getFetchMetricsService().fetchMetrics(param);
+    TdqMtrcQryRs result = (TdqMtrcQryRs) ServiceFactory.getFetchMetricsService().fetchMetrics(param);
     System.out.println(result.getTagMetrics());
     Assert.assertEquals(1, result.getTagMetrics().size());
 //    Map<Long, Double> m =
@@ -104,8 +112,8 @@ public class FetchMetricsMsMtcServiceTest  {
   }
 
   @AfterAll
-  public void close(){
-    if(elasticsearchResource!=null) {
+  public void close() {
+    if (elasticsearchResource != null) {
       try {
         elasticsearchResource.close();
       } catch (Exception e) {

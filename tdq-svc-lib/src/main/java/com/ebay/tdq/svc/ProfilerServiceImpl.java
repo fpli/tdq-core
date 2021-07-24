@@ -1,5 +1,7 @@
 package com.ebay.tdq.svc;
 
+import static com.ebay.sojourner.common.env.EnvironmentUtils.getStringWithPattern;
+
 import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;
@@ -201,10 +203,11 @@ public class ProfilerServiceImpl implements ProfilerService {
     Set<String> results = new HashSet<>();
     long next = from;
     while (end >= next) {
-      results.add(ServiceFactory.getProntoEnv().getNormalMetricIndex(next));
+
+      results.add(ServiceFactory.getTdqEnv().getSinkEnv().getNormalMetricIndex(next));
       next = next + 86400 * 1000;
     }
-    results.add(ServiceFactory.getProntoEnv().getNormalMetricIndex(end));
+    results.add(ServiceFactory.getTdqEnv().getSinkEnv().getNormalMetricIndex(end));
     log.info("search request indexes=>{}", StringUtils.join(results, ","));
     return results.toArray(new String[0]);
   }

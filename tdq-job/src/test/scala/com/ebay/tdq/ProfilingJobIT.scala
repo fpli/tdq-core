@@ -128,7 +128,7 @@ class EsProfilingJobIT(id: String, config: String, events: List[RawEvent], expec
     Thread.sleep(1000)
     val client: Client = elasticsearchResource.getClient
     val searchRequest = new SearchRequest(
-      s"${tdqEnv.getProntoEnv.getNormalMetricIndex(expects.head.getEventTime)}")
+      s"${tdqEnv.getSinkEnv.getNormalMetricIndex(expects.head.getEventTime)}")
     val searchSourceBuilder = new SearchSourceBuilder()
     searchSourceBuilder.query(QueryBuilders.matchAllQuery())
     searchSourceBuilder.size(100)

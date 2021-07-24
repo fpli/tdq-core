@@ -1,8 +1,8 @@
 package com.ebay.tdq.functions;
 
-import com.ebay.tdq.common.env.ProntoEnv;
 import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.utils.DateUtils;
+import com.ebay.tdq.common.env.TdqEnv;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +19,11 @@ import org.elasticsearch.client.Requests;
 @Slf4j
 public class ProntoSinkFunction implements ElasticsearchSinkFunction<TdqMetric> {
 
-  private final ProntoEnv prontoEnv;
+  private final TdqEnv tdqEnv;
   private transient Map<String, Counter> counterMap;
 
-  public ProntoSinkFunction(ProntoEnv prontoEnv) {
-    this.prontoEnv = prontoEnv;
+  public ProntoSinkFunction(TdqEnv tdqEnv) {
+    this.tdqEnv = tdqEnv;
   }
 
   @Override
@@ -58,7 +58,7 @@ public class ProntoSinkFunction implements ElasticsearchSinkFunction<TdqMetric> 
   }
 
   private IndexRequest createIndexRequest(TdqMetric tdqMetric) {
-    String index = prontoEnv.getNormalMetricIndex(tdqMetric.getEventTime());
+    String index = tdqEnv.getSinkEnv().getNormalMetricIndex(tdqMetric.getEventTime());
     try {
       return Requests.indexRequest()
           .id(tdqMetric.getTagIdWithEventTime())

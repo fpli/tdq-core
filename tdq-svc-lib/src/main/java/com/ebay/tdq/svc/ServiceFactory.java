@@ -2,6 +2,7 @@ package com.ebay.tdq.svc;
 
 import com.ebay.sojourner.common.env.EnvironmentUtils;
 import com.ebay.tdq.common.env.ProntoEnv;
+import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.service.FetchMetricsService;
 import com.ebay.tdq.service.ProfilerService;
 import com.ebay.tdq.service.RuleEngineService;
@@ -27,6 +28,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 public class ServiceFactory {
 
   private static volatile ServiceFactory serviceFactory;
+  private TdqEnv tdqEnv;
   private ProntoEnv prontoEnv;
   private RestHighLevelClient restHighLevelClient;
   private RuleEngineService ruleEngineService;
@@ -50,7 +52,8 @@ public class ServiceFactory {
     if (StringUtils.isNotBlank(profile)) {
       EnvironmentUtils.activateProfile(profile);
     }
-    prontoEnv = new ProntoEnv();
+    tdqEnv = new TdqEnv();
+    prontoEnv = tdqEnv.getProntoEnv();
     restHighLevelClient = restHighLevelClient();
     ruleEngineService = new RuleEngineServiceImpl();
     profilerService = new ProfilerServiceImpl(restHighLevelClient);
@@ -102,7 +105,7 @@ public class ServiceFactory {
     return getInstance().fetchMetricsService;
   }
 
-  public static ProntoEnv getProntoEnv() {
-    return getInstance().prontoEnv;
+  public static TdqEnv getTdqEnv() {
+    return getInstance().tdqEnv;
   }
 }

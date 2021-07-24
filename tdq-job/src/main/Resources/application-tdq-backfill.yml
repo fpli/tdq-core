@@ -1,33 +1,7 @@
 flink:
   app:
     name: TDQ-V2-backfill
-    profile: pre-prod
-    parallelism:
-      metric-1st-aggr: 100
-      metric-1st-aggr-partitions: 47
-      metric-2nd-aggr: 2
-    window:
-      supports: 1min,5min
-    source:
-      sample-fraction: 0
-      out-of-orderless-in-min: 0
-    advance:
-      watermark:
-        out-of-orderless: 1min
-        idle-source-timeout: 1min
-      local-combine:
-        queue-size: 2000
-        flush-timeout: 5000
+    profile: prod
     sink:
-      types:
-        normal-metric: pronto
-        latency-metric:
-        debug-log:
-        sample-log:
-        exception-log: pronto
-mysql:
-  jdbc:
-    url: jdbc:mysql://mysql-master-svc-qa.ido-ns.svc.57.tess.io:3306/tdq?verifyServerCertificate=false&useSSL=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf8
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    u: dataops
-    p: dataops#123
+      normal-metric:
+        pronto-index-pattern: tdq.${flink.app.profile}.metric.normal.

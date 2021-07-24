@@ -10,7 +10,7 @@ import com.ebay.sojourner.common.util.SOJNVL;
 import com.ebay.sojourner.common.util.SOJURLDecodeEscape;
 import com.ebay.sojourner.common.util.SojTimestamp;
 import com.ebay.sojourner.flink.connector.kafka.RheosEventSerdeFactory;
-import com.ebay.tdq.utils.TdqEnv;
+import com.ebay.tdq.common.env.TdqEnv;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
