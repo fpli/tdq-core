@@ -40,6 +40,9 @@ object ProfilingSqlParser {
   }
 
   def getExpr(str: String): SqlNode = {
+    if (StringUtils.isBlank(str)) {
+      return null
+    }
     val parser = SqlParser.create("SELECT " + str, FRAMEWORK_CONFIG.getParserConfig)
     parser.parseStmt.asInstanceOf[SqlSelect].getSelectList.get(0)
   }
@@ -132,7 +135,7 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, jdbcEnv: 
   }
 
   def parseProntoFilterExpr(): SqlNode = {
-    if (physicalPlanContext.isDefined) {
+    if (physicalPlanContext.isDefined && StringUtils.isNotBlank(physicalPlanContext.get.prontoFilterExpr)) {
       val expr = physicalPlanContext.get.prontoFilterExpr
       getExpr(expr)
     } else {
@@ -141,7 +144,7 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, jdbcEnv: 
   }
 
   def parseProntoDropdownExpr(): SqlNode = {
-    if (physicalPlanContext.isDefined) {
+    if (physicalPlanContext.isDefined && StringUtils.isNotBlank(physicalPlanContext.get.prontoDropdownExpr)) {
       val expr = physicalPlanContext.get.prontoDropdownExpr
       getExpr(expr)
     } else {

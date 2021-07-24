@@ -5,7 +5,7 @@ import static com.ebay.tdq.common.env.TdqConstant.LATENCY_METRIC;
 import static com.ebay.tdq.common.env.TdqConstant.NORMAL_METRIC;
 
 import com.ebay.tdq.common.env.ProntoEnv;
-import com.ebay.tdq.common.model.TdqAvroMetric;
+import com.ebay.tdq.common.model.TdqMetricAvro;
 import com.ebay.tdq.functions.ProntoSinkFunction;
 import com.ebay.tdq.rules.TdqErrorMsg;
 import com.ebay.tdq.rules.TdqMetric;
@@ -237,12 +237,12 @@ public class TdqSinks implements Serializable {
 
 
   public static void sinkHDFS(String id, String scene, TdqEnv tdqEnv, DataStream<TdqMetric> ds) {
-    String path = tdqEnv.getHdfsConfig().getNormalMetricPath();
+    String path = tdqEnv.getHdfsEnv().getNormalMetricPath();
     if (scene.equals(LATENCY_METRIC)) {
-      path = tdqEnv.getHdfsConfig().getLatencyMetricPath();
+      path = tdqEnv.getHdfsEnv().getLatencyMetricPath();
     }
-    StreamingFileSink<TdqAvroMetric> sink = HdfsConnectorFactory.createWithParquet(
-        path, TdqAvroMetric.class, new TdqMetricDateTimeBucketAssigner());
+    StreamingFileSink<TdqMetricAvro> sink = HdfsConnectorFactory.createWithParquet(
+        path, TdqMetricAvro.class, new TdqMetricDateTimeBucketAssigner(tdqEnv.getTimeZone().toZoneId()));
     ds.map(TdqMetric::toTdqAvroMetric)
         .uid(id + "_avro")
         .name(id + "_avro")

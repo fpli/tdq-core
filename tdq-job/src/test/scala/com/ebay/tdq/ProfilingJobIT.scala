@@ -7,16 +7,15 @@ import java.util.{HashMap => JMap, List => JList}
 import com.ebay.sojourner.common.model.RawEvent
 import com.ebay.sojourner.flink.connector.kafka.SojSerializableTimestampAssigner
 import com.ebay.tdq.common.env.JdbcEnv
+import com.ebay.tdq.job.sinks.MemorySink
 import com.ebay.tdq.jobs.ProfilingJob
+import com.ebay.tdq.planner.LkpManager
 import com.ebay.tdq.rules.TdqMetric
-import com.ebay.tdq.sinks.MemorySink
-import com.ebay.tdq.utils._
 import com.google.common.collect.Lists
 import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.StringUtils
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
 import org.apache.flink.streaming.api.datastream.DataStream
-import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.functions.source.SourceFunction
 import org.apache.flink.streaming.connectors.elasticsearch.TdqElasticsearchResource
 import org.elasticsearch.action.search.SearchRequest
@@ -30,98 +29,39 @@ import scala.collection.JavaConverters._
 /**
  * @author juntzhang
  */
+
 case class ProfilingJobIT(
-                           id: String, config: String, events: List[RawEvent], expects: List[TdqMetric]) extends ProfilingJob {
+  id: String, config: String, events: List[RawEvent], expects: List[TdqMetric]
+) extends ProfilingJob {
 
-  def submit(): Unit = {
-    // step0: prepare environment
-    env = FlinkEnvFactory.create(Array[String](), true)
-    tdqEnv = new TdqEnv
-    setTdqEnv(tdqEnv)
+  import ProfilingJobIT.setupDB
 
-    ProfilingJobIT.setupDB(config)
+  override def setup(args: Array[String]): Unit = {
+    super.setup(args)
+    setupDB(config)
+    LkpManager.getInstance(tdqEnv.getJdbcEnv).refresh()
+  }
 
+  override def start(): Unit = {
+    val memorySink = new MemorySink(id, LkpManager.getInstance(tdqEnv.getJdbcEnv).getPhysicalPlans.get(0))
     // step1: build data source
-    val rawEventDataStream = buildSource(env)
+    val rawEventDataStream = buildSource()
     // step2: normalize event to metric
-    val normalizeOperator = normalizeMetric(env, rawEventDataStream)
+    val normalizeOperator = normalizeMetric(rawEventDataStream)
     // step3: aggregate metric by key and window
     val outputTags = reduceMetric(normalizeOperator)
     // step4: output metric by window
-    val collect = new MemorySink(id)
     outputTags.asScala.foreach { case (k, v) =>
       val uid = "console_out_" + k
-      v.addSink(collect)
+      v.addSink(memorySink)
         .name(uid)
         .uid(uid)
     }
     env.execute("Tdq Job [id=" + id + "]")
-    Assert.assertTrue(collect.check(expects.asJava))
+    Assert.assertTrue(memorySink.check(expects.asJava))
   }
 
-  def submit2Pronto(): Unit = {
-    val elasticsearchResource = new TdqElasticsearchResource("es-test")
-    elasticsearchResource.start()
-
-    // step0: prepare environment
-    env = FlinkEnvFactory.create(Array[String](), true)
-    tdqEnv = new TdqEnv
-    tdqEnv.getSinkTypes.asScala.foreach { case (_, v) =>
-      v.add("pronto")
-    }
-    setTdqEnv(tdqEnv)
-
-    ProfilingJobIT.setupDB(config)
-
-    // step1: build data source
-    val rawEventDataStream = buildSource(env)
-    // step2: normalize event to metric
-    val normalizeOperator: DataStream[TdqMetric] = normalizeMetric(env, rawEventDataStream)
-    // step3: aggregate metric by key and window
-    val outputTags = reduceMetric(normalizeOperator)
-    // step4: output metric by window
-    outputMetricByWindow(outputTags)
-
-    val collect = new MemorySink(id)
-    outputTags.asScala.foreach { case (k, v) =>
-      val uid = "console_out_" + k
-      v.addSink(collect)
-        .name(uid)
-        .uid(uid)
-    }
-    env.execute("Tdq Job [id=" + id + "]")
-    Assert.assertTrue(collect.check(expects.asJava))
-
-    Thread.sleep(1000)
-    val client: Client = elasticsearchResource.getClient
-    val searchRequest = new SearchRequest(s"${tdqEnv.getProntoEnv.getNormalMetricIndex(expects.head.getEventTime)}")
-    val searchSourceBuilder = new SearchSourceBuilder()
-    searchSourceBuilder.query(QueryBuilders.matchAllQuery())
-    searchSourceBuilder.size(100)
-    searchSourceBuilder.from(0)
-    println(searchSourceBuilder)
-    searchRequest.source(searchSourceBuilder)
-    val resp = client.search(searchRequest).get()
-    val resultInPronto = resp.getHits.iterator().asScala.map(f => {
-      getMetric0(
-        f.getSourceAsMap.get("metric_key").asInstanceOf[String],
-        f.getSourceAsMap.get("event_time").asInstanceOf[Long],
-        f.getSourceAsMap.get("tags").asInstanceOf[JMap[String, String]],
-        f.getSourceAsMap.get("expr").asInstanceOf[JMap[String, Double]],
-        f.getSourceAsMap.get("value").asInstanceOf[Double]
-      )
-    }).toList
-    println("expects=>")
-    expects.foreach(println)
-    //Thread.sleep(10000000)
-    println("pronto=>")
-    resultInPronto.foreach(println)
-    Assert.assertTrue(MemorySink.check0(resultInPronto.asJava, expects.asJava))
-
-    elasticsearchResource.stop()
-  }
-
-  private def getMetric0(metricKey: String, t: Long, tags: JMap[String, String], expr: JMap[String, Double], v: Double): TdqMetric = {
+  def getMetric0(metricKey: String, t: Long, tags: JMap[String, String], expr: JMap[String, Double], v: Double): TdqMetric = {
     val m = new TdqMetric(metricKey, t).setValue(v)
     tags.asScala.foreach { case (k, v) =>
       m.putTag(k, v)
@@ -132,7 +72,7 @@ case class ProfilingJobIT(
     m.genUID
   }
 
-  private def buildSource(env: StreamExecutionEnvironment): JList[DataStream[RawEvent]] = {
+  def buildSource(): JList[DataStream[RawEvent]] = {
     Lists.newArrayList(env.addSource(new SourceFunction[RawEvent]() {
       @throws[InterruptedException]
       override def run(ctx: SourceFunction.SourceContext[RawEvent]): Unit = {
@@ -158,6 +98,65 @@ case class ProfilingJobIT(
   }
 }
 
+class EsProfilingJobIT(id: String, config: String, events: List[RawEvent], expects: List[TdqMetric])
+  extends ProfilingJobIT(id, config, events, expects) {
+
+  override def start(): Unit = {
+    val memorySink = new MemorySink(id, LkpManager.getInstance(tdqEnv.getJdbcEnv).getPhysicalPlans.get(0))
+
+    val elasticsearchResource = new TdqElasticsearchResource("es-test")
+    elasticsearchResource.start()
+
+    // step1: build data source
+    val rawEventDataStream = buildSource()
+    // step2: normalize event to metric
+    val normalizeOperator: DataStream[TdqMetric] = normalizeMetric(rawEventDataStream)
+    // step3: aggregate metric by key and window
+    val outputTags = reduceMetric(normalizeOperator)
+    // step4: output metric by window
+    outputMetricByWindow(outputTags)
+
+    outputTags.asScala.foreach { case (k, v) =>
+      val uid = "console_out_" + k
+      v.addSink(memorySink)
+        .name(uid)
+        .uid(uid)
+    }
+    env.execute("Tdq Job [id=" + id + "]")
+    Assert.assertTrue(memorySink.check(expects.asJava))
+
+    Thread.sleep(1000)
+    val client: Client = elasticsearchResource.getClient
+    val searchRequest = new SearchRequest(
+      s"${tdqEnv.getProntoEnv.getNormalMetricIndex(expects.head.getEventTime)}")
+    val searchSourceBuilder = new SearchSourceBuilder()
+    searchSourceBuilder.query(QueryBuilders.matchAllQuery())
+    searchSourceBuilder.size(100)
+    searchSourceBuilder.from(0)
+    println(searchSourceBuilder)
+    searchRequest.source(searchSourceBuilder)
+    val resp = client.search(searchRequest).get()
+    val resultInPronto = resp.getHits.iterator().asScala.map(f => {
+      getMetric0(
+        f.getSourceAsMap.get("metric_key").asInstanceOf[String],
+        f.getSourceAsMap.get("event_time").asInstanceOf[Long],
+        f.getSourceAsMap.get("tags").asInstanceOf[JMap[String, String]],
+        f.getSourceAsMap.get("expr").asInstanceOf[JMap[String, Double]],
+        f.getSourceAsMap.get("value").asInstanceOf[Double]
+      )
+    }).toList
+    println("expects=>")
+    expects.foreach(println)
+    //Thread.sleep(10000000)
+    println("pronto=>")
+    resultInPronto.foreach(println)
+
+    Assert.assertTrue(memorySink.check0(expects.asJava, resultInPronto.asJava))
+
+    elasticsearchResource.stop()
+  }
+}
+
 object ProfilingJobIT {
   def setupDB(config: String): Unit = {
     val jdbc = new JdbcEnv
@@ -176,5 +175,24 @@ object ProfilingJobIT {
       if (StringUtils.isNotBlank(s)) conn.createStatement().execute(s)
     }
     ps.close()
+  }
+
+  def es(id: String, config: String, events: List[RawEvent], expects: List[TdqMetric]): ProfilingJobIT = {
+    val it = new EsProfilingJobIT(id, config, events, expects)
+    it.submit(Array[String](
+      "--flink.app.local", "true",
+      "--flink.app.sink.types.normal-metric", "pronto"
+    ))
+    it
+  }
+
+  def apply(id: String, config: String, events: List[RawEvent], expects: List[TdqMetric]): ProfilingJobIT = {
+    val it = new ProfilingJobIT(id, config, events, expects)
+    println("+++++++================" + id)
+    it.submit(Array[String](
+      "--flink.app.local", "true",
+      "--flink.app.sink.types.normal-metric", "console"
+    ))
+    it
   }
 }

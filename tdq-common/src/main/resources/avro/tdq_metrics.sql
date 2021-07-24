@@ -17,6 +17,8 @@ OPTIONS (
 PARTITIONED BY (dt, hr);
 
 
+
+
 MSCK REPAIR TABLE zhangjt_metrics;
 refresh table zhangjt_metrics;
 

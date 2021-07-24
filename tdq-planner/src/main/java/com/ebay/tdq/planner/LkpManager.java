@@ -90,7 +90,7 @@ public class LkpManager {
     return lkpManager;
   }
 
-  private void refresh() {
+  public void refresh() {
     Map<String, String> lkp = getLkpTable();
     refreshBBWOAPagesWithItm(lkp);
     refreshPageFamily(lkp);
@@ -190,7 +190,7 @@ public class LkpManager {
   }
 
   public boolean isBBWOAPagesWithItm(Integer pageId) {
-    return pageId == null && bbwoaPagesWithItm.contains(pageId);
+    return pageId != null && bbwoaPagesWithItm.contains(pageId);
   }
 
   public String getPageFmlyByPageId(Integer pageId) {

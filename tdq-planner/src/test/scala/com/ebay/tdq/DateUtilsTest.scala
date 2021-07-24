@@ -1,6 +1,6 @@
 package com.ebay.tdq
 
-import com.ebay.sojourner.common.util.LkpManager
+import com.ebay.sojourner.common.util.{LkpManager, SojTimestamp}
 import com.ebay.tdq.utils.DateUtils._
 import org.apache.commons.lang3.time.{DateFormatUtils, FastDateFormat}
 import org.junit.Test
@@ -18,6 +18,7 @@ class DateUtilsTest {
     println(FastDateFormat.getInstance("yyyyMMddHHmm").format(1621391339604L))
     assert(getMinBuckets(1621391339604L, 10) == "202105191020")
     assert(getMinBuckets(1621391339604L, 5) == "202105191025")
+    println(SojTimestamp.getSojTimestampToUnixTimestamp(3835843200089000L))
   }
 
   @Test

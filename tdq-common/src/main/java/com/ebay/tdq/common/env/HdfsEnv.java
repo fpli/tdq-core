@@ -22,6 +22,8 @@ public class HdfsEnv implements Serializable {
   private String debugLogPath;
   private String sampleLogPath;
   private String exceptionLogPath;
+  private String rawDataPath;
+  private int rawDataParallelism;
 
   public HdfsEnv() {
     this.normalMetricPath = EnvironmentUtils.getStringWithPattern("flink.app.source.hdfs." + NORMAL_METRIC);
@@ -29,5 +31,8 @@ public class HdfsEnv implements Serializable {
     this.debugLogPath = EnvironmentUtils.getStringWithPattern("flink.app.source.hdfs." + DEBUG_LOG);
     this.sampleLogPath = EnvironmentUtils.getStringWithPattern("flink.app.source.hdfs." + SAMPLE_LOG);
     this.exceptionLogPath = EnvironmentUtils.getStringWithPattern("flink.app.source.hdfs." + EXCEPTION_LOG);
+    this.rawDataPath = EnvironmentUtils.getStringWithPattern("flink.app.source.hdfs.raw-data");
+    this.rawDataParallelism = Integer
+        .parseInt(EnvironmentUtils.getStringOrDefault("flink.app.parallelism.hdfs.raw-data", "50"));
   }
 }

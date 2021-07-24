@@ -5,10 +5,17 @@ import java.util.{HashMap => JHashMap}
 import com.ebay.sojourner.common.model.{ClientData, RawEvent}
 import com.ebay.tdq.common.env.JdbcEnv
 import com.ebay.tdq.config.TdqConfig
+import com.ebay.tdq.planner.LkpManagerTest
 import com.ebay.tdq.rules.{ProfilingSqlParser, TdqMetric}
 import com.ebay.tdq.utils.{DateUtils, JsonUtils}
-import org.junit.Test
+import org.junit.{BeforeClass, Test}
 
+object SOJlibUDFTest {
+  @BeforeClass
+  def setup(): Unit = {
+    LkpManagerTest.init()
+  }
+}
 
 class SOJlibUDFTest {
   def getTdqConfig(expr1: String, expr2: String): TdqConfig = {

@@ -19,12 +19,13 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
  */
 @Slf4j
 public class FlinkEnvFactory {
-  public static StreamExecutionEnvironment create(String[] args, boolean local) {
+
+  public static StreamExecutionEnvironment create(TdqEnv tdqEnv) {
     StreamExecutionEnvironment env;
-    if (local) {
+    if (tdqEnv.isLocal()) {
       env = createLocal();
     } else {
-      env = FlinkEnvUtils.prepare(args);
+      env = FlinkEnvUtils.prepare();
     }
     return env;
   }

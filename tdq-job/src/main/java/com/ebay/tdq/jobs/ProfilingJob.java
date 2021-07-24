@@ -41,17 +41,19 @@ public class ProfilingJob {
   protected TdqEnv tdqEnv;
   protected transient StreamExecutionEnvironment env;
 
-  public void start(String[] args) {
-    try {
-      // step0: prepare environment
-      env = FlinkEnvFactory.create(args, false);
-      tdqEnv = new TdqEnv(args);
+  protected void setup(String[] args) {
+    // step0: prepare environment
+    tdqEnv = new TdqEnv(args);
+    env = FlinkEnvFactory.create(tdqEnv);
+  }
 
+  protected void start() {
+    try {
       // step1: build data source
       List<DataStream<RawEvent>> rawEventDataStream = new BehaviorPathfinderSource(tdqEnv, env).build();
 
       // step2: normalize event to metric
-      DataStream<TdqMetric> normalizeOperator = normalizeMetric(env, rawEventDataStream);
+      DataStream<TdqMetric> normalizeOperator = normalizeMetric(rawEventDataStream);
 
       // step3: aggregate metric by key and window
       Map<String, SingleOutputStreamOperator<TdqMetric>> outputTags = reduceMetric(normalizeOperator);
@@ -63,6 +65,9 @@ public class ProfilingJob {
     } catch (Exception e) {
       log.error(e.getMessage(), e);
     }
+  }
+
+  protected void stop() {
   }
 
   // output metric by window
@@ -107,8 +112,7 @@ public class ProfilingJob {
   }
 
   // normalize event to metric
-  protected DataStream<TdqMetric> normalizeMetric(StreamExecutionEnvironment env,
-      List<DataStream<RawEvent>> rawEventDataStream) {
+  protected DataStream<TdqMetric> normalizeMetric(List<DataStream<RawEvent>> rawEventDataStream) {
 
     DataStream<TdqMetric> ans = normalizeMetric(rawEventDataStream.get(0), 0);
 
@@ -157,8 +161,13 @@ public class ProfilingJob {
   }
 
 
-  public static void main(String[] args) {
-    new ProfilingJob().start(args);
+  public void submit(String[] args) {
+    setup(args);
+    start();
+    stop();
   }
 
+  public static void main(String[] args) {
+    new ProfilingJob().submit(args);
+  }
 }

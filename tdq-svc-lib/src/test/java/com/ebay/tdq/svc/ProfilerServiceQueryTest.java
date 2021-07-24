@@ -1,7 +1,5 @@
 package com.ebay.tdq.svc;
 
-import static com.ebay.sojourner.common.env.EnvironmentUtils.get;
-
 import com.ebay.tdq.dto.QueryProfilerParam;
 import com.ebay.tdq.dto.QueryProfilerResult;
 import com.google.common.collect.Lists;
@@ -49,15 +47,15 @@ public class ProfilerServiceQueryTest {
   }
 
   public void createData(Client client) throws Exception {
-    val index = ServiceFactory.prontoEnv.getIndexPattern() + "2021-05-28";
+    val index = ServiceFactory.getProntoEnv().getIndexPattern() + "2021-05-28";
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics");
-    request.patterns(Lists.newArrayList(ServiceFactory.prontoEnv.getIndexPattern() + "*"));
+    request.patterns(Lists.newArrayList(ServiceFactory.getProntoEnv().getIndexPattern() + "*"));
     String source = IOUtils.toString(this.getClass().getResourceAsStream("/tdq-metrics-template.json"));
     request.source(source, XContentType.JSON);
     client.admin().indices().putTemplate(request).get();
 
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", "1", 4d, 7d))).get();
-    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "711", "2", 0d, 0d))).get();
+    client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "711", "2", 1d, 0d))).get();
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:04:00", "1677718", "1", 1d, 2d)))
         .get();
     client.index(Requests.indexRequest().index(index).source(getMap("2021-05-29 12:02:00", "711", "1", 1d, 2d))).get();
@@ -88,7 +86,6 @@ public class ProfilerServiceQueryTest {
     double a2 = m.get(DateUtils.parseDate("2021-05-29 12:04:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime());
     Assert.assertEquals(5d / 9d, a1, 0.0001);
     Assert.assertEquals(1d / 2d, a2, 0.0001);
-    ServiceFactory.close();
     elasticsearchResource.close();
   }
 }

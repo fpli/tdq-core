@@ -1,7 +1,7 @@
 package com.ebay.tdq.rules;
 
-import com.ebay.tdq.common.model.TdqAvroMetric;
-import com.ebay.tdq.common.model.TdqAvroMetric.Builder;
+import com.ebay.tdq.common.model.TdqMetricAvro;
+import com.ebay.tdq.common.model.TdqMetricAvro.Builder;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -127,8 +127,8 @@ public class TdqMetric implements Serializable {
     return json;
   }
 
-  public TdqAvroMetric toTdqAvroMetric() {
-    final Builder builder = TdqAvroMetric.newBuilder();
+  public TdqMetricAvro toTdqAvroMetric() {
+    final Builder builder = TdqMetricAvro.newBuilder();
 
     Map<String, String> tags = new HashMap<>();
     getTags().forEach((k, v) -> {

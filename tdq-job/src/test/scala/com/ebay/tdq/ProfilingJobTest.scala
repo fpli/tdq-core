@@ -10,12 +10,11 @@ import org.junit.Test
  */
 class SingleRuleSqlJobTest {
 
+  import TestMetricFactory._
+
   @Test
   def test_sum_by_page_id(): Unit = {
-    sum_by_page_id("test_sum_by_page_id").submit()
-  }
-
-  def sum_by_page_id(id: String): ProfilingJobIT = {
+    val id  = "test_sum_by_page_id"
     ProfilingJobIT(
       id = id,
       config =
@@ -72,10 +71,6 @@ class SingleRuleSqlJobTest {
   @Test
   def test_avg_casewhen(): Unit = {
     val id = "test_avg_casewhen"
-    test_avg_casewhen(id).submit()
-  }
-
-  def test_avg_casewhen(id: String) = {
     ProfilingJobIT(
       id = id,
       config =
@@ -106,7 +101,7 @@ class SingleRuleSqlJobTest {
            |              "expression": {
            |                "operator": "Expr",
            |                "config": {
-           |                  "text": "case when item is not null then 1.0 else 0.0 end"
+           |                  "text": "case when item is not null then 1 else 0 end"
            |                }
            |              }
            |            },
@@ -199,7 +194,7 @@ class SingleRuleSqlJobTest {
         getMetric(id, time = "2021-05-29 12:01:59", tagK = "domain", tagV = "NOTI", v = 1d),
         getMetric(id, time = "2021-05-29 12:01:59", tagK = "domain", tagV = "BID", v = 1d)
       )
-    ).submit()
+    )
   }
 
   @Test
@@ -259,7 +254,7 @@ class SingleRuleSqlJobTest {
         getMetric(id, "2021-05-29 12:03:59", tagK = "page_id", tagV = "2", 2d),
         getMetric(id, "2021-05-29 12:05:59", tagK = "page_id", tagV = "2", 1d)
       )
-    ).submit()
+    )
   }
 
   @Test
@@ -318,7 +313,7 @@ class SingleRuleSqlJobTest {
         getMetric(id, "2021-05-29 12:01:59", 4d - 1d),
         getMetric(id, "2021-05-29 12:03:59", 10d - 5d)
       )
-    ).submit()
+    )
   }
 
   @Test
@@ -379,10 +374,10 @@ class SingleRuleSqlJobTest {
         getRawEvent("2021-05-29 12:01:59", pageId = 2, tDuration = 10d)
       ),
       expects = List(
-        getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "1", 6d-1d),
-        getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "2", 10d-2d)
+        getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "1", 6d - 1d),
+        getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "2", 10d - 2d)
       )
-    ).submit()
+    )
   }
 
 
@@ -435,18 +430,21 @@ class SingleRuleSqlJobTest {
         getMetric(id, "2021-05-29 12:19:59", 2d),
         getMetric(id, "2021-05-29 12:29:59", 1d)
       )
-    ).submit()
+    )
   }
 
 
-  protected def getMetric(metricKey: String, time: String, v: Double): TdqMetric = {
+}
+
+object TestMetricFactory {
+  def getMetric(metricKey: String, time: String, v: Double): TdqMetric = {
     val t = DateUtils.parseDate(time, Array[String]("yyyy-MM-dd HH:mm:ss")).getTime
     new TdqMetric(metricKey, t)
       .genUID
       .setValue(v)
   }
 
-  protected def getMetric(metricKey: String, time: String, tagK: String, tagV: String, v: Double): TdqMetric = {
+  def getMetric(metricKey: String, time: String, tagK: String, tagV: String, v: Double): TdqMetric = {
     val t = DateUtils.parseDate(time, Array[String]("yyyy-MM-dd HH:mm:ss")).getTime
     new TdqMetric(metricKey, t)
       .putTag(tagK, tagV)

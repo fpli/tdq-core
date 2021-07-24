@@ -20,13 +20,11 @@ flink:
         flush-timeout: 5000
     sink:
       types:
-        normal-metric:
-          - pronto
+        normal-metric: pronto
         latency-metric:
         debug-log:
         sample-log:
-        exception-log:
-          - pronto
+        exception-log: pronto
 mysql:
   jdbc:
     url: jdbc:mysql://mysql-master-svc-qa.ido-ns.svc.57.tess.io:3306/tdq?verifyServerCertificate=false&useSSL=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf8

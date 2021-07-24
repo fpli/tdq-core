@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
@@ -36,31 +35,6 @@ public class EnvironmentUtils {
     }
   }
 
-  public static void print() {
-    // checkstyle.off: Regexp
-    String t = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss");
-    System.out.println("=============== " + t + " start =================");
-    Set<String> keys = new HashSet<>();
-    for (AbstractEnvironment propSource : PROP_SOURCES) {
-      keys.addAll(propSource.props.keySet());
-    }
-    Lists.newArrayList(keys).forEach(k -> {
-      if (k.equalsIgnoreCase("password")
-          || k.equalsIgnoreCase("p")
-          || k.equalsIgnoreCase("api-value")) {
-        System.out.println(k + "=******");
-      } else {
-        try {
-          System.out.println(k + "=" + get(k));
-        } catch (Exception e) {
-          log.error(e.getMessage(), e);
-        }
-      }
-    });
-    System.out.println("=============== " + t + " end =================\n\n");
-    // checkstyle.on: Regexp
-  }
-
   public static void activateProfile(String profile) {
     Preconditions.checkNotNull(profile);
 
@@ -72,6 +46,7 @@ public class EnvironmentUtils {
 
   public static void fromProperties(Properties properties) {
     Preconditions.checkNotNull(properties);
+    PROP_SOURCES.removeIf(src -> src instanceof ArgsSource);
     ArgsSource argsSource = new ArgsSource(properties);
     argsSource.sourceProps();
     PROP_SOURCES.add(argsSource);
@@ -96,6 +71,20 @@ public class EnvironmentUtils {
   public static List<String> getStringList(String key, String delimiter) {
     String[] stringArray = getStringArray(key, delimiter);
     return Lists.newArrayList(stringArray);
+  }
+
+  public static Set<String> getStringSet(String key, String delimiter) {
+    String[] stringArray = getStringArray(key, delimiter);
+    return Sets.newHashSet(stringArray);
+  }
+
+  public static Boolean getBooleanOrDefault(String key, boolean defaultValue) {
+    for (AbstractEnvironment propSource : PROP_SOURCES) {
+      if (propSource.contains(key)) {
+        return Boolean.valueOf(propSource.getProperty(key));
+      }
+    }
+    return defaultValue;
   }
 
   public static String getStringOrDefault(String key, String defaultValue) {
@@ -126,6 +115,10 @@ public class EnvironmentUtils {
     throw new IllegalStateException("Cannot find property " + key);
   }
 
+  public static List<String> getList(String key) {
+    return get(key, List.class);
+  }
+
   public static Set<String> getSet(String key) {
     List<String> list = get(key, List.class);
     if (list == null) {
@@ -135,7 +128,10 @@ public class EnvironmentUtils {
   }
 
   public static String getStringWithPattern(String key) {
-    String str = get(key);
+    String str = getStringOrDefault(key, "");
+    if (StringUtils.isBlank(str)) {
+      return str;
+    }
     Matcher m = VARIABLE_PATTERN.matcher(str);
     String s = "";
     if (m.find()) {

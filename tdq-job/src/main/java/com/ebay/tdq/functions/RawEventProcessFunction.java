@@ -73,6 +73,7 @@ public class RawEventProcessFunction extends ProcessFunction<RawEvent, TdqMetric
     metricGroup = new TdqMetricGroup(getRuntimeContext().getMetricGroup());
     localCache = new LocalCache(tdqEnv, metricGroup);
     metricGroup.gauge(localCache);
+    LkpManager.getInstance(tdqEnv.getJdbcEnv());
   }
 
   private void processElement0(RawEvent event,

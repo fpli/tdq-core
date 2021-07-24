@@ -11,7 +11,7 @@ class TdqMetricTest {
   @Test
   def test_toSeconds(): Unit = {
     val m = new TdqMetric(
-      "a", DateUtils.parseDate("2021-05-06 12:05:50", "yyyy-MM-dd HH:mm:ss").getTime
+      "a", DateUtils.parseDate("2021-05-06 12:05:00", "yyyy-MM-dd HH:mm:ss").getTime
     )
       .putTag("a1", "1")
       .putTag("a2", "2")

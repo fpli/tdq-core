@@ -1,6 +1,6 @@
 package com.ebay.tdq.sources;
 
-import com.ebay.tdq.common.model.TdqMetricAvro;
+import com.ebay.tdq.common.model.RawEventAvro;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -9,7 +9,7 @@ import org.apache.flink.streaming.api.functions.sink.filesystem.BucketAssigner;
 import org.apache.flink.streaming.api.functions.sink.filesystem.bucketassigners.SimpleVersionedStringSerializer;
 import org.apache.flink.util.Preconditions;
 
-public class TdqMetricDateTimeBucketAssigner implements BucketAssigner<TdqMetricAvro, String> {
+public class RawEventDateTimeBucketAssigner implements BucketAssigner<RawEventAvro, String> {
 
   private static final long serialVersionUID = 1L;
 
@@ -21,22 +21,22 @@ public class TdqMetricDateTimeBucketAssigner implements BucketAssigner<TdqMetric
 
   private transient DateTimeFormatter dateTimeFormatter;
 
-  public TdqMetricDateTimeBucketAssigner(ZoneId zoneId) {
+  public RawEventDateTimeBucketAssigner(ZoneId zoneId) {
     this(DEFAULT_FORMAT_STRING, zoneId);
   }
 
-  public TdqMetricDateTimeBucketAssigner(String formatString, ZoneId zoneId) {
+  public RawEventDateTimeBucketAssigner(String formatString, ZoneId zoneId) {
     this.formatString = Preconditions.checkNotNull(formatString);
     this.zoneId = Preconditions.checkNotNull(zoneId);
   }
 
   @Override
-  public String getBucketId(TdqMetricAvro metric, Context context) {
+  public String getBucketId(RawEventAvro element, Context context) {
     String defaultTsStr;
     if (dateTimeFormatter == null) {
       dateTimeFormatter = DateTimeFormatter.ofPattern(formatString).withZone(zoneId);
     }
-    defaultTsStr = dateTimeFormatter.format(Instant.ofEpochMilli(metric.getEventTime()));
+    defaultTsStr = dateTimeFormatter.format(Instant.ofEpochMilli(element.getEventTimestamp()));
     return "dt=" + defaultTsStr.substring(0, 8) + "/hr=" + defaultTsStr.substring(9);
   }
 
@@ -45,14 +45,4 @@ public class TdqMetricDateTimeBucketAssigner implements BucketAssigner<TdqMetric
     return SimpleVersionedStringSerializer.INSTANCE;
   }
 
-  @Override
-  public String toString() {
-    return "TdqMetricDateTimeBucketAssigner{"
-        + "formatString='"
-        + formatString
-        + '\''
-        + ", zoneId="
-        + zoneId
-        + '}';
-  }
 }

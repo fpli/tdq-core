@@ -107,7 +107,6 @@ public class FetchMetricsMsMtcServiceTest  {
   public void close(){
     if(elasticsearchResource!=null) {
       try {
-        ServiceFactory.close();
         elasticsearchResource.close();
       } catch (Exception e) {
         e.printStackTrace();

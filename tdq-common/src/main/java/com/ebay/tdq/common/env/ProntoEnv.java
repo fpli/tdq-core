@@ -26,8 +26,13 @@ public class ProntoEnv implements Serializable {
   private int port;
   private String username;
   private String password;
+  private final TimeZone timeZone;
 
   public ProntoEnv() {
+    this(TimeZone.getTimeZone("MST"));
+  }
+
+  public ProntoEnv(TimeZone timeZone) {
     this.indexPattern = getStringWithPattern("flink.app.source.pronto.index-pattern");
     this.latencyIndexPattern = getStringWithPattern("flink.app.source.pronto.latency-index-pattern");
 
@@ -39,10 +44,11 @@ public class ProntoEnv implements Serializable {
     this.port = getInteger("flink.app.source.pronto.port");
     this.username = get("flink.app.source.pronto.api-key");
     this.password = get("flink.app.source.pronto.api-value");
+    this.timeZone = timeZone;
   }
 
   public String getIndexDateSuffix(long ts) {
-    return FastDateFormat.getInstance("yyyy-MM-dd", TimeZone.getTimeZone("MST")).format(ts);
+    return FastDateFormat.getInstance("yyyy-MM-dd", timeZone).format(ts);
   }
 
   @Override

@@ -10,7 +10,7 @@ import org.junit.{Assert, Test}
 class EnvironmentUtilsTest {
   @Test
   def test(): Unit = {
-    TdqEnv.load(Array("--tdq-profile", "tdq-test"))
+    new TdqEnv(Array("--tdq-profile", "tdq-test"))
     Assert.assertTrue(
       EnvironmentUtils.getStringWithPattern("flink.app.source.hdfs."
         + com.ebay.tdq.common.env.TdqConstant.NORMAL_METRIC) == "target/test/metric/normal")

@@ -29,7 +29,6 @@ public class LkpManagerTest {
       try (InputStream is = LkpManagerTest.class.getResourceAsStream("/" + name + ".sql")) {
         String sql = IOUtils.toString(is);
         for (String s : sql.split(";")) {
-          System.out.println(s);
           if (StringUtils.isNotBlank(s)) {
             st.execute(s);
           }

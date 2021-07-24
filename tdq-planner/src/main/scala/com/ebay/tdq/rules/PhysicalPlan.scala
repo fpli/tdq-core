@@ -16,21 +16,21 @@ case class Transformation(name: String, filter: Expression = null, expr: Express
 case class PhysicalPlans(plans: Array[PhysicalPlan])
 
 case class PhysicalPlanContext(
-                                sampling: Boolean = false,
-                                samplingFraction: Double = 0.0001,
-                                prontoDropdownExpr: String,
-                                prontoFilterExpr: String
+  sampling: Boolean = false,
+  samplingFraction: Double = 0.0001,
+  prontoDropdownExpr: String,
+  prontoFilterExpr: String
 )
 
 case class PhysicalPlan(
-                         metricKey: String,
-                         window: Long,
-                         evaluation: Expression,
-                         aggregations: Array[Transformation],
-                         dimensions: Array[Transformation],
-                         filter: Expression,
-                         cxt: Option[PhysicalPlanContext] = None
-                       ) extends Serializable {
+  metricKey: String,
+  window: Long,
+  evaluation: Expression,
+  aggregations: Array[Transformation],
+  dimensions: Array[Transformation],
+  filter: Expression,
+  cxt: Option[PhysicalPlanContext] = None
+) extends Serializable {
   lazy val groupByEvent: DebugEvent = DebugEvent("groupBy")
   lazy val filterEvent: DebugEvent = DebugEvent("filter")
   lazy val aggrFilterEvent: DebugEvent = DebugEvent("aggr.filter")

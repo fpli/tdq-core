@@ -60,9 +60,9 @@ public class ProfilerServiceDropdownTest {
   }
 
   public void createData(Client client) throws Exception {
-    val index = ServiceFactory.prontoEnv.getIndexPattern() + "2021-05-28";
+    val index = ServiceFactory.getProntoEnv().getIndexPattern() + "2021-05-28";
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics");
-    request.patterns(Lists.newArrayList(ServiceFactory.prontoEnv.getIndexPattern() + "*"));
+    request.patterns(Lists.newArrayList(ServiceFactory.getProntoEnv().getIndexPattern() + "*"));
     String source = IOUtils.toString(this.getClass().getResourceAsStream("/tdq-metrics-template.json"));
     request.source(source, XContentType.JSON);
     client.admin().indices().putTemplate(request).get();
@@ -92,7 +92,6 @@ public class ProfilerServiceDropdownTest {
     Assert.assertEquals(2, records.size());
     Assert.assertEquals(2, records.get(0).getItems().size());
     Assert.assertEquals(1, records.get(1).getItems().size());
-    ServiceFactory.close();
     elasticsearchResource.close();
   }
 }

@@ -16,17 +16,22 @@ import scala.collection.JavaConverters._
 /**
  * @author juntzhang
  */
-object ProfilingJobLocalTest extends ProfilingJob {
-  def main(args: Array[String]): Unit = {
+case class ProfilingJobLocalTest() extends ProfilingJob {
+
+  import ProfilingJobIT.setupDB
+
+  override def setup(args: Array[String]): Unit = {
     // step0: prepare environment
-    tdqEnv = new TdqEnv
-    env = FlinkEnvFactory.create(null, true)
-    ProfilingJobIT.setupDB(IOUtils.toString(
+    super.setup(args)
+    setupDB(IOUtils.toString(
       classOf[ProfilingJob].getResourceAsStream("/metrics/q2/Qualification Age - NQT.json")))
+  }
+
+  override def start(): Unit = {
     // step1: build data source
     val rawEventDataStream = buildSource(env)
     // step2: normalize event to metric
-    val normalizeOperator = normalizeMetric(env, rawEventDataStream)
+    val normalizeOperator = normalizeMetric(rawEventDataStream)
     // step3: aggregate metric by key and window
     val outputTags = reduceMetric(normalizeOperator)
     // step4: output metric by window
@@ -82,5 +87,14 @@ object ProfilingJobLocalTest extends ProfilingJob {
       //      .uid("raw-event-watermark-src1")
       //      .slotSharingGroup("src1")
     )
+  }
+}
+
+object ProfilingJobLocalTest {
+  def main(args: Array[String]): Unit = {
+    ProfilingJobLocalTest().submit(Array[String](
+      "--flink.app.local", "true",
+      "--flink.app.sink.types.normal-metric", "console"
+    ))
   }
 }

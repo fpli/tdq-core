@@ -1,8 +1,5 @@
 package com.ebay.tdq.utils;
 
-import static com.ebay.sojourner.common.env.EnvironmentUtils.get;
-import static com.ebay.sojourner.common.env.EnvironmentUtils.getInteger;
-import static com.ebay.sojourner.common.env.EnvironmentUtils.getSet;
 import static com.ebay.tdq.common.env.TdqConstant.DEBUG_LOG;
 import static com.ebay.tdq.common.env.TdqConstant.EXCEPTION_LOG;
 import static com.ebay.tdq.common.env.TdqConstant.LATENCY_METRIC;
@@ -23,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.TimeZone;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -32,6 +30,7 @@ import org.apache.flink.util.OutputTag;
 
 /**
  * todo need classify by application.yml
+ *
  * @author juntzhang
  */
 @Data
@@ -43,7 +42,7 @@ public class TdqEnv implements Serializable {
   private final KafkaSourceEnv kafkaSourceEnv;
   private final JdbcEnv jdbcEnv;
   private final ProntoEnv prontoEnv;
-  private final HdfsEnv hdfsConfig;
+  private final HdfsEnv hdfsEnv;
   private int localCombineFlushTimeout;
   private int localCombineQueueSize;
   private int metric1stAggrPartitions;
@@ -53,12 +52,14 @@ public class TdqEnv implements Serializable {
   private Long metric1stAggrWMilli;
   private Double srcSampleFraction;
   private final Long tdqConfigRefreshInterval = 60L;
+  private boolean local;
 
   private final Map<Long, OutputTag<TdqMetric>> outputTagMap = new HashMap<>();
   private final OutputTag<TdqErrorMsg> exceptionOutputTag;
   private final OutputTag<TdqSampleData> sampleOutputTag;
   private final OutputTag<TdqSampleData> debugOutputTag;
   private final OutputTag<TdqMetric> eventLatencyOutputTag;
+  private final TimeZone timeZone;
 
   private Map<String, Set<String>> sinkTypes = new HashMap<>();
 
@@ -68,52 +69,54 @@ public class TdqEnv implements Serializable {
 
   public TdqEnv(String[] args) {
     load(args);
-    this.profile = get("flink.app.profile");
-    this.jobName = get(Property.FLINK_APP_NAME) + "-" + getProfile();
+
+    this.timeZone = TimeZone.getTimeZone("MST"); // ZoneId.of("-7")
+    this.local = EnvironmentUtils.getBooleanOrDefault("flink.app.local", false);
+    this.profile = EnvironmentUtils.get("flink.app.profile");
+    this.jobName = EnvironmentUtils.get(Property.FLINK_APP_NAME) + "-" + getProfile();
 
     this.kafkaSourceEnv = new KafkaSourceEnv();
-    this.localCombineFlushTimeout = getInteger("flink.app.advance.local-combine.flush-timeout");
-    this.localCombineQueueSize = getInteger("flink.app.advance.local-combine.queue-size");
-    this.metric1stAggrPartitions = getInteger("flink.app.parallelism.metric-1st-aggr-partitions");
-    this.metric1stAggrParallelism = getInteger("flink.app.parallelism.metric-1st-aggr");
-    this.metric2ndAggrParallelism = getInteger("flink.app.parallelism.metric-2nd-aggr");
-    this.metric1stAggrW = get("flink.app.window.metric-1st-aggr");
-    this.metric1stAggrWMilli = DateUtils.toSeconds(get("flink.app.window.metric-1st-aggr"));
-    this.srcSampleFraction = Double.valueOf(get("flink.app.source.sample-fraction"));
+    this.localCombineFlushTimeout = EnvironmentUtils.getInteger("flink.app.advance.local-combine.flush-timeout");
+    this.localCombineQueueSize = EnvironmentUtils.getInteger("flink.app.advance.local-combine.queue-size");
+    this.metric1stAggrPartitions = EnvironmentUtils.getInteger("flink.app.parallelism.metric-1st-aggr-partitions");
+    this.metric1stAggrParallelism = EnvironmentUtils.getInteger("flink.app.parallelism.metric-1st-aggr");
+    this.metric2ndAggrParallelism = EnvironmentUtils.getInteger("flink.app.parallelism.metric-2nd-aggr");
+    this.metric1stAggrW = EnvironmentUtils.get("flink.app.window.metric-1st-aggr");
+    this.metric1stAggrWMilli = DateUtils.toSeconds(EnvironmentUtils.get("flink.app.window.metric-1st-aggr"));
+    this.srcSampleFraction = Double.valueOf(EnvironmentUtils.get("flink.app.source.sample-fraction"));
 
-    this.sinkTypes.put(NORMAL_METRIC, getSet("flink.app.sink.types." + NORMAL_METRIC));
-    this.sinkTypes.put(LATENCY_METRIC, getSet("flink.app.sink.types." + LATENCY_METRIC));
-    this.sinkTypes.put(DEBUG_LOG, getSet("flink.app.sink.types." + DEBUG_LOG));
-    this.sinkTypes.put(SAMPLE_LOG, getSet("flink.app.sink.types." + SAMPLE_LOG));
-    this.sinkTypes.put(EXCEPTION_LOG, getSet("flink.app.sink.types." + EXCEPTION_LOG));
+    this.sinkTypes.put(NORMAL_METRIC, EnvironmentUtils.getStringSet("flink.app.sink.types.normal-metric", ","));
+    this.sinkTypes.put(LATENCY_METRIC, EnvironmentUtils.getStringSet("flink.app.sink.types.latency-metric", ","));
+    this.sinkTypes.put(DEBUG_LOG, EnvironmentUtils.getStringSet("flink.app.sink.types.debug-log", ","));
+    this.sinkTypes.put(SAMPLE_LOG, EnvironmentUtils.getStringSet("flink.app.sink.types.sample-log", ","));
+    this.sinkTypes.put(EXCEPTION_LOG, EnvironmentUtils.getStringSet("flink.app.sink.types.exception-log", ","));
 
     this.exceptionOutputTag = new OutputTag<>("tdq-exception", TypeInformation.of(TdqErrorMsg.class));
     this.sampleOutputTag = new OutputTag<>("tdq-sample", TypeInformation.of(TdqSampleData.class));
     this.debugOutputTag = new OutputTag<>("tdq-debug", TypeInformation.of(TdqSampleData.class));
     this.eventLatencyOutputTag = new OutputTag<>("tdq-event-latency", TypeInformation.of(TdqMetric.class));
 
-    for (String tag : get("flink.app.window.supports").split(",")) {
+    for (String tag : EnvironmentUtils.getStringList("flink.app.window.supports", ",")) {
       Long seconds = DateUtils.toSeconds(tag);
       outputTagMap.put(seconds,
           new OutputTag<>(String.valueOf(seconds), TypeInformation.of(TdqMetric.class)));
     }
-    this.prontoEnv = new ProntoEnv();
+    this.prontoEnv = new ProntoEnv(this.timeZone);
     this.jdbcEnv = new JdbcEnv();
-    this.hdfsConfig = new HdfsEnv();
+    this.hdfsEnv = new HdfsEnv();
     // checkstyle.off: Regexp
     System.out.println(this.toString());
     // checkstyle.on: Regexp
     log.warn(this.toString());
   }
 
-  public static void load(String[] args) {
+  private static void load(String[] args) {
     ParameterTool parameterTool = ParameterTool.fromArgs(args);
     String profile = parameterTool.get(EnvironmentUtils.PROFILE);
     if (StringUtils.isNotBlank(profile)) {
       EnvironmentUtils.activateProfile(profile);
     }
     EnvironmentUtils.fromProperties(parameterTool.getProperties());
-    EnvironmentUtils.print();
   }
 
   public boolean isNormalMetricSink(String type) {

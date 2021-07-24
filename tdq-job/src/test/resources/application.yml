@@ -61,16 +61,11 @@ flink:
         exception-log: target/${flink.app.profile}/log/exception/
     sink:
       types:
-        normal-metric:
-          - console
-        latency-metric:
-          - console
-        debug-log:
-          - console
-        sample-log:
-          - console
-        exception-log:
-          - console
+        normal-metric: console
+        latency-metric: console
+        debug-log: console
+        sample-log: console
+        exception-log: console
     advance:
       watermark:
         out-of-orderless: 5min

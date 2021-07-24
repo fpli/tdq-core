@@ -12,23 +12,23 @@ import org.apache.avro.message.SchemaStore;
 
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
-public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 4315761177038461524L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"TdqAvroMetric\",\"namespace\":\"com.ebay.tdq.common.model\",\"fields\":[{\"name\":\"metricId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"metric key\"},{\"name\":\"metricName\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"metric key\"},{\"name\":\"eventTime\",\"type\":\"long\",\"doc\":\"event time\"},{\"name\":\"processTime\",\"type\":\"long\",\"doc\":\"process time\"},{\"name\":\"tags\",\"type\":[\"null\",{\"type\":\"map\",\"values\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"avro.java.string\":\"String\"}]},{\"name\":\"values\",\"type\":{\"type\":\"map\",\"values\":\"double\",\"avro.java.string\":\"String\"}}]}");
+public class TdqMetricAvro extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
+  private static final long serialVersionUID = 4220754531943398740L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"TdqMetricAvro\",\"namespace\":\"com.ebay.tdq.common.model\",\"fields\":[{\"name\":\"metricId\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"metric key\"},{\"name\":\"metricName\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"doc\":\"metric key\"},{\"name\":\"eventTime\",\"type\":\"long\",\"doc\":\"event time\"},{\"name\":\"processTime\",\"type\":\"long\",\"doc\":\"process time\"},{\"name\":\"tags\",\"type\":[\"null\",{\"type\":\"map\",\"values\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"avro.java.string\":\"String\"}]},{\"name\":\"values\",\"type\":{\"type\":\"map\",\"values\":\"double\",\"avro.java.string\":\"String\"}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
 
-  private static final BinaryMessageEncoder<TdqAvroMetric> ENCODER =
-      new BinaryMessageEncoder<TdqAvroMetric>(MODEL$, SCHEMA$);
+  private static final BinaryMessageEncoder<TdqMetricAvro> ENCODER =
+      new BinaryMessageEncoder<TdqMetricAvro>(MODEL$, SCHEMA$);
 
-  private static final BinaryMessageDecoder<TdqAvroMetric> DECODER =
-      new BinaryMessageDecoder<TdqAvroMetric>(MODEL$, SCHEMA$);
+  private static final BinaryMessageDecoder<TdqMetricAvro> DECODER =
+      new BinaryMessageDecoder<TdqMetricAvro>(MODEL$, SCHEMA$);
 
   /**
    * Return the BinaryMessageDecoder instance used by this class.
    */
-  public static BinaryMessageDecoder<TdqAvroMetric> getDecoder() {
+  public static BinaryMessageDecoder<TdqMetricAvro> getDecoder() {
     return DECODER;
   }
 
@@ -36,17 +36,17 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
    * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link SchemaStore}.
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
    */
-  public static BinaryMessageDecoder<TdqAvroMetric> createDecoder(SchemaStore resolver) {
-    return new BinaryMessageDecoder<TdqAvroMetric>(MODEL$, SCHEMA$, resolver);
+  public static BinaryMessageDecoder<TdqMetricAvro> createDecoder(SchemaStore resolver) {
+    return new BinaryMessageDecoder<TdqMetricAvro>(MODEL$, SCHEMA$, resolver);
   }
 
-  /** Serializes this TdqAvroMetric to a ByteBuffer. */
+  /** Serializes this TdqMetricAvro to a ByteBuffer. */
   public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
     return ENCODER.encode(this);
   }
 
-  /** Deserializes a TdqAvroMetric from a ByteBuffer. */
-  public static TdqAvroMetric fromByteBuffer(
+  /** Deserializes a TdqMetricAvro from a ByteBuffer. */
+  public static TdqMetricAvro fromByteBuffer(
       java.nio.ByteBuffer b) throws java.io.IOException {
     return DECODER.decode(b);
   }
@@ -67,7 +67,7 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
    * to their default values from the schema.  If that is desired then
    * one should use <code>newBuilder()</code>.
    */
-  public TdqAvroMetric() {}
+  public TdqMetricAvro() {}
 
   /**
    * All-args constructor.
@@ -78,7 +78,7 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
    * @param tags The new value for tags
    * @param values The new value for values
    */
-  public TdqAvroMetric(java.lang.String metricId, java.lang.String metricName, java.lang.Long eventTime, java.lang.Long processTime, java.util.Map<java.lang.String,java.lang.String> tags, java.util.Map<java.lang.String,java.lang.Double> values) {
+  public TdqMetricAvro(java.lang.String metricId, java.lang.String metricName, java.lang.Long eventTime, java.lang.Long processTime, java.util.Map<java.lang.String,java.lang.String> tags, java.util.Map<java.lang.String,java.lang.Double> values) {
     this.metricId = metricId;
     this.metricName = metricName;
     this.eventTime = eventTime;
@@ -216,36 +216,36 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
   }
 
   /**
-   * Creates a new TdqAvroMetric RecordBuilder.
-   * @return A new TdqAvroMetric RecordBuilder
+   * Creates a new TdqMetricAvro RecordBuilder.
+   * @return A new TdqMetricAvro RecordBuilder
    */
-  public static com.ebay.tdq.common.model.TdqAvroMetric.Builder newBuilder() {
-    return new com.ebay.tdq.common.model.TdqAvroMetric.Builder();
+  public static com.ebay.tdq.common.model.TdqMetricAvro.Builder newBuilder() {
+    return new com.ebay.tdq.common.model.TdqMetricAvro.Builder();
   }
 
   /**
-   * Creates a new TdqAvroMetric RecordBuilder by copying an existing Builder.
+   * Creates a new TdqMetricAvro RecordBuilder by copying an existing Builder.
    * @param other The existing builder to copy.
-   * @return A new TdqAvroMetric RecordBuilder
+   * @return A new TdqMetricAvro RecordBuilder
    */
-  public static com.ebay.tdq.common.model.TdqAvroMetric.Builder newBuilder(com.ebay.tdq.common.model.TdqAvroMetric.Builder other) {
-    return new com.ebay.tdq.common.model.TdqAvroMetric.Builder(other);
+  public static com.ebay.tdq.common.model.TdqMetricAvro.Builder newBuilder(com.ebay.tdq.common.model.TdqMetricAvro.Builder other) {
+    return new com.ebay.tdq.common.model.TdqMetricAvro.Builder(other);
   }
 
   /**
-   * Creates a new TdqAvroMetric RecordBuilder by copying an existing TdqAvroMetric instance.
+   * Creates a new TdqMetricAvro RecordBuilder by copying an existing TdqMetricAvro instance.
    * @param other The existing instance to copy.
-   * @return A new TdqAvroMetric RecordBuilder
+   * @return A new TdqMetricAvro RecordBuilder
    */
-  public static com.ebay.tdq.common.model.TdqAvroMetric.Builder newBuilder(com.ebay.tdq.common.model.TdqAvroMetric other) {
-    return new com.ebay.tdq.common.model.TdqAvroMetric.Builder(other);
+  public static com.ebay.tdq.common.model.TdqMetricAvro.Builder newBuilder(com.ebay.tdq.common.model.TdqMetricAvro other) {
+    return new com.ebay.tdq.common.model.TdqMetricAvro.Builder(other);
   }
 
   /**
-   * RecordBuilder for TdqAvroMetric instances.
+   * RecordBuilder for TdqMetricAvro instances.
    */
-  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<TdqAvroMetric>
-    implements org.apache.avro.data.RecordBuilder<TdqAvroMetric> {
+  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<TdqMetricAvro>
+    implements org.apache.avro.data.RecordBuilder<TdqMetricAvro> {
 
     /** metric key */
     private java.lang.String metricId;
@@ -267,7 +267,7 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(com.ebay.tdq.common.model.TdqAvroMetric.Builder other) {
+    private Builder(com.ebay.tdq.common.model.TdqMetricAvro.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.metricId)) {
         this.metricId = data().deepCopy(fields()[0].schema(), other.metricId);
@@ -296,10 +296,10 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
     }
 
     /**
-     * Creates a Builder by copying an existing TdqAvroMetric instance
+     * Creates a Builder by copying an existing TdqMetricAvro instance
      * @param other The existing instance to copy.
      */
-    private Builder(com.ebay.tdq.common.model.TdqAvroMetric other) {
+    private Builder(com.ebay.tdq.common.model.TdqMetricAvro other) {
             super(SCHEMA$);
       if (isValidValue(fields()[0], other.metricId)) {
         this.metricId = data().deepCopy(fields()[0].schema(), other.metricId);
@@ -342,7 +342,7 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
       * @param value The value of 'metricId'.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.TdqAvroMetric.Builder setMetricId(java.lang.String value) {
+    public com.ebay.tdq.common.model.TdqMetricAvro.Builder setMetricId(java.lang.String value) {
       validate(fields()[0], value);
       this.metricId = value;
       fieldSetFlags()[0] = true;
@@ -364,7 +364,7 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
       * metric key
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.TdqAvroMetric.Builder clearMetricId() {
+    public com.ebay.tdq.common.model.TdqMetricAvro.Builder clearMetricId() {
       metricId = null;
       fieldSetFlags()[0] = false;
       return this;
@@ -385,7 +385,7 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
       * @param value The value of 'metricName'.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.TdqAvroMetric.Builder setMetricName(java.lang.String value) {
+    public com.ebay.tdq.common.model.TdqMetricAvro.Builder setMetricName(java.lang.String value) {
       validate(fields()[1], value);
       this.metricName = value;
       fieldSetFlags()[1] = true;
@@ -407,7 +407,7 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
       * metric key
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.TdqAvroMetric.Builder clearMetricName() {
+    public com.ebay.tdq.common.model.TdqMetricAvro.Builder clearMetricName() {
       metricName = null;
       fieldSetFlags()[1] = false;
       return this;
@@ -428,7 +428,7 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
       * @param value The value of 'eventTime'.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.TdqAvroMetric.Builder setEventTime(long value) {
+    public com.ebay.tdq.common.model.TdqMetricAvro.Builder setEventTime(long value) {
       validate(fields()[2], value);
       this.eventTime = value;
       fieldSetFlags()[2] = true;
@@ -450,7 +450,7 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
       * event time
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.TdqAvroMetric.Builder clearEventTime() {
+    public com.ebay.tdq.common.model.TdqMetricAvro.Builder clearEventTime() {
       fieldSetFlags()[2] = false;
       return this;
     }
@@ -470,7 +470,7 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
       * @param value The value of 'processTime'.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.TdqAvroMetric.Builder setProcessTime(long value) {
+    public com.ebay.tdq.common.model.TdqMetricAvro.Builder setProcessTime(long value) {
       validate(fields()[3], value);
       this.processTime = value;
       fieldSetFlags()[3] = true;
@@ -492,7 +492,7 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
       * process time
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.TdqAvroMetric.Builder clearProcessTime() {
+    public com.ebay.tdq.common.model.TdqMetricAvro.Builder clearProcessTime() {
       fieldSetFlags()[3] = false;
       return this;
     }
@@ -510,7 +510,7 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
       * @param value The value of 'tags'.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.TdqAvroMetric.Builder setTags(java.util.Map<java.lang.String,java.lang.String> value) {
+    public com.ebay.tdq.common.model.TdqMetricAvro.Builder setTags(java.util.Map<java.lang.String,java.lang.String> value) {
       validate(fields()[4], value);
       this.tags = value;
       fieldSetFlags()[4] = true;
@@ -530,7 +530,7 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
       * Clears the value of the 'tags' field.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.TdqAvroMetric.Builder clearTags() {
+    public com.ebay.tdq.common.model.TdqMetricAvro.Builder clearTags() {
       tags = null;
       fieldSetFlags()[4] = false;
       return this;
@@ -549,7 +549,7 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
       * @param value The value of 'values'.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.TdqAvroMetric.Builder setValues(java.util.Map<java.lang.String,java.lang.Double> value) {
+    public com.ebay.tdq.common.model.TdqMetricAvro.Builder setValues(java.util.Map<java.lang.String,java.lang.Double> value) {
       validate(fields()[5], value);
       this.values = value;
       fieldSetFlags()[5] = true;
@@ -569,7 +569,7 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
       * Clears the value of the 'values' field.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.TdqAvroMetric.Builder clearValues() {
+    public com.ebay.tdq.common.model.TdqMetricAvro.Builder clearValues() {
       values = null;
       fieldSetFlags()[5] = false;
       return this;
@@ -577,9 +577,9 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
 
     @Override
     @SuppressWarnings("unchecked")
-    public TdqAvroMetric build() {
+    public TdqMetricAvro build() {
       try {
-        TdqAvroMetric record = new TdqAvroMetric();
+        TdqMetricAvro record = new TdqMetricAvro();
         record.metricId = fieldSetFlags()[0] ? this.metricId : (java.lang.String) defaultValue(fields()[0]);
         record.metricName = fieldSetFlags()[1] ? this.metricName : (java.lang.String) defaultValue(fields()[1]);
         record.eventTime = fieldSetFlags()[2] ? this.eventTime : (java.lang.Long) defaultValue(fields()[2]);
@@ -594,8 +594,8 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumWriter<TdqAvroMetric>
-    WRITER$ = (org.apache.avro.io.DatumWriter<TdqAvroMetric>)MODEL$.createDatumWriter(SCHEMA$);
+  private static final org.apache.avro.io.DatumWriter<TdqMetricAvro>
+    WRITER$ = (org.apache.avro.io.DatumWriter<TdqMetricAvro>)MODEL$.createDatumWriter(SCHEMA$);
 
   @Override public void writeExternal(java.io.ObjectOutput out)
     throws java.io.IOException {
@@ -603,8 +603,8 @@ public class TdqAvroMetric extends org.apache.avro.specific.SpecificRecordBase i
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumReader<TdqAvroMetric>
-    READER$ = (org.apache.avro.io.DatumReader<TdqAvroMetric>)MODEL$.createDatumReader(SCHEMA$);
+  private static final org.apache.avro.io.DatumReader<TdqMetricAvro>
+    READER$ = (org.apache.avro.io.DatumReader<TdqMetricAvro>)MODEL$.createDatumReader(SCHEMA$);
 
   @Override public void readExternal(java.io.ObjectInput in)
     throws java.io.IOException {

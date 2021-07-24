@@ -26,43 +26,38 @@ import org.elasticsearch.client.RestHighLevelClient;
 @Slf4j
 public class ServiceFactory {
 
-  protected static ProntoEnv prontoEnv;
+  private static volatile ServiceFactory serviceFactory;
+  private ProntoEnv prontoEnv;
+  private RestHighLevelClient restHighLevelClient;
+  private RuleEngineService ruleEngineService;
+  private ProfilerService profilerService;
+  private FetchMetricsService fetchMetricsService;
 
-  static {
-    synchronized (ServiceFactory.class) {
-      String profile = System.getenv(EnvironmentUtils.PROFILE);
-      if (StringUtils.isNotBlank(profile)) {
-        EnvironmentUtils.activateProfile(profile);
+  private ServiceFactory() {
+    initialize();
+  }
+
+  private void initialize() {
+    if (restHighLevelClient != null) {
+      try {
+        restHighLevelClient.close();
+      } catch (IOException e) {
+        log.info(e.getMessage(), e);
       }
-      prontoEnv = new ProntoEnv();
     }
+
+    String profile = System.getenv(EnvironmentUtils.PROFILE);
+    if (StringUtils.isNotBlank(profile)) {
+      EnvironmentUtils.activateProfile(profile);
+    }
+    prontoEnv = new ProntoEnv();
+    restHighLevelClient = restHighLevelClient();
+    ruleEngineService = new RuleEngineServiceImpl();
+    profilerService = new ProfilerServiceImpl(restHighLevelClient);
+    fetchMetricsService = new FetchMetricsMsMtcServiceImpl(restHighLevelClient);
   }
 
-  private static final RuleEngineService ruleEngineService = new RuleEngineServiceImpl();
-
-  private static final ProfilerService profilerService = new ProfilerServiceImpl(restHighLevelClient());
-
-  private static final FetchMetricsService fetchMetricsService =
-      new FetchMetricsMsMtcServiceImpl(restHighLevelClient());
-
-  public static RuleEngineService getRuleEngine() {
-    return ruleEngineService;
-  }
-
-  public static ProfilerService getProfiler() {
-    return profilerService;
-  }
-
-  @Deprecated
-  public static FetchMetricsService getFetchMetricsService() {
-    return fetchMetricsService;
-  }
-
-  public static void close() throws IOException {
-    ((ProfilerServiceImpl) profilerService).client.close();
-  }
-
-  protected static RestHighLevelClient restHighLevelClient() {
+  protected RestHighLevelClient restHighLevelClient() {
     RestClientBuilder builder = RestClient.builder(new HttpHost(
         prontoEnv.getHostname(), prontoEnv.getPort(), prontoEnv.getSchema()));
     if (StringUtils.isNotBlank(prontoEnv.getHostname())) {
@@ -80,5 +75,34 @@ public class ServiceFactory {
     RestHighLevelClient client = new RestHighLevelClient(builder);
     log.info("restHighLevelClient is initialized.");
     return client;
+  }
+
+
+  private static ServiceFactory getInstance() {
+    if (serviceFactory == null) {
+      synchronized (ServiceFactory.class) {
+        if (serviceFactory == null) {
+          serviceFactory = new ServiceFactory();
+        }
+      }
+    }
+    return serviceFactory;
+  }
+
+  public static RuleEngineService getRuleEngine() {
+    return getInstance().ruleEngineService;
+  }
+
+  public static ProfilerService getProfiler() {
+    return getInstance().profilerService;
+  }
+
+  @Deprecated
+  public static FetchMetricsService getFetchMetricsService() {
+    return getInstance().fetchMetricsService;
+  }
+
+  public static ProntoEnv getProntoEnv() {
+    return getInstance().prontoEnv;
   }
 }

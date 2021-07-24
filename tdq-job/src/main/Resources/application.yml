@@ -7,6 +7,8 @@ flink:
       metric-1st-aggr: 200
       metric-1st-aggr-partitions: 48
       metric-2nd-aggr: 2
+      hdfs:
+        raw-data: 50
     window:
       metric-1st-aggr: 1min
       supports: 1min,5min,10min,30min,1h,1d
@@ -48,25 +50,19 @@ flink:
         api-key: 76361a1177564b72bdba1ddb23d17c58
         api-value: 1tIU7GQSADe4bCGGifWLfYYJSZGA8Szlc3ZWDMnd3gMhk43XPLUpw9Mv5viYQZ73
       hdfs:
-        normal-metric: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/metric/normal/
-        latency-metric: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/metric/latency/
-        debug-log: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/log/debug/
-        sample-log: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/log/sample/
-        exception-log: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/log/exception/
+        normal-metric: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/metric/normal
+        latency-metric: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/metric/latency
+        debug-log: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/log/debug
+        sample-log: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/log/sample
+        exception-log: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/log/exception
+        raw-data: hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/raw-data
     sink:
       types:
-        normal-metric:
-          - pronto
-          - hdfs
-        latency-metric:
-          - pronto
-          - hdfs
-        debug-log:
-          - pronto
-        sample-log:
-          - pronto
-        exception-log:
-          - pronto
+        normal-metric: pronto,hdfs
+        latency-metric: pronto,hdfs
+        debug-log: pronto
+        sample-log: pronto
+        exception-log: pronto
     advance:
       watermark:
         out-of-orderless: 5min

@@ -6,11 +6,12 @@
       "metric-name": "common_metric",
       "comment": "Marketing Event Volume",
       "config": {
-        "pronto-dropdown": "tags.page_id.raw in (2547208, 2483445)"
+        "pronto-dropdown": "tags.page_id.raw in (2547208, 2483445)",
+        "pronto-filter": "tags.page_id.raw in (2547208, 2483445)"
       },
       "expr": "total_cnt",
       "filter": "page_id in (2547208, 2483445)",
-      "dimensions": ["domain", "site_id"],
+      "dimensions": ["site_id"],
       "transformations": [
         {"alias": "soj_tag_p",        "expr": "soj_nvl('p')"},
         {"alias": "soj_tag_t",        "expr": "soj_nvl('t')"},

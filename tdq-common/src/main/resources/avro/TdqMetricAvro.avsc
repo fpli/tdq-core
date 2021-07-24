@@ -1,6 +1,6 @@
 {
   "type": "record",
-  "name": "TdqAvroMetric",
+  "name": "TdqMetricAvro",
   "namespace": "com.ebay.tdq.common.model",
   "fields": [
     { "name": "metricId",    "type": [ "null", "string" ],                                      "doc": "metric key"   },
