@@ -2,6 +2,7 @@ package com.ebay.tdq.common.env;
 
 import static com.ebay.sojourner.common.env.EnvironmentUtils.getStringWithPattern;
 
+import java.io.Serializable;
 import java.util.TimeZone;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,7 @@ import org.apache.commons.lang3.time.FastDateFormat;
  */
 @Slf4j
 @Getter
-public class SinkEnv {
+public class SinkEnv implements Serializable {
 
   private final TimeZone timeZone;
 
@@ -36,29 +37,29 @@ public class SinkEnv {
   public SinkEnv() {
     this.timeZone = TimeZone.getTimeZone("MST"); // ZoneId.of("-7")
 
-    this.normalMetricPath = getStringWithPattern("flink.app.sink.pronto.normal-metric.hdfs-path");
+    this.normalMetricPath = getStringWithPattern("flink.app.sink.normal-metric.hdfs-path");
     this.normalMetricProntoIndexPattern = getStringWithPattern(
-        "flink.app.sink.pronto.normal-metric.pronto-index-pattern");
+        "flink.app.sink.normal-metric.pronto-index-pattern");
     this.normalMetricStdName = getStringWithPattern(
-        "flink.app.sink.pronto.normal-metric.std-name");
+        "flink.app.sink.normal-metric.std-name");
 
     this.latencyMetricPath = getStringWithPattern("flink.app.sink.pronto.latency-metric.hdfs-path");
     this.latencyMetricProntoIndexPattern = getStringWithPattern(
-        "flink.app.sink.pronto.latency-metric.pronto-index-pattern");
+        "flink.app.sink.latency-metric.pronto-index-pattern");
     this.latencyMetricStdName = getStringWithPattern(
-        "flink.app.sink.pronto.latency-metric.std-name");
+        "flink.app.sink.latency-metric.std-name");
 
     this.sampleLogProntoIndexPattern = getStringWithPattern(
-        "flink.app.sink.pronto.sample-log.pronto-index-pattern");
+        "flink.app.sink.sample-log.pronto-index-pattern");
     this.sampleLogStdName = getStringWithPattern(
-        "flink.app.sink.pronto.sample-log.std-name");
+        "flink.app.sink.sample-log.std-name");
 
     this.exceptionLogProntoIndexPattern = getStringWithPattern(
-        "flink.app.sink.pronto.exception-log.pronto-index-pattern");
+        "flink.app.sink.exception-log.pronto-index-pattern");
     this.exceptionLogStdName = getStringWithPattern(
-        "flink.app.sink.pronto.exception-log.std-name");
+        "flink.app.sink.exception-log.std-name");
 
-    this.rawDataPath = getStringWithPattern("flink.app.sink.pronto.raw-data.hdfs-path");
+    this.rawDataPath = getStringWithPattern("flink.app.sink.raw-data.hdfs-path");
 
   }
 

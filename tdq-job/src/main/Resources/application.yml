@@ -45,7 +45,7 @@ flink:
       sample-fraction: 0
       from-timestamp: 0
       out-of-orderless: 5min
-      idle-source-timeout: 5min
+      idle-timeout: 5min
 
 pronto:
   scheme: https

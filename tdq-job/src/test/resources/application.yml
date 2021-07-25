@@ -39,7 +39,7 @@ flink:
       sample-fraction: 0
       from-timestamp: 0
       out-of-orderless: 3min
-      idle-source-timeout: 3min
+      idle-timeout: 3min
     sink:
       normal-metric:
         std-name: normal

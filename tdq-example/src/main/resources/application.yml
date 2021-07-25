@@ -1,7 +1,5 @@
 # This file is not normally required, only if you want to change es env
 pronto:
-  index-pattern: tdq-metrics-local-
-  latency-index-pattern: tdq-metrics-latency-local-
   scheme: http
   hostname: localhost
   port: 9200

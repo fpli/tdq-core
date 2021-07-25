@@ -3,6 +3,7 @@ package com.ebay.tdq.common.env;
 import static com.ebay.sojourner.common.env.EnvironmentUtils.get;
 import static com.ebay.sojourner.common.env.EnvironmentUtils.getInteger;
 
+import com.ebay.sojourner.common.env.EnvironmentUtils;
 import java.io.Serializable;
 import java.util.StringJoiner;
 import lombok.Data;
@@ -20,11 +21,13 @@ public class ProntoEnv implements Serializable {
   private String password;
 
   public ProntoEnv() {
-    this.schema = get("pronto.scheme");
-    this.hostname = get("pronto.hostname");
-    this.port = getInteger("pronto.port");
-    this.username = get("pronto.api-key");
-    this.password = get("pronto.api-value");
+    if (EnvironmentUtils.contains("pronto.hostname")) {
+      this.schema = get("pronto.scheme");
+      this.hostname = get("pronto.hostname");
+      this.port = getInteger("pronto.port");
+      this.username = get("pronto.api-key");
+      this.password = get("pronto.api-value");
+    }
   }
 
 

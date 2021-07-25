@@ -1,7 +1,5 @@
 package com.ebay.tdq.common.env;
 
-import static com.ebay.sojourner.common.env.EnvironmentUtils.get;
-
 import com.ebay.sojourner.common.env.EnvironmentUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +18,7 @@ public class KafkaSourceEnv extends SourceEnv {
 
   public KafkaSourceEnv() {
     super();
-    String fromTimestamp = get("flink.app.source.from-timestamp");
+    String fromTimestamp = EnvironmentUtils.getStringOrDefault("flink.app.source.from-timestamp", "0");
     if (fromTimestamp.equalsIgnoreCase("earliest")) {
       startupMode = "EARLIEST";
     } else if (Long.parseLong(fromTimestamp) == 0) {

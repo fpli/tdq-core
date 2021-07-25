@@ -1,4 +1,4 @@
-package com.ebay.tdq.job.sinks;
+package com.ebay.tdq.sinks;
 
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.TdqMetric;

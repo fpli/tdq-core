@@ -1,17 +1,12 @@
 flink:
   app:
     profile: test
-    source:
-      pronto:
-        index-pattern: tdq.${flink.app.profile}.metric.normal.
-        latency-index-pattern: tdq.${flink.app.profile}.metric.latency.
-        debug-index-pattern: tdq.${flink.app.profile}.log.debug.
-        sample-index-pattern: tdq.${flink.app.profile}.log.sample.
-        exception-index-pattern: tdq.${flink.app.profile}.log.exception.
-        scheme: http
-        hostname: localhost
-        port: 9200
-        api-key: ""
-        api-value: ""
-a:
-  b:
+    sink:
+      normal-metric:
+        pronto-index-pattern: tdq.${flink.app.profile}.metric.normal.
+pronto:
+  scheme: http
+  hostname: localhost
+  port: 9200
+  api-key: ""
+  api-value: ""

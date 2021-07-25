@@ -1,7 +1,7 @@
 package com.ebay.tdq.common.env;
 
-import static com.ebay.sojourner.common.env.EnvironmentUtils.get;
 
+import com.ebay.sojourner.common.env.EnvironmentUtils;
 import java.io.Serializable;
 import java.util.StringJoiner;
 import lombok.Data;
@@ -18,10 +18,12 @@ public class JdbcEnv implements Serializable {
   private String url;
 
   public JdbcEnv() {
-    this.user = get("mysql.jdbc.u");
-    this.password = get("mysql.jdbc.p");
-    this.driverClassName = get("mysql.jdbc.driver-class-name");
-    this.url = get("mysql.jdbc.url");
+    if (EnvironmentUtils.contains("mysql.jdbc.url")) {
+      this.url = EnvironmentUtils.get("mysql.jdbc.url");
+      this.driverClassName = EnvironmentUtils.get("mysql.jdbc.driver-class-name");
+      this.user = EnvironmentUtils.get("mysql.jdbc.u");
+      this.password = EnvironmentUtils.get("mysql.jdbc.p");
+    }
   }
 
   @Override

@@ -7,10 +7,10 @@ import java.util.{HashMap => JMap, List => JList}
 import com.ebay.sojourner.common.model.RawEvent
 import com.ebay.sojourner.flink.connector.kafka.SojSerializableTimestampAssigner
 import com.ebay.tdq.common.env.JdbcEnv
-import com.ebay.tdq.job.sinks.MemorySink
 import com.ebay.tdq.jobs.ProfilingJob
 import com.ebay.tdq.planner.LkpManager
 import com.ebay.tdq.rules.TdqMetric
+import com.ebay.tdq.sinks.MemorySink
 import com.google.common.collect.Lists
 import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.StringUtils
@@ -181,7 +181,7 @@ object ProfilingJobIT {
     val it = new EsProfilingJobIT(id, config, events, expects)
     it.submit(Array[String](
       "--flink.app.local", "true",
-      "--flink.app.sink.types.normal-metric", "pronto"
+      "--flink.app.sink.normal-metric.pronto-index-pattern", "tdq.${flink.app.profile}.metric.normal."
     ))
     it
   }
@@ -191,7 +191,7 @@ object ProfilingJobIT {
     println("+++++++================" + id)
     it.submit(Array[String](
       "--flink.app.local", "true",
-      "--flink.app.sink.types.normal-metric", "console"
+      "--flink.app.sink.normal-metric.std-name", "normal"
     ))
     it
   }

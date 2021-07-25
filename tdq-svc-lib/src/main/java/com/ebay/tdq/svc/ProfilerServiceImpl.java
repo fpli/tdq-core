@@ -1,7 +1,5 @@
 package com.ebay.tdq.svc;
 
-import static com.ebay.sojourner.common.env.EnvironmentUtils.getStringWithPattern;
-
 import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;

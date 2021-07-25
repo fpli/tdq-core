@@ -62,6 +62,15 @@ public class EnvironmentUtils {
     throw new IllegalStateException("Cannot find property " + key);
   }
 
+  public static boolean contains(String key) {
+    for (AbstractEnvironment propSource : PROP_SOURCES) {
+      if (propSource.contains(key)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public static String[] getStringArray(String key, String delimiter) {
     String s = get(key);
     delimiter = "\\s*" + delimiter + "\\s*";
@@ -164,4 +173,5 @@ public class EnvironmentUtils {
     }
     return m.replaceAll(s);
   }
+
 }

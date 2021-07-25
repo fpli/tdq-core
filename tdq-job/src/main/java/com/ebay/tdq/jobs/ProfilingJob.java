@@ -1,8 +1,7 @@
 package com.ebay.tdq.jobs;
 
-import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getStringOrDefault;
-
 import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.functions.RawEventProcessFunction;
 import com.ebay.tdq.functions.TdqMetric1stAggrProcessWindowFunction;
 import com.ebay.tdq.functions.TdqMetric2ndAggrProcessWindowFunction;
@@ -13,7 +12,6 @@ import com.ebay.tdq.sources.BehaviorPathfinderSource;
 import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.FlinkEnvFactory;
 import com.ebay.tdq.utils.TdqContext;
-import com.ebay.tdq.common.env.TdqEnv;
 import com.google.common.collect.Maps;
 import java.time.Duration;
 import java.util.List;
@@ -85,7 +83,7 @@ public class ProfilingJob {
     String uid = "1st_aggr_w_" + tdqEnv.getMetric1stAggrW();
     SingleOutputStreamOperator<TdqMetric> unifyDataStream = normalizeOperator
         .keyBy((KeySelector<TdqMetric, String>) m -> m.getPartition() + "#" + m.getTagId())
-        .window(TumblingEventTimeWindows.of(Time.seconds(tdqEnv.getMetric1stAggrWMilli())))
+        .window(TumblingEventTimeWindows.of(Time.seconds(DateUtils.toSeconds(tdqEnv.getMetric1stAggrW()))))
         .sideOutputLateData(tdqCxt.getEventLatencyOutputTag())
         .aggregate(new TdqMetricAggregateFunction(),
             new TdqMetric1stAggrProcessWindowFunction(tdqCxt.getOutputTagMap()))
@@ -135,15 +133,13 @@ public class ProfilingJob {
         .slotSharingGroup(slotSharingGroup)
         .setParallelism(parallelism);
 
-    long orderless = DateUtils.toSeconds(getStringOrDefault("flink.app.advance.watermark.out-of-orderless", "3min"));
-    long timeout = DateUtils.toSeconds(getStringOrDefault("flink.app.advance.watermark.idle-source-timeout", "10min"));
     SerializableTimestampAssigner<TdqMetric> assigner =
         (SerializableTimestampAssigner<TdqMetric>) (event, timestamp) -> event.getEventTime();
 
     WatermarkStrategy<TdqMetric> watermarkStrategy = WatermarkStrategy
-        .<TdqMetric>forBoundedOutOfOrderness(Duration.ofSeconds(orderless))
+        .<TdqMetric>forBoundedOutOfOrderness(Duration.ofSeconds(tdqEnv.getKafkaSourceEnv().getOutOfOrderless()))
         .withTimestampAssigner(assigner)
-        .withIdleness(Duration.ofSeconds(timeout));
+        .withIdleness(Duration.ofSeconds(tdqEnv.getKafkaSourceEnv().getIdleTimeout()));
     TdqTimestampsAndWatermarksOperator<TdqMetric> operator =
         new TdqTimestampsAndWatermarksOperator<>(env.clean(watermarkStrategy));
 
