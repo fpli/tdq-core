@@ -52,7 +52,9 @@ case class ProfilingJobLocalTest() extends ProfilingJob {
         val event = JsonUtils.parseObject(json, classOf[RawEvent])
         event
       })
-    } finally if (is != null) is.close()
+    } finally {
+      if (is != null) is.close()
+    }
   }
 
 

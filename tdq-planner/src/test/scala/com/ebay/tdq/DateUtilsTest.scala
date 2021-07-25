@@ -1,11 +1,9 @@
 package com.ebay.tdq
 
-import com.ebay.sojourner.common.util.{LkpManager, SojTimestamp}
+import com.ebay.sojourner.common.util.SojTimestamp
 import com.ebay.tdq.utils.DateUtils._
 import org.apache.commons.lang3.time.{DateFormatUtils, FastDateFormat}
 import org.junit.Test
-
-import scala.collection.JavaConverters.asScalaSetConverter
 
 /**
  * @author juntzhang
@@ -23,8 +21,6 @@ class DateUtilsTest {
 
   @Test
   def test_toSeconds(): Unit = {
-    LkpManager.getInstance().getItmPages.asScala.foreach(println)
-
     assert(toSeconds("1day") == 86400L)
     assert(toSeconds("1d") == 86400L)
     assert(toSeconds("10min") == 600L)

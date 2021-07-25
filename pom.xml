@@ -466,13 +466,6 @@
         <scope>test</scope>
       </dependency>
 
-      <dependency>
-        <groupId>io.flinkspector</groupId>
-        <artifactId>flinkspector-datastream_2.11</artifactId>
-        <version>0.9.4</version>
-        <scope>test</scope>
-      </dependency>
-
       <!-- joda time -->
       <dependency>
         <groupId>joda-time</groupId>
@@ -876,7 +869,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>${surefire.plugin.version}</version>
       </plugin>
     </plugins>
   </reporting>

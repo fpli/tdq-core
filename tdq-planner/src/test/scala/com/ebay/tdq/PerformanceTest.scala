@@ -12,24 +12,132 @@ import com.ebay.tdq.utils.{DateUtils, JsonUtils}
 import org.apache.commons.beanutils.PropertyUtils
 import org.junit.{BeforeClass, Test}
 
-import scala.collection.mutable
-
-object PerformanceDebug {
+object PerformanceTest {
   @BeforeClass
   def setup(): Unit = {
     LkpManagerTest.init()
   }
 
-  val m = new mutable.HashMap[String, Int]()
+  def main(args: Array[String]): Unit = {
+    val event = JsonUtils.parseObject(
+      """
+        |{
+        |  "sojA": {
+        |    "saucxgdpry": "false",
+        |    "flgs": "AA**",
+        |    "ac": "",
+        |    "efam": "SAND",
+        |    "saucxgdprct": "false",
+        |    "sameid": "553fdf2676434ee79f1734396858f3e6",
+        |    "saty": "1",
+        |    "saebaypid": "100562",
+        |    "g": "643d11771790a368a886f55bffe97ca9",
+        |    "sapcxkw": "Apple+Care+Protection+Plan+For+Apple+Display+-+PC+%2B+Mac+MA517LL%2FA",
+        |    "h": "77",
+        |    "schemaversion": "3",
+        |    "salv": "5",
+        |    "ciid": "PRHBljc*",
+        |    "p": "2367355",
+        |    "sapcxcat": "58058%2C18793%2C182",
+        |    "saiid": "818d4ee4-9fa4-4a67-a385-6fbe49ce69c4",
+        |    "t": "15",
+        |    "cflgs": "gA**",
+        |    "samslid": "",
+        |    "eactn": "AUCT",
+        |    "pn": "2",
+        |    "rq": "5d796a0415b9b360",
+        |    "pagename": "SandPage"
+        |  },
+        |  "sojK": {
+        |    "ciid": "PRHBljc*"
+        |  },
+        |  "sojC": {},
+        |  "clientData": {
+        |    "forwardFor": "10.198.144.70",
+        |    "script": "sand",
+        |    "server": "sand.stratus.ebay.com",
+        |    "colo": "RNO",
+        |    "agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+        |    "remoteIP": "66.249.73.25",
+        |    "corrId": "5d796a0415b9b360",
+        |    "contentLength": "253",
+        |    "nodeId": "e58de20d193a6862",
+        |    "requestGuid": "179643d1-1bf0-ad39-6377-3e24fdc48564",
+        |    "urlQueryString": "/itm/203008530552?chn=ps&mkevt=1&mkcid=28",
+        |    "referrer": "",
+        |    "rlogid": "t6pdhc9%3Ftilvgig%28q%3Ek%7Dt*w%60ut3542-179643d11bf-0x23a7",
+        |    "encoding": "",
+        |    "tname": "sand.v1",
+        |    "tpool": "r1sand",
+        |    "ttype": "",
+        |    "tmachine": "10.211.150.55",
+        |    "tstamp": "1620884394432",
+        |    "tstatus": "",
+        |    "tduration": "2",
+        |    "tpayload": "corr_id_%3D5d796a0415b9b360%26node_id%3De58de20d193a6862%26REQUEST_GUID%3D179643d1-1bf0-ad39-6377-3e24fdc48564%26logid%3Dt6pdhc9%253Ftilvgig%2528q%253Ek%257Dt%2Aw%2560ut3542-179643d11bf-0x23a7"
+        |  },
+        |  "ingestTime": 1620884394460,
+        |  "eventTimestamp": 3829847994432000
+        |}
+        |""".stripMargin, classOf[RawEvent])
 
-  def add(k: String): Unit = {
-    m.put(k, m.getOrElse(k, 0) + 1)
-  }
+    """
+      |forwardFor
+      |script
+      |server
+      |TMachine
+      |TStamp
+      |TName
+      |t
+      |colo
+      |pool
+      |agent
+      |remoteIP
+      |TType
+      |TPool
+      |TStatus
+      |corrId
+      |contentLength
+      |nodeId
+      |requestGuid
+      |urlQueryString
+      |referrer
+      |rlogid
+      |acceptEncoding
+      |TDuration
+      |encoding
+      |TPayload
+      |""".stripMargin.split("\n").filter(_.nonEmpty).foreach(k => {
+      println(PropertyUtils.getProperty(event, s"clientData.$k"))
+    })
 
-  override def toString: String = {
-    m.filter(_._2 > 0).toString
+    // this performance is good
+    var s = System.currentTimeMillis()
+    (0 to 1000000).foreach(_ => {
+      PropertyUtils.getProperty(event, "clientData.remoteIP")
+    })
+    println(System.currentTimeMillis() - s)
+
+    // refection exception will so bad
+    //    s = System.currentTimeMillis()
+    //    (0 to 1000000).foreach(_ => {
+    //      try {
+    //        PropertyUtils.getProperty(event, "clientData.remoteIP1")
+    //      } catch {
+    //        case _: NoSuchMethodException =>
+    //      }
+    //    })
+    //    println(System.currentTimeMillis() - s)
+
+    // this is bad
+    s = System.currentTimeMillis()
+    (0 to 1000000).foreach(_ => {
+      SojUtils.getTagValueStr(event, "remoteIP")
+    })
+    println(System.currentTimeMillis() - s)
   }
 }
+
 class PerformanceTest {
   @Test
   def testExprCallCache(): Unit = {
@@ -161,123 +269,4 @@ class PerformanceTest {
   }
 }
 
-object PerformanceTest {
-  def main(args: Array[String]): Unit = {
-    val event = JsonUtils.parseObject(
-      """
-        |{
-        |  "sojA": {
-        |    "saucxgdpry": "false",
-        |    "flgs": "AA**",
-        |    "ac": "",
-        |    "efam": "SAND",
-        |    "saucxgdprct": "false",
-        |    "sameid": "553fdf2676434ee79f1734396858f3e6",
-        |    "saty": "1",
-        |    "saebaypid": "100562",
-        |    "g": "643d11771790a368a886f55bffe97ca9",
-        |    "sapcxkw": "Apple+Care+Protection+Plan+For+Apple+Display+-+PC+%2B+Mac+MA517LL%2FA",
-        |    "h": "77",
-        |    "schemaversion": "3",
-        |    "salv": "5",
-        |    "ciid": "PRHBljc*",
-        |    "p": "2367355",
-        |    "sapcxcat": "58058%2C18793%2C182",
-        |    "saiid": "818d4ee4-9fa4-4a67-a385-6fbe49ce69c4",
-        |    "t": "15",
-        |    "cflgs": "gA**",
-        |    "samslid": "",
-        |    "eactn": "AUCT",
-        |    "pn": "2",
-        |    "rq": "5d796a0415b9b360",
-        |    "pagename": "SandPage"
-        |  },
-        |  "sojK": {
-        |    "ciid": "PRHBljc*"
-        |  },
-        |  "sojC": {},
-        |  "clientData": {
-        |    "forwardFor": "10.198.144.70",
-        |    "script": "sand",
-        |    "server": "sand.stratus.ebay.com",
-        |    "colo": "RNO",
-        |    "agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
-        |    "remoteIP": "66.249.73.25",
-        |    "corrId": "5d796a0415b9b360",
-        |    "contentLength": "253",
-        |    "nodeId": "e58de20d193a6862",
-        |    "requestGuid": "179643d1-1bf0-ad39-6377-3e24fdc48564",
-        |    "urlQueryString": "/itm/203008530552?chn=ps&mkevt=1&mkcid=28",
-        |    "referrer": "",
-        |    "rlogid": "t6pdhc9%3Ftilvgig%28q%3Ek%7Dt*w%60ut3542-179643d11bf-0x23a7",
-        |    "encoding": "",
-        |    "tname": "sand.v1",
-        |    "tpool": "r1sand",
-        |    "ttype": "",
-        |    "tmachine": "10.211.150.55",
-        |    "tstamp": "1620884394432",
-        |    "tstatus": "",
-        |    "tduration": "2",
-        |    "tpayload": "corr_id_%3D5d796a0415b9b360%26node_id%3De58de20d193a6862%26REQUEST_GUID%3D179643d1-1bf0-ad39-6377-3e24fdc48564%26logid%3Dt6pdhc9%253Ftilvgig%2528q%253Ek%257Dt%2Aw%2560ut3542-179643d11bf-0x23a7"
-        |  },
-        |  "ingestTime": 1620884394460,
-        |  "eventTimestamp": 3829847994432000
-        |}
-        |""".stripMargin, classOf[RawEvent])
 
-    """
-      |forwardFor
-      |script
-      |server
-      |TMachine
-      |TStamp
-      |TName
-      |t
-      |colo
-      |pool
-      |agent
-      |remoteIP
-      |TType
-      |TPool
-      |TStatus
-      |corrId
-      |contentLength
-      |nodeId
-      |requestGuid
-      |urlQueryString
-      |referrer
-      |rlogid
-      |acceptEncoding
-      |TDuration
-      |encoding
-      |TPayload
-      |""".stripMargin.split("\n").filter(_.nonEmpty).foreach(k=>{
-      println(PropertyUtils.getProperty(event, s"clientData.$k"))
-    })
-
-    // this performance is good
-    var s = System.currentTimeMillis()
-    (0 to 1000000).foreach(_ => {
-      PropertyUtils.getProperty(event, "clientData.remoteIP")
-    })
-    println(System.currentTimeMillis() - s)
-
-    // refection exception will so bad
-    //    s = System.currentTimeMillis()
-    //    (0 to 1000000).foreach(_ => {
-    //      try {
-    //        PropertyUtils.getProperty(event, "clientData.remoteIP1")
-    //      } catch {
-    //        case _: NoSuchMethodException =>
-    //      }
-    //    })
-    //    println(System.currentTimeMillis() - s)
-
-    // this is bad
-    s = System.currentTimeMillis()
-    (0 to 1000000).foreach(_ => {
-      SojUtils.getTagValueStr(event, "remoteIP")
-    })
-    println(System.currentTimeMillis() - s)
-  }
-}

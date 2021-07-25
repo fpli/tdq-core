@@ -1,10 +1,11 @@
 package com.ebay.tdq
 
-import com.ebay.tdq.common.env.TdqEnv
-import com.ebay.tdq.rules.{PhysicalPlan, TdqMetric}
-import com.ebay.tdq.utils.{LocalCache, TdqMetricGroup}
+import com.ebay.tdq.common.env.{JdbcEnv, TdqEnv}
+import com.ebay.tdq.config.TdqConfig
+import com.ebay.tdq.rules.{PhysicalPlan, ProfilingSqlParser, TdqMetric}
+import com.ebay.tdq.utils.{DateUtils, LocalCache, TdqMetricGroup}
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.lang.time.DateFormatUtils
-import org.apache.commons.lang3.time.DateUtils
 import org.junit.Test
 
 import scala.collection.mutable
@@ -85,7 +86,18 @@ class LocalCacheTest {
       |  ]
       |}
       |""".stripMargin
-  val physicalPlan: PhysicalPlan = PhysicalPlanFactory.getPhysicalPlan(config)
+  val physicalPlan: PhysicalPlan = getPhysicalPlan(config)
+
+  def getPhysicalPlan(json: String): PhysicalPlan = {
+    val objectMapper = new ObjectMapper
+    val config: TdqConfig = objectMapper.reader.forType(classOf[TdqConfig]).readValue(json)
+    val parser = new ProfilingSqlParser(
+      config.getRules.get(0).getProfilers.get(0),
+      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString),
+      new JdbcEnv()
+    )
+    parser.parsePlan()
+  }
 
   @Test
   def test(): Unit = {
@@ -121,7 +133,7 @@ class LocalCacheTest {
     }
 
     (1 to 100000).foreach { i =>
-      val m = new TdqMetric("a", DateUtils.parseDate("2021-05-06 12:05:50", "yyyy-MM-dd HH:mm:ss").getTime + 60000L * (Math.abs(new Random().nextInt()) % 10))
+      val m = new TdqMetric("a", DateUtils.parseDate("2021-05-06 12:05:50").getTime + 60000L * (Math.abs(new Random().nextInt()) % 10))
         .putExpr("p1", 1d)
         .genUID()
       run(m)
@@ -135,7 +147,7 @@ class LocalCacheTest {
       }
     }
     Thread.sleep(1000)
-    run(new TdqMetric("a", DateUtils.parseDate("2021-05-06 12:05:50", "yyyy-MM-dd HH:mm:ss").getTime + 3600000L)
+    run(new TdqMetric("a", DateUtils.parseDate("2021-05-06 12:05:50").getTime + 3600000L)
       .putExpr("p1", 1d)
       .genUID())
     println("=raw_data=")

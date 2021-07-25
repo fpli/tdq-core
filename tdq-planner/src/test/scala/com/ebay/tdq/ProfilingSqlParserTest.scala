@@ -7,32 +7,20 @@ import com.ebay.sojourner.common.util.SojTimestamp
 import com.ebay.tdq.common.env.JdbcEnv
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.planner.LkpManagerTest
-import com.ebay.tdq.rules.{PhysicalPlan, ProfilingSqlParser}
+import com.ebay.tdq.rules.ProfilingSqlParser
 import com.ebay.tdq.utils.{DateUtils, JsonUtils}
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.{BeforeClass, Test}
 
 /**
  * @author juntzhang
  */
-object PhysicalPlanFactory {
+object ProfilingSqlParserTest {
   @BeforeClass
   def setup(): Unit = {
     LkpManagerTest.init()
   }
-
-  def getPhysicalPlan(json: String): PhysicalPlan = {
-    val objectMapper = new ObjectMapper
-    val config: TdqConfig = objectMapper.reader.forType(classOf[TdqConfig]).readValue(json)
-    val parser = new ProfilingSqlParser(
-      config.getRules.get(0).getProfilers.get(0),
-      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString),
-      new JdbcEnv()
-    )
-    parser.parsePlan()
-  }
-
 }
+
 
 class ProfilingSqlParserTest {
 
@@ -466,6 +454,4 @@ class ProfilingSqlParserTest {
     println(metric)
 
   }
-
-
 }

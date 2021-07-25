@@ -15,6 +15,12 @@ public class DateUtils {
     return parseDate(str, zone).getTime();
   }
 
+  public static Date parseDate(String str) throws ParseException {
+    return FastDateFormat
+        .getInstance("yyyy-MM-dd HH:mm:ss")
+        .parse(str);
+  }
+
   public static Date parseDate(String str, TimeZone zone) throws ParseException {
     return FastDateFormat
         .getInstance("yyyy-MM-dd HH:mm:ss", zone)
