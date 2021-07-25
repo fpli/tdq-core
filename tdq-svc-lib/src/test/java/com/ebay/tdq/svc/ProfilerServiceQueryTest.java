@@ -2,6 +2,7 @@ package com.ebay.tdq.svc;
 
 import com.ebay.tdq.dto.QueryProfilerParam;
 import com.ebay.tdq.dto.QueryProfilerResult;
+import com.ebay.tdq.utils.DateUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -9,11 +10,11 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.elasticsearch.action.admin.indices.template.put.PutIndexTemplateRequest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.Requests;
@@ -27,6 +28,8 @@ import org.junit.Test;
 @Slf4j
 public class ProfilerServiceQueryTest {
 
+  TimeZone zone = ServiceFactory.getTdqEnv().getSinkEnv().getTimeZone();
+
   public HashMap<String, Object> getMap(String event_time, String pageId, String siteId, Double itm_valid_cnt,
       Double itm_cnt) throws ParseException {
     HashMap<String, Object> json = Maps.newHashMap();
@@ -39,8 +42,9 @@ public class ProfilerServiceQueryTest {
     tags.put("page_id", pageId);
     tags.put("site", siteId);
 
+    long t = DateUtils.parseDateTime(event_time, zone);
     json.put("metric_key", "global_mandatory_tag_item_rate1");
-    json.put("event_time", DateUtils.parseDate(event_time, new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime());
+    json.put("event_time", t);
     json.put("tags", tags);
     json.put("expr", expr);
     return json;
@@ -48,7 +52,7 @@ public class ProfilerServiceQueryTest {
 
   public void createData(Client client) throws Exception {
     val pattern = ServiceFactory.getTdqEnv().getSinkEnv().getNormalMetricProntoIndexPattern();
-    val index = pattern + "2021-05-28";
+    val index = pattern + "2021-05-29";
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics");
     request.patterns(Lists.newArrayList(pattern + "*"));
     String source = IOUtils.toString(this.getClass().getResourceAsStream("/tdq-metrics-template.json"));
@@ -73,8 +77,10 @@ public class ProfilerServiceQueryTest {
     dimensions.put("page_id", Sets.newHashSet("711", "1677718"));
     QueryProfilerParam param = new QueryProfilerParam(
         RuleEngineServiceTest.get("global_mandatory_tag_item_rate1"),
-        DateUtils.parseDate("2021-05-29 12:02:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime(),
-        DateUtils.parseDate("2021-05-29 12:04:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime(),
+        com.ebay.tdq.utils.DateUtils
+            .parseDateTime("2021-05-29 12:02:00", zone),
+        com.ebay.tdq.utils.DateUtils
+            .parseDateTime("2021-05-29 12:04:00", zone),
         dimensions
     );
 
@@ -83,8 +89,8 @@ public class ProfilerServiceQueryTest {
     Map<Long, Double> m =
         result.getRecords().stream().collect(Collectors.toMap(QueryProfilerResult.Record::getTimestamp,
             QueryProfilerResult.Record::getValue));
-    double a1 = m.get(DateUtils.parseDate("2021-05-29 12:02:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime());
-    double a2 = m.get(DateUtils.parseDate("2021-05-29 12:04:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime());
+    double a1 = m.get(DateUtils.parseDateTime("2021-05-29 12:02:00", zone));
+    double a2 = m.get(DateUtils.parseDateTime("2021-05-29 12:04:00", zone));
     Assert.assertEquals(5d / 9d, a1, 0.0001);
     Assert.assertEquals(1d / 2d, a2, 0.0001);
     elasticsearchResource.close();

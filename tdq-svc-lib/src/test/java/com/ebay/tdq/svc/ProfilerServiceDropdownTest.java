@@ -2,6 +2,7 @@ package com.ebay.tdq.svc;
 
 import com.ebay.tdq.dto.QueryDropdownParam;
 import com.ebay.tdq.dto.QueryDropdownResult;
+import com.ebay.tdq.utils.DateUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.text.ParseException;
@@ -11,7 +12,6 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.elasticsearch.action.admin.indices.template.put.PutIndexTemplateRequest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.Requests;
@@ -52,8 +52,9 @@ public class ProfilerServiceDropdownTest {
 
     tags.put("site", siteId);
 
+    long t = DateUtils.parseDateTime(event_time, ServiceFactory.getTdqEnv().getSinkEnv().getTimeZone());
     json.put("metric_key", "global_mandatory_tag_item_rate2");
-    json.put("event_time", DateUtils.parseDate(event_time, new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime());
+    json.put("event_time", t);
     json.put("tags", tags);
     json.put("expr", expr);
     return json;
@@ -61,7 +62,7 @@ public class ProfilerServiceDropdownTest {
 
   public void createData(Client client) throws Exception {
     val pattern = ServiceFactory.getTdqEnv().getSinkEnv().getNormalMetricProntoIndexPattern();
-    val index = pattern + "2021-05-28";
+    val index = pattern + "2021-05-29";
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics");
     request.patterns(Lists.newArrayList(pattern + "*"));
     String source = IOUtils.toString(this.getClass().getResourceAsStream("/tdq-metrics-template.json"));
@@ -84,8 +85,8 @@ public class ProfilerServiceDropdownTest {
     createData(elasticsearchResource.getClient());
     QueryDropdownParam param = new QueryDropdownParam(
         RuleEngineServiceTest.get("global_mandatory_tag_item_rate2"),
-        DateUtils.parseDate("2021-05-29 12:02:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime(),
-        DateUtils.parseDate("2021-05-29 12:04:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime()
+        DateUtils.parseDateTime("2021-05-29 12:02:00", ServiceFactory.getTdqEnv().getSinkEnv().getTimeZone()),
+        DateUtils.parseDateTime("2021-05-29 12:04:00", ServiceFactory.getTdqEnv().getSinkEnv().getTimeZone())
     );
 
     QueryDropdownResult result = ServiceFactory.getProfiler().dropdown(param);

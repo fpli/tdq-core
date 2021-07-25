@@ -49,7 +49,8 @@ public class LocalCache {
     if (curr == null) {
       return;
     }
-    metricGroup.inc(curr.getMetricKey() + "_" + DateUtils.getMinBuckets(curr.getEventTime(), 5));
+    metricGroup.inc(curr.getMetricKey() + "_" + DateUtils.getMinBuckets(curr.getEventTime(), 5,tdqEnv.getSinkEnv()
+        .getTimeZone()));
     TdqMetric last = cache.get(curr.getTagIdWithEventTime());
     if (last != null) {
       curr = plan.merge(last, curr);

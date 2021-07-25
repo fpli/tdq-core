@@ -1,8 +1,7 @@
 package com.ebay.tdq.functions;
 
-import com.ebay.tdq.rules.TdqMetric;
-import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.common.env.TdqEnv;
+import com.ebay.tdq.rules.TdqMetric;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -43,12 +42,6 @@ public class ProntoSinkFunction implements ElasticsearchSinkFunction<TdqMetric> 
 
   @Override
   public void process(TdqMetric m, RuntimeContext runtimeContext, RequestIndexer indexer) {
-    if (m.getValues() != null && m.getValues().get("p1") != null) {
-      inc(runtimeContext,
-          m.getMetricKey() + "_" + DateUtils.getMinBuckets(m.getEventTime(), 5),
-          (long) (double) m.getValues().get("p1")
-      );
-    }
     try {
       indexer.add(createIndexRequest(m));
     } catch (Throwable e) {

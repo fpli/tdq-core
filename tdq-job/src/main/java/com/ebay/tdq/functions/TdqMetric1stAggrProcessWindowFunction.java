@@ -1,7 +1,6 @@
 package com.ebay.tdq.functions;
 
 import com.ebay.tdq.rules.TdqMetric;
-import com.ebay.tdq.utils.DateUtils;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +18,7 @@ import org.apache.flink.util.OutputTag;
 @Slf4j
 public class TdqMetric1stAggrProcessWindowFunction
     extends ProcessWindowFunction<TdqMetric, TdqMetric, String, TimeWindow> {
+
   public final Map<Long, OutputTag<TdqMetric>> tagMap;
   private transient Map<String, Counter> counterMap;
   private transient MetricGroup group;
@@ -39,7 +39,7 @@ public class TdqMetric1stAggrProcessWindowFunction
   @Override
   public void open(Configuration parameters) throws Exception {
     counterMap = new HashMap<>();
-    group      = this.getRuntimeContext().getMetricGroup().addGroup("tdq1");
+    group = this.getRuntimeContext().getMetricGroup().addGroup("tdq1");
     super.open(parameters);
   }
 
@@ -50,10 +50,6 @@ public class TdqMetric1stAggrProcessWindowFunction
   }
 
   void collect(TdqMetric m, Context context) {
-    if (m.getValues() != null && m.getValues().get("p1") != null) {
-      inc(DateUtils.getMinBuckets(m.getEventTime(), 5) + "_" + m.getMetricKey(),
-          (long) (double) m.getValues().get("p1"));
-    }
     OutputTag<TdqMetric> outputTag = tagMap.get(m.getWindow());
     if (outputTag != null) {
       context.output(outputTag, m);

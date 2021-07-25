@@ -6,14 +6,20 @@ import com.ebay.sojourner.common.model.{ClientData, RawEvent}
 import com.ebay.sojourner.common.util.SojUtils
 import com.ebay.tdq.common.env.JdbcEnv
 import com.ebay.tdq.config.TdqConfig
+import com.ebay.tdq.planner.LkpManagerTest
 import com.ebay.tdq.rules.ProfilingSqlParser
 import com.ebay.tdq.utils.{DateUtils, JsonUtils}
 import org.apache.commons.beanutils.PropertyUtils
-import org.junit.Test
+import org.junit.{BeforeClass, Test}
 
 import scala.collection.mutable
 
 object PerformanceDebug {
+  @BeforeClass
+  def setup(): Unit = {
+    LkpManagerTest.init()
+  }
+
   val m = new mutable.HashMap[String, Int]()
 
   def add(k: String): Unit = {

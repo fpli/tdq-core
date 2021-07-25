@@ -6,15 +6,21 @@ import com.ebay.sojourner.common.model.{ClientData, RawEvent}
 import com.ebay.sojourner.common.util.SojTimestamp
 import com.ebay.tdq.common.env.JdbcEnv
 import com.ebay.tdq.config.TdqConfig
+import com.ebay.tdq.planner.LkpManagerTest
 import com.ebay.tdq.rules.{PhysicalPlan, ProfilingSqlParser}
 import com.ebay.tdq.utils.{DateUtils, JsonUtils}
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.junit.Test
+import org.junit.{BeforeClass, Test}
 
 /**
  * @author juntzhang
  */
 object PhysicalPlanFactory {
+  @BeforeClass
+  def setup(): Unit = {
+    LkpManagerTest.init()
+  }
+
   def getPhysicalPlan(json: String): PhysicalPlan = {
     val objectMapper = new ObjectMapper
     val config: TdqConfig = objectMapper.reader.forType(classOf[TdqConfig]).readValue(json)
@@ -25,6 +31,7 @@ object PhysicalPlanFactory {
     )
     parser.parsePlan()
   }
+
 }
 
 class ProfilingSqlParserTest {
