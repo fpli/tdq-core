@@ -14,13 +14,15 @@ class SingleRuleSqlJobTest {
 
   @Test
   def test_sum_by_page_id(): Unit = {
-    val id  = "test_sum_by_page_id"
+    val id = "test_sum_by_page_id"
     ProfilingJobIT(
       id = id,
       config =
         s"""
            |{
            |  "id": "1",
+           |  "name": "$id",
+           |  "sources": [{"name":"$id","type":"realtime.memory","config":{}}],
            |  "rules": [
            |    {
            |      "name": "rule_1",
@@ -77,6 +79,8 @@ class SingleRuleSqlJobTest {
         s"""
            |{
            |  "id": "1",
+           |  "name": "$id",
+           |  "sources": [{"name":"$id","type":"realtime.memory","config":{}}],
            |  "rules": [
            |    {
            |      "name": "rule_1",
@@ -148,6 +152,8 @@ class SingleRuleSqlJobTest {
         s"""
            |{
            |  "id": "1",
+           |  "name": "$id",
+           |  "sources": [{"name":"$id","type":"realtime.memory","config":{}}],
            |  "rules": [
            |    {
            |      "name": "rule_1",
@@ -206,6 +212,8 @@ class SingleRuleSqlJobTest {
         s"""
            |{
            |  "id": "1",
+           |  "name": "$id",
+           |  "sources": [{"name":"$id","type":"realtime.memory","config":{}}],
            |  "rules": [
            |    {
            |      "name": "rule_1",
@@ -266,6 +274,8 @@ class SingleRuleSqlJobTest {
         s"""
            |{
            |  "id": "1",
+           |  "name": "$id",
+           |  "sources": [{"name":"$id","type":"realtime.memory","config":{}}],
            |  "rules": [
            |    {
            |      "name": "rule_1",
@@ -325,6 +335,8 @@ class SingleRuleSqlJobTest {
         s"""
            |{
            |  "id": "1",
+           |  "name": "$id",
+           |  "sources": [{"name":"$id","type":"realtime.memory","config":{}}],
            |  "rules": [
            |    {
            |      "name": "rule_1",
@@ -390,7 +402,8 @@ class SingleRuleSqlJobTest {
         s"""
            |{
            |  "id": "8",
-           |  "name": "cfg_8",
+           |  "name": "$id",
+           |  "sources": [{"name":"$id","type":"realtime.memory","config":{}}],
            |  "rules": [
            |    {
            |      "name": "rule_8",

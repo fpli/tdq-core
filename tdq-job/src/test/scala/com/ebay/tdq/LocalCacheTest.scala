@@ -16,36 +16,18 @@ import scala.util.Random
  */
 class LocalCacheTest {
 
-  class TdqMetricGroupMock extends TdqMetricGroup {
-    var counterMap = new mutable.HashMap[String, Long]
-    private var tdqProcessEventsMeter = 0L
-
-    def get(): Map[String, Long] = {
-      counterMap.toMap
-    }
-
-    override def markEvent(): Unit = {
-      tdqProcessEventsMeter += 1
-    }
-
-    override def inc(key: String): Unit = {
-      inc(key, 1)
-    }
-
-    override def inc(key: String, v: Long): Unit = {
-      if (counterMap.isDefinedAt(key)) {
-        counterMap.put(key, counterMap(key) + v)
-      } else {
-        counterMap.put(key, v)
-      }
-    }
-  }
-
   val config: String =
     """
       |{
       |  "id": "10",
       |  "name": "cfg_10",
+      |  "sources": [
+      |    {
+      |      "name": "test",
+      |      "type": "realtime.memory",
+      |      "config": {}
+      |    }
+      |  ],
       |  "rules": [
       |    {
       |      "name": "rule_10",
@@ -107,8 +89,8 @@ class LocalCacheTest {
 
     val mock = new TdqMetricGroupMock
     val env = new TdqEnv()
-    env.getLocalCacheEnv.setLocalCombineQueueSize(12)
-    env.getLocalCacheEnv.setLocalCombineFlushTimeout(1000)
+    env.setLocalCombineQueueSize(12)
+    env.setLocalCombineFlushTimeout(1000)
     val cache = new LocalCache(env, mock)
     val rawData = new mutable.HashMap[String, Double]()
     val mergeData = new mutable.HashMap[String, Double]()
@@ -157,5 +139,30 @@ class LocalCacheTest {
     println("=MetricGroup=")
     mock.get().foreach(println)
 
+  }
+
+  class TdqMetricGroupMock extends TdqMetricGroup {
+    var counterMap = new mutable.HashMap[String, Long]
+    private var tdqProcessEventsMeter = 0L
+
+    def get(): Map[String, Long] = {
+      counterMap.toMap
+    }
+
+    override def markEvent(): Unit = {
+      tdqProcessEventsMeter += 1
+    }
+
+    override def inc(key: String): Unit = {
+      inc(key, 1)
+    }
+
+    override def inc(key: String, v: Long): Unit = {
+      if (counterMap.isDefinedAt(key)) {
+        counterMap.put(key, counterMap(key) + v)
+      } else {
+        counterMap.put(key, v)
+      }
+    }
   }
 }

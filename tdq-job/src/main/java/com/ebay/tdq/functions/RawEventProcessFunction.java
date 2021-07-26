@@ -38,7 +38,7 @@ public class RawEventProcessFunction extends ProcessFunction<RawEvent, TdqMetric
   public RawEventProcessFunction(TdqContext tdqCxt) {
     this.tdqCxt = tdqCxt;
     this.tdqEnv = tdqCxt.getTdqEnv();
-    if (tdqEnv.getLocalCacheEnv().getLocalCombineFlushTimeout() > 60000) {
+    if (tdqEnv.getLocalCombineFlushTimeout() > 60000) {
       throw new RuntimeException("flink.app.advance.local-combine.flush-timeout must less than 60s!");
     }
   }
@@ -84,7 +84,7 @@ public class RawEventProcessFunction extends ProcessFunction<RawEvent, TdqMetric
     if (physicalPlans == null || physicalPlans.size() == 0) {
       throw new Exception("physical plans is empty!");
     }
-    if (tdqEnv.getKafkaSourceEnv().isNotProcessElement(event.getUnixEventTimestamp())) {
+    if (tdqEnv.isNotProcessElement(event.getUnixEventTimestamp())) {
       metricGroup.inc("isNotProcessElement");
       return;
     }

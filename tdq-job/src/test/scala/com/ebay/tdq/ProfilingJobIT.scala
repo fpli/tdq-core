@@ -1,22 +1,17 @@
 package com.ebay.tdq
 
 import java.sql.DriverManager
-import java.time.Duration
-import java.util.{HashMap => JMap, List => JList}
+import java.util.{HashMap => JMap}
 
 import com.ebay.sojourner.common.model.RawEvent
-import com.ebay.sojourner.flink.connector.kafka.SojSerializableTimestampAssigner
 import com.ebay.tdq.common.env.JdbcEnv
 import com.ebay.tdq.jobs.ProfilingJob
 import com.ebay.tdq.planner.LkpManager
 import com.ebay.tdq.rules.TdqMetric
-import com.ebay.tdq.sinks.MemorySink
-import com.google.common.collect.Lists
+import com.ebay.tdq.sinks.{MemorySink, TdqSinks}
+import com.ebay.tdq.sources.MemorySourceBuilder
 import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.StringUtils
-import org.apache.flink.api.common.eventtime.WatermarkStrategy
-import org.apache.flink.streaming.api.datastream.DataStream
-import org.apache.flink.streaming.api.functions.source.SourceFunction
 import org.apache.flink.streaming.connectors.elasticsearch.TdqElasticsearchResource
 import org.elasticsearch.action.search.SearchRequest
 import org.elasticsearch.client.Client
@@ -31,34 +26,23 @@ import scala.collection.JavaConverters._
  */
 
 case class ProfilingJobIT(
-  id: String, config: String, events: List[RawEvent], expects: List[TdqMetric]
+  name: String, config: String, events: List[RawEvent], expects: List[TdqMetric]
 ) extends ProfilingJob {
 
   import ProfilingJobIT.setupDB
 
   override def setup(args: Array[String]): Unit = {
-    super.setup(args)
+    super.setup(Array.concat(args, Array("--flink.app.name", name)))
+    tdqEnv.setJobName(name)
     setupDB(config)
     LkpManager.getInstance(tdqEnv.getJdbcEnv).refresh()
+    val memorySink = new MemorySink(name, LkpManager.getInstance(tdqEnv.getJdbcEnv).getPhysicalPlans.get(0))
+    TdqSinks.setMemoryFunction(memorySink)
+    MemorySourceBuilder.setRawEventList(events.asJava)
   }
 
-  override def start(): Unit = {
-    val memorySink = new MemorySink(id, LkpManager.getInstance(tdqEnv.getJdbcEnv).getPhysicalPlans.get(0))
-    // step1: build data source
-    val rawEventDataStream = buildSource()
-    // step2: normalize event to metric
-    val normalizeOperator = normalizeMetric(rawEventDataStream)
-    // step3: aggregate metric by key and window
-    val outputTags = reduceMetric(normalizeOperator)
-    // step4: output metric by window
-    outputTags.asScala.foreach { case (k, v) =>
-      val uid = "console_out_" + k
-      v.addSink(memorySink)
-        .name(uid)
-        .uid(uid)
-    }
-    env.execute("Tdq Job [id=" + id + "]")
-    Assert.assertTrue(memorySink.check(expects.asJava))
+  override def stop(): Unit = {
+    Assert.assertTrue(TdqSinks.getMemoryFunction.asInstanceOf[MemorySink].check(expects.asJava))
   }
 
   def getMetric0(metricKey: String, t: Long, tags: JMap[String, String], expr: JMap[String, Double], v: Double): TdqMetric = {
@@ -71,60 +55,19 @@ case class ProfilingJobIT(
     }
     m.genUID
   }
-
-  def buildSource(): JList[DataStream[RawEvent]] = {
-    Lists.newArrayList(env.addSource(new SourceFunction[RawEvent]() {
-      @throws[InterruptedException]
-      override def run(ctx: SourceFunction.SourceContext[RawEvent]): Unit = {
-        Thread.sleep(1000)
-        events.foreach(ctx.collect)
-        //        Thread.sleep(10000000)
-      }
-
-      override def cancel(): Unit = {}
-    }).name("Raw Event Src1")
-      .uid("raw-event-src1")
-      .slotSharingGroup("src1")
-      .assignTimestampsAndWatermarks(
-        WatermarkStrategy
-          .forBoundedOutOfOrderness[RawEvent](Duration.ofSeconds(0))
-          .withTimestampAssigner(new SojSerializableTimestampAssigner[RawEvent])
-          .withIdleness(Duration.ofSeconds(1))
-      )
-      .slotSharingGroup("src1")
-      .name("Raw Event Watermark Src1")
-      .uid("raw-event-watermark-src1")
-      .slotSharingGroup("src1"))
-  }
 }
 
-class EsProfilingJobIT(id: String, config: String, events: List[RawEvent], expects: List[TdqMetric])
-  extends ProfilingJobIT(id, config, events, expects) {
+class EsProfilingJobIT(name: String, config: String, events: List[RawEvent], expects: List[TdqMetric])
+  extends ProfilingJobIT(name, config, events, expects) {
+  var elasticsearchResource: TdqElasticsearchResource = _
 
-  override def start(): Unit = {
-    val memorySink = new MemorySink(id, LkpManager.getInstance(tdqEnv.getJdbcEnv).getPhysicalPlans.get(0))
-
-    val elasticsearchResource = new TdqElasticsearchResource("es-test")
+  override def setup(args: Array[String]): Unit = {
+    super.setup(args)
+    elasticsearchResource = new TdqElasticsearchResource("es-test")
     elasticsearchResource.start()
+  }
 
-    // step1: build data source
-    val rawEventDataStream = buildSource()
-    // step2: normalize event to metric
-    val normalizeOperator: DataStream[TdqMetric] = normalizeMetric(rawEventDataStream)
-    // step3: aggregate metric by key and window
-    val outputTags = reduceMetric(normalizeOperator)
-    // step4: output metric by window
-    outputMetricByWindow(outputTags)
-
-    outputTags.asScala.foreach { case (k, v) =>
-      val uid = "console_out_" + k
-      v.addSink(memorySink)
-        .name(uid)
-        .uid(uid)
-    }
-    env.execute("Tdq Job [id=" + id + "]")
-    Assert.assertTrue(memorySink.check(expects.asJava))
-
+  override def stop(): Unit = {
     Thread.sleep(1000)
     val client: Client = elasticsearchResource.getClient
     val searchRequest = new SearchRequest(
@@ -151,8 +94,8 @@ class EsProfilingJobIT(id: String, config: String, events: List[RawEvent], expec
     println("pronto=>")
     resultInPronto.foreach(println)
 
-    Assert.assertTrue(memorySink.check0(expects.asJava, resultInPronto.asJava))
-
+    Assert.assertTrue(TdqSinks.getMemoryFunction.asInstanceOf[MemorySink]
+      .check0(expects.asJava, resultInPronto.asJava))
     elasticsearchResource.stop()
   }
 }
@@ -188,10 +131,9 @@ object ProfilingJobIT {
 
   def apply(id: String, config: String, events: List[RawEvent], expects: List[TdqMetric]): ProfilingJobIT = {
     val it = new ProfilingJobIT(id, config, events, expects)
-    println("+++++++================" + id)
     it.submit(Array[String](
       "--flink.app.local", "true",
-      "--flink.app.sink.normal-metric.std-name", "normal"
+      "--flink.app.sink.normal-metric.mem-name", id
     ))
     it
   }

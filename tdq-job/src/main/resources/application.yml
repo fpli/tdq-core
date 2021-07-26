@@ -1,32 +1,13 @@
 flink:
   app:
-    name: TDQ-V2
     parallelism:
       default: 125
-      source: 125
       metric-1st-aggr: 200
       metric-2nd-aggr: 2
 
     window:
       metric-1st-aggr: 1min
       supports: 1min,5min
-
-    slot-sharing-group:
-      source-event-lvs: tdq-lvs
-      source-event-slc: tdq-slc
-      source-event-rno: tdq-rno
-
-    operator-name:
-      source:
-        rno: Pathfinder RNO Tdq Source
-        lvs: Pathfinder LVS Tdq Source
-        slc: Pathfinder SLC Tdq Source
-
-    uid:
-      source:
-        rno: pathfinder-rno-tdq-source
-        lvs: pathfinder-lvs-tdq-source
-        slc: pathfinder-slc-tdq-source
 
     checkpoint:
       data-dir: /opt/tdq-${flink.app.profile}/checkpoint
@@ -41,12 +22,6 @@ flink:
       flush-timeout: 5s
       output-partitions: 61
 
-    source:
-      sample-fraction: 0
-      from-timestamp: 0
-      out-of-orderless: 5min
-      idle-timeout: 5min
-
 pronto:
   scheme: https
   hostname: estdq-datalvs.vip.ebay.com
@@ -60,47 +35,3 @@ mysql:
     driver-class-name: com.mysql.cj.jdbc.Driver
     u: dataops
     p: dataops#123
-
-kafka:
-  consumer:
-    stream: behavior.pathfinder
-    topic:
-      - behavior.pathfinder.events.total
-    group-id: tdq-v2-${flink.app.profile}
-    bootstrap-servers:
-      rno:
-        - rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092
-        - rhs-glrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092
-        - rhs-glrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092
-        - rhs-glrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092
-        - rhs-glrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092
-      slc:
-        - rhs-mwsvkiaa-kfk-slc-1.rheos-streaming-prod.svc.45.tess.io:9092
-        - rhs-mwsvkiaa-kfk-slc-2.rheos-streaming-prod.svc.45.tess.io:9092
-        - rhs-mwsvkiaa-kfk-slc-3.rheos-streaming-prod.svc.45.tess.io:9092
-        - rhs-mwsvkiaa-kfk-slc-4.rheos-streaming-prod.svc.45.tess.io:9092
-        - rhs-mwsvkiaa-kfk-slc-5.rheos-streaming-prod.svc.45.tess.io:9092
-      lvs:
-        - rhs-swsvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-swsvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-swsvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-swsvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092
-        - rhs-swsvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092
-    
-    max-poll-records: 5000
-    # 50MB, default value is 50MB
-    fetch-max-bytes: 52428800
-    # 8MB, default value is 64KB
-    receive-buffer: 8388608
-    fetch-max-wait-ms: 100
-    # 10MB, default value is 1MB
-    max-partitions-fetch-bytes: 10485760
-    auto-offset-reset: latest
-
-rheos:
-  registry-url: https://rheos-services.stratus.ebay.com
-  client:
-    id: "urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618"
-    iaf:
-      secret: c4bb6fca-7ac5-46dd-b218-a49cb6307dbc
-      env: production

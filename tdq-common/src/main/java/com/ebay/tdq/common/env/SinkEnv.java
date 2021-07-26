@@ -10,10 +10,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 /**
+ * need config in tdq Config
+ *
  * @author juntzhang
  */
 @Slf4j
 @Getter
+@Deprecated
 public class SinkEnv implements Serializable {
 
   private final TimeZone timeZone;
@@ -21,6 +24,7 @@ public class SinkEnv implements Serializable {
   private final String normalMetricPath;
   private final String normalMetricProntoIndexPattern;
   private final String normalMetricStdName;
+  private final String normalMetricMemName;
 
   private final String latencyMetricPath;
   private final String latencyMetricProntoIndexPattern;
@@ -42,6 +46,8 @@ public class SinkEnv implements Serializable {
         "flink.app.sink.normal-metric.pronto-index-pattern");
     this.normalMetricStdName = getStringWithPattern(
         "flink.app.sink.normal-metric.std-name");
+    this.normalMetricMemName = getStringWithPattern(
+        "flink.app.sink.normal-metric.mem-name");
 
     this.latencyMetricPath = getStringWithPattern("flink.app.sink.pronto.latency-metric.hdfs-path");
     this.latencyMetricProntoIndexPattern = getStringWithPattern(
@@ -73,6 +79,10 @@ public class SinkEnv implements Serializable {
 
   public boolean isNormalMetricSinkHdfs() {
     return StringUtils.isNotBlank(normalMetricPath);
+  }
+
+  public boolean isNormalMetricSinkMemory() {
+    return StringUtils.isNotBlank(normalMetricMemName);
   }
 
   public boolean isLatencyMetricSinkStd() {

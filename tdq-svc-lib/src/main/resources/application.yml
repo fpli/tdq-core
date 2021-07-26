@@ -1,5 +1,6 @@
 flink:
   app:
+    name: "tdq-svc-lib"
     profile: test
     sink:
       normal-metric:

@@ -57,4 +57,8 @@ public class DateUtils {
   public static long toSeconds(String length) {
     return Duration.apply(length).toSeconds();
   }
+
+  public static long toMillis(String length) {
+    return Duration.apply(length).toMillis();
+  }
 }

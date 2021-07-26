@@ -9,9 +9,12 @@ import java.util.StringJoiner;
 import lombok.Data;
 
 /**
+ * need config in tdq Config
+ *
  * @author juntzhang
  */
 @Data
+@Deprecated
 public class ProntoEnv implements Serializable {
 
   private String schema;

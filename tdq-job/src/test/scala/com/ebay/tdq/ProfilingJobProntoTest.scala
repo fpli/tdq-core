@@ -19,6 +19,8 @@ class ProfilingJobProntoTest {
         s"""
            |{
            |  "id": "1",
+           |  "name": "$id",
+           |  "sources": [{"name":"$id","type":"realtime.memory","config":{}}],
            |  "rules": [
            |    {
            |      "name": "rule_1",
@@ -75,6 +77,8 @@ class ProfilingJobProntoTest {
         s"""
            |{
            |  "id": "1",
+           |  "name": "$id",
+           |  "sources": [{"name":"$id","type":"realtime.memory","config":{}}],
            |  "rules": [
            |    {
            |      "name": "rule_1",

@@ -34,40 +34,12 @@ import org.jetbrains.annotations.NotNull;
 public class LkpManager {
 
   private static volatile LkpManager lkpManager;
+  private final LkpRefreshTimeTask lkpRefreshTimeTask;
+  private final JdbcEnv jdbc;
   private Set<Integer> bbwoaPagesWithItm = new CopyOnWriteArraySet<>();
   private Map<Integer, String> pageFmlyAllMap = new ConcurrentHashMap<>();
   private List<TdqConfig> tdqConfigs = new CopyOnWriteArrayList<>();
   private List<PhysicalPlan> physicalPlans = new CopyOnWriteArrayList<>();
-  private final LkpRefreshTimeTask lkpRefreshTimeTask;
-  private final JdbcEnv jdbc;
-
-  static class LkpRefreshTimeTask extends TimerTask {
-
-    private final LkpManager lkpManager;
-
-    private LkpRefreshTimeTask(LkpManager lkpManager, TimeUnit timeUnit) {
-      this.lkpManager = lkpManager;
-      ScheduledThreadPoolExecutor scheduledThreadPoolExecutor
-          = new ScheduledThreadPoolExecutor(1, new ThreadFactory() {
-        @Override
-        public Thread newThread(@NotNull Runnable r) {
-          Thread t = new Thread(r, "tdq-lkp-refresh-thread");
-          t.setDaemon(true);
-          return t;
-        }
-      });
-      scheduledThreadPoolExecutor.scheduleAtFixedRate(this, 0, 1, timeUnit);
-    }
-
-    @Override
-    public void run() {
-      try {
-        lkpManager.refresh();
-      } catch (Exception e) {
-        log.warn(System.currentTimeMillis() + "refresh lkp file failed");
-      }
-    }
-  }
 
   private LkpManager(TimeUnit timeUnit, JdbcEnv jdbc) {
     this.jdbc = jdbc;
@@ -197,11 +169,48 @@ public class LkpManager {
     return pageFmlyAllMap.get(pageId);
   }
 
+  public TdqConfig findTdqConfig(String name) {
+    for (TdqConfig c : tdqConfigs) {
+      if (c.getName() != null && c.getName().equals(name)) {
+        return c;
+      }
+    }
+    return null;
+  }
+
   public List<TdqConfig> getTdqConfigs() {
     return tdqConfigs;
   }
 
   public List<PhysicalPlan> getPhysicalPlans() {
     return physicalPlans;
+  }
+
+  static class LkpRefreshTimeTask extends TimerTask {
+
+    private final LkpManager lkpManager;
+
+    private LkpRefreshTimeTask(LkpManager lkpManager, TimeUnit timeUnit) {
+      this.lkpManager = lkpManager;
+      ScheduledThreadPoolExecutor scheduledThreadPoolExecutor
+          = new ScheduledThreadPoolExecutor(1, new ThreadFactory() {
+        @Override
+        public Thread newThread(@NotNull Runnable r) {
+          Thread t = new Thread(r, "tdq-lkp-refresh-thread");
+          t.setDaemon(true);
+          return t;
+        }
+      });
+      scheduledThreadPoolExecutor.scheduleAtFixedRate(this, 0, 1, timeUnit);
+    }
+
+    @Override
+    public void run() {
+      try {
+        lkpManager.refresh();
+      } catch (Exception e) {
+        log.warn(System.currentTimeMillis() + "refresh lkp file failed");
+      }
+    }
   }
 }

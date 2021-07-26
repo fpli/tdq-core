@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.OutputTag;
 
 /**
@@ -22,7 +23,8 @@ import org.apache.flink.util.OutputTag;
 @Getter
 public class TdqContext implements Serializable {
 
-  private TdqEnv tdqEnv;
+  private final transient StreamExecutionEnvironment rhsEnv;
+  private final TdqEnv tdqEnv;
 
   private final Map<Long, OutputTag<TdqMetric>> outputTagMap = new HashMap<>();
   private final OutputTag<TdqErrorMsg> exceptionOutputTag;
@@ -41,6 +43,8 @@ public class TdqContext implements Serializable {
       outputTagMap.put(seconds,
           new OutputTag<>(String.valueOf(seconds), TypeInformation.of(TdqMetric.class)));
     }
+
+    this.rhsEnv = FlinkEnvFactory.create(this.getTdqEnv());
   }
 
   private static void load(String[] args) {

@@ -10,9 +10,7 @@ import com.ebay.sojourner.common.util.SOJNVL;
 import com.ebay.sojourner.common.util.SOJURLDecodeEscape;
 import com.ebay.sojourner.common.util.SojTimestamp;
 import com.ebay.sojourner.flink.connector.kafka.RheosEventSerdeFactory;
-import com.ebay.tdq.common.env.TdqEnv;
 import io.ebay.rheos.schema.event.RheosEvent;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -23,16 +21,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.streaming.connectors.kafka.KafkaDeserializationSchema;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 @Slf4j
-public class PathFinderRawEventDeserializationSchema implements DeserializationSchema<RawEvent> {
-
-  private final TdqEnv tdqEnv;
+public class PathFinderRawEventKafkaDeserializationSchema implements
+    KafkaDeserializationSchema<RawEvent> {
 
   private static final DateTimeFormatter formaterUtc =
       DateTimeFormat.forPattern(Constants.DEFAULT_TIMESTAMP_FORMAT)
@@ -47,21 +45,33 @@ public class PathFinderRawEventDeserializationSchema implements DeserializationS
       .withZone(
           DateTimeZone.forTimeZone(Constants.PST_TIMEZONE));
   private static String[] tagsToEncode = new String[]{Constants.TAG_ITEMIDS, Constants.TAG_TRKP};
-
+  private final Long endTimestamp;
   private String schemaRegistryUrl = null;
 
-  public PathFinderRawEventDeserializationSchema(TdqEnv tdqEnv) {
-    this.tdqEnv = tdqEnv;
+  public PathFinderRawEventKafkaDeserializationSchema(Long endTimestamp) {
+    this.endTimestamp = endTimestamp;
   }
 
   @Override
-  public RawEvent deserialize(byte[] message) throws IOException {
+  public boolean isEndOfStream(RawEvent nextElement) {
+    return isEndOfStream(nextElement.getUnixEventTimestamp());
+  }
+
+  public boolean isEndOfStream(long t) {
+    return this.endTimestamp > 0 && t > this.endTimestamp;
+  }
+
+  @Override
+  public RawEvent deserialize(ConsumerRecord<byte[], byte[]> record) {
+    return deserialize0(record.value());
+  }
+
+  public RawEvent deserialize0(byte[] message) {
     long ingestTime = new Date().getTime();
     RheosEvent rheosEvent =
         RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
     GenericRecord genericRecord =
         RheosEventSerdeFactory.getRheosEventDeserializer(schemaRegistryUrl).decode(rheosEvent);
-
     // Generate RheosHeader
     RheosHeader rheosHeader =
         new RheosHeader(
@@ -509,13 +519,7 @@ public class PathFinderRawEventDeserializationSchema implements DeserializationS
   }
 
   @Override
-  public boolean isEndOfStream(RawEvent nextElement) {
-    return tdqEnv.getKafkaSourceEnv().isEndOfStream(nextElement.getUnixEventTimestamp());
-  }
-
-  @Override
   public TypeInformation<RawEvent> getProducedType() {
     return TypeInformation.of(RawEvent.class);
   }
 }
-

@@ -3,6 +3,7 @@ package com.ebay.tdq.sinks;
 
 import com.ebay.tdq.common.env.ProntoEnv;
 import com.ebay.tdq.common.env.SinkEnv;
+import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.common.model.TdqMetricAvro;
 import com.ebay.tdq.functions.ProntoSinkFunction;
 import com.ebay.tdq.rules.TdqErrorMsg;
@@ -11,7 +12,7 @@ import com.ebay.tdq.rules.TdqSampleData;
 import com.ebay.tdq.sources.HdfsConnectorFactory;
 import com.ebay.tdq.sources.TdqMetricDateTimeBucketAssigner;
 import com.ebay.tdq.utils.TdqContext;
-import com.ebay.tdq.common.env.TdqEnv;
+import com.google.common.annotations.VisibleForTesting;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
+import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 import org.apache.flink.streaming.connectors.elasticsearch.ActionRequestFailureHandler;
 import org.apache.flink.streaming.connectors.elasticsearch.ElasticsearchSinkBase;
@@ -45,6 +47,22 @@ import org.elasticsearch.common.util.concurrent.EsRejectedExecutionException;
 @Slf4j
 public class TdqSinks implements Serializable {
 
+  @Deprecated
+  @VisibleForTesting
+  private static RichSinkFunction<TdqMetric> memoryFunction;
+
+  @Deprecated
+  @VisibleForTesting
+  public static RichSinkFunction<TdqMetric> getMemoryFunction() {
+    return memoryFunction;
+  }
+
+  @Deprecated
+  @VisibleForTesting
+  public static void setMemoryFunction(RichSinkFunction<TdqMetric> memoryFunction) {
+    TdqSinks.memoryFunction = memoryFunction;
+  }
+
   public static void sinkNormalMetric(String id, TdqContext tdqCxt, DataStream<TdqMetric> ds) {
     TdqEnv tdqEnv = tdqCxt.getTdqEnv();
     SinkEnv env = tdqEnv.getSinkEnv();
@@ -65,6 +83,12 @@ public class TdqSinks implements Serializable {
     }
     if (env.isNormalMetricSinkHdfs()) {
       sinkHDFS(id, env.getNormalMetricPath(), tdqEnv, ds);
+    }
+    if (env.isNormalMetricSinkMemory()) {
+      ds.addSink(memoryFunction)
+          .name(id + "_mem")
+          .setParallelism(1)
+          .uid(id + "_mem");
     }
   }
 
@@ -174,6 +198,22 @@ public class TdqSinks implements Serializable {
     return builder.build();
   }
 
+  public static void sinkHDFS(String id, String path, TdqEnv tdqEnv, DataStream<TdqMetric> ds) {
+    StreamingFileSink<TdqMetricAvro> sink = HdfsConnectorFactory.createWithParquet(
+        path, TdqMetricAvro.class, new TdqMetricDateTimeBucketAssigner(tdqEnv.getSinkEnv().getTimeZone().toZoneId()));
+    ds.map(TdqMetric::toTdqAvroMetric)
+        .uid(id + "_avro")
+        .name(id + "_avro")
+        .setParallelism(1)
+        .slotSharingGroup(id + "_hdfs")
+        .addSink(sink)
+        .uid(id + "_o_hdfs")
+        .name(id + "_o_hdfs")
+        .slotSharingGroup(id + "_hdfs")
+        .setParallelism(1);
+
+  }
+
   @Slf4j
   private static class ProntoActionRequestFailureHandler implements ActionRequestFailureHandler {
 
@@ -197,22 +237,5 @@ public class TdqSinks implements Serializable {
         throw failure;
       }
     }
-  }
-
-
-  public static void sinkHDFS(String id, String path, TdqEnv tdqEnv, DataStream<TdqMetric> ds) {
-    StreamingFileSink<TdqMetricAvro> sink = HdfsConnectorFactory.createWithParquet(
-        path, TdqMetricAvro.class, new TdqMetricDateTimeBucketAssigner(tdqEnv.getSinkEnv().getTimeZone().toZoneId()));
-    ds.map(TdqMetric::toTdqAvroMetric)
-        .uid(id + "_avro")
-        .name(id + "_avro")
-        .setParallelism(1)
-        .slotSharingGroup(id + "_hdfs")
-        .addSink(sink)
-        .uid(id + "_o_hdfs")
-        .name(id + "_o_hdfs")
-        .slotSharingGroup(id + "_hdfs")
-        .setParallelism(1);
-
   }
 }
