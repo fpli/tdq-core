@@ -22,7 +22,7 @@ class SingleRuleSqlJobTest {
            |{
            |  "id": "1",
            |  "name": "$id",
-           |  "sources": [{"name":"$id","type":"realtime.memory","config":{}}],
+           |  "sources": [{"name":"$id","type":"realtime.memory","config":{"a.b":123,"c":{"c.a.d":1}}}],
            |  "rules": [
            |    {
            |      "name": "rule_1",

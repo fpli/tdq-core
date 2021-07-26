@@ -1,0 +1,56 @@
+{
+  "id": "1",
+  "name": "kafka_local_dev",
+  "sources": [
+    {
+      "name": "kafka_gro_trans_udaf",
+      "type": "realtime.kafka",
+      "config": {
+        "rhs-parallelism": 1,
+        "rhs-out-of-orderless": "5min",
+        "rhs-idle-timeout": "5min",
+        "sample-fraction": 0.0,
+        "startup-mode": "EARLIEST",
+        "from-timestamp": 0,
+        "to-timestamp": 0,
+        "topics": "misc.crossdcs.gro.trans.udaf",
+        "deserializer": "com.ebay.tdq.connector.kafka.schema.RheosEventDeserializationSchema",
+        "kafka-consumer": {
+          "sasl.mechanism": "IAF",
+          "security.protocol": "SASL_PLAINTEXT",
+          "sasl.jaas.config": "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:7b071ddc-1ab1-4f2b-8fc4-8d2a0afcff46\" iafSecret=\"2c43449b-0d6f-4054-a082-e5576d667654\" iafEnv=\"staging\";",
+          "group.id": "tdq_dev_1",
+          "bootstrap.servers": "rhs-irrvkiaa-kfk-slc-1.rheos-streaming-qa.svc.33.tess.io:9092,rhs-irrvkiaa-kfk-slc-2.rheos-streaming-qa.svc.33.tess.io:9092,rhs-irrvkiaa-kfk-slc-3.rheos-streaming-qa.svc.33.tess.io:9092,rhs-irrvkiaa-kfk-slc-4.rheos-streaming-qa.svc.33.tess.io:9092,rhs-irrvkiaa-kfk-slc-5.rheos-streaming-qa.svc.33.tess.io:9092,rhs-irrvkiaa-kfk-slc-6.rheos-streaming-qa.svc.33.tess.io:9092,rhs-irrvkiaa-kfk-slc-7.rheos-streaming-qa.svc.33.tess.io:9092",
+          "partition.assignment.strategy": "org.apache.kafka.clients.consumer.RoundRobinAssignor",
+          "max.poll.records": 2,
+          "fetch.max.bytes": 1024,
+          "receive.buffer": 1024,
+          "fetch.max.wait.ms": 10,
+          "max.partition.fetch.bytes": 1024,
+          "auto.offset.reset": "latest"
+        }
+      }
+    }
+  ],
+  "rules": [
+    {
+      "name": "tdq_system",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "1min"
+      },
+      "profilers": [
+        {
+          "expr": "p1",
+          "metric-name": "global_cnt_by_1min",
+          "transformations": [
+            {
+              "alias": "p1",
+              "expr": "count(1)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,5 @@
 flink:
   app:
-    name: TDQ-V2-Dumper
     profile: prod
     sink:
       raw-data:

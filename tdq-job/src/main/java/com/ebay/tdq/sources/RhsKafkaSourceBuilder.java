@@ -1,26 +1,26 @@
 package com.ebay.tdq.sources;
 
+import com.ebay.sojourner.common.model.ClientData;
 import com.ebay.sojourner.common.model.RawEvent;
-import com.ebay.tdq.common.env.TdqEnv;
+import com.ebay.sojourner.common.util.SojTimestamp;
 import com.ebay.tdq.common.model.RawEventAvro;
 import com.ebay.tdq.config.KafkaSourceConfig;
 import com.ebay.tdq.config.SourceConfig;
 import com.ebay.tdq.config.TdqConfig;
+import com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema;
+import com.ebay.tdq.connector.kafka.schema.RheosEventDeserializationSchema;
 import com.ebay.tdq.functions.RawEventProcessFunction;
 import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.utils.TdqContext;
-import java.time.Duration;
+import io.ebay.rheos.schema.event.RheosEvent;
+import java.util.HashMap;
 import java.util.Random;
 import lombok.val;
-import org.apache.commons.lang3.Validate;
-import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
-import org.apache.flink.api.common.eventtime.WatermarkStrategy;
+import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.KafkaDeserializationSchema;
-import org.apache.flink.streaming.runtime.operators.TdqTimestampsAndWatermarksOperator;
 
 /**
  * @author juntzhang
@@ -29,15 +29,13 @@ public class RhsKafkaSourceBuilder {
 
   private static void dump(SourceConfig sourceConfig, TdqContext tdqCxt) throws ReflectiveOperationException {
     KafkaSourceConfig ksc = KafkaSourceConfig.build(sourceConfig);
-    Validate.isTrue(ksc != null);
-
     val tdqEnv = tdqCxt.getTdqEnv();
     tdqCxt.getTdqEnv().setFromTimestamp(ksc.getFromTimestamp());
     tdqCxt.getTdqEnv().setToTimestamp(ksc.getToTimestamp());
 
     Class<?> c = Class.forName(ksc.getDeserializer());
     KafkaDeserializationSchema<RawEvent> schema = (KafkaDeserializationSchema<RawEvent>) c
-        .getConstructor(TdqEnv.class).newInstance(ksc.getEndOfStreamTimestamp());
+        .getConstructor(Long.class).newInstance(ksc.getEndOfStreamTimestamp());
 
     FlinkKafkaConsumer<RawEvent> flinkKafkaConsumer = new FlinkKafkaConsumer<>(
         ksc.getTopics(), schema, ksc.getKafkaConsumer());
@@ -102,37 +100,75 @@ public class RhsKafkaSourceBuilder {
   public static DataStream<TdqMetric> build(SourceConfig sourceConfig, TdqContext tdqCxt)
       throws ReflectiveOperationException {
     KafkaSourceConfig ksc = KafkaSourceConfig.build(sourceConfig);
-    Validate.isTrue(ksc != null);
 
     tdqCxt.getTdqEnv().setFromTimestamp(ksc.getFromTimestamp());
     tdqCxt.getTdqEnv().setToTimestamp(ksc.getToTimestamp());
 
-    Class<?> c = Class.forName(ksc.getDeserializer());
-    KafkaDeserializationSchema<RawEvent> schema = (KafkaDeserializationSchema<RawEvent>) c
-        .getConstructor(TdqEnv.class).newInstance(ksc.getEndOfStreamTimestamp());
-
-    FlinkKafkaConsumer<RawEvent> flinkKafkaConsumer = new FlinkKafkaConsumer<>(
-        ksc.getTopics(), schema, ksc.getKafkaConsumer());
-
-    if (ksc.getStartupMode().equalsIgnoreCase("EARLIEST")) {
-      flinkKafkaConsumer.setStartFromEarliest();
-    } else if (ksc.getStartupMode().equalsIgnoreCase("LATEST")) {
-      flinkKafkaConsumer.setStartFromLatest();
-    } else if (ksc.getStartupMode().equalsIgnoreCase("TIMESTAMP")) {
-      flinkKafkaConsumer.setStartFromTimestamp(ksc.getFromTimestamp() - ksc.getOutOfOrderlessMs());
+    DataStream<RawEvent> inDS;
+    if (ksc.getDeserializer().equals(
+        "com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema")) {
+      Class<?> c = Class.forName(ksc.getDeserializer());
+      KafkaDeserializationSchema<RawEvent> schema = new PathFinderRawEventKafkaDeserializationSchema(
+          ksc.getEndOfStreamTimestamp());
+      FlinkKafkaConsumer<RawEvent> flinkKafkaConsumer = new FlinkKafkaConsumer<>(
+          ksc.getTopics(), schema, ksc.getKafkaConsumer());
+      if (ksc.getStartupMode().equalsIgnoreCase("EARLIEST")) {
+        flinkKafkaConsumer.setStartFromEarliest();
+      } else if (ksc.getStartupMode().equalsIgnoreCase("LATEST")) {
+        flinkKafkaConsumer.setStartFromLatest();
+      } else if (ksc.getStartupMode().equalsIgnoreCase("TIMESTAMP")) {
+        flinkKafkaConsumer.setStartFromTimestamp(ksc.getFromTimestamp() - ksc.getOutOfOrderlessMs());
+      } else {
+        throw new IllegalArgumentException("Cannot parse fromTimestamp value");
+      }
+      inDS = tdqCxt.getRhsEnv()
+          .addSource(flinkKafkaConsumer)
+          .setParallelism(ksc.getParallelism())
+          .slotSharingGroup(ksc.getName())
+          .name(ksc.getName())
+          .uid(ksc.getName());
     } else {
-      throw new IllegalArgumentException("Cannot parse fromTimestamp value");
+      // todo for test
+      val schema = new RheosEventDeserializationSchema("https://rheos-services.qa.ebay.com",
+          ksc.getEndOfStreamTimestamp());
+      FlinkKafkaConsumer<RheosEvent> flinkKafkaConsumer = new FlinkKafkaConsumer<>(
+          ksc.getTopics(), schema, ksc.getKafkaConsumer());
+      if (ksc.getStartupMode().equalsIgnoreCase("EARLIEST")) {
+        flinkKafkaConsumer.setStartFromEarliest();
+      } else if (ksc.getStartupMode().equalsIgnoreCase("LATEST")) {
+        flinkKafkaConsumer.setStartFromLatest();
+      } else if (ksc.getStartupMode().equalsIgnoreCase("TIMESTAMP")) {
+        flinkKafkaConsumer.setStartFromTimestamp(ksc.getFromTimestamp() - ksc.getOutOfOrderlessMs());
+      } else {
+        throw new IllegalArgumentException("Cannot parse fromTimestamp value");
+      }
+
+      inDS = tdqCxt.getRhsEnv()
+          .addSource(flinkKafkaConsumer)
+          .setParallelism(ksc.getParallelism())
+          .slotSharingGroup(ksc.getName())
+          .name(ksc.getName())
+          .uid(ksc.getName())
+          .map((MapFunction<RheosEvent, RawEvent>) rec -> {
+            RawEvent event = new RawEvent();
+            event.setSojA(new HashMap<>());
+            event.setSojK(new HashMap<>());
+            event.setSojC(new HashMap<>());
+            event.setClientData(new ClientData());
+            event.setIngestTime(System.currentTimeMillis());
+            event.setEventTimestamp(SojTimestamp.getUnixTimestampToSojTimestamp((long) rec.get("viTimestamp")));
+            event.getSojA().put("t", String.valueOf(rec.get("siteId")));
+            return event;
+          })
+          .setParallelism(ksc.getParallelism())
+          .slotSharingGroup(ksc.getName())
+          .name(ksc.getName() + "_test")
+          .uid(ksc.getName() + "_test");
     }
 
-    DataStream<RawEvent> rawEventDataStream = tdqCxt.getRhsEnv().addSource(flinkKafkaConsumer)
-        .setParallelism(ksc.getParallelism())
-        .slotSharingGroup(ksc.getName())
-        .name(ksc.getName())
-        .uid(ksc.getName());
     double sf = ksc.getSampleFraction();
-
     if (sf > 0 && sf < 1) {
-      rawEventDataStream = rawEventDataStream
+      inDS = inDS
           .filter(r -> Math.abs(new Random().nextDouble()) < sf)
           .name(ksc.getName() + "_sample")
           .uid(ksc.getName() + "_sample")
@@ -140,35 +176,8 @@ public class RhsKafkaSourceBuilder {
           .setParallelism(ksc.getParallelism());
     }
 
-    return normalize(tdqCxt, ksc, rawEventDataStream);
+    return SourceFactory.getTdqMetricDS(tdqCxt, inDS, ksc.getName(), ksc.getParallelism(),
+        ksc.getOutOfOrderlessMs(), ksc.getIdleTimeoutMs(), new RawEventProcessFunction(tdqCxt));
   }
 
-  private static SingleOutputStreamOperator<TdqMetric> normalize(
-      TdqContext tdqCxt, KafkaSourceConfig ksc, DataStream<RawEvent> rawEventDataStream) {
-
-    SingleOutputStreamOperator<TdqMetric> ds = rawEventDataStream
-        .process(new RawEventProcessFunction(tdqCxt))
-        .name(ksc.getName() + "_normalize")
-        .uid(ksc.getName() + "_normalize")
-        .slotSharingGroup(ksc.getName())
-        .setParallelism(ksc.getParallelism());
-
-    SerializableTimestampAssigner<TdqMetric> assigner =
-        (SerializableTimestampAssigner<TdqMetric>) (event, timestamp) -> event.getEventTime();
-
-    WatermarkStrategy<TdqMetric> watermarkStrategy = WatermarkStrategy
-        .<TdqMetric>forBoundedOutOfOrderness(Duration.ofMillis(ksc.getOutOfOrderlessMs()))
-        .withTimestampAssigner(assigner)
-        .withIdleness(Duration.ofMillis(ksc.getIdleTimeoutMs()));
-    TdqTimestampsAndWatermarksOperator<TdqMetric> operator =
-        new TdqTimestampsAndWatermarksOperator<>(tdqCxt.getRhsEnv().clean(watermarkStrategy));
-
-    ds = ds.transform("Timestamps/Watermarks", ds.getTransformation().getOutputType(), operator)
-        .slotSharingGroup(ksc.getName())
-        .name(ksc.getName() + "_wks")
-        .uid(ksc.getName() + "_wks")
-        .slotSharingGroup(ksc.getName())
-        .setParallelism(ksc.getParallelism());
-    return ds;
-  }
 }

@@ -7,12 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * @author juntzhang
  */
 @Data
+@Slf4j
 public class KafkaSourceConfig implements Serializable {
 
   private String name;
@@ -43,13 +46,14 @@ public class KafkaSourceConfig implements Serializable {
     ksc.setSampleFraction((double) props.getOrDefault("sample-fraction", 0d));
     ksc.setStartupMode((String) props.get("startup-mode"));
     if (ksc.getStartupMode().equalsIgnoreCase("TIMESTAMP")) {
-      ksc.setFromTimestamp((long) props.getOrDefault("from-timestamp", 0L));
+      ksc.setFromTimestamp(((Number) props.getOrDefault("from-timestamp", 0L)).longValue());
     }
-    ksc.setToTimestamp((long) props.getOrDefault("to-timestamp", 0L));
+    ksc.setToTimestamp(((Number) props.getOrDefault("to-timestamp", 0L)).longValue());
     ksc.setTopics(Arrays.asList(((String) props.get("topics")).split(",")));
     ksc.setDeserializer((String) props.get("deserializer"));
     ksc.kafkaConsumer = new Properties();
     ksc.kafkaConsumer.putAll((Map<?, ?>) props.get("kafka-consumer"));
+    log.info(ksc.toString());
     return ksc;
   }
 
@@ -58,5 +62,22 @@ public class KafkaSourceConfig implements Serializable {
       return this.toTimestamp + this.outOfOrderlessMs;
     }
     return 0L;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("name", name)
+        .append("parallelism", parallelism)
+        .append("startupMode", startupMode)
+        .append("fromTimestamp", fromTimestamp)
+        .append("toTimestamp", toTimestamp)
+        .append("sampleFraction", sampleFraction)
+        .append("outOfOrderlessMs", outOfOrderlessMs)
+        .append("idleTimeoutMs", idleTimeoutMs)
+        .append("topics", topics)
+        .append("deserializer", deserializer)
+        .append("kafkaConsumer", kafkaConsumer)
+        .toString();
   }
 }

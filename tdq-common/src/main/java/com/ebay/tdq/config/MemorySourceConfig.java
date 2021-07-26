@@ -5,11 +5,14 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * @author juntzhang
  */
 @Data
+@Slf4j
 public class MemorySourceConfig implements Serializable {
 
   private String name;
@@ -29,6 +32,18 @@ public class MemorySourceConfig implements Serializable {
         DateUtils.toMillis((String) props.getOrDefault("rhs-out-of-orderless", "1min")));
     msc.setIdleTimeoutMs(
         DateUtils.toMillis((String) props.getOrDefault("rhs-idle-timeout", "1min")));
+
+    log.info(msc.toString());
     return msc;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("name", name)
+        .append("parallelism", parallelism)
+        .append("outOfOrderlessMs", outOfOrderlessMs)
+        .append("idleTimeoutMs", idleTimeoutMs)
+        .toString();
   }
 }
