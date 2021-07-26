@@ -68,7 +68,7 @@ class EsProfilingJobIT(name: String, config: String, events: List[RawEvent], exp
   }
 
   override def stop(): Unit = {
-    Thread.sleep(1000)
+    Thread.sleep(3000)
     val client: Client = elasticsearchResource.getClient
     val searchRequest = new SearchRequest(
       s"${tdqEnv.getSinkEnv.getNormalMetricIndex(expects.head.getEventTime)}")
