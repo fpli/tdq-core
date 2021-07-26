@@ -9,7 +9,9 @@ import com.ebay.sojourner.common.util.PropertyUtils;
 import com.ebay.sojourner.common.util.SOJNVL;
 import com.ebay.sojourner.common.util.SOJURLDecodeEscape;
 import com.ebay.sojourner.common.util.SojTimestamp;
-import com.ebay.sojourner.flink.connector.kafka.RheosEventSerdeFactory;
+import io.ebay.rheos.kafka.client.StreamConnectorConfig;
+import io.ebay.rheos.schema.avro.GenericRecordDomainDataDecoder;
+import io.ebay.rheos.schema.avro.RheosEventDeserializer;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -34,22 +36,21 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
 
   private static final DateTimeFormatter formaterUtc =
       DateTimeFormat.forPattern(Constants.DEFAULT_TIMESTAMP_FORMAT)
-          .withZone(
-              DateTimeZone.forTimeZone(Constants.UTC_TIMEZONE));
+          .withZone(DateTimeZone.forTimeZone(Constants.UTC_TIMEZONE));
   private static final DateTimeFormatter formater = DateTimeFormat.forPattern(
-      Constants.DEFAULT_TIMESTAMP_FORMAT)
-      .withZone(
-          DateTimeZone.forTimeZone(Constants.PST_TIMEZONE));
+      Constants.DEFAULT_TIMESTAMP_FORMAT).withZone(DateTimeZone.forTimeZone(Constants.PST_TIMEZONE));
   private static final DateTimeFormatter dateMinsFormatter = DateTimeFormat.forPattern(
-      Constants.DEFAULT_DATE_MINS_FORMAT)
-      .withZone(
-          DateTimeZone.forTimeZone(Constants.PST_TIMEZONE));
+      Constants.DEFAULT_DATE_MINS_FORMAT).withZone(DateTimeZone.forTimeZone(Constants.PST_TIMEZONE));
   private static String[] tagsToEncode = new String[]{Constants.TAG_ITEMIDS, Constants.TAG_TRKP};
+
   private final Long endTimestamp;
-  private String schemaRegistryUrl = null;
+  private final String schemaRegistryUrl;
+  private transient volatile GenericRecordDomainDataDecoder decoder = null;
+  private static final RheosEventDeserializer deserializer = new RheosEventDeserializer();
 
   public PathFinderRawEventKafkaDeserializationSchema(Long endTimestamp) {
     this.endTimestamp = endTimestamp;
+    this.schemaRegistryUrl = "https://rheos-services.stratus.ebay.com";
   }
 
   @Override
@@ -61,6 +62,19 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
     return this.endTimestamp > 0 && t > this.endTimestamp;
   }
 
+  public GenericRecordDomainDataDecoder getDecoder() {
+    if (null == decoder) {
+      Map<String, Object> config = new HashMap<>();
+      config.put(StreamConnectorConfig.RHEOS_SERVICES_URLS, this.schemaRegistryUrl);
+      synchronized (this.schemaRegistryUrl) {
+        if (null == decoder) {
+          decoder = new GenericRecordDomainDataDecoder(config);
+        }
+      }
+    }
+    return decoder;
+  }
+
   @Override
   public RawEvent deserialize(ConsumerRecord<byte[], byte[]> record) {
     return deserialize0(record.value());
@@ -68,10 +82,8 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
 
   public RawEvent deserialize0(byte[] message) {
     long ingestTime = new Date().getTime();
-    RheosEvent rheosEvent =
-        RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
-    GenericRecord genericRecord =
-        RheosEventSerdeFactory.getRheosEventDeserializer(schemaRegistryUrl).decode(rheosEvent);
+    RheosEvent rheosEvent = deserializer.deserialize(null, message);
+    GenericRecord genericRecord = getDecoder().decode(rheosEvent);
     // Generate RheosHeader
     RheosHeader rheosHeader =
         new RheosHeader(
