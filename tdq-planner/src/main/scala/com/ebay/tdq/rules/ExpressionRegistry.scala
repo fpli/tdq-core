@@ -31,7 +31,7 @@ case class ExpressionRegistry(jdbcEnv: JdbcEnv) {
       case "SOJ_TAG" =>
         Preconditions.checkArgument(operands.length == 1)
         SojTag(
-          subject = GetRawEvent(Some("__RAW_EVENT")),
+          subject = GetTdqEvent(Some("__TDQ_EVENT")),
           tag = operands.head.asInstanceOf[Literal].value.asInstanceOf[String],
           dataType = StringType,
           cacheKey = cacheKey
@@ -39,7 +39,7 @@ case class ExpressionRegistry(jdbcEnv: JdbcEnv) {
       case "SOJ_NVL" =>
         Preconditions.checkArgument(operands.length == 1)
         SojNvl(
-          subject = GetRawEvent(Some("__RAW_EVENT")),
+          subject = GetTdqEvent(Some("__TDQ_EVENT")),
           tag = operands.head.asInstanceOf[Literal].value.asInstanceOf[String],
           dataType = StringType,
           cacheKey = cacheKey
@@ -61,7 +61,6 @@ case class ExpressionRegistry(jdbcEnv: JdbcEnv) {
           cacheKey = cacheKey,
           jdbcEnv
         )
-
       case "EVENT_TIMESTAMP" =>
         TdqTimestamp("event_timestamp", TimestampType)
       case "EVENT_TIME_MILLIS" =>
@@ -214,7 +213,8 @@ case class ExpressionRegistry(jdbcEnv: JdbcEnv) {
   }
 
 }
-object ExpressionRegistry{
+
+object ExpressionRegistry {
   def aggregateOperator(operatorName: String, v1: Double, v2: Double): Double = {
     operatorName.toUpperCase() match {
       case "COUNT" =>

@@ -2,9 +2,9 @@ package com.ebay.tdq.utils;
 
 import com.ebay.sojourner.common.env.EnvironmentUtils;
 import com.ebay.tdq.common.env.TdqEnv;
-import com.ebay.tdq.rules.TdqErrorMsg;
-import com.ebay.tdq.rules.TdqMetric;
-import com.ebay.tdq.rules.TdqSampleData;
+import com.ebay.tdq.common.model.TdqErrorMsg;
+import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.TdqSampleData;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;

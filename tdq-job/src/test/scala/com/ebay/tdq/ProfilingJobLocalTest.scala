@@ -1,6 +1,7 @@
 package com.ebay.tdq
 
 import com.ebay.sojourner.common.model.RawEvent
+import com.ebay.tdq.common.model.TdqEvent
 import com.ebay.tdq.jobs.ProfilingJob
 import com.ebay.tdq.sources.MemorySourceBuilder
 import com.ebay.tdq.utils._
@@ -21,13 +22,13 @@ case class ProfilingJobLocalTest() extends ProfilingJob {
     setupDB(IOUtils.toString(
       classOf[ProfilingJob].getResourceAsStream("/metrics/local.json")))
 
-    MemorySourceBuilder.setSourceFunction(new SourceFunction[RawEvent]() {
+    MemorySourceBuilder.setSourceFunction(new SourceFunction[TdqEvent]() {
       @throws[InterruptedException]
-      override def run(ctx: SourceFunction.SourceContext[RawEvent]): Unit = {
+      override def run(ctx: SourceFunction.SourceContext[TdqEvent]): Unit = {
         val sample = getSampleData
         //while (true) {
         sample.foreach(e => {
-          ctx.collect(e)
+          ctx.collect(new TdqEvent(e))
         })
         //}
         //        Thread.sleep(10000000)

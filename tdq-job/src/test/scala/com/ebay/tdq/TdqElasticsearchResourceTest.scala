@@ -2,7 +2,7 @@ package com.ebay.tdq
 
 import java.util.{HashMap => JMap}
 
-import com.ebay.tdq.rules.TdqMetric
+import com.ebay.tdq.common.model.TdqMetric
 import org.apache.flink.streaming.connectors.elasticsearch.TdqElasticsearchResource
 import org.elasticsearch.action.get.GetRequest
 import org.elasticsearch.action.search.SearchRequest

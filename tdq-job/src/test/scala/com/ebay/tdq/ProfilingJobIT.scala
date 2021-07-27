@@ -3,13 +3,12 @@ package com.ebay.tdq
 import java.sql.DriverManager
 import java.util.{HashMap => JMap}
 
-import com.ebay.sojourner.common.model.RawEvent
 import com.ebay.tdq.common.env.JdbcEnv
+import com.ebay.tdq.common.model.{TdqEvent, TdqMetric}
 import com.ebay.tdq.jobs.ProfilingJob
-import com.ebay.tdq.planner.LkpManager
-import com.ebay.tdq.rules.TdqMetric
 import com.ebay.tdq.sinks.{MemorySink, TdqSinks}
 import com.ebay.tdq.sources.MemorySourceBuilder
+import com.ebay.tdq.utils.TdqConfigManager
 import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.StringUtils
 import org.apache.flink.streaming.connectors.elasticsearch.TdqElasticsearchResource
@@ -26,7 +25,7 @@ import scala.collection.JavaConverters._
  */
 
 case class ProfilingJobIT(
-  name: String, config: String, events: List[RawEvent], expects: List[TdqMetric]
+  name: String, config: String, events: List[TdqEvent], expects: List[TdqMetric]
 ) extends ProfilingJob {
 
   import ProfilingJobIT.setupDB
@@ -35,8 +34,8 @@ case class ProfilingJobIT(
     super.setup(Array.concat(args, Array("--flink.app.name", name)))
     tdqEnv.setJobName(name)
     setupDB(config)
-    LkpManager.getInstance(tdqEnv.getJdbcEnv).refresh()
-    val memorySink = new MemorySink(name, LkpManager.getInstance(tdqEnv.getJdbcEnv).getPhysicalPlans.get(0))
+    TdqConfigManager.getInstance(tdqEnv.getJdbcEnv).refresh()
+    val memorySink = new MemorySink(name, TdqConfigManager.getInstance(tdqEnv.getJdbcEnv).getPhysicalPlans.get(0))
     TdqSinks.setMemoryFunction(memorySink)
     MemorySourceBuilder.setRawEventList(events.asJava)
   }
@@ -57,7 +56,7 @@ case class ProfilingJobIT(
   }
 }
 
-class EsProfilingJobIT(name: String, config: String, events: List[RawEvent], expects: List[TdqMetric])
+class EsProfilingJobIT(name: String, config: String, events: List[TdqEvent], expects: List[TdqMetric])
   extends ProfilingJobIT(name, config, events, expects) {
   var elasticsearchResource: TdqElasticsearchResource = _
 
@@ -120,7 +119,7 @@ object ProfilingJobIT {
     ps.close()
   }
 
-  def es(id: String, config: String, events: List[RawEvent], expects: List[TdqMetric]): ProfilingJobIT = {
+  def es(id: String, config: String, events: List[TdqEvent], expects: List[TdqMetric]): ProfilingJobIT = {
     val it = new EsProfilingJobIT(id, config, events, expects)
     it.submit(Array[String](
       "--flink.app.local", "true",
@@ -129,7 +128,7 @@ object ProfilingJobIT {
     it
   }
 
-  def apply(id: String, config: String, events: List[RawEvent], expects: List[TdqMetric]): ProfilingJobIT = {
+  def apply(id: String, config: String, events: List[TdqEvent], expects: List[TdqMetric]): ProfilingJobIT = {
     val it = new ProfilingJobIT(id, config, events, expects)
     it.submit(Array[String](
       "--flink.app.local", "true",

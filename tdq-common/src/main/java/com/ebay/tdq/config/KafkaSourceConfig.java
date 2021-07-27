@@ -20,6 +20,9 @@ public class KafkaSourceConfig implements Serializable {
 
   private String name;
   private int parallelism;
+  private String rheosServicesUrls;
+  private String eventTimeField;
+  private String schemaSubject;
 
   private String startupMode = "EARLIEST";
   private Long fromTimestamp = 0L;
@@ -40,19 +43,25 @@ public class KafkaSourceConfig implements Serializable {
     if (MapUtils.isEmpty(props)) {
       throw new IllegalArgumentException("realtime.kafka config is empty!");
     }
-    ksc.setParallelism((int) props.get("rhs-parallelism"));
-    ksc.setOutOfOrderlessMs(DateUtils.toMillis((String) props.get("rhs-out-of-orderless")));
-    ksc.setIdleTimeoutMs(DateUtils.toMillis((String) props.get("rhs-idle-timeout")));
+    ksc.setRheosServicesUrls((String) props.getOrDefault("rheos-services-urls", ""));
+    ksc.setEventTimeField((String) props.getOrDefault("event-time-field", ""));
+    ksc.setSchemaSubject((String) props.getOrDefault("schema-subject", ""));
+
+    ksc.setParallelism((int) props.getOrDefault("rhs-parallelism", 1));
+    ksc.setOutOfOrderlessMs(DateUtils.toMillis((String) props.getOrDefault("rhs-out-of-orderless", "3min")));
+    ksc.setIdleTimeoutMs(DateUtils.toMillis((String) props.getOrDefault("rhs-idle-timeout", "3min")));
     ksc.setSampleFraction((double) props.getOrDefault("sample-fraction", 0d));
-    ksc.setStartupMode((String) props.get("startup-mode"));
+    ksc.setStartupMode((String) props.getOrDefault("startup-mode", "LATEST"));
     if (ksc.getStartupMode().equalsIgnoreCase("TIMESTAMP")) {
       ksc.setFromTimestamp(((Number) props.getOrDefault("from-timestamp", 0L)).longValue());
     }
     ksc.setToTimestamp(((Number) props.getOrDefault("to-timestamp", 0L)).longValue());
-    ksc.setTopics(Arrays.asList(((String) props.get("topics")).split(",")));
-    ksc.setDeserializer((String) props.get("deserializer"));
+    ksc.setTopics(Arrays.asList(((String) props.getOrDefault("topics", "")).split(",")));
+    ksc.setDeserializer((String) props.getOrDefault("deserializer", ""));
     ksc.kafkaConsumer = new Properties();
-    ksc.kafkaConsumer.putAll((Map<?, ?>) props.get("kafka-consumer"));
+    if (props.get("kafka-consumer") != null) {
+      ksc.kafkaConsumer.putAll((Map<?, ?>) props.get("kafka-consumer"));
+    }
     log.info(ksc.toString());
     return ksc;
   }

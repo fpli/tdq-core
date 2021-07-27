@@ -1,10 +1,12 @@
 package com.ebay.tdq.rules
 
 import com.ebay.tdq.common.env.JdbcEnv
+import com.ebay.tdq.common.model.TdqEvent
 import com.ebay.tdq.config.{ExpressionConfig, ProfilerConfig, TransformationConfig}
 import com.ebay.tdq.expressions._
 import com.ebay.tdq.expressions.aggregate.AggregateExpression
-import com.ebay.tdq.types.{DataType, TimestampType}
+import com.ebay.tdq.types._
+import org.apache.avro.Schema
 import org.apache.calcite.avatica.util.{Casing, Quoting}
 import org.apache.calcite.sql._
 import org.apache.calcite.sql.fun.{SqlCase, SqlStdOperatorTable}
@@ -59,6 +61,12 @@ object ProfilingSqlParser {
     buffer.toArray
   }
 
+  def getFilterIdentifiers(filter: String): Array[SqlIdentifier] = {
+    val buffer = new ArrayBuffer[SqlIdentifier]()
+    baseCallIdentifiers(getSql("SELECT 1 FROM T where " + filter).getWhere.asInstanceOf[SqlBasicCall], buffer)
+    buffer.toArray
+  }
+
   private def baseCallIdentifiers(call: SqlBasicCall, buffer: ArrayBuffer[SqlIdentifier]): Unit = {
     call.operands.foreach {
       case c: SqlBasicCall =>
@@ -100,27 +108,12 @@ object ProfilingSqlParser {
       baseCallIdentifiers(sqlCase.getWhenOperands.get(i).asInstanceOf[SqlBasicCall], buffer)
     }
   }
-
-  def getFilterIdentifiers(filter: String): Array[SqlIdentifier] = {
-    val buffer = new ArrayBuffer[SqlIdentifier]()
-    baseCallIdentifiers(getSql("SELECT 1 FROM T where " + filter).getWhere.asInstanceOf[SqlBasicCall], buffer)
-    buffer.toArray
-  }
 }
 
-class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, jdbcEnv: JdbcEnv) {
+class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, jdbcEnv: JdbcEnv, schema: Schema) {
 
   import ProfilingSqlParser._
 
-  private val expressionRegistry = ExpressionRegistry(jdbcEnv)
-  private val aliasTransformationConfigMap = profilerConfig
-    .getTransformations
-    .asScala
-    .filter(_.getAlias.nonEmpty)
-    .map(transformationConfig => {
-      transformationConfig.getAlias -> transformationConfig
-    }).toMap
-  private val expressionMap = new mutable.HashMap[String, Expression]
   lazy val physicalPlanContext: Option[PhysicalPlanContext] = {
     if (profilerConfig.getConfig == null) {
       None
@@ -133,6 +126,15 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, jdbcEnv: 
       ))
     }
   }
+  private val expressionRegistry = ExpressionRegistry(jdbcEnv)
+  private val aliasTransformationConfigMap = profilerConfig
+    .getTransformations
+    .asScala
+    .filter(_.getAlias.nonEmpty)
+    .map(transformationConfig => {
+      transformationConfig.getAlias -> transformationConfig
+    }).toMap
+  private val expressionMap = new mutable.HashMap[String, Expression]
 
   def parseProntoFilterExpr(): SqlNode = {
     if (physicalPlanContext.isDefined && StringUtils.isNotBlank(physicalPlanContext.get.prontoFilterExpr)) {
@@ -162,14 +164,14 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, jdbcEnv: 
     }
 
     val dimensions = if (CollectionUtils.isNotEmpty(profilerConfig.getDimensions)) {
-      val set = profilerConfig.getDimensions.asScala.toSet
-      val ans = transformations.filter(t => {
-        set.contains(t.name)
-      }).toArray
-      if (ans.length != set.size) {
-        throw new IllegalArgumentException("dimensions config illegal!")
-      }
-      ans
+      val dimensionSet = profilerConfig.getDimensions.asScala.toSet
+      val ans = transformations.filter(t => dimensionSet.contains(t.name)).toArray
+      val trans = ans.map(_.name).toSet
+
+      // dimensions are directly fields in TdqEvent
+      dimensionSet.diff(trans).map(name => {
+        Transformation(name, null, transformIdentifier(name))
+      }).toArray ++ ans
     } else {
       Array[Transformation]()
     }
@@ -192,30 +194,50 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, jdbcEnv: 
     plan
   }
 
+  def getDataType(name: String): DataType = {
+    val f = TdqEvent.getField(schema, name)
+    if (f == null) {
+      return com.ebay.tdq.types.StringType
+    }
+    f.schema().getType match {
+      case Schema.Type.INT => IntegerType
+      case Schema.Type.LONG => LongType
+      case Schema.Type.DOUBLE => DoubleType
+      case Schema.Type.FLOAT => FloatType
+      case Schema.Type.BOOLEAN => BooleanType
+      case Schema.Type.STRING => StringType
+      case _ =>
+        throw new IllegalArgumentException(s"${f.schema().getType} not implement!")
+    }
+  }
+
+  private def transformIdentifier(name: String): Expression = {
+    name match {
+      case ci"EVENT_TIMESTAMP" =>
+        TdqTimestamp("event_timestamp", TimestampType)
+      case ci"EVENT_TIME_MILLIS" =>
+        TdqTimestamp()
+      case ci"SOJ_TIMESTAMP" =>
+        TdqTimestamp("soj_timestamp")
+      case _ =>
+        GetStructField(name, getDataType(name))
+    }
+  }
+
   private def transformIdentifier(identifier: SqlIdentifier): Expression = {
     val name = identifier.toString
     val config = aliasTransformationConfigMap.get(name)
-    if (config.isDefined) {
-      var expression = expressionMap.get(name)
-      if (expression.isDefined) expression.get
-      else {
-        // generate by other transformation
-        expression = Some(parseTransformationPlan(config.get))
-        expressionMap.put(config.get.getAlias, expression.get)
-        expression.get
-      }
+    var expression = expressionMap.get(name)
+    if (config.isDefined && expression.isDefined) {
+      expression.get
+    } else if (config.isDefined && expression.isEmpty && !config.get.getExpr.equals(config.get.getAlias)) {
+      // if expression(identifier) is same as alias
+      // generate by other transformation
+      expression = Some(parseTransformationPlan(config.get))
+      expressionMap.put(config.get.getAlias, expression.get)
+      expression.get
     } else {
-      // get from raw event todo data type
-      name match {
-        case ci"EVENT_TIMESTAMP" =>
-          TdqTimestamp("event_timestamp", TimestampType)
-        case ci"EVENT_TIME_MILLIS" =>
-          TdqTimestamp()
-        case ci"SOJ_TIMESTAMP" =>
-          TdqTimestamp("soj_timestamp")
-        case _ =>
-          GetStructField(name)
-      }
+      transformIdentifier(name)
     }
   }
 

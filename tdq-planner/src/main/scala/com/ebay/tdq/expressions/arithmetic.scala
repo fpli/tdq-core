@@ -1,7 +1,7 @@
 package com.ebay.tdq.expressions
 
-import com.ebay.tdq.rules.CalendarInterval
 import com.ebay.tdq.types._
+import com.ebay.tdq.utils.CalendarInterval
 
 /**
  * @author juntzhang

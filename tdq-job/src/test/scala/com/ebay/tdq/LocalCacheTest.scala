@@ -1,8 +1,9 @@
 package com.ebay.tdq
 
 import com.ebay.tdq.common.env.{JdbcEnv, TdqEnv}
+import com.ebay.tdq.common.model.TdqMetric
 import com.ebay.tdq.config.TdqConfig
-import com.ebay.tdq.rules.{PhysicalPlan, ProfilingSqlParser, TdqMetric}
+import com.ebay.tdq.rules.{PhysicalPlan, ProfilingSqlParser}
 import com.ebay.tdq.utils.{DateUtils, LocalCache, TdqMetricGroup}
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.lang.time.DateFormatUtils
@@ -73,11 +74,7 @@ class LocalCacheTest {
   def getPhysicalPlan(json: String): PhysicalPlan = {
     val objectMapper = new ObjectMapper
     val config: TdqConfig = objectMapper.reader.forType(classOf[TdqConfig]).readValue(json)
-    val parser = new ProfilingSqlParser(
-      config.getRules.get(0).getProfilers.get(0),
-      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString),
-      new JdbcEnv()
-    )
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
     parser.parsePlan()
   }
 
@@ -165,4 +162,5 @@ class LocalCacheTest {
       }
     }
   }
+
 }

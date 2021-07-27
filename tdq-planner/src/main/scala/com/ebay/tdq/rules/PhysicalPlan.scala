@@ -1,8 +1,8 @@
 package com.ebay.tdq.rules
 
-import java.util.{Random, HashMap => JHashMap, HashSet => JHashSet}
+import java.util.{Random, HashMap => JHashMap}
 
-import com.ebay.sojourner.common.model.RawEvent
+import com.ebay.tdq.common.model.{TdqEvent, TdqMetric}
 import com.ebay.tdq.expressions._
 
 import scala.collection.JavaConverters.mapAsScalaMapConverter
@@ -46,18 +46,15 @@ case class PhysicalPlan(
   // TODO validate
   def validatePlan(): Unit = {}
 
-  def process(rawEvent: RawEvent): TdqMetric = {
+  def process(event: TdqEvent): TdqMetric = {
     val cacheData = new JHashMap[String, Any]()
-    val eventTimeMillis = rawEvent.getUnixEventTimestamp
+    val eventTimeMillis = event.getEventTimeMs
     val metric = new TdqMetric(metricKey, (eventTimeMillis / 60000) * 60000)
     metric.setWindow(window)
     aggregations.foreach(aggr => {
       metric.putAggrExpress(aggr.name, aggr.expr.simpleName)
     })
-    cacheData.put("__RAW_EVENT", rawEvent)
-    cacheData.put("soj_timestamp", rawEvent.getEventTimestamp)
-    cacheData.put("event_timestamp", eventTimeMillis * 1000)
-    cacheData.put("event_time_millis", eventTimeMillis)
+    cacheData.put("__TDQ_EVENT", event)
 
     val input = InternalRow(Array(metric), cacheData)
     if (where(input, filter)) {
@@ -112,44 +109,5 @@ case class PhysicalPlan(
     val input = InternalRow(Array(metric), cacheData)
     val v = evaluation.call(input)
     metric.setValue(if (v != null) v.asInstanceOf[Number].doubleValue() else 0d)
-  }
-
-  def findDimensionValues(): JHashMap[String, JHashSet[String]] = {
-    val names: Set[String] = dimensions.map(_.name).toSet
-    val ans = new JHashMap[String, JHashSet[String]]()
-    // get from filter
-    if (filter != null && filter.children != null) {
-      filter.children.foreach(expr => {
-        findInExpressionValues(expr, names, ans)
-      })
-    }
-
-    // get from Transformation
-    dimensions.filter(_.filter != null).map(_.filter).foreach(expr => {
-      findInExpressionValues(expr, names, ans)
-    })
-    ans
-  }
-
-  def findInExpressionValues(expr: Expression, names: Set[String], ans: JHashMap[String, JHashSet[String]]): Unit = {
-    expr match {
-      case not: Not if not.child.isInstanceOf[In] =>
-      // ignore not in
-      case in: In if in.value.cacheKey.isDefined && names.contains(in.value.cacheKey.get) =>
-        var v = ans.get(in.value.cacheKey.get)
-        if (v == null) {
-          v = new JHashSet[String]()
-          ans.put(in.value.cacheKey.get, v)
-        }
-        in.list.foreach {
-          case literal: Literal =>
-            v.add(literal.value.toString)
-          case _ =>
-        }
-      case _ =>
-        expr.children.foreach(child => {
-          findInExpressionValues(child, names, ans)
-        })
-    }
   }
 }

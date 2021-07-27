@@ -4,9 +4,10 @@ import java.util.{HashMap => JHashMap}
 
 import com.ebay.sojourner.common.model.{ClientData, RawEvent}
 import com.ebay.tdq.common.env.JdbcEnv
+import com.ebay.tdq.common.model.{TdqEvent, TdqMetric}
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.planner.LkpManagerTest
-import com.ebay.tdq.rules.{ProfilingSqlParser, TdqMetric}
+import com.ebay.tdq.rules.ProfilingSqlParser
 import com.ebay.tdq.utils.{DateUtils, JsonUtils}
 import org.junit.{BeforeClass, Test}
 
@@ -18,6 +19,58 @@ object SOJlibUDFTest {
 }
 
 class SOJlibUDFTest {
+  @Test
+  def test_soj_nvl(): Unit = {
+    val soj = new JHashMap[String, String]
+    soj.put("udid", "1")
+    test("case when length(p2)>0 then 1 else 0 end", "soj_nvl('udid')", soj, metric => {
+      assert(metric.getValues.get("p1") == 1)
+    })
+
+    test("case when length(p2)>0 then 1 else 0 end", "soj_nvl('udid_test')", soj, metric => {
+      assert(metric.getValues.get("p1") == 0)
+    })
+  }
+
+  @Test
+  def test_is_bbwoa_page(): Unit = {
+    val soj = new JHashMap[String, String]
+    soj.put("p", "2545343")
+    test("case when IS_BBWOA_PAGE_WITH_ITM(p2) then 1 else 0 end", "cast(soj_nvl('p') AS INTEGER)", soj, metric => {
+      assert(metric.getValues.get("p1") == 1)
+    })
+
+    soj.put("p", "111111111")
+    test("case when IS_BBWOA_PAGE_WITH_ITM(p2) then 1 else 0 end", "cast(soj_nvl('p') AS INTEGER)", soj, metric => {
+      assert(metric.getValues.get("p1") == 0)
+    })
+  }
+
+  def test(expr1: String, expr2: String, soj: JHashMap[String, String], assertFunction: TdqMetric => Unit, eventTime: Long = 3829847994095000L): Unit = {
+    test0(expr1, expr2, soj, assertFunction, _ => {}, eventTime)
+  }
+
+  def test0(expr1: String, expr2: String, soj: JHashMap[String, String], assertFunction: TdqMetric => Unit, rawEventFunction: RawEvent => Unit, eventTime: Long = 3829847994095000L): Unit = {
+    val config = getTdqConfig(expr1, expr2)
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
+    val plan = parser.parsePlan()
+    println(plan)
+    val rawEvent = new RawEvent
+    rawEvent.setClientData(new ClientData)
+    rawEvent.getClientData.setContentLength("55")
+    rawEvent.getClientData.setRemoteIP("100.10.1.1")
+    rawEvent.setEventTimestamp(eventTime)
+    rawEvent.setSojA(new JHashMap[String, String])
+    rawEvent.setSojK(new JHashMap[String, String])
+    rawEvent.setSojC(new JHashMap[String, String])
+    rawEvent.getSojA.putAll(soj)
+    rawEventFunction(rawEvent)
+
+    val metric = plan.process(new TdqEvent(rawEvent))
+    assert(metric != null)
+    assertFunction.apply(metric)
+  }
+
   def getTdqConfig(expr1: String, expr2: String): TdqConfig = {
     val json =
       s"""
@@ -46,62 +99,6 @@ class SOJlibUDFTest {
          |}
          |""".stripMargin
     JsonUtils.parseObject(json, classOf[TdqConfig])
-  }
-
-  def test(expr1: String, expr2: String, soj: JHashMap[String, String], assertFunction: TdqMetric => Unit, eventTime: Long = 3829847994095000L): Unit = {
-    test0(expr1, expr2, soj, assertFunction, _ => {}, eventTime)
-  }
-
-  def test0(expr1: String, expr2: String, soj: JHashMap[String, String], assertFunction: TdqMetric => Unit, rawEventFunction: RawEvent => Unit, eventTime: Long = 3829847994095000L): Unit = {
-    val config = getTdqConfig(expr1, expr2)
-    val parser = new ProfilingSqlParser(
-      config.getRules.get(0).getProfilers.get(0),
-      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString),
-      new JdbcEnv()
-    )
-    val plan = parser.parsePlan()
-    println(plan)
-    val rawEvent = new RawEvent
-    rawEvent.setClientData(new ClientData)
-    rawEvent.getClientData.setContentLength("55")
-    rawEvent.getClientData.setRemoteIP("100.10.1.1")
-    rawEvent.setEventTimestamp(eventTime)
-    rawEvent.setSojA(new JHashMap[String, String])
-    rawEvent.setSojK(new JHashMap[String, String])
-    rawEvent.setSojC(new JHashMap[String, String])
-    rawEvent.getSojA.putAll(soj)
-    rawEventFunction(rawEvent)
-
-    val metric = plan.process(rawEvent)
-    assert(metric != null)
-    assertFunction.apply(metric)
-  }
-
-  @Test
-  def test_soj_nvl(): Unit = {
-    val soj = new JHashMap[String, String]
-    soj.put("udid", "1")
-    test("case when length(p2)>0 then 1 else 0 end", "soj_nvl('udid')", soj, metric => {
-      assert(metric.getValues.get("p1") == 1)
-    })
-
-    test("case when length(p2)>0 then 1 else 0 end", "soj_nvl('udid_test')", soj, metric => {
-      assert(metric.getValues.get("p1") == 0)
-    })
-  }
-
-  @Test
-  def test_is_bbwoa_page(): Unit = {
-    val soj = new JHashMap[String, String]
-    soj.put("p", "2545343")
-    test("case when IS_BBWOA_PAGE_WITH_ITM(p2) then 1 else 0 end", "cast(soj_nvl('p') AS INTEGER)", soj, metric => {
-      assert(metric.getValues.get("p1") == 1)
-    })
-
-    soj.put("p", "111111111")
-    test("case when IS_BBWOA_PAGE_WITH_ITM(p2) then 1 else 0 end", "cast(soj_nvl('p') AS INTEGER)", soj, metric => {
-      assert(metric.getValues.get("p1") == 0)
-    })
   }
 
   @Test

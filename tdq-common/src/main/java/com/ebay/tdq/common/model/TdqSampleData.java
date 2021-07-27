@@ -1,6 +1,5 @@
-package com.ebay.tdq.rules;
+package com.ebay.tdq.common.model;
 
-import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.tdq.utils.JsonUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.Date;
@@ -17,18 +16,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TdqSampleData {
+
   private long processTime;
   private String metricKey;
-  private RawEvent rawEvent;
+  private TdqEvent tdqEvent;
   private TdqMetric tdqMetric;
   private String params;
 
-  public TdqSampleData(RawEvent rawEvent, TdqMetric tdqMetric, String metricKey, String params) {
+  public TdqSampleData(TdqEvent tdqEvent, TdqMetric tdqMetric, String metricKey, String params) {
     this.processTime = System.currentTimeMillis();
-    this.rawEvent    = rawEvent;
-    this.metricKey   = metricKey;
-    this.tdqMetric   = tdqMetric;
-    this.params      = params;
+    this.tdqEvent = tdqEvent;
+    this.metricKey = metricKey;
+    this.tdqMetric = tdqMetric;
+    this.params = params;
   }
 
   public Map<String, Object> toIndexRequest() {
@@ -41,11 +41,11 @@ public class TdqSampleData {
         json.put("tdq_metric", tdqMetric.toString());
       }
     }
-    if (rawEvent != null) {
+    if (tdqEvent != null) {
       try {
-        json.put("raw_event", JsonUtils.toJSONString(rawEvent));
+        json.put("tdq_event", JsonUtils.toJSONString(tdqEvent));
       } catch (JsonProcessingException ignore) {
-        json.put("raw_event", rawEvent.toString());
+        json.put("tdq_event", tdqEvent.toString());
       }
     }
     json.put("process_time", new Date(processTime));

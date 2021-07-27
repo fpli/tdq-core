@@ -1,15 +1,15 @@
 package com.ebay.tdq.jobs;
 
 import com.ebay.tdq.common.env.TdqEnv;
+import com.ebay.tdq.common.model.TdqMetric;
 import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.functions.TdqMetric1stAggrProcessWindowFunction;
 import com.ebay.tdq.functions.TdqMetric2ndAggrProcessWindowFunction;
 import com.ebay.tdq.functions.TdqMetricAggregateFunction;
-import com.ebay.tdq.planner.LkpManager;
-import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.sinks.TdqSinks;
 import com.ebay.tdq.sources.SourceBuilder;
 import com.ebay.tdq.utils.DateUtils;
+import com.ebay.tdq.utils.TdqConfigManager;
 import com.ebay.tdq.utils.TdqContext;
 import com.google.common.collect.Maps;
 import java.time.Duration;
@@ -47,7 +47,7 @@ public class ProfilingJob {
 
   protected void start() {
     try {
-      TdqConfig tdqConfig = LkpManager.getInstance(tdqEnv.getJdbcEnv()).findTdqConfig(tdqEnv.getJobName());
+      TdqConfig tdqConfig = TdqConfigManager.getInstance(tdqEnv.getJdbcEnv()).findTdqConfig(tdqEnv.getJobName());
       Validate.isTrue(tdqConfig != null);
       // step1: build data source
       // step2: normalize event to metric

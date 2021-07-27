@@ -1,7 +1,7 @@
 package com.ebay.tdq.functions;
 
 import com.ebay.tdq.common.env.TdqEnv;
-import com.ebay.tdq.rules.TdqMetric;
+import com.ebay.tdq.common.model.TdqMetric;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;

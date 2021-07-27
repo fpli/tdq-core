@@ -15,7 +15,8 @@ public class KafkaSourceEnvTest {
 
   @Test
   public void testIsEndOfStream() throws Exception {
-    val schema = new PathFinderRawEventKafkaDeserializationSchema(getTime("2021-07-20 18:25:00"));
+    val schema = new PathFinderRawEventKafkaDeserializationSchema(
+        null, getTime("2021-07-20 18:25:00"), null);
     Assert.assertFalse(schema.isEndOfStream(getTime("2021-07-20 18:24:00")));
     Assert.assertTrue(schema.isEndOfStream(getTime("2021-07-20 18:26:00")));
   }

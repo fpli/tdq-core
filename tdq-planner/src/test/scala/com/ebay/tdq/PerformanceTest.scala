@@ -3,13 +3,12 @@ package com.ebay.tdq
 import java.util.{HashMap => JHashMap}
 
 import com.ebay.sojourner.common.model.{ClientData, RawEvent}
-import com.ebay.sojourner.common.util.SojUtils
 import com.ebay.tdq.common.env.JdbcEnv
+import com.ebay.tdq.common.model.{RawEventAvro, TdqEvent}
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.planner.LkpManagerTest
 import com.ebay.tdq.rules.ProfilingSqlParser
 import com.ebay.tdq.utils.{DateUtils, JsonUtils}
-import org.apache.commons.beanutils.PropertyUtils
 import org.junit.{BeforeClass, Test}
 
 object PerformanceTest {
@@ -19,7 +18,7 @@ object PerformanceTest {
   }
 
   def main(args: Array[String]): Unit = {
-    val event = JsonUtils.parseObject(
+    val raw = JsonUtils.parseObject(
       """
         |{
         |  "sojA": {
@@ -81,6 +80,8 @@ object PerformanceTest {
         |}
         |""".stripMargin, classOf[RawEvent])
 
+    val tdqEvent = new TdqEvent(raw)
+
     """
       |forwardFor
       |script
@@ -108,33 +109,91 @@ object PerformanceTest {
       |encoding
       |TPayload
       |""".stripMargin.split("\n").filter(_.nonEmpty).foreach(k => {
-      println(PropertyUtils.getProperty(event, s"clientData.$k"))
+
+      //      println(PropertyUtils.getProperty(raw, s"clientData.$k"))
+      println(s"tdqEvent clientData.$k=>${tdqEvent.get(s"clientData.$k")}")
+    })
+
+    val avro = RawEventAvro.newBuilder()
+      .setSojA(raw.getSojA)
+      .setSojC(raw.getSojC)
+      .setSojK(raw.getSojK)
+      .setClientData(raw.getClientData.getMap)
+      .setIngestTime(raw.getIngestTime)
+      .setEventTimestamp(raw.getUnixEventTimestamp)
+      .setSojTimestamp(raw.getEventTimestamp())
+      .setProcessTimestamp(System.currentTimeMillis())
+      .build()
+    val tdqEvent2 = new TdqEvent(avro, "eventTimestamp")
+
+    """
+      |forwardFor
+      |script
+      |server
+      |TMachine
+      |TStamp
+      |TName
+      |t
+      |colo
+      |pool
+      |agent
+      |remoteIP
+      |TType
+      |TPool
+      |TStatus
+      |corrId
+      |contentLength
+      |nodeId
+      |requestGuid
+      |urlQueryString
+      |referrer
+      |rlogid
+      |acceptEncoding
+      |TDuration
+      |encoding
+      |TPayload
+      |""".stripMargin.split("\n").filter(_.nonEmpty).foreach(k => {
+
+      //      println(PropertyUtils.getProperty(raw, s"clientData.$k"))
+      println(s"tdqEvent2 clientData.$k=>${tdqEvent2.get(s"clientData.$k")}")
     })
 
     // this performance is good
     var s = System.currentTimeMillis()
     (0 to 1000000).foreach(_ => {
-      PropertyUtils.getProperty(event, "clientData.remoteIP")
+      tdqEvent.get("clientData.remoteIP")
     })
-    println(System.currentTimeMillis() - s)
+    println(s"hashmap=>${System.currentTimeMillis() - s}")
+
+    s = System.currentTimeMillis()
+    (0 to 1000000).foreach(_ => {
+      tdqEvent2.get("clientData.remoteIP")
+    })
+    println(s"hashmap GenericRecord=>${System.currentTimeMillis() - s}")
 
     // refection exception will so bad
     //    s = System.currentTimeMillis()
     //    (0 to 1000000).foreach(_ => {
     //      try {
-    //        PropertyUtils.getProperty(event, "clientData.remoteIP1")
+    //        PropertyUtils.getProperty(raw, "clientData.remoteIP1")
     //      } catch {
     //        case _: NoSuchMethodException =>
     //      }
     //    })
     //    println(System.currentTimeMillis() - s)
 
-    // this is bad
-    s = System.currentTimeMillis()
-    (0 to 1000000).foreach(_ => {
-      SojUtils.getTagValueStr(event, "remoteIP")
-    })
-    println(System.currentTimeMillis() - s)
+    //    s = System.currentTimeMillis()
+    //    (0 to 1000000).foreach(_ => {
+    //      PropertyUtils.getProperty(raw, s"clientData.remoteIP")
+    //    })
+    //    println(s"PropertyUtils=>${System.currentTimeMillis() - s}")
+    //    s = System.currentTimeMillis()
+    //
+    //    // this is bad
+    //    (0 to 1000000).foreach(_ => {
+    //      SojUtils.getTagValueStr(raw, "remoteIP")
+    //    })
+    //    println(s"SojUtils.getTagValueStr=>${System.currentTimeMillis() - s}")
   }
 }
 
@@ -239,11 +298,7 @@ class PerformanceTest {
         |}
         |""".stripMargin
     val config = JsonUtils.parseObject(json, classOf[TdqConfig])
-    val parser = new ProfilingSqlParser(
-      config.getRules.get(0).getProfilers.get(0),
-      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString),
-      new JdbcEnv()
-    )
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
     val plan = parser.parsePlan()
     println(plan)
 
@@ -262,7 +317,7 @@ class PerformanceTest {
     rawEvent.getSojA.put("TDuration", "155")
     rawEvent.getSojA.put("itm", item)
 
-    val metric = plan.process(rawEvent)
+    val metric = plan.process(new TdqEvent(rawEvent))
     assert(metric != null)
     println(metric.getValues)
 

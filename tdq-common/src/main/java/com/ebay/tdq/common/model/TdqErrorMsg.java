@@ -1,6 +1,5 @@
-package com.ebay.tdq.rules;
+package com.ebay.tdq.common.model;
 
-import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.tdq.utils.JsonUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.Date;
@@ -15,15 +14,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class TdqErrorMsg {
+
   private long processTime;
   private String metricKey;
-  private RawEvent rawEvent;
+  private TdqEvent tdqEvent;
   private String exception;
 
-  public TdqErrorMsg(RawEvent rawEvent, Exception e, String metricKey) {
+  public TdqErrorMsg(TdqEvent event, Exception e, String metricKey) {
     this.processTime = System.currentTimeMillis();
-    this.rawEvent    = rawEvent;
-    this.metricKey   = metricKey;
+    this.tdqEvent = event;
+    this.metricKey = metricKey;
     if (e != null) {
       this.exception = e.toString();
     }
@@ -34,9 +34,9 @@ public class TdqErrorMsg {
     json.put("metric_key", getMetricKey());
     json.put("process_time", new Date(processTime));
     try {
-      json.put("raw_event", JsonUtils.toJSONString(rawEvent));
+      json.put("tdq_event", JsonUtils.toJSONString(tdqEvent));
     } catch (JsonProcessingException ignore) {
-      json.put("raw_event", rawEvent.toString());
+      json.put("tdq_event", tdqEvent.toString());
     }
     json.put("exception", exception);
     return json;

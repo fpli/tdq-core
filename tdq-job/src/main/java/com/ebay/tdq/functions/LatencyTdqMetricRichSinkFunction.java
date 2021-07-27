@@ -1,6 +1,6 @@
 package com.ebay.tdq.functions;
 
-import com.ebay.tdq.rules.TdqMetric;
+import com.ebay.tdq.common.model.TdqMetric;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.flink.configuration.Configuration;
@@ -13,6 +13,7 @@ import org.apache.flink.streaming.api.functions.sink.SinkFunction;
  * @author juntzhang
  */
 public class LatencyTdqMetricRichSinkFunction extends RichSinkFunction<TdqMetric> {
+
   private transient MetricGroup group;
   private transient Map<String, Counter> counterMap;
 
@@ -20,7 +21,7 @@ public class LatencyTdqMetricRichSinkFunction extends RichSinkFunction<TdqMetric
   public void open(Configuration parameters) throws Exception {
     super.open(parameters);
     counterMap = new HashMap<>();
-    group      = this.getRuntimeContext().getMetricGroup().addGroup("tdq2");
+    group = this.getRuntimeContext().getMetricGroup().addGroup("tdq2");
   }
 
   public void inc(String key, long v) {

@@ -1,5 +1,6 @@
 package com.ebay.tdq.svc;
 
+import com.ebay.tdq.common.model.TdqMetric;
 import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;
@@ -12,7 +13,6 @@ import com.ebay.tdq.expressions.aggregate.Max;
 import com.ebay.tdq.expressions.aggregate.Min;
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.ProfilingSqlParser;
-import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.rules.Transformation;
 import com.ebay.tdq.service.ProfilerService;
 import com.ebay.tdq.utils.DateUtils;
@@ -72,7 +72,7 @@ public class ProfilerServiceImpl implements ProfilerService {
       Validate.isTrue(StringUtils.isNotEmpty(profilerConfig.getMetricName()), "metric name is required.");
       int window = (int) DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString());
 
-      PhysicalPlan physicalPlan = new ProfilingSqlParser(profilerConfig, window, null).parsePlan();
+      PhysicalPlan physicalPlan = new ProfilingSqlParser(profilerConfig, window, null, null).parsePlan();
 
       SearchSourceBuilder builder = new SearchSourceBuilder();
       BoolQueryBuilder rootBuilder = QueryBuilders.boolQuery();
@@ -85,7 +85,7 @@ public class ProfilerServiceImpl implements ProfilerService {
           rootBuilder.must(QueryBuilders.termsQuery("tags." + k + ".raw", v));
         });
       }
-      ProfilingSqlParser parser = new ProfilingSqlParser(profilerConfig, window, null);
+      ProfilingSqlParser parser = new ProfilingSqlParser(profilerConfig, window, null, null);
       new ProntoQueryBuilder(rootBuilder, parser.parseProntoFilterExpr()).submit();
 
       builder.query(rootBuilder);
@@ -148,7 +148,7 @@ public class ProfilerServiceImpl implements ProfilerService {
       Validate.isTrue(StringUtils.isNotEmpty(profilerConfig.getMetricName()), "metric name is required.");
       int window = (int) DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString());
 
-      ProfilingSqlParser parser = new ProfilingSqlParser(profilerConfig, window, null);
+      ProfilingSqlParser parser = new ProfilingSqlParser(profilerConfig, window, null, null);
       PhysicalPlan physicalPlan = parser.parsePlan();
       if (ArrayUtils.isEmpty(physicalPlan.dimensions())) {
         return resultBuilder.build();

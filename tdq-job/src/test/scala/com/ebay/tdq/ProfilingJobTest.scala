@@ -1,7 +1,7 @@
 package com.ebay.tdq
 
-import com.ebay.tdq.RawEventTest.getRawEvent
-import com.ebay.tdq.rules.TdqMetric
+import com.ebay.tdq.RawEventTest.getTdqEvent
+import com.ebay.tdq.common.model.TdqMetric
 import org.apache.commons.lang.time.DateUtils
 import org.junit.Test
 
@@ -53,13 +53,13 @@ class SingleRuleSqlJobTest {
            |}
            |""".stripMargin,
       events = List(
-        getRawEvent("2021-05-29 12:00:00", contentLength = 31, pageId = 1, tDuration = 1d),
-        getRawEvent("2021-05-29 12:01:02", contentLength = 29, pageId = 2, tDuration = 2d), //ignore
-        getRawEvent("2021-05-29 12:01:59", contentLength = 31, pageId = 1, tDuration = 3d),
-        getRawEvent("2021-05-29 12:01:59", contentLength = 31, pageId = 2, tDuration = 3d),
-        getRawEvent("2021-05-29 12:02:00", contentLength = 31, pageId = 1, tDuration = 5d),
-        getRawEvent("2021-05-29 12:03:59", contentLength = 31, pageId = 1, tDuration = 6d),
-        getRawEvent("2021-05-29 12:04:00", contentLength = 31, pageId = 2, tDuration = 7d)
+        getTdqEvent("2021-05-29 12:00:00", contentLength = 31, pageId = 1, tDuration = 1d),
+        getTdqEvent("2021-05-29 12:01:02", contentLength = 29, pageId = 2, tDuration = 2d), //ignore
+        getTdqEvent("2021-05-29 12:01:59", contentLength = 31, pageId = 1, tDuration = 3d),
+        getTdqEvent("2021-05-29 12:01:59", contentLength = 31, pageId = 2, tDuration = 3d),
+        getTdqEvent("2021-05-29 12:02:00", contentLength = 31, pageId = 1, tDuration = 5d),
+        getTdqEvent("2021-05-29 12:03:59", contentLength = 31, pageId = 1, tDuration = 6d),
+        getTdqEvent("2021-05-29 12:04:00", contentLength = 31, pageId = 2, tDuration = 7d)
       ),
       expects = List(
         getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "1", 4d),
@@ -127,13 +127,13 @@ class SingleRuleSqlJobTest {
            |}
            |""".stripMargin,
       events = List(
-        getRawEvent("2021-05-29 12:00:00", itm = "1"),
-        getRawEvent("2021-05-29 12:00:02", itm = "2"),
-        getRawEvent("2021-05-29 12:00:29", itm = null),
-        getRawEvent("2021-05-29 12:01:29", itm = ""),
-        getRawEvent("2021-05-29 12:01:30", itm = "5"),
-        getRawEvent("2021-05-29 12:01:58", itm = "a"),
-        getRawEvent("2021-05-29 12:01:59", itm = "7")
+        getTdqEvent("2021-05-29 12:00:00", itm = "1"),
+        getTdqEvent("2021-05-29 12:00:02", itm = "2"),
+        getTdqEvent("2021-05-29 12:00:29", itm = null),
+        getTdqEvent("2021-05-29 12:01:29", itm = ""),
+        getTdqEvent("2021-05-29 12:01:30", itm = "5"),
+        getTdqEvent("2021-05-29 12:01:58", itm = "a"),
+        getTdqEvent("2021-05-29 12:01:59", itm = "7")
       ),
       expects = List(
         getMetric(id, time = "2021-05-29 12:01:59", v = 4d / 7d)
@@ -144,8 +144,8 @@ class SingleRuleSqlJobTest {
   @Test
   def test_count_by_domain(): Unit = {
     val id = "test_count_by_domain"
-    val nullEvent = getRawEvent("2021-05-29 12:01:51")
-    nullEvent.getSojA.remove("p")
+    val nullEvent = getTdqEvent("2021-05-29 12:01:51")
+    nullEvent.remote("p")
     ProfilingJobIT(
       id = id,
       config =
@@ -186,13 +186,13 @@ class SingleRuleSqlJobTest {
            |}
            |""".stripMargin,
       events = List(
-        getRawEvent("2021-05-29 12:01:50", pageId = 711),
+        getTdqEvent("2021-05-29 12:01:50", pageId = 711),
         nullEvent,
-        getRawEvent("2021-05-29 12:01:52", pageId = 711),
-        getRawEvent("2021-05-29 12:01:53", pageId = 1677718),
-        getRawEvent("2021-05-29 12:01:59", pageId = 1),
-        getRawEvent("2021-05-29 12:01:59", pageId = 1677718),
-        getRawEvent("2021-05-29 12:01:59", pageId = 711)
+        getTdqEvent("2021-05-29 12:01:52", pageId = 711),
+        getTdqEvent("2021-05-29 12:01:53", pageId = 1677718),
+        getTdqEvent("2021-05-29 12:01:59", pageId = 1),
+        getTdqEvent("2021-05-29 12:01:59", pageId = 1677718),
+        getTdqEvent("2021-05-29 12:01:59", pageId = 711)
       ),
       expects = List(
         getMetric(id, time = "2021-05-29 12:01:59", tagK = "domain", tagV = "ASQ", v = 3d),
@@ -246,15 +246,15 @@ class SingleRuleSqlJobTest {
            |}
            |""".stripMargin,
       events = List(
-        getRawEvent("2021-05-29 12:00:00", pageId = 1),
-        getRawEvent("2021-05-29 12:01:02", pageId = 1),
-        getRawEvent("2021-05-29 12:01:59", pageId = 2),
-        getRawEvent("2021-05-29 12:01:59", pageId = 1),
+        getTdqEvent("2021-05-29 12:00:00", pageId = 1),
+        getTdqEvent("2021-05-29 12:01:02", pageId = 1),
+        getTdqEvent("2021-05-29 12:01:59", pageId = 2),
+        getTdqEvent("2021-05-29 12:01:59", pageId = 1),
 
-        getRawEvent("2021-05-29 12:02:00", pageId = 2),
-        getRawEvent("2021-05-29 12:03:59", pageId = 2),
+        getTdqEvent("2021-05-29 12:02:00", pageId = 2),
+        getTdqEvent("2021-05-29 12:03:59", pageId = 2),
 
-        getRawEvent("2021-05-29 12:04:01", pageId = 2)
+        getTdqEvent("2021-05-29 12:04:01", pageId = 2)
       ),
       expects = List(
         getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "1", 3d),
@@ -311,13 +311,13 @@ class SingleRuleSqlJobTest {
            |}
            |""".stripMargin,
       events = List(
-        getRawEvent("2021-05-29 12:00:00", tDuration = 1d),
-        getRawEvent("2021-05-29 12:01:02", tDuration = 2d),
-        getRawEvent("2021-05-29 12:01:59", tDuration = 3d),
-        getRawEvent("2021-05-29 12:01:59", tDuration = 4d),
-        getRawEvent("2021-05-29 12:03:59", tDuration = 5d),
-        getRawEvent("2021-05-29 12:03:59", tDuration = 6d),
-        getRawEvent("2021-05-29 12:03:59", tDuration = 10d)
+        getTdqEvent("2021-05-29 12:00:00", tDuration = 1d),
+        getTdqEvent("2021-05-29 12:01:02", tDuration = 2d),
+        getTdqEvent("2021-05-29 12:01:59", tDuration = 3d),
+        getTdqEvent("2021-05-29 12:01:59", tDuration = 4d),
+        getTdqEvent("2021-05-29 12:03:59", tDuration = 5d),
+        getTdqEvent("2021-05-29 12:03:59", tDuration = 6d),
+        getTdqEvent("2021-05-29 12:03:59", tDuration = 10d)
       ),
       expects = List(
         getMetric(id, "2021-05-29 12:01:59", 4d - 1d),
@@ -377,13 +377,13 @@ class SingleRuleSqlJobTest {
            |}
            |""".stripMargin,
       events = List(
-        getRawEvent("2021-05-29 12:00:00", pageId = 1, tDuration = 1d),
-        getRawEvent("2021-05-29 12:01:02", pageId = 2, tDuration = 2d),
-        getRawEvent("2021-05-29 12:01:59", pageId = 1, tDuration = 3d),
-        getRawEvent("2021-05-29 12:01:59", pageId = 2, tDuration = 4d),
-        getRawEvent("2021-05-29 12:01:59", pageId = 1, tDuration = 5d),
-        getRawEvent("2021-05-29 12:01:59", pageId = 1, tDuration = 6d),
-        getRawEvent("2021-05-29 12:01:59", pageId = 2, tDuration = 10d)
+        getTdqEvent("2021-05-29 12:00:00", pageId = 1, tDuration = 1d),
+        getTdqEvent("2021-05-29 12:01:02", pageId = 2, tDuration = 2d),
+        getTdqEvent("2021-05-29 12:01:59", pageId = 1, tDuration = 3d),
+        getTdqEvent("2021-05-29 12:01:59", pageId = 2, tDuration = 4d),
+        getTdqEvent("2021-05-29 12:01:59", pageId = 1, tDuration = 5d),
+        getTdqEvent("2021-05-29 12:01:59", pageId = 1, tDuration = 6d),
+        getTdqEvent("2021-05-29 12:01:59", pageId = 2, tDuration = 10d)
       ),
       expects = List(
         getMetric(id, "2021-05-29 12:01:59", tagK = "page_id", tagV = "1", 6d - 1d),
@@ -428,15 +428,15 @@ class SingleRuleSqlJobTest {
            |}
            |""".stripMargin,
       events = List(
-        getRawEvent("2021-05-29 12:01:50", pageId = 1),
-        getRawEvent("2021-05-29 12:01:52", pageId = 1),
-        getRawEvent("2021-05-29 12:01:59", pageId = 2),
-        getRawEvent("2021-05-29 12:01:59", pageId = 1),
+        getTdqEvent("2021-05-29 12:01:50", pageId = 1),
+        getTdqEvent("2021-05-29 12:01:52", pageId = 1),
+        getTdqEvent("2021-05-29 12:01:59", pageId = 2),
+        getTdqEvent("2021-05-29 12:01:59", pageId = 1),
 
-        getRawEvent("2021-05-29 12:12:00", pageId = 2),
-        getRawEvent("2021-05-29 12:13:59", pageId = 2),
+        getTdqEvent("2021-05-29 12:12:00", pageId = 2),
+        getTdqEvent("2021-05-29 12:13:59", pageId = 2),
 
-        getRawEvent("2021-05-29 12:24:01", pageId = 2)
+        getTdqEvent("2021-05-29 12:24:01", pageId = 2)
       ),
       expects = List(
         getMetric(id, "2021-05-29 12:09:59", 4d),

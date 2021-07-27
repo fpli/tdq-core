@@ -1,10 +1,10 @@
 package com.ebay.tdq.sources;
 
-import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.tdq.common.model.TdqEvent;
+import com.ebay.tdq.common.model.TdqMetric;
 import com.ebay.tdq.config.MemorySourceConfig;
 import com.ebay.tdq.config.SourceConfig;
 import com.ebay.tdq.functions.RawEventProcessFunction;
-import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.utils.TdqContext;
 import com.google.common.annotations.VisibleForTesting;
 import java.util.List;
@@ -17,26 +17,26 @@ import org.apache.flink.streaming.api.functions.source.SourceFunction;
 public class MemorySourceBuilder {
 
   @VisibleForTesting
-  private static List<RawEvent> rawEventList;
-  private static SourceFunction<RawEvent> sourceFunction;
+  private static List<TdqEvent> rawEventList;
+  private static SourceFunction<TdqEvent> sourceFunction;
 
   @VisibleForTesting
-  public static void setRawEventList(List<RawEvent> rawEventList) {
+  public static void setRawEventList(List<TdqEvent> rawEventList) {
     MemorySourceBuilder.rawEventList = rawEventList;
   }
 
   @VisibleForTesting
   public static void setSourceFunction(
-      SourceFunction<RawEvent> sourceFunction) {
+      SourceFunction<TdqEvent> sourceFunction) {
     MemorySourceBuilder.sourceFunction = sourceFunction;
   }
 
   public static DataStream<TdqMetric> build(SourceConfig sourceConfig, TdqContext tdqCxt) {
     MemorySourceConfig msc = MemorySourceConfig.build(sourceConfig);
     if (sourceFunction == null) {
-      sourceFunction = new SourceFunction<RawEvent>() {
+      sourceFunction = new SourceFunction<TdqEvent>() {
         @Override
-        public void run(SourceContext<RawEvent> ctx) throws Exception {
+        public void run(SourceContext<TdqEvent> ctx) throws Exception {
           Thread.sleep(1000);
           rawEventList.forEach(ctx::collect);
         }
@@ -46,7 +46,7 @@ public class MemorySourceBuilder {
         }
       };
     }
-    DataStream<RawEvent> rawEventDataStream = tdqCxt.getRhsEnv().addSource(sourceFunction)
+    DataStream<TdqEvent> rawEventDataStream = tdqCxt.getRhsEnv().addSource(sourceFunction)
         .setParallelism(msc.getParallelism())
         .slotSharingGroup(msc.getName())
         .name(msc.getName())

@@ -1,13 +1,14 @@
 package com.ebay.tdq.functions;
 
+import com.ebay.tdq.common.model.TdqMetric;
 import com.ebay.tdq.rules.ExpressionRegistry;
-import com.ebay.tdq.rules.TdqMetric;
 import org.apache.flink.api.common.functions.AggregateFunction;
 
 /**
  * @author juntzhang
  */
 public class TdqMetricAggregateFunction implements AggregateFunction<TdqMetric, TdqMetric, TdqMetric> {
+
   public static TdqMetric merge0(TdqMetric m1, TdqMetric m2) {
     if (m1 == null && m2 == null) {
       return null;

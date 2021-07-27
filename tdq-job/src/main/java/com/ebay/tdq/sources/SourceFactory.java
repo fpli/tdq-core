@@ -1,6 +1,6 @@
 package com.ebay.tdq.sources;
 
-import com.ebay.tdq.rules.TdqMetric;
+import com.ebay.tdq.common.model.TdqMetric;
 import com.ebay.tdq.utils.TdqContext;
 import java.time.Duration;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;

@@ -5,6 +5,7 @@ import java.util.{HashMap => JHashMap}
 import com.ebay.sojourner.common.model.{ClientData, RawEvent}
 import com.ebay.sojourner.common.util.SojTimestamp
 import com.ebay.tdq.common.env.JdbcEnv
+import com.ebay.tdq.common.model.TdqEvent
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.planner.LkpManagerTest
 import com.ebay.tdq.rules.ProfilingSqlParser
@@ -68,11 +69,7 @@ class ProfilingSqlParserTest {
         |}
         |""".stripMargin
     val config = JsonUtils.parseObject(json, classOf[TdqConfig])
-    val parser = new ProfilingSqlParser(
-      config.getRules.get(0).getProfilers.get(0),
-      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString),
-      new JdbcEnv()
-    )
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
     val plan = parser.parsePlan()
     println(plan)
 
@@ -91,17 +88,17 @@ class ProfilingSqlParserTest {
     rawEvent.getSojA.put("TDuration", "155")
     rawEvent.getSojA.put("itm", item)
 
-    var metric = plan.process(rawEvent)
+    var metric = plan.process(new TdqEvent(rawEvent))
     assert(metric != null)
     assert(metric.getValues.get("t_duration_sum") == 155d)
 
     rawEvent.getClientData.setContentLength("25")
-    metric = plan.process(rawEvent)
+    metric = plan.process(new TdqEvent(rawEvent))
     assert(metric == null)
 
     rawEvent.getClientData.setContentLength("35")
     rawEvent.getSojA.put("TDuration", "10")
-    metric = plan.process(rawEvent)
+    metric = plan.process(new TdqEvent(rawEvent))
     assert(metric.getValues.get("t_duration_sum") == 10d)
 
   }
@@ -167,11 +164,7 @@ class ProfilingSqlParserTest {
         |}
         |""".stripMargin
     val config = JsonUtils.parseObject(json, classOf[TdqConfig])
-    val parser = new ProfilingSqlParser(
-      config.getRules.get(0).getProfilers.get(0),
-      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString),
-      new JdbcEnv()
-    )
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
     val plan = parser.parsePlan()
     println(plan)
 
@@ -188,12 +181,12 @@ class ProfilingSqlParserTest {
     rawEvent.getSojA.put("t", siteId)
     rawEvent.getSojA.put("itm", item)
 
-    var metric = plan.process(rawEvent)
+    var metric = plan.process(new TdqEvent(rawEvent))
     assert(metric.getValues.get("itm_cnt") == 1)
     assert(metric.getValues.get("itm_valid_cnt") == 1)
 
     rawEvent.getSojA.put("itm", "123a")
-    metric = plan.process(rawEvent)
+    metric = plan.process(new TdqEvent(rawEvent))
     assert(metric.getValues.get("itm_cnt") == 1)
     assert(metric.getValues.get("itm_valid_cnt") == 0)
 
@@ -204,7 +197,7 @@ class ProfilingSqlParserTest {
     (0 to 100000).foreach { _ =>
       rawEvent.getSojA.put("p", Math.abs(RawEventTest.getInt).toString)
       rawEvent.getSojA.put("itm", Math.abs(RawEventTest.getLong).toString)
-      metric = plan.process(rawEvent)
+      metric = plan.process(new TdqEvent(rawEvent))
     }
 
     println(s"100k process cast time ${System.currentTimeMillis() - s} ms")
@@ -236,11 +229,7 @@ class ProfilingSqlParserTest {
         |]}
         |""".stripMargin
     val config = JsonUtils.parseObject(json, classOf[TdqConfig])
-    val parser = new ProfilingSqlParser(
-      config.getRules.get(0).getProfilers.get(0),
-      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString),
-      new JdbcEnv()
-    )
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
     val plan = parser.parsePlan()
     println(plan)
 
@@ -257,12 +246,12 @@ class ProfilingSqlParserTest {
     rawEvent.getSojA.put("t", siteId)
     rawEvent.getSojA.put("itm", item)
 
-    var metric = plan.process(rawEvent)
+    var metric = plan.process(new TdqEvent(rawEvent))
     assert(metric.getTags.get("page_id") == 2547208)
     assert(metric.getValues.get("total_cnt") == 1)
 
     rawEvent.getSojA.put("p", "123")
-    metric = plan.process(rawEvent)
+    metric = plan.process(new TdqEvent(rawEvent))
     assert(metric.getTags.get("page_id") == null)
     assert(metric.getValues.get("total_cnt") == 1)
   }
@@ -328,11 +317,7 @@ class ProfilingSqlParserTest {
         |}
         |""".stripMargin
     val config = JsonUtils.parseObject(json, classOf[TdqConfig])
-    val parser = new ProfilingSqlParser(
-      config.getRules.get(0).getProfilers.get(0),
-      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString),
-      new JdbcEnv()
-    )
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
     val plan = parser.parsePlan()
     println(plan)
 
@@ -351,13 +336,13 @@ class ProfilingSqlParserTest {
     rawEvent.getSojA.put("t", siteId)
     rawEvent.getSojA.put("itm", item)
 
-    var metric = plan.process(rawEvent)
+    var metric = plan.process(new TdqEvent(rawEvent))
     println(metric)
     assert(metric.getValues.get("total_cnt") == 1)
     assert(metric.getValues.get("qualified_events_cnt") == 0)
 
     rawEvent.setEventTimestamp(SojTimestamp.getUnixTimestampToSojTimestamp(SojTimestamp.getSojTimestampToUnixTimestamp(3829847994095000L) + 1000 * 5))
-    metric = plan.process(rawEvent)
+    metric = plan.process(new TdqEvent(rawEvent))
     println(metric)
     assert(metric.getValues.get("total_cnt") == 1)
     assert(metric.getValues.get("qualified_events_cnt") == 1)
@@ -429,11 +414,7 @@ class ProfilingSqlParserTest {
         |}
         |""".stripMargin
     val config = JsonUtils.parseObject(json, classOf[TdqConfig])
-    val parser = new ProfilingSqlParser(
-      config.getRules.get(0).getProfilers.get(0),
-      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString),
-      new JdbcEnv()
-    )
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
     val plan = parser.parsePlan()
     println(plan)
 
@@ -450,7 +431,7 @@ class ProfilingSqlParserTest {
     rawEvent.getSojA.put("t", siteId)
     rawEvent.getSojA.put("itm", item)
 
-    val metric = plan.process(rawEvent)
+    val metric = plan.process(new TdqEvent(rawEvent))
     println(metric)
 
   }

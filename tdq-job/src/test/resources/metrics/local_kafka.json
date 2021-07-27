@@ -13,6 +13,9 @@
         "startup-mode": "EARLIEST",
         "from-timestamp": 0,
         "to-timestamp": 0,
+        "rheos-services-urls": "https://rheos-services.qa.ebay.com",
+        "schema-subject": "daf.checkout",
+        "event-time-field": "viTimestamp",
         "topics": "misc.crossdcs.gro.trans.udaf",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.RheosEventDeserializationSchema",
         "kafka-consumer": {
@@ -43,9 +46,23 @@
         {
           "expr": "p1",
           "metric-name": "global_cnt_by_1min",
+          "dimensions": [
+            "quantity"
+          ],
           "transformations": [
             {
               "alias": "p1",
+              "expr": "count(1)"
+            }
+          ]
+        },
+        {
+          "expr": "total_cnt",
+          "metric-name": "test_filter_dims",
+          "filter": "quantity > 1",
+          "transformations": [
+            {
+              "alias": "total_cnt",
               "expr": "count(1)"
             }
           ]

@@ -1,13 +1,13 @@
 package com.ebay.tdq.functions;
 
-import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.tdq.common.env.TdqEnv;
-import com.ebay.tdq.planner.LkpManager;
+import com.ebay.tdq.common.model.TdqErrorMsg;
+import com.ebay.tdq.common.model.TdqEvent;
+import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.TdqSampleData;
 import com.ebay.tdq.rules.PhysicalPlan;
-import com.ebay.tdq.rules.TdqErrorMsg;
-import com.ebay.tdq.rules.TdqMetric;
-import com.ebay.tdq.rules.TdqSampleData;
 import com.ebay.tdq.utils.LocalCache;
+import com.ebay.tdq.utils.TdqConfigManager;
 import com.ebay.tdq.utils.TdqContext;
 import com.ebay.tdq.utils.TdqMetricGroup;
 import java.util.List;
@@ -26,7 +26,7 @@ import org.apache.flink.util.Collector;
  * @author juntzhang
  */
 @Slf4j
-public class RawEventProcessFunction extends ProcessFunction<RawEvent, TdqMetric> implements CheckpointedFunction {
+public class RawEventProcessFunction extends ProcessFunction<TdqEvent, TdqMetric> implements CheckpointedFunction {
 
   private final TdqEnv tdqEnv;
   private final TdqContext tdqCxt;
@@ -44,9 +44,9 @@ public class RawEventProcessFunction extends ProcessFunction<RawEvent, TdqMetric
   }
 
   @Override
-  public void processElement(RawEvent event, Context ctx, Collector<TdqMetric> collector) throws Exception {
+  public void processElement(TdqEvent event, Context ctx, Collector<TdqMetric> collector) throws Exception {
     long s1 = System.nanoTime();
-    processElement0(event, LkpManager.getInstance(tdqEnv.getJdbcEnv()).getPhysicalPlans(), ctx, collector);
+    processElement0(event, TdqConfigManager.getInstance(tdqEnv.getJdbcEnv()).getPhysicalPlans(), ctx, collector);
     metricGroup.markElement(s1);
   }
 
@@ -76,15 +76,15 @@ public class RawEventProcessFunction extends ProcessFunction<RawEvent, TdqMetric
     metricGroup = new TdqMetricGroup(getRuntimeContext().getMetricGroup());
     localCache = new LocalCache(tdqEnv, metricGroup);
     metricGroup.gauge(localCache);
-    LkpManager.getInstance(tdqEnv.getJdbcEnv());
+    TdqConfigManager.getInstance(tdqEnv.getJdbcEnv());
   }
 
-  private void processElement0(RawEvent event,
+  private void processElement0(TdqEvent event,
       List<PhysicalPlan> physicalPlans, Context ctx, Collector<TdqMetric> collector) throws Exception {
     if (physicalPlans == null || physicalPlans.size() == 0) {
       throw new Exception("physical plans is empty!");
     }
-    if (tdqEnv.isNotProcessElement(event.getUnixEventTimestamp())) {
+    if (tdqEnv.isNotProcessElement(event.getEventTimeMs())) {
       metricGroup.inc("isNotProcessElement");
       return;
     }
@@ -105,7 +105,7 @@ public class RawEventProcessFunction extends ProcessFunction<RawEvent, TdqMetric
     }
   }
 
-  private void sampleData(Context ctx, RawEvent event, TdqMetric metric, PhysicalPlan plan) {
+  private void sampleData(Context ctx, TdqEvent event, TdqMetric metric, PhysicalPlan plan) {
     if (plan.sampling()) {
       metricGroup.inc("sampleEvent_" + plan.metricKey());
       ctx.output(tdqCxt.getSampleOutputTag(), new TdqSampleData(
@@ -114,7 +114,7 @@ public class RawEventProcessFunction extends ProcessFunction<RawEvent, TdqMetric
     }
   }
 
-  private void errorMsg(Context ctx, RawEvent event, Exception e, PhysicalPlan plan) {
+  private void errorMsg(Context ctx, TdqEvent event, Exception e, PhysicalPlan plan) {
     metricGroup.inc("errorEvent");
     metricGroup.inc("errorEvent_" + plan.metricKey());
     if ((System.currentTimeMillis() - errorMsgCurrentTimeMillis) > 5000) {

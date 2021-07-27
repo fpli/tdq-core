@@ -12,6 +12,8 @@
         "startup-mode": "LATEST",
         "stream": "behavior.pathfinder",
         "topics": "behavior.pathfinder.events.total",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
+        "event-time-field": "eventTimestamp",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema",
         "kafka-consumer": {
           "sasl.mechanism": "IAF",
@@ -39,6 +41,8 @@
         "startup-mode": "LATEST",
         "stream": "behavior.pathfinder",
         "topics": "behavior.pathfinder.events.total",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
+        "event-time-field": "eventTimestamp",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema",
         "kafka-consumer": {
           "sasl.mechanism": "IAF",
@@ -66,6 +70,8 @@
         "startup-mode": "LATEST",
         "stream": "behavior.pathfinder",
         "topics": "behavior.pathfinder.events.total",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
+        "event-time-field": "eventTimestamp",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema",
         "kafka-consumer": {
           "sasl.mechanism": "IAF",

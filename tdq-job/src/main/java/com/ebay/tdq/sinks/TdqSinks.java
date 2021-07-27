@@ -4,11 +4,11 @@ package com.ebay.tdq.sinks;
 import com.ebay.tdq.common.env.ProntoEnv;
 import com.ebay.tdq.common.env.SinkEnv;
 import com.ebay.tdq.common.env.TdqEnv;
+import com.ebay.tdq.common.model.TdqErrorMsg;
+import com.ebay.tdq.common.model.TdqMetric;
 import com.ebay.tdq.common.model.TdqMetricAvro;
+import com.ebay.tdq.common.model.TdqSampleData;
 import com.ebay.tdq.functions.ProntoSinkFunction;
-import com.ebay.tdq.rules.TdqErrorMsg;
-import com.ebay.tdq.rules.TdqMetric;
-import com.ebay.tdq.rules.TdqSampleData;
 import com.ebay.tdq.sources.HdfsConnectorFactory;
 import com.ebay.tdq.sources.TdqMetricDateTimeBucketAssigner;
 import com.ebay.tdq.utils.TdqContext;
@@ -143,6 +143,13 @@ public class TdqSinks implements Serializable {
           .name("log_sample_o_pronto")
           .setParallelism(3);
     }
+    if (env.isSampleLogSinkStd()) {
+      ds.getSideOutput(tdqCxt.getSampleOutputTag())
+          .print(env.getLatencyMetricStdName())
+          .uid("log_sample_o_std")
+          .name("log_sample_o_std")
+          .setParallelism(tdqEnv.getMetric2ndAggrParallelism());
+    }
   }
 
   public static void sinkException(TdqContext tdqCxt, SingleOutputStreamOperator<TdqMetric> ds) {
@@ -163,6 +170,13 @@ public class TdqSinks implements Serializable {
           .uid("log_exception_o_pronto")
           .name("log_exception_o_pronto")
           .setParallelism(1);
+    }
+    if (env.isExceptionLogSinkStd()) {
+      ds.getSideOutput(tdqCxt.getExceptionOutputTag())
+          .print(env.getLatencyMetricStdName())
+          .uid("log_exception_o_std")
+          .name("log_exception_o_std")
+          .setParallelism(tdqEnv.getMetric2ndAggrParallelism());
     }
   }
 

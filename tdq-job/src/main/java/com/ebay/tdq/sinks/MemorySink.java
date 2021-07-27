@@ -1,7 +1,7 @@
 package com.ebay.tdq.sinks;
 
+import com.ebay.tdq.common.model.TdqMetric;
 import com.ebay.tdq.rules.PhysicalPlan;
-import com.ebay.tdq.rules.TdqMetric;
 import com.google.common.annotations.VisibleForTesting;
 import java.util.ArrayList;
 import java.util.HashMap;

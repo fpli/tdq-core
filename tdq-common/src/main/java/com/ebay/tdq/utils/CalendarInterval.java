@@ -1,4 +1,4 @@
-package com.ebay.tdq.rules;
+package com.ebay.tdq.utils;
 
 import java.io.Serializable;
 import java.util.regex.Matcher;
@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
  * The internal representation of interval type.
  */
 public final class CalendarInterval implements Serializable {
+
   public static final long MICROS_PER_MILLI = 1000L;
   public static final long MICROS_PER_SECOND = MICROS_PER_MILLI * 1000;
   public static final long MICROS_PER_MINUTE = MICROS_PER_SECOND * 60;
@@ -27,19 +28,17 @@ public final class CalendarInterval implements Serializable {
   public final long microseconds;
 
   public CalendarInterval(int months, long microseconds) {
-    this.months       = months;
+    this.months = months;
     this.microseconds = microseconds;
   }
 
   /**
    * A function to generate regex which matches interval string's unit part like "3 years".
-   *
-   * First, we can leave out some units in interval string, and we only care about the value of
-   * unit, so here we use non-capturing group to wrap the actual regex.
-   * At the beginning of the actual regex, we should match spaces before the unit part.
-   * Next is the number part, starts with an optional "-" to represent negative value. We use
-   * capturing group to wrap this part as we need the value later.
-   * Finally is the unit name, ends with an optional "s".
+   * <p>
+   * First, we can leave out some units in interval string, and we only care about the value of unit, so here we use
+   * non-capturing group to wrap the actual regex. At the beginning of the actual regex, we should match spaces before
+   * the unit part. Next is the number part, starts with an optional "-" to represent negative value. We use capturing
+   * group to wrap this part as we need the value later. Finally is the unit name, ends with an optional "s".
    */
   private static String unitRegex(String unit) {
     return "(?:\\s+(-?\\d+)\\s+" + unit + "s?)?";
@@ -78,15 +77,17 @@ public final class CalendarInterval implements Serializable {
    * Parse CalendarInterval from String.
    *
    * @param s Interval specified in String, up to day.
-   * @return CalendarInterval If there is any of hour/minute/second/millisecond/microsecond
-   * specified, throw parse exception.
+   * @return CalendarInterval If there is any of hour/minute/second/millisecond/microsecond specified, throw parse
+   * exception.
    */
   public static CalendarInterval parseDateInterval(String s) {
     if (s == null) {
       return null;
     }
     s = s.trim().toLowerCase();
-    if (!s.startsWith("interval")) s = "interval " + s;
+    if (!s.startsWith("interval")) {
+      s = "interval " + s;
+    }
     Matcher m = p.matcher(s);
     if (!m.matches() || s.equals("interval")) {
       return null;
@@ -118,7 +119,7 @@ public final class CalendarInterval implements Serializable {
 
   /**
    * Parse YearMonth string in form: [-]YYYY-MM
-   *
+   * <p>
    * adapted from HiveIntervalYearMonth.valueOf
    */
   public static CalendarInterval fromYearMonthString(String s) throws IllegalArgumentException {
@@ -147,7 +148,7 @@ public final class CalendarInterval implements Serializable {
 
   /**
    * Parse dayTime string in form: [-]d HH:mm:ss.nnnnnnnnn
-   *
+   * <p>
    * adapted from HiveIntervalDayTime.valueOf
    */
   public static CalendarInterval fromDayTimeString(String s) throws IllegalArgumentException {
@@ -291,8 +292,12 @@ public final class CalendarInterval implements Serializable {
 
   @Override
   public boolean equals(Object other) {
-    if (this == other) return true;
-    if (other == null || !(other instanceof CalendarInterval)) return false;
+    if (this == other) {
+      return true;
+    }
+    if (other == null || !(other instanceof CalendarInterval)) {
+      return false;
+    }
 
     CalendarInterval o = (CalendarInterval) other;
     return this.months == o.months && this.microseconds == o.microseconds;

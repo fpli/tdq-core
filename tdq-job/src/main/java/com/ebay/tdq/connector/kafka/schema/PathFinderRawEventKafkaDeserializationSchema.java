@@ -9,6 +9,7 @@ import com.ebay.sojourner.common.util.PropertyUtils;
 import com.ebay.sojourner.common.util.SOJNVL;
 import com.ebay.sojourner.common.util.SOJURLDecodeEscape;
 import com.ebay.sojourner.common.util.SojTimestamp;
+import com.ebay.tdq.common.model.TdqEvent;
 import io.ebay.rheos.kafka.client.StreamConnectorConfig;
 import io.ebay.rheos.schema.avro.GenericRecordDomainDataDecoder;
 import io.ebay.rheos.schema.avro.RheosEventDeserializer;
@@ -32,7 +33,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 @Slf4j
 public class PathFinderRawEventKafkaDeserializationSchema implements
-    KafkaDeserializationSchema<RawEvent> {
+    KafkaDeserializationSchema<TdqEvent> {
 
   private static final DateTimeFormatter formaterUtc =
       DateTimeFormat.forPattern(Constants.DEFAULT_TIMESTAMP_FORMAT)
@@ -41,21 +42,23 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
       Constants.DEFAULT_TIMESTAMP_FORMAT).withZone(DateTimeZone.forTimeZone(Constants.PST_TIMEZONE));
   private static final DateTimeFormatter dateMinsFormatter = DateTimeFormat.forPattern(
       Constants.DEFAULT_DATE_MINS_FORMAT).withZone(DateTimeZone.forTimeZone(Constants.PST_TIMEZONE));
+  private static final RheosEventDeserializer deserializer = new RheosEventDeserializer();
   private static String[] tagsToEncode = new String[]{Constants.TAG_ITEMIDS, Constants.TAG_TRKP};
-
   private final Long endTimestamp;
   private final String schemaRegistryUrl;
+  private String eventTimeField;
   private transient volatile GenericRecordDomainDataDecoder decoder = null;
-  private static final RheosEventDeserializer deserializer = new RheosEventDeserializer();
 
-  public PathFinderRawEventKafkaDeserializationSchema(Long endTimestamp) {
+  public PathFinderRawEventKafkaDeserializationSchema(String schemaRegistryUrl, Long endTimestamp,
+      String eventTimeField) {
     this.endTimestamp = endTimestamp;
-    this.schemaRegistryUrl = "https://rheos-services.stratus.ebay.com";
+    this.schemaRegistryUrl = schemaRegistryUrl;
+    this.eventTimeField = eventTimeField;
   }
 
   @Override
-  public boolean isEndOfStream(RawEvent nextElement) {
-    return isEndOfStream(nextElement.getUnixEventTimestamp());
+  public boolean isEndOfStream(TdqEvent nextElement) {
+    return isEndOfStream(nextElement.getEventTimeMs());
   }
 
   public boolean isEndOfStream(long t) {
@@ -76,11 +79,11 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
   }
 
   @Override
-  public RawEvent deserialize(ConsumerRecord<byte[], byte[]> record) {
+  public TdqEvent deserialize(ConsumerRecord<byte[], byte[]> record) {
     return deserialize0(record.value());
   }
 
-  public RawEvent deserialize0(byte[] message) {
+  public TdqEvent deserialize0(byte[] message) {
     long ingestTime = new Date().getTime();
     RheosEvent rheosEvent = deserializer.deserialize(null, message);
     GenericRecord genericRecord = getDecoder().decode(rheosEvent);
@@ -133,7 +136,8 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
     RawEvent rawEvent = new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData,
         ingestTime, null);
     parseEventTimestamp(rawEvent);
-    return rawEvent;
+
+    return new TdqEvent(rawEvent, eventTimeField);
   }
 
   private void parseClientData(ClientData clentData, GenericRecord genericRecord) {
@@ -531,7 +535,7 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
   }
 
   @Override
-  public TypeInformation<RawEvent> getProducedType() {
-    return TypeInformation.of(RawEvent.class);
+  public TypeInformation<TdqEvent> getProducedType() {
+    return TypeInformation.of(TdqEvent.class);
   }
 }

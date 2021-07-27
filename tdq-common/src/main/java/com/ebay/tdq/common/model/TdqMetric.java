@@ -1,6 +1,5 @@
-package com.ebay.tdq.rules;
+package com.ebay.tdq.common.model;
 
-import com.ebay.tdq.common.model.TdqMetricAvro;
 import com.ebay.tdq.common.model.TdqMetricAvro.Builder;
 import java.io.Serializable;
 import java.util.Date;

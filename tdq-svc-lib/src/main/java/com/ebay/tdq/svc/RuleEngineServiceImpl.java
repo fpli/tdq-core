@@ -1,6 +1,8 @@
 package com.ebay.tdq.svc;
 
 import com.ebay.sojourner.common.model.RawEvent;
+import com.ebay.tdq.common.model.TdqEvent;
+import com.ebay.tdq.common.model.TdqMetric;
 import com.ebay.tdq.config.ExpressionConfig;
 import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
@@ -12,7 +14,6 @@ import com.ebay.tdq.dto.TdqDataResult;
 import com.ebay.tdq.dto.TdqResult;
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.ProfilingSqlParser;
-import com.ebay.tdq.rules.TdqMetric;
 import com.ebay.tdq.service.RuleEngineService;
 import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.JsonUtils;
@@ -43,6 +44,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 @Slf4j
 public class RuleEngineServiceImpl implements RuleEngineService {
+
   private final ExecutorService executor;
   private final List<RawEvent> sample;
 
@@ -50,7 +52,7 @@ public class RuleEngineServiceImpl implements RuleEngineService {
     try {
       executor = new ThreadPoolExecutor(
           5, 50, 60L, TimeUnit.SECONDS, new SynchronousQueue<>());
-      sample   = new ArrayList<>();
+      sample = new ArrayList<>();
       for (String json : getSampleData()) {
         RawEvent event = JsonUtils.parseObject(json, RawEvent.class);
         event.setEventTimestamp(System.currentTimeMillis());
@@ -158,7 +160,7 @@ public class RuleEngineServiceImpl implements RuleEngineService {
 
       ProfilerConfig profilerConfig = new ProfilerConfig(
           iDoMetricConfig.getMetricName(),
-          null,ExpressionConfig.expr(aggregate.getExpr()),
+          null, ExpressionConfig.expr(aggregate.getExpr()),
           filter,
           transformations,
           iDoMetricConfig.getDimensions(),
@@ -219,8 +221,8 @@ public class RuleEngineServiceImpl implements RuleEngineService {
           ProfilingSqlParser parser = new ProfilingSqlParser(
               profilerConfig,
               DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString()),
-              null
-          );
+              null,
+              null);
           final PhysicalPlan plan = parser.parsePlan();
           plan.validatePlan();
           process(result, plan);
@@ -246,7 +248,7 @@ public class RuleEngineServiceImpl implements RuleEngineService {
         int i = 1;
         while (i > 0) {
           for (RawEvent event : sample) {
-            TdqMetric newMetric = plan.process(event);
+            TdqMetric newMetric = plan.process(new TdqEvent(event));
             if (newMetric != null) {
               map.compute(newMetric.getTagId(), (key, old) -> {
                 if (old != null) {

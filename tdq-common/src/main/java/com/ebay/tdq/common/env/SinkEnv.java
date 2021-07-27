@@ -49,7 +49,7 @@ public class SinkEnv implements Serializable {
     this.normalMetricMemName = getStringWithPattern(
         "flink.app.sink.normal-metric.mem-name");
 
-    this.latencyMetricPath = getStringWithPattern("flink.app.sink.pronto.latency-metric.hdfs-path");
+    this.latencyMetricPath = getStringWithPattern("flink.app.sink.latency-metric.hdfs-path");
     this.latencyMetricProntoIndexPattern = getStringWithPattern(
         "flink.app.sink.latency-metric.pronto-index-pattern");
     this.latencyMetricStdName = getStringWithPattern(
@@ -66,7 +66,6 @@ public class SinkEnv implements Serializable {
         "flink.app.sink.exception-log.std-name");
 
     this.rawDataPath = getStringWithPattern("flink.app.sink.raw-data.hdfs-path");
-
   }
 
   public boolean isNormalMetricSinkStd() {

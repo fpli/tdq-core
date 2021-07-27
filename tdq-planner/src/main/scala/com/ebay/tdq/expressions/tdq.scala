@@ -1,14 +1,13 @@
 package com.ebay.tdq.expressions
 
-import com.ebay.sojourner.common.model.RawEvent
+import com.ebay.tdq.common.model.TdqEvent
 import com.ebay.tdq.types._
-import org.apache.commons.beanutils.PropertyUtils
 
 /**
  * @author juntzhang
  */
 case class TdqTimestamp(name: String = "event_time_millis", dataType: DataType = LongType) extends LeafExpression {
-  val cacheKey = None
+  val cacheKey: Option[String] = None
 
   override def nullable: Boolean = true
 
@@ -17,10 +16,11 @@ case class TdqTimestamp(name: String = "event_time_millis", dataType: DataType =
     if (o != null) {
       return o
     }
-    input.getCache("__RAW_EVENT").asInstanceOf[RawEvent].getEventTimestamp
+    input.getCache("__TDQ_EVENT").asInstanceOf[TdqEvent].get(name)
   }
 }
 
+// todo get type from schema
 case class GetStructField(name: String, dataType: DataType = StringType, cacheKey: Option[String] = None) extends LeafExpression {
   override def nullable: Boolean = true
 
@@ -29,21 +29,17 @@ case class GetStructField(name: String, dataType: DataType = StringType, cacheKe
     if (o != null) {
       return o
     }
-    try {
-      PropertyUtils.getProperty(input.getCache("__RAW_EVENT"), name)
-    } catch {
-      case _: NoSuchMethodException => null
-    }
+    input.getCache("__TDQ_EVENT").asInstanceOf[TdqEvent].get(name)
   }
 }
 
-case class GetRawEvent(cacheKey: Option[String] = None) extends LeafExpression {
+case class GetTdqEvent(cacheKey: Option[String] = None) extends LeafExpression {
   override def nullable: Boolean = true
 
-  override def dataType: DataType = ObjectType(classOf[RawEvent])
+  override def dataType: DataType = ObjectType(classOf[TdqEvent])
 
   protected override def eval(input: InternalRow): Any = {
-    input.getCache("__RAW_EVENT")
+    input.getCache("__TDQ_EVENT")
   }
 }
 

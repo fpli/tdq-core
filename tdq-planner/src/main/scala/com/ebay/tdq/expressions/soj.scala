@@ -1,17 +1,16 @@
 package com.ebay.tdq.expressions
 
-import com.ebay.sojourner.common.model.{ClientData, RawEvent}
 import com.ebay.tdq.common.env.JdbcEnv
+import com.ebay.tdq.common.model.TdqEvent
 import com.ebay.tdq.planner.LkpManager
 import com.ebay.tdq.types.{BooleanType, DataType, StringType}
-import org.apache.commons.beanutils.PropertyUtils
 import org.apache.commons.lang3.StringUtils
 
 /**
  * @author juntzhang
  */
 case class SojParseRlogid(subject: Expression, infoType: Expression, cacheKey: Option[String] = None) extends LeafExpression {
-  val dataType = StringType
+  val dataType: StringType.type = StringType
 
   override def nullable: Boolean = true
 
@@ -20,50 +19,56 @@ case class SojParseRlogid(subject: Expression, infoType: Expression, cacheKey: O
 }
 
 object SojTag {
+  type JMap = java.util.Map[String, String]
   val SPLIT_DEL = "\\|"
 
-  def eval(rawEvent: RawEvent, tag: String): String = {
+  def evalTag(tdqEvent: TdqEvent, tag: String): String = {
     val tags = tag.split(SPLIT_DEL)
     for (t <- tags) {
-      if (StringUtils.isNotBlank(rawEvent.getSojA.get(t))) return rawEvent.getSojA.get(t)
-      if (StringUtils.isNotBlank(rawEvent.getSojC.get(t))) return rawEvent.getSojC.get(t)
-      if (StringUtils.isNotBlank(rawEvent.getSojK.get(t))) return rawEvent.getSojK.get(t)
+      val v = eval(tdqEvent, t)
+      if (StringUtils.isNotBlank(v)) return v
     }
+    null
+  }
+
+  def evalAll(tdqEvent: TdqEvent, tag: String): String = {
+    val tags = tag.split(SPLIT_DEL)
+    for (t <- tags) {
+      var v = eval(tdqEvent, t)
+      if (StringUtils.isNotBlank(v)) return v
+      v = tdqEvent.get("clientData").asInstanceOf[JMap].get(t)
+      if (StringUtils.isNotBlank(v)) return v
+    }
+    null
+  }
+
+  def eval(tdqEvent: TdqEvent, t: String): String = {
+    var v = tdqEvent.get("sojA").asInstanceOf[JMap].get(t)
+    if (StringUtils.isNotBlank(v)) return v
+    v = tdqEvent.get("sojC").asInstanceOf[JMap].get(t)
+    if (StringUtils.isNotBlank(v)) return v
+    v = tdqEvent.get("sojK").asInstanceOf[JMap].get(t)
+    if (StringUtils.isNotBlank(v)) return v
     null
   }
 }
 
-case class SojTag(subject: GetRawEvent, tag: String, dataType: DataType, cacheKey: Option[String] = None) extends LeafExpression {
+case class SojTag(subject: GetTdqEvent, tag: String, dataType: DataType, cacheKey: Option[String] = None) extends LeafExpression {
   override def nullable: Boolean = true
 
   protected override def eval(input: InternalRow): Any = {
-    val rawEvent = subject.call(input).asInstanceOf[RawEvent]
-    SojTag.eval(rawEvent, tag)
+    val tdqEvent = subject.call(input).asInstanceOf[TdqEvent]
+    SojTag.evalTag(tdqEvent, tag)
   }
 }
 
-case class SojNvl(subject: GetRawEvent, tag: String,
-                  dataType: DataType, cacheKey: Option[String] = None) extends LeafExpression {
+case class SojNvl(subject: GetTdqEvent, tag: String,
+  dataType: DataType, cacheKey: Option[String] = None) extends LeafExpression {
   override def nullable: Boolean = true
 
   protected override def eval(input: InternalRow): Any = {
-    val rawEvent = subject.call(input).asInstanceOf[RawEvent]
-    val v = SojTag.eval(rawEvent, tag)
-    if (StringUtils.isNotBlank(v)) {
-      v
-    } else {
-      val tags = tag.split(SojTag.SPLIT_DEL)
-      for (t <- tags) {
-        if (!ClientData.FIELDS.contains(t)) {
-          return null
-        }
-        val v = PropertyUtils.getProperty(input.getCache("__RAW_EVENT"), s"clientData.$t")
-        if (v != null) {
-          return v
-        }
-      }
-      null
-    }
+    val tdqEvent = subject.call(input).asInstanceOf[TdqEvent]
+    SojTag.evalAll(tdqEvent, tag)
   }
 }
 

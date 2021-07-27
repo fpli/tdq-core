@@ -2,9 +2,8 @@ package com.ebay.tdq.expressions
 
 import java.math.{BigDecimal => JavaBigDecimal}
 
-import com.ebay.tdq.rules.CalendarInterval
 import com.ebay.tdq.types._
-import com.ebay.tdq.utils.StringUtils
+import com.ebay.tdq.utils.{CalendarInterval, StringUtils}
 import org.apache.commons.lang.math.NumberUtils
 
 /**
@@ -302,9 +301,6 @@ case class Cast(child: Expression, dataType: DataType, cacheKey: Option[String] 
       b => x.numeric.asInstanceOf[Numeric[Any]].toInt(b)
   }
 
-  // converting us to seconds
-  private[this] def timestampToLong(ts: Long): Long = math.floor(ts.toDouble / 1000000L).toLong
-
   // ShortConverter
   private[this] def castToShort(from: DataType): Any => Any = from match {
     case StringType =>
@@ -322,6 +318,9 @@ case class Cast(child: Expression, dataType: DataType, cacheKey: Option[String] 
     case x: NumericType =>
       b => x.numeric.asInstanceOf[Numeric[Any]].toInt(b).toShort
   }
+
+  // converting us to seconds
+  private[this] def timestampToLong(ts: Long): Long = math.floor(ts.toDouble / 1000000L).toLong
 
   // ByteConverter
   private[this] def castToByte(from: DataType): Any => Any = from match {

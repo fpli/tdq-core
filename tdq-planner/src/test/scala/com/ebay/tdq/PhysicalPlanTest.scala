@@ -65,17 +65,9 @@ class PhysicalPlanTest {
         |}
         |""".stripMargin
     val config = JsonUtils.parseObject(json, classOf[TdqConfig])
-    val parser = new ProfilingSqlParser(
-      config.getRules.get(0).getProfilers.get(0),
-      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString),
-      new JdbcEnv()
-    )
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
     val plan = parser.parsePlan()
     println(plan)
-
-    val map = plan.findDimensionValues()
-    assert(map.size() == 1)
-    assert(map.get("domain").size() == 11)
 
   }
 
@@ -131,16 +123,9 @@ class PhysicalPlanTest {
         |}
         |""".stripMargin
     val config = JsonUtils.parseObject(json, classOf[TdqConfig])
-    val parser = new ProfilingSqlParser(
-      config.getRules.get(0).getProfilers.get(0),
-      window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString),
-      new JdbcEnv()
-    )
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
     val plan = parser.parsePlan()
     println(plan)
 
-    val map = plan.findDimensionValues()
-    assert(map.size() == 1)
-    assert(map.get("domain").size() == 11)
   }
 }
