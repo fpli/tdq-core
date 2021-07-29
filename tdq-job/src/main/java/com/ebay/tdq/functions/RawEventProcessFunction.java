@@ -46,7 +46,7 @@ public class RawEventProcessFunction extends ProcessFunction<TdqEvent, TdqMetric
   @Override
   public void processElement(TdqEvent event, Context ctx, Collector<TdqMetric> collector) throws Exception {
     long s1 = System.nanoTime();
-    processElement0(event, TdqConfigManager.getInstance(tdqEnv.getJdbcEnv()).getPhysicalPlans(), ctx, collector);
+    processElement0(event, TdqConfigManager.getInstance(tdqEnv).getPhysicalPlans(), ctx, collector);
     metricGroup.markElement(s1);
   }
 
@@ -76,7 +76,7 @@ public class RawEventProcessFunction extends ProcessFunction<TdqEvent, TdqMetric
     metricGroup = new TdqMetricGroup(getRuntimeContext().getMetricGroup());
     localCache = new LocalCache(tdqEnv, metricGroup);
     metricGroup.gauge(localCache);
-    TdqConfigManager.getInstance(tdqEnv.getJdbcEnv());
+    TdqConfigManager.getInstance(tdqEnv);
   }
 
   private void processElement0(TdqEvent event,

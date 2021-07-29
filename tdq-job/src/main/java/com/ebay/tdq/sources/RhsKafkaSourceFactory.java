@@ -10,9 +10,11 @@ import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema;
 import com.ebay.tdq.connector.kafka.schema.RheosEventDeserializationSchema;
 import com.ebay.tdq.functions.RawEventProcessFunction;
+import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.TdqContext;
 import java.util.Map;
 import java.util.Random;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.Schema;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -22,10 +24,11 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 /**
  * @author juntzhang
  */
-public class RhsKafkaSourceBuilder {
+@Slf4j
+public class RhsKafkaSourceFactory {
 
-  private static void dump(SourceConfig sourceConfig, TdqContext tdqCxt) throws ReflectiveOperationException {
-    KafkaSourceConfig ksc = KafkaSourceConfig.build(sourceConfig);
+  private static void dump(SourceConfig sourceConfig, TdqContext tdqCxt) {
+    KafkaSourceConfig ksc = KafkaSourceConfig.build(sourceConfig, tdqCxt.getTdqEnv());
     final TdqEnv tdqEnv = tdqCxt.getTdqEnv();
     tdqCxt.getTdqEnv().setFromTimestamp(ksc.getFromTimestamp());
     tdqCxt.getTdqEnv().setToTimestamp(ksc.getToTimestamp());
@@ -88,15 +91,14 @@ public class RhsKafkaSourceBuilder {
         .uid(ksc.getName() + "_dump");
   }
 
-  public static void dump(TdqConfig tdqConfig, TdqContext tdqCxt)
-      throws ReflectiveOperationException {
+  public static void dump(TdqConfig tdqConfig, TdqContext tdqCxt) {
     for (SourceConfig sourceConfig : tdqConfig.getSources()) {
       dump(sourceConfig, tdqCxt);
     }
   }
 
   public static DataStream<TdqMetric> build(SourceConfig sourceConfig, TdqContext tdqCxt) {
-    KafkaSourceConfig ksc = KafkaSourceConfig.build(sourceConfig);
+    KafkaSourceConfig ksc = KafkaSourceConfig.build(sourceConfig, tdqCxt.getTdqEnv());
 
     tdqCxt.getTdqEnv().setFromTimestamp(ksc.getFromTimestamp());
     tdqCxt.getTdqEnv().setToTimestamp(ksc.getToTimestamp());
@@ -117,10 +119,15 @@ public class RhsKafkaSourceBuilder {
 
     if (ksc.getStartupMode().equalsIgnoreCase("EARLIEST")) {
       flinkKafkaConsumer.setStartFromEarliest();
+      log.warn("Kafka setStartFromEarliest()");
     } else if (ksc.getStartupMode().equalsIgnoreCase("LATEST")) {
       flinkKafkaConsumer.setStartFromLatest();
+      log.warn("Kafka setStartFromLatest()");
     } else if (ksc.getStartupMode().equalsIgnoreCase("TIMESTAMP")) {
-      flinkKafkaConsumer.setStartFromTimestamp(ksc.getFromTimestamp() - ksc.getOutOfOrderlessMs());
+      long t = ksc.getFromTimestamp() - ksc.getOutOfOrderlessMs();
+      flinkKafkaConsumer.setStartFromTimestamp(t);
+      log.warn("Kafka setStartFromTimestamp(" + (t) + "):" + DateUtils.format(
+          t, tdqCxt.getTdqEnv().getSinkEnv().getTimeZone()));
     } else {
       throw new IllegalArgumentException("Cannot parse fromTimestamp value");
     }

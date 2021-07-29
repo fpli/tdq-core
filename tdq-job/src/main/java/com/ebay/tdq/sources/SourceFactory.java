@@ -1,8 +1,12 @@
 package com.ebay.tdq.sources;
 
 import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.config.SourceConfig;
+import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.utils.TdqContext;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -14,6 +18,20 @@ import org.apache.flink.streaming.runtime.operators.TdqTimestampsAndWatermarksOp
  * @author juntzhang
  */
 public class SourceFactory {
+
+  public static DataStream<TdqMetric> build(TdqConfig tdqConfig, TdqContext tdqCxt) {
+    List<DataStream<TdqMetric>> list = new ArrayList<>();
+    for (SourceConfig sourceConfig : tdqConfig.getSources()) {
+      if (sourceConfig.getType().equals("realtime.kafka")) {
+        list.add(RhsKafkaSourceFactory.build(sourceConfig, tdqCxt));
+      } else if (sourceConfig.getType().equals("realtime.memory")) {
+        list.add(MemorySourceFactory.build(sourceConfig, tdqCxt));
+      } else {
+        throw new IllegalArgumentException(sourceConfig.getType() + " not implement!");
+      }
+    }
+    return list.stream().reduce(DataStream::union).orElse(null);
+  }
 
   public static <T> SingleOutputStreamOperator<TdqMetric> getTdqMetricDS(
       TdqContext tdqCxt, DataStream<T> inDS, String name, int parallelism,

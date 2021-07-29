@@ -7,7 +7,7 @@ import com.ebay.tdq.functions.TdqMetric1stAggrProcessWindowFunction;
 import com.ebay.tdq.functions.TdqMetric2ndAggrProcessWindowFunction;
 import com.ebay.tdq.functions.TdqMetricAggregateFunction;
 import com.ebay.tdq.sinks.TdqSinks;
-import com.ebay.tdq.sources.SourceBuilder;
+import com.ebay.tdq.sources.SourceFactory;
 import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.TdqConfigManager;
 import com.ebay.tdq.utils.TdqContext;
@@ -47,11 +47,11 @@ public class ProfilingJob {
 
   protected void start() {
     try {
-      TdqConfig tdqConfig = TdqConfigManager.getInstance(tdqEnv.getJdbcEnv()).findTdqConfig(tdqEnv.getJobName());
+      TdqConfig tdqConfig = TdqConfigManager.getInstance(tdqEnv).findTdqConfig(tdqEnv.getJobName());
       Validate.isTrue(tdqConfig != null);
       // step1: build data source
       // step2: normalize event to metric
-      DataStream<TdqMetric> ds = SourceBuilder.build(tdqConfig, tdqCxt);
+      DataStream<TdqMetric> ds = SourceFactory.build(tdqConfig, tdqCxt);
 
       // step3: aggregate metric by key and window
       Map<String, SingleOutputStreamOperator<TdqMetric>> outputTags = reduceByWindow(ds);

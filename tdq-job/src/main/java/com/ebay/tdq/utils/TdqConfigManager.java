@@ -1,6 +1,7 @@
 package com.ebay.tdq.utils;
 
 import com.ebay.tdq.common.env.JdbcEnv;
+import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.config.KafkaSourceConfig;
 import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
@@ -10,6 +11,7 @@ import com.ebay.tdq.planner.LkpRefreshTimeTask;
 import com.ebay.tdq.planner.Refreshable;
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.ProfilingSqlParser;
+import com.google.common.collect.Lists;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -18,6 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.Schema;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
 
 /**
@@ -28,25 +31,32 @@ public class TdqConfigManager implements Refreshable {
 
   private static volatile TdqConfigManager lkpManager;
   private final LkpRefreshTimeTask lkpRefreshTimeTask;
-  private final JdbcEnv jdbc;
+  private TdqEnv tdqEnv;
   private List<TdqConfig> tdqConfigs = new CopyOnWriteArrayList<>();
   private List<PhysicalPlan> physicalPlans = new CopyOnWriteArrayList<>();
 
-  private TdqConfigManager(TimeUnit timeUnit, JdbcEnv jdbc) {
-    this.jdbc = jdbc;
+  private TdqConfigManager(TimeUnit timeUnit, TdqEnv tdqEnv) {
+    this.tdqEnv = tdqEnv;
     this.lkpRefreshTimeTask = new LkpRefreshTimeTask(this, timeUnit);
     refresh();
   }
 
-  private TdqConfigManager(JdbcEnv jdbc) {
-    this(TimeUnit.MINUTES, jdbc);
+  private TdqConfigManager(TdqEnv tdqEnv) {
+    this(TimeUnit.MINUTES, tdqEnv);
   }
 
-  public static TdqConfigManager getInstance(JdbcEnv jdbc) {
+  public static TdqConfigManager getInstance(TdqEnv tdqEnv) {
     if (lkpManager == null) {
       synchronized (TdqConfigManager.class) {
         if (lkpManager == null) {
-          lkpManager = new TdqConfigManager(jdbc);
+          lkpManager = new TdqConfigManager(tdqEnv);
+        }
+      }
+    } else {
+      // for unit test
+      if (tdqEnv.isLocal() && lkpManager.tdqEnv != tdqEnv) {
+        synchronized (TdqConfigManager.class) {
+          lkpManager.tdqEnv = tdqEnv;
         }
       }
     }
@@ -60,14 +70,26 @@ public class TdqConfigManager implements Refreshable {
 
   public void freshTdqConfigs() {
     try {
+      JdbcEnv jdbc = tdqEnv.getJdbcEnv();
       List<TdqConfig> tdqConfigList = new CopyOnWriteArrayList<>();
       Class.forName(jdbc.getDriverClassName());
       Connection conn = DriverManager.getConnection(jdbc.getUrl(), jdbc.getUser(), jdbc.getPassword());
-      ResultSet rs = conn.createStatement().executeQuery("select config from rhs_config where status='ACTIVE'");
+      ResultSet rs = conn.createStatement()
+          .executeQuery(
+              "select id, config from rhs_config where status='ACTIVE' and name='" + tdqEnv.getJobName() + "'");
       while (rs.next()) {
         String json = rs.getString("config");
-        log.warn("getTdqConfigs={}", json.replace("\n", ""));
-        tdqConfigList.add(JsonUtils.parseObject(json, TdqConfig.class));
+        String id = String.valueOf(rs.getInt("id"));
+        String name = tdqEnv.getJobName();
+        TdqConfig c = JsonUtils.parseObject(json, TdqConfig.class);
+        log.warn("getTdqConfigs={}", DigestUtils.md5Hex(json));
+        tdqConfigList.add(TdqConfig.builder()
+            .id(id)
+            .name(name)
+            .sources(c.getSources())
+            .rules(c.getRules())
+            .sinks(c.getSinks() == null ? Lists.newArrayList() : c.getSinks())
+            .build());
       }
       conn.close();
       this.tdqConfigs = tdqConfigList;
@@ -78,7 +100,7 @@ public class TdqConfigManager implements Refreshable {
         if (CollectionUtils.isNotEmpty(config.getSources()) &&
             config.getSources().get(0).getType().equals("realtime.kafka")) {
           // tdq config must have same schema
-          KafkaSourceConfig ksc = KafkaSourceConfig.build(config.getSources().get(0));
+          KafkaSourceConfig ksc = KafkaSourceConfig.build(config.getSources().get(0), tdqEnv);
           if (ksc.getDeserializer().equals(
               "com.ebay.tdq.connector.kafka.schema.RheosEventDeserializationSchema")) {
             RheosEventDeserializationSchema deserializer = new RheosEventDeserializationSchema(
@@ -98,7 +120,7 @@ public class TdqConfigManager implements Refreshable {
                   schema);
               PhysicalPlan plan = parser.parsePlan();
               plan.validatePlan();
-              log.warn("TdqConfigSourceFunction={}", plan);
+              // log.debug("TdqConfigSourceFunction={}", plan);
               plans.add(plan);
             } catch (Exception e) {
               log.warn("profilerConfig[" + profilerConfig + "] validate exception:" + e.getMessage(), e);

@@ -199,7 +199,7 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, jdbcEnv: 
     if (f == null) {
       return com.ebay.tdq.types.StringType
     }
-    f.schema().getType match {
+    f.getType match {
       case Schema.Type.INT => IntegerType
       case Schema.Type.LONG => LongType
       case Schema.Type.DOUBLE => DoubleType
@@ -207,20 +207,20 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, jdbcEnv: 
       case Schema.Type.BOOLEAN => BooleanType
       case Schema.Type.STRING => StringType
       case _ =>
-        throw new IllegalArgumentException(s"${f.schema().getType} not implement!")
+        throw new IllegalArgumentException(s"${f.getType} not implement!")
     }
   }
 
   private def transformIdentifier(name: String): Expression = {
     name match {
       case ci"EVENT_TIMESTAMP" =>
-        TdqTimestamp("event_timestamp", TimestampType)
+        GetTdqField("event_timestamp", TimestampType)
       case ci"EVENT_TIME_MILLIS" =>
-        TdqTimestamp()
+        GetTdqField("event_time_millis", LongType)
       case ci"SOJ_TIMESTAMP" =>
-        TdqTimestamp("soj_timestamp")
+        GetTdqField("soj_timestamp", LongType)
       case _ =>
-        GetStructField(name, getDataType(name))
+        GetTdqField(name, getDataType(name))
     }
   }
 

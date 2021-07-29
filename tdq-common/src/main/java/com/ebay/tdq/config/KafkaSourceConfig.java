@@ -1,5 +1,6 @@
 package com.ebay.tdq.config;
 
+import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.utils.DateUtils;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -9,6 +10,8 @@ import java.util.Properties;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
@@ -36,7 +39,7 @@ public class KafkaSourceConfig implements Serializable {
   private String deserializer;
   private Properties kafkaConsumer;
 
-  public static KafkaSourceConfig build(SourceConfig config) {
+  public static KafkaSourceConfig build(SourceConfig config, TdqEnv tdqEnv) {
     KafkaSourceConfig ksc = new KafkaSourceConfig();
     ksc.setName(config.getName());
     Map<String, Object> props = config.getConfig();
@@ -58,10 +61,13 @@ public class KafkaSourceConfig implements Serializable {
     ksc.setToTimestamp(((Number) props.getOrDefault("to-timestamp", 0L)).longValue());
     ksc.setTopics(Arrays.asList(((String) props.getOrDefault("topics", "")).split(",")));
     ksc.setDeserializer((String) props.getOrDefault("deserializer", ""));
+
     ksc.kafkaConsumer = new Properties();
     if (props.get("kafka-consumer") != null) {
       ksc.kafkaConsumer.putAll((Map<?, ?>) props.get("kafka-consumer"));
+      ksc.kafkaConsumer.put("group.id", tdqEnv.getJobName());
     }
+    Validate.isTrue(StringUtils.isNotBlank(ksc.getKafkaConsumer().getProperty("group.id")), "group.is must be unique!");
     log.info(ksc.toString());
     return ksc;
   }

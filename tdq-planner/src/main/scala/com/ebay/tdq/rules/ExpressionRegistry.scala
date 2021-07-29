@@ -52,7 +52,7 @@ case class ExpressionRegistry(jdbcEnv: JdbcEnv) {
           jdbcEnv
         )
       case "SOJ_TIMESTAMP" =>
-        TdqTimestamp("soj_timestamp")
+        GetTdqField("soj_timestamp",LongType)
 
       case "IS_BBWOA_PAGE_WITH_ITM" =>
         Preconditions.checkArgument(operands.length == 1)
@@ -62,9 +62,9 @@ case class ExpressionRegistry(jdbcEnv: JdbcEnv) {
           jdbcEnv
         )
       case "EVENT_TIMESTAMP" =>
-        TdqTimestamp("event_timestamp", TimestampType)
+        GetTdqField("event_timestamp", TimestampType)
       case "EVENT_TIME_MILLIS" =>
-        TdqTimestamp()
+        GetTdqField("event_time_millis",LongType)
 
       case "CURRENT_TIMESTAMP" =>
         CurrentTimestamp()

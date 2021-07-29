@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.avro.Schema;
+import org.apache.avro.Schema.Type;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
 import org.apache.commons.lang3.StringUtils;
@@ -52,19 +53,21 @@ public class TdqEvent implements Serializable {
     put("event_time_millis", eventTimeMillis);
   }
 
-  public static Schema.Field getField(Schema schema, String name) {
+  public static Schema getField(Schema schema, String name) {
     if (schema == null || StringUtils.isBlank(name)) {
       return null;
     }
     Schema v = schema;
-    Schema.Field f = null;
     for (String k : name.split("\\.")) {
-      f = v.getField(k);
+      if (v.getType().equals(Type.MAP)) {
+        return v.getValueType();
+      }
+      Schema.Field f = v.getField(k);
       if (f != null) {
         v = f.schema();
       }
     }
-    return f;
+    return v;
   }
 
   private long getOriginalEventTimeMs() {

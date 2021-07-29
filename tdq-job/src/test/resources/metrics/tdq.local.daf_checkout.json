@@ -1,17 +1,17 @@
 {
   "id": "1",
-  "name": "kafka_local_dev",
+  "name": "tdq.local.daf_checkout",
   "sources": [
     {
       "name": "kafka_gro_trans_udaf",
       "type": "realtime.kafka",
       "config": {
-        "rhs-parallelism": 1,
-        "rhs-out-of-orderless": "5min",
-        "rhs-idle-timeout": "5min",
+        "rhs-parallelism": 3,
+        "rhs-out-of-orderless": "1s",
+        "rhs-idle-timeout": "1s",
         "sample-fraction": 0.0,
-        "startup-mode": "EARLIEST",
-        "from-timestamp": 0,
+        "startup-mode": "TIMESTAMP",
+        "from-timestamp": 1626160441000,
         "to-timestamp": 0,
         "rheos-services-urls": "https://rheos-services.qa.ebay.com",
         "schema-subject": "daf.checkout",

@@ -18,6 +18,7 @@ import lombok.Value;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class TdqConfig implements Serializable {
+
   @JsonProperty(index = 0)
   private String id;
   @JsonProperty(index = 1)

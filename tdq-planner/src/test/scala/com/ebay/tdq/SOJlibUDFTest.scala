@@ -112,7 +112,7 @@ class SOJlibUDFTest {
 
     soj.put("p", "578000000")
     test("case when length(p2)>0 then 1 else 0 end", "soj_page_family(cast(soj_nvl('p') AS INTEGER))", soj, metric => {
-      assert(metric.getTags.get("p2") == null)
+      assert(metric.getTags.get("p2") == "Others")
     })
   }
 

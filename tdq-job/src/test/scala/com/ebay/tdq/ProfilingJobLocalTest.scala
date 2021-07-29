@@ -3,7 +3,7 @@ package com.ebay.tdq
 import com.ebay.sojourner.common.model.RawEvent
 import com.ebay.tdq.common.model.TdqEvent
 import com.ebay.tdq.jobs.ProfilingJob
-import com.ebay.tdq.sources.MemorySourceBuilder
+import com.ebay.tdq.sources.MemorySourceFactory
 import com.ebay.tdq.utils._
 import org.apache.commons.io.IOUtils
 import org.apache.flink.streaming.api.functions.source.SourceFunction
@@ -20,17 +20,17 @@ case class ProfilingJobLocalTest() extends ProfilingJob {
   override def setup(args: Array[String]): Unit = {
     super.setup(args)
     setupDB(IOUtils.toString(
-      classOf[ProfilingJob].getResourceAsStream("/metrics/local.json")))
+      classOf[ProfilingJob].getResourceAsStream("/metrics/tdq.local.memory.json")))
 
-    MemorySourceBuilder.setSourceFunction(new SourceFunction[TdqEvent]() {
+    MemorySourceFactory.setSourceFunction(new SourceFunction[TdqEvent]() {
       @throws[InterruptedException]
       override def run(ctx: SourceFunction.SourceContext[TdqEvent]): Unit = {
         val sample = getSampleData
-        //while (true) {
+        //        while (true) {
         sample.foreach(e => {
           ctx.collect(new TdqEvent(e))
         })
-        //}
+        //        }
         //        Thread.sleep(10000000)
       }
 
@@ -56,7 +56,7 @@ object ProfilingJobLocalTest {
     ProfilingJobLocalTest().submit(Array[String](
       "--flink.app.local", "true",
       "--flink.app.sink.types.normal-metric", "console",
-      "--flink.app.name", "test"
+      "--flink.app.name", "tdq.local.memory"
     ))
   }
 }

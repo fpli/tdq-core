@@ -14,7 +14,7 @@ import org.apache.flink.streaming.api.functions.source.SourceFunction;
 /**
  * @author juntzhang
  */
-public class MemorySourceBuilder {
+public class MemorySourceFactory {
 
   @VisibleForTesting
   private static List<TdqEvent> rawEventList;
@@ -22,13 +22,13 @@ public class MemorySourceBuilder {
 
   @VisibleForTesting
   public static void setRawEventList(List<TdqEvent> rawEventList) {
-    MemorySourceBuilder.rawEventList = rawEventList;
+    MemorySourceFactory.rawEventList = rawEventList;
   }
 
   @VisibleForTesting
   public static void setSourceFunction(
       SourceFunction<TdqEvent> sourceFunction) {
-    MemorySourceBuilder.sourceFunction = sourceFunction;
+    MemorySourceFactory.sourceFunction = sourceFunction;
   }
 
   public static DataStream<TdqMetric> build(SourceConfig sourceConfig, TdqContext tdqCxt) {

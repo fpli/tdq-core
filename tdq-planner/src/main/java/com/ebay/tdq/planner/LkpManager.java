@@ -112,7 +112,12 @@ public class LkpManager implements Refreshable {
   }
 
   public String getPageFmlyByPageId(Integer pageId) {
-    return pageFmlyAllMap.get(pageId);
+    String v = pageFmlyAllMap.get(pageId);
+    if (v == null || v.equalsIgnoreCase("NULL")) {
+      return "Others";
+    } else {
+      return v;
+    }
   }
 
 }

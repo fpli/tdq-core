@@ -13,7 +13,7 @@ case class ProfilingJobKafkaLocalTest() extends ProfilingJob {
   override def setup(args: Array[String]): Unit = {
     super.setup(args)
     setupDB(IOUtils.toString(
-      classOf[ProfilingJob].getResourceAsStream("/metrics/local_kafka.json")))
+      classOf[ProfilingJob].getResourceAsStream("/metrics/tdq.local.daf_checkout.json")))
   }
 }
 
@@ -22,7 +22,7 @@ object ProfilingJobKafkaLocalTest {
     ProfilingJobKafkaLocalTest().submit(Array[String](
       "--flink.app.local", "true",
       "--flink.app.sink.types.normal-metric", "console",
-      "--flink.app.name", "kafka_local_dev"
+      "--flink.app.name", "tdq.local.daf_checkout"
     ))
   }
 }

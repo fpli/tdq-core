@@ -5,10 +5,11 @@ import java.util.{HashMap => JMap}
 
 import com.ebay.tdq.common.env.JdbcEnv
 import com.ebay.tdq.common.model.{TdqEvent, TdqMetric}
+import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.jobs.ProfilingJob
 import com.ebay.tdq.sinks.{MemorySink, TdqSinks}
-import com.ebay.tdq.sources.MemorySourceBuilder
-import com.ebay.tdq.utils.TdqConfigManager
+import com.ebay.tdq.sources.MemorySourceFactory
+import com.ebay.tdq.utils.{JsonUtils, TdqConfigManager}
 import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.StringUtils
 import org.apache.flink.streaming.connectors.elasticsearch.TdqElasticsearchResource
@@ -34,10 +35,10 @@ case class ProfilingJobIT(
     super.setup(Array.concat(args, Array("--flink.app.name", name)))
     tdqEnv.setJobName(name)
     setupDB(config)
-    TdqConfigManager.getInstance(tdqEnv.getJdbcEnv).refresh()
-    val memorySink = new MemorySink(name, TdqConfigManager.getInstance(tdqEnv.getJdbcEnv).getPhysicalPlans.get(0))
+    TdqConfigManager.getInstance(tdqEnv).refresh()
+    val memorySink = new MemorySink(name, TdqConfigManager.getInstance(tdqEnv).getPhysicalPlans.get(0))
     TdqSinks.setMemoryFunction(memorySink)
-    MemorySourceBuilder.setRawEventList(events.asJava)
+    MemorySourceFactory.setRawEventList(events.asJava)
   }
 
   override def stop(): Unit = {
@@ -89,7 +90,6 @@ class EsProfilingJobIT(name: String, config: String, events: List[TdqEvent], exp
     }).toList
     println("expects=>")
     expects.foreach(println)
-    //Thread.sleep(10000000)
     println("pronto=>")
     resultInPronto.foreach(println)
 
@@ -105,9 +105,10 @@ object ProfilingJobIT {
     Class.forName(jdbc.getDriverClassName)
     val conn = DriverManager.getConnection(jdbc.getUrl, jdbc.getUser, jdbc.getPassword)
     conn.createStatement().execute("drop table if exists rhs_config")
-    conn.createStatement().execute("CREATE TABLE `rhs_config` (`config` mediumtext NOT NULL,`status` varchar(10) NOT NULL DEFAULT 'ACTIVE')")
-    val ps = conn.prepareStatement("INSERT INTO rhs_config (config) VALUES (?)")
-    ps.setString(1, config)
+    conn.createStatement().execute("CREATE TABLE `rhs_config` (`id` int auto_increment, `name` varchar(100) NOT NULL,`config` mediumtext NOT NULL,`status` varchar(10) NOT NULL DEFAULT 'ACTIVE')")
+    val ps = conn.prepareStatement("INSERT INTO rhs_config (name,config) VALUES (?,?)")
+    ps.setString(1, JsonUtils.parseObject(config, classOf[TdqConfig]).getName)
+    ps.setString(2, config)
     ps.addBatch()
     ps.executeBatch
 
@@ -117,6 +118,7 @@ object ProfilingJobIT {
       if (StringUtils.isNotBlank(s)) conn.createStatement().execute(s)
     }
     ps.close()
+    conn.close()
   }
 
   def es(id: String, config: String, events: List[TdqEvent], expects: List[TdqMetric]): ProfilingJobIT = {

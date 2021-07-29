@@ -10,7 +10,7 @@ flink:
       supports: 1min,5min
 
     checkpoint:
-      data-dir: /opt/tdq-${flink.app.profile}/checkpoint
+      data-dir: /opt/tdq-${flink.app.name}/checkpoint
       interval-ms: 300000
       timeout-ms: 900000
       min-pause-between-ms: 120000

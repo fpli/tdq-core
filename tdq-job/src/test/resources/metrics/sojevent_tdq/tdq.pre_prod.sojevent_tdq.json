@@ -1,0 +1,103 @@
+{
+  "id": "ignore",
+  "name": "ignore",
+  "rules": [
+    {
+      "name": "system",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "1min"
+      },
+      "profilers": [
+        {
+          "expr": "p1",
+          "metric-name": "sojevent_global_cnt_by_1min",
+          "transformations": [
+            {
+              "expr": "count(1)",
+              "alias": "p1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ido",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "5min"
+      },
+      "profilers": [
+        {
+          "expr": "total_cnt",
+          "dimensions": [
+            "domain",
+            "site_id",
+            "page_id"
+          ],
+          "metric-name": "sojevent_common_metric",
+          "transformations": [
+            {
+              "expr": "CAST(applicationPayload.p AS INTEGER)",
+              "alias": "page_id",
+              "filter": "page_id in (2547208,2483445,2047936,2054032,2053742,2045573,2351460,2381081)"
+            },
+            {
+              "expr": "soj_page_family(CAST(applicationPayload.p AS INTEGER))",
+              "alias": "domain"
+            },
+            {
+              "expr": "CAST(applicationPayload.t AS INTEGER)",
+              "alias": "site_id"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "total_cnt"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "st_total_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            },
+            {
+              "expr": "sum(case when LENGTH(applicationPayload.prof) > 0 then 1 else 0 end)",
+              "alias": "st_prof_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "name": "kafka_sojevent_tdq",
+      "type": "realtime.kafka",
+      "config": {
+        "stream": "behavior.pulsar",
+        "topics": "behavior.pulsar.customized.tdq",
+        "deserializer": "com.ebay.tdq.connector.kafka.schema.RheosEventDeserializationSchema",
+        "startup-mode": "LATEST",
+        "kafka-consumer": {
+          "receive.buffer": 8388608,
+          "sasl.mechanism": "IAF",
+          "fetch.max.bytes": 52428800,
+          "max.poll.records": 5000,
+          "sasl.jaas.config": "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" iafSecret=\"c4bb6fca-7ac5-46dd-b218-a49cb6307dbc\" iafEnv=\"production\";",
+          "auto.offset.reset": "latest",
+          "bootstrap.servers": "rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092",
+          "fetch.max.wait.ms": 100,
+          "security.protocol": "SASL_PLAINTEXT",
+          "max.partition.fetch.bytes": 10485760,
+          "partition.assignment.strategy": "org.apache.kafka.clients.consumer.RoundRobinAssignor"
+        },
+        "schema-subject": "behavior.sojourner.sojevent.schema",
+        "rhs-parallelism": 30,
+        "event-time-field": "eventTimestamp",
+        "rhs-idle-timeout": "5min",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
+        "rhs-out-of-orderless": "5min"
+      }
+    }
+  ]
+}
