@@ -124,7 +124,7 @@ public class TdqSinks implements Serializable {
     }
   }
 
-  public static void sinkSampleLog(TdqContext tdqCxt, SingleOutputStreamOperator<TdqMetric> ds) {
+  public static void sinkSampleLog(TdqContext tdqCxt, SingleOutputStreamOperator<TdqMetric> ds, String name) {
     TdqEnv tdqEnv = tdqCxt.getTdqEnv();
     SinkEnv env = tdqEnv.getSinkEnv();
     if (env.isSampleLogSinkPronto()) {
@@ -139,20 +139,20 @@ public class TdqSinks implements Serializable {
                   requestIndexer.add(Requests.indexRequest().index(index).source(tdqSampleData.toIndexRequest()));
                 }
               }))
-          .uid("log_sample_o_pronto")
-          .name("log_sample_o_pronto")
+          .uid(name + "_log_sample_o_pronto")
+          .name(name + "_log_sample_o_pronto")
           .setParallelism(3);
     }
     if (env.isSampleLogSinkStd()) {
       ds.getSideOutput(tdqCxt.getSampleOutputTag())
           .print(env.getSampleLogStdName())
-          .uid("log_sample_o_std")
-          .name("log_sample_o_std")
+          .uid(name + "_log_sample_o_std")
+          .name(name + "_log_sample_o_std")
           .setParallelism(tdqEnv.getMetric2ndAggrParallelism());
     }
   }
 
-  public static void sinkException(TdqContext tdqCxt, SingleOutputStreamOperator<TdqMetric> ds) {
+  public static void sinkException(TdqContext tdqCxt, SingleOutputStreamOperator<TdqMetric> ds, String name) {
     TdqEnv tdqEnv = tdqCxt.getTdqEnv();
     SinkEnv env = tdqEnv.getSinkEnv();
     if (env.isExceptionLogSinkPronto()) {
@@ -167,15 +167,15 @@ public class TdqSinks implements Serializable {
                   requestIndexer.add(Requests.indexRequest().index(index).source(tdqErrorMsg.toIndexRequest()));
                 }
               }))
-          .uid("log_exception_o_pronto")
-          .name("log_exception_o_pronto")
+          .uid(name + "_log_exception_o_pronto")
+          .name(name + "_log_exception_o_pronto")
           .setParallelism(1);
     }
     if (env.isExceptionLogSinkStd()) {
       ds.getSideOutput(tdqCxt.getExceptionOutputTag())
           .print(env.getExceptionLogStdName())
-          .uid("log_exception_o_std")
-          .name("log_exception_o_std")
+          .uid(name + "_log_exception_o_std")
+          .name(name + "_log_exception_o_std")
           .setParallelism(tdqEnv.getMetric2ndAggrParallelism());
     }
   }

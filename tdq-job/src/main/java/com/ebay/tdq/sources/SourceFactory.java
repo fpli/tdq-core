@@ -46,8 +46,8 @@ public class SourceFactory {
         .slotSharingGroup(name)
         .setParallelism(parallelism);
 
-    TdqSinks.sinkException(tdqCxt, outDS);
-    TdqSinks.sinkSampleLog(tdqCxt, outDS);
+    TdqSinks.sinkException(tdqCxt, outDS, name);
+    TdqSinks.sinkSampleLog(tdqCxt, outDS, name);
 
     SerializableTimestampAssigner<TdqMetric> assigner =
         (SerializableTimestampAssigner<TdqMetric>) (event, timestamp) -> event.getEventTime();
