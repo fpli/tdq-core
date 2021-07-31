@@ -12,7 +12,6 @@ import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * @author juntzhang
@@ -86,6 +85,24 @@ public class TdqEvent implements Serializable {
     this.data.remove(field);
   }
 
+  public Map<String, Object> convert(Map<?, ?> record) {
+    Map<String, Object> map = new HashMap<>();
+    for (Map.Entry<?, ?> e : record.entrySet()) {
+      // map key only support string
+      String key = e.getKey().toString();
+      if (e.getValue() instanceof Utf8) {
+        map.put(key, convert((Utf8) e.getValue()));
+      } else if (e.getValue() instanceof GenericRecord) {
+        map.put(key, convert((GenericRecord) e.getValue()));
+      } else if (e.getValue() instanceof Map) {
+        map.put(key, convert((Map<?, ?>) e.getValue()));
+      } else {
+        map.put(key, e.getValue());
+      }
+    }
+    return map;
+  }
+
   public Map<String, Object> convert(GenericRecord record) {
     Map<String, Object> ans = new HashMap<>();
     if (record == null) {
@@ -97,6 +114,8 @@ public class TdqEvent implements Serializable {
         ans.put(field.name(), convert((Utf8) o));
       } else if (o instanceof GenericRecord) {
         ans.put(field.name(), convert((GenericRecord) o));
+      } else if (o instanceof Map) {
+        ans.put(field.name(), convert((Map<?, ?>) o));
       } else {
         ans.put(field.name(), o);
       }
