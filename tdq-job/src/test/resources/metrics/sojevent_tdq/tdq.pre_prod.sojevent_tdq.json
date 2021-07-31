@@ -11,24 +11,12 @@
       "profilers": [
         {
           "expr": "total_cnt",
-          "dimensions": [
-            "site",
-            "page"
-          ],
           "config": {
-            "sampling": true,
+            "sampling": false,
             "sampling-fraction": 0.005
           },
-          "metric-name": "sojevent_page_test",
+          "metric-name": "exception1",
           "transformations": [
-            {
-              "expr": "applicationPayload.t",
-              "alias": "site"
-            },
-            {
-              "expr": "applicationPayload.p",
-              "alias": "page"
-            },
             {
               "expr": "count(1)",
               "alias": "total_cnt"

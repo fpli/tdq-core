@@ -107,6 +107,8 @@ public class TdqTimestampsAndWatermarksOperator<T>
         + ", open->emitWatermark(" + currentWatermark + "): "
         + DateFormatUtils.format(currentWatermark, "yyyy-MM-dd HH:mm:ss"));
     wmOutput.emitWatermark(new Watermark(currentWatermark));
+    getRuntimeContext().getMetricGroup().addGroup("tdq")
+        .gauge("srcWatermark", () -> ((WatermarkEmitter) wmOutput).getCurrentWatermark());
   }
 
   @Override

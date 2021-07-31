@@ -27,3 +27,10 @@ LOCATION 'viewfs://apollo-rno/user/b_bis/tdq/raw-data/tdq.pre_prod.dump.sojevent
 
 MSCK REPAIR TABLE zhangjt_tdq_sojevent;
 refresh table zhangjt_tdq_sojevent;
+
+
+select
+    minute(eventTimestamp) as t_minute,count(1) as cnt
+from zhangjt_tdq_sojevent
+where dt=20210730 and hr='03'
+group by 1
