@@ -75,16 +75,3 @@ from
 group by 1
 order by 1
 ;
-
-
-
-CREATE TABLE `ubi_t`.`ubi_event_skew` (`guid` STRING, `sessionskey` BIGINT, `seqnum` INT, `sessionstartdt` BIGINT, `sojdatadt` BIGINT, `clickid` INT, `siteid` INT, `version` INT, `pageid` INT, `pagename` STRING, `refererhash` BIGINT, `eventtimestamp` BIGINT, `urlquerystring` STRING, `clientdata` STRING, `cookies` STRING, `applicationpayload` STRING, `webserver` STRING, `referrer` STRING, `userid` STRING, `itemid` BIGINT, `flags` STRING, `rdt` INT, `regu` INT, `sqr` STRING, `staticpagetype` INT, `reservedforfuture` INT, `eventattr` STRING, `currentimprid` BIGINT, `sourceimprid` BIGINT, `oldsessionskey` BIGINT, `dt` STRING, `type` STRING)
-USING parquet
-OPTIONS (
-  `compression` 'gzip',
-  `serialization.format` '1',
-  path 'viewfs://apollo-rno/sys/edw/ubi/ubi_t/soj/ubi_event_skew'
-)
-PARTITIONED BY (dt, type)
-CLUSTERED BY (guid, eventtimestamp)
-INTO 6000 BUCKETS

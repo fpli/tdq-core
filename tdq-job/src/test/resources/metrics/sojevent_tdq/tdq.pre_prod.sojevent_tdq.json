@@ -91,7 +91,8 @@
         "stream": "behavior.pulsar",
         "topics": "behavior.pulsar.customized.tdq",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.RheosEventDeserializationSchema",
-        "startup-mode": "LATEST",
+        "startup-mode": "TIMESTAMP",
+        "from-timestamp": 1627731300000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
@@ -108,9 +109,9 @@
         "schema-subject": "behavior.sojourner.sojevent.schema",
         "rhs-parallelism": 30,
         "event-time-field": "eventTimestamp",
-        "rhs-idle-timeout": "5min",
+        "rhs-idle-timeout": "6min",
         "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
-        "rhs-out-of-orderless": "5min"
+        "rhs-out-of-orderless": "3min"
       }
     }
   ]
