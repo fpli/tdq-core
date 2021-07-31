@@ -54,8 +54,10 @@ case class ProfilingJobLocalTest() extends ProfilingJob {
 object ProfilingJobLocalTest {
   def main(args: Array[String]): Unit = {
     ProfilingJobLocalTest().submit(Array[String](
+      "--flink.app.name", "tdq.local.memory",
       "--flink.app.local", "true",
-      "--flink.app.sink.types.normal-metric", "console",
+      "--flink.app.sink.normal-metric.std-name", "NORMAL",
+      "--flink.app.sink.latency-metric.std-name", "LATE",
       "--flink.app.name", "tdq.local.memory"
     ))
   }

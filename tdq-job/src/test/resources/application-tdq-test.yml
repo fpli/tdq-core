@@ -1,9 +1,10 @@
 flink:
   app:
+    name: "test123"
     profile: test
     sink:
       normal-metric:
-        hdfs-path: target/test/metric/normal
+        hdfs-path: target/${flink.app.profile}/metric/normal
       latency-metric:
         std-name: latency
       sample-log:

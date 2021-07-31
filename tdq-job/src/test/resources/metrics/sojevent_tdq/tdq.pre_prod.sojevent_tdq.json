@@ -10,6 +10,32 @@
       },
       "profilers": [
         {
+          "expr": "total_cnt",
+          "dimensions": [
+            "site",
+            "page"
+          ],
+          "config": {
+            "sampling": true,
+            "sampling-fraction": 0.05
+          },
+          "metric-name": "sojevent_page_test",
+          "transformations": [
+            {
+              "expr": "applicationPayload.t",
+              "alias": "site"
+            },
+            {
+              "expr": "applicationPayload.p",
+              "alias": "page"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "total_cnt"
+            }
+          ]
+        },
+        {
           "expr": "p1",
           "metric-name": "sojevent_global_cnt_by_1min",
           "transformations": [

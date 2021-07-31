@@ -7,11 +7,10 @@
       "type": "realtime.kafka",
       "config": {
         "rhs-parallelism": 3,
-        "rhs-out-of-orderless": "1s",
-        "rhs-idle-timeout": "1s",
+        "rhs-out-of-orderless": "1min",
+        "rhs-idle-timeout": "1min",
         "sample-fraction": 0.0,
-        "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1626160441000,
+        "startup-mode": "LATEST",
         "to-timestamp": 0,
         "rheos-services-urls": "https://rheos-services.qa.ebay.com",
         "schema-subject": "daf.checkout",
@@ -46,23 +45,13 @@
         {
           "expr": "p1",
           "metric-name": "global_cnt_by_1min",
-          "dimensions": [
-            "quantity"
-          ],
+          "config": {
+            "sampling": true,
+            "sampling-fraction": 0.5
+          },
           "transformations": [
             {
               "alias": "p1",
-              "expr": "count(1)"
-            }
-          ]
-        },
-        {
-          "expr": "total_cnt",
-          "metric-name": "test_filter_dims",
-          "filter": "quantity > 1",
-          "transformations": [
-            {
-              "alias": "total_cnt",
               "expr": "count(1)"
             }
           ]

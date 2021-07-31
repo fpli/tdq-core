@@ -1,10 +1,12 @@
 package com.ebay.tdq.common.model;
 
+import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.JsonUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringJoiner;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -51,5 +53,17 @@ public class TdqSampleData {
     json.put("process_time", new Date(processTime));
     json.put("params", params);
     return json;
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", TdqSampleData.class.getSimpleName() + "[", "]")
+        .add("processTimeFmt=" + DateUtils.format(processTime))
+        .add("processTime=" + processTime)
+        .add("metricKey='" + metricKey + "'")
+        .add("tdqEvent=" + tdqEvent)
+        .add("tdqMetric=" + tdqMetric)
+        .add("params='" + params + "'")
+        .toString();
   }
 }

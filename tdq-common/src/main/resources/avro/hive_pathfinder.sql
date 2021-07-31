@@ -1,4 +1,4 @@
-CREATE TABLE `zhangjt_tdq_pf_dumper` (
+CREATE TABLE `zhangjt_tdq_pathfinder` (
     `ingestTime` BIGINT,
     `sojTimestamp` BIGINT,
     `eventTimestamp` BIGINT,
@@ -7,6 +7,7 @@ CREATE TABLE `zhangjt_tdq_pf_dumper` (
     `sojK` MAP<STRING, STRING>,
     `sojC` MAP<STRING, STRING>,
     `clientData` MAP<STRING, STRING>,
+    `source` STRING,
     `dt` STRING,
     `hr` STRING
 )
@@ -14,9 +15,9 @@ USING parquet
 OPTIONS (
   `compression` 'snappy',
   `serialization.format` '1',
-  path 'viewfs://apollo-rno/user/b_bis/tdq/pre-prod/raw-data/'
+  path 'viewfs://apollo-rno/user/b_bis/tdq/raw-data/tdq.pre_prod.dump.pathfinder'
 )
-PARTITIONED BY (dt, hr);
+PARTITIONED BY (source, dt, hr);
 
-MSCK REPAIR TABLE zhangjt_tdq_pf_dumper;
-refresh table zhangjt_tdq_pf_dumper;
+MSCK REPAIR TABLE zhangjt_tdq_pathfinder;
+refresh table zhangjt_tdq_pathfinder;

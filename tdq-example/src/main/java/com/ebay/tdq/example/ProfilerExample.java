@@ -15,6 +15,7 @@ import org.apache.commons.lang.time.DateUtils;
  * @author juntzhang
  */
 public class ProfilerExample {
+
   public static void main(String[] args) throws IOException, ParseException {
     Map<String, Set<String>> dimensions = new HashMap<>();
     dimensions.put("page_id", Sets.newHashSet("711", "1677718"));
@@ -79,6 +80,5 @@ public class ProfilerExample {
 
     QueryProfilerResult result = ServiceFactory.getProfiler().query(param);
     System.out.println(result.getRecords());
-    ServiceFactory.close();
   }
 }

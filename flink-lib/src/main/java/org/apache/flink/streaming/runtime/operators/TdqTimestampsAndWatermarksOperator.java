@@ -103,7 +103,9 @@ public class TdqTimestampsAndWatermarksOperator<T>
       getProcessingTimeService().registerTimer(now + watermarkInterval, this);
     }
 
-    System.out.println("open->emitWatermark: " + DateFormatUtils.format(currentWatermark, "yyyy-MM-dd HH:mm:ss"));
+    System.out.println(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss")
+        + ", open->emitWatermark(" + currentWatermark + "): "
+        + DateFormatUtils.format(currentWatermark, "yyyy-MM-dd HH:mm:ss"));
     wmOutput.emitWatermark(new Watermark(currentWatermark));
   }
 
@@ -131,7 +133,9 @@ public class TdqTimestampsAndWatermarksOperator<T>
     if (wmOutput != null) {
       ((WatermarkEmitter) wmOutput).setCurrentWatermark(currentWatermark);
     }
-    System.out.println("initializeState: " + DateFormatUtils.format(currentWatermark, "yyyy-MM-dd HH:mm:ss"));
+    System.out.println(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss")
+        + ", initializeState(" + currentWatermark + "): "
+        + DateFormatUtils.format(currentWatermark, "yyyy-MM-dd HH:mm:ss"));
   }
 
   @Override
@@ -139,7 +143,9 @@ public class TdqTimestampsAndWatermarksOperator<T>
     super.snapshotState(context);
     restoreWatermarks.clear();
     currentWatermark = ((WatermarkEmitter) wmOutput).getCurrentWatermark();
-    System.out.println("snapshotState: " + DateFormatUtils.format(currentWatermark, "yyyy-MM-dd HH:mm:ss"));
+    System.out.println(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss")
+        + ", snapshotState(" + currentWatermark + "): "
+        + DateFormatUtils.format(currentWatermark, "yyyy-MM-dd HH:mm:ss"));
     restoreWatermarks.add(currentWatermark);
   }
 

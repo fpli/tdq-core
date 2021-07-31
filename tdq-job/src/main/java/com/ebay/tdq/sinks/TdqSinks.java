@@ -145,7 +145,7 @@ public class TdqSinks implements Serializable {
     }
     if (env.isSampleLogSinkStd()) {
       ds.getSideOutput(tdqCxt.getSampleOutputTag())
-          .print(env.getLatencyMetricStdName())
+          .print(env.getSampleLogStdName())
           .uid("log_sample_o_std")
           .name("log_sample_o_std")
           .setParallelism(tdqEnv.getMetric2ndAggrParallelism());
@@ -173,7 +173,7 @@ public class TdqSinks implements Serializable {
     }
     if (env.isExceptionLogSinkStd()) {
       ds.getSideOutput(tdqCxt.getExceptionOutputTag())
-          .print(env.getLatencyMetricStdName())
+          .print(env.getExceptionLogStdName())
           .uid("log_exception_o_std")
           .name("log_exception_o_std")
           .setParallelism(tdqEnv.getMetric2ndAggrParallelism());

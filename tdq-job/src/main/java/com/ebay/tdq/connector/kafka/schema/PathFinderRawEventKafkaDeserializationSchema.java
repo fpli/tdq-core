@@ -10,9 +10,6 @@ import com.ebay.sojourner.common.util.SOJNVL;
 import com.ebay.sojourner.common.util.SOJURLDecodeEscape;
 import com.ebay.sojourner.common.util.SojTimestamp;
 import com.ebay.tdq.common.model.TdqEvent;
-import io.ebay.rheos.kafka.client.StreamConnectorConfig;
-import io.ebay.rheos.schema.avro.GenericRecordDomainDataDecoder;
-import io.ebay.rheos.schema.avro.RheosEventDeserializer;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -42,12 +39,10 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
       Constants.DEFAULT_TIMESTAMP_FORMAT).withZone(DateTimeZone.forTimeZone(Constants.PST_TIMEZONE));
   private static final DateTimeFormatter dateMinsFormatter = DateTimeFormat.forPattern(
       Constants.DEFAULT_DATE_MINS_FORMAT).withZone(DateTimeZone.forTimeZone(Constants.PST_TIMEZONE));
-  private static final RheosEventDeserializer deserializer = new RheosEventDeserializer();
   private static String[] tagsToEncode = new String[]{Constants.TAG_ITEMIDS, Constants.TAG_TRKP};
   private final Long endTimestamp;
   private final String schemaRegistryUrl;
   private String eventTimeField;
-  private transient volatile GenericRecordDomainDataDecoder decoder = null;
 
   public PathFinderRawEventKafkaDeserializationSchema(String schemaRegistryUrl, Long endTimestamp,
       String eventTimeField) {
@@ -65,19 +60,6 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
     return this.endTimestamp > 0 && t > this.endTimestamp;
   }
 
-  public GenericRecordDomainDataDecoder getDecoder() {
-    if (null == decoder) {
-      Map<String, Object> config = new HashMap<>();
-      config.put(StreamConnectorConfig.RHEOS_SERVICES_URLS, this.schemaRegistryUrl);
-      synchronized (this.schemaRegistryUrl) {
-        if (null == decoder) {
-          decoder = new GenericRecordDomainDataDecoder(config);
-        }
-      }
-    }
-    return decoder;
-  }
-
   @Override
   public TdqEvent deserialize(ConsumerRecord<byte[], byte[]> record) {
     return deserialize0(record.value());
@@ -85,8 +67,9 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
 
   public TdqEvent deserialize0(byte[] message) {
     long ingestTime = new Date().getTime();
-    RheosEvent rheosEvent = deserializer.deserialize(null, message);
-    GenericRecord genericRecord = getDecoder().decode(rheosEvent);
+    RheosEvent rheosEvent = RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
+    GenericRecord genericRecord = RheosEventSerdeFactory.getRheosEventDeserializer(this.schemaRegistryUrl)
+        .decode(rheosEvent);
     // Generate RheosHeader
     RheosHeader rheosHeader =
         new RheosHeader(

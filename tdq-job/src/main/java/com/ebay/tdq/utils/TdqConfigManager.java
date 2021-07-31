@@ -6,7 +6,7 @@ import com.ebay.tdq.config.KafkaSourceConfig;
 import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;
-import com.ebay.tdq.connector.kafka.schema.RheosEventDeserializationSchema;
+import com.ebay.tdq.connector.kafka.schema.RheosEventSerdeFactory;
 import com.ebay.tdq.planner.LkpRefreshTimeTask;
 import com.ebay.tdq.planner.Refreshable;
 import com.ebay.tdq.rules.PhysicalPlan;
@@ -65,33 +65,38 @@ public class TdqConfigManager implements Refreshable {
 
   public void refresh() {
     freshTdqConfigs();
-    log.info("refresh success!");
+    log.info(lkpRefreshTimeTask.getId() + ":refresh success!");
+  }
+
+  public static TdqConfig getTdqConfig(TdqEnv tdqEnv) throws Exception {
+    JdbcEnv jdbc = tdqEnv.getJdbcEnv();
+    Class.forName(jdbc.getDriverClassName());
+    Connection conn = DriverManager.getConnection(jdbc.getUrl(), jdbc.getUser(), jdbc.getPassword());
+    ResultSet rs = conn.createStatement()
+        .executeQuery(
+            "select id, config from rhs_config where status='ACTIVE' and name='" + tdqEnv.getJobName() + "'");
+    rs.next();
+    String json = rs.getString("config");
+    String id = String.valueOf(rs.getInt("id"));
+    String name = tdqEnv.getJobName();
+    TdqConfig c = JsonUtils.parseObject(json, TdqConfig.class);
+    // log.warn("getTdqConfigs={}", json);
+    log.warn("getTdqConfigs={}", DigestUtils.md5Hex(json));
+    conn.close();
+    return TdqConfig.builder()
+        .id(id)
+        .name(name)
+        .sources(c.getSources())
+        .rules(c.getRules())
+        .sinks(c.getSinks() == null ? Lists.newArrayList() : c.getSinks())
+        .build();
   }
 
   public void freshTdqConfigs() {
     try {
       JdbcEnv jdbc = tdqEnv.getJdbcEnv();
       List<TdqConfig> tdqConfigList = new CopyOnWriteArrayList<>();
-      Class.forName(jdbc.getDriverClassName());
-      Connection conn = DriverManager.getConnection(jdbc.getUrl(), jdbc.getUser(), jdbc.getPassword());
-      ResultSet rs = conn.createStatement()
-          .executeQuery(
-              "select id, config from rhs_config where status='ACTIVE' and name='" + tdqEnv.getJobName() + "'");
-      while (rs.next()) {
-        String json = rs.getString("config");
-        String id = String.valueOf(rs.getInt("id"));
-        String name = tdqEnv.getJobName();
-        TdqConfig c = JsonUtils.parseObject(json, TdqConfig.class);
-        log.warn("getTdqConfigs={}", DigestUtils.md5Hex(json));
-        tdqConfigList.add(TdqConfig.builder()
-            .id(id)
-            .name(name)
-            .sources(c.getSources())
-            .rules(c.getRules())
-            .sinks(c.getSinks() == null ? Lists.newArrayList() : c.getSinks())
-            .build());
-      }
-      conn.close();
+      tdqConfigList.add(getTdqConfig(tdqEnv));
       this.tdqConfigs = tdqConfigList;
 
       List<PhysicalPlan> plans = new CopyOnWriteArrayList<>();
@@ -103,10 +108,7 @@ public class TdqConfigManager implements Refreshable {
           KafkaSourceConfig ksc = KafkaSourceConfig.build(config.getSources().get(0), tdqEnv);
           if (ksc.getDeserializer().equals(
               "com.ebay.tdq.connector.kafka.schema.RheosEventDeserializationSchema")) {
-            RheosEventDeserializationSchema deserializer = new RheosEventDeserializationSchema(
-                ksc.getRheosServicesUrls(), ksc.getEndOfStreamTimestamp(),
-                ksc.getEventTimeField(), ksc.getSchemaSubject());
-            schema = deserializer.getSchema();
+            schema = RheosEventSerdeFactory.getSchema(ksc.getSchemaSubject(), ksc.getRheosServicesUrls());
           }
         }
 
@@ -146,10 +148,6 @@ public class TdqConfigManager implements Refreshable {
       }
     }
     return null;
-  }
-
-  public List<TdqConfig> getTdqConfigs() {
-    return tdqConfigs;
   }
 
   public List<PhysicalPlan> getPhysicalPlans() {

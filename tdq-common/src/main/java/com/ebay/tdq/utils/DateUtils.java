@@ -27,6 +27,12 @@ public class DateUtils {
         .parse(str);
   }
 
+  public static String format(Long ts) {
+    return FastDateFormat
+        .getInstance("yyyy-MM-dd HH:mm:ss")
+        .format(ts);
+  }
+
   public static String format(Long ts, TimeZone zone) {
     return FastDateFormat
         .getInstance("yyyy-MM-dd HH:mm:ss", zone)

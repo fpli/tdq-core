@@ -47,7 +47,7 @@ public class ProfilingJob {
 
   protected void start() {
     try {
-      TdqConfig tdqConfig = TdqConfigManager.getInstance(tdqEnv).findTdqConfig(tdqEnv.getJobName());
+      TdqConfig tdqConfig = TdqConfigManager.getTdqConfig(tdqEnv);
       Validate.isTrue(tdqConfig != null);
       // step1: build data source
       // step2: normalize event to metric
@@ -62,6 +62,8 @@ public class ProfilingJob {
       tdqCxt.getRhsEnv().execute(tdqEnv.getJobName());
     } catch (Exception e) {
       log.error(e.getMessage(), e);
+    } finally {
+      TdqConfigManager.getInstance(tdqEnv).stop();
     }
   }
 
@@ -89,8 +91,6 @@ public class ProfilingJob {
         .name(uid)
         .uid(uid);
 
-    TdqSinks.sinkException(tdqCxt, unifyDataStream);
-    TdqSinks.sinkSampleLog(tdqCxt, unifyDataStream);
     TdqSinks.sinkLatencyMetric(tdqCxt, unifyDataStream);
 
     Map<String, SingleOutputStreamOperator<TdqMetric>> ans = Maps.newHashMap();

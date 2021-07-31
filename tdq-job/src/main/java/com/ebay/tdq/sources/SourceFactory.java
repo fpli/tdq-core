@@ -3,6 +3,7 @@ package com.ebay.tdq.sources;
 import com.ebay.tdq.common.model.TdqMetric;
 import com.ebay.tdq.config.SourceConfig;
 import com.ebay.tdq.config.TdqConfig;
+import com.ebay.tdq.sinks.TdqSinks;
 import com.ebay.tdq.utils.TdqContext;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -45,6 +46,9 @@ public class SourceFactory {
         .slotSharingGroup(name)
         .setParallelism(parallelism);
 
+    TdqSinks.sinkException(tdqCxt, outDS);
+    TdqSinks.sinkSampleLog(tdqCxt, outDS);
+
     SerializableTimestampAssigner<TdqMetric> assigner =
         (SerializableTimestampAssigner<TdqMetric>) (event, timestamp) -> event.getEventTime();
 
@@ -52,6 +56,7 @@ public class SourceFactory {
         .<TdqMetric>forBoundedOutOfOrderness(Duration.ofMillis(outOfOrderlessMs))
         .withTimestampAssigner(assigner)
         .withIdleness(Duration.ofMillis(idleTimeoutMs));
+
     TdqTimestampsAndWatermarksOperator<TdqMetric> operator =
         new TdqTimestampsAndWatermarksOperator<>(tdqCxt.getRhsEnv().clean(watermarkStrategy));
 
@@ -61,6 +66,7 @@ public class SourceFactory {
         .uid(name + "_wks")
         .slotSharingGroup(name)
         .setParallelism(parallelism);
+
     return outDS;
   }
 }

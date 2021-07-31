@@ -7,6 +7,7 @@ import java.util.TimeZone;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 /**
@@ -120,4 +121,22 @@ public class SinkEnv implements Serializable {
     return normalMetricProntoIndexPattern + getIndexDateSuffix(eventTime);
   }
 
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("timeZone", timeZone)
+        .append("normalMetricPath", normalMetricPath)
+        .append("normalMetricProntoIndexPattern", normalMetricProntoIndexPattern)
+        .append("normalMetricStdName", normalMetricStdName)
+        .append("normalMetricMemName", normalMetricMemName)
+        .append("latencyMetricPath", latencyMetricPath)
+        .append("latencyMetricProntoIndexPattern", latencyMetricProntoIndexPattern)
+        .append("latencyMetricStdName", latencyMetricStdName)
+        .append("sampleLogProntoIndexPattern", sampleLogProntoIndexPattern)
+        .append("sampleLogStdName", sampleLogStdName)
+        .append("exceptionLogProntoIndexPattern", exceptionLogProntoIndexPattern)
+        .append("exceptionLogStdName", exceptionLogStdName)
+        .append("rawDataPath", rawDataPath)
+        .toString();
+  }
 }

@@ -29,17 +29,13 @@ public class RheosEventSerdeFactory implements Serializable {
   }
 
   public static GenericRecordDomainDataDecoder getRheosEventDeserializer(String schemaRegistryUrl) {
-
     if (rheosEventDeserializer == null) {
       Map<String, Object> config = new HashMap<>();
-      if (schemaRegistryUrl != null) {
-        config.put(StreamConnectorConfig.RHEOS_SERVICES_URLS, schemaRegistryUrl);
-      } else {
-        config.put(StreamConnectorConfig.RHEOS_SERVICES_URLS, RHEOS_SERVICES_URL);
+      config.put(StreamConnectorConfig.RHEOS_SERVICES_URLS, schemaRegistryUrl);
+      synchronized (RheosEventSerdeFactory.class){
+        rheosEventDeserializer = new GenericRecordDomainDataDecoder(config);
       }
-      rheosEventDeserializer = new GenericRecordDomainDataDecoder(config);
     }
-
     return rheosEventDeserializer;
   }
 }

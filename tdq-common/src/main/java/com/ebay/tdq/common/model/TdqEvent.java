@@ -5,11 +5,14 @@ import com.google.common.annotations.VisibleForTesting;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringJoiner;
 import org.apache.avro.Schema;
 import org.apache.avro.Schema.Type;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * @author juntzhang
@@ -129,5 +132,18 @@ public class TdqEvent implements Serializable {
   public TdqEvent put(String key, Object v) {
     data.put(key, v);
     return this;
+  }
+
+  public String getEventTimeMsStr() {
+    return DateFormatUtils.format(getEventTimeMs(), "yyyy-MM-dd HH:mm:ss");
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", TdqEvent.class.getSimpleName() + "[", "]")
+        .add("type='" + type + "'")
+        .add("eventTimeFiled='" + eventTimeFiled + "'")
+        .add("data=" + data)
+        .toString();
   }
 }

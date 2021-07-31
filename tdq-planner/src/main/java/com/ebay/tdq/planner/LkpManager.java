@@ -29,8 +29,8 @@ public class LkpManager implements Refreshable {
 
   private LkpManager(TimeUnit timeUnit, JdbcEnv jdbc) {
     this.jdbc = jdbc;
-    refresh();
     lkpRefreshTimeTask = new LkpRefreshTimeTask(this, timeUnit);
+    refresh();
   }
 
   private LkpManager(JdbcEnv jdbc) {
@@ -58,7 +58,7 @@ public class LkpManager implements Refreshable {
     Map<String, String> lkp = getLkpTable();
     refreshBBWOAPagesWithItm(lkp);
     refreshPageFamily(lkp);
-    log.info("refresh success!");
+    log.info(lkpRefreshTimeTask.getId() + ": refresh success!");
   }
 
   private void refreshBBWOAPagesWithItm(Map<String, String> lkp) {

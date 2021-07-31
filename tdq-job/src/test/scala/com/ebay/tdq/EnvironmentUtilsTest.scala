@@ -16,7 +16,7 @@ class EnvironmentUtilsTest {
       EnvironmentUtils.getStringWithPattern("flink.app.sink.normal-metric.hdfs-path") == "target/test/metric/normal")
 
     Assert.assertTrue(
-      EnvironmentUtils.getStringWithPattern("flink.app.checkpoint.data-dir") == "/tmp/tdq-test/checkpoint")
+      EnvironmentUtils.getStringWithPattern("flink.app.checkpoint.data-dir") == "/tmp/test123/checkpoint")
   }
 
 }

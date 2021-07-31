@@ -20,10 +20,22 @@ case class ProfilingJobKafkaLocalTest() extends ProfilingJob {
 object ProfilingJobKafkaLocalTest {
   def main(args: Array[String]): Unit = {
     ProfilingJobKafkaLocalTest().submit(Array[String](
+      "--flink.app.name", "tdq.local.daf_checkout",
       "--flink.app.local", "true",
-      "--flink.app.sink.types.normal-metric", "console",
+      "--flink.app.window.supports", "1min",
+      "--flink.app.sink.normal-metric.std-name", "NOR",
+      "--flink.app.sink.latency-metric.std-name", "LAT",
+      "--flink.app.sink.sample-log.std-name", "SAM",
       "--flink.app.name", "tdq.local.daf_checkout"
     ))
+
+    //    val args = Array[String](
+    //      "--flink.app.name", "tdq.local.daf_checkout",
+    //      "--flink.app.local", "true",
+    //      "--flink.app.sink.raw-data.hdfs-path", "target/test/raw-data"
+    //    )
+    //    ProfilingJobKafkaLocalTest().setup(args)
+    //    new SojEventDumpJob().submit(args)
   }
 }
 
