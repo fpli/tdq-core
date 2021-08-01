@@ -33,7 +33,7 @@ group by 1;
 select
     minute(to_timestamp((eventTimestamp-2208963600000000)/1000000)) as t_minute, count(1) as cnt
 from ubi_w.stg_ubi_event_dump_w
-where dt=20210730 and hr='03'
+where dt='20210730' and hr='03'
 group by 1;
 
 select
@@ -45,6 +45,9 @@ from
 where
   a.session_start_dt = '2021-07-30'
 limit 10;
+
+
+
 
 select
   t_minute,

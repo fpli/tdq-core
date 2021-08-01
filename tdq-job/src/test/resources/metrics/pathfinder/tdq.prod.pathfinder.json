@@ -18,16 +18,6 @@
               "alias": "p1"
             }
           ]
-        },
-        {
-          "expr": "p1",
-          "metric-name": "exception1",
-          "transformations": [
-            {
-              "expr": "count(1)",
-              "alias": "p1"
-            }
-          ]
         }
       ]
     },
@@ -296,8 +286,7 @@
         "stream": "behavior.pathfinder",
         "topics": "behavior.pathfinder.events.total",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema",
-        "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1627733100000,
+        "startup-mode": "LATEST",
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
@@ -325,8 +314,7 @@
         "stream": "behavior.pathfinder",
         "topics": "behavior.pathfinder.events.total",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema",
-        "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1627733100000,
+        "startup-mode": "LATEST",
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
@@ -354,8 +342,7 @@
         "stream": "behavior.pathfinder",
         "topics": "behavior.pathfinder.events.total",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema",
-        "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1627733100000,
+        "startup-mode": "LATEST",
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",

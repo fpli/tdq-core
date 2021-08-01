@@ -1,6 +1,6 @@
 {
-  "id": "1",
-  "name": "tdq.prod.pathfinder",
+  "id": "ignore",
+  "name": "ignore",
   "rules": [
     {
       "name": "tdq_system",
@@ -12,6 +12,16 @@
         {
           "expr": "p1",
           "metric-name": "global_cnt_by_1min",
+          "transformations": [
+            {
+              "expr": "count(1)",
+              "alias": "p1"
+            }
+          ]
+        },
+        {
+          "expr": "p1",
+          "metric-name": "exception1",
           "transformations": [
             {
               "expr": "count(1)",
@@ -288,7 +298,6 @@
         "deserializer": "com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema",
         "startup-mode": "LATEST",
         "kafka-consumer": {
-          "group.id": "tdq_pathfinder_prod",
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
           "fetch.max.bytes": 52428800,
@@ -302,7 +311,9 @@
           "partition.assignment.strategy": "org.apache.kafka.clients.consumer.RoundRobinAssignor"
         },
         "rhs-parallelism": 125,
+        "event-time-field": "eventTimestamp",
         "rhs-idle-timeout": "5min",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
         "rhs-out-of-orderless": "5min"
       }
     },
@@ -315,7 +326,6 @@
         "deserializer": "com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema",
         "startup-mode": "LATEST",
         "kafka-consumer": {
-          "group.id": "tdq_pathfinder_prod",
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
           "fetch.max.bytes": 52428800,
@@ -329,7 +339,9 @@
           "partition.assignment.strategy": "org.apache.kafka.clients.consumer.RoundRobinAssignor"
         },
         "rhs-parallelism": 125,
+        "event-time-field": "eventTimestamp",
         "rhs-idle-timeout": "5min",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
         "rhs-out-of-orderless": "5min"
       }
     },
@@ -342,7 +354,6 @@
         "deserializer": "com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema",
         "startup-mode": "LATEST",
         "kafka-consumer": {
-          "group.id": "tdq_pathfinder_prod",
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
           "fetch.max.bytes": 52428800,
@@ -356,7 +367,9 @@
           "partition.assignment.strategy": "org.apache.kafka.clients.consumer.RoundRobinAssignor"
         },
         "rhs-parallelism": 125,
+        "event-time-field": "eventTimestamp",
         "rhs-idle-timeout": "5min",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
         "rhs-out-of-orderless": "5min"
       }
     }

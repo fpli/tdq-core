@@ -12,7 +12,7 @@ USING parquet
 OPTIONS (
   `compression` 'snappy',
   `serialization.format` '1',
-  path 'viewfs://apollo-rno/user/b_bis/juntzhang/tdq/metric/'
+  path 'viewfs://apollo-rno/user/b_bis/tdq/metric/'
 )
 PARTITIONED BY (dt, hr);
 
