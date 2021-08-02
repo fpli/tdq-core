@@ -39,7 +39,7 @@ public class TdqMetric1stAggrProcessWindowFunction
   @Override
   public void open(Configuration parameters) throws Exception {
     counterMap = new HashMap<>();
-    group = this.getRuntimeContext().getMetricGroup().addGroup("tdq1");
+    group = this.getRuntimeContext().getMetricGroup().addGroup("tdq");
     super.open(parameters);
   }
 
@@ -54,7 +54,7 @@ public class TdqMetric1stAggrProcessWindowFunction
     if (outputTag != null) {
       context.output(outputTag, m);
     } else {
-      inc("drop_metric", 1);
+      inc("dropMetric", 1);
       log.warn("Drop tdq metric {}, windows not supported!", m);
     }
   }

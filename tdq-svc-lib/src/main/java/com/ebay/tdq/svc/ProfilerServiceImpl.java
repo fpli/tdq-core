@@ -17,6 +17,7 @@ import com.ebay.tdq.rules.Transformation;
 import com.ebay.tdq.service.ProfilerService;
 import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.JsonUtils;
+import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -60,8 +61,6 @@ public class ProfilerServiceImpl implements ProfilerService {
     try {
       Validate.isTrue(StringUtils.isNotBlank(param.getTdqConfig()), "TDQ config is empty");
 
-      Validate.isTrue(param.getFrom() <= param.getTo(), "from must be earlier than to");
-
       TdqConfig config = JsonUtils.parseObject(param.getTdqConfig(), TdqConfig.class);
       Validate.isTrue(config.getRules().size() == 1, "currently only support one rule.");
 
@@ -70,6 +69,9 @@ public class ProfilerServiceImpl implements ProfilerService {
 
       ProfilerConfig profilerConfig = ruleConfig.getProfilers().get(0);
       Validate.isTrue(StringUtils.isNotEmpty(profilerConfig.getMetricName()), "metric name is required.");
+
+      Long from = getFrom(profilerConfig, param.getFrom());
+
       int window = (int) DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString());
 
       PhysicalPlan physicalPlan = new ProfilingSqlParser(profilerConfig, window, null, null).parsePlan();
@@ -77,7 +79,7 @@ public class ProfilerServiceImpl implements ProfilerService {
       SearchSourceBuilder builder = new SearchSourceBuilder();
       BoolQueryBuilder rootBuilder = QueryBuilders.boolQuery();
 
-      rootBuilder.must(QueryBuilders.rangeQuery("event_time").gte(param.getFrom()).lte(param.getTo()));
+      rootBuilder.must(QueryBuilders.rangeQuery("event_time").gte(from).lte(param.getTo()));
       rootBuilder.must(QueryBuilders.termQuery("metric_key", profilerConfig.getMetricName()));
 
       if (MapUtils.isNotEmpty(param.getDimensions())) {
@@ -106,7 +108,7 @@ public class ProfilerServiceImpl implements ProfilerService {
       builder.aggregation(aggregation);
       builder.size(0);
       log.info("search request {}", builder);
-      SearchRequest searchRequest = new SearchRequest(calculateIndexes(param.getFrom(), param.getTo()), builder);
+      SearchRequest searchRequest = new SearchRequest(calculateIndexes(from, param.getTo()), builder);
       searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
 
       SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
@@ -136,8 +138,6 @@ public class ProfilerServiceImpl implements ProfilerService {
     try {
       Validate.isTrue(StringUtils.isNotBlank(param.getTdqConfig()), "TDQ config is empty");
 
-      Validate.isTrue(param.getFrom() <= param.getTo(), "from must be earlier than to");
-
       TdqConfig config = JsonUtils.parseObject(param.getTdqConfig(), TdqConfig.class);
       Validate.isTrue(config.getRules().size() == 1, "currently only support one rule.");
 
@@ -148,6 +148,8 @@ public class ProfilerServiceImpl implements ProfilerService {
       Validate.isTrue(StringUtils.isNotEmpty(profilerConfig.getMetricName()), "metric name is required.");
       int window = (int) DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString());
 
+      Long from = getFrom(profilerConfig, param.getFrom());
+
       ProfilingSqlParser parser = new ProfilingSqlParser(profilerConfig, window, null, null);
       PhysicalPlan physicalPlan = parser.parsePlan();
       if (ArrayUtils.isEmpty(physicalPlan.dimensions())) {
@@ -157,7 +159,7 @@ public class ProfilerServiceImpl implements ProfilerService {
       SearchSourceBuilder builder = new SearchSourceBuilder();
       BoolQueryBuilder rootBuilder = QueryBuilders.boolQuery();
 
-      rootBuilder.must(QueryBuilders.rangeQuery("event_time").gte(param.getFrom()).lte(param.getTo()));
+      rootBuilder.must(QueryBuilders.rangeQuery("event_time").gte(from).lte(param.getTo()));
       rootBuilder.must(QueryBuilders.termQuery("metric_key", profilerConfig.getMetricName()));
 
       new ProntoQueryBuilder(rootBuilder, parser.parseProntoDropdownExpr()).submit();
@@ -175,7 +177,7 @@ public class ProfilerServiceImpl implements ProfilerService {
         builder.size(0);
       }
       log.info("search request {}", builder);
-      SearchRequest searchRequest = new SearchRequest(calculateIndexes(param.getFrom(), param.getTo()), builder);
+      SearchRequest searchRequest = new SearchRequest(calculateIndexes(from, param.getTo()), builder);
       searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
 
       SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
@@ -208,5 +210,14 @@ public class ProfilerServiceImpl implements ProfilerService {
     results.add(ServiceFactory.getTdqEnv().getSinkEnv().getNormalMetricIndex(end));
     log.info("search request indexes=>{}", StringUtils.join(results, ","));
     return results.toArray(new String[0]);
+  }
+
+  private Long getFrom(ProfilerConfig config, long from) throws ParseException {
+    Long birthday = config.getMetricBirthday();
+    if (birthday == null) {
+      return from;
+    } else {
+      return Math.max(birthday, from);
+    }
   }
 }

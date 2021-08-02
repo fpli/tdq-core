@@ -34,7 +34,7 @@ public class ProntoSinkFunction implements ElasticsearchSinkFunction<TdqMetric> 
   public void inc(RuntimeContext runtimeContext, String key, long v) {
     Counter counter = counterMap.get(key);
     if (counter == null) {
-      counter = runtimeContext.getMetricGroup().addGroup("tdq3").counter(key);
+      counter = runtimeContext.getMetricGroup().addGroup("tdq").counter(key);
       counterMap.put(key, counter);
     }
     counter.inc(v);

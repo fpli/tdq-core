@@ -21,7 +21,7 @@ public class LatencyTdqMetricRichSinkFunction extends RichSinkFunction<TdqMetric
   public void open(Configuration parameters) throws Exception {
     super.open(parameters);
     counterMap = new HashMap<>();
-    group = this.getRuntimeContext().getMetricGroup().addGroup("tdq2");
+    group = this.getRuntimeContext().getMetricGroup().addGroup("tdq");
   }
 
   public void inc(String key, long v) {

@@ -1,6 +1,7 @@
 package com.ebay.tdq.common.model;
 
 import com.ebay.tdq.common.model.TdqMetricAvro.Builder;
+import com.ebay.tdq.utils.DateUtils;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -91,8 +92,8 @@ public class TdqMetric implements Serializable {
     values.forEach((k, v) -> sj.add("e-" + k + "=" + v));
     sj.add("window" + "=" + window);
     sj.add("partition" + "=" + partition);
-    sj.add("tag_id" + "=" + tagId);
-    sj.add("eventTime" + "=" + FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").format(eventTime));
+    sj.add("tagId" + "=" + tagId);
+    sj.add("eventTime" + "=" + DateUtils.format(eventTime));
     sb.append(sj).append("}").append(" ").append(value);
     return sb.toString();
   }

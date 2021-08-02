@@ -95,7 +95,7 @@ public class TdqTimestampsAndWatermarksOperator<T>
     timestampAssigner = watermarkStrategy.createTimestampAssigner(this::getMetricGroup);
     watermarkGenerator = watermarkStrategy.createWatermarkGenerator(this::getMetricGroup);
 
-    wmOutput = new WatermarkEmitter(output, getContainingTask().getStreamStatusMaintainer());
+    wmOutput = new WatermarkEmitter(output, getContainingTask().getStreamStatusMaintainer(), currentWatermark);
 
     watermarkInterval = getExecutionConfig().getAutoWatermarkInterval();
     if (watermarkInterval > 0) {
@@ -103,12 +103,11 @@ public class TdqTimestampsAndWatermarksOperator<T>
       getProcessingTimeService().registerTimer(now + watermarkInterval, this);
     }
 
-    System.out.println(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss")
-        + ", open->emitWatermark(" + currentWatermark + "): "
-        + DateFormatUtils.format(currentWatermark, "yyyy-MM-dd HH:mm:ss"));
-    wmOutput.emitWatermark(new Watermark(currentWatermark));
     getRuntimeContext().getMetricGroup().addGroup("tdq")
         .gauge("srcWatermark", () -> ((WatermarkEmitter) wmOutput).getCurrentWatermark());
+
+    output.emitWatermark(new org.apache.flink.streaming.api.watermark.Watermark(currentWatermark));
+    // wmOutput.emitWatermark(new Watermark(currentWatermark));
   }
 
   @Override
@@ -127,17 +126,13 @@ public class TdqTimestampsAndWatermarksOperator<T>
         }
       }
       currentWatermark = lowestWatermark == Long.MAX_VALUE ? Long.MIN_VALUE : lowestWatermark;
-      LOG.info("Find restore state for TimestampsAndPeriodicWatermarksOperator.");
+      LOG.info("Find restore state for currentWatermark={}.",currentWatermark);
     } else {
       currentWatermark = Long.MIN_VALUE;
-      LOG.info("No restore state for TimestampsAndPeriodicWatermarksOperator.");
+      LOG.info("No restore state.");
     }
-    if (wmOutput != null) {
-      ((WatermarkEmitter) wmOutput).setCurrentWatermark(currentWatermark);
-    }
-    System.out.println(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss")
-        + ", initializeState(" + currentWatermark + "): "
-        + DateFormatUtils.format(currentWatermark, "yyyy-MM-dd HH:mm:ss"));
+
+    output.emitWatermark(new org.apache.flink.streaming.api.watermark.Watermark(currentWatermark));
   }
 
   @Override
@@ -209,17 +204,10 @@ public class TdqTimestampsAndWatermarksOperator<T>
       return currentWatermark;
     }
 
-    public void setCurrentWatermark(long ts) {
-      if (ts <= currentWatermark) {
-        return;
-      }
-      this.currentWatermark = ts;
-    }
-
-    WatermarkEmitter(Output<?> output, StreamStatusMaintainer statusMaintainer) {
+    WatermarkEmitter(Output<?> output, StreamStatusMaintainer statusMaintainer, Long currentWatermark) {
       this.output = output;
       this.statusMaintainer = statusMaintainer;
-      this.currentWatermark = Long.MIN_VALUE;
+      this.currentWatermark = currentWatermark;
     }
 
     @Override

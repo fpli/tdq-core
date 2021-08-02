@@ -24,7 +24,7 @@ public class TdqMetric2ndAggrProcessWindowFunction
   @Override
   public void open(Configuration parameters) throws Exception {
     counterMap = new HashMap<>();
-    group = this.getRuntimeContext().getMetricGroup().addGroup("tdq2");
+    group = this.getRuntimeContext().getMetricGroup().addGroup("tdq");
     super.open(parameters);
   }
 

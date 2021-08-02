@@ -24,12 +24,12 @@
           ]
         },
         {
-          "expr": "p1",
+          "expr": "total_cnt",
           "metric-name": "sojevent_global_cnt_by_1min",
           "transformations": [
             {
               "expr": "count(1)",
-              "alias": "p1"
+              "alias": "total_cnt"
             }
           ]
         }
@@ -85,7 +85,7 @@
   ],
   "sources": [
     {
-      "name": "kafka_sojevent_tdq",
+      "name": "kafka_sojevent_tdq_rno",
       "type": "realtime.kafka",
       "config": {
         "stream": "behavior.pulsar",

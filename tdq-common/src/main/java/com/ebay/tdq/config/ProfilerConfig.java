@@ -1,8 +1,10 @@
 package com.ebay.tdq.config;
 
+import com.ebay.tdq.utils.DateUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 import lombok.AccessLevel;
@@ -11,6 +13,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
 import lombok.Value;
+import org.apache.commons.lang3.StringUtils;
 
 @Builder
 @Value
@@ -58,6 +61,14 @@ public class ProfilerConfig implements Serializable {
 
   public String getProntoDropdownExpr() {
     return getConfig("pronto-dropdown");
+  }
+
+  public Long getMetricBirthday() throws ParseException {
+    String birthday = getConfig("birthday");
+    if (StringUtils.isBlank(birthday)) {
+      return null;
+    }
+    return DateUtils.parseDate(birthday).getTime();
   }
 
   public String getProntoFilterExpr() {
