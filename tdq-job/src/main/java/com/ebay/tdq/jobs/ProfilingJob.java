@@ -6,6 +6,7 @@ import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.functions.TdqMetric1stAggrProcessWindowFunction;
 import com.ebay.tdq.functions.TdqMetric2ndAggrProcessWindowFunction;
 import com.ebay.tdq.functions.TdqMetricAggregateFunction;
+import com.ebay.tdq.planner.LkpManager;
 import com.ebay.tdq.sinks.TdqSinks;
 import com.ebay.tdq.sources.SourceFactory;
 import com.ebay.tdq.utils.DateUtils;
@@ -47,6 +48,8 @@ public class ProfilingJob {
 
   protected void start() {
     try {
+      LkpManager.register(tdqEnv);
+
       TdqConfig tdqConfig = TdqConfigManager.getTdqConfig(tdqEnv);
       Validate.isTrue(tdqConfig != null);
       // step1: build data source
@@ -62,8 +65,6 @@ public class ProfilingJob {
       tdqCxt.getRhsEnv().execute(tdqEnv.getJobName());
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-    } finally {
-      TdqConfigManager.getInstance(tdqEnv).stop();
     }
   }
 

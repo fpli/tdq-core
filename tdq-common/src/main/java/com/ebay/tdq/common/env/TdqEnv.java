@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import scala.concurrent.duration.Duration;
 
 /**
@@ -19,6 +20,7 @@ public class TdqEnv implements Serializable {
   private final JdbcEnv jdbcEnv;
   private final ProntoEnv prontoEnv;
   private final SinkEnv sinkEnv;
+  private String id;
   private String jobName;
   private String profile;
   private boolean local;
@@ -36,6 +38,7 @@ public class TdqEnv implements Serializable {
 
   public TdqEnv() {
     this.jobName = EnvironmentUtils.get("flink.app.name");
+    this.id = this.jobName + "." + RandomStringUtils.randomAlphanumeric(10).toLowerCase();
     this.local = EnvironmentUtils.getBooleanOrDefault("flink.app.local", false);
     this.profile = EnvironmentUtils.get("flink.app.profile");
     this.sinkEnv = new SinkEnv();

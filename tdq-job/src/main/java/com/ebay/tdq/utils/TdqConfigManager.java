@@ -7,7 +7,7 @@ import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.connector.kafka.schema.RheosEventSerdeFactory;
-import com.ebay.tdq.planner.LkpRefreshTimeTask;
+import com.ebay.tdq.planner.LkpManager;
 import com.ebay.tdq.planner.Refreshable;
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.ProfilingSqlParser;
@@ -17,10 +17,12 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.Schema;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
 
 /**
@@ -29,43 +31,77 @@ import org.apache.commons.collections.CollectionUtils;
 @Slf4j
 public class TdqConfigManager implements Refreshable {
 
-  private static volatile TdqConfigManager lkpManager;
-  private final LkpRefreshTimeTask lkpRefreshTimeTask;
+  private static volatile TdqConfigManager configManager;
+  private static volatile ScheduledThreadPoolExecutor poolExecutor;
+  private static final AtomicBoolean scheduled = new AtomicBoolean(false);
+
   private TdqEnv tdqEnv;
-  private List<TdqConfig> tdqConfigs = new CopyOnWriteArrayList<>();
   private List<PhysicalPlan> physicalPlans = new CopyOnWriteArrayList<>();
 
-  private TdqConfigManager(TimeUnit timeUnit, TdqEnv tdqEnv) {
-    this.tdqEnv = tdqEnv;
-    this.lkpRefreshTimeTask = new LkpRefreshTimeTask(this, timeUnit);
-    refresh();
-  }
-
   private TdqConfigManager(TdqEnv tdqEnv) {
-    this(TimeUnit.MINUTES, tdqEnv);
+    log.info("init {}", tdqEnv.getId());
+    this.tdqEnv = tdqEnv;
+    start();
   }
 
   public static TdqConfigManager getInstance(TdqEnv tdqEnv) {
-    if (lkpManager == null) {
+    if (configManager == null) {
       synchronized (TdqConfigManager.class) {
-        if (lkpManager == null) {
-          lkpManager = new TdqConfigManager(tdqEnv);
+        if (configManager == null) {
+          configManager = new TdqConfigManager(tdqEnv);
         }
       }
     } else {
       // for unit test
-      if (tdqEnv.isLocal() && lkpManager.tdqEnv != tdqEnv) {
+      if (tdqEnv.isLocal() && configManager.tdqEnv != tdqEnv) {
         synchronized (TdqConfigManager.class) {
-          lkpManager.tdqEnv = tdqEnv;
+          configManager.tdqEnv = tdqEnv;
         }
       }
     }
-    return lkpManager;
+    return configManager;
+  }
+
+  public void start() {
+    if (scheduled.compareAndSet(false, true)) {
+      log.info("{} started!", this.tdqEnv.getId());
+      refresh();
+      poolExecutor = new ScheduledThreadPoolExecutor(1, r -> {
+        Thread t = new Thread(r, tdqEnv.getId() + ".tdq_config");
+        t.setDaemon(true);
+        return t;
+      });
+      final Refreshable refreshable = this;
+      try {
+        poolExecutor.scheduleAtFixedRate(refreshable::refresh, 1, 1, TimeUnit.MINUTES);
+      } catch (RejectedExecutionException e) {
+        log.warn("pool already stopped!");
+      }
+    }
+  }
+
+  public void stop() {
+    if (scheduled.compareAndSet(true, false)) {
+      poolExecutor.shutdown();
+      log.info("{} stopped!", this.tdqEnv.getId());
+    }
+  }
+
+  private void stop0() {
+    if (!LkpManager.isActive(tdqEnv, "tdq_config_daemon")) {
+      log.info("stop");
+      stop();
+    }
   }
 
   public void refresh() {
-    freshTdqConfigs();
-    log.info(lkpRefreshTimeTask.getId() + ":refresh success!");
+    try {
+      freshTdqConfigs();
+      log.info("{}:refresh success!", this.tdqEnv.getId());
+      stop0();
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+    }
   }
 
   public static TdqConfig getTdqConfig(TdqEnv tdqEnv) throws Exception {
@@ -80,8 +116,7 @@ public class TdqConfigManager implements Refreshable {
     String id = String.valueOf(rs.getInt("id"));
     String name = tdqEnv.getJobName();
     TdqConfig c = JsonUtils.parseObject(json, TdqConfig.class);
-    // log.warn("getTdqConfigs={}", json);
-    log.warn("getTdqConfigs={}", DigestUtils.md5Hex(json));
+    log.warn("{} getTdqConfigs={}", tdqEnv.getId(), json);
     conn.close();
     return TdqConfig.builder()
         .id(id)
@@ -94,10 +129,8 @@ public class TdqConfigManager implements Refreshable {
 
   public void freshTdqConfigs() {
     try {
-      JdbcEnv jdbc = tdqEnv.getJdbcEnv();
       List<TdqConfig> tdqConfigList = new CopyOnWriteArrayList<>();
       tdqConfigList.add(getTdqConfig(tdqEnv));
-      this.tdqConfigs = tdqConfigList;
 
       List<PhysicalPlan> plans = new CopyOnWriteArrayList<>();
       for (TdqConfig config : tdqConfigList) {
@@ -118,11 +151,10 @@ public class TdqConfigManager implements Refreshable {
               ProfilingSqlParser parser = new ProfilingSqlParser(
                   profilerConfig,
                   DateUtils.toSeconds(ruleConfig.getConfig().get("window").toString()),
-                  jdbc,
+                  tdqEnv,
                   schema);
               PhysicalPlan plan = parser.parsePlan();
               plan.validatePlan();
-              // log.debug("TdqConfigSourceFunction={}", plan);
               plans.add(plan);
             } catch (Exception e) {
               log.warn("profilerConfig[" + profilerConfig + "] validate exception:" + e.getMessage(), e);
@@ -137,20 +169,8 @@ public class TdqConfigManager implements Refreshable {
     }
   }
 
-  public void stop() {
-    this.lkpRefreshTimeTask.cancel();
-  }
-
-  public TdqConfig findTdqConfig(String name) {
-    for (TdqConfig c : tdqConfigs) {
-      if (c.getName() != null && c.getName().equals(name)) {
-        return c;
-      }
-    }
-    return null;
-  }
-
   public List<PhysicalPlan> getPhysicalPlans() {
     return physicalPlans;
   }
+
 }

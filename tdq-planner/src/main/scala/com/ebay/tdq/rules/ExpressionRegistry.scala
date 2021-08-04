@@ -1,6 +1,6 @@
 package com.ebay.tdq.rules
 
-import com.ebay.tdq.common.env.JdbcEnv
+import com.ebay.tdq.common.env.{JdbcEnv, TdqEnv}
 import com.ebay.tdq.expressions._
 import com.ebay.tdq.expressions.aggregate._
 import com.ebay.tdq.expressions.analysis.TypeCoercionRule
@@ -12,14 +12,13 @@ import org.apache.log4j.Logger
 /**
  * @author juntzhang
  */
-case class ExpressionRegistry(jdbcEnv: JdbcEnv) {
+case class ExpressionRegistry(tdqEnv: TdqEnv) {
   val LOG: Logger = Logger.getLogger("ExpressionRegistry")
 
   def parse(operatorName: String, operands: Array[Any], alias: String): Expression = {
     val cacheKey = Some(alias).filter(StringUtils.isNotBlank)
     LOG.debug(s"operatorName=[$operatorName], operands=[${operands.mkString(",")}], alias=[$alias]")
     val expr = operatorName.toUpperCase() match {
-
 
       case "SOJ_PARSE_RLOGID" =>
         Preconditions.checkArgument(operands.length == 2)
@@ -49,7 +48,7 @@ case class ExpressionRegistry(jdbcEnv: JdbcEnv) {
         SojPageFamily(
           subject = operands.head.asInstanceOf[Expression],
           cacheKey = cacheKey,
-          jdbcEnv
+          tdqEnv
         )
       case "SOJ_TIMESTAMP" =>
         GetTdqField("soj_timestamp",LongType)
@@ -59,7 +58,7 @@ case class ExpressionRegistry(jdbcEnv: JdbcEnv) {
         IsBBWOAPageWithItm(
           subject = operands.head.asInstanceOf[Expression],
           cacheKey = cacheKey,
-          jdbcEnv
+          tdqEnv
         )
       case "EVENT_TIMESTAMP" =>
         GetTdqField("event_timestamp", TimestampType)

@@ -3,7 +3,7 @@ package com.ebay.tdq
 import java.util.{HashMap => JHashMap}
 
 import com.ebay.sojourner.common.model.{ClientData, RawEvent}
-import com.ebay.tdq.common.env.JdbcEnv
+import com.ebay.tdq.common.env.{JdbcEnv, TdqEnv}
 import com.ebay.tdq.common.model.{TdqEvent, TdqMetric}
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.planner.LkpManagerTest
@@ -52,7 +52,7 @@ class SOJlibUDFTest {
 
   def test0(expr1: String, expr2: String, soj: JHashMap[String, String], assertFunction: TdqMetric => Unit, rawEventFunction: RawEvent => Unit, eventTime: Long = 3829847994095000L): Unit = {
     val config = getTdqConfig(expr1, expr2)
-    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new TdqEnv(), null)
     val plan = parser.parsePlan()
     println(plan)
     val rawEvent = new RawEvent

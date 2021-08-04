@@ -1,6 +1,6 @@
 package com.ebay.tdq.rules
 
-import com.ebay.tdq.common.env.JdbcEnv
+import com.ebay.tdq.common.env.TdqEnv
 import com.ebay.tdq.common.model.TdqEvent
 import com.ebay.tdq.config.{ExpressionConfig, ProfilerConfig, TransformationConfig}
 import com.ebay.tdq.expressions._
@@ -110,7 +110,7 @@ object ProfilingSqlParser {
   }
 }
 
-class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, jdbcEnv: JdbcEnv, schema: Schema) {
+class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, tdqEnv: TdqEnv, schema: Schema) {
 
   import ProfilingSqlParser._
 
@@ -126,7 +126,7 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, jdbcEnv: 
       ))
     }
   }
-  private val expressionRegistry = ExpressionRegistry(jdbcEnv)
+  private val expressionRegistry = ExpressionRegistry(tdqEnv)
   private val aliasTransformationConfigMap = profilerConfig
     .getTransformations
     .asScala

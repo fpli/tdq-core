@@ -8,4 +8,8 @@ import java.io.Serializable;
 public interface Refreshable extends Serializable {
 
   void refresh();
+
+  void start();
+
+  void stop();
 }

@@ -74,7 +74,7 @@ class LocalCacheTest {
   def getPhysicalPlan(json: String): PhysicalPlan = {
     val objectMapper = new ObjectMapper
     val config: TdqConfig = objectMapper.reader.forType(classOf[TdqConfig]).readValue(json)
-    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new TdqEnv(), null)
     parser.parsePlan()
   }
 

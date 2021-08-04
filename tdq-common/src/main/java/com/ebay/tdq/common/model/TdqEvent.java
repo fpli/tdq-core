@@ -22,6 +22,9 @@ public class TdqEvent implements Serializable {
   public String eventTimeFiled;
   public Map<String, Object> data;
 
+  public TdqEvent() {
+  }
+
   public TdqEvent(GenericRecord record, String eventTimeFiled) {
     this.type = "GENERIC_EVENT";
     this.eventTimeFiled = eventTimeFiled;

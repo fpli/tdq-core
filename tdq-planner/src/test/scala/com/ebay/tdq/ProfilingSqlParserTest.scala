@@ -4,7 +4,7 @@ import java.util.{HashMap => JHashMap}
 
 import com.ebay.sojourner.common.model.{ClientData, RawEvent}
 import com.ebay.sojourner.common.util.SojTimestamp
-import com.ebay.tdq.common.env.JdbcEnv
+import com.ebay.tdq.common.env.TdqEnv
 import com.ebay.tdq.common.model.TdqEvent
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.planner.LkpManagerTest
@@ -69,7 +69,7 @@ class ProfilingSqlParserTest {
         |}
         |""".stripMargin
     val config = JsonUtils.parseObject(json, classOf[TdqConfig])
-    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new TdqEnv(), null)
     val plan = parser.parsePlan()
     println(plan)
 
@@ -164,7 +164,7 @@ class ProfilingSqlParserTest {
         |}
         |""".stripMargin
     val config = JsonUtils.parseObject(json, classOf[TdqConfig])
-    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new TdqEnv(), null)
     val plan = parser.parsePlan()
     println(plan)
 
@@ -229,7 +229,7 @@ class ProfilingSqlParserTest {
         |]}
         |""".stripMargin
     val config = JsonUtils.parseObject(json, classOf[TdqConfig])
-    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new TdqEnv(), null)
     val plan = parser.parsePlan()
     println(plan)
 
@@ -317,7 +317,7 @@ class ProfilingSqlParserTest {
         |}
         |""".stripMargin
     val config = JsonUtils.parseObject(json, classOf[TdqConfig])
-    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new TdqEnv(), null)
     val plan = parser.parsePlan()
     println(plan)
 
@@ -414,7 +414,7 @@ class ProfilingSqlParserTest {
         |}
         |""".stripMargin
     val config = JsonUtils.parseObject(json, classOf[TdqConfig])
-    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new JdbcEnv(), null)
+    val parser = new ProfilingSqlParser(config.getRules.get(0).getProfilers.get(0), window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString), new TdqEnv(), null)
     val plan = parser.parsePlan()
     println(plan)
 

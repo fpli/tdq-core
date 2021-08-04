@@ -112,7 +112,7 @@ object ProfilingJobIT {
     ps.addBatch()
     ps.executeBatch
 
-    val is = classOf[ProfilingJobIT].getResourceAsStream("/rhs_lkp_table.sql")
+    val is = classOf[ProfilingJobIT].getResourceAsStream("/rhs_table.sql")
     val sql = IOUtils.toString(is)
     for (s <- sql.split(";")) {
       if (StringUtils.isNotBlank(s)) conn.createStatement().execute(s)

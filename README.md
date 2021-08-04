@@ -1,6 +1,29 @@
 # TDQ
 Tracking Data Quality
 
+#### startup-mode config
+```
+"startup-mode": "LATEST",
+"startup-mode": "TIMESTAMP", "from-timestamp": 1628067300000,
+```
+#### exception config
+```
+{
+  "expr": "total_cnt",
+  "config": {
+    "sampling": false,
+    "sampling-fraction": 0.005
+  },
+  "metric-name": "exception",
+  "transformations": [
+    {
+      "expr": "count(1)",
+      "alias": "total_cnt"
+    }
+  ]
+},
+```
+
 ## Regenerate Metric
 
 --tdq-profile tdq-backfill --flink.app.profile pre-prod --kafka.consumer.group-id tdq-v2-1626667200000 --flink.app.source.from-timestamp 1626667200000 --flink.app.source.end-timestamp 1626667800000

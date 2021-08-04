@@ -10,19 +10,19 @@
       },
       "profilers": [
         {
-          "expr": "p1",
-          "metric-name": "global_cnt_by_1min",
+          "expr": "total_cnt",
+          "metric-name": "system_metric",
           "transformations": [
             {
               "expr": "count(1)",
-              "alias": "p1"
+              "alias": "total_cnt"
             }
           ]
         }
       ]
     },
     {
-      "name": "tdq_pathfinder_in_ido",
+      "name": "tdq_pathfinder_ido",
       "type": "realtime.rheos.profiler",
       "config": {
         "window": "5min"

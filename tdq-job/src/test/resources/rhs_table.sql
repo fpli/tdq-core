@@ -1,3 +1,10 @@
+drop table if exists rhs_daemon;
+CREATE TABLE `rhs_daemon` (
+    `id` varchar(100) NOT NULL,
+    `name` varchar(100) NOT NULL,
+    `value` varchar(100) NOT NULL
+);
+
 drop table if exists rhs_lkp_table;
 CREATE TABLE `rhs_lkp_table` (
   `id` int(11) NOT NULL,

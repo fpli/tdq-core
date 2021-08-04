@@ -1,4 +1,4 @@
-package com.ebay.sojourner;
+package com.ebay.tdq.common.env;
 
 import com.ebay.tdq.config.ExpressionConfig;
 import com.ebay.tdq.config.ProfilerConfig;

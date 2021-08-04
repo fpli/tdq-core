@@ -30,17 +30,13 @@ public class RawEventDumpJob {
   public void submit(String[] args) throws Exception {
     tdqCxt = new TdqContext(args);
 
-    try {
-      TdqConfig tdqConfig = TdqConfigManager.getTdqConfig(tdqCxt.getTdqEnv());
+    TdqConfig tdqConfig = TdqConfigManager.getTdqConfig(tdqCxt.getTdqEnv());
 
-      for (SourceConfig sourceConfig : tdqConfig.getSources()) {
-        dump(sourceConfig, tdqCxt);
-      }
-
-      tdqCxt.getRhsEnv().execute(tdqCxt.getTdqEnv().getJobName());
-    } finally {
-      TdqConfigManager.getInstance(tdqCxt.getTdqEnv()).stop();
+    for (SourceConfig sourceConfig : tdqConfig.getSources()) {
+      dump(sourceConfig, tdqCxt);
     }
+
+    tdqCxt.getRhsEnv().execute(tdqCxt.getTdqEnv().getJobName());
   }
 
   private static void dump(SourceConfig sourceConfig, TdqContext tdqCxt) {

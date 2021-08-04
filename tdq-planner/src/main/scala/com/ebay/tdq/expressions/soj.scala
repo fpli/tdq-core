@@ -1,6 +1,6 @@
 package com.ebay.tdq.expressions
 
-import com.ebay.tdq.common.env.JdbcEnv
+import com.ebay.tdq.common.env.{JdbcEnv, TdqEnv}
 import com.ebay.tdq.common.model.TdqEvent
 import com.ebay.tdq.planner.LkpManager
 import com.ebay.tdq.types.{BooleanType, DataType, StringType}
@@ -72,22 +72,22 @@ case class SojNvl(subject: GetTdqEvent, tag: String,
   }
 }
 
-case class SojPageFamily(subject: Expression, cacheKey: Option[String] = None, jdbcEnv: JdbcEnv) extends LeafExpression {
+case class SojPageFamily(subject: Expression, cacheKey: Option[String] = None, tdqEnv: TdqEnv) extends LeafExpression {
   override def nullable: Boolean = true
 
   override def dataType: DataType = StringType
 
   protected override def eval(input: InternalRow): Any = {
-    LkpManager.getInstance(jdbcEnv).getPageFmlyByPageId(subject.call(input).asInstanceOf[Int])
+    LkpManager.getInstance(tdqEnv).getPageFmlyByPageId(subject.call(input).asInstanceOf[Int])
   }
 }
 
-case class IsBBWOAPageWithItm(subject: Expression, cacheKey: Option[String] = None, jdbcEnv: JdbcEnv) extends LeafExpression {
+case class IsBBWOAPageWithItm(subject: Expression, cacheKey: Option[String] = None, tdqEnv: TdqEnv) extends LeafExpression {
   override def nullable: Boolean = true
 
   override def dataType: DataType = BooleanType
 
   protected override def eval(input: InternalRow): Any = {
-    LkpManager.getInstance(jdbcEnv).isBBWOAPagesWithItm(subject.call(input).asInstanceOf[Int])
+    LkpManager.getInstance(tdqEnv).isBBWOAPagesWithItm(subject.call(input).asInstanceOf[Int])
   }
 }

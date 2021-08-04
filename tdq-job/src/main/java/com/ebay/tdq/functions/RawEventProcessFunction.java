@@ -5,6 +5,7 @@ import com.ebay.tdq.common.model.TdqErrorMsg;
 import com.ebay.tdq.common.model.TdqEvent;
 import com.ebay.tdq.common.model.TdqMetric;
 import com.ebay.tdq.common.model.TdqSampleData;
+import com.ebay.tdq.planner.LkpManager;
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.utils.LocalCache;
 import com.ebay.tdq.utils.TdqConfigManager;
@@ -16,6 +17,7 @@ import org.apache.flink.api.common.state.ListState;
 import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
 import org.apache.flink.runtime.state.FunctionSnapshotContext;
 import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction;
@@ -41,6 +43,19 @@ public class RawEventProcessFunction extends ProcessFunction<TdqEvent, TdqMetric
     if (tdqEnv.getLocalCombineFlushTimeout() > 60000) {
       throw new RuntimeException("flink.app.advance.local-combine.flush-timeout must less than 60s!");
     }
+  }
+
+  @Override
+  public void open(Configuration parameters) throws Exception {
+    super.open(parameters);
+    TdqConfigManager.getInstance(tdqEnv).start();
+    LkpManager.getInstance(tdqEnv).start();
+  }
+
+  @Override
+  public void close() throws Exception {
+    TdqConfigManager.getInstance(tdqEnv).stop();
+    LkpManager.getInstance(tdqEnv).stop();
   }
 
   @Override
