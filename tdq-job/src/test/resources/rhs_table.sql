@@ -2,7 +2,7 @@ drop table if exists rhs_daemon;
 CREATE TABLE `rhs_daemon` (
     `id` varchar(100) NOT NULL,
     `name` varchar(100) NOT NULL,
-    `value` varchar(100) NOT NULL
+    `value` varchar(1000) NOT NULL
 );
 
 drop table if exists rhs_lkp_table;

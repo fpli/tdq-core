@@ -12,7 +12,7 @@ drop table if exists rhs_daemon;
 CREATE TABLE `rhs_daemon` (
     `id` varchar(100) NOT NULL,
     `name` varchar(100) NOT NULL,
-    `value` varchar(100) NOT NULL
+    `value` varchar(1000) NOT NULL
 );
 
 INSERT INTO `rhs_lkp_table` (`id`, `name`, `value`, `version`, `crd_user`, `crd_date`) VALUES

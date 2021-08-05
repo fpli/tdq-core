@@ -7,7 +7,6 @@ import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.connector.kafka.schema.RheosEventSerdeFactory;
-import com.ebay.tdq.planner.LkpManager;
 import com.ebay.tdq.planner.Refreshable;
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.ProfilingSqlParser;
@@ -87,18 +86,10 @@ public class TdqConfigManager implements Refreshable {
     }
   }
 
-  private void stop0() {
-    if (!LkpManager.isActive(tdqEnv, "tdq_config_daemon")) {
-      log.info("stop");
-      stop();
-    }
-  }
-
   public void refresh() {
     try {
       freshTdqConfigs();
       log.info("{}:refresh success!", this.tdqEnv.getId());
-      stop0();
     } catch (Exception e) {
       log.error(e.getMessage(), e);
     }

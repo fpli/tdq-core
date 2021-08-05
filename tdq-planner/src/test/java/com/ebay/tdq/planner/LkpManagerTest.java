@@ -2,6 +2,7 @@ package com.ebay.tdq.planner;
 
 import com.ebay.tdq.common.env.JdbcEnv;
 import com.ebay.tdq.common.env.TdqEnv;
+import com.ebay.tdq.planner.utils.ConfigService;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -35,7 +36,7 @@ public class LkpManagerTest {
 
     st.close();
 
-    LkpManager.register(tdqEnv);
+    ConfigService.register(tdqEnv);
   }
 
   @Test
