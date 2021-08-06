@@ -1,6 +1,6 @@
 package com.ebay.tdq.rules
 
-import com.ebay.tdq.common.env.{JdbcEnv, TdqEnv}
+import com.ebay.tdq.common.env.TdqEnv
 import com.ebay.tdq.expressions._
 import com.ebay.tdq.expressions.aggregate._
 import com.ebay.tdq.expressions.analysis.TypeCoercionRule
@@ -12,7 +12,7 @@ import org.apache.log4j.Logger
 /**
  * @author juntzhang
  */
-case class ExpressionRegistry(tdqEnv: TdqEnv) {
+case class ExpressionRegistry(tdqEnv: TdqEnv, parser: ProfilingSqlParser) {
   val LOG: Logger = Logger.getLogger("ExpressionRegistry")
 
   def parse(operatorName: String, operands: Array[Any], alias: String): Expression = {
@@ -51,7 +51,7 @@ case class ExpressionRegistry(tdqEnv: TdqEnv) {
           tdqEnv
         )
       case "SOJ_TIMESTAMP" =>
-        GetTdqField("soj_timestamp",LongType)
+        GetTdqField("soj_timestamp", LongType)
 
       case "IS_BBWOA_PAGE_WITH_ITM" =>
         Preconditions.checkArgument(operands.length == 1)
@@ -86,6 +86,17 @@ case class ExpressionRegistry(tdqEnv: TdqEnv) {
         } else {
           ParseToTimestamp(left, Option(operands(1).asInstanceOf[Expression]), operands(2).asInstanceOf[Expression], cacheKey)
         }
+        // only support @see TdqEventMapTypeTest.scala
+      case "ITEM" =>
+        val name = operands.map {
+          case field: GetTdqField =>
+            field.name
+          case literal: Literal =>
+            literal.value.toString
+          case t =>
+            throw new IllegalStateException("Unexpected ITEM: " + t)
+        }
+        GetTdqField0(name, parser.getDataType0(name))
 
       // https://stackoverflow.com/questions/51860219/how-to-use-apache-calcite-like-regex
       // https://calcite.apache.org/docs/reference.html#keywords

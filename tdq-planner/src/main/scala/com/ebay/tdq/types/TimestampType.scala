@@ -21,7 +21,7 @@ class TimestampType private() extends AtomicType {
    */
   override def defaultSize: Int = 8
 
-  protected override def asNullable: TimestampType = this
+  def asNullable: TimestampType = this
 }
 
 case object TimestampType extends TimestampType

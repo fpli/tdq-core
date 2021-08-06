@@ -70,7 +70,7 @@ case class DecimalType(precision: Int, scale: Int) extends FractionalType {
 
   override def simpleString: String = s"decimal($precision,$scale)"
 
-  protected override def asNullable: DecimalType = this
+  def asNullable: DecimalType = this
 }
 
 

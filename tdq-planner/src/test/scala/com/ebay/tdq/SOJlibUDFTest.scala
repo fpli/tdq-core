@@ -3,7 +3,7 @@ package com.ebay.tdq
 import java.util.{HashMap => JHashMap}
 
 import com.ebay.sojourner.common.model.{ClientData, RawEvent}
-import com.ebay.tdq.common.env.{JdbcEnv, TdqEnv}
+import com.ebay.tdq.common.env.TdqEnv
 import com.ebay.tdq.common.model.{TdqEvent, TdqMetric}
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.planner.LkpManagerTest

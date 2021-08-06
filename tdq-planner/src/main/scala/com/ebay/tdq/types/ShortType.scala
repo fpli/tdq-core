@@ -23,7 +23,7 @@ class ShortType private() extends IntegralType {
 
   override def simpleString: String = "smallint"
 
-  protected override def asNullable: ShortType = this
+  def asNullable: ShortType = this
 }
 
 case object ShortType extends ShortType

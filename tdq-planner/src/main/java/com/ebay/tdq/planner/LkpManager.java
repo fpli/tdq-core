@@ -2,12 +2,9 @@ package com.ebay.tdq.planner;
 
 import com.ebay.tdq.common.env.JdbcEnv;
 import com.ebay.tdq.common.env.TdqEnv;
-import com.ebay.tdq.utils.JsonUtils;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -146,7 +143,6 @@ public class LkpManager implements Refreshable {
       return v;
     }
   }
-
 
 
 }

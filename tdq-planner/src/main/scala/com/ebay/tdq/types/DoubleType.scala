@@ -28,7 +28,7 @@ class DoubleType private() extends FractionalType {
    */
   override def defaultSize: Int = 8
 
-  protected override def asNullable: DoubleType = this
+  def asNullable: DoubleType = this
 }
 
 case object DoubleType extends DoubleType

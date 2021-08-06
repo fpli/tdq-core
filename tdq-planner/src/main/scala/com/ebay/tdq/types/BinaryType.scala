@@ -25,7 +25,7 @@ class BinaryType extends AtomicType {
    */
   override def defaultSize: Int = 100
 
-  protected override def asNullable: BinaryType = this
+  def asNullable: BinaryType = this
 }
 
 case object BinaryType extends BinaryType

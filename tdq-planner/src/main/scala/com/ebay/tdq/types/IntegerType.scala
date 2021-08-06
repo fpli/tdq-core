@@ -23,7 +23,7 @@ class IntegerType private() extends IntegralType {
 
   override def simpleString: String = "int"
 
-  protected override def asNullable: IntegerType = this
+  def asNullable: IntegerType = this
 }
 
 case object IntegerType extends IntegerType

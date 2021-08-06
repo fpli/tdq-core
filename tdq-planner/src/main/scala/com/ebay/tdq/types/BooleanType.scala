@@ -19,7 +19,7 @@ class BooleanType private() extends AtomicType {
    */
   override def defaultSize: Int = 1
 
-  protected override def asNullable: BooleanType = this
+  def asNullable: BooleanType = this
 }
 
 case object BooleanType extends BooleanType

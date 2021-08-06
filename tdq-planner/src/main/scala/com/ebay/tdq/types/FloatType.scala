@@ -27,7 +27,7 @@ class FloatType private() extends FractionalType {
    */
   override def defaultSize: Int = 4
 
-  protected override def asNullable: FloatType = this
+  def asNullable: FloatType = this
 }
 
 case object FloatType extends FloatType

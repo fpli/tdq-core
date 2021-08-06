@@ -23,7 +23,7 @@ class ByteType private() extends IntegralType {
 
   override def simpleString: String = "tinyint"
 
-  protected override def asNullable: ByteType = this
+  def asNullable: ByteType = this
 }
 
 case object ByteType extends ByteType

@@ -36,7 +36,7 @@ abstract class DataType extends AbstractDataType {
 
   def sql: String = simpleString.toUpperCase(Locale.ROOT)
 
-  protected def asNullable: DataType
+  def asNullable: DataType
 }
 
 object DataType {

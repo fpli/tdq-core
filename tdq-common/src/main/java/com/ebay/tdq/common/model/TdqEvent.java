@@ -2,20 +2,24 @@ package com.ebay.tdq.common.model;
 
 import com.ebay.sojourner.common.model.RawEvent;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.Maps;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
+import lombok.Data;
 import org.apache.avro.Schema;
 import org.apache.avro.Schema.Type;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
 import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author juntzhang
  */
+@Data
 public class TdqEvent implements Serializable {
 
   public String type;
@@ -23,6 +27,17 @@ public class TdqEvent implements Serializable {
   public Map<String, Object> data;
 
   public TdqEvent() {
+  }
+
+  @VisibleForTesting
+  public TdqEvent(Map<String, Object> record, String eventTimeFiled) {
+    this.type = "GENERIC_EVENT";
+    this.eventTimeFiled = eventTimeFiled;
+    this.data = Maps.newHashMap(record);
+
+    long eventTimeMillis = getOriginalEventTimeMs();
+    put("event_timestamp", eventTimeMillis * 1000);
+    put("event_time_millis", eventTimeMillis);
   }
 
   public TdqEvent(GenericRecord record, String eventTimeFiled) {
@@ -58,21 +73,45 @@ public class TdqEvent implements Serializable {
     put("event_time_millis", eventTimeMillis);
   }
 
-  public static Schema getField(Schema schema, String name) {
-    if (schema == null || StringUtils.isBlank(name)) {
+  public static Schema getField0(Schema schema, String[] names) {
+    if (schema == null || ArrayUtils.isEmpty(names)) {
       return null;
     }
     Schema v = schema;
-    for (String k : name.split("\\.")) {
-      if (v.getType().equals(Type.MAP)) {
-        return v.getValueType();
-      }
-      Schema.Field f = v.getField(k);
-      if (f != null) {
-        v = f.schema();
+    for (String k : names) {
+      if (v.getType().equals(Type.UNION)) {
+        for (Schema s : v.getTypes()) {
+          if (s.getType().equals(Schema.Type.NULL)) {
+            continue;
+          }
+          if (s.getType().equals(Type.MAP)) {
+            return s.getValueType();
+          }
+          Schema.Field f = s.getField(k);
+          if (f != null) {
+            v = f.schema();
+            break;
+          }
+        }
+      } else {
+        if (v.getType().equals(Type.MAP)) {
+          return v.getValueType();
+        }
+        Schema.Field f = v.getField(k);
+        if (f != null) {
+          v = f.schema();
+        }
       }
     }
+
     return v;
+  }
+
+  public static Schema getField(Schema schema, String name) {
+    if (StringUtils.isBlank(name)) {
+      return null;
+    }
+    return getField0(schema, name.split("\\."));
   }
 
   private long getOriginalEventTimeMs() {
@@ -134,12 +173,12 @@ public class TdqEvent implements Serializable {
   }
 
 
-  public Object get(String keys) {
-    if (StringUtils.isBlank(keys)) {
+  public Object get(String[] keys) {
+    if (ArrayUtils.isEmpty(keys)) {
       return null;
     }
     Object v = data;
-    for (String k : keys.split("\\.")) {
+    for (String k : keys) {
       if (v == null) {
         return null;
       } else if (v instanceof Map) {
@@ -149,6 +188,13 @@ public class TdqEvent implements Serializable {
       }
     }
     return v;
+  }
+
+  public Object get(String key) {
+    if (StringUtils.isBlank(key)) {
+      return null;
+    }
+    return get(key.split("\\."));
   }
 
   public TdqEvent put(String key, Object v) {

@@ -19,7 +19,7 @@ class StringType private() extends AtomicType {
    */
   override def defaultSize: Int = 20
 
-  protected override def asNullable: StringType = this
+  def asNullable: StringType = this
 }
 
 case object StringType extends StringType

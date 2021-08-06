@@ -23,7 +23,7 @@ class LongType private() extends IntegralType {
 
   override def simpleString: String = "bigint"
 
-  protected override def asNullable: LongType = this
+  def asNullable: LongType = this
 }
 
 case object LongType extends LongType

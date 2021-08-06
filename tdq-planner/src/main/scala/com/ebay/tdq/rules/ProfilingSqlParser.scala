@@ -126,7 +126,7 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, tdqEnv: T
       ))
     }
   }
-  private val expressionRegistry = ExpressionRegistry(tdqEnv)
+  private val expressionRegistry = ExpressionRegistry(tdqEnv, this)
   private val aliasTransformationConfigMap = profilerConfig
     .getTransformations
     .asScala
@@ -194,11 +194,7 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, tdqEnv: T
     plan
   }
 
-  def getDataType(name: String): DataType = {
-    val f = TdqEvent.getField(schema, name)
-    if (f == null) {
-      return com.ebay.tdq.types.StringType
-    }
+  def getType(f: Schema): DataType = {
     f.getType match {
       case Schema.Type.INT => IntegerType
       case Schema.Type.LONG => LongType
@@ -206,9 +202,27 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, tdqEnv: T
       case Schema.Type.FLOAT => FloatType
       case Schema.Type.BOOLEAN => BooleanType
       case Schema.Type.STRING => StringType
+      case Schema.Type.MAP => MapType(StringType, getType(f.getValueType))
+      case Schema.Type.UNION => getType(f.getTypes.asScala.filter(_.getType != Schema.Type.NULL).head)
       case _ =>
         throw new IllegalArgumentException(s"${f.getType} not implement!")
     }
+  }
+
+  def getDataType(name: String): DataType = {
+    val f = TdqEvent.getField(schema, name)
+    if (f == null) {
+      return com.ebay.tdq.types.StringType
+    }
+    getType(f)
+  }
+
+  def getDataType0(name: Array[String]): DataType = {
+    val f = TdqEvent.getField0(schema, name)
+    if (f == null) {
+      return com.ebay.tdq.types.StringType
+    }
+    getType(f)
   }
 
   private def transformIdentifier(name: String): Expression = {
