@@ -136,7 +136,39 @@ class ItemMapTypeTest {
         |  "namespace": "com.ebay.tdq.common.model",
         |  "fields": [
         |    { "name": "event_timestamp",   "type": "long"                                                 },
-        |    { "name": "payload",           "type": [ "null", { "type": "map", "values": "[ "null", { "type": "map", "values": "string" }]" }]       }
+        |    { "name": "payload",           "type": { "type": "map", "values": { "type": "map", "values": "string" } }       }
+        |  ]
+        |}
+        |""".stripMargin)
+    test("case when p2='123' then 1 else 0 end", "payload['annotation.nId']['a.b']", schema, () => {
+      val tdqEvent = new TdqEvent(
+        Map(
+          "event_timestamp" -> eventTime,
+          "payload" -> Map(
+            "annotation.nId" -> Map(
+              "a.b" -> "123"
+            ).asJava
+          ).asJava
+        ).mapValues(_.asInstanceOf[Object]).asJava
+      )
+      tdqEvent.buildEventTime(eventTime)
+    }, metric => {
+      println(metric)
+      Assert.assertEquals(1d, metric.getValues.get("p1"))
+    })
+  }
+
+  @Test
+  def test_map_map2(): Unit = {
+    val schema = new Schema.Parser().parse(
+      """
+        |{
+        |  "type": "record",
+        |  "name": "TdqEvent",
+        |  "namespace": "com.ebay.tdq.common.model",
+        |  "fields": [
+        |    { "name": "event_timestamp",   "type": "long"                                                 },
+        |    { "name": "payload",           "type": [ "null", { "type": "map", "values": [ "null", { "type": "map", "values": "string" }] }]       }
         |  ]
         |}
         |""".stripMargin)

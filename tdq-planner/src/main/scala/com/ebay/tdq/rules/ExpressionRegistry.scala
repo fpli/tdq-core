@@ -87,11 +87,13 @@ case class ExpressionRegistry(tdqEnv: TdqEnv, getDataType: Array[String] => Data
           ParseToTimestamp(left, Option(operands(1).asInstanceOf[Expression]), operands(2).asInstanceOf[Expression], cacheKey)
         }
       case "ITEM" =>
-        val names = operands.map {
+        val names = operands.flatMap {
           case field: GetTdqField =>
-            field.name
+            Seq(field.name)
           case literal: Literal =>
-            literal.value.toString
+            Seq(literal.value.toString)
+          case field0: GetTdqField0 =>
+            field0.names
           case t =>
             throw new IllegalStateException("Unexpected ITEM: " + t)
         }

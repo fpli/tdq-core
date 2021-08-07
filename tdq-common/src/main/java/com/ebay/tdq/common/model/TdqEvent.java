@@ -75,21 +75,24 @@ public class TdqEvent implements Serializable {
             continue;
           }
           if (s.getType().equals(Type.MAP)) {
-            return s.getValueType();
+            v = s.getValueType();
+          } else {
+            Schema.Field f = s.getField(k);
+            if (f != null) {
+              v = f.schema();
+              break;
+            }
           }
-          Schema.Field f = s.getField(k);
-          if (f != null) {
-            v = f.schema();
-            break;
-          }
+
         }
       } else {
         if (v.getType().equals(Type.MAP)) {
-          return v.getValueType();
-        }
-        Schema.Field f = v.getField(k);
-        if (f != null) {
-          v = f.schema();
+          v = v.getValueType();
+        } else {
+          Schema.Field f = v.getField(k);
+          if (f != null) {
+            v = f.schema();
+          }
         }
       }
     }

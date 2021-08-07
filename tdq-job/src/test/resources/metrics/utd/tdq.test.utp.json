@@ -41,6 +41,10 @@
           ],
           "transformations": [
             {
+              "expr": "COALESCE(payload['channel.name'], 'NULL')",
+              "alias": "channel_name"
+            },
+            {
               "expr": "COALESCE(siteId, -1)",
               "alias": "site_id"
             },
