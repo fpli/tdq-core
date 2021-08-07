@@ -20,6 +20,57 @@
           ]
         }
       ]
+    },
+    {
+      "name": "system",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "5min"
+      },
+      "profilers": [
+        {
+          "expr": "total_cnt",
+          "metric-name": "utp_common_metric",
+          "dimensions": [
+            "site_id",
+            "device_type",
+            "os_version",
+            "app_version",
+            "app_id",
+            "is_bot"
+          ],
+          "transformations": [
+            {
+              "expr": "COALESCE(siteId, -1)",
+              "alias": "site_id"
+            },
+            {
+              "expr": "COALESCE(deviceType, 'NULL')",
+              "alias": "device_type"
+            },
+            {
+              "expr": "COALESCE(osVersion, 'NULL')",
+              "alias": "os_version"
+            },
+            {
+              "expr": "COALESCE(appVersion, 'NULL')",
+              "alias": "app_version"
+            },
+            {
+              "expr": "COALESCE(appId, 'NULL')",
+              "alias": "app_id"
+            },
+            {
+              "expr": "case when isBot is NULL then 'NULL' when isBot then 'Y' else 'N' end",
+              "alias": "is_bot"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "total_cnt"
+            }
+          ]
+        }
+      ]
     }
   ],
   "sources": [

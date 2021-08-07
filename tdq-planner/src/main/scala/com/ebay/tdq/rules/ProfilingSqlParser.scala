@@ -370,10 +370,13 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, tdqEnv: T
   private def transformSqlCase(sqlCase: SqlCase, alias: String): CaseWhen = {
     val buffer = new ArrayBuffer[(Expression, Expression)]
     for (i <- 0 until sqlCase.getWhenOperands.size) {
-      buffer += ((
-        transformSqlBaseCall(sqlCase.getWhenOperands.get(i).asInstanceOf[SqlBasicCall], ""),
-        transformLiteral(sqlCase.getThenOperands.get(i).asInstanceOf[SqlLiteral])
-      ))
+      val expr = sqlCase.getWhenOperands.get(i) match {
+        case call: SqlBasicCall =>
+          transformSqlBaseCall(call, "")
+        case identifier: SqlIdentifier => transformIdentifier(identifier)
+        case unknown => throw new IllegalStateException("Unexpected SqlCall: " + unknown)
+      }
+      buffer += ((expr, transformLiteral(sqlCase.getThenOperands.get(i).asInstanceOf[SqlLiteral])))
     }
     val expression = new CaseWhen(
       buffer,

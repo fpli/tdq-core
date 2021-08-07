@@ -20,6 +20,8 @@ case class GetTdqField0(names: Array[String], dataType: DataType = StringType) e
     }
     input.getCache("__TDQ_EVENT").asInstanceOf[TdqEvent].get(names)
   }
+
+  override def toString: String = s"GetTdqField0(${names.mkString("|")},$dataType)"
 }
 
 /**

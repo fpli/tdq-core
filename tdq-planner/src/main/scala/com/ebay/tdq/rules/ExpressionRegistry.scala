@@ -86,7 +86,6 @@ case class ExpressionRegistry(tdqEnv: TdqEnv, getDataType: Array[String] => Data
         } else {
           ParseToTimestamp(left, Option(operands(1).asInstanceOf[Expression]), operands(2).asInstanceOf[Expression], cacheKey)
         }
-      // only support @see TdqEventMapTypeTest.scala
       case "ITEM" =>
         val names = operands.map {
           case field: GetTdqField =>
@@ -170,6 +169,8 @@ case class ExpressionRegistry(tdqEnv: TdqEnv, getDataType: Array[String] => Data
         Or(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression])
       case "AND" =>
         And(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression])
+      case "COALESCE" =>
+        Coalesce(operands.map(_.asInstanceOf[Expression]), cacheKey)
       case "IS NULL" =>
         Preconditions.checkArgument(operands.length == 1)
         IsNull(operands.head.asInstanceOf[Expression])
