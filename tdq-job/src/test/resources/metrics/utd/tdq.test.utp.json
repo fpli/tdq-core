@@ -11,7 +11,7 @@
       "profilers": [
         {
           "expr": "total_cnt",
-          "metric-name": "sojevent_system_metric",
+          "metric-name": "utp_system_metric",
           "transformations": [
             {
               "expr": "count(1)",
@@ -29,7 +29,7 @@
       "config": {
         "stream": "marketing.tracking",
         "topics": "marketing.tracking.events.total",
-        "deserializer": "com.ebay.tdq.connector.kafka.schema.RheosEventDeserializationSchema",
+        "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "startup-mode": "LATEST",
         "kafka-consumer": {
           "receive.buffer": 8388608,
@@ -46,7 +46,7 @@
         },
         "schema-subject": "marketing.tracking.events.schema",
         "rhs-parallelism": 80,
-        "event-time-field": "cast(payload['timestamp.created'] as Long)",
+        "event-time-field": "eventTs",
         "rhs-idle-timeout": "3min",
         "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
         "rhs-out-of-orderless": "3min"
@@ -54,4 +54,3 @@
     }
   ]
 }
-

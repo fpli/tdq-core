@@ -14,9 +14,9 @@
         "to-timestamp": 0,
         "rheos-services-urls": "https://rheos-services.qa.ebay.com",
         "schema-subject": "daf.checkout",
-        "event-time-field": "viTimestamp",
+        "event-time-field": "cast(viTimestamp as long)+1000",
         "topics": "misc.crossdcs.gro.trans.udaf",
-        "deserializer": "com.ebay.tdq.connector.kafka.schema.RheosEventDeserializationSchema",
+        "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "kafka-consumer": {
           "sasl.mechanism": "IAF",
           "security.protocol": "SASL_PLAINTEXT",

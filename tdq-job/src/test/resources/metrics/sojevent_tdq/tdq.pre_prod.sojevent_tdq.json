@@ -76,7 +76,7 @@
       "config": {
         "stream": "behavior.pulsar",
         "topics": "behavior.pulsar.customized.tdq",
-        "deserializer": "com.ebay.tdq.connector.kafka.schema.RheosEventDeserializationSchema",
+        "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "startup-mode": "TIMESTAMP", "from-timestamp": 1628067300000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
