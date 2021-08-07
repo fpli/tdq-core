@@ -14,6 +14,8 @@ import scala.collection.JavaConverters._
  * @author juntzhang
  */
 class TdqEventMapTypeTest {
+  val eventTime: Long = System.currentTimeMillis()
+
   def getTdqConfig(expr1: String, expr2: String): TdqConfig = {
     val json =
       s"""
@@ -44,17 +46,13 @@ class TdqEventMapTypeTest {
     JsonUtils.parseObject(json, classOf[TdqConfig])
   }
 
-  def getSchema(s: String): Schema = {
-    new Schema.Parser().parse(s)
-  }
-
-  def test(expr1: String, expr2: String, schema: String, createEvent: () => TdqEvent, assertFunction: TdqMetric => Unit): Unit = {
+  def test(expr1: String, expr2: String, schema: Schema, createEvent: () => TdqEvent, assertFunction: TdqMetric => Unit): Unit = {
     val config = getTdqConfig(expr1, expr2)
     val parser = new ProfilingSqlParser(
       config.getRules.get(0).getProfilers.get(0),
       window = DateUtils.toSeconds(config.getRules.get(0).getConfig.get("window").toString),
       new TdqEnv(),
-      schema = getSchema(schema)
+      schema = schema
     )
     val plan = parser.parsePlan()
     println(plan)
@@ -68,7 +66,7 @@ class TdqEventMapTypeTest {
    */
   @Test
   def test_map1(): Unit = {
-    test("case when p2='123' then 1 else 0 end", "payload.annotation",
+    val schema = new Schema.Parser().parse(
       """
         |{
         |  "type": "record",
@@ -79,26 +77,27 @@ class TdqEventMapTypeTest {
         |    { "name": "payload",           "type": [ "null", { "type": "map", "values": "string" }]       }
         |  ]
         |}
-        |""".stripMargin, () => {
-        val tdqEvent = new TdqEvent(
-          Map(
-            "event_timestamp" -> System.currentTimeMillis(),
-            "payload" -> Map(
-              "annotation" -> "123"
-            ).asJava
-          ).mapValues(_.asInstanceOf[Object]).asJava,
-          "event_timestamp"
-        )
-        tdqEvent
-      }, metric => {
-        println(metric)
-        Assert.assertEquals(1d, metric.getValues.get("p1"))
-      })
+        |""".stripMargin)
+
+    test("case when p2='123' then 1 else 0 end", "payload.annotation", schema, () => {
+      val tdqEvent = new TdqEvent(
+        Map(
+          "event_timestamp" -> eventTime,
+          "payload" -> Map(
+            "annotation" -> "123"
+          ).asJava
+        ).mapValues(_.asInstanceOf[Object]).asJava
+      )
+      tdqEvent.buildEventTime(eventTime)
+    }, metric => {
+      println(metric)
+      Assert.assertEquals(1d, metric.getValues.get("p1"))
+    })
   }
 
   @Test
   def test_map2(): Unit = {
-    test("case when p2='123' then 1 else 0 end", "payload['annotation.nId']",
+    val schema = new Schema.Parser().parse(
       """
         |{
         |  "type": "record",
@@ -109,25 +108,26 @@ class TdqEventMapTypeTest {
         |    { "name": "payload",           "type": [ "null", { "type": "map", "values": "string" }]       }
         |  ]
         |}
-        |""".stripMargin, () => {
-        val tdqEvent = new TdqEvent(
-          Map(
-            "event_timestamp" -> System.currentTimeMillis(),
-            "payload" -> Map(
-              "annotation.nId" -> "123"
-            ).asJava
-          ).mapValues(_.asInstanceOf[Object]).asJava,
-          "event_timestamp"
-        )
-        tdqEvent
-      }, metric => {
-        println(metric)
-        Assert.assertEquals(1d, metric.getValues.get("p1"))
-      })
+        |""".stripMargin)
+    test("case when p2='123' then 1 else 0 end", "payload['annotation.nId']", schema, () => {
+      val tdqEvent = new TdqEvent(
+        Map(
+          "event_timestamp" -> eventTime,
+          "payload" -> Map(
+            "annotation.nId" -> "123"
+          ).asJava
+        ).mapValues(_.asInstanceOf[Object]).asJava
+      )
+      tdqEvent.buildEventTime(eventTime)
+      tdqEvent
+    }, metric => {
+      println(metric)
+      Assert.assertEquals(1d, metric.getValues.get("p1"))
+    })
   }
 
   def test_map_map(): Unit = {
-    test("case when p2='123' then 1 else 0 end", "payload['annotation.nId']['a.b']",
+    val schema = new Schema.Parser().parse(
       """
         |{
         |  "type": "record",
@@ -138,22 +138,22 @@ class TdqEventMapTypeTest {
         |    { "name": "payload",           "type": [ "null", { "type": "map", "values": "[ "null", { "type": "map", "values": "string" }]" }]       }
         |  ]
         |}
-        |""".stripMargin, () => {
-        val tdqEvent = new TdqEvent(
-          Map(
-            "event_timestamp" -> System.currentTimeMillis(),
-            "payload" -> Map(
-              "annotation.nId" -> Map(
-                "a.b" -> "123"
-              ).asJava
+        |""".stripMargin)
+    test("case when p2='123' then 1 else 0 end", "payload['annotation.nId']['a.b']", schema, () => {
+      val tdqEvent = new TdqEvent(
+        Map(
+          "event_timestamp" -> eventTime,
+          "payload" -> Map(
+            "annotation.nId" -> Map(
+              "a.b" -> "123"
             ).asJava
-          ).mapValues(_.asInstanceOf[Object]).asJava,
-          "event_timestamp"
-        )
-        tdqEvent
-      }, metric => {
-        println(metric)
-        Assert.assertEquals(1d, metric.getValues.get("p1"))
-      })
+          ).asJava
+        ).mapValues(_.asInstanceOf[Object]).asJava
+      )
+      tdqEvent.buildEventTime(eventTime)
+    }, metric => {
+      println(metric)
+      Assert.assertEquals(1d, metric.getValues.get("p1"))
+    })
   }
 }

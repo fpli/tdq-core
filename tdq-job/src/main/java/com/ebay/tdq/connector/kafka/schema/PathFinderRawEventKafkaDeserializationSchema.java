@@ -32,23 +32,21 @@ import org.joda.time.format.DateTimeFormatter;
 public class PathFinderRawEventKafkaDeserializationSchema implements
     KafkaDeserializationSchema<TdqEvent> {
 
-  private static final DateTimeFormatter formaterUtc =
+  private static final DateTimeFormatter FORMATTER_UTC =
       DateTimeFormat.forPattern(Constants.DEFAULT_TIMESTAMP_FORMAT)
           .withZone(DateTimeZone.forTimeZone(Constants.UTC_TIMEZONE));
-  private static final DateTimeFormatter formater = DateTimeFormat.forPattern(
+  private static final DateTimeFormatter formatter = DateTimeFormat.forPattern(
       Constants.DEFAULT_TIMESTAMP_FORMAT).withZone(DateTimeZone.forTimeZone(Constants.PST_TIMEZONE));
-  private static final DateTimeFormatter dateMinsFormatter = DateTimeFormat.forPattern(
+  private static final DateTimeFormatter dateMsFormatter = DateTimeFormat.forPattern(
       Constants.DEFAULT_DATE_MINS_FORMAT).withZone(DateTimeZone.forTimeZone(Constants.PST_TIMEZONE));
-  private static String[] tagsToEncode = new String[]{Constants.TAG_ITEMIDS, Constants.TAG_TRKP};
+  private static final String[] tagsToEncode = new String[]{Constants.TAG_ITEMIDS, Constants.TAG_TRKP};
   private final Long endTimestamp;
   private final String schemaRegistryUrl;
-  private String eventTimeField;
 
   public PathFinderRawEventKafkaDeserializationSchema(String schemaRegistryUrl, Long endTimestamp,
       String eventTimeField) {
     this.endTimestamp = endTimestamp;
     this.schemaRegistryUrl = schemaRegistryUrl;
-    this.eventTimeField = eventTimeField;
   }
 
   @Override
@@ -119,8 +117,7 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
     RawEvent rawEvent = new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData,
         ingestTime, null);
     parseEventTimestamp(rawEvent);
-
-    return new TdqEvent(rawEvent, eventTimeField);
+    return new TdqEvent(rawEvent);
   }
 
   private void parseClientData(ClientData clentData, GenericRecord genericRecord) {
@@ -484,10 +481,10 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
               mtstsString = mtstsString.replaceAll("T", " ")
                   .replaceAll("Z", "");
               eventTimestamp =
-                  SojTimestamp.getSojTimestamp(formaterUtc.parseDateTime(mtstsString).getMillis());
+                  SojTimestamp.getSojTimestamp(FORMATTER_UTC.parseDateTime(mtstsString).getMillis());
             } else {
               eventTimestamp = SojTimestamp
-                  .getSojTimestamp(formater.parseDateTime(mtstsString).getMillis());
+                  .getSojTimestamp(formatter.parseDateTime(mtstsString).getMillis());
             }
             interval = getMicroSecondInterval(eventTimestamp, abEventTimestamp);
             if (interval > Constants.UPPERLIMITMICRO || interval < Constants.LOWERLIMITMICRO) {
@@ -512,8 +509,8 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
   // ignore second during comparing
   private Long getMicroSecondInterval(Long microts1, Long microts2) {
     long v1, v2;
-    v1 = dateMinsFormatter.parseDateTime(dateMinsFormatter.print(microts1 / 1000)).getMillis();
-    v2 = dateMinsFormatter.parseDateTime(dateMinsFormatter.print(microts2 / 1000)).getMillis();
+    v1 = dateMsFormatter.parseDateTime(dateMsFormatter.print(microts1 / 1000)).getMillis();
+    v2 = dateMsFormatter.parseDateTime(dateMsFormatter.print(microts2 / 1000)).getMillis();
     return (v1 - v2) * 1000;
   }
 

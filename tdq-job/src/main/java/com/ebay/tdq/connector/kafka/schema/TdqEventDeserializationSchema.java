@@ -1,7 +1,14 @@
 package com.ebay.tdq.connector.kafka.schema;
 
+import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.common.model.TdqEvent;
+import com.ebay.tdq.config.KafkaSourceConfig;
+import com.ebay.tdq.expressions.Expression;
+import com.ebay.tdq.expressions.InternalRow;
+import com.ebay.tdq.rules.KafkaSourceSqlParser;
 import io.ebay.rheos.schema.event.RheosEvent;
+import java.util.HashMap;
+import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -12,16 +19,15 @@ public class TdqEventDeserializationSchema implements DeserializationSchema<TdqE
 
   private final String schemaRegistryUrl;
   private final Long endTimestamp;
-  private final String eventTimeField;
-  private final String schemaSubject;
+  private final Expression eventTimeExpr;
 
-  public TdqEventDeserializationSchema(String schemaRegistryUrl, Long endTimestamp, String eventTimeField,
-      String schemaSubject) {
-    this.schemaRegistryUrl = schemaRegistryUrl;
-    this.endTimestamp = endTimestamp;
-    this.eventTimeField = eventTimeField;
-    Validate.isTrue(StringUtils.isNotBlank(schemaSubject), "schema-subject is empty!");
-    this.schemaSubject = schemaSubject;
+  public TdqEventDeserializationSchema(KafkaSourceConfig ksc, TdqEnv tdqEnv) {
+    this.schemaRegistryUrl = ksc.getRheosServicesUrls();
+    this.endTimestamp = ksc.getEndOfStreamTimestamp();
+    Validate.isTrue(StringUtils.isNotBlank(ksc.getSchemaSubject()), "schema-subject is empty!");
+    Schema schema = RheosEventSerdeFactory.getSchema(ksc.getSchemaSubject(), schemaRegistryUrl);
+    KafkaSourceSqlParser parser = KafkaSourceSqlParser.apply(ksc, tdqEnv, schema);
+    this.eventTimeExpr = parser.parse();
   }
 
   @Override
@@ -33,7 +39,15 @@ public class TdqEventDeserializationSchema implements DeserializationSchema<TdqE
   public TdqEvent deserialize(byte[] message) {
     RheosEvent event = RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
     GenericRecord record = RheosEventSerdeFactory.getRheosEventDeserializer(this.schemaRegistryUrl).decode(event);
-    return new TdqEvent(record, eventTimeField);
+    TdqEvent tdqEvent = new TdqEvent(record);
+    tdqEvent.buildEventTime(getEventTimeMs(tdqEvent));
+    return tdqEvent;
+  }
+
+  private Long getEventTimeMs(TdqEvent event) {
+    HashMap<String, Object> cacheData = new HashMap<>();
+    cacheData.put("__TDQ_EVENT", event);
+    return (long) eventTimeExpr.eval(InternalRow.apply(null, cacheData));
   }
 
   @Override

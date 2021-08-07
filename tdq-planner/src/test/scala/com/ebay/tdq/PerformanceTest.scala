@@ -124,7 +124,7 @@ object PerformanceTest {
       .setSojTimestamp(raw.getEventTimestamp())
       .setProcessTimestamp(System.currentTimeMillis())
       .build()
-    val tdqEvent2 = new TdqEvent(avro, "eventTimestamp")
+    val tdqEvent2 = new TdqEvent(avro)
 
     """
       |forwardFor

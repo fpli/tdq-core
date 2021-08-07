@@ -22,41 +22,31 @@ import org.apache.commons.lang3.StringUtils;
 @Data
 public class TdqEvent implements Serializable {
 
-  public String type;
-  public String eventTimeFiled;
-  public Map<String, Object> data;
+  private String type;
+  private Map<String, Object> data;
 
   public TdqEvent() {
   }
 
   @VisibleForTesting
-  public TdqEvent(Map<String, Object> record, String eventTimeFiled) {
+  public TdqEvent(Map<String, Object> record) {
     this.type = "GENERIC_EVENT";
-    this.eventTimeFiled = eventTimeFiled;
     this.data = Maps.newHashMap(record);
-
-    long eventTimeMillis = getOriginalEventTimeMs();
-    put("event_timestamp", eventTimeMillis * 1000);
-    put("event_time_millis", eventTimeMillis);
   }
 
-  public TdqEvent(GenericRecord record, String eventTimeFiled) {
+  public TdqEvent(GenericRecord record) {
     this.type = "GENERIC_EVENT";
-    this.eventTimeFiled = eventTimeFiled;
     this.data = convert(record);
+  }
 
-    long eventTimeMillis = getOriginalEventTimeMs();
+  public TdqEvent buildEventTime(Long eventTimeMillis) {
     put("event_timestamp", eventTimeMillis * 1000);
     put("event_time_millis", eventTimeMillis);
+    return this;
   }
 
   public TdqEvent(RawEvent sojEvent) {
-    this(sojEvent, "eventTimestamp");
-  }
-
-  public TdqEvent(RawEvent sojEvent, String eventTimeFiled) {
     this.type = "SOJ_EVENT";
-    this.eventTimeFiled = eventTimeFiled;
     this.data = new HashMap<>();
     put("sojA", sojEvent.getSojA());
     put("sojC", sojEvent.getSojC());
@@ -73,7 +63,7 @@ public class TdqEvent implements Serializable {
     put("event_time_millis", eventTimeMillis);
   }
 
-  public static Schema getField0(Schema schema, String[] names) {
+  public static Schema getFieldType0(Schema schema, String[] names) {
     if (schema == null || ArrayUtils.isEmpty(names)) {
       return null;
     }
@@ -107,15 +97,11 @@ public class TdqEvent implements Serializable {
     return v;
   }
 
-  public static Schema getField(Schema schema, String name) {
+  public static Schema getFieldType(Schema schema, String name) {
     if (StringUtils.isBlank(name)) {
       return null;
     }
-    return getField0(schema, name.split("\\."));
-  }
-
-  private long getOriginalEventTimeMs() {
-    return (long) get(eventTimeFiled);
+    return getFieldType0(schema, name.split("\\."));
   }
 
   public long getEventTimeMs() {
@@ -210,7 +196,7 @@ public class TdqEvent implements Serializable {
   public String toString() {
     return new StringJoiner(", ", TdqEvent.class.getSimpleName() + "[", "]")
         .add("type='" + type + "'")
-        .add("eventTimeFiled='" + eventTimeFiled + "'")
+        .add("eventTime='" + getEventTimeMsStr() + "'")
         .add("data=" + data)
         .toString();
   }

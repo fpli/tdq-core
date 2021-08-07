@@ -22,7 +22,7 @@ object RawEventTest {
     e.getSojA.put("itm", itm)
     e.getSojA.put("siteId", siteId)
     e.getSojA.put("TDuration", tDuration.toString)
-    new TdqEvent(e, "eventTimestamp")
+    new TdqEvent(e)
   }
 
   def getRawEvent(eventTimestamp: Long): RawEvent = {

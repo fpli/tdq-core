@@ -36,8 +36,7 @@ public class RhsKafkaSourceFactory {
           ksc.getRheosServicesUrls(), ksc.getEndOfStreamTimestamp(), ksc.getEventTimeField());
       flinkKafkaConsumer = new FlinkKafkaConsumer<>(ksc.getTopics(), deserializer, ksc.getKafkaConsumer());
     } else {
-      TdqEventDeserializationSchema deserializer = new TdqEventDeserializationSchema(ksc.getRheosServicesUrls(),
-          ksc.getEndOfStreamTimestamp(), ksc.getEventTimeField(), ksc.getSchemaSubject());
+      TdqEventDeserializationSchema deserializer = new TdqEventDeserializationSchema(ksc,tdqCxt.getTdqEnv());
       flinkKafkaConsumer = new FlinkKafkaConsumer<>(ksc.getTopics(), deserializer, ksc.getKafkaConsumer());
     }
 

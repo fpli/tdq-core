@@ -2,7 +2,7 @@ package com.ebay.tdq.rules
 
 import com.ebay.tdq.common.env.TdqEnv
 import com.ebay.tdq.common.model.TdqEvent
-import com.ebay.tdq.config.{ExpressionConfig, ProfilerConfig, TransformationConfig}
+import com.ebay.tdq.config.{ExpressionConfig, KafkaSourceConfig, ProfilerConfig, TransformationConfig}
 import com.ebay.tdq.expressions._
 import com.ebay.tdq.expressions.aggregate.AggregateExpression
 import com.ebay.tdq.types._
@@ -25,6 +25,11 @@ import scala.util.matching.Regex
  * @author juntzhang
  */
 object ProfilingSqlParser {
+
+  implicit class CaseInsensitiveRegex(sc: StringContext) {
+    def ci: Regex = ("(?i)" + sc.parts.mkString).r
+  }
+
   private val FRAMEWORK_CONFIG = Frameworks
     .newConfigBuilder
     .parserConfig(
@@ -85,7 +90,7 @@ object ProfilingSqlParser {
 
   // TODO need add more rule:
   //  1.Casts types according to the expected input types for [[Expression]]s. like spark `ImplicitTypeCasts`
-  private def transformLiteral(literal: SqlLiteral): Expression = {
+  def transformLiteral(literal: SqlLiteral): Expression = {
     literal match {
       case snl: SqlNumericLiteral =>
         if (snl.isInteger) {
@@ -108,6 +113,110 @@ object ProfilingSqlParser {
       baseCallIdentifiers(sqlCase.getWhenOperands.get(i).asInstanceOf[SqlBasicCall], buffer)
     }
   }
+
+  def getType(f: Schema): DataType = {
+    f.getType match {
+      case Schema.Type.INT => IntegerType
+      case Schema.Type.LONG => LongType
+      case Schema.Type.DOUBLE => DoubleType
+      case Schema.Type.FLOAT => FloatType
+      case Schema.Type.BOOLEAN => BooleanType
+      case Schema.Type.STRING => StringType
+      case Schema.Type.MAP => MapType(StringType, getType(f.getValueType))
+      case Schema.Type.UNION => getType(f.getTypes.asScala.filter(_.getType != Schema.Type.NULL).head)
+      case _ =>
+        throw new IllegalArgumentException(s"${f.getType} not implement!")
+    }
+  }
+
+  def getDataType(schema: Schema, name: String): DataType = {
+    val f = TdqEvent.getFieldType(schema, name)
+    if (f == null) {
+      return com.ebay.tdq.types.StringType
+    }
+    getType(f)
+  }
+
+  def getDataType0(schema: Schema)(name: Array[String]): DataType = {
+    val f = TdqEvent.getFieldType0(schema, name)
+    if (f == null) {
+      return com.ebay.tdq.types.StringType
+    }
+    getType(f)
+  }
+
+  def transformIdentifier0(schema: Schema, name: String): Expression = {
+    name match {
+      case ci"EVENT_TIMESTAMP" =>
+        GetTdqField("event_timestamp", TimestampType)
+      case ci"EVENT_TIME_MILLIS" =>
+        GetTdqField("event_time_millis", LongType)
+      case ci"SOJ_TIMESTAMP" =>
+        GetTdqField("soj_timestamp", LongType)
+      case _ =>
+        GetTdqField(name, getDataType(schema, name))
+    }
+  }
+
+}
+
+case class KafkaSourceSqlParser(kafkaSourceConfig: KafkaSourceConfig, tdqEnv: TdqEnv, schema: Schema) {
+
+  import ProfilingSqlParser._
+
+  private val expressionRegistry = ExpressionRegistry(tdqEnv, getDataType0(schema))
+
+  private def transformSqlNode(sqlNode: SqlNode): Expression = {
+    if (sqlNode == null) return null
+    sqlNode match {
+      case call: SqlBasicCall => transformSqlBaseCall(call)
+      case literal: SqlLiteral => transformLiteral(literal)
+      case identifier: SqlIdentifier => transformIdentifier(identifier)
+      case _ => throw new IllegalStateException("Unexpected SqlCall: " + sqlNode)
+    }
+  }
+
+  private def transformOperands(operands: Seq[SqlNode]): Array[Any] = {
+    if (operands == null || operands.isEmpty) {
+      return Array()
+    }
+    val ans = new Array[Any](operands.length)
+    for (i <- operands.indices) {
+      operands(i) match {
+        case call: SqlBasicCall =>
+          ans(i) = transformSqlBaseCall(call)
+        case list: SqlNodeList =>
+          val seq = new ArrayBuffer[Expression]
+          list.asScala.foreach(node => {
+            seq += transformLiteral(node.asInstanceOf[SqlLiteral])
+          })
+          ans(i) = seq
+        case literal: SqlLiteral => ans(i) = transformLiteral(literal)
+        case _: SqlIdentifier =>
+          ans(i) = transformIdentifier(operands(i).asInstanceOf[SqlIdentifier])
+        case spec: SqlDataTypeSpec => // find DateType
+          ans(i) = DataType.nameToType(spec.getTypeName.getSimple)
+        case _ => throw new IllegalStateException("Unexpected operand: " + operands(i))
+      }
+    }
+    ans
+  }
+
+  private def transformIdentifier(identifier: SqlIdentifier): Expression = {
+    transformIdentifier0(schema, identifier.toString)
+  }
+
+  private def transformSqlBaseCall(call: SqlBasicCall): Expression = {
+    val operator = call.getOperator.getName
+    val expression = expressionRegistry.parse(operator, transformOperands(call.getOperands), "")
+    expression
+  }
+
+  def parse(): Expression = {
+    val sqlNode = getExpr(kafkaSourceConfig.getEventTimeField)
+    transformSqlNode(sqlNode)
+  }
+
 }
 
 class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, tdqEnv: TdqEnv, schema: Schema) {
@@ -126,7 +235,7 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, tdqEnv: T
       ))
     }
   }
-  private val expressionRegistry = ExpressionRegistry(tdqEnv, this)
+  private val expressionRegistry = ExpressionRegistry(tdqEnv, getDataType0(schema))
   private val aliasTransformationConfigMap = profilerConfig
     .getTransformations
     .asScala
@@ -170,7 +279,7 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, tdqEnv: T
 
       // dimensions are directly fields in TdqEvent
       dimensionSet.diff(trans).map(name => {
-        Transformation(name, null, transformIdentifier(name))
+        Transformation(name, null, transformIdentifier0(schema, name))
       }).toArray ++ ans
     } else {
       Array[Transformation]()
@@ -194,49 +303,6 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, tdqEnv: T
     plan
   }
 
-  def getType(f: Schema): DataType = {
-    f.getType match {
-      case Schema.Type.INT => IntegerType
-      case Schema.Type.LONG => LongType
-      case Schema.Type.DOUBLE => DoubleType
-      case Schema.Type.FLOAT => FloatType
-      case Schema.Type.BOOLEAN => BooleanType
-      case Schema.Type.STRING => StringType
-      case Schema.Type.MAP => MapType(StringType, getType(f.getValueType))
-      case Schema.Type.UNION => getType(f.getTypes.asScala.filter(_.getType != Schema.Type.NULL).head)
-      case _ =>
-        throw new IllegalArgumentException(s"${f.getType} not implement!")
-    }
-  }
-
-  def getDataType(name: String): DataType = {
-    val f = TdqEvent.getField(schema, name)
-    if (f == null) {
-      return com.ebay.tdq.types.StringType
-    }
-    getType(f)
-  }
-
-  def getDataType0(name: Array[String]): DataType = {
-    val f = TdqEvent.getField0(schema, name)
-    if (f == null) {
-      return com.ebay.tdq.types.StringType
-    }
-    getType(f)
-  }
-
-  private def transformIdentifier(name: String): Expression = {
-    name match {
-      case ci"EVENT_TIMESTAMP" =>
-        GetTdqField("event_timestamp", TimestampType)
-      case ci"EVENT_TIME_MILLIS" =>
-        GetTdqField("event_time_millis", LongType)
-      case ci"SOJ_TIMESTAMP" =>
-        GetTdqField("soj_timestamp", LongType)
-      case _ =>
-        GetTdqField(name, getDataType(name))
-    }
-  }
 
   private def transformIdentifier(identifier: SqlIdentifier): Expression = {
     val name = identifier.toString
@@ -251,12 +317,8 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, tdqEnv: T
       expressionMap.put(config.get.getAlias, expression.get)
       expression.get
     } else {
-      transformIdentifier(name)
+      transformIdentifier0(schema, name)
     }
-  }
-
-  implicit class CaseInsensitiveRegex(sc: StringContext) {
-    def ci: Regex = ("(?i)" + sc.parts.mkString).r
   }
 
   private def transformOperands(operands: Seq[SqlNode]): Array[Any] = {

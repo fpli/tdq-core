@@ -12,7 +12,7 @@ import org.apache.log4j.Logger
 /**
  * @author juntzhang
  */
-case class ExpressionRegistry(tdqEnv: TdqEnv, parser: ProfilingSqlParser) {
+case class ExpressionRegistry(tdqEnv: TdqEnv, getDataType: Array[String] => DataType) {
   val LOG: Logger = Logger.getLogger("ExpressionRegistry")
 
   def parse(operatorName: String, operands: Array[Any], alias: String): Expression = {
@@ -63,7 +63,7 @@ case class ExpressionRegistry(tdqEnv: TdqEnv, parser: ProfilingSqlParser) {
       case "EVENT_TIMESTAMP" =>
         GetTdqField("event_timestamp", TimestampType)
       case "EVENT_TIME_MILLIS" =>
-        GetTdqField("event_time_millis",LongType)
+        GetTdqField("event_time_millis", LongType)
 
       case "CURRENT_TIMESTAMP" =>
         CurrentTimestamp()
@@ -86,9 +86,9 @@ case class ExpressionRegistry(tdqEnv: TdqEnv, parser: ProfilingSqlParser) {
         } else {
           ParseToTimestamp(left, Option(operands(1).asInstanceOf[Expression]), operands(2).asInstanceOf[Expression], cacheKey)
         }
-        // only support @see TdqEventMapTypeTest.scala
+      // only support @see TdqEventMapTypeTest.scala
       case "ITEM" =>
-        val name = operands.map {
+        val names = operands.map {
           case field: GetTdqField =>
             field.name
           case literal: Literal =>
@@ -96,7 +96,7 @@ case class ExpressionRegistry(tdqEnv: TdqEnv, parser: ProfilingSqlParser) {
           case t =>
             throw new IllegalStateException("Unexpected ITEM: " + t)
         }
-        GetTdqField0(name, parser.getDataType0(name))
+        GetTdqField0(names, getDataType(names))
 
       // https://stackoverflow.com/questions/51860219/how-to-use-apache-calcite-like-regex
       // https://calcite.apache.org/docs/reference.html#keywords
