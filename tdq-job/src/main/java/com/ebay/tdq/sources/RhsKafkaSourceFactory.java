@@ -11,7 +11,6 @@ import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.TdqContext;
 import java.util.Random;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.avro.Schema;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 
@@ -29,14 +28,13 @@ public class RhsKafkaSourceFactory {
 
     DataStream<TdqEvent> inDS;
     FlinkKafkaConsumer<TdqEvent> flinkKafkaConsumer;
-    Schema schema = null;
-    if (ksc.getDeserializer().equals(
+    if (ksc.getDeserializer() != null && ksc.getDeserializer().equals(
         "com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema")) {
       PathFinderRawEventKafkaDeserializationSchema deserializer = new PathFinderRawEventKafkaDeserializationSchema(
           ksc.getRheosServicesUrls(), ksc.getEndOfStreamTimestamp(), ksc.getEventTimeField());
       flinkKafkaConsumer = new FlinkKafkaConsumer<>(ksc.getTopics(), deserializer, ksc.getKafkaConsumer());
     } else {
-      TdqEventDeserializationSchema deserializer = new TdqEventDeserializationSchema(ksc,tdqCxt.getTdqEnv());
+      TdqEventDeserializationSchema deserializer = new TdqEventDeserializationSchema(ksc, tdqCxt.getTdqEnv());
       flinkKafkaConsumer = new FlinkKafkaConsumer<>(ksc.getTopics(), deserializer, ksc.getKafkaConsumer());
     }
 

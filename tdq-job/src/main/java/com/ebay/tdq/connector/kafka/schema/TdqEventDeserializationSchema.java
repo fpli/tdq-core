@@ -5,7 +5,9 @@ import com.ebay.tdq.common.model.TdqEvent;
 import com.ebay.tdq.config.KafkaSourceConfig;
 import com.ebay.tdq.expressions.Expression;
 import com.ebay.tdq.expressions.InternalRow;
+import com.ebay.tdq.planner.LkpManager;
 import com.ebay.tdq.rules.KafkaSourceSqlParser;
+import com.ebay.tdq.utils.TdqConfigManager;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.util.HashMap;
 import org.apache.avro.Schema;
@@ -20,14 +22,17 @@ public class TdqEventDeserializationSchema implements DeserializationSchema<TdqE
   private final String schemaRegistryUrl;
   private final Long endTimestamp;
   private final Expression eventTimeExpr;
+  private final TdqEnv tdqEnv;
 
   public TdqEventDeserializationSchema(KafkaSourceConfig ksc, TdqEnv tdqEnv) {
+    this.tdqEnv = tdqEnv;
     this.schemaRegistryUrl = ksc.getRheosServicesUrls();
     this.endTimestamp = ksc.getEndOfStreamTimestamp();
     Validate.isTrue(StringUtils.isNotBlank(ksc.getSchemaSubject()), "schema-subject is empty!");
     Schema schema = RheosEventSerdeFactory.getSchema(ksc.getSchemaSubject(), schemaRegistryUrl);
     KafkaSourceSqlParser parser = KafkaSourceSqlParser.apply(ksc, tdqEnv, schema);
     this.eventTimeExpr = parser.parse();
+    Validate.isTrue(this.eventTimeExpr != null);
   }
 
   @Override
@@ -37,11 +42,17 @@ public class TdqEventDeserializationSchema implements DeserializationSchema<TdqE
 
   @Override
   public TdqEvent deserialize(byte[] message) {
-    RheosEvent event = RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
-    GenericRecord record = RheosEventSerdeFactory.getRheosEventDeserializer(this.schemaRegistryUrl).decode(event);
-    TdqEvent tdqEvent = new TdqEvent(record);
-    tdqEvent.buildEventTime(getEventTimeMs(tdqEvent));
-    return tdqEvent;
+    try {
+      RheosEvent event = RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
+      GenericRecord record = RheosEventSerdeFactory.getRheosEventDeserializer(this.schemaRegistryUrl).decode(event);
+      TdqEvent tdqEvent = new TdqEvent(record);
+      tdqEvent.buildEventTime(getEventTimeMs(tdqEvent));
+      return tdqEvent;
+    } catch (Exception e) {
+      TdqConfigManager.getInstance(tdqEnv).stop();
+      LkpManager.getInstance(tdqEnv).stop();
+      throw e;
+    }
   }
 
   private Long getEventTimeMs(TdqEvent event) {
