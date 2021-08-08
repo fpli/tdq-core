@@ -6,7 +6,7 @@ import com.ebay.tdq.common.env.TdqEnv
 import com.ebay.tdq.common.model.TdqEvent
 import com.ebay.tdq.config.KafkaSourceConfig
 import com.ebay.tdq.expressions.InternalRow
-import com.ebay.tdq.rules.KafkaSourceSqlParser
+import com.ebay.tdq.rules.ExpressionParser
 import org.apache.avro.Schema
 import org.junit.{Assert, Test}
 
@@ -15,7 +15,7 @@ import scala.collection.JavaConverters._
 /**
  * @author juntzhang
  */
-class KafkaSourceSqlParserTest {
+class ExpressionParserTest {
   @Test
   def test_timestamp(): Unit = {
     val ksc = new KafkaSourceConfig()
@@ -44,7 +44,7 @@ class KafkaSourceSqlParserTest {
     val cacheData = new util.HashMap[String, Any]
     cacheData.put("__TDQ_EVENT", tdqEvent)
 
-    val parser = KafkaSourceSqlParser(ksc, new TdqEnv(), schema)
+    val parser = ExpressionParser(ksc.getEventTimeField, new TdqEnv(), schema)
     val expr = parser.parse()
 
     tdqEvent.buildEventTime(expr.call(InternalRow.apply(null, cacheData)).asInstanceOf[Long])
@@ -80,7 +80,7 @@ class KafkaSourceSqlParserTest {
     val cacheData = new util.HashMap[String, Any]
     cacheData.put("__TDQ_EVENT", tdqEvent)
 
-    val parser = KafkaSourceSqlParser(ksc, new TdqEnv(), schema)
+    val parser = ExpressionParser(ksc.getEventTimeField, new TdqEnv(), schema)
     val expr = parser.parse()
 
     val s = System.currentTimeMillis()

@@ -18,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QueryDropdownResult extends TdqResult {
+
   private QueryDropdownParam param;
   @Singular
   private List<Record> records;
@@ -25,6 +26,8 @@ public class QueryDropdownResult extends TdqResult {
   @Data
   @Builder
   public static class Record {
+
+    private String metricName;
     private String name;
     @Singular
     private List<String> items;

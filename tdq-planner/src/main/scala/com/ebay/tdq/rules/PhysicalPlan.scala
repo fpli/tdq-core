@@ -1,6 +1,6 @@
 package com.ebay.tdq.rules
 
-import java.util.{Random, HashMap => JHashMap}
+import java.util.{Random, HashMap => JHashMap, Map => JMap}
 
 import com.ebay.tdq.common.model.{TdqEvent, TdqMetric}
 import com.ebay.tdq.expressions._
@@ -23,7 +23,7 @@ case class PhysicalPlanContext(
 case class PhysicalPlan(
   metricKey: String,
   window: Long,
-  evaluation: Expression,
+  evaluation: Option[Expression],
   aggregations: Array[Transformation],
   dimensions: Array[Transformation],
   filter: Expression,
@@ -102,12 +102,26 @@ case class PhysicalPlan(
   }
 
   def evaluate(metric: TdqMetric): Unit = {
-    val cacheData = new JHashMap[String, Any]()
-    metric.getValues.asScala.foreach { case (k: String, v) =>
-      cacheData.put(k, v)
+    if (evaluation.isDefined) {
+      val cacheData = new JHashMap[String, Any]()
+      metric.getValues.asScala.foreach { case (k: String, v) =>
+        cacheData.put(k, v)
+      }
+      val input = InternalRow(Array(metric), cacheData)
+      val v = evaluation.get.call(input)
+      metric.setValue(if (v != null) v.asInstanceOf[Number].doubleValue() else 0d)
     }
-    val input = InternalRow(Array(metric), cacheData)
-    val v = evaluation.call(input)
-    metric.setValue(if (v != null) v.asInstanceOf[Number].doubleValue() else 0d)
+  }
+}
+
+object PhysicalPlan {
+  def eval(evaluation: Expression, event: TdqEvent): Any = {
+    val cache = new JHashMap[String, Any]()
+    cache.put("__TDQ_EVENT", event)
+    PhysicalPlan.eval(evaluation, cache);
+  }
+
+  def eval(evaluation: Expression, cacheData: JMap[String, Any]): Any = {
+    evaluation.call(InternalRow(null, cacheData, true))
   }
 }

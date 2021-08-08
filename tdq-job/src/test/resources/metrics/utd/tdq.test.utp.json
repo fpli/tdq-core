@@ -32,6 +32,7 @@
           "expr": "total_cnt",
           "metric-name": "utp_common_metric",
           "dimensions": [
+            "channel_name",
             "site_id",
             "device_type",
             "os_version",
@@ -39,9 +40,10 @@
             "app_id",
             "is_bot"
           ],
+          "filter": "length(channel_name) > 0",
           "transformations": [
             {
-              "expr": "COALESCE(payload['channel.name'], 'NULL')",
+              "expr": "payload['channel.name']",
               "alias": "channel_name"
             },
             {

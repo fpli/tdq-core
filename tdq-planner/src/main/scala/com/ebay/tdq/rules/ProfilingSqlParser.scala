@@ -2,7 +2,7 @@ package com.ebay.tdq.rules
 
 import com.ebay.tdq.common.env.TdqEnv
 import com.ebay.tdq.common.model.TdqEvent
-import com.ebay.tdq.config.{ExpressionConfig, KafkaSourceConfig, ProfilerConfig, TransformationConfig}
+import com.ebay.tdq.config.{ExpressionConfig, ProfilerConfig, TransformationConfig}
 import com.ebay.tdq.expressions._
 import com.ebay.tdq.expressions.aggregate.AggregateExpression
 import com.ebay.tdq.types._
@@ -160,64 +160,6 @@ object ProfilingSqlParser {
 
 }
 
-case class KafkaSourceSqlParser(kafkaSourceConfig: KafkaSourceConfig, tdqEnv: TdqEnv, schema: Schema) {
-
-  import ProfilingSqlParser._
-
-  private val expressionRegistry = ExpressionRegistry(tdqEnv, getDataType0(schema))
-
-  private def transformSqlNode(sqlNode: SqlNode): Expression = {
-    if (sqlNode == null) return null
-    sqlNode match {
-      case call: SqlBasicCall => transformSqlBaseCall(call)
-      case literal: SqlLiteral => transformLiteral(literal)
-      case identifier: SqlIdentifier => transformIdentifier(identifier)
-      case _ => throw new IllegalStateException("Unexpected SqlCall: " + sqlNode)
-    }
-  }
-
-  private def transformOperands(operands: Seq[SqlNode]): Array[Any] = {
-    if (operands == null || operands.isEmpty) {
-      return Array()
-    }
-    val ans = new Array[Any](operands.length)
-    for (i <- operands.indices) {
-      operands(i) match {
-        case call: SqlBasicCall =>
-          ans(i) = transformSqlBaseCall(call)
-        case list: SqlNodeList =>
-          val seq = new ArrayBuffer[Expression]
-          list.asScala.foreach(node => {
-            seq += transformLiteral(node.asInstanceOf[SqlLiteral])
-          })
-          ans(i) = seq
-        case literal: SqlLiteral => ans(i) = transformLiteral(literal)
-        case _: SqlIdentifier =>
-          ans(i) = transformIdentifier(operands(i).asInstanceOf[SqlIdentifier])
-        case spec: SqlDataTypeSpec => // find DateType
-          ans(i) = DataType.nameToType(spec.getTypeName.getSimple)
-        case _ => throw new IllegalStateException("Unexpected operand: " + operands(i))
-      }
-    }
-    ans
-  }
-
-  private def transformIdentifier(identifier: SqlIdentifier): Expression = {
-    transformIdentifier0(schema, identifier.toString)
-  }
-
-  private def transformSqlBaseCall(call: SqlBasicCall): Expression = {
-    val operator = call.getOperator.getName
-    val expression = expressionRegistry.parse(operator, transformOperands(call.getOperands), "")
-    expression
-  }
-
-  def parse(): Expression = {
-    val sqlNode = getExpr(kafkaSourceConfig.getEventTimeField)
-    transformSqlNode(sqlNode)
-  }
-
-}
 
 class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, tdqEnv: TdqEnv, schema: Schema) {
 
@@ -286,9 +228,11 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, tdqEnv: T
     }
 
     val evaluation = if (StringUtils.isNotBlank(profilerConfig.getExpr)) {
-      parseExpressionPlan(profilerConfig.getExpr, "")
+      Some(parseExpressionPlan(profilerConfig.getExpr, ""))
+    } else if (profilerConfig.getExpression != null) {
+      Some(parseExpressionPlan(profilerConfig.getExpression, ""))
     } else {
-      parseExpressionPlan(profilerConfig.getExpression, "")
+      None
     }
 
     val plan = PhysicalPlan(

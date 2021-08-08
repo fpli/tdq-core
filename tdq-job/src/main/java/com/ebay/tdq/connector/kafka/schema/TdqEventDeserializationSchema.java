@@ -4,12 +4,11 @@ import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.common.model.TdqEvent;
 import com.ebay.tdq.config.KafkaSourceConfig;
 import com.ebay.tdq.expressions.Expression;
-import com.ebay.tdq.expressions.InternalRow;
 import com.ebay.tdq.planner.LkpManager;
-import com.ebay.tdq.rules.KafkaSourceSqlParser;
+import com.ebay.tdq.rules.ExpressionParser;
+import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.utils.TdqConfigManager;
 import io.ebay.rheos.schema.event.RheosEvent;
-import java.util.HashMap;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +29,7 @@ public class TdqEventDeserializationSchema implements DeserializationSchema<TdqE
     this.endTimestamp = ksc.getEndOfStreamTimestamp();
     Validate.isTrue(StringUtils.isNotBlank(ksc.getSchemaSubject()), "schema-subject is empty!");
     Schema schema = RheosEventSerdeFactory.getSchema(ksc.getSchemaSubject(), schemaRegistryUrl);
-    KafkaSourceSqlParser parser = KafkaSourceSqlParser.apply(ksc, tdqEnv, schema);
+    ExpressionParser parser = ExpressionParser.apply(ksc.getEventTimeField(), tdqEnv, schema);
     this.eventTimeExpr = parser.parse();
     Validate.isTrue(this.eventTimeExpr != null);
   }
@@ -56,9 +55,7 @@ public class TdqEventDeserializationSchema implements DeserializationSchema<TdqE
   }
 
   private Long getEventTimeMs(TdqEvent event) {
-    HashMap<String, Object> cacheData = new HashMap<>();
-    cacheData.put("__TDQ_EVENT", event);
-    return (long) eventTimeExpr.eval(InternalRow.apply(null, cacheData));
+    return (long) PhysicalPlan.eval(eventTimeExpr, event);
   }
 
   @Override

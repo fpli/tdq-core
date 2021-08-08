@@ -5,6 +5,7 @@ import com.ebay.tdq.common.model.{TdqEvent, TdqMetric}
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.rules.ProfilingSqlParser
 import com.ebay.tdq.utils.{DateUtils, JsonUtils}
+import com.google.common.collect.Lists
 import org.apache.avro.Schema
 import org.junit.{Assert, Test}
 
@@ -59,6 +60,53 @@ class ItemMapTypeTest {
     val metric = plan.process(createEvent())
     assert(metric != null)
     assertFunction.apply(metric)
+  }
+
+  /**
+   * tdq field support payload['annotation.nId']
+   */
+  @Test
+  def testSchema(): Unit = {
+    val a = new Schema.Field("test_a", Schema.create(Schema.Type.DOUBLE), "", null)
+    val b = new Schema.Field("test_b", Schema.create(Schema.Type.DOUBLE), "", null)
+
+    val schema = Schema.createRecord(Lists.newArrayList(a, b))
+    println(schema)
+
+    val schema2 = new Schema.Parser().setValidate(false).parse(
+      """
+        |{
+        |  "type": "record",
+        |  "name": "EvaluationRecord",
+        |  "fields": [
+        |    {
+        |     "name": "test",
+        |     "type": {
+        |        "type": "record",
+        |        "name": "test",
+        |        "fields":[
+        |           { "name": "a", "type": "double"},
+        |           { "name": "b", "type": "double"}
+        |        ]
+        |     }
+        |    },
+        |    {
+        |     "name": "test2",
+        |     "type": {
+        |        "type": "record",
+        |        "name": "test2",
+        |        "fields":[
+        |           { "name": "a", "type": "double"},
+        |           { "name": "b", "type": "double"}
+        |        ]
+        |     }
+        |    }
+        |  ]
+        |}
+        |""".stripMargin)
+
+    println(schema2)
+
   }
 
   /**

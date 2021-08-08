@@ -1,11 +1,11 @@
 package com.ebay.tdq.expressions
 
-import java.util.{HashMap => JHashMap}
+import java.util.{Map => JMap}
 
 /**
  * @author juntzhang
  */
-case class InternalRow(operands: Array[Any], rowCache: JHashMap[String, Any]) {
+case class InternalRow(operands: Array[Any], rowCache: JMap[String, Any], default: Boolean = false) {
 
   def containsKey(k: Option[String]): Boolean = {
     k.isDefined && k.get.nonEmpty && rowCache.containsKey(k.get)

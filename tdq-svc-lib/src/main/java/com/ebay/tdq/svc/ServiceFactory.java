@@ -3,7 +3,6 @@ package com.ebay.tdq.svc;
 import com.ebay.sojourner.common.env.EnvironmentUtils;
 import com.ebay.tdq.common.env.ProntoEnv;
 import com.ebay.tdq.common.env.TdqEnv;
-import com.ebay.tdq.service.FetchMetricsService;
 import com.ebay.tdq.service.ProfilerService;
 import com.ebay.tdq.service.RuleEngineService;
 import java.io.IOException;
@@ -33,7 +32,6 @@ public class ServiceFactory {
   private RestHighLevelClient restHighLevelClient;
   private RuleEngineService ruleEngineService;
   private ProfilerService profilerService;
-  private FetchMetricsService fetchMetricsService;
 
   private ServiceFactory() {
     initialize();
@@ -57,7 +55,6 @@ public class ServiceFactory {
     restHighLevelClient = restHighLevelClient();
     ruleEngineService = new RuleEngineServiceImpl();
     profilerService = new ProfilerServiceImpl(restHighLevelClient);
-    fetchMetricsService = new FetchMetricsMsMtcServiceImpl(restHighLevelClient);
   }
 
   protected RestHighLevelClient restHighLevelClient() {
@@ -98,11 +95,6 @@ public class ServiceFactory {
 
   public static ProfilerService getProfiler() {
     return getInstance().profilerService;
-  }
-
-  @Deprecated
-  public static FetchMetricsService getFetchMetricsService() {
-    return getInstance().fetchMetricsService;
   }
 
   public static TdqEnv getTdqEnv() {

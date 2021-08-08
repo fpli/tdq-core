@@ -38,7 +38,15 @@ case class GetTdqField(name: String, dataType: DataType = StringType) extends Le
     if (o != null) {
       return o
     }
-    input.getCache("__TDQ_EVENT").asInstanceOf[TdqEvent].get(name)
+    val e = input.getCache("__TDQ_EVENT")
+    if (e == null) {
+      // restore from pronto, hard code
+      if(input.default && dataType.isInstanceOf[DoubleType]){
+        return 0d
+      }
+      return null
+    }
+    e.asInstanceOf[TdqEvent].get(name)
   }
 }
 
