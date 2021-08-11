@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 public class ExtractFlag implements Serializable {
 
-  private final static int ascii_to_base64[] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  private static final int[] ASCII_TO_BASE_64 = {
+      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62,
       -1, -1, -1, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1,
@@ -46,15 +47,15 @@ public class ExtractFlag implements Serializable {
     }
     // Error if input char is
     char charAt = soj_flag.charAt(mybytepos);
-    if (charAt < 0 || charAt >= ascii_to_base64.length) {
+    if (charAt < 0 || charAt >= ASCII_TO_BASE_64.length) {
       return 0;
     }
 
-    if (ascii_to_base64[charAt] < 0) {
+    if (ASCII_TO_BASE_64[charAt] < 0) {
       return 0;
     }
 
-    return ((ascii_to_base64[charAt] >> (5 - (bit_pos % 6))) & 1);
+    return ((ASCII_TO_BASE_64[charAt] >> (5 - (bit_pos % 6))) & 1);
   }
 
   public int evaluate(String sojFlag, int bitPos) {

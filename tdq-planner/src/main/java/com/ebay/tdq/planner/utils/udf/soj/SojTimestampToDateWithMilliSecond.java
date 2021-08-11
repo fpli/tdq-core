@@ -3,7 +3,6 @@ package com.ebay.tdq.planner.utils.udf.soj;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.TimeZone;
-import org.apache.hadoop.io.LongWritable;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;

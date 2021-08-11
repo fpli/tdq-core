@@ -11,8 +11,8 @@ public class SOJBase64ToLong {
     }
 
     try {
-      byte s[] = new byte[8];
-      byte s1[] = Base64Ebay.decode(b64, true);
+      byte[] s = new byte[8];
+      byte[] s1 = Base64Ebay.decode(b64, true);
       for (int i = 0; i < s1.length; i++) {
         s[i] = s1[i];
       }

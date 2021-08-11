@@ -260,14 +260,7 @@ public class TrieExt<T> implements StringSearcherExt<T>, StringSearcherPrepareEx
 
   private void removePartialMatches(final CharSequence searchText, final List<Emit<T>> collectedEmits) {
 
-    final ListElementRemoval.RemoveElementPredicate<Emit<T>> predicate = new ListElementRemoval.RemoveElementPredicate<Emit<T>>() {
-
-      @Override
-      public boolean remove(Emit<T> emit) {
-        return isPartialMatch(searchText, emit);
-      }
-
-    };
+    final ListElementRemoval.RemoveElementPredicate<Emit<T>> predicate = emit -> isPartialMatch(searchText, emit);
 
     ListElementRemoval.removeIf(collectedEmits, predicate);
   }

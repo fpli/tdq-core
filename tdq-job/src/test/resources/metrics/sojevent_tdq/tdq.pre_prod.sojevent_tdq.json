@@ -63,6 +63,21 @@
               "expr": "sum(case when LENGTH(applicationPayload.prof) > 0 then 1 else 0 end)",
               "alias": "st_prof_cnt",
               "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            },
+            {
+              "expr": "sum(case when LENGTH(applicationPayload['cpnip']) > 0 then 1 else 0 end)",
+              "alias": "st_cpnip_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            },
+            {
+              "expr": "sum(case when LENGTH(applicationPayload['icpp']) > 0 then 1 else 0 end)",
+              "alias": "st_icpp_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            },
+            {
+              "expr": "sum(case when LENGTH(applicationPayload['!clktrack']) > 0 then 1 else 0 end)",
+              "alias": "st_clktrack_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
             }
           ]
         }
@@ -77,7 +92,7 @@
         "stream": "behavior.pulsar",
         "topics": "behavior.pulsar.customized.tdq",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
-        "startup-mode": "TIMESTAMP", "from-timestamp": 1628067300000,
+        "startup-mode": "LATEST",
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
@@ -94,7 +109,7 @@
         "schema-subject": "behavior.sojourner.sojevent.schema",
         "rhs-parallelism": 30,
         "event-time-field": "eventTimestamp",
-        "rhs-idle-timeout": "6min",
+        "rhs-idle-timeout": "3min",
         "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
         "rhs-out-of-orderless": "3min"
       }

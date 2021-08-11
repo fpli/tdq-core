@@ -10,17 +10,6 @@ import org.joda.time.format.DateTimeFormatter;
 public class GUID2DateHive implements Serializable {
 
   private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
-//  private static SimpleDateFormat formatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
-
-  //  private static ThreadLocal<SimpleDateFormat> simpleDateFormatThreadLocal = new ThreadLocal<SimpleDateFormat>() {
-//    @Override
-//    protected SimpleDateFormat initialValue() {
-//      SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
-//      // Make consistent with getCalender()
-//      dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-//      return dateFormat;
-//    }
-//  };
   private DateTimeFormatter formatter = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT).withZone(
       DateTimeZone.forTimeZone(TimeZone.getTimeZone("GMT")));
 
@@ -35,6 +24,7 @@ public class GUID2DateHive implements Serializable {
     try {
       newdate = GUID2Date.getDate(guid);
     } catch (Exception e) {
+      // ignore
     }
     //      return new Text(simpleDateFormatThreadLocal.get().format(newdate));
     if (newdate != null) {

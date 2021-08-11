@@ -14,7 +14,7 @@ public class SojParseRlogid implements Serializable {
 
   private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
   private static final String UTC = "UTC";
-  public static int s_xors[] = {6, 7, 3, 5};
+  public static int[] s_xors = {6, 7, 3, 5};
   private DateTimeFormatter formatter = DateTimeFormat.forPattern(DEFAULT_DATE_FORMAT)
       .withZone(
           DateTimeZone.forTimeZone(TimeZone.getTimeZone("GMT-7")));
@@ -107,7 +107,7 @@ public class SojParseRlogid implements Serializable {
 
   public String decrypt(String str) {
 
-    char dest[] = new char[str.length()];
+    char[] dest = new char[str.length()];
     for (int i = 0; i < str.length(); i++) {
       char k = str.charAt(i);
       dest[i] = (char) (k ^ (s_xors[i % 4]));

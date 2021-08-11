@@ -1,4 +1,4 @@
-package com.ebay.tdq.expressions.soj
+package com.ebay.tdq.expressions
 
 import com.ebay.tdq.common.env.TdqEnv
 import com.ebay.tdq.common.model.{TdqEvent, TdqMetric}
@@ -15,16 +15,16 @@ import scala.collection.JavaConverters._
 /**
  * @author juntzhang
  */
-object UdfTest {
+object SojUdfTest {
   @BeforeClass
   def setup(): Unit = {
     LkpManagerTest.init()
   }
 }
 
-class UdfTest {
+class SojUdfTest {
   val eventTime: Long = System.currentTimeMillis()
-  val schema = new Schema.Parser().parse(
+  val schema: Schema = new Schema.Parser().parse(
     """
       |{
       |  "type": "record",
@@ -382,7 +382,7 @@ class UdfTest {
 
   @Test
   def soj_list_get_range_by_idx(): Unit = {
-    testExpr("soj_list_get_range_by_idx('abc,defc,hef',',',2,3)", "'defc'")
+    testExpr("soj_list_get_range_by_idx('abc,defc,hef',',',2,3)", "'defc,hef'")
   }
 
 
@@ -470,7 +470,7 @@ class UdfTest {
 
   @Test
   def udf_soj_get_b64_bit_postns(): Unit = {
-    testExpr("udf_soj_get_b64_bit_postns('BA**',0)", "'5'")
+    testExpr("udf_soj_get_b64_bit_postns('BA**',0)", "'5,'")
   }
 
   @Test

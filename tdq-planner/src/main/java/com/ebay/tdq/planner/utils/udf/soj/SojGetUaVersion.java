@@ -20,7 +20,6 @@ public class SojGetUaVersion {
       return " ";
     } else {
       String subUserAgent = userAgent.substring(startPos);
-      System.out.println("subUserAgent:" + subUserAgent);
       int minPos = getMinStartPos(subUserAgent, " /");
       char minPosChar = getMinStartChar(subUserAgent, " /");
       if (minPos == Integer.MAX_VALUE) {
@@ -28,13 +27,7 @@ public class SojGetUaVersion {
       }
       String startUserAgent = subUserAgent.substring(minPos + 1);
 
-      System.out.println("startUserAgent:" + startUserAgent);
-      int minEnd = getMinStartPos(startUserAgent, ";/)([ -+,");
       char minEndChar = getMinStartChar(startUserAgent, ";/)([ -+,");
-      System.out.println("minPos:" + minPos);
-      System.out.println("minPosChar:" + minPosChar);
-      System.out.println("minEnd:" + minEnd);
-      System.out.println("minEndChar:" + minEndChar);
       String subStr = SOJStrBetweenEndlist.getStringBetweenEndList(subUserAgent, minPosChar, minEndChar);
       if (subStr == null) {
         return " ";
@@ -62,12 +55,10 @@ public class SojGetUaVersion {
   private static int getMinStartPos(String subUserAgent, String chars) {
     char[] arr = chars.toCharArray();
     int min = Integer.MAX_VALUE;
-    char minChar = ' ';
     for (int i = 0; i < arr.length; i++) {
       int midIndex = subUserAgent.indexOf(arr[i]);
       if (midIndex < min && midIndex != -1) {
         min = midIndex;
-        minChar = arr[i];
       }
     }
     return min;
@@ -79,7 +70,8 @@ public class SojGetUaVersion {
       return " ";
     } else if (userAgent.charAt(startPos - 1) == ';' || userAgent.charAt(startPos - 1) == ')') {
       return " ";
-    } else if (StrBetweenList.getStrBetweenList(userAgent.substring(startPos - 1), " /", ";/)([ -+,") == null) {
+    } else if (StrBetweenList.getStrBetweenList(
+        userAgent.substring(startPos - 1), " /", ";/)([ -+,") == null) {
       return " ";
     } else {
       return StrBetweenList.getStrBetweenList(userAgent.substring(startPos - 1), " /", ";/)([ -+,");

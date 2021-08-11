@@ -48,10 +48,10 @@ public class IsTimestamp implements Serializable {
       return (0);
     }
 
-    if (len > 19 && p > 0) {
-      if (msec < 0 || msec > Math.pow(10, p) - 1) {
-      }
-    }
+    // if (len > 19 && p > 0) {
+    //   if (msec < 0 || msec > Math.pow(10, p) - 1) {
+    //   }
+    // }
 
     return (1);
   }

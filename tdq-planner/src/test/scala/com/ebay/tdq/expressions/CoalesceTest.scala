@@ -1,11 +1,10 @@
-package com.ebay.tdq
+package com.ebay.tdq.expressions
 
 import com.ebay.tdq.common.env.TdqEnv
 import com.ebay.tdq.common.model.{TdqEvent, TdqMetric}
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.rules.ProfilingSqlParser
 import com.ebay.tdq.utils.{DateUtils, JsonUtils}
-import com.google.common.collect.Lists
 import org.apache.avro.Schema
 import org.junit.{Assert, Test}
 
@@ -14,7 +13,7 @@ import scala.collection.JavaConverters._
 /**
  * @author juntzhang
  */
-class ItemMapTypeTest {
+class CoalesceTest {
   val eventTime: Long = System.currentTimeMillis()
 
   def getTdqConfig(expr1: String, expr2: String): TdqConfig = {
@@ -62,58 +61,8 @@ class ItemMapTypeTest {
     assertFunction.apply(metric)
   }
 
-  /**
-   * tdq field support payload['annotation.nId']
-   */
   @Test
-  def testSchema(): Unit = {
-    val a = new Schema.Field("test_a", Schema.create(Schema.Type.DOUBLE), "", null)
-    val b = new Schema.Field("test_b", Schema.create(Schema.Type.DOUBLE), "", null)
-
-    val schema = Schema.createRecord(Lists.newArrayList(a, b))
-    println(schema)
-
-    val schema2 = new Schema.Parser().setValidate(false).parse(
-      """
-        |{
-        |  "type": "record",
-        |  "name": "EvaluationRecord",
-        |  "fields": [
-        |    {
-        |     "name": "test",
-        |     "type": {
-        |        "type": "record",
-        |        "name": "test",
-        |        "fields":[
-        |           { "name": "a", "type": "double"},
-        |           { "name": "b", "type": "double"}
-        |        ]
-        |     }
-        |    },
-        |    {
-        |     "name": "test2",
-        |     "type": {
-        |        "type": "record",
-        |        "name": "test2",
-        |        "fields":[
-        |           { "name": "a", "type": "double"},
-        |           { "name": "b", "type": "double"}
-        |        ]
-        |     }
-        |    }
-        |  ]
-        |}
-        |""".stripMargin)
-
-    println(schema2)
-
-  }
-
-  /**
-   * tdq field support payload['annotation.nId']
-   */
-  @Test
-  def test_map1(): Unit = {
+  def test_coalesce(): Unit = {
     val schema = new Schema.Parser().parse(
       """
         |{
@@ -126,38 +75,7 @@ class ItemMapTypeTest {
         |  ]
         |}
         |""".stripMargin)
-
-    test("case when p2='123' then 1 else 0 end", "payload.annotation", schema, () => {
-      val tdqEvent = new TdqEvent(
-        Map(
-          "event_timestamp" -> eventTime,
-          "payload" -> Map(
-            "annotation" -> "123"
-          ).asJava
-        ).mapValues(_.asInstanceOf[Object]).asJava
-      )
-      tdqEvent.buildEventTime(eventTime)
-    }, metric => {
-      println(metric)
-      Assert.assertEquals(1d, metric.getValues.get("p1"))
-    })
-  }
-
-  @Test
-  def test_map2(): Unit = {
-    val schema = new Schema.Parser().parse(
-      """
-        |{
-        |  "type": "record",
-        |  "name": "TdqEvent",
-        |  "namespace": "com.ebay.tdq.common.model",
-        |  "fields": [
-        |    { "name": "event_timestamp",   "type": "long"                                                 },
-        |    { "name": "payload",           "type": [ "null", { "type": "map", "values": "string" }]       }
-        |  ]
-        |}
-        |""".stripMargin)
-    test("case when p2='123' then 1 else 0 end", "payload['annotation.nId']", schema, () => {
+    test("case when p2='123' then 1 else 0 end", "COALESCE(payload['ignore_xxx'], payload['annotation.nId'])", schema, () => {
       val tdqEvent = new TdqEvent(
         Map(
           "event_timestamp" -> eventTime,
@@ -175,7 +93,7 @@ class ItemMapTypeTest {
   }
 
   @Test
-  def test_map_map(): Unit = {
+  def test_coalesce2(): Unit = {
     val schema = new Schema.Parser().parse(
       """
         |{
@@ -184,22 +102,21 @@ class ItemMapTypeTest {
         |  "namespace": "com.ebay.tdq.common.model",
         |  "fields": [
         |    { "name": "event_timestamp",   "type": "long"                                                 },
-        |    { "name": "payload",           "type": { "type": "map", "values": { "type": "map", "values": "string" } }       }
+        |    { "name": "payload",           "type": [ "null", { "type": "map", "values": "string" }]       }
         |  ]
         |}
         |""".stripMargin)
-    test("case when p2='123' then 1 else 0 end", "payload['annotation.nId']['a.b']", schema, () => {
+    test("case when p2='NULL' then 1 else 0 end", "COALESCE(payload['ignore_xxx'], payload['ignore_xxx2'], 'NULL')", schema, () => {
       val tdqEvent = new TdqEvent(
         Map(
           "event_timestamp" -> eventTime,
           "payload" -> Map(
-            "annotation.nId" -> Map(
-              "a.b" -> "123"
-            ).asJava
+            "annotation.nId" -> "123"
           ).asJava
         ).mapValues(_.asInstanceOf[Object]).asJava
       )
       tdqEvent.buildEventTime(eventTime)
+      tdqEvent
     }, metric => {
       println(metric)
       Assert.assertEquals(1d, metric.getValues.get("p1"))
@@ -207,7 +124,7 @@ class ItemMapTypeTest {
   }
 
   @Test
-  def test_map_map2(): Unit = {
+  def test_coalesce3(): Unit = {
     val schema = new Schema.Parser().parse(
       """
         |{
@@ -216,22 +133,21 @@ class ItemMapTypeTest {
         |  "namespace": "com.ebay.tdq.common.model",
         |  "fields": [
         |    { "name": "event_timestamp",   "type": "long"                                                 },
-        |    { "name": "payload",           "type": [ "null", { "type": "map", "values": [ "null", { "type": "map", "values": "string" }] }]       }
+        |    { "name": "payload",           "type": [ "null", { "type": "map", "values": "string" }]       }
         |  ]
         |}
         |""".stripMargin)
-    test("case when p2='123' then 1 else 0 end", "payload['annotation.nId']['a.b']", schema, () => {
+    test("case when p2='' then 1 else 0 end", "COALESCE(payload['ignore_xxx'], payload['annotation.nId'], 'NULL')", schema, () => {
       val tdqEvent = new TdqEvent(
         Map(
           "event_timestamp" -> eventTime,
           "payload" -> Map(
-            "annotation.nId" -> Map(
-              "a.b" -> "123"
-            ).asJava
+            "annotation.nId" -> ""
           ).asJava
         ).mapValues(_.asInstanceOf[Object]).asJava
       )
       tdqEvent.buildEventTime(eventTime)
+      tdqEvent
     }, metric => {
       println(metric)
       Assert.assertEquals(1d, metric.getValues.get("p1"))

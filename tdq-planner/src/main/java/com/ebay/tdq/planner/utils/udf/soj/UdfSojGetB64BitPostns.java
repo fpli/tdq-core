@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class UdfSojGetB64BitPostns implements Serializable {
 
 
-  public static final int sg_ascii_to_base64[] = {
+  public static final int[] sg_ascii_to_base64 = {
       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63,

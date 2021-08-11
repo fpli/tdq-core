@@ -31,7 +31,7 @@ public class GUID2Date {
     return p;
   }
 
-  private static long Hex2Long(String in) {
+  private static long hex2Long(String in) {
     int len = in.length();
     long out = 0;
     int dec = 0;
@@ -61,6 +61,6 @@ public class GUID2Date {
     }
 
     String s = guid.substring(8, 11) + guid.substring(0, 8);
-    return Hex2Long(s);
+    return hex2Long(s);
   }
 }

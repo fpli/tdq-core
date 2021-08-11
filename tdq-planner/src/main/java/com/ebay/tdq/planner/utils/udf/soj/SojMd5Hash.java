@@ -164,8 +164,7 @@ public class SojMd5Hash {
       sb.append(constant_id);
     }
 
-    char a[] = new char[sb.toString().length()];
-    a = sb.toString().toCharArray();
+    char[] a = sb.toString().toCharArray();
     int multiplier = 1;
 
     for (int i = (sb.toString().length() - 1); i >= 0; i--) {

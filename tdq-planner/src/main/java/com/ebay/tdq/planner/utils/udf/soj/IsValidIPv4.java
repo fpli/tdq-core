@@ -12,7 +12,7 @@ public class IsValidIPv4 implements Serializable {
 
     int iplen = 0;
     int ip1, ip2, ip3, ip4;
-    String ipseg[] = null;
+    String[] ipseg;
 
     iplen = instr.length();
 
@@ -55,7 +55,7 @@ public class IsValidIPv4 implements Serializable {
     if (result == null) {
       return result;
     }
-    char ch[] = result.toCharArray();
+    char[] ch = result.toCharArray();
     int index = -1;
     for (int i = 0; i < ch.length; i++) {
       if (Character.isWhitespace(ch[i])) {

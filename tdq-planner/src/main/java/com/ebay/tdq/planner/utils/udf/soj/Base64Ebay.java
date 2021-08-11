@@ -1,6 +1,5 @@
 package com.ebay.tdq.planner.utils.udf.soj;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 public final class Base64Ebay {

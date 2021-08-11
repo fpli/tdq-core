@@ -6,9 +6,9 @@ package com.ebay.tdq.planner.utils.udf.soj;
  */
 public class SojGetBase64EncodedBitsSets {
 
-  private final static int MAX_RESULT_SIZE = 4096;
+  private static final int MAX_RESULT_SIZE = 4096;
 
-  private final static int ascii_to_base64[] = {
+  private static final int[] ascii_to_base64 = {
       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63,

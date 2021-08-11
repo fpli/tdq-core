@@ -42,23 +42,13 @@ public class SojExtractNVP implements Serializable {
     }
   }
 
-  public static boolean CheckEqual(String f1, String v1) {
+  public static boolean checkEqual(String f1, String v1) {
     if ((v1 == null && f1 != null) || (v1 != null && f1 == null)) {
       return false;
     } else if (v1 == null && f1 == null) {
       return true;
     } else {
       return v1.equals(f1);
-    }
-  }
-
-  public static void Verify(String value, String key, String keyDelimiter, String valueDelimiter) {
-    String f1 = getTagValue(value, key, keyDelimiter, valueDelimiter);
-    String v1 = getTagValue(value, key, keyDelimiter, valueDelimiter);
-    if (!CheckEqual(f1, v1)) {
-      System.out.println("Failed");
-    } else {
-      System.out.println("Pass");
     }
   }
 

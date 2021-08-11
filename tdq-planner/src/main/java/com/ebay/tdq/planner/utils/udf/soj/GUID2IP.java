@@ -29,7 +29,7 @@ public class GUID2IP {
     return p;
   }
 
-  private static int Hex2Int(String in) {
+  private static int hex2Int(String in) {
     int i;
     int len = in.length();
     int out = 0;
@@ -71,7 +71,7 @@ public class GUID2IP {
     }
 
     String s = guid.substring(11, 19);
-    int ip = Hex2Int(s);
+    int ip = hex2Int(s);
 
     return toBytes(ip);
   }

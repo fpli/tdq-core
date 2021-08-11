@@ -67,6 +67,7 @@ public class SojUtils {
           try {
             firstDecodedUrl = java.net.URLDecoder.decode(firstDecodedUrl, "UTF-8");
           } catch (UnsupportedEncodingException e) {
+            // ignore
           }
 
           List<String> schValues2 = searchs.get(key);
