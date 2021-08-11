@@ -9,6 +9,7 @@ import com.ebay.tdq.types._
 import org.apache.avro.Schema
 import org.apache.calcite.avatica.util.{Casing, Quoting}
 import org.apache.calcite.sql._
+import org.apache.calcite.sql.`type`.SqlTypeName
 import org.apache.calcite.sql.fun.{SqlCase, SqlStdOperatorTable}
 import org.apache.calcite.sql.parser.SqlParser
 import org.apache.calcite.tools.Frameworks
@@ -104,7 +105,12 @@ object ProfilingSqlParser {
           Literal.apply(literal.getValueAs(classOf[Number]).doubleValue())
         }
       case _: SqlCharStringLiteral => Literal.apply(literal.getValueAs(classOf[String]))
-      case _ => throw new IllegalStateException("Unexpected literal: " + literal)
+      case sl: SqlLiteral if sl.getTypeName==SqlTypeName.NULL =>
+        Literal.apply(null)
+      case sl: SqlLiteral if sl.getTypeName==SqlTypeName.BOOLEAN =>
+        Literal.apply(sl.getValue)
+      case _ =>
+        throw new IllegalStateException("Unexpected literal: " + literal)
     }
   }
 

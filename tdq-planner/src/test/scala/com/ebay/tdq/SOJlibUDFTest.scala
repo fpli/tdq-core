@@ -102,21 +102,6 @@ class SOJlibUDFTest {
   }
 
   @Test
-  def test_soj_page_family(): Unit = {
-    val soj = new JHashMap[String, String]
-    soj.put("p", "5780")
-    test("case when length(p2)>0 then 1 else 0 end", "soj_page_family(cast(soj_nvl('p') AS INTEGER))", soj, metric => {
-      assert(metric.getValues.get("p1") == 1)
-      assert(metric.getTags.get("p2").toString.toUpperCase().equals("GR"))
-    })
-
-    soj.put("p", "578000000")
-    test("case when length(p2)>0 then 1 else 0 end", "soj_page_family(cast(soj_nvl('p') AS INTEGER))", soj, metric => {
-      assert(metric.getTags.get("p2") == "Others")
-    })
-  }
-
-  @Test
   def test_ebay_ip(): Unit = {
     val soj = new JHashMap[String, String]
     test0("case when clientData.remoteIP like '10.%' then 1 else 0 end", "clientData.remoteIP", soj, metric => {

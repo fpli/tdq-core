@@ -1,6 +1,8 @@
 package com.ebay.tdq.expressions
 
+import com.ebay.tdq.common.env.TdqEnv
 import com.ebay.tdq.common.model.TdqEvent
+import com.ebay.tdq.planner.LkpManager
 import com.ebay.tdq.types._
 
 /**
@@ -41,7 +43,7 @@ case class GetTdqField(name: String, dataType: DataType = StringType) extends Le
     val e = input.getCache("__TDQ_EVENT")
     if (e == null) {
       // restore from pronto, hard code
-      if(input.default && dataType.isInstanceOf[DoubleType]){
+      if (input.default && dataType.isInstanceOf[DoubleType]) {
         return 0d
       }
       return null
@@ -60,14 +62,12 @@ case class GetTdqEvent(cacheKey: Option[String] = None) extends LeafExpression {
   }
 }
 
-case class DebugEvent(name: String) extends LeafExpression {
+case class IsBBWOAPageWithItm(subject: Expression, cacheKey: Option[String] = None, tdqEnv: TdqEnv) extends LeafExpression {
   override def nullable: Boolean = true
 
   override def dataType: DataType = BooleanType
 
-  def cacheKey: Option[String] = None
-
   protected override def eval(input: InternalRow): Any = {
-    true
+    LkpManager.getInstance(tdqEnv).isBBWOAPagesWithItm(subject.call(input).asInstanceOf[Int])
   }
 }

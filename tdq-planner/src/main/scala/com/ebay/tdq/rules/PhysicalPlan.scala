@@ -29,9 +29,6 @@ case class PhysicalPlan(
   filter: Expression,
   cxt: Option[PhysicalPlanContext] = None
 ) extends Serializable {
-  lazy val groupByEvent: DebugEvent = DebugEvent("groupBy")
-  lazy val filterEvent: DebugEvent = DebugEvent("filter")
-  lazy val aggrFilterEvent: DebugEvent = DebugEvent("aggr.filter")
   lazy val random = new Random()
 
   def uuid(): String = {
@@ -111,6 +108,10 @@ case class PhysicalPlan(
       val v = evaluation.get.call(input)
       metric.setValue(if (v != null) v.asInstanceOf[Number].doubleValue() else 0d)
     }
+  }
+
+  override def toString: String = {
+    s"metricKey=$metricKey,window=$window,evaluation=$evaluation,aggregations=${aggregations.mkString(";")},dimensions=${dimensions.mkString(";")}"
   }
 }
 

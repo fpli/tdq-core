@@ -18,6 +18,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.neosearch.stringsearcher</groupId>
+            <artifactId>multiple-string-searcher</artifactId>
+            <version>0.1.1</version>
+        </dependency>
+
         <!--scala-->
         <dependency>
             <groupId>org.scala-lang</groupId>
