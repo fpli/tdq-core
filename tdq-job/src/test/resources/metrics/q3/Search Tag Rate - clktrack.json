@@ -10,7 +10,7 @@
       },
       "profilers": [
         {
-          "metric-name": "common_metric",
+          "metric-name": "sojevent_common_metric",
           "expr": "st_clktrack_cnt / st_total_cnt",
           "dimensions": [
             "page_id",
@@ -19,51 +19,34 @@
           "config": {
             "pronto-dropdown": "expr.st_total_cnt > 0"
           },
-          "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and soj_tag_eactn is not null)",
+          "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)",
           "transformations": [
             {
-              "alias": "soj_tag_p",
-              "expr": "soj_nvl('p')"
-            },
-            {
-              "alias": "soj_tag_t",
-              "expr": "soj_nvl('t')"
-            },
-            {
-              "alias": "soj_tag_app",
-              "expr": "soj_nvl('app')"
-            },
-            {
-              "alias": "soj_tag_eactn",
-              "expr": "soj_nvl('eactn')"
-            },
-            {
-              "alias": "soj_tag_clktrack",
-              "expr": "soj_nvl('!clktrack')"
-            },
-            {
-              "alias": "domain",
-              "expr": "soj_page_family(CAST(soj_tag_p AS INTEGER))"
-            },
-            {
-              "alias": "site_id",
-              "expr": "CAST(soj_tag_t AS INTEGER)"
-            },
-            {
-              "alias": "app",
-              "expr": "soj_tag_app"
-            },
-            {
+              "expr": "CAST(applicationPayload.p AS INTEGER)",
               "alias": "page_id",
-              "expr": "CAST(soj_tag_p AS INTEGER)"
+              "filter": "page_id in (2547208,2483445,2047936,2054032,2053742,2045573,2351460,2381081)"
             },
             {
+              "expr": "soj_page_family(CAST(applicationPayload.p AS INTEGER))",
+              "alias": "domain"
+            },
+            {
+              "expr": "CAST(applicationPayload.t AS INTEGER)",
+              "alias": "site_id"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "total_cnt"
+            },
+            {
+              "expr": "count(1)",
               "alias": "st_total_cnt",
-              "expr": "count(1)"
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
             },
             {
+              "expr": "sum(case when LENGTH(applicationPayload['!clktrack']) > 0 then 1 else 0 end)",
               "alias": "st_clktrack_cnt",
-              "expr": "sum(case when LENGTH(soj_tag_clktrack) > 0 then 1 else 0 end)"
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
             }
           ]
         }
