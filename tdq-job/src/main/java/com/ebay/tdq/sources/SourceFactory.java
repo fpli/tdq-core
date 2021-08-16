@@ -3,7 +3,7 @@ package com.ebay.tdq.sources;
 import com.ebay.tdq.common.model.InternalMetric;
 import com.ebay.tdq.config.SourceConfig;
 import com.ebay.tdq.config.TdqConfig;
-import com.ebay.tdq.sinks.TdqSinks;
+import com.ebay.tdq.sinks.SinkFactory;
 import com.ebay.tdq.utils.TdqContext;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -46,8 +46,8 @@ public class SourceFactory {
         .slotSharingGroup(name)
         .setParallelism(parallelism);
 
-    TdqSinks.sinkException(tdqCxt, outDS, name);
-    TdqSinks.sinkSampleLog(tdqCxt, outDS, name);
+    SinkFactory.sinkException(tdqCxt, outDS, name);
+    SinkFactory.sinkSampleLog(tdqCxt, outDS, name);
 
     SerializableTimestampAssigner<InternalMetric> assigner =
         (SerializableTimestampAssigner<InternalMetric>) (event, timestamp) -> event.getEventTime();

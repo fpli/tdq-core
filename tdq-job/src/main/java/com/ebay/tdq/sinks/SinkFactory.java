@@ -45,7 +45,7 @@ import org.elasticsearch.common.util.concurrent.EsRejectedExecutionException;
  * @author juntzhang
  */
 @Slf4j
-public class TdqSinks implements Serializable {
+public class SinkFactory implements Serializable {
 
   @Deprecated
   @VisibleForTesting
@@ -60,7 +60,7 @@ public class TdqSinks implements Serializable {
   @Deprecated
   @VisibleForTesting
   public static void setMemoryFunction(RichSinkFunction<InternalMetric> memoryFunction) {
-    TdqSinks.memoryFunction = memoryFunction;
+    SinkFactory.memoryFunction = memoryFunction;
   }
 
   public static void sinkNormalMetric(String id, TdqContext tdqCxt, DataStream<InternalMetric> ds) {

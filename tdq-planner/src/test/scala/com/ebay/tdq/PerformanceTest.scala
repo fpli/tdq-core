@@ -4,7 +4,7 @@ import java.util.{HashMap => JHashMap}
 
 import com.ebay.sojourner.common.model.{ClientData, RawEvent}
 import com.ebay.tdq.common.env.TdqEnv
-import com.ebay.tdq.common.model.{RawEvent, TdqEvent}
+import com.ebay.tdq.common.model.{TdqEvent, RawEvent => TdqRawEvent}
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.planner.LkpManagerTest
 import com.ebay.tdq.rules.ProfilingSqlParser
@@ -114,7 +114,7 @@ object PerformanceTest {
       println(s"tdqEvent clientData.$k=>${tdqEvent.get(s"clientData.$k")}")
     })
 
-    val avro = RawEvent.newBuilder()
+    val avro = TdqRawEvent.newBuilder()
       .setSojA(raw.getSojA)
       .setSojC(raw.getSojC)
       .setSojK(raw.getSojK)

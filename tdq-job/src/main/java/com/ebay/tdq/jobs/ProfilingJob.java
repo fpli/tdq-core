@@ -7,7 +7,7 @@ import com.ebay.tdq.functions.TdqMetric1stAggrProcessWindowFunction;
 import com.ebay.tdq.functions.TdqMetric2ndAggrProcessWindowFunction;
 import com.ebay.tdq.functions.TdqMetricAggregateFunction;
 import com.ebay.tdq.planner.utils.ConfigService;
-import com.ebay.tdq.sinks.TdqSinks;
+import com.ebay.tdq.sinks.SinkFactory;
 import com.ebay.tdq.sources.SourceFactory;
 import com.ebay.tdq.utils.DateUtils;
 import com.ebay.tdq.utils.TdqConfigManager;
@@ -74,12 +74,13 @@ public class ProfilingJob {
   // output metric by window
   protected void outputByWindow(Map<String, SingleOutputStreamOperator<InternalMetric>> outputTags) {
     outputTags.forEach((key, ds) -> {
-      TdqSinks.sinkNormalMetric(key + "_o", tdqCxt, ds);
+      SinkFactory.sinkNormalMetric(key + "_o", tdqCxt, ds);
     });
   }
 
   // aggregate metric by key and window
-  protected Map<String, SingleOutputStreamOperator<InternalMetric>> reduceByWindow(DataStream<InternalMetric> normalizeOperator) {
+  protected Map<String, SingleOutputStreamOperator<InternalMetric>> reduceByWindow(
+      DataStream<InternalMetric> normalizeOperator) {
     String uid = "1st_aggr_w_" + tdqEnv.getMetric1stAggrWindow();
     SingleOutputStreamOperator<InternalMetric> unifyDataStream = normalizeOperator
         .keyBy((KeySelector<InternalMetric, String>) m -> m.getPartition() + "#" + m.getMetricId())
@@ -92,13 +93,15 @@ public class ProfilingJob {
         .name(uid)
         .uid(uid);
 
-    TdqSinks.sinkLatencyMetric(tdqCxt, unifyDataStream);
+    SinkFactory.sinkLatencyMetric(tdqCxt, unifyDataStream);
 
     Map<String, SingleOutputStreamOperator<InternalMetric>> ans = Maps.newHashMap();
     tdqCxt.getOutputTagMap().forEach((seconds, tag) -> {
       String key = Duration.ofSeconds(seconds).toString().toLowerCase();
       String tagUid = "aggr_w_" + key;
-      SingleOutputStreamOperator<InternalMetric> ds = unifyDataStream.getSideOutput(tag).keyBy(InternalMetric::getMetricId)
+      SingleOutputStreamOperator<InternalMetric> ds = unifyDataStream
+          .getSideOutput(tag)
+          .keyBy(InternalMetric::getMetricId)
           .window(TumblingEventTimeWindows.of(Time.seconds(seconds)))
           .aggregate(new TdqMetricAggregateFunction(), new TdqMetric2ndAggrProcessWindowFunction())
           .setParallelism(tdqEnv.getMetric2ndAggrParallelism())

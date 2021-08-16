@@ -119,6 +119,7 @@ public class InternalMetric implements Serializable {
         .setEventCreateTimestamp(System.currentTimeMillis())
         .setEventSentTimestamp(System.currentTimeMillis())
         .setSchemaId(schemaId)
+        .setEventId(null)
         .setProducerId(producerId)
         .build());
 

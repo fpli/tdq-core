@@ -7,7 +7,7 @@ import com.ebay.tdq.common.env.JdbcEnv
 import com.ebay.tdq.common.model.{TdqEvent, InternalMetric}
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.jobs.ProfilingJob
-import com.ebay.tdq.sinks.{MemorySink, TdqSinks}
+import com.ebay.tdq.sinks.{MemorySink, SinkFactory}
 import com.ebay.tdq.sources.MemorySourceFactory
 import com.ebay.tdq.utils.{JsonUtils, TdqConfigManager}
 import org.apache.commons.io.IOUtils
@@ -37,12 +37,12 @@ case class ProfilingJobIT(
     setupDB(config)
     TdqConfigManager.getInstance(tdqEnv).refresh()
     val memorySink = new MemorySink(name, TdqConfigManager.getInstance(tdqEnv).getPhysicalPlans.get(0))
-    TdqSinks.setMemoryFunction(memorySink)
+    SinkFactory.setMemoryFunction(memorySink)
     MemorySourceFactory.setRawEventList(events.asJava)
   }
 
   override def stop(): Unit = {
-    Assert.assertTrue(TdqSinks.getMemoryFunction.asInstanceOf[MemorySink].check(expects.asJava))
+    Assert.assertTrue(SinkFactory.getMemoryFunction.asInstanceOf[MemorySink].check(expects.asJava))
   }
 
   def getMetric0(metricKey: String, t: Long, tags: JMap[String, String], expr: JMap[String, Double], v: Double): InternalMetric = {
@@ -93,7 +93,7 @@ class EsProfilingJobIT(name: String, config: String, events: List[TdqEvent], exp
     println("pronto=>")
     resultInPronto.foreach(println)
 
-    Assert.assertTrue(TdqSinks.getMemoryFunction.asInstanceOf[MemorySink]
+    Assert.assertTrue(SinkFactory.getMemoryFunction.asInstanceOf[MemorySink]
       .check0(expects.asJava, resultInPronto.asJava))
     elasticsearchResource.stop()
   }
