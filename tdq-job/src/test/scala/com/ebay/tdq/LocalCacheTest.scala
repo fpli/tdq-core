@@ -1,7 +1,7 @@
 package com.ebay.tdq
 
 import com.ebay.tdq.common.env.{JdbcEnv, TdqEnv}
-import com.ebay.tdq.common.model.TdqMetric
+import com.ebay.tdq.common.model.InternalMetric
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.rules.{PhysicalPlan, ProfilingSqlParser}
 import com.ebay.tdq.utils.{DateUtils, LocalCache, TdqMetricGroup}
@@ -92,11 +92,11 @@ class LocalCacheTest {
     val rawData = new mutable.HashMap[String, Double]()
     val mergeData = new mutable.HashMap[String, Double]()
 
-    def run(metric: TdqMetric): Unit = {
-      metric.setMetricKey(physicalPlan.metricKey)
-      metric.genUID()
-      cache.flush(physicalPlan, metric, new org.apache.flink.util.Collector[TdqMetric] {
-        override def collect(record: TdqMetric): Unit = {
+    def run(metric: InternalMetric): Unit = {
+      metric.setMetricName(physicalPlan.metricKey)
+      metric.genMetricId()
+      cache.flush(physicalPlan, metric, new org.apache.flink.util.Collector[InternalMetric] {
+        override def collect(record: InternalMetric): Unit = {
           val k = physicalPlan.uuid() + format(record.getEventTime)
           val old = mergeData.get(k)
           if (old.isDefined) {
@@ -112,12 +112,12 @@ class LocalCacheTest {
     }
 
     (1 to 100000).foreach { i =>
-      val m = new TdqMetric("a", DateUtils.parseDate("2021-05-06 12:05:50").getTime + 60000L * (Math.abs(new Random().nextInt()) % 10))
+      val m = new InternalMetric("a", DateUtils.parseDate("2021-05-06 12:05:50").getTime + 60000L * (Math.abs(new Random().nextInt()) % 10))
         .putExpr("p1", 1d)
-        .genUID()
+        .genMetricId()
       run(m)
 
-      val k = m.getTagId + format(m.getEventTime)
+      val k = m.getMetricId + format(m.getEventTime)
       val old = rawData.get(k)
       if (old.isDefined) {
         rawData.put(k, old.get + 1d)
@@ -126,9 +126,9 @@ class LocalCacheTest {
       }
     }
     Thread.sleep(1000)
-    run(new TdqMetric("a", DateUtils.parseDate("2021-05-06 12:05:50").getTime + 3600000L)
+    run(new InternalMetric("a", DateUtils.parseDate("2021-05-06 12:05:50").getTime + 3600000L)
       .putExpr("p1", 1d)
-      .genUID())
+      .genMetricId())
     println("=raw_data=")
     rawData.foreach(println)
     println("=merge_data=")

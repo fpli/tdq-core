@@ -1,6 +1,6 @@
 package com.ebay.tdq.sinks;
 
-import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.InternalMetric;
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.google.common.annotations.VisibleForTesting;
 import java.util.ArrayList;
@@ -16,9 +16,9 @@ import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
  */
 @Slf4j
 @VisibleForTesting
-public class MemorySink extends RichSinkFunction<TdqMetric> {
+public class MemorySink extends RichSinkFunction<InternalMetric> {
 
-  private static final Map<String, List<TdqMetric>> localCache = new HashMap<>();
+  private static final Map<String, List<InternalMetric>> localCache = new HashMap<>();
   private final String name;
   private final PhysicalPlan plan;
 
@@ -30,18 +30,18 @@ public class MemorySink extends RichSinkFunction<TdqMetric> {
     }
   }
 
-  public boolean check0(List<TdqMetric> expectedList, List<TdqMetric> actualList) {
+  public boolean check0(List<InternalMetric> expectedList, List<InternalMetric> actualList) {
     assert actualList.size() == expectedList.size();
-    Map<String, TdqMetric> m = new HashMap<>();
+    Map<String, InternalMetric> m = new HashMap<>();
     expectedList.forEach(v -> {
       String time = DateFormatUtils.format(v.getEventTime(), "yyyy-MM-dd HH:mm:ss");
-      m.put(v.getTagId() + " " + time, v);
+      m.put(v.getMetricId() + " " + time, v);
     });
     boolean success = true;
 
-    for (TdqMetric actual : actualList) {
+    for (InternalMetric actual : actualList) {
       String time = DateFormatUtils.format(actual.getEventTime(), "yyyy-MM-dd HH:mm:ss");
-      TdqMetric expected = m.get(actual.getTagId() + " " + time);
+      InternalMetric expected = m.get(actual.getMetricId() + " " + time);
       if (expected == null) {
         log.error("can not find {} in list1", actual);
         success = false;
@@ -54,7 +54,7 @@ public class MemorySink extends RichSinkFunction<TdqMetric> {
   }
 
   @Override
-  public void invoke(TdqMetric metric, Context context) {
+  public void invoke(InternalMetric metric, Context context) {
     localCache.compute(name, (k, v) -> {
       if (v == null) {
         v = new ArrayList<>();
@@ -64,7 +64,7 @@ public class MemorySink extends RichSinkFunction<TdqMetric> {
     });
   }
 
-  public boolean check(List<TdqMetric> expectedList) {
+  public boolean check(List<InternalMetric> expectedList) {
     log.info("memory=>");
     localCache.get(name).forEach(System.out::println);
     return check0(expectedList, localCache.get(name));

@@ -1,7 +1,7 @@
 package com.ebay.tdq.expressions
 
 import com.ebay.tdq.common.env.TdqEnv
-import com.ebay.tdq.common.model.{TdqEvent, TdqMetric}
+import com.ebay.tdq.common.model.{TdqEvent, InternalMetric}
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.rules.ProfilingSqlParser
 import com.ebay.tdq.utils.{DateUtils, JsonUtils}
@@ -46,7 +46,7 @@ class CaseWhenTest {
     JsonUtils.parseObject(json, classOf[TdqConfig])
   }
 
-  def test(expr1: String, expr2: String, schema: Schema, createEvent: () => TdqEvent, assertFunction: TdqMetric => Unit): Unit = {
+  def test(expr1: String, expr2: String, schema: Schema, createEvent: () => TdqEvent, assertFunction: InternalMetric => Unit): Unit = {
     val config = getTdqConfig(expr1, expr2)
     val parser = new ProfilingSqlParser(
       config.getRules.get(0).getProfilers.get(0),

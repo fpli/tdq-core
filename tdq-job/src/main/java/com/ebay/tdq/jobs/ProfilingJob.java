@@ -1,7 +1,7 @@
 package com.ebay.tdq.jobs;
 
 import com.ebay.tdq.common.env.TdqEnv;
-import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.InternalMetric;
 import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.functions.TdqMetric1stAggrProcessWindowFunction;
 import com.ebay.tdq.functions.TdqMetric2ndAggrProcessWindowFunction;
@@ -54,10 +54,10 @@ public class ProfilingJob {
       Validate.isTrue(tdqConfig != null);
       // step1: build data source
       // step2: normalize event to metric
-      DataStream<TdqMetric> ds = SourceFactory.build(tdqConfig, tdqCxt);
+      DataStream<InternalMetric> ds = SourceFactory.build(tdqConfig, tdqCxt);
 
       // step3: aggregate metric by key and window
-      Map<String, SingleOutputStreamOperator<TdqMetric>> outputTags = reduceByWindow(ds);
+      Map<String, SingleOutputStreamOperator<InternalMetric>> outputTags = reduceByWindow(ds);
 
       // step4: output metric by window
       outputByWindow(outputTags);
@@ -72,17 +72,17 @@ public class ProfilingJob {
   }
 
   // output metric by window
-  protected void outputByWindow(Map<String, SingleOutputStreamOperator<TdqMetric>> outputTags) {
+  protected void outputByWindow(Map<String, SingleOutputStreamOperator<InternalMetric>> outputTags) {
     outputTags.forEach((key, ds) -> {
       TdqSinks.sinkNormalMetric(key + "_o", tdqCxt, ds);
     });
   }
 
   // aggregate metric by key and window
-  protected Map<String, SingleOutputStreamOperator<TdqMetric>> reduceByWindow(DataStream<TdqMetric> normalizeOperator) {
+  protected Map<String, SingleOutputStreamOperator<InternalMetric>> reduceByWindow(DataStream<InternalMetric> normalizeOperator) {
     String uid = "1st_aggr_w_" + tdqEnv.getMetric1stAggrWindow();
-    SingleOutputStreamOperator<TdqMetric> unifyDataStream = normalizeOperator
-        .keyBy((KeySelector<TdqMetric, String>) m -> m.getPartition() + "#" + m.getTagId())
+    SingleOutputStreamOperator<InternalMetric> unifyDataStream = normalizeOperator
+        .keyBy((KeySelector<InternalMetric, String>) m -> m.getPartition() + "#" + m.getMetricId())
         .window(TumblingEventTimeWindows.of(Time.seconds(DateUtils.toSeconds(tdqEnv.getMetric1stAggrWindow()))))
         .sideOutputLateData(tdqCxt.getEventLatencyOutputTag())
         .aggregate(new TdqMetricAggregateFunction(),
@@ -94,11 +94,11 @@ public class ProfilingJob {
 
     TdqSinks.sinkLatencyMetric(tdqCxt, unifyDataStream);
 
-    Map<String, SingleOutputStreamOperator<TdqMetric>> ans = Maps.newHashMap();
+    Map<String, SingleOutputStreamOperator<InternalMetric>> ans = Maps.newHashMap();
     tdqCxt.getOutputTagMap().forEach((seconds, tag) -> {
       String key = Duration.ofSeconds(seconds).toString().toLowerCase();
       String tagUid = "aggr_w_" + key;
-      SingleOutputStreamOperator<TdqMetric> ds = unifyDataStream.getSideOutput(tag).keyBy(TdqMetric::getTagId)
+      SingleOutputStreamOperator<InternalMetric> ds = unifyDataStream.getSideOutput(tag).keyBy(InternalMetric::getMetricId)
           .window(TumblingEventTimeWindows.of(Time.seconds(seconds)))
           .aggregate(new TdqMetricAggregateFunction(), new TdqMetric2ndAggrProcessWindowFunction())
           .setParallelism(tdqEnv.getMetric2ndAggrParallelism())

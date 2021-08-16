@@ -2,7 +2,7 @@ package com.ebay.tdq.svc;
 
 import com.ebay.sojourner.common.model.RawEvent;
 import com.ebay.tdq.common.model.TdqEvent;
-import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.InternalMetric;
 import com.ebay.tdq.config.ExpressionConfig;
 import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
@@ -243,14 +243,14 @@ public class RuleEngineServiceImpl implements RuleEngineService {
   private void process(TdqDataResult<Long> result, PhysicalPlan plan) {
     Future<Long> future = executor.submit(() -> {
       long s = System.currentTimeMillis();
-      Map<String, TdqMetric> map = Maps.newHashMap();
+      Map<String, InternalMetric> map = Maps.newHashMap();
       try {
         int i = 1;
         while (i > 0) {
           for (RawEvent event : sample) {
-            TdqMetric newMetric = plan.process(new TdqEvent(event));
+            InternalMetric newMetric = plan.process(new TdqEvent(event));
             if (newMetric != null) {
-              map.compute(newMetric.getTagId(), (key, old) -> {
+              map.compute(newMetric.getMetricId(), (key, old) -> {
                 if (old != null) {
                   return plan.merge(newMetric, old);
                 } else {

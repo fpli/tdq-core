@@ -1,6 +1,6 @@
 package com.ebay.tdq.sources;
 
-import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.InternalMetric;
 import com.ebay.tdq.config.SourceConfig;
 import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.sinks.TdqSinks;
@@ -20,8 +20,8 @@ import org.apache.flink.streaming.runtime.operators.TdqTimestampsAndWatermarksOp
  */
 public class SourceFactory {
 
-  public static DataStream<TdqMetric> build(TdqConfig tdqConfig, TdqContext tdqCxt) {
-    List<DataStream<TdqMetric>> list = new ArrayList<>();
+  public static DataStream<InternalMetric> build(TdqConfig tdqConfig, TdqContext tdqCxt) {
+    List<DataStream<InternalMetric>> list = new ArrayList<>();
     for (SourceConfig sourceConfig : tdqConfig.getSources()) {
       if (sourceConfig.getType().equals("realtime.kafka")) {
         list.add(RhsKafkaSourceFactory.build(sourceConfig, tdqCxt));
@@ -34,12 +34,12 @@ public class SourceFactory {
     return list.stream().reduce(DataStream::union).orElse(null);
   }
 
-  public static <T> SingleOutputStreamOperator<TdqMetric> getTdqMetricDS(
+  public static <T> SingleOutputStreamOperator<InternalMetric> getTdqMetricDS(
       TdqContext tdqCxt, DataStream<T> inDS, String name, int parallelism,
       Long outOfOrderlessMs, Long idleTimeoutMs,
-      ProcessFunction<T, TdqMetric> processFunction
+      ProcessFunction<T, InternalMetric> processFunction
   ) {
-    SingleOutputStreamOperator<TdqMetric> outDS = inDS
+    SingleOutputStreamOperator<InternalMetric> outDS = inDS
         .process(processFunction)
         .name(name + "_normalize")
         .uid(name + "_normalize")
@@ -49,15 +49,15 @@ public class SourceFactory {
     TdqSinks.sinkException(tdqCxt, outDS, name);
     TdqSinks.sinkSampleLog(tdqCxt, outDS, name);
 
-    SerializableTimestampAssigner<TdqMetric> assigner =
-        (SerializableTimestampAssigner<TdqMetric>) (event, timestamp) -> event.getEventTime();
+    SerializableTimestampAssigner<InternalMetric> assigner =
+        (SerializableTimestampAssigner<InternalMetric>) (event, timestamp) -> event.getEventTime();
 
-    WatermarkStrategy<TdqMetric> watermarkStrategy = WatermarkStrategy
-        .<TdqMetric>forBoundedOutOfOrderness(Duration.ofMillis(outOfOrderlessMs))
+    WatermarkStrategy<InternalMetric> watermarkStrategy = WatermarkStrategy
+        .<InternalMetric>forBoundedOutOfOrderness(Duration.ofMillis(outOfOrderlessMs))
         .withTimestampAssigner(assigner)
         .withIdleness(Duration.ofMillis(idleTimeoutMs));
 
-    TdqTimestampsAndWatermarksOperator<TdqMetric> operator =
+    TdqTimestampsAndWatermarksOperator<InternalMetric> operator =
         new TdqTimestampsAndWatermarksOperator<>(tdqCxt.getRhsEnv().clean(watermarkStrategy));
 
     outDS = outDS.transform("Timestamps/Watermarks", outDS.getTransformation().getOutputType(), operator)

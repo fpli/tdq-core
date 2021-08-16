@@ -3,7 +3,7 @@ package com.ebay.tdq.functions;
 import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.common.model.TdqErrorMsg;
 import com.ebay.tdq.common.model.TdqEvent;
-import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.InternalMetric;
 import com.ebay.tdq.common.model.TdqSampleData;
 import com.ebay.tdq.planner.LkpManager;
 import com.ebay.tdq.rules.PhysicalPlan;
@@ -28,13 +28,13 @@ import org.apache.flink.util.Collector;
  * @author juntzhang
  */
 @Slf4j
-public class RawEventProcessFunction extends ProcessFunction<TdqEvent, TdqMetric> implements CheckpointedFunction {
+public class RawEventProcessFunction extends ProcessFunction<TdqEvent, InternalMetric> implements CheckpointedFunction {
 
   private final TdqEnv tdqEnv;
   private final TdqContext tdqCxt;
   private transient long errorMsgCurrentTimeMillis;
   private transient TdqMetricGroup metricGroup;
-  private transient ListState<TdqMetric> cacheState;
+  private transient ListState<InternalMetric> cacheState;
   private transient LocalCache localCache;
 
   public RawEventProcessFunction(TdqContext tdqCxt) {
@@ -59,7 +59,7 @@ public class RawEventProcessFunction extends ProcessFunction<TdqEvent, TdqMetric
   }
 
   @Override
-  public void processElement(TdqEvent event, Context ctx, Collector<TdqMetric> collector) throws Exception {
+  public void processElement(TdqEvent event, Context ctx, Collector<InternalMetric> collector) throws Exception {
     long s1 = System.nanoTime();
     processElement0(event, TdqConfigManager.getInstance(tdqEnv).getPhysicalPlans(), ctx, collector);
     metricGroup.markElement(s1);
@@ -68,7 +68,7 @@ public class RawEventProcessFunction extends ProcessFunction<TdqEvent, TdqMetric
   @Override
   public void snapshotState(FunctionSnapshotContext context) throws Exception {
     cacheState.clear();
-    for (TdqMetric m : localCache.values()) {
+    for (InternalMetric m : localCache.values()) {
       cacheState.add(m);
     }
     metricGroup.inc("snapshotState");
@@ -76,13 +76,13 @@ public class RawEventProcessFunction extends ProcessFunction<TdqEvent, TdqMetric
 
   @Override
   public void initializeState(FunctionInitializationContext context) throws Exception {
-    final TypeInformation<TdqMetric> ti = TypeInformation.of(new TypeHint<TdqMetric>() {
+    final TypeInformation<InternalMetric> ti = TypeInformation.of(new TypeHint<InternalMetric>() {
     });
     cacheState = context.getOperatorStateStore().getListState(new ListStateDescriptor<>("cacheState", ti));
     initialize();
     if (context.isRestored()) {
       metricGroup.inc("restored");
-      cacheState.get().forEach(v -> localCache.put(v.getTagIdWithEventTime(), v));
+      cacheState.get().forEach(v -> localCache.put(v.getMetricIdWithEventTime(), v));
     }
   }
 
@@ -95,7 +95,7 @@ public class RawEventProcessFunction extends ProcessFunction<TdqEvent, TdqMetric
   }
 
   private void processElement0(TdqEvent event,
-      List<PhysicalPlan> physicalPlans, Context ctx, Collector<TdqMetric> collector) throws Exception {
+      List<PhysicalPlan> physicalPlans, Context ctx, Collector<InternalMetric> collector) throws Exception {
     if (physicalPlans == null || physicalPlans.size() == 0) {
       throw new Exception("physical plans is empty!");
     }
@@ -110,7 +110,7 @@ public class RawEventProcessFunction extends ProcessFunction<TdqEvent, TdqMetric
       }
       long s = System.nanoTime();
       try {
-        TdqMetric metric = plan.process(event);
+        InternalMetric metric = plan.process(event);
         sampleData(ctx, event, metric, plan);
         localCache.flush(plan, metric, collector);
         metricGroup.updateEventHistogram(s);
@@ -120,7 +120,7 @@ public class RawEventProcessFunction extends ProcessFunction<TdqEvent, TdqMetric
     }
   }
 
-  private void sampleData(Context ctx, TdqEvent event, TdqMetric metric, PhysicalPlan plan) {
+  private void sampleData(Context ctx, TdqEvent event, InternalMetric metric, PhysicalPlan plan) {
     if (plan.sampling()) {
       metricGroup.inc("sampleEvent_" + plan.metricKey());
       ctx.output(tdqCxt.getSampleOutputTag(), new TdqSampleData(

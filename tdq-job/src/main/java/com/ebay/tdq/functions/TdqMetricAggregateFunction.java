@@ -1,15 +1,15 @@
 package com.ebay.tdq.functions;
 
-import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.InternalMetric;
 import com.ebay.tdq.rules.ExpressionRegistry;
 import org.apache.flink.api.common.functions.AggregateFunction;
 
 /**
  * @author juntzhang
  */
-public class TdqMetricAggregateFunction implements AggregateFunction<TdqMetric, TdqMetric, TdqMetric> {
+public class TdqMetricAggregateFunction implements AggregateFunction<InternalMetric, InternalMetric, InternalMetric> {
 
-  public static TdqMetric merge0(TdqMetric m1, TdqMetric m2) {
+  public static InternalMetric merge0(InternalMetric m1, InternalMetric m2) {
     if (m1 == null && m2 == null) {
       return null;
     } else if (m1 == null) {
@@ -31,22 +31,22 @@ public class TdqMetricAggregateFunction implements AggregateFunction<TdqMetric, 
   }
 
   @Override
-  public TdqMetric createAccumulator() {
+  public InternalMetric createAccumulator() {
     return null;
   }
 
   @Override
-  public TdqMetric add(TdqMetric m1, TdqMetric m2) {
+  public InternalMetric add(InternalMetric m1, InternalMetric m2) {
     return merge0(m1, m2);
   }
 
   @Override
-  public TdqMetric getResult(TdqMetric m) {
+  public InternalMetric getResult(InternalMetric m) {
     return m;
   }
 
   @Override
-  public TdqMetric merge(TdqMetric m1, TdqMetric m2) {
+  public InternalMetric merge(InternalMetric m1, InternalMetric m2) {
     return merge0(m1, m2);
   }
 }

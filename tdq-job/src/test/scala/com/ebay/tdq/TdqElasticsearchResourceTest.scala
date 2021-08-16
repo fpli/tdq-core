@@ -2,7 +2,7 @@ package com.ebay.tdq
 
 import java.util.{HashMap => JMap}
 
-import com.ebay.tdq.common.model.TdqMetric
+import com.ebay.tdq.common.model.InternalMetric
 import org.apache.flink.streaming.connectors.elasticsearch.TdqElasticsearchResource
 import org.elasticsearch.action.get.GetRequest
 import org.elasticsearch.action.search.SearchRequest
@@ -77,10 +77,10 @@ class TdqElasticsearchResourceTest {
     json
   }
 
-  private def getMetric2(metricKey: String, t: Long, tagK: String, tagV: String, v: Double): TdqMetric = {
-    new TdqMetric(metricKey, t)
+  private def getMetric2(metricKey: String, t: Long, tagK: String, tagV: String, v: Double): InternalMetric = {
+    new InternalMetric(metricKey, t)
       .putTag(tagK, tagV)
-      .genUID
+      .genMetricId
       .setValue(v)
   }
 

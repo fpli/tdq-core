@@ -1,7 +1,7 @@
 package com.ebay.tdq
 
 import com.ebay.tdq.RawEventTest.getTdqEvent
-import com.ebay.tdq.common.model.TdqMetric
+import com.ebay.tdq.common.model.InternalMetric
 import org.apache.commons.lang.time.DateUtils
 import org.junit.Test
 
@@ -450,18 +450,18 @@ class SingleRuleSqlJobTest {
 }
 
 object TestMetricFactory {
-  def getMetric(metricKey: String, time: String, v: Double): TdqMetric = {
+  def getMetric(metricKey: String, time: String, v: Double): InternalMetric = {
     val t = DateUtils.parseDate(time, Array[String]("yyyy-MM-dd HH:mm:ss")).getTime
-    new TdqMetric(metricKey, t)
-      .genUID
+    new InternalMetric(metricKey, t)
+      .genMetricId
       .setValue(v)
   }
 
-  def getMetric(metricKey: String, time: String, tagK: String, tagV: String, v: Double): TdqMetric = {
+  def getMetric(metricKey: String, time: String, tagK: String, tagV: String, v: Double): InternalMetric = {
     val t = DateUtils.parseDate(time, Array[String]("yyyy-MM-dd HH:mm:ss")).getTime
-    new TdqMetric(metricKey, t)
+    new InternalMetric(metricKey, t)
       .putTag(tagK, tagV)
-      .genUID
+      .genMetricId
       .setValue(v)
   }
 }

@@ -1,7 +1,7 @@
 package com.ebay.tdq.functions;
 
 import com.ebay.tdq.common.env.TdqEnv;
-import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.InternalMetric;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import org.elasticsearch.client.Requests;
  * @author juntzhang
  */
 @Slf4j
-public class ProntoSinkFunction implements ElasticsearchSinkFunction<TdqMetric> {
+public class ProntoSinkFunction implements ElasticsearchSinkFunction<InternalMetric> {
 
   private final TdqEnv tdqEnv;
   private transient Map<String, Counter> counterMap;
@@ -41,7 +41,7 @@ public class ProntoSinkFunction implements ElasticsearchSinkFunction<TdqMetric> 
   }
 
   @Override
-  public void process(TdqMetric m, RuntimeContext runtimeContext, RequestIndexer indexer) {
+  public void process(InternalMetric m, RuntimeContext runtimeContext, RequestIndexer indexer) {
     try {
       indexer.add(createIndexRequest(m));
     } catch (Throwable e) {
@@ -50,11 +50,11 @@ public class ProntoSinkFunction implements ElasticsearchSinkFunction<TdqMetric> 
     }
   }
 
-  private IndexRequest createIndexRequest(TdqMetric tdqMetric) {
+  private IndexRequest createIndexRequest(InternalMetric tdqMetric) {
     String index = tdqEnv.getSinkEnv().getNormalMetricIndex(tdqMetric.getEventTime());
     try {
       return Requests.indexRequest()
-          .id(tdqMetric.getTagIdWithEventTime())
+          .id(tdqMetric.getMetricIdWithEventTime())
           .index(index)
           .source(tdqMetric.toIndexRequest(System.currentTimeMillis()));
     } catch (Exception e) {

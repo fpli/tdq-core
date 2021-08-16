@@ -4,7 +4,7 @@ import java.sql.DriverManager
 import java.util.{HashMap => JMap}
 
 import com.ebay.tdq.common.env.JdbcEnv
-import com.ebay.tdq.common.model.{TdqEvent, TdqMetric}
+import com.ebay.tdq.common.model.{TdqEvent, InternalMetric}
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.jobs.ProfilingJob
 import com.ebay.tdq.sinks.{MemorySink, TdqSinks}
@@ -26,7 +26,7 @@ import scala.collection.JavaConverters._
  */
 
 case class ProfilingJobIT(
-  name: String, config: String, events: List[TdqEvent], expects: List[TdqMetric]
+  name: String, config: String, events: List[TdqEvent], expects: List[InternalMetric]
 ) extends ProfilingJob {
 
   import ProfilingJobIT.setupDB
@@ -45,19 +45,19 @@ case class ProfilingJobIT(
     Assert.assertTrue(TdqSinks.getMemoryFunction.asInstanceOf[MemorySink].check(expects.asJava))
   }
 
-  def getMetric0(metricKey: String, t: Long, tags: JMap[String, String], expr: JMap[String, Double], v: Double): TdqMetric = {
-    val m = new TdqMetric(metricKey, t).setValue(v)
+  def getMetric0(metricKey: String, t: Long, tags: JMap[String, String], expr: JMap[String, Double], v: Double): InternalMetric = {
+    val m = new InternalMetric(metricKey, t).setValue(v)
     tags.asScala.foreach { case (k, v) =>
       m.putTag(k, v)
     }
     expr.asScala.foreach { case (k, v) =>
       m.putExpr(k, v)
     }
-    m.genUID
+    m.genMetricId
   }
 }
 
-class EsProfilingJobIT(name: String, config: String, events: List[TdqEvent], expects: List[TdqMetric])
+class EsProfilingJobIT(name: String, config: String, events: List[TdqEvent], expects: List[InternalMetric])
   extends ProfilingJobIT(name, config, events, expects) {
   var elasticsearchResource: TdqElasticsearchResource = _
 
@@ -121,7 +121,7 @@ object ProfilingJobIT {
     conn.close()
   }
 
-  def es(id: String, config: String, events: List[TdqEvent], expects: List[TdqMetric]): ProfilingJobIT = {
+  def es(id: String, config: String, events: List[TdqEvent], expects: List[InternalMetric]): ProfilingJobIT = {
     val it = new EsProfilingJobIT(id, config, events, expects)
     it.submit(Array[String](
       "--flink.app.local", "true",
@@ -130,7 +130,7 @@ object ProfilingJobIT {
     it
   }
 
-  def apply(id: String, config: String, events: List[TdqEvent], expects: List[TdqMetric]): ProfilingJobIT = {
+  def apply(id: String, config: String, events: List[TdqEvent], expects: List[InternalMetric]): ProfilingJobIT = {
     val it = new ProfilingJobIT(id, config, events, expects)
     it.submit(Array[String](
       "--flink.app.local", "true",

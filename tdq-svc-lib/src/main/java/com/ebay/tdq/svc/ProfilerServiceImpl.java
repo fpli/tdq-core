@@ -1,6 +1,6 @@
 package com.ebay.tdq.svc;
 
-import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.InternalMetric;
 import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;
@@ -93,7 +93,7 @@ public class ProfilerServiceImpl implements ProfilerService {
       throws IOException, ParseException {
     final QueryProfilerResult.QueryProfilerResultBuilder<?, ?> resultBuilder =
         QueryProfilerResult.builder().param(param);
-    for (TdqMetric metric : query0(param, profilerConfig, window)) {
+    for (InternalMetric metric : query0(param, profilerConfig, window)) {
       resultBuilder.record(new QueryProfilerResult.Record(metric.getEventTime(), metric.getValue()));
     }
     return resultBuilder.build();
@@ -115,14 +115,14 @@ public class ProfilerServiceImpl implements ProfilerService {
           newDimensions.put(e.getKey().split("\\.")[1], e.getValue());
         }
       }
-      for (TdqMetric metric : query0(
+      for (InternalMetric metric : query0(
           new QueryProfilerParam(param.getTdqConfig(), param.getFrom(), param.getTo(), newDimensions), pc, window)) {
         params.compute(metric.getEventTime(), (key, values) -> {
           if (values == null) {
             values = new HashMap<>();
           }
           Map<String, Object> finalValues = values;
-          metric.getValues().forEach((k, v) -> finalValues.put(metric.getMetricKey() + "." + k, v));
+          metric.getValues().forEach((k, v) -> finalValues.put(metric.getMetricName() + "." + k, v));
           return finalValues;
         });
       }
@@ -135,7 +135,7 @@ public class ProfilerServiceImpl implements ProfilerService {
     return resultBuilder.build();
   }
 
-  private List<TdqMetric> query0(QueryProfilerParam param, ProfilerConfig profilerConfig, int window)
+  private List<InternalMetric> query0(QueryProfilerParam param, ProfilerConfig profilerConfig, int window)
       throws ParseException, IOException {
     Validate.isTrue(StringUtils.isNotEmpty(profilerConfig.getMetricName()), "metric name is required.");
 
@@ -180,10 +180,10 @@ public class ProfilerServiceImpl implements ProfilerService {
 
     SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
     Histogram agg = searchResponse.getAggregations().get("agg");
-    List<TdqMetric> result = Lists.newArrayList();
+    List<InternalMetric> result = Lists.newArrayList();
     for (Histogram.Bucket entry : agg.getBuckets()) {
       long eventTime = Long.parseLong(entry.getKeyAsString());
-      TdqMetric tdqMetric = new TdqMetric(physicalPlan.metricKey(), eventTime);
+      InternalMetric tdqMetric = new InternalMetric(physicalPlan.metricKey(), eventTime);
       for (Transformation aggPlan : physicalPlan.aggregations()) {
         tdqMetric.putExpr(aggPlan.name(),
             ((NumericMetricsAggregation.SingleValue) entry.getAggregations().get(aggPlan.name())).value());

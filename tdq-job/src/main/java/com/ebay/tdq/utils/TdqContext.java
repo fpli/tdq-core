@@ -3,7 +3,7 @@ package com.ebay.tdq.utils;
 import com.ebay.sojourner.common.env.EnvironmentUtils;
 import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.common.model.TdqErrorMsg;
-import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.InternalMetric;
 import com.ebay.tdq.common.model.TdqSampleData;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -26,11 +26,11 @@ public class TdqContext implements Serializable {
   private final transient StreamExecutionEnvironment rhsEnv;
   private final TdqEnv tdqEnv;
 
-  private final Map<Long, OutputTag<TdqMetric>> outputTagMap = new HashMap<>();
+  private final Map<Long, OutputTag<InternalMetric>> outputTagMap = new HashMap<>();
   private final OutputTag<TdqErrorMsg> exceptionOutputTag;
   private final OutputTag<TdqSampleData> sampleOutputTag;
   private final OutputTag<TdqSampleData> debugOutputTag;
-  private final OutputTag<TdqMetric> eventLatencyOutputTag;
+  private final OutputTag<InternalMetric> eventLatencyOutputTag;
 
   public TdqContext(String[] args) {
     load(args);
@@ -38,10 +38,10 @@ public class TdqContext implements Serializable {
     this.exceptionOutputTag = new OutputTag<>("tdq-exception", TypeInformation.of(TdqErrorMsg.class));
     this.sampleOutputTag = new OutputTag<>("tdq-sample", TypeInformation.of(TdqSampleData.class));
     this.debugOutputTag = new OutputTag<>("tdq-debug", TypeInformation.of(TdqSampleData.class));
-    this.eventLatencyOutputTag = new OutputTag<>("tdq-event-latency", TypeInformation.of(TdqMetric.class));
+    this.eventLatencyOutputTag = new OutputTag<>("tdq-event-latency", TypeInformation.of(InternalMetric.class));
     for (Long seconds : tdqEnv.getWinTags()) {
       outputTagMap.put(seconds,
-          new OutputTag<>(String.valueOf(seconds), TypeInformation.of(TdqMetric.class)));
+          new OutputTag<>(String.valueOf(seconds), TypeInformation.of(InternalMetric.class)));
     }
 
     this.rhsEnv = FlinkEnvFactory.create(this.getTdqEnv());

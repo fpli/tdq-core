@@ -22,10 +22,10 @@ public class TdqSampleData {
   private long processTime;
   private String metricKey;
   private TdqEvent tdqEvent;
-  private TdqMetric tdqMetric;
+  private InternalMetric tdqMetric;
   private String params;
 
-  public TdqSampleData(TdqEvent tdqEvent, TdqMetric tdqMetric, String metricKey, String params) {
+  public TdqSampleData(TdqEvent tdqEvent, InternalMetric tdqMetric, String metricKey, String params) {
     this.processTime = System.currentTimeMillis();
     this.tdqEvent = tdqEvent;
     this.metricKey = metricKey;

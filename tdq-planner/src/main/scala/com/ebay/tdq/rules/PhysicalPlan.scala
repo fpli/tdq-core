@@ -2,7 +2,7 @@ package com.ebay.tdq.rules
 
 import java.util.{Random, HashMap => JHashMap, Map => JMap}
 
-import com.ebay.tdq.common.model.{TdqEvent, TdqMetric}
+import com.ebay.tdq.common.model.{TdqEvent, InternalMetric}
 import com.ebay.tdq.expressions._
 
 import scala.collection.JavaConverters.mapAsScalaMapConverter
@@ -43,10 +43,10 @@ case class PhysicalPlan(
   // TODO validate
   def validatePlan(): Unit = {}
 
-  def process(event: TdqEvent): TdqMetric = {
+  def process(event: TdqEvent): InternalMetric = {
     val cacheData = new JHashMap[String, Any]()
     val eventTimeMillis = event.getEventTimeMs
-    val metric = new TdqMetric(metricKey, (eventTimeMillis / 60000) * 60000)
+    val metric = new InternalMetric(metricKey, (eventTimeMillis / 60000) * 60000)
     metric.setWindow(window)
     aggregations.foreach(aggr => {
       metric.putAggrExpress(aggr.name, aggr.expr.simpleName)
@@ -66,14 +66,14 @@ case class PhysicalPlan(
           groupBy(metric, input, a)
         }
       })
-      metric.genUID()
+      metric.genMetricId()
       metric
     } else {
       null
     }
   }
 
-  private def groupBy(metric: TdqMetric, input: InternalRow, aggr: Transformation): Unit = {
+  private def groupBy(metric: InternalMetric, input: InternalRow, aggr: Transformation): Unit = {
     val t = aggr.expr.call(input)
     if (t != null) {
       metric.putExpr(aggr.expr.cacheKey.get, t.asInstanceOf[Number].doubleValue())
@@ -84,7 +84,7 @@ case class PhysicalPlan(
     filter == null || (filter != null && filter.call(input).asInstanceOf[Boolean])
   }
 
-  def merge(m1: TdqMetric, m2: TdqMetric): TdqMetric = {
+  def merge(m1: InternalMetric, m2: InternalMetric): InternalMetric = {
     val m = m1
     aggregations.foreach {
       case Transformation(name, _, expression) =>
@@ -98,7 +98,7 @@ case class PhysicalPlan(
     m
   }
 
-  def evaluate(metric: TdqMetric): Unit = {
+  def evaluate(metric: InternalMetric): Unit = {
     if (evaluation.isDefined) {
       val cacheData = new JHashMap[String, Any]()
       metric.getValues.asScala.foreach { case (k: String, v) =>

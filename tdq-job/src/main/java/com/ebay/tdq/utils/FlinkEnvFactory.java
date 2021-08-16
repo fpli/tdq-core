@@ -10,7 +10,7 @@ import static com.ebay.sojourner.flink.common.FlinkEnvUtils.getInteger;
 import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import com.ebay.sojourner.flink.state.StateBackendFactory;
 import com.ebay.tdq.common.env.TdqEnv;
-import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.InternalMetric;
 import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.config.TransformationConfig;
 import com.ebay.tdq.expressions.Expression;
@@ -52,7 +52,7 @@ public class FlinkEnvFactory {
     env.registerTypeWithKryoSerializer(TdqEnv.class, JavaSerializer.class);
     env.registerTypeWithKryoSerializer(Expression.class, JavaSerializer.class);
     env.registerTypeWithKryoSerializer(PhysicalPlan.class, JavaSerializer.class);
-    env.registerTypeWithKryoSerializer(TdqMetric.class, JavaSerializer.class);
+    env.registerTypeWithKryoSerializer(InternalMetric.class, JavaSerializer.class);
     env.registerTypeWithKryoSerializer(TransformationConfig.class, JavaSerializer.class);
     env.registerTypeWithKryoSerializer(TdqConfig.class, JavaSerializer.class);
     env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);

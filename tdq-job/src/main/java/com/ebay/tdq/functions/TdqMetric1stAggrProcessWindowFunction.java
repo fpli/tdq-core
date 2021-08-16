@@ -1,6 +1,6 @@
 package com.ebay.tdq.functions;
 
-import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.InternalMetric;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +17,13 @@ import org.apache.flink.util.OutputTag;
  */
 @Slf4j
 public class TdqMetric1stAggrProcessWindowFunction
-    extends ProcessWindowFunction<TdqMetric, TdqMetric, String, TimeWindow> {
+    extends ProcessWindowFunction<InternalMetric, InternalMetric, String, TimeWindow> {
 
-  public final Map<Long, OutputTag<TdqMetric>> tagMap;
+  public final Map<Long, OutputTag<InternalMetric>> tagMap;
   private transient Map<String, Counter> counterMap;
   private transient MetricGroup group;
 
-  public TdqMetric1stAggrProcessWindowFunction(Map<Long, OutputTag<TdqMetric>> tagMap) {
+  public TdqMetric1stAggrProcessWindowFunction(Map<Long, OutputTag<InternalMetric>> tagMap) {
     this.tagMap = tagMap;
   }
 
@@ -45,12 +45,12 @@ public class TdqMetric1stAggrProcessWindowFunction
 
   @Override
   public void process(String tag, Context context,
-      Iterable<TdqMetric> iterable, Collector<TdqMetric> collector) {
+      Iterable<InternalMetric> iterable, Collector<InternalMetric> collector) {
     iterable.forEach(tdqMetric -> collect(tdqMetric, context));
   }
 
-  void collect(TdqMetric m, Context context) {
-    OutputTag<TdqMetric> outputTag = tagMap.get(m.getWindow());
+  void collect(InternalMetric m, Context context) {
+    OutputTag<InternalMetric> outputTag = tagMap.get(m.getWindow());
     if (outputTag != null) {
       context.output(outputTag, m);
     } else {

@@ -1,6 +1,6 @@
 package com.ebay.tdq.functions;
 
-import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.InternalMetric;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import org.apache.flink.util.Collector;
  */
 @Slf4j
 public class TdqMetric2ndAggrProcessWindowFunction
-    extends ProcessWindowFunction<TdqMetric, TdqMetric, String, TimeWindow> {
+    extends ProcessWindowFunction<InternalMetric, InternalMetric, String, TimeWindow> {
 
   private transient Map<String, Counter> counterMap;
   private transient MetricGroup group;
@@ -38,8 +38,8 @@ public class TdqMetric2ndAggrProcessWindowFunction
   }
 
   @Override
-  public void process(String s, Context context, Iterable<TdqMetric> elements,
-      Collector<TdqMetric> out) {
+  public void process(String s, Context context, Iterable<InternalMetric> elements,
+      Collector<InternalMetric> out) {
     elements.forEach(metric -> {
       metric.setEventTime(context.window().getEnd() - 1);
       out.collect(metric);

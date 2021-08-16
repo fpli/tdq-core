@@ -1,6 +1,6 @@
 package com.ebay.tdq.functions;
 
-import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.InternalMetric;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.flink.configuration.Configuration;
@@ -12,7 +12,7 @@ import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 /**
  * @author juntzhang
  */
-public class LatencyTdqMetricRichSinkFunction extends RichSinkFunction<TdqMetric> {
+public class LatencyTdqMetricRichSinkFunction extends RichSinkFunction<InternalMetric> {
 
   private transient MetricGroup group;
   private transient Map<String, Counter> counterMap;
@@ -34,7 +34,7 @@ public class LatencyTdqMetricRichSinkFunction extends RichSinkFunction<TdqMetric
   }
 
   @Override
-  public void invoke(TdqMetric metric, SinkFunction.Context context) {
+  public void invoke(InternalMetric metric, SinkFunction.Context context) {
     inc("tag_latency", 1);
   }
 }

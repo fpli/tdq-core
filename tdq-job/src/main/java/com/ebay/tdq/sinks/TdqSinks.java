@@ -5,7 +5,7 @@ import com.ebay.tdq.common.env.ProntoEnv;
 import com.ebay.tdq.common.env.SinkEnv;
 import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.common.model.TdqErrorMsg;
-import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.InternalMetric;
 import com.ebay.tdq.common.model.TdqMetricAvro;
 import com.ebay.tdq.common.model.TdqSampleData;
 import com.ebay.tdq.functions.ProntoSinkFunction;
@@ -49,21 +49,21 @@ public class TdqSinks implements Serializable {
 
   @Deprecated
   @VisibleForTesting
-  private static RichSinkFunction<TdqMetric> memoryFunction;
+  private static RichSinkFunction<InternalMetric> memoryFunction;
 
   @Deprecated
   @VisibleForTesting
-  public static RichSinkFunction<TdqMetric> getMemoryFunction() {
+  public static RichSinkFunction<InternalMetric> getMemoryFunction() {
     return memoryFunction;
   }
 
   @Deprecated
   @VisibleForTesting
-  public static void setMemoryFunction(RichSinkFunction<TdqMetric> memoryFunction) {
+  public static void setMemoryFunction(RichSinkFunction<InternalMetric> memoryFunction) {
     TdqSinks.memoryFunction = memoryFunction;
   }
 
-  public static void sinkNormalMetric(String id, TdqContext tdqCxt, DataStream<TdqMetric> ds) {
+  public static void sinkNormalMetric(String id, TdqContext tdqCxt, DataStream<InternalMetric> ds) {
     TdqEnv tdqEnv = tdqCxt.getTdqEnv();
     SinkEnv env = tdqEnv.getSinkEnv();
     if (env.isNormalMetricSinkStd()) {
@@ -92,7 +92,7 @@ public class TdqSinks implements Serializable {
     }
   }
 
-  public static void sinkLatencyMetric(TdqContext tdqCxt, SingleOutputStreamOperator<TdqMetric> ds) {
+  public static void sinkLatencyMetric(TdqContext tdqCxt, SingleOutputStreamOperator<InternalMetric> ds) {
     TdqEnv tdqEnv = tdqCxt.getTdqEnv();
     SinkEnv env = tdqEnv.getSinkEnv();
     if (env.isLatencyMetricSinkStd()) {
@@ -105,9 +105,9 @@ public class TdqSinks implements Serializable {
     if (env.isLatencyMetricSinkPronto()) {
       ds.getSideOutput(tdqCxt.getEventLatencyOutputTag())
           .addSink(buildPronto(tdqEnv.getProntoEnv(), 10,
-              new ElasticsearchSinkFunction<TdqMetric>() {
+              new ElasticsearchSinkFunction<InternalMetric>() {
                 @Override
-                public void process(TdqMetric tdqMetric, RuntimeContext runtimeContext,
+                public void process(InternalMetric tdqMetric, RuntimeContext runtimeContext,
                     RequestIndexer requestIndexer) {
                   long processTime = System.currentTimeMillis();
                   String index = env.getLatencyMetricProntoIndexPattern() + env.getIndexDateSuffix(processTime);
@@ -124,7 +124,7 @@ public class TdqSinks implements Serializable {
     }
   }
 
-  public static void sinkSampleLog(TdqContext tdqCxt, SingleOutputStreamOperator<TdqMetric> ds, String name) {
+  public static void sinkSampleLog(TdqContext tdqCxt, SingleOutputStreamOperator<InternalMetric> ds, String name) {
     TdqEnv tdqEnv = tdqCxt.getTdqEnv();
     SinkEnv env = tdqEnv.getSinkEnv();
     if (env.isSampleLogSinkPronto()) {
@@ -152,7 +152,7 @@ public class TdqSinks implements Serializable {
     }
   }
 
-  public static void sinkException(TdqContext tdqCxt, SingleOutputStreamOperator<TdqMetric> ds, String name) {
+  public static void sinkException(TdqContext tdqCxt, SingleOutputStreamOperator<InternalMetric> ds, String name) {
     TdqEnv tdqEnv = tdqCxt.getTdqEnv();
     SinkEnv env = tdqEnv.getSinkEnv();
     if (env.isExceptionLogSinkPronto()) {
@@ -212,10 +212,10 @@ public class TdqSinks implements Serializable {
     return builder.build();
   }
 
-  public static void sinkHDFS(String id, String path, TdqEnv tdqEnv, DataStream<TdqMetric> ds) {
+  public static void sinkHDFS(String id, String path, TdqEnv tdqEnv, DataStream<InternalMetric> ds) {
     StreamingFileSink<TdqMetricAvro> sink = HdfsConnectorFactory.createWithParquet(
         path, TdqMetricAvro.class, new TdqMetricDateTimeBucketAssigner(tdqEnv.getSinkEnv().getTimeZone().toZoneId()));
-    ds.map(TdqMetric::toTdqAvroMetric)
+    ds.map(InternalMetric::toTdqMetric)
         .uid(id + "_avro")
         .name(id + "_avro")
         .setParallelism(1)

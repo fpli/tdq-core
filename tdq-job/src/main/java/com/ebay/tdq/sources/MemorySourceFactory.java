@@ -1,7 +1,7 @@
 package com.ebay.tdq.sources;
 
 import com.ebay.tdq.common.model.TdqEvent;
-import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.InternalMetric;
 import com.ebay.tdq.config.MemorySourceConfig;
 import com.ebay.tdq.config.SourceConfig;
 import com.ebay.tdq.functions.RawEventProcessFunction;
@@ -31,7 +31,7 @@ public class MemorySourceFactory {
     MemorySourceFactory.sourceFunction = sourceFunction;
   }
 
-  public static DataStream<TdqMetric> build(SourceConfig sourceConfig, TdqContext tdqCxt) {
+  public static DataStream<InternalMetric> build(SourceConfig sourceConfig, TdqContext tdqCxt) {
     MemorySourceConfig msc = MemorySourceConfig.build(sourceConfig);
     if (sourceFunction == null) {
       sourceFunction = new SourceFunction<TdqEvent>() {

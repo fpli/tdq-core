@@ -1,7 +1,7 @@
 package com.ebay.tdq.sources;
 
 import com.ebay.tdq.common.model.TdqEvent;
-import com.ebay.tdq.common.model.TdqMetric;
+import com.ebay.tdq.common.model.InternalMetric;
 import com.ebay.tdq.config.KafkaSourceConfig;
 import com.ebay.tdq.config.SourceConfig;
 import com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema;
@@ -20,7 +20,7 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 @Slf4j
 public class RhsKafkaSourceFactory {
 
-  public static DataStream<TdqMetric> build(SourceConfig sourceConfig, TdqContext tdqCxt) {
+  public static DataStream<InternalMetric> build(SourceConfig sourceConfig, TdqContext tdqCxt) {
     KafkaSourceConfig ksc = KafkaSourceConfig.build(sourceConfig, tdqCxt.getTdqEnv());
 
     tdqCxt.getTdqEnv().setFromTimestamp(ksc.getFromTimestamp());
