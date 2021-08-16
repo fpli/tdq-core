@@ -1,6 +1,6 @@
 package com.ebay.tdq.sources;
 
-import com.ebay.tdq.common.model.TdqMetricAvro;
+import com.ebay.tdq.common.model.TdqMetric;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -9,7 +9,7 @@ import org.apache.flink.streaming.api.functions.sink.filesystem.BucketAssigner;
 import org.apache.flink.streaming.api.functions.sink.filesystem.bucketassigners.SimpleVersionedStringSerializer;
 import org.apache.flink.util.Preconditions;
 
-public class TdqMetricDateTimeBucketAssigner implements BucketAssigner<TdqMetricAvro, String> {
+public class TdqMetricDateTimeBucketAssigner implements BucketAssigner<TdqMetric, String> {
 
   private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class TdqMetricDateTimeBucketAssigner implements BucketAssigner<TdqMetric
   }
 
   @Override
-  public String getBucketId(TdqMetricAvro metric, Context context) {
+  public String getBucketId(TdqMetric metric, Context context) {
     String defaultTsStr;
     if (dateTimeFormatter == null) {
       dateTimeFormatter = DateTimeFormatter.ofPattern(formatString).withZone(zoneId);

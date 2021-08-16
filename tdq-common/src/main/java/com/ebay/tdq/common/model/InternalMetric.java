@@ -1,6 +1,6 @@
 package com.ebay.tdq.common.model;
 
-import com.ebay.tdq.common.model.TdqMetricAvro.Builder;
+import com.ebay.tdq.common.model.TdqMetric.Builder;
 import com.ebay.tdq.utils.DateUtils;
 import java.io.Serializable;
 import java.util.Date;
@@ -113,15 +113,14 @@ public class InternalMetric implements Serializable {
     return json;
   }
 
-  public TdqMetricAvro toTdqMetric() {
-    final Builder builder = TdqMetricAvro.newBuilder();
-    //m.setRheosHeader(RheosHeader.newBuilder()
-    //    .setEventCreateTimestamp(System.currentTimeMillis())
-    //    .setEventSentTimestamp(System.currentTimeMillis())
-    //    .setSchemaId(100)
-    //    .setEventId("101")
-    //    .setProducerId("102")
-    //    .build());
+  public TdqMetric toTdqMetric(String producerId, int schemaId) {
+    final Builder builder = TdqMetric.newBuilder();
+    builder.setRheosHeader(RheosHeader.newBuilder()
+        .setEventCreateTimestamp(System.currentTimeMillis())
+        .setEventSentTimestamp(System.currentTimeMillis())
+        .setSchemaId(schemaId)
+        .setProducerId(producerId)
+        .build());
 
     return builder
         .setTags(getNonTags())

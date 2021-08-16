@@ -4,9 +4,9 @@ package com.ebay.tdq.sinks;
 import com.ebay.tdq.common.env.ProntoEnv;
 import com.ebay.tdq.common.env.SinkEnv;
 import com.ebay.tdq.common.env.TdqEnv;
-import com.ebay.tdq.common.model.TdqErrorMsg;
 import com.ebay.tdq.common.model.InternalMetric;
-import com.ebay.tdq.common.model.TdqMetricAvro;
+import com.ebay.tdq.common.model.TdqErrorMsg;
+import com.ebay.tdq.common.model.TdqMetric;
 import com.ebay.tdq.common.model.TdqSampleData;
 import com.ebay.tdq.functions.ProntoSinkFunction;
 import com.ebay.tdq.sources.HdfsConnectorFactory;
@@ -213,9 +213,9 @@ public class TdqSinks implements Serializable {
   }
 
   public static void sinkHDFS(String id, String path, TdqEnv tdqEnv, DataStream<InternalMetric> ds) {
-    StreamingFileSink<TdqMetricAvro> sink = HdfsConnectorFactory.createWithParquet(
-        path, TdqMetricAvro.class, new TdqMetricDateTimeBucketAssigner(tdqEnv.getSinkEnv().getTimeZone().toZoneId()));
-    ds.map(InternalMetric::toTdqMetric)
+    StreamingFileSink<TdqMetric> sink = HdfsConnectorFactory.createWithParquet(
+        path, TdqMetric.class, new TdqMetricDateTimeBucketAssigner(tdqEnv.getSinkEnv().getTimeZone().toZoneId()));
+    ds.map(m -> m.toTdqMetric(tdqEnv.getJobName(), 6901)) // todo update schemaId
         .uid(id + "_avro")
         .name(id + "_avro")
         .setParallelism(1)
@@ -230,7 +230,6 @@ public class TdqSinks implements Serializable {
 
   @Slf4j
   private static class ProntoActionRequestFailureHandler implements ActionRequestFailureHandler {
-
     private static final long serialVersionUID = 942269087742453482L;
 
     @Override
