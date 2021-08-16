@@ -1,6 +1,6 @@
 package com.ebay.tdq.sources;
 
-import com.ebay.tdq.common.model.RawEventAvro;
+import com.ebay.tdq.common.model.RawEvent;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -9,7 +9,7 @@ import org.apache.flink.streaming.api.functions.sink.filesystem.BucketAssigner;
 import org.apache.flink.streaming.api.functions.sink.filesystem.bucketassigners.SimpleVersionedStringSerializer;
 import org.apache.flink.util.Preconditions;
 
-public class RawEventDateTimeBucketAssigner implements BucketAssigner<RawEventAvro, String> {
+public class RawEventDateTimeBucketAssigner implements BucketAssigner<RawEvent, String> {
 
   private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class RawEventDateTimeBucketAssigner implements BucketAssigner<RawEventAv
   }
 
   @Override
-  public String getBucketId(RawEventAvro element, Context context) {
+  public String getBucketId(RawEvent element, Context context) {
     String defaultTsStr;
     if (dateTimeFormatter == null) {
       dateTimeFormatter = DateTimeFormatter.ofPattern(formatString).withZone(zoneId);

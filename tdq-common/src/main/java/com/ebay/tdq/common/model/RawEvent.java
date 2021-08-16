@@ -12,23 +12,23 @@ import org.apache.avro.message.SchemaStore;
 
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
-public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
+public class RawEvent extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = -7316864449694185121L;
   public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"RawEventAvro\",\"namespace\":\"com.ebay.tdq.common.model\",\"fields\":[{\"name\":\"ingestTime\",\"type\":\"long\"},{\"name\":\"sojTimestamp\",\"type\":\"long\"},{\"name\":\"eventTimestamp\",\"type\":\"long\"},{\"name\":\"processTimestamp\",\"type\":\"long\"},{\"name\":\"sojA\",\"type\":[\"null\",{\"type\":\"map\",\"values\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"avro.java.string\":\"String\"}]},{\"name\":\"sojK\",\"type\":[\"null\",{\"type\":\"map\",\"values\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"avro.java.string\":\"String\"}]},{\"name\":\"sojC\",\"type\":[\"null\",{\"type\":\"map\",\"values\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"avro.java.string\":\"String\"}]},{\"name\":\"clientData\",\"type\":[\"null\",{\"type\":\"map\",\"values\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"avro.java.string\":\"String\"}]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
 
-  private static final BinaryMessageEncoder<RawEventAvro> ENCODER =
-      new BinaryMessageEncoder<RawEventAvro>(MODEL$, SCHEMA$);
+  private static final BinaryMessageEncoder<RawEvent> ENCODER =
+      new BinaryMessageEncoder<RawEvent>(MODEL$, SCHEMA$);
 
-  private static final BinaryMessageDecoder<RawEventAvro> DECODER =
-      new BinaryMessageDecoder<RawEventAvro>(MODEL$, SCHEMA$);
+  private static final BinaryMessageDecoder<RawEvent> DECODER =
+      new BinaryMessageDecoder<RawEvent>(MODEL$, SCHEMA$);
 
   /**
    * Return the BinaryMessageDecoder instance used by this class.
    */
-  public static BinaryMessageDecoder<RawEventAvro> getDecoder() {
+  public static BinaryMessageDecoder<RawEvent> getDecoder() {
     return DECODER;
   }
 
@@ -36,8 +36,8 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
    * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link SchemaStore}.
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
    */
-  public static BinaryMessageDecoder<RawEventAvro> createDecoder(SchemaStore resolver) {
-    return new BinaryMessageDecoder<RawEventAvro>(MODEL$, SCHEMA$, resolver);
+  public static BinaryMessageDecoder<RawEvent> createDecoder(SchemaStore resolver) {
+    return new BinaryMessageDecoder<RawEvent>(MODEL$, SCHEMA$, resolver);
   }
 
   /** Serializes this RawEventAvro to a ByteBuffer. */
@@ -46,7 +46,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
   }
 
   /** Deserializes a RawEventAvro from a ByteBuffer. */
-  public static RawEventAvro fromByteBuffer(
+  public static RawEvent fromByteBuffer(
       java.nio.ByteBuffer b) throws java.io.IOException {
     return DECODER.decode(b);
   }
@@ -65,7 +65,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
    * to their default values from the schema.  If that is desired then
    * one should use <code>newBuilder()</code>.
    */
-  public RawEventAvro() {}
+  public RawEvent() {}
 
   /**
    * All-args constructor.
@@ -78,7 +78,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
    * @param sojC The new value for sojC
    * @param clientData The new value for clientData
    */
-  public RawEventAvro(java.lang.Long ingestTime, java.lang.Long sojTimestamp, java.lang.Long eventTimestamp, java.lang.Long processTimestamp, java.util.Map<java.lang.String,java.lang.String> sojA, java.util.Map<java.lang.String,java.lang.String> sojK, java.util.Map<java.lang.String,java.lang.String> sojC, java.util.Map<java.lang.String,java.lang.String> clientData) {
+  public RawEvent(java.lang.Long ingestTime, java.lang.Long sojTimestamp, java.lang.Long eventTimestamp, java.lang.Long processTimestamp, java.util.Map<java.lang.String,java.lang.String> sojA, java.util.Map<java.lang.String,java.lang.String> sojK, java.util.Map<java.lang.String,java.lang.String> sojC, java.util.Map<java.lang.String,java.lang.String> clientData) {
     this.ingestTime = ingestTime;
     this.sojTimestamp = sojTimestamp;
     this.eventTimestamp = eventTimestamp;
@@ -253,8 +253,8 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
    * Creates a new RawEventAvro RecordBuilder.
    * @return A new RawEventAvro RecordBuilder
    */
-  public static com.ebay.tdq.common.model.RawEventAvro.Builder newBuilder() {
-    return new com.ebay.tdq.common.model.RawEventAvro.Builder();
+  public static RawEvent.Builder newBuilder() {
+    return new RawEvent.Builder();
   }
 
   /**
@@ -262,8 +262,8 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
    * @param other The existing builder to copy.
    * @return A new RawEventAvro RecordBuilder
    */
-  public static com.ebay.tdq.common.model.RawEventAvro.Builder newBuilder(com.ebay.tdq.common.model.RawEventAvro.Builder other) {
-    return new com.ebay.tdq.common.model.RawEventAvro.Builder(other);
+  public static RawEvent.Builder newBuilder(RawEvent.Builder other) {
+    return new RawEvent.Builder(other);
   }
 
   /**
@@ -271,15 +271,15 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
    * @param other The existing instance to copy.
    * @return A new RawEventAvro RecordBuilder
    */
-  public static com.ebay.tdq.common.model.RawEventAvro.Builder newBuilder(com.ebay.tdq.common.model.RawEventAvro other) {
-    return new com.ebay.tdq.common.model.RawEventAvro.Builder(other);
+  public static RawEvent.Builder newBuilder(RawEvent other) {
+    return new RawEvent.Builder(other);
   }
 
   /**
    * RecordBuilder for RawEventAvro instances.
    */
-  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<RawEventAvro>
-    implements org.apache.avro.data.RecordBuilder<RawEventAvro> {
+  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<RawEvent>
+    implements org.apache.avro.data.RecordBuilder<RawEvent> {
 
     private long ingestTime;
     private long sojTimestamp;
@@ -299,7 +299,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(com.ebay.tdq.common.model.RawEventAvro.Builder other) {
+    private Builder(RawEvent.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.ingestTime)) {
         this.ingestTime = data().deepCopy(fields()[0].schema(), other.ingestTime);
@@ -339,7 +339,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
      * Creates a Builder by copying an existing RawEventAvro instance
      * @param other The existing instance to copy.
      */
-    private Builder(com.ebay.tdq.common.model.RawEventAvro other) {
+    private Builder(RawEvent other) {
             super(SCHEMA$);
       if (isValidValue(fields()[0], other.ingestTime)) {
         this.ingestTime = data().deepCopy(fields()[0].schema(), other.ingestTime);
@@ -388,7 +388,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'ingestTime'.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.RawEventAvro.Builder setIngestTime(long value) {
+    public RawEvent.Builder setIngestTime(long value) {
       validate(fields()[0], value);
       this.ingestTime = value;
       fieldSetFlags()[0] = true;
@@ -408,7 +408,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
       * Clears the value of the 'ingestTime' field.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.RawEventAvro.Builder clearIngestTime() {
+    public RawEvent.Builder clearIngestTime() {
       fieldSetFlags()[0] = false;
       return this;
     }
@@ -426,7 +426,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'sojTimestamp'.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.RawEventAvro.Builder setSojTimestamp(long value) {
+    public RawEvent.Builder setSojTimestamp(long value) {
       validate(fields()[1], value);
       this.sojTimestamp = value;
       fieldSetFlags()[1] = true;
@@ -446,7 +446,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
       * Clears the value of the 'sojTimestamp' field.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.RawEventAvro.Builder clearSojTimestamp() {
+    public RawEvent.Builder clearSojTimestamp() {
       fieldSetFlags()[1] = false;
       return this;
     }
@@ -464,7 +464,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'eventTimestamp'.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.RawEventAvro.Builder setEventTimestamp(long value) {
+    public RawEvent.Builder setEventTimestamp(long value) {
       validate(fields()[2], value);
       this.eventTimestamp = value;
       fieldSetFlags()[2] = true;
@@ -484,7 +484,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
       * Clears the value of the 'eventTimestamp' field.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.RawEventAvro.Builder clearEventTimestamp() {
+    public RawEvent.Builder clearEventTimestamp() {
       fieldSetFlags()[2] = false;
       return this;
     }
@@ -502,7 +502,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'processTimestamp'.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.RawEventAvro.Builder setProcessTimestamp(long value) {
+    public RawEvent.Builder setProcessTimestamp(long value) {
       validate(fields()[3], value);
       this.processTimestamp = value;
       fieldSetFlags()[3] = true;
@@ -522,7 +522,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
       * Clears the value of the 'processTimestamp' field.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.RawEventAvro.Builder clearProcessTimestamp() {
+    public RawEvent.Builder clearProcessTimestamp() {
       fieldSetFlags()[3] = false;
       return this;
     }
@@ -540,7 +540,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'sojA'.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.RawEventAvro.Builder setSojA(java.util.Map<java.lang.String,java.lang.String> value) {
+    public RawEvent.Builder setSojA(java.util.Map<java.lang.String,java.lang.String> value) {
       validate(fields()[4], value);
       this.sojA = value;
       fieldSetFlags()[4] = true;
@@ -560,7 +560,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
       * Clears the value of the 'sojA' field.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.RawEventAvro.Builder clearSojA() {
+    public RawEvent.Builder clearSojA() {
       sojA = null;
       fieldSetFlags()[4] = false;
       return this;
@@ -579,7 +579,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'sojK'.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.RawEventAvro.Builder setSojK(java.util.Map<java.lang.String,java.lang.String> value) {
+    public RawEvent.Builder setSojK(java.util.Map<java.lang.String,java.lang.String> value) {
       validate(fields()[5], value);
       this.sojK = value;
       fieldSetFlags()[5] = true;
@@ -599,7 +599,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
       * Clears the value of the 'sojK' field.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.RawEventAvro.Builder clearSojK() {
+    public RawEvent.Builder clearSojK() {
       sojK = null;
       fieldSetFlags()[5] = false;
       return this;
@@ -618,7 +618,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'sojC'.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.RawEventAvro.Builder setSojC(java.util.Map<java.lang.String,java.lang.String> value) {
+    public RawEvent.Builder setSojC(java.util.Map<java.lang.String,java.lang.String> value) {
       validate(fields()[6], value);
       this.sojC = value;
       fieldSetFlags()[6] = true;
@@ -638,7 +638,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
       * Clears the value of the 'sojC' field.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.RawEventAvro.Builder clearSojC() {
+    public RawEvent.Builder clearSojC() {
       sojC = null;
       fieldSetFlags()[6] = false;
       return this;
@@ -657,7 +657,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'clientData'.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.RawEventAvro.Builder setClientData(java.util.Map<java.lang.String,java.lang.String> value) {
+    public RawEvent.Builder setClientData(java.util.Map<java.lang.String,java.lang.String> value) {
       validate(fields()[7], value);
       this.clientData = value;
       fieldSetFlags()[7] = true;
@@ -677,7 +677,7 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
       * Clears the value of the 'clientData' field.
       * @return This builder.
       */
-    public com.ebay.tdq.common.model.RawEventAvro.Builder clearClientData() {
+    public RawEvent.Builder clearClientData() {
       clientData = null;
       fieldSetFlags()[7] = false;
       return this;
@@ -685,9 +685,9 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
 
     @Override
     @SuppressWarnings("unchecked")
-    public RawEventAvro build() {
+    public RawEvent build() {
       try {
-        RawEventAvro record = new RawEventAvro();
+        RawEvent record = new RawEvent();
         record.ingestTime = fieldSetFlags()[0] ? this.ingestTime : (java.lang.Long) defaultValue(fields()[0]);
         record.sojTimestamp = fieldSetFlags()[1] ? this.sojTimestamp : (java.lang.Long) defaultValue(fields()[1]);
         record.eventTimestamp = fieldSetFlags()[2] ? this.eventTimestamp : (java.lang.Long) defaultValue(fields()[2]);
@@ -704,8 +704,8 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumWriter<RawEventAvro>
-    WRITER$ = (org.apache.avro.io.DatumWriter<RawEventAvro>)MODEL$.createDatumWriter(SCHEMA$);
+  private static final org.apache.avro.io.DatumWriter<RawEvent>
+    WRITER$ = (org.apache.avro.io.DatumWriter<RawEvent>)MODEL$.createDatumWriter(SCHEMA$);
 
   @Override public void writeExternal(java.io.ObjectOutput out)
     throws java.io.IOException {
@@ -713,8 +713,8 @@ public class RawEventAvro extends org.apache.avro.specific.SpecificRecordBase im
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumReader<RawEventAvro>
-    READER$ = (org.apache.avro.io.DatumReader<RawEventAvro>)MODEL$.createDatumReader(SCHEMA$);
+  private static final org.apache.avro.io.DatumReader<RawEvent>
+    READER$ = (org.apache.avro.io.DatumReader<RawEvent>)MODEL$.createDatumReader(SCHEMA$);
 
   @Override public void readExternal(java.io.ObjectInput in)
     throws java.io.IOException {

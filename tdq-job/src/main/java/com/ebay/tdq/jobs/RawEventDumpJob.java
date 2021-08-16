@@ -1,7 +1,7 @@
 package com.ebay.tdq.jobs;
 
 import com.ebay.tdq.common.env.TdqEnv;
-import com.ebay.tdq.common.model.RawEventAvro;
+import com.ebay.tdq.common.model.RawEvent;
 import com.ebay.tdq.common.model.TdqEvent;
 import com.ebay.tdq.config.KafkaSourceConfig;
 import com.ebay.tdq.config.SourceConfig;
@@ -69,12 +69,12 @@ public class RawEventDumpJob {
         .name(ksc.getName())
         .uid(ksc.getName());
 
-    StreamingFileSink<RawEventAvro> sink = HdfsConnectorFactory.createWithParquet(
+    StreamingFileSink<RawEvent> sink = HdfsConnectorFactory.createWithParquet(
         tdqEnv.getSinkEnv().getRawDataPath() + "/" + tdqEnv.getJobName() + "/source=" + ksc.getName(),
-        RawEventAvro.class, new RawEventDateTimeBucketAssigner(tdqEnv.getSinkEnv().getTimeZone().toZoneId()));
+        RawEvent.class, new RawEventDateTimeBucketAssigner(tdqEnv.getSinkEnv().getTimeZone().toZoneId()));
 
     rawEventDataStream
-        .map(raw -> RawEventAvro.newBuilder()
+        .map(raw -> RawEvent.newBuilder()
             .setSojA((Map) raw.get("sojA"))
             .setSojC((Map) raw.get("sojC"))
             .setSojK((Map) raw.get("sojK"))
