@@ -43,9 +43,7 @@ public class KafkaSourceConfig implements Serializable {
     KafkaSourceConfig ksc = new KafkaSourceConfig();
     ksc.setName(config.getName());
     Map<String, Object> props = config.getConfig();
-    if (MapUtils.isEmpty(props)) {
-      throw new IllegalArgumentException("realtime.kafka config is empty!");
-    }
+    Validate.isTrue(MapUtils.isNotEmpty(props), "realtime.kafka source config is empty!");
     ksc.setRheosServicesUrls((String) props.getOrDefault("rheos-services-urls", ""));
     ksc.setEventTimeField((String) props.getOrDefault("event-time-field", ""));
     ksc.setSchemaSubject((String) props.getOrDefault("schema-subject", ""));

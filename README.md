@@ -24,9 +24,62 @@ Tracking Data Quality
 },
 ```
 
-## Regenerate Metric
 
---tdq-profile tdq-backfill --flink.app.profile pre-prod --kafka.consumer.group-id tdq-v2-1626667200000 --flink.app.source.from-timestamp 1626667200000 --flink.app.source.end-timestamp 1626667800000
+#### sink config
+* normal-metric
+```
+{
+  "name": "pronto_sojevent_tdq_normal_metric",
+  "type": "realtime.pronto",
+  "config": {
+    "tdq-type": "normal-metric",
+    "index-pattern": "tdq.${flink.app.profile}.metric.normal."
+  }
+},
+{
+  "name": "hdfs_sojevent_tdq_normal_metric",
+  "type": "realtime.hdfs",
+  "config": {
+    "tdq-type": "normal-metric",
+    "hdfs-path": "hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/metric/normal"
+  }
+},
+{
+  "name": "console_sojevent_tdq_normal_metric",
+  "type": "realtime.console",
+  "config": {
+    "tdq-type": "normal-metric",
+    "std-name": "normal"
+  }
+},
+```
+
+#### dump pathfinder
+```
+{
+  "name": "hdfs_pathfinder_dump",
+  "type": "realtime.hdfs",
+  "config": {
+    "tdq-type": "dump-pathfinder",
+    "hdfs-path": "hdfs://apollo-rno/user/b_bis/tdq/raw-data"
+  }
+}
+```
+#### dump sojevent
+```
+{
+  "name": "hdfs_sojevent_dump",
+  "type": "realtime.hdfs",
+  "config": {
+    "tdq-type": "dump-sojevent",
+    "hdfs-path": "hdfs://apollo-rno/user/b_bis/tdq/raw-data"
+  }
+}
+```
+
+## profile config
+--tdq-profile test|pre-prod|prod
+--flink.app.profile test|pre-prod|prod
 
 ## Features
 * A common library for core business and bot logic
@@ -45,24 +98,7 @@ Requirements:
 Build from source:
 
 ```
-git clone git@github.corp.ebay.com:sojourner/sojourner.git
-cd sojourner
-mvn clean package -DskipTests
-```
-
-
-You can run or debug applications in IDE. E.g. to run real time pipeline, you run
-`com.ebay.sojourner.rt.pipeline.SojournerRTJob`
-
-## Run on a Local Flink Cluster
-Start a local Flink cluster:
-
-```
-<FLINK_HOME>/bin/start-cluster.sh
-```
-
-Run `sojourner-rt-pipeline`:
-
-```
-<FLINK_HOME>/bin/flink run -c com.ebay.sojourner.rt.pipeline.SojournerRTJobForQA <sojourner>/rt-pipeline/target/sojourner-rt-pipeline-0.1-SNAPSHOT.jar
+git clone git@github.corp.ebay.com:juntzhang/tdq-core.git
+cd tdq-parent
+mvn clean package
 ```

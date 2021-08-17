@@ -30,7 +30,7 @@ import org.junit.Test;
 @Slf4j
 public class ProfilerServiceQueryProfilersTest {
 
-  TimeZone zone = ServiceFactory.getTdqEnv().getSinkEnv().getTimeZone();
+  TimeZone zone = ServiceFactory.getTdqEnv().getTimeZone();
 
   public HashMap<String, Object> getMap(
       String metric_key,
@@ -58,7 +58,7 @@ public class ProfilerServiceQueryProfilersTest {
   }
 
   public void createData(Client client) throws Exception {
-    val pattern = ServiceFactory.getTdqEnv().getSinkEnv().getNormalMetricProntoIndexPattern();
+    val pattern = ServiceFactory.getIndexPattern();
     val index = pattern + "2021-05-29";
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics");
     request.patterns(Lists.newArrayList(pattern + "*"));
@@ -138,8 +138,8 @@ public class ProfilerServiceQueryProfilersTest {
     createData(elasticsearchResource.getClient());
     QueryDropdownParam dropdownParam = new QueryDropdownParam(
         RuleEngineServiceTest.get("global_mandatory_tag_item_rate3"),
-        DateUtils.parseDateTime("2021-05-29 12:02:00", ServiceFactory.getTdqEnv().getSinkEnv().getTimeZone()),
-        DateUtils.parseDateTime("2021-05-29 12:04:00", ServiceFactory.getTdqEnv().getSinkEnv().getTimeZone())
+        DateUtils.parseDateTime("2021-05-29 12:02:00", ServiceFactory.getTdqEnv().getTimeZone()),
+        DateUtils.parseDateTime("2021-05-29 12:04:00", ServiceFactory.getTdqEnv().getTimeZone())
     );
     QueryDropdownResult dropdown = ServiceFactory.getProfiler().dropdown(dropdownParam);
     System.out.println(dropdown);

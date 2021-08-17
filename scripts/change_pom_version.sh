@@ -6,7 +6,8 @@ if [ "$#" -ne 1 ]; then
   exit 1
 fi
 
-NEW_VERSION=$1
+NEW_VERSION="$1-SNAPSHOT"
+#NEW_VERSION="$1-RELEASE"
 
 echo "Using maven version: $(mvn -v)"
 

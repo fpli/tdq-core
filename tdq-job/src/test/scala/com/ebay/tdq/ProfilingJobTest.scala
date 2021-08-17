@@ -49,6 +49,33 @@ class SingleRuleSqlJobTest {
            |        }
            |      ]
            |    }
+           |  ],
+           |  "sinks": [
+           |    {
+           |      "name": "hdfs_sojevent_tdq_normal_metric",
+           |      "type": "realtime.hdfs",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "rheos-services-urls": "https://rheos-services.qa.ebay.com",
+           |        "schema-subject": "tdq.metric",
+           |        "hdfs-path": "target/$${flink.app.profile}/metric/normal"
+           |      }
+           |    },
+           |    {
+           |      "name": "console_sojevent_tdq_normal_metric",
+           |      "type": "realtime.console",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "std-name": "nor@mal"
+           |      }
+           |    },
+           |    {
+           |      "name": "console_sojevent_tdq_normal_metric",
+           |      "type": "realtime.memory",
+           |      "config": {
+           |        "sub-type": "normal-metric"
+           |      }
+           |    }
            |  ]
            |}
            |""".stripMargin,
@@ -123,6 +150,33 @@ class SingleRuleSqlJobTest {
            |        }
            |      ]
            |    }
+           |  ],
+           |  "sinks": [
+           |    {
+           |      "name": "hdfs_sojevent_tdq_normal_metric",
+           |      "type": "realtime.hdfs",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "rheos-services-urls": "https://rheos-services.qa.ebay.com",
+           |        "schema-subject": "tdq.metric",
+           |        "hdfs-path": "target/$${flink.app.profile}/metric/normal"
+           |      }
+           |    },
+           |    {
+           |      "name": "console_sojevent_tdq_normal_metric",
+           |      "type": "realtime.console",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "std-name": "nor@mal"
+           |      }
+           |    },
+           |    {
+           |      "name": "console_sojevent_tdq_normal_metric",
+           |      "type": "realtime.memory",
+           |      "config": {
+           |        "sub-type": "normal-metric"
+           |      }
+           |    }
            |  ]
            |}
            |""".stripMargin,
@@ -181,6 +235,33 @@ class SingleRuleSqlJobTest {
            |          ]
            |        }
            |      ]
+           |    }
+           |  ],
+           |  "sinks": [
+           |    {
+           |      "name": "hdfs_sojevent_tdq_normal_metric",
+           |      "type": "realtime.hdfs",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "rheos-services-urls": "https://rheos-services.qa.ebay.com",
+           |        "schema-subject": "tdq.metric",
+           |        "hdfs-path": "target/$${flink.app.profile}/metric/normal"
+           |      }
+           |    },
+           |    {
+           |      "name": "console_sojevent_tdq_normal_metric",
+           |      "type": "realtime.console",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "std-name": "nor@mal"
+           |      }
+           |    },
+           |    {
+           |      "name": "console_sojevent_tdq_normal_metric",
+           |      "type": "realtime.memory",
+           |      "config": {
+           |        "sub-type": "normal-metric"
+           |      }
            |    }
            |  ]
            |}
@@ -241,6 +322,33 @@ class SingleRuleSqlJobTest {
            |          ]
            |        }
            |      ]
+           |    }
+           |  ],
+           |  "sinks": [
+           |    {
+           |      "name": "hdfs_sojevent_tdq_normal_metric",
+           |      "type": "realtime.hdfs",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "rheos-services-urls": "https://rheos-services.qa.ebay.com",
+           |        "schema-subject": "tdq.metric",
+           |        "hdfs-path": "target/$${flink.app.profile}/metric/normal"
+           |      }
+           |    },
+           |    {
+           |      "name": "console_sojevent_tdq_normal_metric",
+           |      "type": "realtime.console",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "std-name": "nor@mal"
+           |      }
+           |    },
+           |    {
+           |      "name": "console_sojevent_tdq_normal_metric",
+           |      "type": "realtime.memory",
+           |      "config": {
+           |        "sub-type": "normal-metric"
+           |      }
            |    }
            |  ]
            |}
@@ -306,6 +414,33 @@ class SingleRuleSqlJobTest {
            |          ]
            |        }
            |      ]
+           |    }
+           |  ],
+           |  "sinks": [
+           |    {
+           |      "name": "hdfs_sojevent_tdq_normal_metric",
+           |      "type": "realtime.hdfs",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "rheos-services-urls": "https://rheos-services.qa.ebay.com",
+           |        "schema-subject": "tdq.metric",
+           |        "hdfs-path": "target/$${flink.app.profile}/metric/normal"
+           |      }
+           |    },
+           |    {
+           |      "name": "console_sojevent_tdq_normal_metric",
+           |      "type": "realtime.console",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "std-name": "nor@mal"
+           |      }
+           |    },
+           |    {
+           |      "name": "console_sojevent_tdq_normal_metric",
+           |      "type": "realtime.memory",
+           |      "config": {
+           |        "sub-type": "normal-metric"
+           |      }
            |    }
            |  ]
            |}
@@ -373,6 +508,33 @@ class SingleRuleSqlJobTest {
            |        }
            |      ]
            |    }
+           |  ],
+           |  "sinks": [
+           |    {
+           |      "name": "hdfs_sojevent_tdq_normal_metric",
+           |      "type": "realtime.hdfs",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "rheos-services-urls": "https://rheos-services.qa.ebay.com",
+           |        "schema-subject": "tdq.metric",
+           |        "hdfs-path": "target/$${flink.app.profile}/metric/normal"
+           |      }
+           |    },
+           |    {
+           |      "name": "console_sojevent_tdq_normal_metric",
+           |      "type": "realtime.console",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "std-name": "nor@mal"
+           |      }
+           |    },
+           |    {
+           |      "name": "console_sojevent_tdq_normal_metric",
+           |      "type": "realtime.memory",
+           |      "config": {
+           |        "sub-type": "normal-metric"
+           |      }
+           |    }
            |  ]
            |}
            |""".stripMargin,
@@ -423,6 +585,33 @@ class SingleRuleSqlJobTest {
            |          ]
            |        }
            |      ]
+           |    }
+           |  ],
+           |  "sinks": [
+           |    {
+           |      "name": "hdfs_sojevent_tdq_normal_metric",
+           |      "type": "realtime.hdfs",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "rheos-services-urls": "https://rheos-services.qa.ebay.com",
+           |        "schema-subject": "tdq.metric",
+           |        "hdfs-path": "target/$${flink.app.profile}/metric/normal"
+           |      }
+           |    },
+           |    {
+           |      "name": "console_sojevent_tdq_normal_metric",
+           |      "type": "realtime.console",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "std-name": "nor@mal"
+           |      }
+           |    },
+           |    {
+           |      "name": "console_sojevent_tdq_normal_metric",
+           |      "type": "realtime.memory",
+           |      "config": {
+           |        "sub-type": "normal-metric"
+           |      }
            |    }
            |  ]
            |}

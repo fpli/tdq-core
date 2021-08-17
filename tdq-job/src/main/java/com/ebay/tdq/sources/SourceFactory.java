@@ -2,7 +2,6 @@ package com.ebay.tdq.sources;
 
 import com.ebay.tdq.common.model.InternalMetric;
 import com.ebay.tdq.config.SourceConfig;
-import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.sinks.SinkFactory;
 import com.ebay.tdq.utils.TdqContext;
 import java.time.Duration;
@@ -20,9 +19,9 @@ import org.apache.flink.streaming.runtime.operators.TdqTimestampsAndWatermarksOp
  */
 public class SourceFactory {
 
-  public static DataStream<InternalMetric> build(TdqConfig tdqConfig, TdqContext tdqCxt) {
+  public static DataStream<InternalMetric> build(TdqContext tdqCxt) {
     List<DataStream<InternalMetric>> list = new ArrayList<>();
-    for (SourceConfig sourceConfig : tdqConfig.getSources()) {
+    for (SourceConfig sourceConfig : tdqCxt.getTdqEnv().getTdqConfig().getSources()) {
       if (sourceConfig.getType().equals("realtime.kafka")) {
         list.add(RhsKafkaSourceFactory.build(sourceConfig, tdqCxt));
       } else if (sourceConfig.getType().equals("realtime.memory")) {
@@ -46,8 +45,8 @@ public class SourceFactory {
         .slotSharingGroup(name)
         .setParallelism(parallelism);
 
-    SinkFactory.sinkException(tdqCxt, outDS, name);
-    SinkFactory.sinkSampleLog(tdqCxt, outDS, name);
+    SinkFactory.sinkException(name, tdqCxt, outDS);
+    SinkFactory.sinkSampleLog(name, tdqCxt, outDS);
 
     SerializableTimestampAssigner<InternalMetric> assigner =
         (SerializableTimestampAssigner<InternalMetric>) (event, timestamp) -> event.getEventTime();

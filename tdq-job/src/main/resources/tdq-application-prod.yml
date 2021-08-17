@@ -1,0 +1,10 @@
+flink:
+  app:
+    profile: prod
+
+mysql:
+  jdbc:
+    url: jdbc:mysql://mysqlidodb.db.stratus.ebay.com:3306/tdq?verifyServerCertificate=false&useSSL=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    u: uc4_user
+    p: uc4_user

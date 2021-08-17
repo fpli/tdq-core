@@ -3,20 +3,20 @@ package com.ebay.tdq.example;
 import com.ebay.tdq.dto.QueryProfilerParam;
 import com.ebay.tdq.dto.QueryProfilerResult;
 import com.ebay.tdq.svc.ServiceFactory;
+import com.ebay.tdq.utils.DateUtils;
 import com.google.common.collect.Sets;
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.lang.time.DateUtils;
 
 /**
+ * env: flink.app.profile=test
+ *
  * @author juntzhang
  */
 public class ProfilerExample {
 
-  public static void main(String[] args) throws IOException, ParseException {
+  public static void main(String[] args) throws Exception {
     Map<String, Set<String>> dimensions = new HashMap<>();
     dimensions.put("page_id", Sets.newHashSet("711", "1677718"));
     QueryProfilerParam param = new QueryProfilerParam(
@@ -73,12 +73,13 @@ public class ProfilerExample {
             "    }\n" +
             "  ]\n" +
             "}",
-        DateUtils.parseDate("2021-05-29 12:02:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime(),
-        DateUtils.parseDate("2021-05-29 12:04:00", new String[]{"yyyy-MM-dd HH:mm:ss"}).getTime(),
+        DateUtils.parseDateTime("2021-05-29 12:02:00", ServiceFactory.getTdqEnv().getTimeZone()),
+        DateUtils.parseDateTime("2021-05-29 12:04:00", ServiceFactory.getTdqEnv().getTimeZone()),
         dimensions
     );
 
     QueryProfilerResult result = ServiceFactory.getProfiler().query(param);
     System.out.println(result.getRecords());
+    ServiceFactory.close();
   }
 }

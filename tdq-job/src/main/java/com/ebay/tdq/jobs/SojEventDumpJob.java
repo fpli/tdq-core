@@ -3,15 +3,12 @@ package com.ebay.tdq.jobs;
 import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.common.model.SojEvent;
 import com.ebay.tdq.config.KafkaSourceConfig;
+import com.ebay.tdq.config.SinkConfig;
 import com.ebay.tdq.config.SourceConfig;
-import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.connector.kafka.schema.SojEventDeserializationSchema;
-import com.ebay.tdq.sources.HdfsConnectorFactory;
-import com.ebay.tdq.sources.SojEventDateTimeBucketAssigner;
-import com.ebay.tdq.utils.TdqConfigManager;
+import com.ebay.tdq.sinks.HdfsSink;
 import com.ebay.tdq.utils.TdqContext;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 
 /**
@@ -27,9 +24,9 @@ public class SojEventDumpJob {
 
   public void submit(String[] args) throws Exception {
     tdqCxt = new TdqContext(args);
-    TdqConfig tdqConfig = TdqConfigManager.getTdqConfig(tdqCxt.getTdqEnv());
+    tdqCxt.registerJob();
 
-    for (SourceConfig sourceConfig : tdqConfig.getSources()) {
+    for (SourceConfig sourceConfig : tdqCxt.getTdqEnv().getTdqConfig().getSources()) {
       dump(sourceConfig, tdqCxt);
     }
 
@@ -62,17 +59,13 @@ public class SojEventDumpJob {
         .name(ksc.getName())
         .uid(ksc.getName());
 
-    StreamingFileSink<SojEvent> sink = HdfsConnectorFactory.createWithParquet(
-        tdqEnv.getSinkEnv().getRawDataPath() + "/" + tdqEnv.getJobName() + "/source=" + ksc.getName(),
-        SojEvent.class, new SojEventDateTimeBucketAssigner(
-            tdqEnv.getSinkEnv().getTimeZone().toZoneId()
-        ));
-
-    rawEventDataStream
-        .addSink(sink)
-        .setParallelism(ksc.getParallelism())
-        .name(ksc.getName() + "_dump")
-        .uid(ksc.getName() + "_dump");
+    SinkConfig sinkConfig = tdqEnv.getTdqConfig().getSinks().get(0);
+    sinkConfig.getConfig().put("rhs-parallelism", rawEventDataStream.getParallelism());
+    new HdfsSink().sinkSojEvent(
+        ksc.getName(),
+        sinkConfig,
+        tdqEnv,
+        rawEventDataStream);
   }
 
 }

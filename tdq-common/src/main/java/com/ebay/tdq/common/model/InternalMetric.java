@@ -54,7 +54,7 @@ public class InternalMetric implements Serializable {
   }
 
   public String getMetricIdWithEventTime() {
-    return metricId + "_" + getEventTime();
+    return metricId + "_" + eventTime;
   }
 
   public InternalMetric removeTag(String k) {

@@ -105,11 +105,10 @@
       "name": "kafka_sojevent_tdq_normal_metric",
       "type": "realtime.kafka",
       "config": {
-        "tdq-type": "normal-metric",
+        "sub-type": "normal-metric",
         "topic": "misc.crossdcs.tdq.pathfinder-lvs",
         "schema-subject": "behavior.sojourner.sojevent.schema",
-        "bootstrap.servers.lvs": "rhs-absvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.27.tess.io:9092,rhs-absvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.27.tess.io:9092,rhs-absvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.27.tess.io:9092,rhs-absvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.27.tess.io:9092,rhs-absvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.27.tess.io:9092",
-        "bootstrap.servers.slc": "rhs-uasvkiaa-kfk-slc-1.rheos-streaming-prod.svc.23.tess.io:9092,rhs-uasvkiaa-kfk-slc-2.rheos-streaming-prod.svc.23.tess.io:9092,rhs-uasvkiaa-kfk-slc-3.rheos-streaming-prod.svc.23.tess.io:9092,rhs-uasvkiaa-kfk-slc-4.rheos-streaming-prod.svc.23.tess.io:9092,rhs-uasvkiaa-kfk-slc-5.rheos-streaming-prod.svc.23.tess.io:9092",
+        "rhs-parallelism": 3,
         "kafka-producer": {
           "bootstrap.servers": "rhs-oasvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092",
           "batch.size": "5120",

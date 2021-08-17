@@ -2,12 +2,11 @@ flink:
   app:
     name: test
     profile: test
-    sink:
-      normal-metric:
-        pronto-index-pattern: tdq.${flink.app.profile}.metric.normal.
+
 pronto:
   scheme: http
   hostname: localhost
   port: 9200
   api-key: ""
   api-value: ""
+  index-pattern: tdq.${flink.app.profile}.metric.normal.

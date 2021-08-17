@@ -21,10 +21,6 @@ flink:
       queue-size: 0
       flush-timeout: 5s
       output-partitions: 2
-    sink:
-      normal-metric:
-        std-name: normal
-        hdfs-path: target/${flink.app.profile}/metric/normal
 
 pronto:
   scheme: http

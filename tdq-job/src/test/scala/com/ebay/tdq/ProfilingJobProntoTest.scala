@@ -47,6 +47,41 @@ class ProfilingJobProntoTest {
            |        }
            |      ]
            |    }
+           |  ],
+           |  "sinks": [
+           |    {
+           |      "name": "hdfs_tdq_normal_metric",
+           |      "type": "realtime.hdfs",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "rheos-services-urls": "https://rheos-services.qa.ebay.com",
+           |        "schema-subject": "tdq.metric",
+           |        "hdfs-path": "target/$${flink.app.profile}/metric/normal"
+           |      }
+           |    },
+           |    {
+           |      "name": "console_tdq_normal_metric",
+           |      "type": "realtime.console",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "std-name": "nor@mal"
+           |      }
+           |    },
+           |    {
+           |      "name": "memory_tdq_normal_metric",
+           |      "type": "realtime.memory",
+           |      "config": {
+           |        "sub-type": "normal-metric"
+           |      }
+           |    },
+           |    {
+           |      "name": "pronto_tdq_normal_metric",
+           |      "type": "realtime.pronto",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "index-pattern": "tdq.$${flink.app.profile}.metric.normal."
+           |      }
+           |    }
            |  ]
            |}
            |""".stripMargin,
@@ -125,6 +160,41 @@ class ProfilingJobProntoTest {
            |          ]
            |        }
            |      ]
+           |    }
+           |  ],
+           |  "sinks": [
+           |    {
+           |      "name": "hdfs_tdq_normal_metric",
+           |      "type": "realtime.hdfs",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "rheos-services-urls": "https://rheos-services.qa.ebay.com",
+           |        "schema-subject": "tdq.metric",
+           |        "hdfs-path": "target/$${flink.app.profile}/metric/normal"
+           |      }
+           |    },
+           |    {
+           |      "name": "console_tdq_normal_metric",
+           |      "type": "realtime.console",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "std-name": "nor@mal"
+           |      }
+           |    },
+           |    {
+           |      "name": "memory_tdq_normal_metric",
+           |      "type": "realtime.memory",
+           |      "config": {
+           |        "sub-type": "normal-metric"
+           |      }
+           |    },
+           |    {
+           |      "name": "pronto_tdq_normal_metric",
+           |      "type": "realtime.pronto",
+           |      "config": {
+           |        "sub-type": "normal-metric",
+           |        "index-pattern": "tdq.$${flink.app.profile}.metric.normal."
+           |      }
            |    }
            |  ]
            |}

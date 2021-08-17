@@ -24,8 +24,7 @@ public class KafkaSourceEnvTest {
   @Test
   public void testIsProcessingElement() throws Exception {
     TdqContext tdqContext = new TdqContext(new String[]{
-        "--tdq-profile", "tdq-test"
-
+        "--tdq-profile", "test"
     });
     final TdqEnv tdqEnv = tdqContext.getTdqEnv();
     long current = getTime("2021-07-20 18:24:59");
@@ -35,7 +34,7 @@ public class KafkaSourceEnvTest {
   @Test
   public void testIsProcessingElement1() throws Exception {
     TdqContext tdqContext = new TdqContext(new String[]{
-        "--tdq-profile", "tdq-test"
+        "--tdq-profile", "test"
 
     });
     final TdqEnv tdqEnv = tdqContext.getTdqEnv();
@@ -49,7 +48,7 @@ public class KafkaSourceEnvTest {
     long end = getTime("2021-07-20 18:25:00");
     long current = getTime("2021-07-20 18:24:59");
     TdqContext tdqContext = new TdqContext(new String[]{
-        "--tdq-profile", "tdq-test"
+        "--tdq-profile", "test"
 
     });
     final TdqEnv tdqEnv = tdqContext.getTdqEnv();
@@ -67,7 +66,7 @@ public class KafkaSourceEnvTest {
   public void testIsProcessingElement3() throws Exception {
     long end = getTime("2021-07-20 18:25:00");
     TdqContext tdqContext = new TdqContext(new String[]{
-        "--tdq-profile", "tdq-test"
+        "--tdq-profile", "test"
     });
     final TdqEnv tdqEnv = tdqContext.getTdqEnv();
     tdqEnv.setToTimestamp(end);

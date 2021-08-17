@@ -1,13 +1,18 @@
 package com.ebay.tdq.svc;
 
+import static com.ebay.sojourner.common.env.EnvironmentUtils.getStringWithPattern;
+
 import com.ebay.sojourner.common.env.EnvironmentUtils;
 import com.ebay.tdq.common.env.ProntoEnv;
 import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.service.ProfilerService;
 import com.ebay.tdq.service.RuleEngineService;
+import com.google.common.annotations.VisibleForTesting;
 import java.io.IOException;
+import java.util.TimeZone;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -29,6 +34,7 @@ public class ServiceFactory {
   private static volatile ServiceFactory serviceFactory;
   private TdqEnv tdqEnv;
   private ProntoEnv prontoEnv;
+  private String indexPattern;
   private RestHighLevelClient restHighLevelClient;
   private RuleEngineService ruleEngineService;
   private ProfilerService profilerService;
@@ -38,20 +44,14 @@ public class ServiceFactory {
   }
 
   private void initialize() {
-    if (restHighLevelClient != null) {
-      try {
-        restHighLevelClient.close();
-      } catch (IOException e) {
-        log.info(e.getMessage(), e);
-      }
-    }
-
+    close0();
     String profile = System.getenv(EnvironmentUtils.PROFILE);
     if (StringUtils.isNotBlank(profile)) {
       EnvironmentUtils.activateProfile(profile);
     }
     tdqEnv = new TdqEnv();
     prontoEnv = tdqEnv.getProntoEnv();
+    indexPattern = getStringWithPattern("pronto.index-pattern");
     restHighLevelClient = restHighLevelClient();
     ruleEngineService = new RuleEngineServiceImpl();
     profilerService = new ProfilerServiceImpl(restHighLevelClient);
@@ -77,6 +77,23 @@ public class ServiceFactory {
     return client;
   }
 
+  private String getIndexDateSuffix(long ts, TimeZone timeZone) {
+    return FastDateFormat.getInstance("yyyy-MM-dd", timeZone).format(ts);
+  }
+
+  private String getNormalMetricIndex0(Long eventTime) {
+    return indexPattern + getIndexDateSuffix(eventTime, tdqEnv.getTimeZone());
+  }
+
+  private void close0() {
+    if (restHighLevelClient != null) {
+      try {
+        restHighLevelClient.close();
+      } catch (IOException e) {
+        log.info(e.getMessage(), e);
+      }
+    }
+  }
 
   private static ServiceFactory getInstance() {
     if (serviceFactory == null) {
@@ -99,5 +116,24 @@ public class ServiceFactory {
 
   public static TdqEnv getTdqEnv() {
     return getInstance().tdqEnv;
+  }
+
+  @VisibleForTesting
+  public static String getIndexPattern() {
+    return getInstance().indexPattern;
+  }
+
+  public static String getNormalMetricIndex(long t) {
+    return getInstance().getNormalMetricIndex0(t);
+  }
+
+  // close when jvm is shutdown
+  public static void close() {
+    getInstance().close0();
+  }
+
+  // reconnect when es client is closed
+  public static synchronized void refresh() {
+    serviceFactory = new ServiceFactory();
   }
 }

@@ -52,7 +52,7 @@ public class ProfilerServiceDropdownTest {
 
     tags.put("site", siteId);
 
-    long t = DateUtils.parseDateTime(event_time, ServiceFactory.getTdqEnv().getSinkEnv().getTimeZone());
+    long t = DateUtils.parseDateTime(event_time, ServiceFactory.getTdqEnv().getTimeZone());
     json.put("metric_key", "global_mandatory_tag_item_rate2");
     json.put("event_time", t);
     json.put("tags", tags);
@@ -61,7 +61,7 @@ public class ProfilerServiceDropdownTest {
   }
 
   public void createData(Client client) throws Exception {
-    val pattern = ServiceFactory.getTdqEnv().getSinkEnv().getNormalMetricProntoIndexPattern();
+    val pattern = ServiceFactory.getIndexPattern();
     val index = pattern + "2021-05-29";
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics");
     request.patterns(Lists.newArrayList(pattern + "*"));
@@ -85,8 +85,8 @@ public class ProfilerServiceDropdownTest {
     createData(elasticsearchResource.getClient());
     QueryDropdownParam param = new QueryDropdownParam(
         RuleEngineServiceTest.get("global_mandatory_tag_item_rate2"),
-        DateUtils.parseDateTime("2021-05-29 12:02:00", ServiceFactory.getTdqEnv().getSinkEnv().getTimeZone()),
-        DateUtils.parseDateTime("2021-05-29 12:04:00", ServiceFactory.getTdqEnv().getSinkEnv().getTimeZone())
+        DateUtils.parseDateTime("2021-05-29 12:02:00", ServiceFactory.getTdqEnv().getTimeZone()),
+        DateUtils.parseDateTime("2021-05-29 12:04:00", ServiceFactory.getTdqEnv().getTimeZone())
     );
 
     QueryDropdownResult result = ServiceFactory.getProfiler().dropdown(param);

@@ -2,15 +2,12 @@ package com.ebay.tdq.jobs;
 
 import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.common.model.InternalMetric;
-import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.functions.TdqMetric1stAggrProcessWindowFunction;
 import com.ebay.tdq.functions.TdqMetric2ndAggrProcessWindowFunction;
 import com.ebay.tdq.functions.TdqMetricAggregateFunction;
-import com.ebay.tdq.planner.utils.ConfigService;
 import com.ebay.tdq.sinks.SinkFactory;
 import com.ebay.tdq.sources.SourceFactory;
 import com.ebay.tdq.utils.DateUtils;
-import com.ebay.tdq.utils.TdqConfigManager;
 import com.ebay.tdq.utils.TdqContext;
 import com.google.common.collect.Maps;
 import java.time.Duration;
@@ -18,7 +15,6 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.Validate;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -26,7 +22,7 @@ import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindo
 import org.apache.flink.streaming.api.windowing.time.Time;
 
 /**
- * --tdq-profile tdq-pre-prod|tdq-prod [default is test]
+ * --tdq-profile test|pre-prod|prod
  */
 @Slf4j
 @Getter
@@ -40,32 +36,25 @@ public class ProfilingJob {
     new ProfilingJob().submit(args);
   }
 
-  protected void setup(String[] args) {
+  protected void setup(String[] args) throws Exception {
     // step0: prepare environment
     tdqCxt = new TdqContext(args);
+    tdqCxt.registerJob();
     tdqEnv = tdqCxt.getTdqEnv();
   }
 
-  protected void start() {
-    try {
-      ConfigService.register(tdqEnv);
+  protected void start() throws Exception {
+    // step1: build data source
+    // step2: normalize event to metric
+    DataStream<InternalMetric> ds = SourceFactory.build(tdqCxt);
 
-      TdqConfig tdqConfig = TdqConfigManager.getTdqConfig(tdqEnv);
-      Validate.isTrue(tdqConfig != null);
-      // step1: build data source
-      // step2: normalize event to metric
-      DataStream<InternalMetric> ds = SourceFactory.build(tdqConfig, tdqCxt);
+    // step3: aggregate metric by key and window
+    Map<String, SingleOutputStreamOperator<InternalMetric>> outputTags = reduceByWindow(ds);
 
-      // step3: aggregate metric by key and window
-      Map<String, SingleOutputStreamOperator<InternalMetric>> outputTags = reduceByWindow(ds);
+    // step4: output metric by window
+    outputByWindow(outputTags);
 
-      // step4: output metric by window
-      outputByWindow(outputTags);
-
-      tdqCxt.getRhsEnv().execute(tdqEnv.getJobName());
-    } catch (Exception e) {
-      log.error(e.getMessage(), e);
-    }
+    tdqCxt.getRhsEnv().execute(tdqEnv.getJobName());
   }
 
   protected void stop() {
@@ -113,8 +102,12 @@ public class ProfilingJob {
   }
 
   public void submit(String[] args) {
-    setup(args);
-    start();
-    stop();
+    try {
+      setup(args);
+      start();
+      stop();
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+    }
   }
 }

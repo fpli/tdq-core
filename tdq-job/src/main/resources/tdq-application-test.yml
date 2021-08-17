@@ -9,7 +9,3 @@ flink:
       queue-size: 1000
       flush-timeout: 5s
       output-partitions: 3
-
-    sink:
-      normal-metric:
-        pronto-index-pattern: tdq.${flink.app.profile}.metric.normal.

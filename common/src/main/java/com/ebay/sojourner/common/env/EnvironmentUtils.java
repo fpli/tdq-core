@@ -38,7 +38,7 @@ public class EnvironmentUtils {
   public static void activateProfile(String profile) {
     Preconditions.checkNotNull(profile);
 
-    String configFileName = "application-" + profile;
+    String configFileName = "tdq-application-" + profile;
     PropertySource propertySource = new PropertySource(configFileName, 3);
     propertySource.sourceProps();
     PROP_SOURCES.add(propertySource);
@@ -154,11 +154,7 @@ public class EnvironmentUtils {
     return new HashSet<>(list);
   }
 
-  public static String getStringWithPattern(String key) {
-    String str = getStringOrDefault(key, "");
-    if (StringUtils.isBlank(str)) {
-      return str;
-    }
+  public static String replaceStringWithPattern(String str) {
     Matcher m = VARIABLE_PATTERN.matcher(str);
     String s = "";
     if (m.find()) {
@@ -172,6 +168,11 @@ public class EnvironmentUtils {
       }
     }
     return m.replaceAll(s);
+  }
+
+  public static String getStringWithPattern(String key) {
+    String str = getStringOrDefault(key, "");
+    return replaceStringWithPattern(str);
   }
 
 }

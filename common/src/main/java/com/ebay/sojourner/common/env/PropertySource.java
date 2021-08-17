@@ -14,7 +14,7 @@ public class PropertySource extends AbstractEnvironment {
   private final Integer order;
 
   public PropertySource() {
-    this.configFileName = "application";
+    this.configFileName = "tdq-application";
     this.order = 999;
   }
 

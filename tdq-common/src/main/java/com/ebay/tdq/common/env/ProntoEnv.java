@@ -14,7 +14,6 @@ import lombok.Data;
  * @author juntzhang
  */
 @Data
-@Deprecated
 public class ProntoEnv implements Serializable {
 
   private String schema;

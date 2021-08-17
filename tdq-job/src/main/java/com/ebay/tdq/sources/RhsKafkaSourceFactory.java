@@ -1,7 +1,7 @@
 package com.ebay.tdq.sources;
 
-import com.ebay.tdq.common.model.TdqEvent;
 import com.ebay.tdq.common.model.InternalMetric;
+import com.ebay.tdq.common.model.TdqEvent;
 import com.ebay.tdq.config.KafkaSourceConfig;
 import com.ebay.tdq.config.SourceConfig;
 import com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema;
@@ -48,7 +48,7 @@ public class RhsKafkaSourceFactory {
       long t = ksc.getFromTimestamp() - ksc.getOutOfOrderlessMs();
       flinkKafkaConsumer.setStartFromTimestamp(t);
       log.warn("Kafka setStartFromTimestamp(" + (t) + "):" + DateUtils.format(
-          t, tdqCxt.getTdqEnv().getSinkEnv().getTimeZone()));
+          t, tdqCxt.getTdqEnv().getTimeZone()));
     } else {
       throw new IllegalArgumentException("Cannot parse fromTimestamp value");
     }
@@ -61,9 +61,10 @@ public class RhsKafkaSourceFactory {
         .uid(ksc.getName());
 
     double sf = ksc.getSampleFraction();
+    Random random = new Random();
     if (sf > 0 && sf < 1) {
       inDS = inDS
-          .filter(r -> Math.abs(new Random().nextDouble()) < sf)
+          .filter(r -> Math.abs(random.nextDouble()) < sf)
           .name(ksc.getName() + "_sample")
           .uid(ksc.getName() + "_sample")
           .slotSharingGroup(ksc.getName())

@@ -1,9 +1,11 @@
 package com.ebay.tdq.common.env;
 
 import com.ebay.sojourner.common.env.EnvironmentUtils;
+import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.utils.DateUtils;
 import java.io.Serializable;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +19,16 @@ import scala.concurrent.duration.Duration;
 @Slf4j
 public class TdqEnv implements Serializable {
 
+  private final TimeZone timeZone;
+  private TdqConfig tdqConfig;
+
   private final JdbcEnv jdbcEnv;
   private final ProntoEnv prontoEnv;
-  private final SinkEnv sinkEnv;
   private String id;
   private String jobName;
   private String profile;
   private boolean local;
+  private boolean noRestart;
   private List<Long> winTags;
 
   private int metric1stAggrParallelism;
@@ -37,11 +42,13 @@ public class TdqEnv implements Serializable {
   private Long toTimestamp = 0L;
 
   public TdqEnv() {
+    this.timeZone = TimeZone.getTimeZone("MST"); // ZoneId.of("-7")
+
     this.jobName = EnvironmentUtils.get("flink.app.name");
     this.id = this.jobName + "." + RandomStringUtils.randomAlphanumeric(10).toLowerCase();
     this.local = EnvironmentUtils.getBooleanOrDefault("flink.app.local", false);
+    this.noRestart = EnvironmentUtils.getBooleanOrDefault("flink.app.noRestart", false);
     this.profile = EnvironmentUtils.get("flink.app.profile");
-    this.sinkEnv = new SinkEnv();
     this.prontoEnv = new ProntoEnv();
 
     this.localCombineFlushTimeout = Duration
@@ -89,4 +96,5 @@ public class TdqEnv implements Serializable {
   public boolean isNotProcessElement(long t) {
     return !isProcessElement(t);
   }
+
 }

@@ -3,11 +3,12 @@ package com.ebay.tdq
 import java.sql.DriverManager
 import java.util.{HashMap => JMap}
 
+import com.ebay.sojourner.common.env.EnvironmentUtils
 import com.ebay.tdq.common.env.JdbcEnv
-import com.ebay.tdq.common.model.{TdqEvent, InternalMetric}
+import com.ebay.tdq.common.model.{InternalMetric, TdqEvent}
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.jobs.ProfilingJob
-import com.ebay.tdq.sinks.{MemorySink, SinkFactory}
+import com.ebay.tdq.sinks.{MemorySink, MemorySinkFunction, ProntoSink}
 import com.ebay.tdq.sources.MemorySourceFactory
 import com.ebay.tdq.utils.{JsonUtils, TdqConfigManager}
 import org.apache.commons.io.IOUtils
@@ -32,17 +33,33 @@ case class ProfilingJobIT(
   import ProfilingJobIT.setupDB
 
   override def setup(args: Array[String]): Unit = {
+    setupDB(config)
     super.setup(Array.concat(args, Array("--flink.app.name", name)))
     tdqEnv.setJobName(name)
-    setupDB(config)
+    //    val tdqConfig = JsonUtils.parseObject(config, classOf[TdqConfig])
+    //    JsonUtils.toJSONString(new TdqConfig(tdqConfig.getId, tdqConfig.getName, tdqConfig.getSources, tdqConfig.getRules, Lists.newArrayList(
+    //      new SinkConfig("tdq_hdfs_normal_metric", "realtime.hdfs", mapAsJavaMap(Map(
+    //        "sub-type" -> "normal-metric",
+    //        "rheos-services-urls" -> "https://rheos-services.qa.ebay.com",
+    //        "schema-subject" -> "tdq.metric",
+    //        "hdfs-path" -> "target/${flink.app.profile}/metric/normal"
+    //      ))),
+    //      new SinkConfig("tdq_console_normal_metric", "realtime.console", mapAsJavaMap(Map(
+    //        "sub-type" -> "normal-metric",
+    //        "std-name" -> "nor@mal"
+    //      ))),
+    //      new SinkConfig("tdq_memory_normal_metric", "realtime.memory", mapAsJavaMap(Map(
+    //        "sub-type" -> "normal-metric"
+    //      )))
+    //    )))
     TdqConfigManager.getInstance(tdqEnv).refresh()
-    val memorySink = new MemorySink(name, TdqConfigManager.getInstance(tdqEnv).getPhysicalPlans.get(0))
-    SinkFactory.setMemoryFunction(memorySink)
+    val memorySink = new MemorySinkFunction(name, TdqConfigManager.getInstance(tdqEnv).getPhysicalPlans.get(0))
+    MemorySink.setMemoryFunction(memorySink)
     MemorySourceFactory.setRawEventList(events.asJava)
   }
 
   override def stop(): Unit = {
-    Assert.assertTrue(SinkFactory.getMemoryFunction.asInstanceOf[MemorySink].check(expects.asJava))
+    Assert.assertTrue(MemorySink.getMemoryFunction.asInstanceOf[MemorySinkFunction].check(expects.asJava))
   }
 
   def getMetric0(metricKey: String, t: Long, tags: JMap[String, String], expr: JMap[String, Double], v: Double): InternalMetric = {
@@ -70,8 +87,13 @@ class EsProfilingJobIT(name: String, config: String, events: List[TdqEvent], exp
   override def stop(): Unit = {
     Thread.sleep(3000)
     val client: Client = elasticsearchResource.getClient
+    val pattern = EnvironmentUtils.replaceStringWithPattern(
+      tdqEnv.getTdqConfig.getSinks.asScala
+        .find(s => s.getType.equals("realtime.pronto"))
+        .map(_.getConfig.get("index-pattern").asInstanceOf[String]).get
+    )
     val searchRequest = new SearchRequest(
-      s"${tdqEnv.getSinkEnv.getNormalMetricIndex(expects.head.getEventTime)}")
+      s"${pattern + ProntoSink.getIndexDateSuffix(expects.head.getEventTime, tdqEnv.getTimeZone)}")
     val searchSourceBuilder = new SearchSourceBuilder()
     searchSourceBuilder.query(QueryBuilders.matchAllQuery())
     searchSourceBuilder.size(100)
@@ -93,7 +115,7 @@ class EsProfilingJobIT(name: String, config: String, events: List[TdqEvent], exp
     println("pronto=>")
     resultInPronto.foreach(println)
 
-    Assert.assertTrue(SinkFactory.getMemoryFunction.asInstanceOf[MemorySink]
+    Assert.assertTrue(MemorySink.getMemoryFunction.asInstanceOf[MemorySinkFunction]
       .check0(expects.asJava, resultInPronto.asJava))
     elasticsearchResource.stop()
   }
@@ -125,7 +147,7 @@ object ProfilingJobIT {
     val it = new EsProfilingJobIT(id, config, events, expects)
     it.submit(Array[String](
       "--flink.app.local", "true",
-      "--flink.app.sink.normal-metric.pronto-index-pattern", "tdq.${flink.app.profile}.metric.normal."
+      "--flink.app.noRestart", "true"
     ))
     it
   }
@@ -134,7 +156,7 @@ object ProfilingJobIT {
     val it = new ProfilingJobIT(id, config, events, expects)
     it.submit(Array[String](
       "--flink.app.local", "true",
-      "--flink.app.sink.normal-metric.mem-name", id
+      "--flink.app.noRestart", "true"
     ))
     it
   }

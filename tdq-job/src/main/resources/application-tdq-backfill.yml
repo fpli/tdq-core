@@ -1,7 +1,0 @@
-flink:
-  app:
-    name: TDQ-V2-backfill
-    profile: prod
-    sink:
-      normal-metric:
-        pronto-index-pattern: tdq.${flink.app.profile}.metric.normal.

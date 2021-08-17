@@ -2,6 +2,7 @@ package com.ebay.tdq.functions;
 
 import com.ebay.tdq.common.env.TdqEnv;
 import com.ebay.tdq.common.model.InternalMetric;
+import com.ebay.tdq.sinks.ProntoSink;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +52,7 @@ public class ProntoSinkFunction implements ElasticsearchSinkFunction<InternalMet
   }
 
   private IndexRequest createIndexRequest(InternalMetric tdqMetric) {
-    String index = tdqEnv.getSinkEnv().getNormalMetricIndex(tdqMetric.getEventTime());
+    String index = ProntoSink.getIndexDateSuffix(tdqMetric.getEventTime(), tdqEnv.getTimeZone());
     try {
       return Requests.indexRequest()
           .id(tdqMetric.getMetricIdWithEventTime())

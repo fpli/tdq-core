@@ -1,6 +1,0 @@
-flink:
-  app:
-    profile: pre-prod
-    sink:
-      normal-metric:
-        pronto-index-pattern: tdq.${flink.app.profile}.metric.normal.

@@ -2,15 +2,18 @@ package com.ebay.tdq.utils;
 
 import com.ebay.sojourner.common.env.EnvironmentUtils;
 import com.ebay.tdq.common.env.TdqEnv;
-import com.ebay.tdq.common.model.TdqErrorMsg;
 import com.ebay.tdq.common.model.InternalMetric;
+import com.ebay.tdq.common.model.TdqErrorMsg;
 import com.ebay.tdq.common.model.TdqSampleData;
+import com.ebay.tdq.config.TdqConfig;
+import com.ebay.tdq.planner.utils.ConfigService;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -32,7 +35,7 @@ public class TdqContext implements Serializable {
   private final OutputTag<TdqSampleData> debugOutputTag;
   private final OutputTag<InternalMetric> eventLatencyOutputTag;
 
-  public TdqContext(String[] args) {
+  public TdqContext(String[] args) throws Exception {
     load(args);
     this.tdqEnv = new TdqEnv();
     this.exceptionOutputTag = new OutputTag<>("tdq-exception", TypeInformation.of(TdqErrorMsg.class));
@@ -45,6 +48,13 @@ public class TdqContext implements Serializable {
     }
 
     this.rhsEnv = FlinkEnvFactory.create(this.getTdqEnv());
+  }
+
+  public void registerJob() throws Exception {
+    ConfigService.register(tdqEnv);
+    TdqConfig tdqConfig = TdqConfigManager.getTdqConfig(tdqEnv);
+    Validate.isTrue(tdqConfig != null);
+    tdqEnv.setTdqConfig(tdqConfig);
   }
 
   private static void load(String[] args) {

@@ -28,7 +28,7 @@ import org.junit.Test;
 @Slf4j
 public class ProfilerServiceQueryTest {
 
-  TimeZone zone = ServiceFactory.getTdqEnv().getSinkEnv().getTimeZone();
+  TimeZone zone = ServiceFactory.getTdqEnv().getTimeZone();
 
   public HashMap<String, Object> getMap(String event_time, String pageId, String siteId, Double itm_valid_cnt,
       Double itm_cnt) throws ParseException {
@@ -51,7 +51,7 @@ public class ProfilerServiceQueryTest {
   }
 
   public void createData(Client client) throws Exception {
-    val pattern = ServiceFactory.getTdqEnv().getSinkEnv().getNormalMetricProntoIndexPattern();
+    val pattern = ServiceFactory.getIndexPattern();
     val index = pattern + "2021-05-29";
     PutIndexTemplateRequest request = new PutIndexTemplateRequest("tdq-metrics");
     request.patterns(Lists.newArrayList(pattern + "*"));
@@ -77,10 +77,8 @@ public class ProfilerServiceQueryTest {
     dimensions.put("page_id", Sets.newHashSet("711", "1677718"));
     QueryProfilerParam param = new QueryProfilerParam(
         RuleEngineServiceTest.get("global_mandatory_tag_item_rate1"),
-        com.ebay.tdq.utils.DateUtils
-            .parseDateTime("2021-05-29 12:02:00", zone),
-        com.ebay.tdq.utils.DateUtils
-            .parseDateTime("2021-05-29 12:04:00", zone),
+        DateUtils.parseDateTime("2021-05-29 12:02:00", zone),
+        DateUtils.parseDateTime("2021-05-29 12:04:00", zone),
         dimensions
     );
 
@@ -93,6 +91,7 @@ public class ProfilerServiceQueryTest {
     double a2 = m.get(DateUtils.parseDateTime("2021-05-29 12:04:00", zone));
     Assert.assertEquals(5d / 9d, a1, 0.0001);
     Assert.assertEquals(1d / 2d, a2, 0.0001);
+
     elasticsearchResource.close();
   }
 }
