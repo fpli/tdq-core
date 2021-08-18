@@ -1,7 +1,7 @@
 package com.ebay.tdq.expressions
 
 import com.ebay.tdq.common.env.TdqEnv
-import com.ebay.tdq.common.model.{TdqEvent, InternalMetric}
+import com.ebay.tdq.common.model.{InternalMetric, TdqEvent}
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.rules.ProfilingSqlParser
 import com.ebay.tdq.utils.{DateUtils, JsonUtils}
@@ -141,4 +141,12 @@ class CalciteGrammarTest {
     })
   }
 
+
+  @Test
+  def test_round(): Unit = {
+    test1(s"case when p2>23 then 1 else 0 end", "round(123213 / 1000,1) - 100", metric => {
+      println(metric)
+      assert(1d == metric.getValues.get("p1"))
+    })
+  }
 }

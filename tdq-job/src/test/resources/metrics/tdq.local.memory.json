@@ -79,14 +79,14 @@
               "filter": "qual_timestamp is not null"
             },
 
-            {"alias": "mdbref_timestamp", "expr": "cast(cast(soj_nvl('mdbreftime') AS LONG) / 1000 AS LONG)"},
+            {"alias": "mdbref_timestamp", "expr": "round(cast(soj_nvl('mdbreftime') AS LONG) / 1000)"},
             {
               "alias": "mdbref_age",
               "expr":  "unix_timestamp(qual_timestamp) - mdbref_timestamp"
             },
             {
               "alias": "mdbref_age_group",
-              "expr":  "case when mdbref_age < 0 then 'Group: Error' when mdbref_age < 910 then '<= 15 min 10 sec' else 'Not meet target' end"
+              "expr":  "case when mdbref_age < 0 then 'Group: Error' when mdbref_age <= 910 then '<= 15 min 10 sec' else 'Not meet target' end"
             },
             {
               "alias": "mrq_cnt",

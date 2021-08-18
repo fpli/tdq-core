@@ -82,6 +82,14 @@ object CalciteGrammarRegistry extends DelegatingRegistry({
     Or(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression])
   case RegistryContext("AND", operands: Array[Any], _) =>
     And(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression])
+  case RegistryContext("ROUND", operands: Array[Any], cacheKey) =>
+    if (operands.length == 1) {
+      new Round(operands.head.asInstanceOf[Expression])
+    } else if (operands.length == 2) {
+      Round(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression], cacheKey)
+    } else {
+      throw new IllegalArgumentException()
+    }
   case RegistryContext("COALESCE", operands: Array[Any], cacheKey) =>
     Coalesce(operands.map(_.asInstanceOf[Expression]), cacheKey)
   case RegistryContext("IS NULL", operands: Array[Any], _) =>

@@ -287,7 +287,7 @@
               "filter": "qual_timestamp is not null"
             },
             {
-              "expr": "cast(cast(soj_nvl('mdbreftime') AS LONG) / 1000 AS LONG)",
+              "expr": "round(cast(soj_nvl('mdbreftime') AS LONG) / 1000)",
               "alias": "mdbref_timestamp"
             },
             {
@@ -295,7 +295,7 @@
               "alias": "mdbref_age"
             },
             {
-              "expr": "case when mdbref_age < 0 then 'Group: Error' when mdbref_age < 910 then '<= 15 min 10 sec' else 'Not meet target' end",
+              "expr": "case when mdbref_age < 0 then 'Group: Error' when mdbref_age <= 910 then '<= 15 min 10 sec' else 'Not meet target' end",
               "alias": "mdbref_age_group",
               "filter": "mdbref_timestamp is not null"
             },
