@@ -48,7 +48,7 @@ public class KafkaSourceConfig implements Serializable {
     ksc.setEventTimeField((String) props.getOrDefault("event-time-field", ""));
     ksc.setSchemaSubject((String) props.getOrDefault("schema-subject", ""));
 
-    ksc.setParallelism((int) props.getOrDefault("rhs-parallelism", 1));
+    ksc.setParallelism((int) props.getOrDefault("rhs-parallelism", -1));
     ksc.setOutOfOrderlessMs(DateUtils.toMillis((String) props.getOrDefault("rhs-out-of-orderless", "3min")));
     ksc.setIdleTimeoutMs(DateUtils.toMillis((String) props.getOrDefault("rhs-idle-timeout", "3min")));
     ksc.setSampleFraction((double) props.getOrDefault("sample-fraction", 0d));

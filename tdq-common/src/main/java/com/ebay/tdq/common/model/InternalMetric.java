@@ -88,12 +88,12 @@ public class InternalMetric implements Serializable {
     final StringBuilder sb = new StringBuilder();
     sb.append(metricName).append("{");
     StringJoiner sj = new StringJoiner(",");
+    sj.add("eventTime" + "=" + DateUtils.format(eventTime));
     tags.forEach((k, v) -> sj.add("t-" + k + "=" + v));
     values.forEach((k, v) -> sj.add("e-" + k + "=" + v));
     sj.add("window" + "=" + window);
     sj.add("partition" + "=" + partition);
     sj.add("tagId" + "=" + metricId);
-    sj.add("eventTime" + "=" + DateUtils.format(eventTime));
     sb.append(sj).append("}").append(" ").append(value);
     return sb.toString();
   }

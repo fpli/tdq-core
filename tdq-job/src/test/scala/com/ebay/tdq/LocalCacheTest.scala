@@ -79,7 +79,7 @@ class LocalCacheTest {
   }
 
   @Test
-  def test(): Unit = {
+  def testLocalCache(): Unit = {
     def format(t: Long): String = {
       DateFormatUtils.format(t / 300000L * 300000L, "yyyy-MM-dd HH:mm")
     }
@@ -88,12 +88,13 @@ class LocalCacheTest {
     val env = new TdqEnv()
     env.setLocalCombineQueueSize(12)
     env.setLocalCombineFlushTimeout(1000)
+    env.setOutputPartitions(1)
     val cache = new LocalCache(env, mock)
     val rawData = new mutable.HashMap[String, Double]()
     val mergeData = new mutable.HashMap[String, Double]()
 
     def run(metric: InternalMetric): Unit = {
-      metric.setMetricName(physicalPlan.metricKey)
+      metric.setMetricName(physicalPlan.metricName)
       metric.genMetricId()
       cache.flush(physicalPlan, metric, new org.apache.flink.util.Collector[InternalMetric] {
         override def collect(record: InternalMetric): Unit = {

@@ -104,8 +104,8 @@ public class RawEventProcessFunction extends ProcessFunction<TdqEvent, InternalM
       return;
     }
     for (PhysicalPlan plan : physicalPlans) {
-      metricGroup.inc(plan.metricKey());
-      if (plan.metricKey().equals("exception")) {
+      metricGroup.inc(plan.metricName());
+      if (plan.metricName().equals("exception")) {
         throw new RuntimeException("this is debugging exception, checking checkpoint recovery.");
       }
       long s = System.nanoTime();
@@ -122,19 +122,19 @@ public class RawEventProcessFunction extends ProcessFunction<TdqEvent, InternalM
 
   private void sampleData(Context ctx, TdqEvent event, InternalMetric metric, PhysicalPlan plan) {
     if (plan.sampling()) {
-      metricGroup.inc("sampleEvent_" + plan.metricKey());
+      metricGroup.inc("sampleEvent_" + plan.metricName());
       ctx.output(tdqCxt.getSampleOutputTag(), new TdqSampleData(
-          event, metric, plan.metricKey(), plan.cxt().get().toString())
+          event, metric, plan.metricName(), plan.cxt().get().toString())
       );
     }
   }
 
   private void errorMsg(Context ctx, TdqEvent event, Exception e, PhysicalPlan plan) {
     metricGroup.inc("errorEvent");
-    metricGroup.inc("errorEvent_" + plan.metricKey());
+    metricGroup.inc("errorEvent_" + plan.metricName());
     if ((System.currentTimeMillis() - errorMsgCurrentTimeMillis) > 5000) {
       log.warn("Drop event={},plan={},exception={}", event, plan, e);
-      ctx.output(tdqCxt.getExceptionOutputTag(), new TdqErrorMsg(event, e, plan.metricKey()));
+      ctx.output(tdqCxt.getExceptionOutputTag(), new TdqErrorMsg(event, e, plan.metricName()));
       errorMsgCurrentTimeMillis = System.currentTimeMillis();
     }
   }

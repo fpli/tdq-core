@@ -32,4 +32,6 @@ public class TdqConfig implements Serializable {
   @JsonProperty(index = 4)
   @Singular
   private List<SinkConfig> sinks;
+  @JsonProperty(index = 5)
+  private EnvConfig env;
 }

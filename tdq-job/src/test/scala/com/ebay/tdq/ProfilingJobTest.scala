@@ -1,9 +1,10 @@
 package com.ebay.tdq
 
+import com.ebay.sojourner.common.env.EnvironmentUtils
 import com.ebay.tdq.RawEventTest.getTdqEvent
 import com.ebay.tdq.common.model.InternalMetric
 import org.apache.commons.lang.time.DateUtils
-import org.junit.Test
+import org.junit.{Assert, Test}
 
 /**
  * @author juntzhang
@@ -76,7 +77,17 @@ class SingleRuleSqlJobTest {
            |        "sub-type": "normal-metric"
            |      }
            |    }
-           |  ]
+           |  ],
+           |  "env": {
+           |    "config": {
+           |      "flink.app.window.metric-1st-aggr": "10s",
+           |      "flink.app.local-aggr.queue-size": 0,
+           |      "flink.app.local-aggr.flush-timeout": "5s",
+           |      "flink.app.local-aggr.output-partitions": 2,
+           |      "flink.app.parallelism.metric-1st-aggr": 2,
+           |      "flink.app.parallelism.metric-2nd-aggr": 2
+           |    }
+           |  }
            |}
            |""".stripMargin,
       events = List(
@@ -177,7 +188,17 @@ class SingleRuleSqlJobTest {
            |        "sub-type": "normal-metric"
            |      }
            |    }
-           |  ]
+           |  ],
+           |  "env": {
+           |    "config": {
+           |      "flink.app.window.metric-1st-aggr": "10s",
+           |      "flink.app.local-aggr.queue-size": 0,
+           |      "flink.app.local-aggr.flush-timeout": "5s",
+           |      "flink.app.local-aggr.output-partitions": 2,
+           |      "flink.app.parallelism.metric-1st-aggr": 2,
+           |      "flink.app.parallelism.metric-2nd-aggr": 2
+           |    }
+           |  }
            |}
            |""".stripMargin,
       events = List(
@@ -263,7 +284,17 @@ class SingleRuleSqlJobTest {
            |        "sub-type": "normal-metric"
            |      }
            |    }
-           |  ]
+           |  ],
+           |  "env": {
+           |    "config": {
+           |      "flink.app.window.metric-1st-aggr": "10s",
+           |      "flink.app.local-aggr.queue-size": 0,
+           |      "flink.app.local-aggr.flush-timeout": "5s",
+           |      "flink.app.local-aggr.output-partitions": 2,
+           |      "flink.app.parallelism.metric-1st-aggr": 2,
+           |      "flink.app.parallelism.metric-2nd-aggr": 2
+           |    }
+           |  }
            |}
            |""".stripMargin,
       events = List(
@@ -350,7 +381,17 @@ class SingleRuleSqlJobTest {
            |        "sub-type": "normal-metric"
            |      }
            |    }
-           |  ]
+           |  ],
+           |  "env": {
+           |    "config": {
+           |      "flink.app.window.metric-1st-aggr": "10s",
+           |      "flink.app.local-aggr.queue-size": 0,
+           |      "flink.app.local-aggr.flush-timeout": "5s",
+           |      "flink.app.local-aggr.output-partitions": 2,
+           |      "flink.app.parallelism.metric-1st-aggr": 2,
+           |      "flink.app.parallelism.metric-2nd-aggr": 2
+           |    }
+           |  }
            |}
            |""".stripMargin,
       events = List(
@@ -442,7 +483,17 @@ class SingleRuleSqlJobTest {
            |        "sub-type": "normal-metric"
            |      }
            |    }
-           |  ]
+           |  ],
+           |  "env": {
+           |    "config": {
+           |      "flink.app.window.metric-1st-aggr": "10s",
+           |      "flink.app.local-aggr.queue-size": 0,
+           |      "flink.app.local-aggr.flush-timeout": "5s",
+           |      "flink.app.local-aggr.output-partitions": 2,
+           |      "flink.app.parallelism.metric-1st-aggr": 2,
+           |      "flink.app.parallelism.metric-2nd-aggr": 2
+           |    }
+           |  }
            |}
            |""".stripMargin,
       events = List(
@@ -535,7 +586,17 @@ class SingleRuleSqlJobTest {
            |        "sub-type": "normal-metric"
            |      }
            |    }
-           |  ]
+           |  ],
+           |  "env": {
+           |    "config": {
+           |      "flink.app.window.metric-1st-aggr": "10s",
+           |      "flink.app.local-aggr.queue-size": 0,
+           |      "flink.app.local-aggr.flush-timeout": "5s",
+           |      "flink.app.local-aggr.output-partitions": 2,
+           |      "flink.app.parallelism.metric-1st-aggr": 2,
+           |      "flink.app.parallelism.metric-2nd-aggr": 2
+           |    }
+           |  }
            |}
            |""".stripMargin,
       events = List(
@@ -613,7 +674,17 @@ class SingleRuleSqlJobTest {
            |        "sub-type": "normal-metric"
            |      }
            |    }
-           |  ]
+           |  ],
+           |  "env": {
+           |    "config": {
+           |      "flink.app.window.metric-1st-aggr": "10s",
+           |      "flink.app.local-aggr.queue-size": 0,
+           |      "flink.app.local-aggr.flush-timeout": "5s",
+           |      "flink.app.local-aggr.output-partitions": 2,
+           |      "flink.app.parallelism.metric-1st-aggr": 2,
+           |      "flink.app.parallelism.metric-2nd-aggr": 2
+           |    }
+           |  }
            |}
            |""".stripMargin,
       events = List(
@@ -633,6 +704,9 @@ class SingleRuleSqlJobTest {
         getMetric(id, "2021-05-29 12:29:59", 1d)
       )
     )
+
+    Assert.assertTrue(
+      EnvironmentUtils.replaceStringWithPattern("/tmp/${flink.app.name}/checkpoint") == s"/tmp/$id/checkpoint")
   }
 
 

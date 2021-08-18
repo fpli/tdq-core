@@ -1,22 +1,12 @@
 {
   "id": "ignore",
-  "env": {
-    "config": {
-      "flink.app.local-aggr.queue-size": 1000,
-      "flink.app.window.metric-1st-aggr": "1min",
-      "flink.app.local-aggr.flush-timeout": "5s",
-      "flink.app.parallelism.metric-1st-aggr": 200,
-      "flink.app.parallelism.metric-2nd-aggr": 2,
-      "flink.app.local-aggr.output-partitions": 61
-    }
-  },
   "name": "ignore",
   "rules": [
     {
       "name": "tdq_system",
       "type": "realtime.rheos.profiler",
       "config": {
-        "window": "1min"
+        "window": "10s"
       },
       "profilers": [
         {
@@ -35,7 +25,7 @@
       "name": "tdq_pathfinder_ido",
       "type": "realtime.rheos.profiler",
       "config": {
-        "window": "5min"
+        "window": "10s"
       },
       "profilers": [
         {
@@ -288,83 +278,7 @@
       ]
     }
   ],
-  "sinks": [
-    {
-      "name": "pronto_pathfinder_normal_metric",
-      "type": "realtime.pronto",
-      "config": {
-        "sub-type": "normal-metric",
-        "index-pattern": "tdq.${flink.app.profile}.metric.normal."
-      }
-    },
-    {
-      "name": "pronto_pathfinder_latency_metric",
-      "type": "realtime.pronto",
-      "config": {
-        "sub-type": "latency-metric",
-        "index-pattern": "tdq.${flink.app.profile}.metric.latency."
-      }
-    }
-  ],
   "sources": [
-    {
-      "name": "kafka_pathfinder_rno",
-      "type": "realtime.kafka",
-      "config": {
-        "stream": "behavior.pathfinder",
-        "topics": "behavior.pathfinder.events.total",
-        "deserializer": "com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema",
-        "startup-mode": "LATEST",
-        "kafka-consumer": {
-          "receive.buffer": 8388608,
-          "sasl.mechanism": "IAF",
-          "fetch.max.bytes": 52428800,
-          "flink.partition-discovery.interval-millis": 30000,
-          "max.poll.records": 5000,
-          "sasl.jaas.config": "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" iafSecret=\"c4bb6fca-7ac5-46dd-b218-a49cb6307dbc\" iafEnv=\"production\";",
-          "auto.offset.reset": "latest",
-          "bootstrap.servers": "rhs-glrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092,rhs-glrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092,rhs-glrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092,rhs-glrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092,rhs-glrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092",
-          "fetch.max.wait.ms": 100,
-          "security.protocol": "SASL_PLAINTEXT",
-          "max.partition.fetch.bytes": 10485760,
-          "partition.assignment.strategy": "org.apache.kafka.clients.consumer.RoundRobinAssignor"
-        },
-        "rhs-parallelism": 125,
-        "event-time-field": "eventTimestamp",
-        "rhs-idle-timeout": "5min",
-        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
-        "rhs-out-of-orderless": "5min"
-      }
-    },
-    {
-      "name": "kafka_pathfinder_slc",
-      "type": "realtime.kafka",
-      "config": {
-        "stream": "behavior.pathfinder",
-        "topics": "behavior.pathfinder.events.total",
-        "deserializer": "com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema",
-        "startup-mode": "LATEST",
-        "kafka-consumer": {
-          "receive.buffer": 8388608,
-          "sasl.mechanism": "IAF",
-          "fetch.max.bytes": 52428800,
-          "flink.partition-discovery.interval-millis": 30000,
-          "max.poll.records": 5000,
-          "sasl.jaas.config": "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" iafSecret=\"c4bb6fca-7ac5-46dd-b218-a49cb6307dbc\" iafEnv=\"production\";",
-          "auto.offset.reset": "latest",
-          "bootstrap.servers": "rhs-mwsvkiaa-kfk-slc-1.rheos-streaming-prod.svc.45.tess.io:9092,rhs-mwsvkiaa-kfk-slc-2.rheos-streaming-prod.svc.45.tess.io:9092,rhs-mwsvkiaa-kfk-slc-3.rheos-streaming-prod.svc.45.tess.io:9092,rhs-mwsvkiaa-kfk-slc-4.rheos-streaming-prod.svc.45.tess.io:9092,rhs-mwsvkiaa-kfk-slc-5.rheos-streaming-prod.svc.45.tess.io:9092",
-          "fetch.max.wait.ms": 100,
-          "security.protocol": "SASL_PLAINTEXT",
-          "max.partition.fetch.bytes": 10485760,
-          "partition.assignment.strategy": "org.apache.kafka.clients.consumer.RoundRobinAssignor"
-        },
-        "rhs-parallelism": 125,
-        "event-time-field": "eventTimestamp",
-        "rhs-idle-timeout": "5min",
-        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
-        "rhs-out-of-orderless": "5min"
-      }
-    },
     {
       "name": "kafka_pathfinder_lvs",
       "type": "realtime.kafka",
@@ -382,7 +296,6 @@
           "auto.offset.reset": "latest",
           "bootstrap.servers": "rhs-swsvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.38.tess.io:9092,rhs-swsvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.38.tess.io:9092,rhs-swsvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.38.tess.io:9092,rhs-swsvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.38.tess.io:9092,rhs-swsvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.38.tess.io:9092",
           "fetch.max.wait.ms": 100,
-          "flink.partition-discovery.interval-millis": 30000,
           "security.protocol": "SASL_PLAINTEXT",
           "max.partition.fetch.bytes": 10485760,
           "partition.assignment.strategy": "org.apache.kafka.clients.consumer.RoundRobinAssignor"
@@ -394,5 +307,43 @@
         "rhs-out-of-orderless": "5min"
       }
     }
-  ]
+  ],
+  "sinks": [
+    {
+      "name": "kafka_tdq_metric_normal_metric",
+      "type": "realtime.kafka",
+      "config": {
+        "sub-type": "normal-metric",
+        "topic": "misc.crossdcs.tdq.pathfinder-lvs",
+        "schema-subject": "tdq.metric",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
+        "rhs-parallelism": 3,
+        "kafka-producer": {
+          "bootstrap.servers": "rhs-oasvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-6.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-7.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-8.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-9.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-10.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-11.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-12.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-13.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-14.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-15.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-16.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-17.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-18.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-19.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-20.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-21.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-22.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-23.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-24.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-25.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-26.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-27.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-28.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-29.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-30.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-31.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-32.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-33.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-34.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-35.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-36.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-37.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-38.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-39.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-40.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-41.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-42.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-43.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-44.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-45.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-46.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-47.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-48.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-49.rheos-streaming-prod.svc.25.tess.io:9092,rhs-oasvkiaa-kfk-rno-50.rheos-streaming-prod.svc.25.tess.io:9092",
+          "batch.size": "3",
+          "request.timeout.ms": "3000",
+          "delivery.timeout.ms": "12000",
+          "retries": "3",
+          "linger.ms": "50",
+          "buffer.memory": "1048",
+          "acks": "all",
+          "enable.idempotence":"true",
+          "compression.type": "lz4",
+          "sasl.mechanism": "IAF",
+          "sasl.jaas.config": "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" iafSecret=\"c4bb6fca-7ac5-46dd-b218-a49cb6307dbc\" iafEnv=\"production\";",
+          "security.protocol": "SASL_PLAINTEXT"
+        }
+      }
+    }
+  ],
+  "env": {
+    "config": {
+      "flink.app.window.metric-1st-aggr": "5s",
+      "flink.app.local-aggr.queue-size": 1000,
+      "flink.app.local-aggr.flush-timeout": "5s",
+      "flink.app.local-aggr.output-partitions": 13,
+      "flink.app.parallelism.metric-1st-aggr": 20,
+      "flink.app.parallelism.metric-2nd-aggr": 3
+    }
+  }
 }

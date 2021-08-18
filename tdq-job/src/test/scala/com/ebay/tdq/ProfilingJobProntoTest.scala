@@ -82,7 +82,17 @@ class ProfilingJobProntoTest {
            |        "index-pattern": "tdq.$${flink.app.profile}.metric.normal."
            |      }
            |    }
-           |  ]
+           |  ],
+           |  "env": {
+           |    "config": {
+           |      "flink.app.window.metric-1st-aggr": "10s",
+           |      "flink.app.local-aggr.queue-size": 0,
+           |      "flink.app.local-aggr.flush-timeout": "5s",
+           |      "flink.app.local-aggr.output-partitions": 2,
+           |      "flink.app.parallelism.metric-1st-aggr": 2,
+           |      "flink.app.parallelism.metric-2nd-aggr": 2
+           |    }
+           |  }
            |}
            |""".stripMargin,
       events = List(
@@ -196,7 +206,17 @@ class ProfilingJobProntoTest {
            |        "index-pattern": "tdq.$${flink.app.profile}.metric.normal."
            |      }
            |    }
-           |  ]
+           |  ],
+           |  "env": {
+           |    "config": {
+           |      "flink.app.window.metric-1st-aggr": "10s",
+           |      "flink.app.local-aggr.queue-size": 0,
+           |      "flink.app.local-aggr.flush-timeout": "5s",
+           |      "flink.app.local-aggr.output-partitions": 2,
+           |      "flink.app.parallelism.metric-1st-aggr": 2,
+           |      "flink.app.parallelism.metric-2nd-aggr": 2
+           |    }
+           |  }
            |}
            |""".stripMargin,
       events = List(

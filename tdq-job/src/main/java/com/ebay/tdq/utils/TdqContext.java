@@ -38,23 +38,24 @@ public class TdqContext implements Serializable {
   public TdqContext(String[] args) throws Exception {
     load(args);
     this.tdqEnv = new TdqEnv();
+
+    ConfigService.register(tdqEnv);
+    TdqConfig tdqConfig = TdqConfigManager.getTdqConfig(tdqEnv);
+    Validate.isTrue(tdqConfig != null);
+    tdqEnv.setEnv(tdqConfig);
+
     this.exceptionOutputTag = new OutputTag<>("tdq-exception", TypeInformation.of(TdqErrorMsg.class));
     this.sampleOutputTag = new OutputTag<>("tdq-sample", TypeInformation.of(TdqSampleData.class));
     this.debugOutputTag = new OutputTag<>("tdq-debug", TypeInformation.of(TdqSampleData.class));
     this.eventLatencyOutputTag = new OutputTag<>("tdq-event-latency", TypeInformation.of(InternalMetric.class));
-    for (Long seconds : tdqEnv.getWinTags()) {
-      outputTagMap.put(seconds,
-          new OutputTag<>(String.valueOf(seconds), TypeInformation.of(InternalMetric.class)));
+    if (tdqEnv.getMetric2ndAggrWindow() != null) {
+      for (Long seconds : tdqEnv.getMetric2ndAggrWindow()) {
+        outputTagMap.put(seconds,
+            new OutputTag<>(String.valueOf(seconds), TypeInformation.of(InternalMetric.class)));
+      }
     }
 
     this.rhsEnv = FlinkEnvFactory.create(this.getTdqEnv());
-  }
-
-  public void registerJob() throws Exception {
-    ConfigService.register(tdqEnv);
-    TdqConfig tdqConfig = TdqConfigManager.getTdqConfig(tdqEnv);
-    Validate.isTrue(tdqConfig != null);
-    tdqEnv.setTdqConfig(tdqConfig);
   }
 
   private static void load(String[] args) {

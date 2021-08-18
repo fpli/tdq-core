@@ -1,7 +1,6 @@
 package com.ebay.tdq.common.env;
 
 import com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema;
-import com.ebay.tdq.utils.TdqContext;
 import java.text.ParseException;
 import lombok.val;
 import org.apache.commons.lang3.time.FastDateFormat;
@@ -23,21 +22,14 @@ public class KafkaSourceEnvTest {
 
   @Test
   public void testIsProcessingElement() throws Exception {
-    TdqContext tdqContext = new TdqContext(new String[]{
-        "--tdq-profile", "test"
-    });
-    final TdqEnv tdqEnv = tdqContext.getTdqEnv();
+    final TdqEnv tdqEnv = new TdqEnv();
     long current = getTime("2021-07-20 18:24:59");
     Assert.assertTrue(tdqEnv.isProcessElement(current));
   }
 
   @Test
   public void testIsProcessingElement1() throws Exception {
-    TdqContext tdqContext = new TdqContext(new String[]{
-        "--tdq-profile", "test"
-
-    });
-    final TdqEnv tdqEnv = tdqContext.getTdqEnv();
+    final TdqEnv tdqEnv = new TdqEnv();
     long current = getTime("2021-07-20 18:24:59");
     Assert.assertTrue(tdqEnv.isProcessElement(current));
   }
@@ -47,11 +39,7 @@ public class KafkaSourceEnvTest {
     long start = getTime("2021-07-20 18:20:00");
     long end = getTime("2021-07-20 18:25:00");
     long current = getTime("2021-07-20 18:24:59");
-    TdqContext tdqContext = new TdqContext(new String[]{
-        "--tdq-profile", "test"
-
-    });
-    final TdqEnv tdqEnv = tdqContext.getTdqEnv();
+    final TdqEnv tdqEnv = new TdqEnv();
     tdqEnv.setFromTimestamp(start);
     tdqEnv.setToTimestamp(end);
 
@@ -65,10 +53,7 @@ public class KafkaSourceEnvTest {
   @Test
   public void testIsProcessingElement3() throws Exception {
     long end = getTime("2021-07-20 18:25:00");
-    TdqContext tdqContext = new TdqContext(new String[]{
-        "--tdq-profile", "test"
-    });
-    final TdqEnv tdqEnv = tdqContext.getTdqEnv();
+    final TdqEnv tdqEnv = new TdqEnv();
     tdqEnv.setToTimestamp(end);
 
     long current = getTime("2021-07-20 18:24:59");

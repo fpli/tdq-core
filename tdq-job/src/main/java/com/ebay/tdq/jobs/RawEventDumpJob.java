@@ -26,7 +26,6 @@ public class RawEventDumpJob {
 
   public void submit(String[] args) throws Exception {
     tdqCxt = new TdqContext(args);
-    tdqCxt.registerJob();
 
     TdqConfig tdqConfig = TdqConfigManager.getTdqConfig(tdqCxt.getTdqEnv());
 

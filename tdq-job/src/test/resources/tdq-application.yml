@@ -2,14 +2,6 @@ flink:
   app:
     name: "tdq-job"
     profile: dev
-    parallelism:
-      default: 1
-      source: 1
-      metric-1st-aggr: 2
-      metric-2nd-aggr: 1
-    window:
-      metric-1st-aggr: 60s
-      supports: 1min,2min,5min,10min
     checkpoint:
       data-dir: /tmp/${flink.app.name}/checkpoint
       interval-ms: 10000
@@ -17,11 +9,6 @@ flink:
       min-pause-between-ms: 60000
       max-concurrent: 1
       tolerate-failure-number: 3
-    local-cache:
-      queue-size: 0
-      flush-timeout: 5s
-      output-partitions: 2
-
 pronto:
   scheme: http
   hostname: localhost

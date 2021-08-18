@@ -242,7 +242,7 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, tdqEnv: T
     }
 
     val plan = PhysicalPlan(
-      metricKey = profilerConfig.getMetricName,
+      metricName = profilerConfig.getMetricName,
       window = window,
       filter = parseFilter(profilerConfig.getFilter),
       dimensions = dimensions,

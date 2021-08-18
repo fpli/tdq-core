@@ -39,7 +39,6 @@ public class ProfilingJob {
   protected void setup(String[] args) throws Exception {
     // step0: prepare environment
     tdqCxt = new TdqContext(args);
-    tdqCxt.registerJob();
     tdqEnv = tdqCxt.getTdqEnv();
   }
 

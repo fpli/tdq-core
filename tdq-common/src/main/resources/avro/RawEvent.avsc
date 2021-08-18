@@ -1,6 +1,6 @@
 {
   "type": "record",
-  "name": "RawEventAvro",
+  "name": "RawEvent",
   "namespace": "com.ebay.tdq.common.model",
   "fields": [
     { "name": "ingestTime",     "type": "long"                                                   },

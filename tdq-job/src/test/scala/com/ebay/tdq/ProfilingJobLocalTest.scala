@@ -18,10 +18,9 @@ case class ProfilingJobLocalTest() extends ProfilingJob {
   import ProfilingJobIT.setupDB
 
   override def setup(args: Array[String]): Unit = {
-    super.setup(args)
     setupDB(IOUtils.toString(
       classOf[ProfilingJob].getResourceAsStream("/metrics/tdq.local.memory.json")))
-
+    super.setup(args)
     MemorySourceFactory.setSourceFunction(new SourceFunction[TdqEvent]() {
       @throws[InterruptedException]
       override def run(ctx: SourceFunction.SourceContext[TdqEvent]): Unit = {
@@ -55,10 +54,7 @@ object ProfilingJobLocalTest {
   def main(args: Array[String]): Unit = {
     ProfilingJobLocalTest().submit(Array[String](
       "--flink.app.name", "tdq.local.memory",
-      "--flink.app.local", "true",
-      "--flink.app.sink.normal-metric.std-name", "NORMAL",
-      "--flink.app.sink.latency-metric.std-name", "LATE",
-      "--flink.app.name", "tdq.local.memory"
+      "--flink.app.local", "true"
     ))
   }
 }

@@ -32,7 +32,7 @@ Tracking Data Quality
   "name": "pronto_sojevent_tdq_normal_metric",
   "type": "realtime.pronto",
   "config": {
-    "tdq-type": "normal-metric",
+    "sub-type": "normal-metric",
     "index-pattern": "tdq.${flink.app.profile}.metric.normal."
   }
 },
@@ -40,7 +40,7 @@ Tracking Data Quality
   "name": "hdfs_sojevent_tdq_normal_metric",
   "type": "realtime.hdfs",
   "config": {
-    "tdq-type": "normal-metric",
+    "sub-type": "normal-metric",
     "hdfs-path": "hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/metric/normal"
   }
 },
@@ -48,7 +48,7 @@ Tracking Data Quality
   "name": "console_sojevent_tdq_normal_metric",
   "type": "realtime.console",
   "config": {
-    "tdq-type": "normal-metric",
+    "sub-type": "normal-metric",
     "std-name": "normal"
   }
 },
@@ -60,7 +60,7 @@ Tracking Data Quality
   "name": "hdfs_pathfinder_dump",
   "type": "realtime.hdfs",
   "config": {
-    "tdq-type": "dump-pathfinder",
+    "sub-type": "dump-pathfinder",
     "hdfs-path": "hdfs://apollo-rno/user/b_bis/tdq/raw-data"
   }
 }
@@ -71,10 +71,16 @@ Tracking Data Quality
   "name": "hdfs_sojevent_dump",
   "type": "realtime.hdfs",
   "config": {
-    "tdq-type": "dump-sojevent",
+    "sub-type": "dump-sojevent",
     "hdfs-path": "hdfs://apollo-rno/user/b_bis/tdq/raw-data"
   }
 }
+```
+
+#### local dev
+```
+ubi
+"sasl.jaas.config": "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" iafSecret=\"c4bb6fca-7ac5-46dd-b218-a49cb6307dbc\" iafEnv=\"staging\";",
 ```
 
 ## profile config

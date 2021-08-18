@@ -24,7 +24,6 @@ public class SojEventDumpJob {
 
   public void submit(String[] args) throws Exception {
     tdqCxt = new TdqContext(args);
-    tdqCxt.registerJob();
 
     for (SourceConfig sourceConfig : tdqCxt.getTdqEnv().getTdqConfig().getSources()) {
       dump(sourceConfig, tdqCxt);

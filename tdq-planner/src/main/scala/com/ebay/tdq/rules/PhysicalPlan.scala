@@ -2,7 +2,7 @@ package com.ebay.tdq.rules
 
 import java.util.{Random, HashMap => JHashMap, Map => JMap}
 
-import com.ebay.tdq.common.model.{TdqEvent, InternalMetric}
+import com.ebay.tdq.common.model.{InternalMetric, TdqEvent}
 import com.ebay.tdq.expressions._
 
 import scala.collection.JavaConverters.mapAsScalaMapConverter
@@ -21,7 +21,7 @@ case class PhysicalPlanContext(
 )
 
 case class PhysicalPlan(
-  metricKey: String,
+  metricName: String,
   window: Long,
   evaluation: Option[Expression],
   aggregations: Array[Transformation],
@@ -32,7 +32,7 @@ case class PhysicalPlan(
   lazy val random = new Random()
 
   def uuid(): String = {
-    s"${metricKey}_$window"
+    s"${metricName}_$window"
   }
 
   def sampling(): Boolean = {
@@ -46,7 +46,7 @@ case class PhysicalPlan(
   def process(event: TdqEvent): InternalMetric = {
     val cacheData = new JHashMap[String, Any]()
     val eventTimeMillis = event.getEventTimeMs
-    val metric = new InternalMetric(metricKey, (eventTimeMillis / 60000) * 60000)
+    val metric = new InternalMetric(metricName, (eventTimeMillis / 60000) * 60000)
     metric.setWindow(window)
     aggregations.foreach(aggr => {
       metric.putAggrExpress(aggr.name, aggr.expr.simpleName)
@@ -111,7 +111,7 @@ case class PhysicalPlan(
   }
 
   override def toString: String = {
-    s"metricKey=$metricKey,window=$window,evaluation=$evaluation,aggregations=${aggregations.mkString(";")},dimensions=${dimensions.mkString(";")}"
+    s"metricKey=$metricName,window=$window,evaluation=$evaluation,aggregations=${aggregations.mkString(";")},dimensions=${dimensions.mkString(";")}"
   }
 }
 

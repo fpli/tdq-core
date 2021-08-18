@@ -266,7 +266,7 @@ public class RuleEngineServiceImpl implements RuleEngineService {
         log.warn(e.getMessage(), e);
         result.exception(e);
       }
-      log.warn(plan.metricKey() + " cost time {}ms", (System.currentTimeMillis() - s));
+      log.warn(plan.metricName() + " cost time {}ms", (System.currentTimeMillis() - s));
       return System.currentTimeMillis() - s;
     });
 

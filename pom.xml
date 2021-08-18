@@ -62,13 +62,12 @@
     <scala-maven-plugin.version>4.4.0</scala-maven-plugin.version>
 
     <sonar.coverage.exclusions>
-      src/main/java/com/ebay/sojourner/rt/pipeline/*.java,
-      src/main/java/com/ebay/sojourner/rt/metric/*.java,
-      src/main/java/com/ebay/sojourner/dumper/pipeline/*.java,
-      src/main/java/com/ebay/sojourner/distributor/pipeline/*.java,
-      src/main/java/org/apache/flink/streaming/runtime/operators/windowing/*.java,
-      src/main/java/com/ebay/sojourner/dsl/domain/rule/*.java,
-      src/main/java/com/ebay/sojourner/dsl/domain/RuleManager.java
+      src/main/java/com/ebay/sojourner/*,
+      src/main/java/org/apache/flink/*,
+      src/main/java/com/ebay/tdq/jobs/*.java,
+      src/main/java/com/ebay/tdq/common/*,
+      src/main/java/com/ebay/tdq/dto/*,
+      src/main/java/com/ebay/tdq/config/*
     </sonar.coverage.exclusions>
   </properties>
 

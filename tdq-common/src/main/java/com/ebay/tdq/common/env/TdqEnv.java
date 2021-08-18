@@ -5,10 +5,12 @@ import com.ebay.tdq.config.TdqConfig;
 import com.ebay.tdq.utils.DateUtils;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import scala.concurrent.duration.Duration;
 
@@ -29,11 +31,10 @@ public class TdqEnv implements Serializable {
   private String profile;
   private boolean local;
   private boolean noRestart;
-  private List<Long> winTags;
-
   private int metric1stAggrParallelism;
   private int metric2ndAggrParallelism;
   private String metric1stAggrWindow;
+  private List<Long> metric2ndAggrWindow;
   private long localCombineFlushTimeout;
   private int localCombineQueueSize;
   private int outputPartitions;
@@ -50,22 +51,28 @@ public class TdqEnv implements Serializable {
     this.noRestart = EnvironmentUtils.getBooleanOrDefault("flink.app.noRestart", false);
     this.profile = EnvironmentUtils.get("flink.app.profile");
     this.prontoEnv = new ProntoEnv();
+    this.jdbcEnv = new JdbcEnv();
+  }
 
-    this.localCombineFlushTimeout = Duration
-        .apply(EnvironmentUtils.getStringOrDefault("flink.app.local-cache.flush-timeout", "5min")).toMillis();
-    this.localCombineQueueSize = EnvironmentUtils.getIntegerOrDefault("flink.app.local-cache.queue-size", 5000);
-    this.outputPartitions = EnvironmentUtils.getIntegerOrDefault("flink.app.local-cache.output-partitions", 57);
-    this.metric1stAggrParallelism = EnvironmentUtils.getIntegerOrDefault("flink.app.parallelism.metric-1st-aggr", 100);
-    this.metric2ndAggrParallelism = EnvironmentUtils.getIntegerOrDefault("flink.app.parallelism.metric-2nd-aggr", 61);
-    this.metric1stAggrWindow = EnvironmentUtils.getStringOrDefault("flink.app.window.metric-1st-aggr", "1min");
+  public void setEnv(TdqConfig tdqConfig) {
+    this.tdqConfig = tdqConfig;
 
-    if (EnvironmentUtils.contains("flink.app.window.supports")) {
-      this.winTags = EnvironmentUtils.getStringList("flink.app.window.supports", ",")
-          .stream().map(DateUtils::toSeconds)
+    if (tdqConfig.getEnv() != null && MapUtils.isNotEmpty(tdqConfig.getEnv().getConfig())) {
+      Map<String, Object> config = tdqConfig.getEnv().getConfig();
+      this.localCombineFlushTimeout = Duration.apply(
+          (String) config.get("flink.app.local-aggr.flush-timeout")).toMillis();
+      this.localCombineQueueSize = (Integer) config.get("flink.app.local-aggr.queue-size");
+      this.outputPartitions = (Integer) config.get("flink.app.local-aggr.output-partitions");
+      this.metric1stAggrParallelism = (Integer) config.get("flink.app.parallelism.metric-1st-aggr");
+      this.metric2ndAggrParallelism = (Integer) config.get("flink.app.parallelism.metric-2nd-aggr");
+      this.metric1stAggrWindow = (String) config.get("flink.app.window.metric-1st-aggr");
+
+      this.metric2ndAggrWindow = tdqConfig.getRules().stream()
+          .map(r -> (String) r.getConfig().get("window"))
+          .map(DateUtils::toSeconds)
           .collect(Collectors.toList());
     }
 
-    this.jdbcEnv = new JdbcEnv();
     // checkstyle.off: Regexp
     System.out.println(this.toString());
     // checkstyle.on: Regexp

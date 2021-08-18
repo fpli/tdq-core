@@ -43,6 +43,7 @@ public class ProntoSink implements Sinkable {
   @Override
   public void sinkNormalMetric(String id, SinkConfig sinkConfig, TdqEnv tdqEnv, DataStream<InternalMetric> ds) {
     Map<String, Object> props = sinkConfig.getConfig();
+    int parallelism = ((int) props.getOrDefault("rhs-parallelism", 2));
     String pattern = replaceStringWithPattern((String) props.get("index-pattern"));
     ds
         .addSink(buildPronto(tdqEnv.getProntoEnv(), 1,
@@ -54,13 +55,14 @@ public class ProntoSink implements Sinkable {
             }))
         .uid(id + "_pronto")
         .name(id + "_pronto")
-        .setParallelism(tdqEnv.getMetric2ndAggrParallelism());
+        .setParallelism(parallelism);
   }
 
   @Override
   public void sinkLatencyMetric(String id, SinkConfig sinkConfig, TdqEnv tdqEnv, DataStream<InternalMetric> ds) {
     Map<String, Object> props = sinkConfig.getConfig();
     String pattern = replaceStringWithPattern((String) props.get("index-pattern"));
+    int parallelism = ((int) props.getOrDefault("rhs-parallelism", 2));
     ds
         .addSink(buildPronto(tdqEnv.getProntoEnv(), 10,
             new ElasticsearchSinkFunction<InternalMetric>() {
@@ -75,13 +77,14 @@ public class ProntoSink implements Sinkable {
             }))
         .uid(id + "_pronto")
         .name(id + "_pronto")
-        .setParallelism(tdqEnv.getMetric2ndAggrParallelism());
+        .setParallelism(parallelism);
   }
 
   @Override
   public void sinkSampleLog(String id, SinkConfig sinkConfig, TdqEnv tdqEnv, DataStream<TdqSampleData> ds) {
     Map<String, Object> props = sinkConfig.getConfig();
     String pattern = replaceStringWithPattern((String) props.get("index-pattern"));
+    int parallelism = ((int) props.getOrDefault("rhs-parallelism", 3));
     ds
         .addSink(buildPronto(tdqEnv.getProntoEnv(), 20,
             new ElasticsearchSinkFunction<TdqSampleData>() {
@@ -95,13 +98,14 @@ public class ProntoSink implements Sinkable {
             }))
         .uid(id + "_log_sample_o_pronto")
         .name(id + "_log_sample_o_pronto")
-        .setParallelism(3);
+        .setParallelism(parallelism);
   }
 
   @Override
   public void sinkExceptionLog(String id, SinkConfig sinkConfig, TdqEnv tdqEnv, DataStream<TdqErrorMsg> ds) {
     Map<String, Object> props = sinkConfig.getConfig();
     String pattern = replaceStringWithPattern((String) props.get("index-pattern"));
+    int parallelism = ((int) props.getOrDefault("rhs-parallelism", 1));
     ds
         .addSink(buildPronto(tdqEnv.getProntoEnv(), 1,
             new ElasticsearchSinkFunction<TdqErrorMsg>() {
@@ -115,7 +119,7 @@ public class ProntoSink implements Sinkable {
             }))
         .uid(id + "_log_exception_o_pronto")
         .name(id + "_log_exception_o_pronto")
-        .setParallelism(1);
+        .setParallelism(parallelism);
   }
 
   private static <T> ElasticsearchSink<T> buildPronto(ProntoEnv env, int numMaxActions,

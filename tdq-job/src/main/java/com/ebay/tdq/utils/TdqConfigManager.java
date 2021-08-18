@@ -10,11 +10,15 @@ import com.ebay.tdq.connector.kafka.schema.RheosEventSerdeFactory;
 import com.ebay.tdq.planner.Refreshable;
 import com.ebay.tdq.rules.PhysicalPlan;
 import com.ebay.tdq.rules.ProfilingSqlParser;
+import com.ebay.tdq.rules.Transformation;
 import com.google.common.collect.Lists;
+import com.sun.jersey.client.impl.CopyOnWriteHashMap;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -36,6 +40,7 @@ public class TdqConfigManager implements Refreshable {
 
   private TdqEnv tdqEnv;
   private List<PhysicalPlan> physicalPlans = new CopyOnWriteArrayList<>();
+  private Map<String, Map<String, String>> metricNameAggrExpressMap = new CopyOnWriteHashMap<>();
 
   private TdqConfigManager(TdqEnv tdqEnv) {
     log.info("init {}", tdqEnv.getId());
@@ -115,6 +120,7 @@ public class TdqConfigManager implements Refreshable {
         .sources(c.getSources())
         .rules(c.getRules())
         .sinks(c.getSinks() == null ? Lists.newArrayList() : c.getSinks())
+        .env(c.getEnv())
         .build();
   }
 
@@ -155,6 +161,17 @@ public class TdqConfigManager implements Refreshable {
       }
 
       this.physicalPlans = plans;
+
+      Map<String, Map<String, String>> metricNameAggrExpressMap = new CopyOnWriteHashMap<>();
+      plans.forEach(p -> {
+        Map<String, String> t = new HashMap<>();
+        for (Transformation tr : p.aggregations()) {
+          t.put(tr.name(), tr.expr().simpleName());
+        }
+        metricNameAggrExpressMap.put(p.metricName(), t);
+      });
+      this.metricNameAggrExpressMap = metricNameAggrExpressMap;
+
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -162,6 +179,10 @@ public class TdqConfigManager implements Refreshable {
 
   public List<PhysicalPlan> getPhysicalPlans() {
     return physicalPlans;
+  }
+
+  public Map<String, Map<String, String>> getMetricNameAggrExpressMap() {
+    return metricNameAggrExpressMap;
   }
 
 }

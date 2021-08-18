@@ -48,6 +48,13 @@ public class SourceFactory {
     SinkFactory.sinkException(name, tdqCxt, outDS);
     SinkFactory.sinkSampleLog(name, tdqCxt, outDS);
 
+    return assignTimestampsAndWatermarks(tdqCxt, name, parallelism, outOfOrderlessMs, idleTimeoutMs, outDS);
+  }
+
+  public static SingleOutputStreamOperator<InternalMetric> assignTimestampsAndWatermarks(
+      TdqContext tdqCxt,
+      String name, int parallelism, Long outOfOrderlessMs, Long idleTimeoutMs,
+      SingleOutputStreamOperator<InternalMetric> outDS) {
     SerializableTimestampAssigner<InternalMetric> assigner =
         (SerializableTimestampAssigner<InternalMetric>) (event, timestamp) -> event.getEventTime();
 
@@ -65,7 +72,6 @@ public class SourceFactory {
         .uid(name + "_wks")
         .slotSharingGroup(name)
         .setParallelism(parallelism);
-
     return outDS;
   }
 }

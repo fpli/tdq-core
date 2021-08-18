@@ -28,7 +28,7 @@ public class RhsKafkaSink implements Sinkable {
         config.getTopic(),
         new TdqMetricSerializationSchema(config, tdqEnv),
         config.getKafkaProducer(),
-        Semantic.EXACTLY_ONCE);
+        Semantic.AT_LEAST_ONCE);
 
     int schemaId = RheosEventSerdeFactory.getSchemaId(config.getSchemaSubject(), config.getRheosServicesUrls());
 
@@ -41,7 +41,11 @@ public class RhsKafkaSink implements Sinkable {
         })
         .uid(id + "_trans")
         .name(id + "_trans")
-        .addSink(producer);
+        .setParallelism(config.getParallelism())
+        .addSink(producer)
+        .setParallelism(config.getParallelism())
+        .uid(id + "_kafka")
+        .name(id + "_kafka");
   }
 
   @Override

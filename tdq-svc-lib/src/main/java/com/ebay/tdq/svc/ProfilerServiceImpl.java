@@ -183,7 +183,7 @@ public class ProfilerServiceImpl implements ProfilerService {
     List<InternalMetric> result = Lists.newArrayList();
     for (Histogram.Bucket entry : agg.getBuckets()) {
       long eventTime = Long.parseLong(entry.getKeyAsString());
-      InternalMetric tdqMetric = new InternalMetric(physicalPlan.metricKey(), eventTime);
+      InternalMetric tdqMetric = new InternalMetric(physicalPlan.metricName(), eventTime);
       for (Transformation aggPlan : physicalPlan.aggregations()) {
         tdqMetric.putExpr(aggPlan.name(),
             ((NumericMetricsAggregation.SingleValue) entry.getAggregations().get(aggPlan.name())).value());
