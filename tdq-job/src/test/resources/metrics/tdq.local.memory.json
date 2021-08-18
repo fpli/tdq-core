@@ -10,25 +10,6 @@
   ],
   "rules": [
     {
-      "name": "tdq_system",
-      "type": "realtime.rheos.profiler",
-      "config": {
-        "window": "10s"
-      },
-      "profilers": [
-        {
-          "expr": "p1",
-          "metric-name": "system_metric",
-          "transformations": [
-            {
-              "alias": "p1",
-              "expr": "count(1)"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "tdq_pathfinder_in_ido",
       "type": "realtime.rheos.profiler",
       "config": {
@@ -36,199 +17,14 @@
       },
       "profilers": [
         {
-          "metric-name": "common_metric",
-          "expr": "total_cnt",
-          "dimensions": [
-            "domain",
-            "site_id",
-            "app",
-            "page_id"
-          ],
-          "transformations": [
-            {
-              "alias": "soj_tag_p",
-              "expr": "soj_tag('p')"
-            },
-            {
-              "alias": "soj_tag_u",
-              "expr": "soj_tag('u')"
-            },
-            {
-              "alias": "soj_tag_t",
-              "expr": "soj_tag('t')"
-            },
-            {
-              "alias": "soj_tag_itm",
-              "expr": "soj_tag('itm|itmid|itm_id|itmlist|litm')"
-            },
-            {
-              "alias": "soj_tag_mav",
-              "expr": "soj_tag('mav')"
-            },
-            {
-              "alias": "soj_tag_dn",
-              "expr": "soj_tag('dn')"
-            },
-            {
-              "alias": "soj_tag_mos",
-              "expr": "soj_tag('mos')"
-            },
-            {
-              "alias": "soj_tag_osv",
-              "expr": "soj_tag('osv')"
-            },
-            {
-              "alias": "soj_tag_es",
-              "expr": "soj_tag('es')"
-            },
-            {
-              "alias": "soj_tag_app",
-              "expr": "soj_tag('app')"
-            },
-            {
-              "alias": "soj_tag_cpnip",
-              "expr": "soj_tag('cpnip')"
-            },
-            {
-              "alias": "soj_tag_icpp",
-              "expr": "soj_tag('icpp')"
-            },
-            {
-              "alias": "soj_tag_prof",
-              "expr": "soj_tag('prof')"
-            },
-            {
-              "alias": "soj_tag_clktrack",
-              "expr": "soj_tag('!clktrack')"
-            },
-            {
-              "alias": "soj_tag_eactn",
-              "expr": "soj_tag('eactn')"
-            },
-            {
-              "alias": "app",
-              "expr": "soj_tag_app",
-              "filter": "app in ('2571','1462','2878')"
-            },
-            {
-              "alias": "page_id",
-              "expr": "CAST(soj_tag_p AS INTEGER)",
-              "filter": "page_id in (2547208,2483445,2047936,2054032,2053742,2045573,2351460,2381081)"
-            },
-            {
-              "alias": "domain",
-              "expr": "soj_page_family(CAST(soj_tag_p AS INTEGER))"
-            },
-            {
-              "alias": "site_id",
-              "expr": "CAST(soj_tag_t AS INTEGER)"
-            },
-            {
-              "alias": "usr_id",
-              "expr": "CAST(soj_tag_u AS LONG)"
-            },
-            {
-              "alias": "total_cnt",
-              "expr": "count(1)"
-            },
-            {
-              "alias": "duration_sum",
-              "expr": "sum(CAST(clientData.TDuration AS DOUBLE))"
-            },
-            {
-              "alias": "gmt_usr_total_cnt",
-              "expr": "count(1)",
-              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%'"
-            },
-            {
-              "alias": "gmt_usr_cnt",
-              "expr": "sum(case when LENGTH(soj_tag_u) > 0 then 1 else 0 end)",
-              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%'"
-            },
-            {
-              "alias": "gmt_itm_total_cnt",
-              "expr": "count(1)",
-              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','VI','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%'"
-            },
-            {
-              "alias": "gmt_itm_cnt",
-              "expr": "sum(case when LENGTH(soj_tag_itm) > 0 then 1 else 0 end)",
-              "filter": "domain in ('ASQ','BID','BIDFLOW','BIN','BINFLOW','CART','OFFER','UNWTCH','VI','WTCH','XO') and IS_BBWOA_PAGE_WITH_ITM(page_id) and clientData.remoteIP not like '10.%'"
-            },
-            {
-              "alias": "ebay_ip_cnt",
-              "expr": "count(1)",
-              "filter": "clientData.remoteIP like '10.%'"
-            },
-            {
-              "alias": "bbwoa_pwi_cnt",
-              "expr": "count(1)",
-              "filter": "IS_BBWOA_PAGE_WITH_ITM(page_id)"
-            },
-            {
-              "alias": "nt_dn_cnt",
-              "expr": "sum(case when LENGTH(soj_tag_dn) > 0 then 1 else 0 end)"
-            },
-            {
-              "alias": "nt_mav_cnt",
-              "expr": "sum(case when LENGTH(soj_tag_mav) > 0 then 1 else 0 end)"
-            },
-            {
-              "alias": "nt_mos_cnt",
-              "expr": "sum(case when LENGTH(soj_tag_mos) > 0 then 1 else 0 end)"
-            },
-            {
-              "alias": "nt_osv_cnt",
-              "expr": "sum(case when LENGTH(soj_tag_osv) > 0 then 1 else 0 end)"
-            },
-            {
-              "alias": "ep_site_incon_cnt",
-              "expr": "sum(case when soj_tag_t = soj_tag_es then 0 else 1 end)",
-              "filter": "soj_tag_es is not null"
-            },
-            {
-              "alias": "ep_site_total_cnt",
-              "expr": "count(1)",
-              "filter": "soj_tag_es is not null"
-            },
-            {
-              "alias": "ut_err_cnt",
-              "expr": "sum(case when ((soj_tag_u similar to '\\d+' and (usr_id <= 0 or usr_id > 9999999999999999)) or soj_tag_u not similar to '\\d+') then 1 else 0 end)"
-            },
-            {
-              "alias": "st_total_cnt",
-              "expr": "count(1)",
-              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and soj_tag_eactn is not null)"
-            },
-            {
-              "alias": "st_cpnip_cnt",
-              "expr": "sum(case when LENGTH(soj_tag_cpnip) > 0 then 1 else 0 end)",
-              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and soj_tag_eactn is not null)"
-            },
-            {
-              "alias": "st_icpp_cnt",
-              "expr": "sum(case when LENGTH(soj_tag_icpp) > 0 then 1 else 0 end)",
-              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and soj_tag_eactn is not null)"
-            },
-            {
-              "alias": "st_prof_cnt",
-              "expr": "sum(case when LENGTH(soj_tag_prof) > 0 then 1 else 0 end)",
-              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and soj_tag_eactn is not null)"
-            },
-            {
-              "alias": "st_clktrack_cnt",
-              "expr": "sum(case when LENGTH(soj_tag_clktrack) > 0 then 1 else 0 end)",
-              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and soj_tag_eactn is not null)"
-            }
-          ]
-        },
-        {
           "metric-name": "ep_qa_nqt",
           "expr": "qualified_events_cnt / total_cnt",
           "dimensions": [
             "expt_flow_type",
             "channel",
-            "qual_age_target"
+            "qual_age_target",
+            "soj_ec",
+            "mdbref_age_group"
           ],
           "filter": "qual_timestamp is not null",
           "transformations": [
@@ -273,12 +69,29 @@
               "expr": "case when expt_flow_type in ('Native Client Side') then '< 12 hours' else '< 10 second' end"
             },
             {
+              "expr": "count(1)",
               "alias": "total_cnt",
-              "expr": "count(1)"
+              "filter": "qual_timestamp is not null"
             },
             {
+              "expr": "sum( case when expt_flow_type in ('Native Client Side') and qual_age <= 3600 * 12 then 1 when expt_flow_type in ('Native web, MWeb, DWeb', 'Native Server Side') and qual_age <= 10 then 1 else 0 end)",
               "alias": "qualified_events_cnt",
-              "expr": "sum( case  when expt_flow_type in ('Native Client Side') and qual_age <= 3600 * 12 then 1  when expt_flow_type in ('Native web, MWeb, DWeb', 'Native Server Side') and qual_age <= 10 then 1  else 0 end)"
+              "filter": "qual_timestamp is not null"
+            },
+
+            {"alias": "mdbref_timestamp", "expr": "cast(cast(soj_nvl('mdbreftime') AS LONG) / 1000 AS LONG)"},
+            {
+              "alias": "mdbref_age",
+              "expr":  "unix_timestamp(qual_timestamp) - mdbref_timestamp"
+            },
+            {
+              "alias": "mdbref_age_group",
+              "expr":  "case when mdbref_age < 0 then 'Group: Error' when mdbref_age < 910 then '<= 15 min 10 sec' else 'Not meet target' end"
+            },
+            {
+              "alias": "mrq_cnt",
+              "expr": "count(1)",
+              "filter": "mdbref_timestamp is not null"
             }
           ]
         }
@@ -292,33 +105,6 @@
       "config": {
         "sub-type": "normal-metric",
         "std-name": "normal"
-      }
-    },
-    {
-      "name": "kafka",
-      "type": "realtime.kafka",
-      "config": {
-        "sub-type": "normal-metric",
-        "topic": "misc.ha.tdq.pathfinder-lvs",
-        "schema-subject": "tdq.metric",
-        "rheos-services-urls": "https://rheos-services.qa.ebay.com",
-        "rhs-parallelism": 2,
-        "kafka-producer": {
-          "bootstrap.servers": "rhs-rurvkiaa-kfk-lvs-1.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-2.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-3.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-4.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-5.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-6.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-7.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-8.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-9.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-10.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-11.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-12.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-13.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-14.rheos-streaming-qa.svc.32.tess.io:9092,rhs-rurvkiaa-kfk-lvs-15.rheos-streaming-qa.svc.32.tess.io:9092",
-          "batch.size": "3",
-          "request.timeout.ms": "3000",
-          "delivery.timeout.ms": "12000",
-          "retries": "3",
-          "linger.ms": "50",
-          "buffer.memory": "1048",
-          "acks": "all",
-          "enable.idempotence":"true",
-          "transactional.id": "0A0A",
-          "compression.type": "lz4",
-          "sasl.mechanism": "IAF",
-          "sasl.jaas.config": "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:7b071ddc-1ab1-4f2b-8fc4-8d2a0afcff46\" iafSecret=\"2c43449b-0d6f-4054-a082-e5576d667654\" iafEnv=\"staging\";",
-          "security.protocol": "SASL_PLAINTEXT"
-        }
       }
     }
   ],

@@ -11,6 +11,10 @@
       "profilers": [
         {
           "metric-name":     "ep_qa_nqt",
+          "config": {
+            "pronto-dropdown": "expr.total_cnt > 0",
+            "pronto-filter": "expr.total_cnt > 0"
+          },
           "expr":            "qualified_events_cnt / total_cnt",
           "dimensions":      ["expt_flow_type", "channel", "qual_age_target"],
           "filter":          "qual_timestamp is not null",

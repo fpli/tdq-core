@@ -1,0 +1,52 @@
+{
+  "id":    "28",
+  "name":  "cfg_28",
+  "rules": [
+    {
+      "name":      "rule_28",
+      "type":      "realtime.rheos.profiler",
+      "config":    {
+        "window": "5min"
+      },
+      "profilers": [
+        {
+          "metric-name":     "ep_qa_nqt",
+          "config": {
+            "pronto-dropdown": "expr.mrq_cnt > 0",
+            "pronto-filter": "expr.mrq_cnt > 0"
+          },
+          "expr":            "qualified_events_cnt / total_cnt",
+          "dimensions":      ["expt_flow_type", "soj_ec", "mdbref_age_group"],
+          "filter":          "mdbref_timestamp is not null",
+          "transformations": [
+            {"alias": "soj_ec", "expr": "soj_nvl('ec')"},
+            {"alias": "soj_eprlogid", "expr": "soj_nvl('eprlogid')"},
+            {"alias": "tpool", "expr": "soj_nvl('TPool')"},
+            {
+              "alias": "qual_timestamp",
+              "expr":  "to_timestamp(soj_parse_rlogid(soj_eprlogid, 'timestamp'))"
+            },
+            {
+              "alias": "pool_type",
+              "expr":  "case when tpool in ('r1rover', 'r1pulsgwy', 'r1edgetrksvc') THEN 'T' else 'D' end"
+            },
+            {
+              "alias": "expt_flow_type",
+              "expr":  "case when pool_type = 'T' and soj_ec in ('4', '5') then 'Native Client Side' when soj_ec in ('4', '5') then 'Native Server Side' else 'Native web, MWeb, DWeb' end"
+            },
+            {"alias": "mdbref_timestamp", "expr": "cast(cast(soj_nvl('mdbreftime') AS LONG) / 1000 AS LONG)"},
+            {
+              "alias": "mdbref_age",
+              "expr":  "unix_timestamp(qual_timestamp) - mdbref_timestamp"
+            },
+            {
+              "alias": "mdbref_age_group",
+              "expr":  "case when mdbref_age < 0 then 'Group: Error' when mdbref_age < 910 then '<= 15 min 10 sec' else 'Not meet target' end"
+            },
+            {"alias": "mrq_cnt", "expr": "count(1)"}
+          ]
+        }
+      ]
+    }
+  ]
+}
