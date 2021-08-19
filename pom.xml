@@ -652,7 +652,7 @@
           http://sonar.soj-ops-ns.svc.53.tess.io/
         </sonar.host.url>
         <sonar.projectKey>
-          sojourner-core
+          tdq-core
         </sonar.projectKey>
         <sonar.moduleKey>
           ${project.groupId}:${project.artifactId}
