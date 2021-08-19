@@ -62,10 +62,11 @@
     <scala-maven-plugin.version>4.4.0</scala-maven-plugin.version>
 
     <sonar.coverage.exclusions>
-      src/main/java/com/ebay/sojourner/*,
-      src/main/java/org/apache/flink/*,
+      src/main/java/com/ebay/sojourner/**,
+      src/main/java/org/apache/flink/**,
       src/main/java/com/ebay/tdq/jobs/*.java,
-      src/main/java/com/ebay/tdq/common/*,
+      src/main/java/com/ebay/tdq/common/**,
+      src/main/java/com/ebay/tdq/planner/utils/udf/**,
       src/main/java/com/ebay/tdq/dto/*,
       src/main/java/com/ebay/tdq/config/*
     </sonar.coverage.exclusions>

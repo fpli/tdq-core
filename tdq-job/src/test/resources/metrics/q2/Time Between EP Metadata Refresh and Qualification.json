@@ -1,12 +1,12 @@
 {
-  "id":    "28",
-  "name":  "cfg_28",
+  "id":    "ignore",
+  "name":  "ignore",
   "rules": [
     {
-      "name":      "rule_28",
+      "name":      "ignore",
       "type":      "realtime.rheos.profiler",
       "config":    {
-        "window": "5min"
+        "window": "1h"
       },
       "profilers": [
         {
@@ -17,7 +17,7 @@
           },
           "expr":            "mrq_cnt",
           "dimensions":      ["expt_flow_type", "soj_ec", "mdbref_age_group"],
-          "filter":          "mdbref_timestamp is not null",
+          "filter":          "mdbref_timestamp is not null and qual_timestamp is not null",
           "transformations": [
             {"alias": "soj_ec", "expr": "soj_nvl('ec')"},
             {"alias": "soj_eprlogid", "expr": "soj_nvl('eprlogid')"},

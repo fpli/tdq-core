@@ -297,12 +297,12 @@
             {
               "expr": "case when mdbref_age < 0 then 'Group: Error' when mdbref_age <= 910 then '<= 15 min 10 sec' else 'Not meet target' end",
               "alias": "mdbref_age_group",
-              "filter": "mdbref_timestamp is not null"
+              "filter": "mdbref_timestamp is not null and qual_timestamp is not null"
             },
             {
               "expr": "count(1)",
               "alias": "mrq_cnt",
-              "filter": "mdbref_timestamp is not null"
+              "filter": "mdbref_timestamp is not null and qual_timestamp is not null"
             }
           ]
         }
