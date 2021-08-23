@@ -40,7 +40,7 @@ object TdqUdfRegistry extends DelegatingRegistry({
     } else {
       ParseToTimestamp(left, Option(operands(1).asInstanceOf[Expression]), operands(2).asInstanceOf[Expression], cacheKey)
     }
-  case cxt@RegistryContext("ITEM", operands: Array[Any], cacheKey) =>
+  case cxt@RegistryContext("ITEM", operands: Array[Any], _) =>
     val names = operands.flatMap {
       case field: GetTdqField =>
         Seq(field.name)

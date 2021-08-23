@@ -99,11 +99,18 @@ object SojUdfRegistry extends DelegatingRegistry({
       cacheKey
     )
   case RegistryContext("SOJ_GET_URL_PATH", operands: Array[Any], cacheKey) =>
-    Preconditions.checkArgument(operands.length == 1)
-    GetURLPath(
-      operands.head.asInstanceOf[Expression],
-      cacheKey
-    )
+    if (operands.length == 1) {
+      new GetURLPath(
+        operands.head.asInstanceOf[Expression],
+        cacheKey
+      )
+    } else {
+      GetURLPath(
+        operands.head.asInstanceOf[Expression],
+        Some(operands(1).asInstanceOf[Expression]),
+        cacheKey
+      )
+    }
   case RegistryContext("SOJ_GUID_TS", operands: Array[Any], cacheKey) =>
     Preconditions.checkArgument(operands.length == 1)
     GUID2DateHive(
@@ -123,13 +130,13 @@ object SojUdfRegistry extends DelegatingRegistry({
       operands(1).asInstanceOf[Expression],
       cacheKey
     )
-  case RegistryContext("IS_BIGINT", operands: Array[Any], cacheKey) =>
+  case RegistryContext("SOJ_IS_BIGINT", operands: Array[Any], cacheKey) =>
     Preconditions.checkArgument(operands.length == 1)
     IsBigInteger(
       operands.head.asInstanceOf[Expression],
       cacheKey
     )
-  case RegistryContext("IS_BITSET", operands: Array[Any], cacheKey) =>
+  case RegistryContext("SOJ_IS_BITSET", operands: Array[Any], cacheKey) =>
     Preconditions.checkArgument(operands.length == 2)
     IsBitSet(
       operands.head.asInstanceOf[Expression],
@@ -137,26 +144,40 @@ object SojUdfRegistry extends DelegatingRegistry({
       cacheKey
     )
   case RegistryContext("IS_DECIMAL", operands: Array[Any], cacheKey) =>
+    if (operands.length == 1) {
+      IsDecimal(
+        operands.head.asInstanceOf[Expression],
+        None,
+        cacheKey
+      )
+    } else {
+      IsDecimal(
+        operands.head.asInstanceOf[Expression],
+        Some(operands(1).asInstanceOf[Expression]),
+        cacheKey
+      )
+    }
+  case RegistryContext("SOJ_IS_DECIMAL", operands: Array[Any], cacheKey) =>
     Preconditions.checkArgument(operands.length == 3)
-    IsDecimal(
+    SojIsDecimal(
       operands.head.asInstanceOf[Expression],
-      operands(1).asInstanceOf[Expression],
-      operands(2).asInstanceOf[Expression],
+      Some(operands(1).asInstanceOf[Expression]),
+      Some(operands(2).asInstanceOf[Expression]),
       cacheKey
     )
-  case RegistryContext("IS_INTEGER", operands: Array[Any], cacheKey) =>
+  case RegistryContext("SOJ_IS_INTEGER", operands: Array[Any], cacheKey) =>
     Preconditions.checkArgument(operands.length == 1)
     IsInteger(
       operands.head.asInstanceOf[Expression],
       cacheKey
     )
-  case RegistryContext("IS_VALIDIPV4", operands: Array[Any], cacheKey) =>
+  case RegistryContext("SOJ_IS_VALIDIPV4", operands: Array[Any], cacheKey) =>
     Preconditions.checkArgument(operands.length == 1)
     IsValidIPv4(
       operands.head.asInstanceOf[Expression],
       cacheKey
     )
-  case RegistryContext("IS_VALIDPRIVATEIPV4", operands: Array[Any], cacheKey) =>
+  case RegistryContext("SOJ_IS_VALIDPRIVATEIPV4", operands: Array[Any], cacheKey) =>
     Preconditions.checkArgument(operands.length == 1)
     IsValidPrivateIPv4(
       operands.head.asInstanceOf[Expression],

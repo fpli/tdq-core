@@ -122,9 +122,38 @@ object CalciteGrammarRegistry extends DelegatingRegistry({
   case RegistryContext("CHAR_LENGTH" | "CHARACTER_LENGTH" | "LENGTH", operands: Array[Any], cacheKey) =>
     Preconditions.checkArgument(operands.length == 1)
     Length(child = operands.head.asInstanceOf[Expression], cacheKey = cacheKey)
-  //      case ("TRIM", operands: Array[Any], cacheKey) =>
-  //        Preconditions.checkArgument(operands.length == 1)
-  //        StringTrim(operands.head.asInstanceOf[Expression], None, cacheKey = cacheKey)
+  case RegistryContext("UPPER", operands: Array[Any], cacheKey) =>
+    Preconditions.checkArgument(operands.length == 1)
+    Upper(child = operands.head.asInstanceOf[Expression], cacheKey = cacheKey)
+  case RegistryContext("LOWER", operands: Array[Any], cacheKey) =>
+    Preconditions.checkArgument(operands.length == 1)
+    Lower(child = operands.head.asInstanceOf[Expression], cacheKey = cacheKey)
+  case RegistryContext("SUBSTRING" | "SUBSTR", operands: Array[Any], cacheKey) =>
+    if (operands.length == 2) {
+      new Substring(
+        operands.head.asInstanceOf[Expression],
+        operands(1).asInstanceOf[Expression],
+        cacheKey = cacheKey
+      )
+    } else {
+      Preconditions.checkArgument(operands.length == 3)
+      Substring(
+        operands.head.asInstanceOf[Expression],
+        operands(1).asInstanceOf[Expression],
+        operands(2).asInstanceOf[Expression],
+        cacheKey = cacheKey
+      )
+    }
+
+  case RegistryContext("CONCAT", operands: Array[Any], cacheKey) =>
+    Concat(
+      operands.map(_.asInstanceOf[Expression]),
+      cacheKey = cacheKey
+    )
+  case RegistryContext("TRIM", operands: Array[Any], cacheKey) =>
+    Preconditions.checkArgument(operands.length == 3)
+    // todo currently only support both
+    StringTrim(operands(2).asInstanceOf[Expression], None, cacheKey = cacheKey)
   case RegistryContext("SUM", operands: Array[Any], cacheKey) =>
     Preconditions.checkArgument(operands.length == 1)
     Sum(operands.head.asInstanceOf[Expression], cacheKey)

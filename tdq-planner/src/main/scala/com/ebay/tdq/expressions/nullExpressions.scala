@@ -1,6 +1,6 @@
 package com.ebay.tdq.expressions
 
-import com.ebay.tdq.types.{AbstractDataType, DataType, DoubleType, FloatType, TypeCollection, TypeUtils}
+import com.ebay.tdq.types._
 
 /**
  * @author juntzhang

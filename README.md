@@ -34,9 +34,13 @@ Tracking Data Quality
   * example for tdq-svc-lib
 
 ## Features
-* Support dynamic kafka source
 * SQL-based DSL for defining rules
-* Support sink types like kafka pronto
+* Support dynamic kafka source
+* Support sink types like kafka/pronto/hdfs
+* Support sink pronto exactly once
+* Support Local Aggregate
+* Fixed FLINK-5601(Window operator does not checkpoint watermarks)
+* Optimise job pipeline, 4000 core reduce to 600 core
 
 ## Development
 Requirements:

@@ -1,5 +1,7 @@
 package com.ebay.tdq.planner.utils.udf.soj;
 
+import static java.lang.Character.isDigit;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -22,6 +24,44 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 
 public class IsDecimal implements Serializable {
+  public boolean evaluate(String input, int digitLimit) {
+
+    // TD return false in case of null input.
+    if (input == null) return false;
+
+    input = input.trim();
+
+    int length = input.length();
+
+    if (length == 0) return false;
+
+    int dpCnt = 0; // decimal points counter
+    int chCnt = 0; // char pointer counter
+
+    // one leading +|- sign is ok
+    if (input.charAt(chCnt) == '+' || input.charAt(chCnt) == '-') {
+      chCnt++;
+    }
+
+    while (true) {
+      if (chCnt == length) {
+        break;
+      }
+      if (input.charAt(chCnt) == '.') {
+        dpCnt++; // count the number of decimalpoints in the input
+      }
+      else if (!isDigit(input.charAt(chCnt))) {
+        return false;
+      }
+      chCnt++;
+    }
+    return chCnt <= digitLimit && dpCnt <= 1;
+  }
+
+  // Overloads the above method with a defalut digitLimit == 18, which is verified in TD by Daniel.
+  public boolean evaluate(String input) {
+    return evaluate(input, 18);
+  }
 
   public int evaluate(String instr, int p, int s) {
     if (instr == null || p < 0 || s < 0) {

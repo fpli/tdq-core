@@ -119,18 +119,6 @@ case class SojListGetValByIdx(
   }
 }
 
-case class SojGetURLPath(subject: Expression, cacheKey: Option[String] = None) extends LeafExpression {
-  val dataType: StringType.type = StringType
-
-  override def nullable: Boolean = true
-
-  lazy val hive = new udf.soj.GetURLPath()
-
-  protected override def eval(input: InternalRow): Any = {
-    hive.evaluate(subject.call(input).asInstanceOf[String])
-  }
-}
-
 case class Base36Decoder(subject: Expression, cacheKey: Option[String] = None) extends LeafExpression {
   val dataType: StringType.type = StringType
 
@@ -229,15 +217,23 @@ case class GetUrlParams(arg1: Expression, cacheKey: Option[String] = None) exten
   }
 }
 
-case class GetURLPath(arg1: Expression, cacheKey: Option[String] = None) extends LeafExpression {
+case class GetURLPath(arg1: Expression, arg2: Option[Expression], cacheKey: Option[String] = None) extends LeafExpression {
   val dataType: StringType.type = StringType
+
+  def this(arg1: Expression, cacheKey: Option[String]) {
+    this(arg1, None, cacheKey)
+  }
 
   override def nullable: Boolean = true
 
   lazy val hive = new udf.soj.GetURLPath()
 
   protected override def eval(input: InternalRow): Any = {
-    hive.evaluate(arg1.call(input).asInstanceOf[String])
+    if (arg2.isEmpty) {
+      hive.evaluate(arg1.call(input).asInstanceOf[String])
+    } else {
+      hive.evaluate(arg1.call(input).asInstanceOf[String], arg2.get.call(input).asInstanceOf[String])
+    }
   }
 }
 
@@ -301,7 +297,29 @@ case class IsBitSet(arg1: Expression, arg2: Expression, cacheKey: Option[String]
   }
 }
 
-case class IsDecimal(arg1: Expression, arg2: Expression, arg3: Expression, cacheKey: Option[String] = None) extends LeafExpression {
+case class IsDecimal(
+  arg1: Expression,
+  arg2: Option[Expression],
+  cacheKey: Option[String] = None) extends LeafExpression {
+  val dataType: DataType = BooleanType
+  override def nullable: Boolean = true
+
+  lazy val hive = new udf.soj.IsDecimal()
+
+  protected override def eval(input: InternalRow): Any = {
+    if (arg2.isEmpty) {
+      hive.evaluate(arg1.call(input).asInstanceOf[String])
+    } else {
+      hive.evaluate(arg1.call(input).asInstanceOf[String], arg2.get.call(input).asInstanceOf[Int])
+    }
+  }
+}
+
+case class SojIsDecimal(
+  arg1: Expression,
+  arg2: Option[Expression],
+  arg3: Option[Expression],
+  cacheKey: Option[String] = None) extends LeafExpression {
   val dataType: IntegerType.type = IntegerType
 
   override def nullable: Boolean = true
@@ -309,7 +327,7 @@ case class IsDecimal(arg1: Expression, arg2: Expression, arg3: Expression, cache
   lazy val hive = new udf.soj.IsDecimal()
 
   protected override def eval(input: InternalRow): Any = {
-    hive.evaluate(arg1.call(input).asInstanceOf[String], arg2.call(input).asInstanceOf[Int], arg3.call(input).asInstanceOf[Int])
+    hive.evaluate(arg1.call(input).asInstanceOf[String], arg2.get.call(input).asInstanceOf[Int], arg3.get.call(input).asInstanceOf[Int])
   }
 }
 

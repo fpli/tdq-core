@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 public class GetURLPath implements Serializable {
 
+  public String evaluate(String urlHost, String urlQuery) {
+    return evaluate(urlHost + urlQuery);
+  }
   public String evaluate(String url) {
     if (url == null) {
       return null;

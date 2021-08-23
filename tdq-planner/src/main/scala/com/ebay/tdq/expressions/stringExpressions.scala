@@ -2,6 +2,7 @@ package com.ebay.tdq.expressions
 
 import java.lang.{String => UTF8String}
 
+import com.ebay.tdq.planner.utils.udf.common.ByteArray
 import com.ebay.tdq.types._
 
 /**
@@ -113,6 +114,65 @@ case class StringTrim(
       } else {
         srcString.trim()
       }
+    }
+  }
+}
+
+trait String2StringExpression extends ImplicitCastInputTypes {
+  self: UnaryExpression =>
+
+  def convert(v: String): String
+
+  override def dataType: DataType = StringType
+
+  override def inputTypes: Seq[DataType] = Seq(StringType)
+
+  protected override def nullSafeEval(input: Any): Any =
+    convert(input.asInstanceOf[UTF8String])
+}
+
+case class Lower(child: Expression, cacheKey: Option[String] = None) extends UnaryExpression with String2StringExpression {
+
+  override def convert(v: String): String = v.toLowerCase
+}
+
+case class Upper(child: Expression, cacheKey: Option[String] = None)
+  extends UnaryExpression with String2StringExpression {
+
+  override def convert(v: UTF8String): UTF8String = v.toUpperCase
+
+}
+
+case class Substring(str: Expression, pos: Expression, len: Expression, cacheKey: Option[String] = None)
+  extends TernaryExpression with ImplicitCastInputTypes with NullIntolerant {
+
+  def this(str: Expression, pos: Expression, cacheKey: Option[String]) = {
+    this(str, pos, Literal(Integer.MAX_VALUE), cacheKey)
+  }
+
+  override def dataType: DataType = str.dataType
+
+  override def inputTypes: Seq[AbstractDataType] =
+    Seq(TypeCollection(StringType, BinaryType), IntegerType, IntegerType)
+
+  override def children: Seq[Expression] = str :: pos :: len :: Nil
+
+  def substringSQL(string: String, pos: Int, length: Int): String = { // Information regarding the pos calculation:
+    val len = string.length
+    val start = if (pos > 0) pos - 1
+    else if ((pos < 0)) len + pos
+    else 0
+    val `end` = if (length == Integer.MAX_VALUE) len
+    else start + length
+    string.substring(start, `end`)
+  }
+
+  override def nullSafeEval(string: Any, pos: Any, len: Any): Any = {
+    str.dataType match {
+      case StringType =>
+        substringSQL(string.asInstanceOf[UTF8String], pos.asInstanceOf[Int], len.asInstanceOf[Int])
+      case BinaryType =>
+        ByteArray.subStringSQL(string.asInstanceOf[Array[Byte]], pos.asInstanceOf[Int], len.asInstanceOf[Int])
     }
   }
 }

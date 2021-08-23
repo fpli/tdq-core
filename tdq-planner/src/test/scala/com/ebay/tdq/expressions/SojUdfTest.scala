@@ -193,6 +193,7 @@ class SojUdfTest {
   @Test
   def soj_get_url_path(): Unit = {
     testExpr("soj_get_url_path('http://shop.ebay.com/xyz/abc?_nkw=ebay+uk&l1=2&sacat=456')", "'/xyz/abc'")
+    testExpr("soj_get_url_path('http://shop.ebay.com','/xyz/abc?_nkw=ebay+uk&l1=2&sacat=456')", "'/xyz/abc'")
     testExpr("soj_get_url_path('http://shop.ebay.com/')", "'/'")
     testExprNUll("soj_get_url_path('http:/')")
     testExprNUll("soj_get_url_path('')")
@@ -218,39 +219,40 @@ class SojUdfTest {
 
   @Test
   def is_bigint(): Unit = {
-    testExpr("is_bigint('123')", "1")
-    testExpr("is_bigint('123a')", "0")
+    testExpr("soj_is_bigint('123')", "1")
+    testExpr("soj_is_bigint('123a')", "0")
   }
 
   @Test
   def is_bitSet(): Unit = {
-    testExpr("is_bitSet('1232',2)", "true")
+    testExpr("soj_is_bitSet('1232',2)", "true")
   }
 
   @Test
   def is_decimal(): Unit = {
-    testExpr("is_decimal('1232.22',18,2)", "1")
-    testExpr("is_decimal('1232.22',2,0)", "0")
-    testExpr("is_decimal('1232a',18,2)", "0")
+    testExpr("soj_is_decimal('1232.22',18,2)", "1")
+    testExpr("soj_is_decimal('1232.22',2,0)", "0")
+    testExpr("soj_is_decimal('1232a',18,2)", "0")
+    testExpr("is_decimal('1232a',18)","false")
   }
 
   @Test
   def is_integer(): Unit = {
-    testExpr("is_integer('1232')", "1")
-    testExpr("is_integer('1232a')", "0")
+    testExpr("soj_is_integer('1232')", "1")
+    testExpr("soj_is_integer('1232a')", "0")
   }
 
   @Test
   def is_validIPv4(): Unit = {
-    testExpr("is_validIPv4('127.0.0.1')", "1")
-    testExpr("is_validIPv4('127.0.0')", "0")
+    testExpr("soj_is_validIPv4('127.0.0.1')", "1")
+    testExpr("soj_is_validIPv4('127.0.0')", "0")
   }
 
   @Test
   def is_validPrivateIPv4(): Unit = {
-    testExpr("is_validPrivateIPv4('127.0.0.1')", "false")
-    testExpr("is_validPrivateIPv4('192.168.0.1')", "true")
-    testExpr("is_validPrivateIPv4(' 202.76.247.150')", "false")
+    testExpr("soj_is_validPrivateIPv4('127.0.0.1')", "false")
+    testExpr("soj_is_validPrivateIPv4('192.168.0.1')", "true")
+    testExpr("soj_is_validPrivateIPv4(' 202.76.247.150')", "false")
   }
 
   @Test

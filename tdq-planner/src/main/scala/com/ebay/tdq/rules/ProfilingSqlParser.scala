@@ -109,6 +109,8 @@ object ProfilingSqlParser {
         Literal.apply(null)
       case sl: SqlLiteral if sl.getTypeName==SqlTypeName.BOOLEAN =>
         Literal.apply(sl.getValue)
+      case sl: SqlLiteral if sl.getTypeName==SqlTypeName.SYMBOL =>
+        Literal.apply(sl.getValue.toString)
       case _ =>
         throw new IllegalStateException("Unexpected literal: " + literal)
     }
@@ -326,7 +328,7 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, tdqEnv: T
         case identifier: SqlIdentifier => transformIdentifier(identifier)
         case unknown => throw new IllegalStateException("Unexpected SqlCall: " + unknown)
       }
-      buffer += ((expr, transformLiteral(sqlCase.getThenOperands.get(i).asInstanceOf[SqlLiteral])))
+      buffer += ((expr, transformSqlNode(sqlCase.getThenOperands.get(i), null)))
     }
     val expression = new CaseWhen(
       buffer,

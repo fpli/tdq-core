@@ -156,3 +156,13 @@ abstract class TernaryExpression extends Expression {
   protected def nullSafeEval(input1: Any, input2: Any, input3: Any): Any =
     sys.error(s"TernaryExpressions must override either eval or nullSafeEval")
 }
+trait Unevaluable extends Expression {
+
+  final override def eval(input: InternalRow = null): Any =
+    throw new UnsupportedOperationException(s"Cannot evaluate expression: $this")
+}
+trait RuntimeReplaceable extends UnaryExpression with Unevaluable {
+  override def nullable: Boolean = child.nullable
+  override def foldable: Boolean = child.foldable
+  override def dataType: DataType = child.dataType
+}
