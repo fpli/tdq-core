@@ -36,10 +36,6 @@
             },
             {
               "expr": "count(1)",
-              "alias": "total_cnt"
-            },
-            {
-              "expr": "count(1)",
               "alias": "st_total_cnt",
               "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
             },

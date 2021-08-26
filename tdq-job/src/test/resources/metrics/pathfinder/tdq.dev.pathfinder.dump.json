@@ -38,8 +38,8 @@
       "name": "hdfs",
       "type": "realtime.hdfs",
       "config": {
-        "sub-type": "normal-metric",
-        "hdfs-path": "target/${flink.app.profile}/metric/normal"
+        "sub-type": "raw-dump",
+        "hdfs-path": "target/${flink.app.profile}/tdq/raw-data"
       }
     }
   ],

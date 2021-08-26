@@ -5,93 +5,109 @@
     {
       "name": "test",
       "type": "realtime.memory",
-      "config": {}
+      "config": {
+        "schema-subject": "behavior.sojourner.sojevent.schema",
+        "rheos-services-urls": "https://rheos-services.qa.ebay.com"
+      }
     }
   ],
   "rules": [
     {
-      "name": "tdq_pathfinder_in_ido",
+      "name": "ido",
       "type": "realtime.rheos.profiler",
       "config": {
-        "window": "10s"
+        "window": "5min"
       },
       "profilers": [
         {
-          "metric-name": "ep_qa_nqt",
-          "expr": "qualified_events_cnt / total_cnt",
+          "expr": "store_total_cnt",
           "dimensions": [
-            "expt_flow_type",
-            "channel",
-            "qual_age_target",
-            "soj_ec",
-            "mdbref_age_group"
+            "domain",
+            "site_id",
+            "page_id"
           ],
-          "filter": "qual_timestamp is not null",
+          "metric-name": "sojevent_common_metric",
           "transformations": [
             {
-              "alias": "soj_ec",
-              "expr": "soj_nvl('ec')"
+              "expr": "CAST(applicationPayload.p AS INTEGER)",
+              "alias": "page_id"
             },
             {
-              "alias": "soj_eprlogid",
-              "expr": "soj_nvl('eprlogid')"
+              "expr": "soj_page_family(CAST(applicationPayload.p AS INTEGER))",
+              "alias": "domain"
             },
             {
-              "alias": "tpool",
-              "expr": "soj_nvl('TPool')"
-            },
-            {
-              "alias": "channel",
-              "expr": "case when soj_ec = '1' then 'Web' when soj_ec = '2' then 'Mobile Web' when soj_ec = '4' then 'Android' when soj_ec = '5' then 'iOS' when soj_ec = '6' then 'Email' else 'Unknown' end"
-            },
-            {
-              "alias": "qual_timestamp",
-              "expr": "to_timestamp(soj_parse_rlogid(soj_eprlogid, 'timestamp'))"
-            },
-            {
-              "alias": "qual_age",
-              "expr": "unix_timestamp(event_timestamp) - unix_timestamp(qual_timestamp)"
-            },
-            {
-              "alias": "qual_age_group",
-              "expr": "case when qual_age < 0 then 'Group: Error' when qual_age <= 1 then 'Group 1: 1 sec' when qual_age <= 2 then 'Group 2: 2 sec' when qual_age <= 10 then 'Group 3: 10 sec' when qual_age <= 60 then 'Group 4: 1 min' when qual_age <= 900 then 'Group 5: 15 min' when qual_age <= 3600 then 'Group 6: 1 hr' when qual_age <= 3600 * 12 then 'Group 7: 12 hr' when qual_age <= 86400 then 'Group 8: 1 day' when qual_age <= 86400 * 2 then 'Group 9: 2 days' when qual_age <= 86400 * 10 then 'Group 10: 10 days' else 'Group 11: > 10 days' end"
-            },
-            {
-              "alias": "pool_type",
-              "expr": "case when tpool in ('r1rover', 'r1pulsgwy', 'r1edgetrksvc') THEN 'T' else 'D' end"
-            },
-            {
-              "alias": "expt_flow_type",
-              "expr": "case when pool_type = 'T' and soj_ec in ('4', '5') then 'Native Client Side' when soj_ec in ('4', '5') then 'Native Server Side' else 'Native web, MWeb, DWeb' end"
-            },
-            {
-              "alias": "qual_age_target",
-              "expr": "case when expt_flow_type in ('Native Client Side') then '< 12 hours' else '< 10 second' end"
+              "expr": "CAST(applicationPayload.t AS INTEGER)",
+              "alias": "site_id"
             },
             {
               "expr": "count(1)",
-              "alias": "total_cnt",
-              "filter": "qual_timestamp is not null"
+              "alias": "total_cnt"
             },
             {
-              "expr": "sum( case when expt_flow_type in ('Native Client Side') and qual_age <= 3600 * 12 then 1 when expt_flow_type in ('Native web, MWeb, DWeb', 'Native Server Side') and qual_age <= 10 then 1 else 0 end)",
-              "alias": "qualified_events_cnt",
-              "filter": "qual_timestamp is not null"
-            },
-
-            {"alias": "mdbref_timestamp", "expr": "round(cast(soj_nvl('mdbreftime') AS LONG) / 1000)"},
-            {
-              "alias": "mdbref_age",
-              "expr":  "unix_timestamp(qual_timestamp) - mdbref_timestamp"
-            },
-            {
-              "alias": "mdbref_age_group",
-              "expr":  "case when mdbref_age < 0 then 'Group: Error' when mdbref_age <= 910 then '<= 15 min 10 sec' else 'Not meet target' end"
-            },
-            {
-              "alias": "mrq_cnt",
               "expr": "count(1)",
-              "filter": "mdbref_timestamp is not null"
+              "alias": "st_total_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            },
+            {
+              "expr": "sum(case when LENGTH(applicationPayload.prof) > 0 then 1 else 0 end)",
+              "alias": "st_prof_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            },
+            {
+              "expr": "sum(case when LENGTH(applicationPayload['cpnip']) > 0 then 1 else 0 end)",
+              "alias": "st_cpnip_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            },
+            {
+              "expr": "sum(case when LENGTH(applicationPayload['icpp']) > 0 then 1 else 0 end)",
+              "alias": "st_icpp_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            },
+            {
+              "expr": "sum(case when LENGTH(applicationPayload['!clktrack']) > 0 then 1 else 0 end)",
+              "alias": "st_clktrack_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            },
+            {
+              "expr": "sum(case when LENGTH(applicationPayload['srpGist']) > 0 then 1 else 0 end)",
+              "alias": "st_srpGist_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "store_total_cnt",
+              "filter": "( page_id = 4634 or (page_id = 2499619 and upper(applicationPayload['eactn'])='EXPC') or page_id in(2545226, 2048320, 2056805) or page_id in(3911,2050449,2046732) or (page_id in (2351460, 2053742, 2047936, 2381081) AND soj_url_decode_escapes(lower(applicationPayload['gf']), '%') like '%seller:specific%' ) or page_id in(3418065, 3658866) or (page_id in (3238419, 3238420) and (applicationPayload['sid']='p3533390' or applicationPayload['cp']='3418065')) or (page_id = 2356359 and applicationPayload['cp']='3418065' and lower(soj_url_decode_escapes(applicationPayload['moduledtl'], '%')) in ('mi:54476','82052')) ) and rdt=0"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "url_query_sn_vol",
+              "filter": "length(case when urlQueryString like '/str/%' then soj_list_get_val_by_idx(soj_get_url_path('http://www.ebay.com', urlQueryString) , '/', 3) when urlQueryString like '/experience/shopping/%' then soj_url_extract_nvp(urlQueryString, 'store_name', 0) when webServer like '%stores%' then soj_list_get_val_by_idx( soj_get_url_path('http://www.ebay.com', urlQueryString) , '/', 2) end) > 0"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "url_query_slctd_vol",
+              "filter": "length(case when page_id = 2048320 then COALESCE( soj_url_decode_escapes( applicationPayload['sn'], '%'), soj_url_extract_nvp(  soj_url_decode_escapes( soj_get_url_params( concat('http://www.ebay.com',  urlQueryString)), '%') ,  'sn',0)) when page_id = 2056805 then soj_url_extract_nvp(  soj_url_decode_escapes( soj_get_url_params(concat('http://www.ebay.com',  urlQueryString)), '%') ,  'sid',0) when page_id in (2351460, 2053742, 2047936, 2381081) then coalesce(soj_url_extract_nvp(soj_url_decode_escapes(soj_get_url_params(concat('http://www.ebay.com',  urlQueryString)), '%') ,  'sid',0) , soj_url_extract_nvp(  soj_url_decode_escapes( soj_get_url_params( concat('http://www.ebay.com',  urlQueryString)), '%') , '_ssn',0) , applicationPayload['sn']) when page_id in (3238419, 3238420) then substr(soj_url_decode_escapes( applicationPayload['folent'], '%'), 2) when page_id = 3658866 then soj_url_extract_nvp(soj_url_decode_escapes(soj_get_url_params( concat('http://www.ebay.com',  urlQueryString)), '%') ,  '_ssn',0) when urlQueryString like '/sch/%' or urlQueryString like '/usr/%' then soj_list_get_val_by_idx(soj_get_url_path(concat('http://www.ebay.com',  urlQueryString)), '/', 3) when page_id = 1236 then soj_str_between_str(  soj_get_url_params(concat('http://www.ebay.com',  urlQueryString)), 'userid=', '&') end)>0"
+            },
+            {
+              "expr": "sum(case when is_decimal(soj_list_get_val_by_idx(soj_decode_base36_vec(applicationPayload['!itm']),',', 1),18) then 1 else 0 end)",
+              "alias": "store_soj_itm_id_vol",
+              "filter": "( page_id in(4634, 2046732, 3658866) or (page_id = 2499619 and upper(applicationPayload['eactn']) = 'EXPC') or (page_id in (2351460, 2053742, 2047936, 2381081) AND soj_url_decode_escapes(lower(applicationPayload['gf']), '%') like '%seller:specific%' ) ) and rdt=0"
+            },
+            {
+              "expr": "sum(case when is_decimal(applicationPayload['soid'],18) then 1 else 0 end)",
+              "alias": "soid_owner_id_vol",
+              "filter": "page_id in (4634, 2046732) and rdt=0"
+            },
+            {
+              "expr": "sum(case when applicationPayload['soid'] is not null then 1 else 0 end)",
+              "alias": "soid_owner_pid_vol",
+              "filter": "((page_id = 2499619 and upper(applicationPayload['eactn']) = 'EXPC') or (page_id = 2356359 and applicationPayload['cp']='3418065' and lower(soj_url_decode_escapes(applicationPayload['moduledtl'], '%')) in ('mi:54476','82052')) or page_id = 3418065 ) and rdt=0"
+            },
+            {
+              "expr": "sum(case when is_decimal(soj_list_last_element(soj_get_url_path(referrer),'/'),18) then 1 else 0 end)",
+              "alias": "store_referrer_itm_id_vol",
+              "filter": "(page_id in (4634, 2545226, 2056805, 2046732, 3418065, 3658866) or (page_id = 2499619 and upper(applicationPayload['eactn']) = 'EXPC') or (page_id = 2351460 AND soj_url_decode_escapes(lower(applicationPayload['gf']), '%') like '%seller:specific%' ) ) and rdt=0"
             }
           ]
         }

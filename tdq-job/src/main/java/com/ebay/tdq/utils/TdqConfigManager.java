@@ -2,7 +2,6 @@ package com.ebay.tdq.utils;
 
 import com.ebay.tdq.common.env.JdbcEnv;
 import com.ebay.tdq.common.env.TdqEnv;
-import com.ebay.tdq.config.KafkaSourceConfig;
 import com.ebay.tdq.config.ProfilerConfig;
 import com.ebay.tdq.config.RuleConfig;
 import com.ebay.tdq.config.TdqConfig;
@@ -27,6 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.Schema;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 
 /**
  * @author juntzhang
@@ -132,16 +132,16 @@ public class TdqConfigManager implements Refreshable {
       List<PhysicalPlan> plans = new CopyOnWriteArrayList<>();
       for (TdqConfig config : tdqConfigList) {
         Schema schema = null;
-        if (CollectionUtils.isNotEmpty(config.getSources()) &&
-            config.getSources().get(0).getType().equals("realtime.kafka")) {
-          // tdq config must have same schema
-          KafkaSourceConfig ksc = KafkaSourceConfig.build(config.getSources().get(0), tdqEnv);
-          if (ksc.getDeserializer().equals(
-              "com.ebay.tdq.connector.kafka.schema.RheosEventDeserializationSchema")) {
-            schema = RheosEventSerdeFactory.getSchema(ksc.getSchemaSubject(), ksc.getRheosServicesUrls());
+        if (CollectionUtils.isNotEmpty(config.getSources())) {
+          Map<String, Object> cfgMap = config.getSources().get(0).getConfig();
+          if (MapUtils.isNotEmpty(cfgMap)) {
+            Object schemaSubject = cfgMap.get("schema-subject");
+            Object rheosServicesUrls = cfgMap.get("rheos-services-urls");
+            if (schemaSubject != null && rheosServicesUrls != null) {
+              schema = RheosEventSerdeFactory.getSchema((String) schemaSubject, (String) rheosServicesUrls);
+            }
           }
         }
-
         for (RuleConfig ruleConfig : config.getRules()) {
           for (ProfilerConfig profilerConfig : ruleConfig.getProfilers()) {
             try {

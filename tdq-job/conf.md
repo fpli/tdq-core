@@ -77,4 +77,16 @@
     }
   ]
 },
+
+
+{
+  "expr": "total_cnt",
+  "metric-name": "exception",
+  "transformations": [
+    {
+      "expr": "count(1)",
+      "alias": "total_cnt"
+    }
+  ]
+}
 ```

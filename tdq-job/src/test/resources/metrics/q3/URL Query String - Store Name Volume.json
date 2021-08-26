@@ -1,0 +1,41 @@
+{
+  "id": "ignore",
+  "name": "ignore",
+  "rules": [
+    {
+      "name": "ignore",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "1h"
+      },
+      "profilers": [
+        {
+          "expr": "url_query_sn_vol",
+          "config": {
+            "pronto-dropdown": "expr.url_query_sn_vol > 0"
+          },
+          "dimensions": [
+            "page_id",
+            "site_id"
+          ],
+          "metric-name": "sojevent_common_metric",
+          "transformations": [
+            {
+              "expr": "CAST(applicationPayload.p AS INTEGER)",
+              "alias": "page_id"
+            },
+            {
+              "expr": "CAST(applicationPayload.t AS INTEGER)",
+              "alias": "site_id"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "url_query_sn_vol",
+              "filter": "length(case when urlQueryString like '/str/%' then soj_list_get_val_by_idx( soj_get_url_path('http://www.ebay.com', urlQueryString) , '/', 3) when urlQueryString like '/experience/shopping/%' then soj_url_extract_nvp(urlQueryString, 'store_name', 0) when webServer like '%stores%' then soj_list_get_val_by_idx( soj_get_url_path('http://www.ebay.com', urlQueryString) , '/', 2) end) > 0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

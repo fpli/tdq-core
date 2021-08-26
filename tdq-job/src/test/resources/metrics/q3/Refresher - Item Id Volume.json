@@ -1,0 +1,41 @@
+{
+  "id": "ignore",
+  "name": "ignore",
+  "rules": [
+    {
+      "name": "ignore",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "1h"
+      },
+      "profilers": [
+        {
+          "expr": "store_referrer_itm_id_vol",
+          "config": {
+            "pronto-dropdown": "expr.store_referrer_itm_id_vol > 0"
+          },
+          "dimensions": [
+            "page_id",
+            "site_id"
+          ],
+          "metric-name": "sojevent_common_metric",
+          "transformations": [
+            {
+              "expr": "CAST(applicationPayload.p AS INTEGER)",
+              "alias": "page_id"
+            },
+            {
+              "expr": "CAST(applicationPayload.t AS INTEGER)",
+              "alias": "site_id"
+            },
+            {
+              "expr": "sum(case when is_decimal(soj_list_last_element(soj_get_url_path(referrer),'/'),18) then 1 else 0 end)",
+              "alias": "store_referrer_itm_id_vol",
+              "filter": "(page_id in (4634, 2545226, 2056805, 2046732, 3418065, 3658866) or (page_id = 2499619 and upper(applicationPayload['eactn']) = 'EXPC') or (page_id = 2351460 AND soj_url_decode_escapes(lower(applicationPayload['gf']), '%') like '%seller:specific%' ) ) and rdt=0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

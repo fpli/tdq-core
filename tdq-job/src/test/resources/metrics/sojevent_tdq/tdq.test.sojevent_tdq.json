@@ -49,7 +49,8 @@
           "transformations": [
             {
               "expr": "CAST(applicationPayload.p AS INTEGER)",
-              "alias": "page_id"
+              "alias": "page_id",
+              "filter": "page_id in (2547208,2483445,2047936,2054032,2053742,2045573,2351460,2381081)"
             },
             {
               "expr": "soj_page_family(CAST(applicationPayload.p AS INTEGER))",
@@ -72,61 +73,6 @@
               "expr": "sum(case when LENGTH(applicationPayload.prof) > 0 then 1 else 0 end)",
               "alias": "st_prof_cnt",
               "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
-            },
-            {
-              "expr": "sum(case when LENGTH(applicationPayload['cpnip']) > 0 then 1 else 0 end)",
-              "alias": "st_cpnip_cnt",
-              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
-            },
-            {
-              "expr": "sum(case when LENGTH(applicationPayload['icpp']) > 0 then 1 else 0 end)",
-              "alias": "st_icpp_cnt",
-              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
-            },
-            {
-              "expr": "sum(case when LENGTH(applicationPayload['!clktrack']) > 0 then 1 else 0 end)",
-              "alias": "st_clktrack_cnt",
-              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
-            },
-            {
-              "expr": "sum(case when LENGTH(applicationPayload['srpGist']) > 0 then 1 else 0 end)",
-              "alias": "st_srpGist_cnt",
-              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
-            },
-            {
-              "expr": "count(1)",
-              "alias": "store_total_cnt",
-              "filter": "( page_id = 4634 or (page_id = 2499619 and upper(applicationPayload['eactn'])='EXPC') or page_id in(2545226, 2048320, 2056805) or page_id in(3911,2050449,2046732) or (page_id in (2351460, 2053742, 2047936, 2381081) AND soj_url_decode_escapes(lower(applicationPayload['gf']), '%') like '%seller:specific%' ) or page_id in(3418065, 3658866) or (page_id in (3238419, 3238420) and (applicationPayload['sid']='p3533390' or applicationPayload['cp']='3418065')) or (page_id = 2356359 and applicationPayload['cp']='3418065' and lower(soj_url_decode_escapes(applicationPayload['moduledtl'], '%')) in ('mi:54476','82052')) ) and rdt=0"
-            },
-            {
-              "expr": "count(1)",
-              "alias": "url_query_sn_vol",
-              "filter": "length(case when urlQueryString like '/str/%' then soj_list_get_val_by_idx(soj_get_url_path('http://www.ebay.com', urlQueryString) , '/', 3) when urlQueryString like '/experience/shopping/%' then soj_url_extract_nvp(urlQueryString, 'store_name', 0) when webServer like '%stores%' then soj_list_get_val_by_idx( soj_get_url_path('http://www.ebay.com', urlQueryString) , '/', 2) end) > 0"
-            },
-            {
-              "expr": "count(1)",
-              "alias": "url_query_slctd_vol",
-              "filter": "length(case when page_id = 2048320 then COALESCE( soj_url_decode_escapes( applicationPayload['sn'], '%'), soj_url_extract_nvp(  soj_url_decode_escapes( soj_get_url_params( concat('http://www.ebay.com',  urlQueryString)), '%') ,  'sn',0)) when page_id = 2056805 then soj_url_extract_nvp(  soj_url_decode_escapes( soj_get_url_params(concat('http://www.ebay.com',  urlQueryString)), '%') ,  'sid',0) when page_id in (2351460, 2053742, 2047936, 2381081) then coalesce(soj_url_extract_nvp(soj_url_decode_escapes(soj_get_url_params(concat('http://www.ebay.com',  urlQueryString)), '%') ,  'sid',0) , soj_url_extract_nvp(  soj_url_decode_escapes( soj_get_url_params( concat('http://www.ebay.com',  urlQueryString)), '%') , '_ssn',0) , applicationPayload['sn']) when page_id in (3238419, 3238420) then substr(soj_url_decode_escapes( applicationPayload['folent'], '%'), 2) when page_id = 3658866 then soj_url_extract_nvp(soj_url_decode_escapes(soj_get_url_params( concat('http://www.ebay.com',  urlQueryString)), '%') ,  '_ssn',0) when urlQueryString like '/sch/%' or urlQueryString like '/usr/%' then soj_list_get_val_by_idx(soj_get_url_path(concat('http://www.ebay.com',  urlQueryString)), '/', 3) when page_id = 1236 then soj_str_between_str(  soj_get_url_params(concat('http://www.ebay.com',  urlQueryString)), 'userid=', '&') end)>0"
-            },
-            {
-              "expr": "sum(case when is_decimal(soj_list_get_val_by_idx(soj_decode_base36_vec(applicationPayload['!itm']),',', 1),18) then 1 else 0 end)",
-              "alias": "store_soj_itm_id_vol",
-              "filter": "( page_id in(4634, 2046732, 3658866) or (page_id = 2499619 and upper(applicationPayload['eactn']) = 'EXPC') or (page_id in (2351460, 2053742, 2047936, 2381081) AND soj_url_decode_escapes(lower(applicationPayload['gf']), '%') like '%seller:specific%' ) ) and rdt=0"
-            },
-            {
-              "expr": "sum(case when is_decimal(applicationPayload['soid'],18) then 1 else 0 end)",
-              "alias": "soid_owner_id_vol",
-              "filter": "page_id in (4634, 2046732) and rdt=0"
-            },
-            {
-              "expr": "sum(case when applicationPayload['soid'] is not null then 1 else 0 end)",
-              "alias": "soid_owner_pid_vol",
-              "filter": "((page_id = 2499619 and upper(applicationPayload['eactn']) = 'EXPC') or (page_id = 2356359 and applicationPayload['cp']='3418065' and lower(soj_url_decode_escapes(applicationPayload['moduledtl'], '%')) in ('mi:54476','82052')) or page_id = 3418065 ) and rdt=0"
-            },
-            {
-              "expr": "sum(case when is_decimal(soj_list_last_element(soj_get_url_path(referrer),'/'),18) then 1 else 0 end)",
-              "alias": "store_referrer_itm_id_vol",
-              "filter": "(page_id in (4634, 2545226, 2056805, 2046732, 3418065, 3658866) or (page_id = 2499619 and upper(applicationPayload['eactn']) = 'EXPC') or (page_id = 2351460 AND soj_url_decode_escapes(lower(applicationPayload['gf']), '%') like '%seller:specific%' ) ) and rdt=0"
             }
           ]
         }
@@ -176,7 +122,7 @@
         "topics": "behavior.pulsar.customized.tdq",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1629273900000,
+        "from-timestamp": 1629948000000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
@@ -207,7 +153,7 @@
         "topics": "behavior.pulsar.customized.page2356359",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1629273900000,
+        "from-timestamp": 1629948000000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
@@ -238,7 +184,7 @@
         "topics": "behavior.pulsar.customized.2349624",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1629273900000,
+        "from-timestamp": 1629948000000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
@@ -269,7 +215,7 @@
         "topics": "behavior.pulsar.customized.2351460",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1629273900000,
+        "from-timestamp": 1629948000000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",

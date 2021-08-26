@@ -230,9 +230,7 @@
           "dimensions": [
             "expt_flow_type",
             "channel",
-            "qual_age_target",
-            "soj_ec",
-            "mdbref_age_group"
+            "qual_age_target"
           ],
           "metric-name": "ep_qa_nqt",
           "transformations": [
@@ -285,24 +283,6 @@
               "expr": "sum( case when expt_flow_type in ('Native Client Side') and qual_age <= 3600 * 12 then 1 when expt_flow_type in ('Native web, MWeb, DWeb', 'Native Server Side') and qual_age <= 10 then 1 else 0 end)",
               "alias": "qualified_events_cnt",
               "filter": "qual_timestamp is not null"
-            },
-            {
-              "expr": "round(cast(soj_nvl('mdbreftime') AS LONG) / 1000)",
-              "alias": "mdbref_timestamp"
-            },
-            {
-              "expr": "unix_timestamp(qual_timestamp) - mdbref_timestamp",
-              "alias": "mdbref_age"
-            },
-            {
-              "expr": "case when mdbref_age < 0 then 'Group: Error' when mdbref_age <= 910 then '<= 15 min 10 sec' else 'Not meet target' end",
-              "alias": "mdbref_age_group",
-              "filter": "mdbref_timestamp is not null and qual_timestamp is not null"
-            },
-            {
-              "expr": "count(1)",
-              "alias": "mrq_cnt",
-              "filter": "mdbref_timestamp is not null and qual_timestamp is not null"
             }
           ]
         }
