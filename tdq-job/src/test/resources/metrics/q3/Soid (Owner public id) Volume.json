@@ -31,7 +31,7 @@
                         {
                             "expr": "sum(case when applicationPayload['soid'] is not null then 1 else 0 end)",
                             "alias": "soid_owner_pid_vol",
-                            "filter":"((page_id = 2499619 and upper(applicationPayload['eactn']) = 'EXPC') or (page_id = 2356359 and applicationPayload['cp']='3418065' and lower(soj_url_decode_escapes(applicationPayload('moduledtl'), '%')) in ('mi:54476','82052')) or page_id = 3418065 ) and rdt=0"
+                            "filter":"((page_id = 2499619 and upper(applicationPayload['eactn']) = 'EXPC') or (page_id = 2356359 and applicationPayload['cp']='3418065' and lower(soj_url_decode_escapes(applicationPayload['moduledtl'], '%')) in ('mi:54476','82052')) or page_id = 3418065 ) and rdt=0"
                         }
                     ]
                 }

@@ -10,9 +10,9 @@
       },
       "profilers": [
         {
-          "expr": "store_referrer_itm_id_vol",
+          "expr": "store_soj_itm_id_vol",
           "config": {
-            "pronto-dropdown": "expr.store_referrer_itm_id_vol > 0"
+            "pronto-dropdown": "expr.store_soj_itm_id_vol > 0"
           },
           "dimensions": [
             "page_id",
