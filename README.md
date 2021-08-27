@@ -40,7 +40,7 @@ Tracking Data Quality
 * Support sink pronto exactly once
 * Support Local Aggregate
 * Fixed FLINK-5601(Window operator does not checkpoint watermarks)
-* Optimise job pipeline, 4000 core reduce to 600 core
+* Optimise job pipeline, 3000 core reduce to 600 core
 
 ## Development
 Requirements:
@@ -51,7 +51,7 @@ Requirements:
 
 Build from source
 ```
-git clone git@github.corp.ebay.com:juntzhang/tdq-core.git
+git clone git@github.corp.ebay.com:Tracking-Data-Quality/tdq-core.git
 cd tdq-parent
 mvn clean package
 ```
