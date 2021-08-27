@@ -1,0 +1,71 @@
+{
+  "order": 10,
+  "index_patterns": [
+    "tdq-metrics-*"
+  ],
+  "settings": {
+    "index": {
+      "number_of_shards": "1",
+      "number_of_replicas": "2"
+    }
+  },
+  "mappings": {
+    "dynamic_templates": [
+      {
+        "unindexed_doubles": {
+          "match_mapping_type": "double",
+          "mapping": {
+            "type": "double",
+            "index": true
+          }
+        }
+      },
+      {
+        "unindexed_longs": {
+          "match_mapping_type": "long",
+          "mapping": {
+            "type": "long",
+            "index": true
+          }
+        }
+      },
+      {
+        "strings": {
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "text",
+            "fields": {
+              "raw": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          }
+        }
+      }
+    ],
+    "properties": {
+      "event_time": {
+        "type": "long"
+      },
+      "event_time_fmt": {
+        "type": "date"
+      },
+      "metric_key": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      },
+      "process_time": {
+        "type": "date"
+      },
+      "value": {
+        "type": "double"
+      }
+    }
+  }
+}

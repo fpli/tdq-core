@@ -1,8 +1,6 @@
 package com.ebay.sojourner.flink.connector.kafka.schema;
 
 import com.ebay.sojourner.common.model.RawEvent;
-import java.util.HashSet;
-import java.util.Set;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.streaming.connectors.kafka.KafkaDeserializationSchema;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -10,12 +8,9 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 public class RawEventKafkaDeserializationSchemaWrapper implements
     KafkaDeserializationSchema<RawEvent> {
 
-  private Set<String> skewGuids = new HashSet<>();
   private RawEventDeserializationSchema rawEventDeserializationSchema;
 
-  public RawEventKafkaDeserializationSchemaWrapper(Set<String> skewGuids,
-      RawEventDeserializationSchema rawEventDeserializationSchema) {
-    this.skewGuids = skewGuids;
+  public RawEventKafkaDeserializationSchemaWrapper(RawEventDeserializationSchema rawEventDeserializationSchema) {
     this.rawEventDeserializationSchema = rawEventDeserializationSchema;
   }
 
@@ -26,12 +21,7 @@ public class RawEventKafkaDeserializationSchemaWrapper implements
 
   @Override
   public RawEvent deserialize(ConsumerRecord<byte[], byte[]> record) throws Exception {
-
-    if (record.key() != null && skewGuids.contains(new String(record.key()))) {
-      return null;
-    } else {
-      return rawEventDeserializationSchema.deserialize(record.value());
-    }
+    return rawEventDeserializationSchema.deserialize(record.value());
   }
 
   @Override

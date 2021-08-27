@@ -1,0 +1,113 @@
+{
+  "id": "ignore",
+  "name": "ignore",
+  "rules": [
+    {
+      "name": "system",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "1min"
+      },
+      "profilers": [
+        {
+          "expr": "total_cnt",
+          "metric-name": "utp_system_metric",
+          "transformations": [
+            {
+              "expr": "count(1)",
+              "alias": "total_cnt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "system",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "5min"
+      },
+      "profilers": [
+        {
+          "expr": "total_cnt",
+          "metric-name": "utp_common_metric",
+          "dimensions": [
+            "channel_name",
+            "site_id",
+            "device_type",
+            "os_version",
+            "app_version",
+            "app_id",
+            "is_bot"
+          ],
+          "filter": "length(channel_name) > 0",
+          "transformations": [
+            {
+              "expr": "payload['channel.name']",
+              "alias": "channel_name"
+            },
+            {
+              "expr": "COALESCE(siteId, -1)",
+              "alias": "site_id"
+            },
+            {
+              "expr": "COALESCE(deviceType, 'NULL')",
+              "alias": "device_type"
+            },
+            {
+              "expr": "COALESCE(osVersion, 'NULL')",
+              "alias": "os_version"
+            },
+            {
+              "expr": "COALESCE(appVersion, 'NULL')",
+              "alias": "app_version"
+            },
+            {
+              "expr": "COALESCE(appId, 'NULL')",
+              "alias": "app_id"
+            },
+            {
+              "expr": "case when isBot is NULL then 'NULL' when isBot then 'Y' else 'N' end",
+              "alias": "is_bot"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "total_cnt"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "name": "lvs",
+      "type": "realtime.kafka",
+      "config": {
+        "stream": "marketing.tracking",
+        "topics": "marketing.tracking.events.total",
+        "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
+        "startup-mode": "LATEST",
+        "kafka-consumer": {
+          "receive.buffer": 8388608,
+          "sasl.mechanism": "IAF",
+          "fetch.max.bytes": 52428800,
+          "max.poll.records": 5000,
+          "sasl.jaas.config": "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" iafSecret=\"c4bb6fca-7ac5-46dd-b218-a49cb6307dbc\" iafEnv=\"production\";",
+          "auto.offset.reset": "latest",
+          "bootstrap.servers": "rhs-hcrvkiaa-kfk-lvs-1.rheos-streaming-prod.svc.27.tess.io:9092,rhs-hcrvkiaa-kfk-lvs-2.rheos-streaming-prod.svc.27.tess.io:9092,rhs-hcrvkiaa-kfk-lvs-3.rheos-streaming-prod.svc.27.tess.io:9092,rhs-hcrvkiaa-kfk-lvs-4.rheos-streaming-prod.svc.27.tess.io:9092,rhs-hcrvkiaa-kfk-lvs-5.rheos-streaming-prod.svc.27.tess.io:9092",
+          "fetch.max.wait.ms": 100,
+          "security.protocol": "SASL_PLAINTEXT",
+          "max.partition.fetch.bytes": 10485760,
+          "partition.assignment.strategy": "org.apache.kafka.clients.consumer.RoundRobinAssignor"
+        },
+        "schema-subject": "marketing.tracking.events.schema",
+        "rhs-parallelism": 80,
+        "event-time-field": "eventTs",
+        "rhs-idle-timeout": "3min",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
+        "rhs-out-of-orderless": "3min"
+      }
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "id": "1",
+  "name": "tdq_1",
+  "sources": [],
+  "rules": [
+    {
+      "name": "rule_1",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "1h"
+      },
+      "profilers": [
+        {
+          "metric-name": "event_capture_publish_latency",
+          "comment": "Event Capture Publish Latency",
+          "dimensions": ["page_id"],
+          "expression": {"operator": "Expr", "config": {"text": "p1"}},
+          "filter": "page_id in (2481888, 2047939, 2050601)",
+          "transformations": [
+            {
+              "alias": "page_id",
+              "expression": {"operator": "UDF", "config": {"text": "CAST( SOJ_NVL('p') as INTEGER)"}}
+            },
+            {
+              "alias": "p1",
+              "expression": {"operator": "SUM", "config": {"arg0": "CAST( SOJ_NVL('TDuration') AS DOUBLE)"}}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rule_2",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "10min"
+      },
+      "profilers": [
+        {
+          "metric-name": "global_mandatory_tag_item_rate",
+          "comment": "Global Mandatory Tag - Item Rate",
+          "expression": {"operator": "Expr", "config": {"text": "p1 / p2"}},
+          "transformations": [
+            {
+              "alias": "item",
+              "expression": {
+                "operator": "UDF",
+                "config": {"text": "CAST( SOJ_NVL('itm|itmid|itm_id|itmlist|litm') AS LONG)"}
+              }
+            },
+            {
+              "alias": "p1",
+              "expression": {"operator": "Count", "config": {"arg0": "1.0"}}
+            },
+            {
+              "alias": "p2",
+              "expression": {
+                "operator": "Sum", "config": {"arg0": "case when item is not null then 1.0 else 0.0 end"}
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rule_3",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "1h"
+      },
+      "profilers": [
+        {
+          "metric-name": "global_page_id_cnt",
+          "dimensions": ["page_id"],
+          "expression": {"operator": "Expr", "config": {"text": "p1"}},
+          "transformations": [
+            {
+              "alias": "page_id",
+              "expression": {
+                "operator": "UDF",
+                "config": {"text": "CAST( SOJ_NVL('p') AS INTEGER)"}
+              }
+            },
+            {
+              "alias": "p1",
+              "expression": {"operator": "Count", "config": {"arg0": "1.0"}}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rule_4",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "30min"
+      },
+      "profilers": [
+        {
+          "metric-name": "global_site_id_cnt",
+          "dimensions": ["site_id"],
+          "expression": {"operator": "Expr", "config": {"text": "p1"}},
+          "transformations": [
+            {
+              "alias": "site_id",
+              "expression": {
+                "operator": "UDF",
+                "config": {"text": "CAST( SOJ_NVL('t') AS INTEGER)"}
+              }
+            },
+            {
+              "alias": "p1",
+              "expression": {"operator": "Count", "config": {"arg0": "1.0"}}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rule_5",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "1h"
+      },
+      "profilers": [
+        {
+          "metric-name": "event_capture_publish_latency5",
+          "comment": "Event Capture Publish Latency",
+          "dimensions": ["page_id"],
+          "expression": {"operator": "Expr", "config": {"text": "p1"}},
+          "transformations": [
+            {
+              "alias": "page_id",
+              "expression": {"operator": "UDF", "config": {"text": "CAST( SOJ_NVL('p') as INTEGER)"}}
+            },
+            {
+              "alias": "p1",
+              "expression": {"operator": "SUM", "config": {"arg0": "CAST( SOJ_NVL('TDuration') AS DOUBLE)"}}
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sinks": []
+}

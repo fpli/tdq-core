@@ -1,0 +1,27 @@
+flink:
+  app:
+    parallelism:
+      source: 2
+      event: 2
+      session: 2
+      pre-agent-ip: 2
+      agent-ip: 2
+      agent: 2
+      ip: 2
+      broadcast: 2
+      metrics: 2
+    data-skew:
+      is-filter: false
+      guid-list:
+        - abc
+        - def
+        - ghi
+
+zookeeper:
+  enable: false
+  server: rhs-tdtvkiaa-fzk-lvs-1.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-2.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-3.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-4.rheos-streaming-qa.svc.32.tess.io:2181,rhs-tdtvkiaa-fzk-lvs-5.rheos-streaming-qa.svc.32.tess.io:2181
+
+rest-client:
+  base-url: https://sojsvc.vip.qa.ebay.com
+
+ua-parser-env: dev

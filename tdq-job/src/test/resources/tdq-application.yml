@@ -1,0 +1,24 @@
+flink:
+  app:
+    name: "tdq-job"
+    profile: dev
+    checkpoint:
+      data-dir: /tmp/${flink.app.name}/checkpoint
+      interval-ms: 10000
+      timeout-ms: 60000
+      min-pause-between-ms: 60000
+      max-concurrent: 1
+      tolerate-failure-number: 3
+pronto:
+  scheme: http
+  hostname: localhost
+  port: 9200
+  api-key: ""
+  api-value: ""
+
+mysql:
+  jdbc:
+    url: jdbc:h2:mem:tdq_unit_test;MODE=MYSQL;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    u:
+    p:

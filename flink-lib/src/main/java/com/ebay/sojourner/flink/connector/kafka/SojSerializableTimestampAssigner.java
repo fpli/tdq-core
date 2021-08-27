@@ -8,15 +8,18 @@ public class SojSerializableTimestampAssigner<T> implements SerializableTimestam
 
   @Override
   public long extractTimestamp(T element, long recordTimestamp) {
+    long t =  getEventTime(element);
+    return t;
+  }
 
+  // due to local aggregate, we need treat TDQ watermark to 1 minute.
+  public static <T> long getEventTime(T event) {
     long field = System.currentTimeMillis();
-
     try {
-      field = TimestampFieldExtractor.getField(element);
+      field = TimestampFieldExtractor.getField(event);
     } catch (Exception e) {
       log.warn("extract timestamp failed" + field);
     }
-
-    return field;
+    return (field / 60_000) * 60_000;
   }
 }

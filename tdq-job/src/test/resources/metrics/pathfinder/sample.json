@@ -1,0 +1,56 @@
+{
+  "rheosHeader": {
+    "eventCreateTimestamp": 1628479611823,
+    "eventSentTimestamp": 1628479611825,
+    "schemaId": 368,
+    "eventId": null,
+    "producerId": "pathfinder"
+  },
+  "sojA": {
+    "nqc": "AAACAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAgAAAAAAg",
+    "c": "1",
+    "epcalenv": "",
+    "g": "28f2e3a917b0ad3965f1f9bbfe0082d1",
+    "eprlogid": "t6rw%257Ft9%253Ftiltt%257Ep%2528q1ob0*w%2560ut3542-17b28f2e3aa-0x14c",
+    "h": "a9",
+    "es": "15",
+    "p": "2057027",
+    "nqt": "AAACAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAgAAAAACg",
+    "uaid": "28f2e3a917b0ad3965f1f9bbfe0082d0S0",
+    "t": "15",
+    "cflgs": "QA**",
+    "gitCommitId": "a7b5edbbe7a80c002592e493caca2813f735aafc",
+    "pn": "2",
+    "ec": "5",
+    "rq": "018795ea4a64d772",
+    "pagename": "qrys__DefaultPage"
+  },
+  "sojK": {
+    "ciid": "8uOpll8*"
+  },
+  "sojC": {},
+  "clientData": {
+    "ForwardFor": "10.119.4.143",
+    "Script": "/shoppingguidance",
+    "Server": "qrys.vip.ebay.com",
+    "TMachine": "10.211.150.95",
+    "TStamp": 1628479611817,
+    "TName": "categorySearchguidance",
+    "TPayload": "corr_id_=018795ea4a64d772&REQUEST_GUID=17b28f2e-3a90-ad39-65f0-2f98fa9aa077&logid=t6rw%257Ft9%253Ftiltt%257Ep%2528q1ob0*w%2560ut3542-17b28f2e3aa-0x14c&cal_mod=false&node_id=3af46bf0e3aef51f",
+    "colo": "RNO",
+    "pool": "r1qrys",
+    "agent": "GingerClient/2.11.4-RELEASE",
+    "remoteIP": "10.119.4.143",
+    "TType": "URL",
+    "TStatus": "0",
+    "corrId": "018795ea4a64d772",
+    "contentLength": 2102,
+    "nodeId": "3af46bf0e3aef51f",
+    "requestGuid": "17b28f2e-3a90-ad39-65f0-2f98fa9aa077",
+    "urlQueryString": "/shoppingguidance/v1/categorySearchguidance",
+    "referrer": null,
+    "rlogid": "t6rw%7Ft9%3Ftiltt%7Ep%28q1ob0*w%60ut3542-17b28f2e3aa-0x14c",
+    "acceptEncoding": null,
+    "TDuration": 6
+  }
+}

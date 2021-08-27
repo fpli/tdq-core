@@ -1,23 +1,7 @@
 package com.ebay.sojourner.common.util;
 
-import static com.ebay.sojourner.common.util.UBIConfig.getString;
-import static com.ebay.sojourner.common.util.UBIConfig.getUBIProperty;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.TimeUnit;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.hadoop.conf.Configuration;
@@ -25,6 +9,20 @@ import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.PathFilter;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.TimeUnit;
+
+import static com.ebay.sojourner.common.util.UBIConfig.getString;
+import static com.ebay.sojourner.common.util.UBIConfig.getUBIProperty;
 
 @Slf4j
 public class LkpManager {
@@ -48,6 +46,8 @@ public class LkpManager {
     private Set<String> selectedAgents = new CopyOnWriteArraySet<>();
     private Map<String, Long> lkpFileLastUpdDt = new ConcurrentHashMap<>();
     private Map<String, Long> lkpFileLastPreUpdDt = new ConcurrentHashMap<>();
+    private Map<String, Map<Integer, Integer>> pageFmlyAllMap = new ConcurrentHashMap<>();
+    private Set<Integer> itemPages = new CopyOnWriteArraySet<>();
     private volatile FileSystem fileSystem = null;
     private volatile boolean loadLkpFromHDFS = false;
     private volatile LkpRefreshTimeTask lkpRefreshTimeTask;
@@ -98,7 +98,9 @@ public class LkpManager {
         refreshAppIds();
         refreshPageFmlys();
         refreshMpxRotetion();
+        refreshPageFmlysTotal();
         refreshLargeSessionGuid();
+        refreshItmPages();
         printLkpFileStatus();
         printLkpFileSize();
     }
@@ -108,7 +110,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             Set<Integer> pageIdSetMid = new CopyOnWriteArraySet<>();
             String pageIds = getLkpFileContent(property);
-            if (pageIds == null) {
+            if (pageIds == null || pageIds.equals("")) {
                 return;
             }
             for (String pageId : pageIds.split(LKP_RECORD_DELIMITER)) {
@@ -128,7 +130,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             Map<String, Boolean> selectedIpsMid = new ConcurrentHashMap<>();
             String fileContent = getLkpFileContent(property);
-            if (fileContent == null) {
+            if (fileContent == null || fileContent.equals("")) {
                 return;
             }
             for (String record : fileContent.split(TEXT_RECORD_DELIMITER)) {
@@ -155,7 +157,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             Set<String> selectedAgentsMid = new CopyOnWriteArraySet<>();
             String fileContent = getLkpFileContent(property);
-            if (fileContent == null) {
+            if (fileContent == null || fileContent.equals("")) {
                 return;
             }
             for (String record : fileContent.split(TEXT_RECORD_DELIMITER)) {
@@ -172,12 +174,29 @@ public class LkpManager {
         }
     }
 
+    private void refreshItmPages() {
+        String property = Property.ITM_PAGES;
+        if (isUpdate(property)) {
+            Set<Integer> itmPagesMid = new CopyOnWriteArraySet<>();
+            String fileContent = getLkpFileContent(property);
+            if (StringUtils.isBlank(fileContent)) {
+                return;
+            }
+            for (String pageId : fileContent.split(LKP_RECORD_DELIMITER)) {
+                if (StringUtils.isNotBlank(pageId)) {
+                    itmPagesMid.add(Integer.valueOf(pageId));
+                }
+            }
+            itemPages = itmPagesMid;
+            updateLkpFileLastUpdDt(property);
+        }
+    }
     private void refreshLargeSessionGuid() {
         String property = Property.LARGE_SESSION_GUID;
         if (isUpdate(property)) {
             Set<String> largeSessionGuidSetMid = new CopyOnWriteArraySet<>();
             String largeSessionGuids = getLkpFileContent(property);
-            if (largeSessionGuids == null) {
+            if (largeSessionGuids == null || largeSessionGuids.equals("")) {
                 return;
             }
             for (String guid : largeSessionGuids.split(LKP_FILED_DELIMITER)) {
@@ -195,7 +214,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             List<String> iabAgentRegsMid = new CopyOnWriteArrayList<>();
             String iabAgentRegValue = getLkpFileContent(property);
-            if (iabAgentRegValue == null) {
+            if (iabAgentRegValue == null || iabAgentRegValue.equals("")) {
                 return;
             }
             for (String iabAgent : iabAgentRegValue.split(LKP_RECORD_DELIMITER)) {
@@ -211,7 +230,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             Map<Integer, Integer> findingFlagMapMid = new ConcurrentHashMap<>();
             String findingFlags = getLkpFileContent(property);
-            if (findingFlags == null) {
+            if (findingFlags == null || findingFlags.equals("")) {
                 return;
             }
             for (String pageFlag : findingFlags.split(LKP_RECORD_DELIMITER)) {
@@ -238,7 +257,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             Map<Integer, Integer[]> vtNewIdsMapMid = new ConcurrentHashMap<>();
             String vtNewIdsValue = getLkpFileContent(property);
-            if (vtNewIdsValue == null) {
+            if (vtNewIdsValue == null || vtNewIdsValue.equals("")) {
                 return;
             }
             for (String vtNewId : vtNewIdsValue.split(LKP_RECORD_DELIMITER)) {
@@ -260,7 +279,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             Set<String> appIdWithBotFlagsMid = new CopyOnWriteArraySet<>();
             String appIdAndFlags = getLkpFileContent(property);
-            if (appIdAndFlags == null) {
+            if (appIdAndFlags == null || appIdAndFlags.equals("")) {
                 return;
             }
             String[] appIdFlagPair = appIdAndFlags.split(LKP_RECORD_DELIMITER);
@@ -279,7 +298,7 @@ public class LkpManager {
         if (isUpdate(property)) {
             Map<Integer, String[]> pageFmlyMapMid = new ConcurrentHashMap<>();
             String pageFmlysValue = getLkpFileContent(property);
-            if (pageFmlysValue == null) {
+            if (pageFmlysValue == null || pageFmlysValue.equals("")) {
                 return;
             }
             for (String pageFmlyPair : pageFmlysValue.split(LKP_RECORD_DELIMITER)) {
@@ -302,12 +321,47 @@ public class LkpManager {
         }
     }
 
+    private void refreshPageFmlysTotal() {
+        String property = Property.PAGE_FMLY_ALL;
+        if (isUpdate(property)) {
+            Map<String, Map<Integer, Integer>> pageFmlyAllMapMid = new ConcurrentHashMap<>();
+            String pageFmlysValue = getLkpFileContent(property);
+            if (StringUtils.isBlank(pageFmlysValue)) {
+                return;
+            }
+            for (String pageFmlyPair : pageFmlysValue.split(LKP_RECORD_DELIMITER)) {
+
+                if (StringUtils.isNotBlank(pageFmlyPair)) {
+                    String[] values = pageFmlyPair.split(LKP_FILED_DELIMITER, 3);
+                    Integer pageId =
+                            StringUtils.isEmpty(values[0]) ? null : Integer.valueOf(values[0]);
+                    String pageFmly = StringUtils.isEmpty(values[1]) ? "" : values[1];
+                    if (pageFmlyAllMapMid.get(pageFmly) != null) {
+                        if (MapUtils.isNotEmpty(pageFmlyAllMapMid.get(pageFmly))) {
+                            pageFmlyAllMapMid.get(pageFmly).put(pageId, Integer.valueOf(values[2]));
+                        } else {
+                            Map<Integer, Integer> pageIframeMap = new ConcurrentHashMap<>();
+                            pageIframeMap.put(pageId, Integer.valueOf(values[2]));
+                            pageFmlyAllMapMid.put(pageFmly, pageIframeMap);
+                        }
+                    } else {
+                        Map<Integer, Integer> pageIframeMap = new ConcurrentHashMap<>();
+                        pageIframeMap.put(pageId, Integer.valueOf(values[2]));
+                        pageFmlyAllMapMid.put(pageFmly, pageIframeMap);
+                    }
+                }
+            }
+            pageFmlyAllMap = pageFmlyAllMapMid;
+            updateLkpFileLastUpdDt(property);
+        }
+    }
+
     private void refreshMpxRotetion() {
         String property = Property.MPX_ROTATION;
         if (isUpdate(property)) {
             Map<Long, String> mpxMapMid = new ConcurrentHashMap<>();
             String mpxRotations = getLkpFileContent(property);
-            if (mpxRotations == null) {
+            if (StringUtils.isBlank(mpxRotations)) {
                 return;
             }
             for (String mpx : mpxRotations.split(LKP_RECORD_DELIMITER)) {
@@ -483,6 +537,7 @@ public class LkpManager {
         iabAgentRegs = null;
         largeSessionGuidSet = null;
         pageFmlyMap = null;
+        pageFmlyAllMap = null;
         mpxMap = null;
         selectedIps = null;
         selectedAgents = null;
@@ -514,12 +569,19 @@ public class LkpManager {
         return pageFmlyMap;
     }
 
+    public Map<String, Map<Integer,Integer>> getPageFmlyAllMaps() {
+        return pageFmlyAllMap;
+    }
+
     public Map<String, Boolean> getSelectedIps() {
         return selectedIps;
     }
 
     public Set<String> getSelectedAgents() {
         return selectedAgents;
+    }
+    public Set<Integer> getItmPages() {
+        return itemPages;
     }
 
     public Set<String> getLargeSessionGuid() {

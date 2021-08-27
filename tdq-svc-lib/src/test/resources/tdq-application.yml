@@ -1,0 +1,12 @@
+flink:
+  app:
+    name: test
+    profile: test
+
+pronto:
+  scheme: http
+  hostname: localhost
+  port: 9200
+  api-key: ""
+  api-value: ""
+  index-pattern: tdq.${flink.app.profile}.metric.normal.

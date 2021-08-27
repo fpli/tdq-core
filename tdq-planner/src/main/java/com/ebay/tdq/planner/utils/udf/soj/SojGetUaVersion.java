@@ -1,0 +1,80 @@
+package com.ebay.tdq.planner.utils.udf.soj;
+
+
+import java.util.HashSet;
+
+/**
+ * Created by xiaoding on 2017/1/20.
+ */
+public class SojGetUaVersion {
+
+  public static String getUaVersion(String userAgent, int startPos) {
+    int len = userAgent.length();
+    HashSet<String> deliSet = new HashSet<String>();
+    deliSet.add(";");
+    deliSet.add(")");
+
+    if (startPos > len - 1) {
+      return " ";
+    } else if (deliSet.contains(userAgent.substring(startPos, startPos + 1))) {
+      return " ";
+    } else {
+      String subUserAgent = userAgent.substring(startPos);
+      int minPos = getMinStartPos(subUserAgent, " /");
+      char minPosChar = getMinStartChar(subUserAgent, " /");
+      if (minPos == Integer.MAX_VALUE) {
+        return " ";
+      }
+      String startUserAgent = subUserAgent.substring(minPos + 1);
+
+      char minEndChar = getMinStartChar(startUserAgent, ";/)([ -+,");
+      String subStr = SOJStrBetweenEndlist.getStringBetweenEndList(subUserAgent, minPosChar, minEndChar);
+      if (subStr == null) {
+        return " ";
+      } else {
+        return subStr;
+      }
+    }
+  }
+
+  private static char getMinStartChar(String subUserAgent, String chars) {
+    char[] arr = chars.toCharArray();
+    int min = Integer.MAX_VALUE;
+    char minChar = ' ';
+    for (int i = 0; i < arr.length; i++) {
+      int midIndex = subUserAgent.indexOf(arr[i]);
+      if (midIndex < min && midIndex != -1) {
+        min = midIndex;
+        minChar = arr[i];
+      }
+    }
+    return minChar;
+
+  }
+
+  private static int getMinStartPos(String subUserAgent, String chars) {
+    char[] arr = chars.toCharArray();
+    int min = Integer.MAX_VALUE;
+    for (int i = 0; i < arr.length; i++) {
+      int midIndex = subUserAgent.indexOf(arr[i]);
+      if (midIndex < min && midIndex != -1) {
+        min = midIndex;
+      }
+    }
+    return min;
+
+  }
+
+  public String evaluate(String userAgent, int startPos) {
+    if (startPos > userAgent.length()) {
+      return " ";
+    } else if (userAgent.charAt(startPos - 1) == ';' || userAgent.charAt(startPos - 1) == ')') {
+      return " ";
+    } else if (StrBetweenList.getStrBetweenList(
+        userAgent.substring(startPos - 1), " /", ";/)([ -+,") == null) {
+      return " ";
+    } else {
+      return StrBetweenList.getStrBetweenList(userAgent.substring(startPos - 1), " /", ";/)([ -+,");
+    }
+  }
+}

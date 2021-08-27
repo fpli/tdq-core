@@ -1,5 +1,7 @@
 package com.ebay.sojourner.common.model;
 
+import com.ebay.sojourner.common.util.SojTimestamp;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -11,6 +13,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RawEvent implements Serializable {
 
   private RheosHeader rheosHeader;
@@ -24,5 +27,13 @@ public class RawEvent implements Serializable {
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+  }
+
+  public long getUnixEventTimestamp() {
+    try {
+      return SojTimestamp.getSojTimestampToUnixTimestamp(this.getEventTimestamp());
+    } catch (Exception ignore) {
+      return System.currentTimeMillis();
+    }
   }
 }

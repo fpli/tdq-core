@@ -1,0 +1,89 @@
+{
+  "type": "record",
+  "name": "TdqMetric",
+  "namespace": "com.ebay.tdq.common.model",
+  "fields": [
+    {
+      "name": "rheosHeader",
+      "type": {
+        "type": "record",
+        "name": "RheosHeader",
+        "fields": [
+          {
+            "name": "eventCreateTimestamp",
+            "type": "long"
+          },
+          {
+            "name": "eventSentTimestamp",
+            "type": "long"
+          },
+          {
+            "name": "schemaId",
+            "type": "int"
+          },
+          {
+            "name": "eventId",
+            "type": [
+              "null",
+              {
+                "type": "string",
+                "avro.java.string": "String"
+              }
+            ]
+          },
+          {
+            "name": "producerId",
+            "type": {
+              "type": "string",
+              "avro.java.string": "String"
+            }
+          }
+        ]
+      },
+      "doc": "Rheos header"
+    },
+    {
+      "name": "metricId",
+      "type": [
+        "null",
+        "string"
+      ],
+      "doc": "metricName + tags"
+    },
+    {
+      "name": "metricName",
+      "type": [
+        "null",
+        "string"
+      ],
+      "doc": "metric name"
+    },
+    {
+      "name": "eventTime",
+      "type": "long",
+      "doc": "event time"
+    },
+    {
+      "name": "processTime",
+      "type": "long",
+      "doc": "process time"
+    },
+    {
+      "name": "tags",
+      "type": [
+        "null",
+        {
+          "type": "map",
+          "values": "string"
+        }
+      ]
+    },
+    {
+      "name": "values",
+      "type": {
+        "type": "map",
+        "values": "double"
+      }
+    }
+  ]
+}

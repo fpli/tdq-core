@@ -1,0 +1,116 @@
+{
+  "order": 10,
+  "index_patterns": [
+    "tdq-metrics-pronto-*"
+  ],
+  "mappings": {
+    "_doc": {
+      "dynamic_templates" : [
+        {
+          "unindexed_doubles" : {
+            "match_mapping_type" : "double",
+            "mapping" : {
+              "index" : true,
+              "type" : "double"
+            }
+          }
+        },
+        {
+          "unindexed_longs" : {
+            "match_mapping_type" : "long",
+            "mapping" : {
+              "index" : true,
+              "type" : "long"
+            }
+          }
+        },
+        {
+          "strings" : {
+            "match_mapping_type" : "string",
+            "mapping" : {
+              "fields" : {
+                "raw" : {
+                  "ignore_above" : 256,
+                  "type" : "keyword"
+                }
+              },
+              "type" : "text"
+            }
+          }
+        }
+      ],
+      "properties" : {
+        "event_time" : {
+          "type" : "long"
+        },
+        "event_time_fmt" : {
+          "type" : "date"
+        },
+        "metric_key" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "metric_name" : {
+          "type" : "text",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "metric_type" : {
+          "type" : "text",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "page_family" : {
+          "type" : "text",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "process_time" : {
+          "type" : "date"
+        },
+        "site_id" : {
+          "type" : "text",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "tag_cnt" : {
+          "type" : "long",
+          "index" : false
+        },
+        "tag_name" : {
+          "type" : "text",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "value" : {
+          "type" : "double"
+        }
+      }
+    }
+  }
+}

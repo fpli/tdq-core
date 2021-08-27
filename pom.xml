@@ -3,22 +3,21 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.ebay.sojourner</groupId>
-  <artifactId>sojourner-parent</artifactId>
-  <!-- DO NOT change version manually, this is managed by bump-version.sh script -->
-  <version>1.1.0-SNAPSHOT</version>
+  <groupId>com.ebay.tdq</groupId>
+  <artifactId>tdq-parent</artifactId>
+  <!-- DO NOT change version manually, this is managed by change_pom_version.sh script -->
+  <version>3.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Sojourner - Parent</name>
+  <name>TDQ - Parent</name>
 
   <modules>
     <module>common</module>
-    <module>rt-pipeline</module>
-    <module>dumper</module>
-    <module>distributor</module>
     <module>flink-lib</module>
-    <module>business</module>
-    <module>sql-dsl</module>
+    <module>tdq-common</module>
+    <module>tdq-planner</module>
+    <module>tdq-job</module>
+    <module>tdq-svc-lib</module>
   </modules>
 
   <properties>
@@ -29,16 +28,21 @@
     <maven.version>3.6.3</maven.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
+    <scala-211.major.version>2.11</scala-211.major.version>
+    <scala-212.major.version>2.12</scala-212.major.version>
+    <scala.major.version>${scala-211.major.version}</scala.major.version>
+    <scala.version>${scala.major.version}.10</scala.version>
+
     <commons.lang3.version>3.4</commons.lang3.version>
     <lombok.version>1.18.10</lombok.version>
     <slf4j.version>1.7.25</slf4j.version>
     <log4j.version>1.2.17</log4j.version>
     <logback.version>1.2.3</logback.version>
     <avro.version>1.8.2</avro.version>
-    <!--<flink.version>1.10.0</flink.version>-->
     <flink.version>1.11.0</flink.version>
     <rheos.client.version>2.0.8</rheos.client.version>
     <calcite.version>1.22.0</calcite.version>
+    <elasticsearch.version>7.5.1</elasticsearch.version>
     <http.core.version>4.4.13</http.core.version>
     <junit-jupiter.version>5.6.2</junit-jupiter.version>
     <mockito.version>3.5.10</mockito.version>
@@ -50,17 +54,21 @@
     <okhttp3.version>4.9.0</okhttp3.version>
     <curator.version>4.2.0</curator.version>
     <zookeeper.version>3.4.14</zookeeper.version>
+    <mysql.version>8.0.21</mysql.version>
+
     <jacoco.plugin.version>0.8.5</jacoco.plugin.version>
     <compiler.plugin.version>3.8.1</compiler.plugin.version>
     <surefire.plugin.version>3.0.0-M5</surefire.plugin.version>
+    <scala-maven-plugin.version>4.4.0</scala-maven-plugin.version>
+
     <sonar.coverage.exclusions>
-      src/main/java/com/ebay/sojourner/rt/pipeline/*.java,
-      src/main/java/com/ebay/sojourner/rt/metric/*.java,
-      src/main/java/com/ebay/sojourner/dumper/pipeline/*.java,
-      src/main/java/com/ebay/sojourner/distributor/pipeline/*.java,
-      src/main/java/org/apache/flink/streaming/runtime/operators/windowing/*.java,
-      src/main/java/com/ebay/sojourner/dsl/domain/rule/*.java,
-      src/main/java/com/ebay/sojourner/dsl/domain/RuleManager.java
+      src/main/java/com/ebay/sojourner/**,
+      src/main/java/org/apache/flink/**,
+      src/main/java/com/ebay/tdq/jobs/*.java,
+      src/main/java/com/ebay/tdq/common/**,
+      src/main/java/com/ebay/tdq/planner/utils/udf/**,
+      src/main/java/com/ebay/tdq/dto/*,
+      src/main/java/com/ebay/tdq/config/*
     </sonar.coverage.exclusions>
   </properties>
 
@@ -398,6 +406,12 @@
         <version>${mockito.version}</version>
         <scope>test</scope>
       </dependency>
+      <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <version>1.4.200</version>
+        <scope>test</scope>
+      </dependency>
       <!--  PowerMock  -->
       <dependency>
         <groupId>org.powermock</groupId>
@@ -449,12 +463,6 @@
         <groupId>org.apache.flink</groupId>
         <artifactId>flink-test-utils_${scala.binary.version}</artifactId>
         <version>${flink.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>io.flinkspector</groupId>
-        <artifactId>flinkspector-datastream_2.11</artifactId>
-        <version>0.9.3</version>
         <scope>test</scope>
       </dependency>
 
@@ -644,7 +652,7 @@
           http://sonar.soj-ops-ns.svc.53.tess.io/
         </sonar.host.url>
         <sonar.projectKey>
-          sojourner-core
+          tdq-core
         </sonar.projectKey>
         <sonar.moduleKey>
           ${project.groupId}:${project.artifactId}
@@ -657,14 +665,18 @@
   </profiles>
 
   <distributionManagement>
-    <repository>
+    <snapshotRepository>
+      <id>ebay-qa-server</id>
+      <url>https://ebaycentral.qa.ebay.com/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <!--<repository>
       <id>ebay-data-releases</id>
       <url>http://nxrepository.corp.ebay.com/nexus/content/repositories/ebay.data.releases</url>
     </repository>
     <snapshotRepository>
       <id>ebay-data-snapshots</id>
       <url>http://nxrepository.corp.ebay.com/nexus/content/repositories/ebay.data.snapshots</url>
-    </snapshotRepository>
+    </snapshotRepository>-->
   </distributionManagement>
 
   <build>
@@ -857,7 +869,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>${surefire.plugin.version}</version>
       </plugin>
     </plugins>
   </reporting>

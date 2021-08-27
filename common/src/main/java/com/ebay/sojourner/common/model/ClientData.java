@@ -2,12 +2,28 @@ package com.ebay.sojourner.common.model;
 
 import com.ebay.sojourner.common.util.CalTimeOfDay;
 import com.ebay.sojourner.common.util.PropertyUtils;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.collect.Sets;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
 @Slf4j
-public class ClientData {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ClientData implements Serializable {
+  // TODO through reflection
+  public static Set<String> FIELDS = Sets.newHashSet(
+      "forwardFor", "script", "server", "TMachine",
+      "TStamp", "TName", "t", "colo", "pool", "agent", "remoteIP", "TType",
+      "TPool", "TStatus", "corrId", "contentLength", "nodeId",
+      "requestGuid", "urlQueryString", "referrer", "rlogid",
+      "acceptEncoding", "TDuration", "encoding", "TPayload"
+  );
 
   private String forwardFor;
   private String script;
@@ -35,9 +51,65 @@ public class ClientData {
   private String encoding;
   private String tPayload;
 
+  public Map<String, String> getMap() {
+    Map<String, String> map = new HashMap<>(100);
+    if(StringUtils.isNotBlank(forwardFor))       map.put("forwardFor", forwardFor);
+    if(StringUtils.isNotBlank(script))           map.put("script", script);
+    if(StringUtils.isNotBlank(server))           map.put("server", server);
+    if(StringUtils.isNotBlank(tMachine))         map.put("TMachine", tMachine);
+    if(StringUtils.isNotBlank(tStamp))           map.put("TStamp", tStamp);
+    if(StringUtils.isNotBlank(tName))            map.put("TName", tName);
+    if(StringUtils.isNotBlank(t))                map.put("t", t);
+    if(StringUtils.isNotBlank(colo))             map.put("colo", colo);
+    if(StringUtils.isNotBlank(pool))             map.put("pool", pool);
+    if(StringUtils.isNotBlank(agent))            map.put("agent", agent);
+    if(StringUtils.isNotBlank(remoteIP))         map.put("remoteIP", remoteIP);
+    if(StringUtils.isNotBlank(tType))            map.put("TType", tType);
+    if(StringUtils.isNotBlank(tPool))            map.put("TPool", tPool);
+    if(StringUtils.isNotBlank(tStatus))          map.put("TStatus", tStatus);
+    if(StringUtils.isNotBlank(corrId))           map.put("corrId", corrId);
+    if(StringUtils.isNotBlank(contentLength))    map.put("contentLength", contentLength);
+    if(StringUtils.isNotBlank(nodeId))           map.put("nodeId", nodeId);
+    if(StringUtils.isNotBlank(requestGuid))      map.put("requestGuid", requestGuid);
+    if(StringUtils.isNotBlank(urlQueryString))   map.put("urlQueryString", urlQueryString);
+    if(StringUtils.isNotBlank(referrer))         map.put("referrer", referrer);
+    if(StringUtils.isNotBlank(rlogid))           map.put("rlogid", rlogid);
+    if(StringUtils.isNotBlank(acceptEncoding))   map.put("acceptEncoding", acceptEncoding);
+    if(StringUtils.isNotBlank(tDuration))        map.put("TDuration", tDuration);
+    if(StringUtils.isNotBlank(encoding))         map.put("encoding", encoding);
+    if(StringUtils.isNotBlank(tPayload))         map.put("TPayload", tPayload);
+    return map;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+
   @Override
   public String toString() {
-    StringBuilder clientInfo = new StringBuilder();
+    StringBuilder clientInfo = new StringBuilder(1000);
 
     clientInfo.append("TPayload=").append(tPayload);
 
@@ -146,6 +218,22 @@ public class ClientData {
       }
       String tagValue = PropertyUtils.encodeValue(referrer);
       clientInfo.append("Referer=").append(tagValue);
+    }
+
+    if (corrId != null && !corrId.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      String tagValue = PropertyUtils.encodeValue(corrId);
+      clientInfo.append("corrId=").append(tagValue);
+    }
+
+    if (nodeId != null && !nodeId.equals("")) {
+      if (clientInfo.length() > 0) {
+        clientInfo.append("&");
+      }
+      String tagValue = PropertyUtils.encodeValue(nodeId);
+      clientInfo.append("nodeId=").append(tagValue);
     }
     return clientInfo.toString();
   }

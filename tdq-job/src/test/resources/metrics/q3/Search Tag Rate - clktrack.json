@@ -1,0 +1,52 @@
+{
+  "id": "ignore",
+  "name": "ignore",
+  "rules": [
+    {
+      "name": "ignore",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "1h"
+      },
+      "profilers": [
+        {
+          "metric-name": "sojevent_common_metric",
+          "expr": "st_clktrack_cnt / st_total_cnt",
+          "dimensions": [
+            "page_id",
+            "site_id"
+          ],
+          "config": {
+            "pronto-dropdown": "expr.st_total_cnt > 0"
+          },
+          "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)",
+          "transformations": [
+            {
+              "expr": "CAST(applicationPayload.p AS INTEGER)",
+              "alias": "page_id",
+              "filter": "page_id in (2547208,2483445,2047936,2054032,2053742,2045573,2351460,2381081)"
+            },
+            {
+              "expr": "soj_page_family(CAST(applicationPayload.p AS INTEGER))",
+              "alias": "domain"
+            },
+            {
+              "expr": "CAST(applicationPayload.t AS INTEGER)",
+              "alias": "site_id"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "st_total_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            },
+            {
+              "expr": "sum(case when LENGTH(applicationPayload['!clktrack']) > 0 then 1 else 0 end)",
+              "alias": "st_clktrack_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

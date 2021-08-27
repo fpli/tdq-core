@@ -14,7 +14,7 @@ public class StateBackendFactory {
   public static final String FS = "FS";
   public static final String ROCKSDB = "ROCKSDB";
   public static final String CHECKPOINT_DATA_URI =
-      "file://" + FlinkEnvUtils.getString(Property.CHECKPOINT_DATA_DIR);
+      "file://" + FlinkEnvUtils.getStringWithPattern(Property.CHECKPOINT_DATA_DIR);
 
   public static StateBackend getStateBackend(String type) {
     switch (type) {

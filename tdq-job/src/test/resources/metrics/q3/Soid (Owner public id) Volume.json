@@ -1,0 +1,41 @@
+{
+    "id": "ignore",
+    "name": "ignore",
+    "rules": [
+        {
+            "name": "ignore",
+            "type": "realtime.rheos.profiler",
+            "config": {
+                "window": "1h"
+            },
+            "profilers": [
+                {
+                    "expr": "soid_owner_pid_vol",
+                    "config": {
+                        "pronto-dropdown": "expr.soid_owner_pid_vol > 0"
+                    },
+                    "dimensions": [
+                        "page_id",
+                        "site_id"
+                    ],
+                    "metric-name": "sojevent_common_metric",
+                    "transformations": [
+                        {
+                            "expr": "CAST(applicationPayload.p AS INTEGER)",
+                            "alias": "page_id"
+                        },
+                        {
+                            "expr": "CAST(applicationPayload.t AS INTEGER)",
+                            "alias": "site_id"
+                        },
+                        {
+                            "expr": "sum(case when applicationPayload['soid'] is not null then 1 else 0 end)",
+                            "alias": "soid_owner_pid_vol",
+                            "filter":"((page_id = 2499619 and upper(applicationPayload['eactn']) = 'EXPC') or (page_id = 2356359 and applicationPayload['cp']='3418065' and lower(soj_url_decode_escapes(applicationPayload['moduledtl'], '%')) in ('mi:54476','82052')) or page_id = 3418065 ) and rdt=0"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

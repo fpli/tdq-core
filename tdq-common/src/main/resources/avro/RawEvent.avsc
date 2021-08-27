@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "RawEvent",
+  "namespace": "com.ebay.tdq.common.model",
+  "fields": [
+    { "name": "ingestTime",     "type": "long"                                                   },
+    { "name": "sojTimestamp",   "type": "long"                                                   },
+    { "name": "eventTimestamp", "type": "long"                                                   },
+    { "name": "processTimestamp", "type": "long"                                                   },
+    { "name": "sojA",           "type": [ "null", { "type": "map", "values": "string" }]                                 },
+    { "name": "sojK",           "type": [ "null", { "type": "map", "values": "string" }]                                 },
+    { "name": "sojC",           "type": [ "null", { "type": "map", "values": "string" }]                                 },
+    { "name": "clientData",     "type": [ "null", { "type": "map", "values": "string" }]                                 }
+  ]
+}

@@ -5,10 +5,11 @@ import com.ebay.sojourner.flink.common.FlinkEnvUtils;
 import io.ebay.rheos.kafka.client.StreamConnectorConfig;
 import io.ebay.rheos.schema.avro.GenericRecordDomainDataDecoder;
 import io.ebay.rheos.schema.avro.RheosEventDeserializer;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RheosEventSerdeFactory {
+public class RheosEventSerdeFactory implements Serializable {
 
   private static final String RHEOS_SERVICES_URL = FlinkEnvUtils
       .getString(Property.RHEOS_KAFKA_REGISTRY_URL);
@@ -28,17 +29,13 @@ public class RheosEventSerdeFactory {
   }
 
   public static GenericRecordDomainDataDecoder getRheosEventDeserializer(String schemaRegistryUrl) {
-
     if (rheosEventDeserializer == null) {
       Map<String, Object> config = new HashMap<>();
-      if (schemaRegistryUrl != null) {
-        config.put(StreamConnectorConfig.RHEOS_SERVICES_URLS, schemaRegistryUrl);
-      } else {
-        config.put(StreamConnectorConfig.RHEOS_SERVICES_URLS, RHEOS_SERVICES_URL);
+      config.put(StreamConnectorConfig.RHEOS_SERVICES_URLS, schemaRegistryUrl);
+      synchronized (RheosEventSerdeFactory.class){
+        rheosEventDeserializer = new GenericRecordDomainDataDecoder(config);
       }
-      rheosEventDeserializer = new GenericRecordDomainDataDecoder(config);
     }
-
     return rheosEventDeserializer;
   }
 }

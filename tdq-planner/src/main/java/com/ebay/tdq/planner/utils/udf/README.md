@@ -1,0 +1,3 @@
+- https://github.corp.ebay.com/zzhou3/sojourner-xuid/tree/master/common/src/main/java/com/ebay/sojourner/common/sojlib
+- https://github.corp.ebay.com/hadoop/ebay-UDF/tree/master/soj-udf
+- https://wiki.vip.corp.ebay.com/display/DW/Spark+soj_get_url_path

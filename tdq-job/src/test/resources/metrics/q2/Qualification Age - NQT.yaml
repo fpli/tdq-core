@@ -1,0 +1,84 @@
+---
+id: '20'
+name: cfg_20
+rules:
+  - name: rule_20
+    type: realtime.rheos.profiler
+    config:
+      window: 5min
+    profilers:
+      - metric-name: qualification_age_nqt
+        expr: qualified_events_cnt / total_cnt
+        dimensions:
+          - expt_flow_type
+          - channel
+          - qual_age_target
+        filter:
+          - qual_timestamp is not null
+        transformations:
+          - alias: soj_ec
+            expr: soj_nvl('ec')
+          - alias: soj_eprlogid
+            expr: soj_nvl('eprlogid')
+          - alias: tpool
+            expr: soj_nvl('TPool')
+          - alias: channel
+            expr: |
+              case
+                when soj_ec = 1 then 'Web'
+                when soj_ec = 2 then 'Mobile Web'
+                when soj_ec = 4 then 'Android'
+                when soj_ec = 5 then 'iOS'
+                when soj_ec = 6 then 'Email'
+                else 'Unknown'
+              end
+          - alias: qual_timestamp
+            expr: to_timestamp(soj_parse_rlogid(soj_eprlogid, 'timestamp'))
+          - alias: qual_age
+            expr: unix_timestamp(event_timestamp) - unix_timestamp(qual_timestamp)
+          - alias: qual_age_group
+            expr: |
+              case
+                when qual_age < 0 then 'Group: Error'
+                when qual_age <= 1 then 'Group  1: 1 sec'
+                when qual_age <= 2 then 'Group  2: 2 sec'
+                when qual_age <= 10 then 'Group  3: 10 sec'
+                when qual_age <= 60 then 'Group  4: 1 min'
+                when qual_age <= 900 then 'Group  5: 15 min'
+                when qual_age <= 3600 then 'Group  6: 1 hr'
+                when qual_age <= 3600 * 12 then 'Group  7: 12 hr'
+                when qual_age <= 86400     then 'Group  8: 1 day'
+                when qual_age <= 86400 * 2 then 'Group  9: 2 days'
+                when qual_age <= 86400 * 10 then 'Group 10: 10 days'
+                else 'Group 11: > 10 days'
+              end
+          - alias: pool_type
+            expr: |
+              case
+                when tpool in ('r1rover', 'r1pulsgwy', 'r1edgetrksvc') THEN 'T'
+                else 'D'
+              end
+          - alias: expt_flow_type
+            expr: |
+              case
+                when pool_type = 'T' and soj_ec in ('4', '5') then 'Native Client Side'
+                when soj_ec in ('4', '5') then 'Native Server Side'
+                else 'Native web, MWeb, DWeb'
+              end
+          - alias: qual_age_target
+            expr: |
+              case
+                when expt_flow_type in ('Native Client Side') then '< 12 hours'
+                else '< 10 second'
+              end
+          - alias: total_cnt
+            expr: count(1)
+          - alias: qualified_events_cnt
+            expr: |
+              sum(
+                case
+                  when expt_flow_type in ('Native Client Side') and qual_age <= 3600 * 12 then 1
+                  when expt_flow_type in ('Native web, MWeb, DWeb', 'Native Server Side') and qual_age <= 10 then 1
+                  else 0
+                end
+              )

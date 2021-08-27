@@ -18,6 +18,7 @@ public class ArgsSource extends AbstractEnvironment {
     while (enumeration.hasMoreElements()) {
       String key = (String) enumeration.nextElement();
       this.props.put(key,properties.get(key));
+
     }
   }
 

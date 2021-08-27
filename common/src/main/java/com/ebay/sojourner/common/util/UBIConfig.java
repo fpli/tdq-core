@@ -129,6 +129,8 @@ public class UBIConfig {
       setString(Property.SELECTED_IPS, getUBIProperty(Property.SELECTED_IPS));
       setString(Property.SELECTED_AGENTS, getUBIProperty(Property.SELECTED_AGENTS));
       setString(Property.LKP_PATH,getUBIProperty(Property.LKP_PATH));
+      setString(Property.PAGE_FMLY_ALL, getUBIProperty(Property.PAGE_FMLY_ALL));
+      setString(Property.ITM_PAGES, getUBIProperty(Property.ITM_PAGES));
     }
   }
 
