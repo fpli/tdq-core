@@ -230,7 +230,9 @@
           "dimensions": [
             "expt_flow_type",
             "channel",
-            "qual_age_target"
+            "qual_age_target",
+            "soj_ec",
+            "mdbref_age_group"
           ],
           "metric-name": "ep_qa_nqt",
           "transformations": [
@@ -283,6 +285,24 @@
               "expr": "sum( case when expt_flow_type in ('Native Client Side') and qual_age <= 3600 * 12 then 1 when expt_flow_type in ('Native web, MWeb, DWeb', 'Native Server Side') and qual_age <= 10 then 1 else 0 end)",
               "alias": "qualified_events_cnt",
               "filter": "qual_timestamp is not null"
+            },
+            {
+              "expr": "round(cast(soj_nvl('mdbreftime') AS LONG) / 1000)",
+              "alias": "mdbref_timestamp"
+            },
+            {
+              "expr": "unix_timestamp(qual_timestamp) - mdbref_timestamp",
+              "alias": "mdbref_age"
+            },
+            {
+              "expr": "case when mdbref_age < 0 then 'Group: Error' when mdbref_age <= 910 then '<= 15 min 10 sec' else 'Not meet target' end",
+              "alias": "mdbref_age_group",
+              "filter": "mdbref_timestamp is not null and qual_timestamp is not null"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "mrq_cnt",
+              "filter": "mdbref_timestamp is not null and qual_timestamp is not null"
             }
           ]
         }
@@ -297,30 +317,6 @@
         "sub-type": "normal-metric",
         "index-pattern": "tdq.${flink.app.profile}.metric.normal."
       }
-    },
-    {
-      "name": "pronto_pathfinder_latency_metric",
-      "type": "realtime.pronto",
-      "config": {
-        "sub-type": "latency-metric",
-        "index-pattern": "tdq.${flink.app.profile}.metric.latency."
-      }
-    },
-    {
-      "name": "pronto_pathfinder_exception",
-      "type": "realtime.pronto",
-      "config": {
-        "sub-type": "exception-log",
-        "index-pattern": "tdq.${flink.app.profile}.log.exception."
-      }
-    },
-    {
-      "name": "pronto_pathfinder_sample",
-      "type": "realtime.pronto",
-      "config": {
-        "sub-type": "sample-log",
-        "index-pattern": "tdq.${flink.app.profile}.log.sample."
-      }
     }
   ],
   "sources": [
@@ -332,7 +328,7 @@
         "topics": "behavior.pathfinder.events.total",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1629862200000,
+        "from-timestamp": 1630136400000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
@@ -362,7 +358,7 @@
         "topics": "behavior.pathfinder.events.total",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1629862200000,
+        "from-timestamp": 1630136400000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
@@ -392,7 +388,7 @@
         "topics": "behavior.pathfinder.events.total",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1629862200000,
+        "from-timestamp": 1630136400000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
