@@ -87,30 +87,6 @@
         "sub-type": "normal-metric",
         "index-pattern": "tdq.${flink.app.profile}.metric.normal."
       }
-    },
-    {
-      "name": "pronto_latency_metric",
-      "type": "realtime.pronto",
-      "config": {
-        "sub-type": "latency-metric",
-        "index-pattern": "tdq.${flink.app.profile}.metric.latency."
-      }
-    },
-    {
-      "name": "pronto_exception",
-      "type": "realtime.pronto",
-      "config": {
-        "sub-type": "exception-log",
-        "index-pattern": "tdq.${flink.app.profile}.log.exception."
-      }
-    },
-    {
-      "name": "pronto_sample",
-      "type": "realtime.pronto",
-      "config": {
-        "sub-type": "sample-log",
-        "index-pattern": "tdq.${flink.app.profile}.log.sample."
-      }
     }
   ],
   "sources": [
@@ -122,7 +98,7 @@
         "topics": "behavior.pulsar.customized.tdq",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1629948000000,
+        "from-timestamp": 1630136400000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",

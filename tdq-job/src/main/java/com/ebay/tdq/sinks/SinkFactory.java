@@ -43,7 +43,8 @@ public class SinkFactory implements Serializable {
               sinkable.sinkNormalMetric(id, sinkConfig, tdqCxt.getTdqEnv(), ds);
               break;
             case "latency-metric":
-              sinkable.sinkLatencyMetric(id, sinkConfig, tdqCxt.getTdqEnv(), ds);
+              sinkable.sinkLatencyMetric(id, sinkConfig, tdqCxt.getTdqEnv(),
+                  ds.getSideOutput(tdqCxt.getEventLatencyOutputTag()));
               break;
             case "sample-log":
               sinkable.sinkSampleLog(id, sinkConfig, tdqCxt.getTdqEnv(),
