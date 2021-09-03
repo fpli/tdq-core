@@ -87,6 +87,14 @@
         "sub-type": "normal-metric",
         "index-pattern": "tdq.${flink.app.profile}.metric.normal."
       }
+    },
+    {
+      "name": "pronto_pathfinder_latency_metric",
+      "type": "realtime.pronto",
+      "config": {
+        "sub-type": "latency-metric",
+        "index-pattern": "tdq.${flink.app.profile}.metric.latency."
+      }
     }
   ],
   "sources": [
