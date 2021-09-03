@@ -49,8 +49,7 @@
           "transformations": [
             {
               "expr": "CAST(applicationPayload.p AS INTEGER)",
-              "alias": "page_id",
-              "filter": "page_id in (2547208,2483445,2047936,2054032,2053742,2045573,2351460,2381081)"
+              "alias": "page_id"
             },
             {
               "expr": "soj_page_family(CAST(applicationPayload.p AS INTEGER))",
@@ -73,6 +72,61 @@
               "expr": "sum(case when LENGTH(applicationPayload.prof) > 0 then 1 else 0 end)",
               "alias": "st_prof_cnt",
               "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            },
+            {
+              "expr": "sum(case when LENGTH(applicationPayload['cpnip']) > 0 then 1 else 0 end)",
+              "alias": "st_cpnip_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            },
+            {
+              "expr": "sum(case when LENGTH(applicationPayload['icpp']) > 0 then 1 else 0 end)",
+              "alias": "st_icpp_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            },
+            {
+              "expr": "sum(case when LENGTH(applicationPayload['!clktrack']) > 0 then 1 else 0 end)",
+              "alias": "st_clktrack_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            },
+            {
+              "expr": "sum(case when LENGTH(applicationPayload['srpGist']) > 0 then 1 else 0 end)",
+              "alias": "st_srpGist_cnt",
+              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "store_total_cnt",
+              "filter": "( page_id = 4634 or (page_id = 2499619 and upper(applicationPayload['eactn'])='EXPC') or page_id in(2545226, 2048320, 2056805) or page_id in(3911,2050449,2046732) or (page_id in (2351460, 2053742, 2047936, 2381081) AND soj_url_decode_escapes(lower(applicationPayload['gf']), '%') like '%seller:specific%' ) or page_id in(3418065, 3658866) or (page_id in (3238419, 3238420) and (applicationPayload['sid']='p3533390' or applicationPayload['cp']='3418065')) or (page_id = 2356359 and applicationPayload['cp']='3418065' and lower(soj_url_decode_escapes(applicationPayload['moduledtl'], '%')) in ('mi:54476','82052')) ) and rdt=0"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "url_query_sn_vol",
+              "filter": "length(case when urlQueryString like '/str/%' then soj_list_get_val_by_idx(soj_get_url_path('http://www.ebay.com', urlQueryString) , '/', 3) when urlQueryString like '/experience/shopping/%' then soj_url_extract_nvp(urlQueryString, 'store_name', 0) when webServer like '%stores%' then soj_list_get_val_by_idx( soj_get_url_path('http://www.ebay.com', urlQueryString) , '/', 2) end) > 0 and (page_id in (4634, 3418065) or (page_id = 2499619 and upper(applicationPayload['eactn'])='EXPC') )"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "url_query_slctd_vol",
+              "filter": "length(case when page_id = 2048320 then COALESCE( soj_url_decode_escapes( applicationPayload['sn'], '%'), soj_url_extract_nvp( soj_url_decode_escapes( soj_get_url_params( concat('http://www.ebay.com', urlQueryString)), '%') , 'sn',0)) when page_id = 2056805 then soj_url_extract_nvp( soj_url_decode_escapes( soj_get_url_params(concat('http://www.ebay.com', urlQueryString)), '%') , 'sid',0) when page_id in (2351460, 2053742, 2047936, 2381081) then coalesce(soj_url_extract_nvp(soj_url_decode_escapes(soj_get_url_params(concat('http://www.ebay.com', urlQueryString)), '%') , 'sid',0) , soj_url_extract_nvp( soj_url_decode_escapes( soj_get_url_params( concat('http://www.ebay.com', urlQueryString)), '%') , '_ssn',0) , applicationPayload['sn']) when page_id in (3238419, 3238420) then substr(soj_url_decode_escapes( applicationPayload['folent'], '%'), 2) when page_id = 3658866 then soj_url_extract_nvp(soj_url_decode_escapes(soj_get_url_params( concat('http://www.ebay.com', urlQueryString)), '%') , '_ssn',0) when urlQueryString like '/sch/%' or urlQueryString like '/usr/%' then soj_list_get_val_by_idx(soj_get_url_path(concat('http://www.ebay.com', urlQueryString)), '/', 3) when page_id = 1236 then soj_str_between_str( soj_get_url_params(concat('http://www.ebay.com', urlQueryString)), 'userid=', '&') end)>0 and (page_id in (2545226, 2048320, 2046732, 3658866) or (page_id in (2351460, 2047936, 2381081) AND soj_url_decode_escapes(lower(applicationPayload['gf']), '%') like '%seller:specific%' ) or (page_id in (3238419, 3238420) and (applicationPayload['sid']='p3533390' or applicationPayload['cp']='3418065'))) and rdt=0"
+            },
+            {
+              "expr": "sum(case when is_decimal(soj_list_get_val_by_idx(soj_decode_base36_vec(applicationPayload['!itm']),',', 1),18) then 1 else 0 end)",
+              "alias": "store_soj_itm_id_vol",
+              "filter": "( page_id in(4634, 2046732, 3658866) or (page_id = 2499619 and upper(applicationPayload['eactn']) = 'EXPC') or (page_id in (2351460, 2053742, 2047936, 2381081) AND soj_url_decode_escapes(lower(applicationPayload['gf']), '%') like '%seller:specific%' ) ) and rdt=0"
+            },
+            {
+              "expr": "sum(case when is_decimal(applicationPayload['soid'],18) then 1 else 0 end)",
+              "alias": "soid_owner_id_vol",
+              "filter": "page_id in (4634, 2046732) and rdt=0"
+            },
+            {
+              "expr": "sum(case when applicationPayload['soid'] is not null then 1 else 0 end)",
+              "alias": "soid_owner_pid_vol",
+              "filter": "((page_id = 2499619 and upper(applicationPayload['eactn']) = 'EXPC') or (page_id = 2356359 and applicationPayload['cp']='3418065' and lower(soj_url_decode_escapes(applicationPayload['moduledtl'], '%')) in ('mi:54476','82052')) or page_id = 3418065 ) and rdt=0"
+            },
+            {
+              "expr": "sum(case when is_decimal(soj_list_last_element(soj_get_url_path(referrer),'/'),18) then 1 else 0 end)",
+              "alias": "store_referrer_itm_id_vol",
+              "filter": "(page_id in (4634, 2545226, 2056805, 2046732, 3418065, 3658866) or (page_id = 2499619 and upper(applicationPayload['eactn']) = 'EXPC') or (page_id = 2351460 AND soj_url_decode_escapes(lower(applicationPayload['gf']), '%') like '%seller:specific%' ) ) and rdt=0"
             }
           ]
         }
@@ -89,7 +143,7 @@
       }
     },
     {
-      "name": "pronto_pathfinder_latency_metric",
+      "name": "pronto_latency_metric",
       "type": "realtime.pronto",
       "config": {
         "sub-type": "latency-metric",
@@ -106,7 +160,7 @@
         "topics": "behavior.pulsar.customized.tdq",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1630136400000,
+        "from-timestamp": 1629273900000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
@@ -123,6 +177,99 @@
         },
         "schema-subject": "behavior.sojourner.sojevent.schema",
         "rhs-parallelism": 30,
+        "event-time-field": "eventTimestamp",
+        "rhs-idle-timeout": "3min",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
+        "rhs-out-of-orderless": "3min"
+      }
+    },
+    {
+      "name": "kafka_sojevent_page2356359_rno",
+      "type": "realtime.kafka",
+      "config": {
+        "stream": "behavior.pulsar",
+        "topics": "behavior.pulsar.customized.page2356359",
+        "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
+        "startup-mode": "TIMESTAMP",
+        "from-timestamp": 1629273900000,
+        "kafka-consumer": {
+          "receive.buffer": 8388608,
+          "sasl.mechanism": "IAF",
+          "fetch.max.bytes": 52428800,
+          "max.poll.records": 5000,
+          "sasl.jaas.config": "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" iafSecret=\"c4bb6fca-7ac5-46dd-b218-a49cb6307dbc\" iafEnv=\"production\";",
+          "auto.offset.reset": "latest",
+          "bootstrap.servers": "rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-6.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-7.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-8.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-9.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-10.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-12.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-13.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-14.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-15.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-16.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-17.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-18.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-19.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-20.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-21.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-22.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-23.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-24.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-25.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-26.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-27.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-28.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-29.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-30.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-32.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-33.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-34.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-35.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-36.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-37.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-38.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-39.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-40.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-41.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-42.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-43.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-44.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-45.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-46.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-47.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-48.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-49.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-50.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-51.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-52.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-53.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-54.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-55.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-56.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-57.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-58.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-59.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-60.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-61.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-62.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-63.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-64.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-65.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-66.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-67.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-68.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-69.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-70.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-71.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-72.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-73.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-74.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-75.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-76.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-77.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-78.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-79.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-80.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-81.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-82.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-83.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-84.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-85.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-86.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-87.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-88.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-89.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-90.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-91.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-92.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-93.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-94.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-95.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-96.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-97.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-98.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-99.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-100.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-101.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-102.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-103.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-104.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-105.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-106.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-107.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-108.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-109.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-110.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-111.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-112.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-113.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-114.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-115.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-116.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-117.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-118.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-119.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-120.rheos-streaming-prod.svc.25.tess.io:9092",
+          "fetch.max.wait.ms": 100,
+          "security.protocol": "SASL_PLAINTEXT",
+          "max.partition.fetch.bytes": 10485760,
+          "partition.assignment.strategy": "org.apache.kafka.clients.consumer.RoundRobinAssignor",
+          "flink.partition-discovery.interval-millis": 30000
+        },
+        "schema-subject": "behavior.sojourner.sojevent.schema",
+        "rhs-parallelism": 40,
+        "event-time-field": "eventTimestamp",
+        "rhs-idle-timeout": "3min",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
+        "rhs-out-of-orderless": "3min"
+      }
+    },
+    {
+      "name": "kafka_sojevent_2349624_rno",
+      "type": "realtime.kafka",
+      "config": {
+        "stream": "behavior.pulsar",
+        "topics": "behavior.pulsar.customized.2349624",
+        "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
+        "startup-mode": "TIMESTAMP",
+        "from-timestamp": 1629273900000,
+        "kafka-consumer": {
+          "receive.buffer": 8388608,
+          "sasl.mechanism": "IAF",
+          "fetch.max.bytes": 52428800,
+          "max.poll.records": 5000,
+          "sasl.jaas.config": "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" iafSecret=\"c4bb6fca-7ac5-46dd-b218-a49cb6307dbc\" iafEnv=\"production\";",
+          "auto.offset.reset": "latest",
+          "bootstrap.servers": "rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-6.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-7.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-8.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-9.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-10.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-12.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-13.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-14.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-15.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-16.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-17.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-18.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-19.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-20.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-21.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-22.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-23.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-24.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-25.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-26.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-27.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-28.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-29.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-30.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-32.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-33.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-34.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-35.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-36.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-37.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-38.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-39.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-40.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-41.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-42.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-43.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-44.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-45.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-46.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-47.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-48.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-49.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-50.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-51.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-52.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-53.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-54.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-55.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-56.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-57.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-58.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-59.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-60.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-61.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-62.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-63.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-64.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-65.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-66.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-67.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-68.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-69.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-70.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-71.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-72.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-73.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-74.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-75.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-76.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-77.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-78.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-79.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-80.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-81.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-82.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-83.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-84.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-85.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-86.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-87.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-88.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-89.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-90.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-91.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-92.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-93.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-94.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-95.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-96.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-97.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-98.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-99.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-100.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-101.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-102.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-103.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-104.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-105.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-106.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-107.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-108.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-109.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-110.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-111.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-112.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-113.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-114.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-115.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-116.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-117.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-118.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-119.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-120.rheos-streaming-prod.svc.25.tess.io:9092",
+          "fetch.max.wait.ms": 100,
+          "security.protocol": "SASL_PLAINTEXT",
+          "max.partition.fetch.bytes": 10485760,
+          "partition.assignment.strategy": "org.apache.kafka.clients.consumer.RoundRobinAssignor",
+          "flink.partition-discovery.interval-millis": 30000
+        },
+        "schema-subject": "behavior.sojourner.sojevent.schema",
+        "rhs-parallelism": 40,
+        "event-time-field": "eventTimestamp",
+        "rhs-idle-timeout": "3min",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
+        "rhs-out-of-orderless": "3min"
+      }
+    },
+    {
+      "name": "kafka_sojevent_2351460_rno",
+      "type": "realtime.kafka",
+      "config": {
+        "stream": "behavior.pulsar",
+        "topics": "behavior.pulsar.customized.2351460",
+        "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
+        "startup-mode": "TIMESTAMP",
+        "from-timestamp": 1629273900000,
+        "kafka-consumer": {
+          "receive.buffer": 8388608,
+          "sasl.mechanism": "IAF",
+          "fetch.max.bytes": 52428800,
+          "max.poll.records": 5000,
+          "sasl.jaas.config": "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" iafSecret=\"c4bb6fca-7ac5-46dd-b218-a49cb6307dbc\" iafEnv=\"production\";",
+          "auto.offset.reset": "latest",
+          "bootstrap.servers": "rhs-okrvkiaa-kfk-rno-1.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-2.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-3.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-4.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-5.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-6.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-7.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-8.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-9.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-10.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-11.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-12.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-13.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-14.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-15.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-16.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-17.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-18.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-19.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-20.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-21.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-22.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-23.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-24.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-25.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-26.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-27.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-28.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-29.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-30.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-31.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-32.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-33.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-34.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-35.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-36.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-37.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-38.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-39.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-40.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-41.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-42.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-43.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-44.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-45.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-46.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-47.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-48.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-49.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-50.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-51.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-52.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-53.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-54.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-55.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-56.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-57.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-58.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-59.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-60.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-61.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-62.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-63.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-64.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-65.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-66.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-67.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-68.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-69.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-70.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-71.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-72.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-73.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-74.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-75.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-76.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-77.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-78.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-79.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-80.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-81.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-82.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-83.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-84.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-85.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-86.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-87.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-88.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-89.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-90.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-91.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-92.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-93.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-94.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-95.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-96.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-97.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-98.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-99.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-100.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-101.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-102.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-103.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-104.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-105.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-106.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-107.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-108.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-109.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-110.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-111.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-112.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-113.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-114.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-115.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-116.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-117.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-118.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-119.rheos-streaming-prod.svc.25.tess.io:9092,rhs-okrvkiaa-kfk-rno-120.rheos-streaming-prod.svc.25.tess.io:9092",
+          "fetch.max.wait.ms": 100,
+          "security.protocol": "SASL_PLAINTEXT",
+          "max.partition.fetch.bytes": 10485760,
+          "partition.assignment.strategy": "org.apache.kafka.clients.consumer.RoundRobinAssignor",
+          "flink.partition-discovery.interval-millis": 30000
+        },
+        "schema-subject": "behavior.sojourner.sojevent.schema",
+        "rhs-parallelism": 10,
         "event-time-field": "eventTimestamp",
         "rhs-idle-timeout": "3min",
         "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
