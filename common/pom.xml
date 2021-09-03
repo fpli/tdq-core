@@ -7,7 +7,7 @@
     <groupId>com.ebay.tdq</groupId>
     <artifactId>tdq-parent</artifactId>
     <!-- DO NOT change version manually, this is managed by change_pom_version.sh script -->
-    <version>3.0.1-SNAPSHOT</version>
+    <version>3.0.2-SNAPSHOT</version>
   </parent>
 
   <artifactId>sojourner-common</artifactId>

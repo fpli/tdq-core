@@ -160,7 +160,7 @@
         "topics": "behavior.pulsar.customized.tdq",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1629273900000,
+        "from-timestamp": 1630637100000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
@@ -191,7 +191,7 @@
         "topics": "behavior.pulsar.customized.page2356359",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1629273900000,
+        "from-timestamp": 1630637100000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
@@ -222,7 +222,7 @@
         "topics": "behavior.pulsar.customized.2349624",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1629273900000,
+        "from-timestamp": 1630637100000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
@@ -253,7 +253,7 @@
         "topics": "behavior.pulsar.customized.2351460",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1629273900000,
+        "from-timestamp": 1630637100000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",

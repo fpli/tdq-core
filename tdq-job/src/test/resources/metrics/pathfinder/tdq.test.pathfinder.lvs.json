@@ -324,6 +324,7 @@
           "request.timeout.ms": "3000",
           "delivery.timeout.ms": "12000",
           "retries": "3",
+          "isolation.level": "read_committed",
           "linger.ms": "50",
           "buffer.memory": "1048",
           "acks": "all",
