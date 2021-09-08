@@ -111,6 +111,7 @@ public class RawEventProcessFunction extends ProcessFunction<TdqEvent, InternalM
       long s = System.nanoTime();
       try {
         InternalMetric metric = plan.process(event);
+        metric.putTag("__DC",tdqEnv.getDc());
         sampleData(ctx, event, metric, plan);
         localCache.flush(plan, metric, collector);
         metricGroup.updateEventHistogram(s);

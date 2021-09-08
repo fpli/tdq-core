@@ -29,6 +29,7 @@ public class TdqEnv implements Serializable {
   private String id;
   private String jobName;
   private String profile;
+  private String dc;
   private boolean local;
   private boolean noRestart;
   private int metric1stAggrParallelism;
@@ -50,6 +51,7 @@ public class TdqEnv implements Serializable {
     this.local = EnvironmentUtils.getBooleanOrDefault("flink.app.local", false);
     this.noRestart = EnvironmentUtils.getBooleanOrDefault("flink.app.noRestart", false);
     this.profile = EnvironmentUtils.get("flink.app.profile");
+    this.dc = EnvironmentUtils.get("flink.app.dc");
     this.prontoEnv = new ProntoEnv();
     this.jdbcEnv = new JdbcEnv();
   }
