@@ -131,6 +131,7 @@ object ProfilingSqlParser {
       case Schema.Type.BOOLEAN => BooleanType
       case Schema.Type.STRING => StringType
       case Schema.Type.MAP => MapType(StringType, getType(f.getValueType))
+      case Schema.Type.ARRAY => ArrayType(getType(f.getElementType))
       case Schema.Type.UNION => getType(f.getTypes.asScala.filter(_.getType != Schema.Type.NULL).head)
       case _ =>
         throw new IllegalArgumentException(s"${f.getType} not implement!")
