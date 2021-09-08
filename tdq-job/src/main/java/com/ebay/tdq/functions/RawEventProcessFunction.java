@@ -1,9 +1,9 @@
 package com.ebay.tdq.functions;
 
 import com.ebay.tdq.common.env.TdqEnv;
+import com.ebay.tdq.common.model.InternalMetric;
 import com.ebay.tdq.common.model.TdqErrorMsg;
 import com.ebay.tdq.common.model.TdqEvent;
-import com.ebay.tdq.common.model.InternalMetric;
 import com.ebay.tdq.common.model.TdqSampleData;
 import com.ebay.tdq.planner.LkpManager;
 import com.ebay.tdq.rules.PhysicalPlan;
@@ -13,6 +13,7 @@ import com.ebay.tdq.utils.TdqContext;
 import com.ebay.tdq.utils.TdqMetricGroup;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.state.ListState;
 import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.api.common.typeinfo.TypeHint;
@@ -111,7 +112,10 @@ public class RawEventProcessFunction extends ProcessFunction<TdqEvent, InternalM
       long s = System.nanoTime();
       try {
         InternalMetric metric = plan.process(event);
-        metric.putTag("__DC",tdqEnv.getDc());
+        if (StringUtils.isNotBlank(tdqEnv.getDc())) {
+          metric.putTag("__DC", tdqEnv.getDc()).genMetricId();
+        }
+
         sampleData(ctx, event, metric, plan);
         localCache.flush(plan, metric, collector);
         metricGroup.updateEventHistogram(s);

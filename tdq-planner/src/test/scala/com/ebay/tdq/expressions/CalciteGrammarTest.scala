@@ -59,12 +59,13 @@ class CalciteGrammarTest {
     val tdqEvent = new TdqEvent(
       Map(
         "event_timestamp" -> eventTime,
-        "page_id"->123,
+        "page_id" -> 123,
         "payload" -> Map(
           "tEsT1" -> "123"
         ).asJava,
         "applicationPayload" -> Map(
-          "tEsT1" -> "123"
+          "tEsT1" -> "123",
+          "element_at_test" -> "2"
         ).asJava
       ).mapValues(_.asInstanceOf[Object]).asJava
     )
@@ -163,6 +164,18 @@ class CalciteGrammarTest {
   @Test
   def test_concat(): Unit = {
     test1(s"case when p2='ab' then 1 else 0 end", "concat('a','b')", metric => {
+      println(metric)
+      assert(1d == metric.getValues.get("p1"))
+    })
+  }
+
+  @Test
+  def test_element_at(): Unit = {
+    test1(s"case when p2='two' then 1 else 0 end", "element_at(split('oneAtwoBthreeC', '[ABC]'), 2)", metric => {
+      println(metric)
+      assert(1d == metric.getValues.get("p1"))
+    })
+    test1(s"case when p2='2' then 1 else 0 end", "element_at(applicationPayload, 'element_at_test')", metric => {
       println(metric)
       assert(1d == metric.getValues.get("p1"))
     })

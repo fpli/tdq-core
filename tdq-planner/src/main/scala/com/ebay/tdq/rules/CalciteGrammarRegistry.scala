@@ -150,6 +150,20 @@ object CalciteGrammarRegistry extends DelegatingRegistry({
       operands.map(_.asInstanceOf[Expression]),
       cacheKey = cacheKey
     )
+  case RegistryContext("ELEMENT_AT", operands: Array[Any], cacheKey) =>
+    Preconditions.checkArgument(operands.length == 2)
+    ElementAt(
+      operands(0).asInstanceOf[Expression],
+      operands(1).asInstanceOf[Expression],
+      cacheKey = cacheKey
+    )
+  case RegistryContext("SPLIT", operands: Array[Any], cacheKey) =>
+    Preconditions.checkArgument(operands.length == 2)
+    StringSplit(
+      operands(0).asInstanceOf[Expression],
+      operands(1).asInstanceOf[Expression],
+      cacheKey = cacheKey
+    )
   case RegistryContext("TRIM", operands: Array[Any], cacheKey) =>
     Preconditions.checkArgument(operands.length == 3)
     // todo currently only support both

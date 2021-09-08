@@ -51,7 +51,7 @@ public class TdqEnv implements Serializable {
     this.local = EnvironmentUtils.getBooleanOrDefault("flink.app.local", false);
     this.noRestart = EnvironmentUtils.getBooleanOrDefault("flink.app.noRestart", false);
     this.profile = EnvironmentUtils.get("flink.app.profile");
-    this.dc = EnvironmentUtils.get("flink.app.dc");
+    this.dc = EnvironmentUtils.getStringOrDefault("flink.app.dc", null);
     this.prontoEnv = new ProntoEnv();
     this.jdbcEnv = new JdbcEnv();
   }
