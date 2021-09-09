@@ -59,5 +59,18 @@ object DataType {
     }
   }
 
+  def buildFormattedString(
+    dataType: DataType,
+    prefix: String,
+    builder: StringBuilder): Unit = {
+    dataType match {
+      case array: ArrayType =>
+        array.buildFormattedString(prefix, builder)
+      case map: MapType =>
+        map.buildFormattedString(prefix, builder)
+      case _ =>
+    }
+  }
+
 }
 

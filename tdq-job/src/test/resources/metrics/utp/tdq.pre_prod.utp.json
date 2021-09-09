@@ -105,22 +105,6 @@
         "sub-type": "latency-metric",
         "index-pattern": "tdq.${flink.app.profile}.metric.latency."
       }
-    },
-    {
-      "name": "pronto_exception",
-      "type": "realtime.pronto",
-      "config": {
-        "sub-type": "exception-log",
-        "index-pattern": "tdq.${flink.app.profile}.log.exception."
-      }
-    },
-    {
-      "name": "pronto_sample",
-      "type": "realtime.pronto",
-      "config": {
-        "sub-type": "sample-log",
-        "index-pattern": "tdq.${flink.app.profile}.log.sample."
-      }
     }
   ],
   "sources": [

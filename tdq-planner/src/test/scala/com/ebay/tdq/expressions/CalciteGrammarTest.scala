@@ -25,8 +25,9 @@ class CalciteGrammarTest {
       |    { "name": "urlQueryString",   "type": "string"                                                 },
       |    { "name": "webServer",   "type": "string"                                                 },
       |    { "name": "page_id",   "type": "int"                                                 },
-      |    { "name": "payload",           "type": [ "null", { "type": "map", "values": "string" }]       },
-      |    { "name": "applicationPayload",           "type": [ "null", { "type": "map", "values": "string" }]       }
+      |    { "name": "payload",             "type": [ "null", { "type": "map", "values": "string" }]       },
+      |    { "name": "array1",              "type": [ "null", { "type": "array", "items": "string" }]       },
+      |    { "name": "applicationPayload",  "type": [ "null", { "type": "map", "values": "string" }]       }
       |  ]
       |}
       |""".stripMargin)
@@ -59,12 +60,14 @@ class CalciteGrammarTest {
     val tdqEvent = new TdqEvent(
       Map(
         "event_timestamp" -> eventTime,
-        "page_id"->123,
+        "page_id" -> 123,
+        "array1" -> Array("a", "b", "c"),
         "payload" -> Map(
           "tEsT1" -> "123"
         ).asJava,
         "applicationPayload" -> Map(
-          "tEsT1" -> "123"
+          "tEsT1" -> "123",
+          "element_at_test" -> "2"
         ).asJava
       ).mapValues(_.asInstanceOf[Object]).asJava
     )
@@ -163,6 +166,32 @@ class CalciteGrammarTest {
   @Test
   def test_concat(): Unit = {
     test1(s"case when p2='ab' then 1 else 0 end", "concat('a','b')", metric => {
+      println(metric)
+      assert(1d == metric.getValues.get("p1"))
+    })
+  }
+
+  @Test
+  def test_element_at(): Unit = {
+    test1(s"case when p2='b' then 1 else 0 end", "element_at(array1, 2)", metric => {
+      println(metric)
+      assert(1d == metric.getValues.get("p1"))
+    })
+
+    test1(s"case when p2='2' then 1 else 0 end", "element_at(applicationPayload, 'element_at_test')", metric => {
+      println(metric)
+      assert(1d == metric.getValues.get("p1"))
+    })
+  }
+
+  @Test
+  def test_split(): Unit = {
+    test1(s"case when p2='two' then 1 else 0 end", "element_at(split('oneAtwoBthreeC', '[ABC]'), 2)", metric => {
+      println(metric)
+      assert(1d == metric.getValues.get("p1"))
+    })
+
+    test1(s"case when p2='iOS' then 1 else 0 end", "element_at(split('Script=/v1/batchtrack&Agent=ebayUserAgent/eBayIOS;6.24.0;iOS;14.4;Apple;iPhone11_8;vodafone UK;414x896;2.0&Server=apisd.ebay.com&corrId=04524f74ce342c26&TType=URL&TPayload=corr_id_%3D04524f74ce342c26%26node_id%3Ddb588e93455a484c%26REQUEST_GUID%3D17b4f66a-2750-a44c-7384-74d8e13305f1%26logid%3Dt6faabwwmtuf%253C%253Dpiebgbcsqnuq%2560%2528k%253Emam%2Aw%2560ut3527-17b4f66a26a-0x2354&TStamp=07:38:51.49&TPool=r1edgetrksvc&TDuration=13&ContentLength=1174&TName=Ginger.v1.batchtrack.POST&nodeId=db588e93455a484c&ForwardedFor=82.33.165.249, 104.80.195.151,23.212.109.46,10.221.13.48,10.196.169.225&TMachine=10.68.199.56', ';'), 3)", metric => {
       println(metric)
       assert(1d == metric.getValues.get("p1"))
     })

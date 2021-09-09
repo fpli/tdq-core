@@ -176,3 +176,23 @@ case class Substring(str: Expression, pos: Expression, len: Expression, cacheKey
     }
   }
 }
+
+case class StringSplit(str: Expression, pattern: Expression, cacheKey: Option[String] = None)
+  extends BinaryExpression with ImplicitCastInputTypes {
+
+  override def left: Expression = str
+
+  override def right: Expression = pattern
+
+  override def dataType: DataType = ArrayType(StringType)
+
+  override def inputTypes: Seq[DataType] = Seq(StringType, StringType)
+
+  override def nullSafeEval(string: Any, regex: Any): Any = {
+    val strings = string.asInstanceOf[UTF8String].split(regex.asInstanceOf[UTF8String], -1)
+    strings.asInstanceOf[Array[Any]]
+  }
+
+
+  override def prettyName: String = "split"
+}

@@ -11,6 +11,7 @@ import com.ebay.tdq.config.SinkConfig;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TimeZone;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -49,9 +50,19 @@ public class ProntoSink implements Sinkable {
         .addSink(buildPronto(tdqEnv.getProntoEnv(), 1,
             (ElasticsearchSinkFunction<InternalMetric>) (tdqMetric, runtimeContext, requestIndexer) -> {
               long processTime = System.currentTimeMillis();
+              if (tdqMetric.getMetricName().startsWith("exception") &&
+                  Math.abs(new Random().nextDouble()) <
+                      Double.parseDouble(tdqMetric.getMetricName().split("-")[1])) {
+                throw new RuntimeException("this is test sink exception, checking checkpoint recovery.");
+              }
               String index = pattern + getIndexDateSuffix(tdqMetric.getEventTime(), tdqEnv.getTimeZone());
               requestIndexer
-                  .add(Requests.indexRequest().index(index).source(tdqMetric.toIndexRequest(processTime)));
+                  .add(
+                      Requests.indexRequest()
+                          .id(tdqMetric.getMetricIdWithEventTime())
+                          .index(index)
+                          .source(tdqMetric.toIndexRequest(processTime))
+                  );
             }))
         .uid(id + "_pronto")
         .name(id + "_pronto")
@@ -69,6 +80,11 @@ public class ProntoSink implements Sinkable {
               @Override
               public void process(InternalMetric tdqMetric, RuntimeContext runtimeContext,
                   RequestIndexer requestIndexer) {
+                if (tdqMetric.getMetricName().startsWith("exception_latency") &&
+                    Math.abs(new Random().nextDouble()) <
+                        Double.parseDouble(tdqMetric.getMetricName().split("-")[1])) {
+                  throw new RuntimeException("this is test latency sink exception, checking checkpoint recovery.");
+                }
                 long processTime = System.currentTimeMillis();
                 String index = pattern + getIndexDateSuffix(tdqMetric.getEventTime(), tdqEnv.getTimeZone());
                 requestIndexer
@@ -91,6 +107,11 @@ public class ProntoSink implements Sinkable {
               @Override
               public void process(TdqSampleData tdqSampleData, RuntimeContext runtimeContext,
                   RequestIndexer requestIndexer) {
+                if (tdqSampleData.getMetricKey().startsWith("exception_sample") &&
+                    Math.abs(new Random().nextDouble()) <
+                        Double.parseDouble(tdqSampleData.getMetricKey().split("-")[1])) {
+                  throw new RuntimeException("this is test sink exception, checking checkpoint recovery.");
+                }
                 String index =
                     pattern + getIndexDateSuffix(tdqSampleData.getProcessTime(), tdqEnv.getTimeZone());
                 requestIndexer.add(Requests.indexRequest().index(index).source(tdqSampleData.toIndexRequest()));
@@ -105,7 +126,7 @@ public class ProntoSink implements Sinkable {
   public void sinkExceptionLog(String id, SinkConfig sinkConfig, TdqEnv tdqEnv, DataStream<TdqErrorMsg> ds) {
     Map<String, Object> props = sinkConfig.getConfig();
     String pattern = replaceStringWithPattern((String) props.get("index-pattern"));
-    int parallelism = ((int) props.getOrDefault("rhs-parallelism", 1));
+    int parallelism = (int) props.getOrDefault("rhs-parallelism", 1);
     ds
         .addSink(buildPronto(tdqEnv.getProntoEnv(), 1,
             new ElasticsearchSinkFunction<TdqErrorMsg>() {

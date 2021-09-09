@@ -28,7 +28,7 @@ public class RhsKafkaSink implements Sinkable {
         config.getTopic(),
         new TdqMetricSerializationSchema(config, tdqEnv),
         config.getKafkaProducer(),
-        Semantic.AT_LEAST_ONCE);
+        Semantic.EXACTLY_ONCE);
 
     int schemaId = RheosEventSerdeFactory.getSchemaId(config.getSchemaSubject(), config.getRheosServicesUrls());
 

@@ -12,102 +12,14 @@
   },
   "name": "ignore",
   "rules": [
-    {
-      "name": "system",
-      "type": "realtime.rheos.profiler",
-      "config": {
-        "window": "1min"
-      },
-      "profilers": [
-        {
-          "expr": "total_cnt",
-          "config": {
-            "sampling": false,
-            "sampling-fraction": 0.0005
-          },
-          "metric-name": "sojevent_system_metric",
-          "transformations": [
-            {
-              "expr": "count(1)",
-              "alias": "total_cnt"
-            }
-          ]
-        },
-        {
-          "expr": "total_cnt",
-          "metric-name": "exception-0.02",
-          "transformations": [
-            {
-              "expr": "count(1)",
-              "alias": "total_cnt"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "ido",
-      "type": "realtime.rheos.profiler",
-      "config": {
-        "window": "5min"
-      },
-      "profilers": [
-        {
-          "expr": "total_cnt",
-          "dimensions": [
-            "domain",
-            "site_id",
-            "page_id"
-          ],
-          "metric-name": "sojevent_common_metric",
-          "transformations": [
-            {
-              "expr": "CAST(applicationPayload.p AS INTEGER)",
-              "alias": "page_id",
-              "filter": "page_id in (2547208,2483445,2047936,2054032,2053742,2045573,2351460,2381081)"
-            },
-            {
-              "expr": "soj_page_family(CAST(applicationPayload.p AS INTEGER))",
-              "alias": "domain"
-            },
-            {
-              "expr": "CAST(applicationPayload.t AS INTEGER)",
-              "alias": "site_id"
-            },
-            {
-              "expr": "count(1)",
-              "alias": "total_cnt"
-            },
-            {
-              "expr": "count(1)",
-              "alias": "st_total_cnt",
-              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
-            },
-            {
-              "expr": "sum(case when LENGTH(applicationPayload.prof) > 0 then 1 else 0 end)",
-              "alias": "st_prof_cnt",
-              "filter": "page_id in (2047936,2054032,2053742,2045573) or (page_id in (2351460,2381081) and applicationPayload.eactn is not null)"
-            }
-          ]
-        }
-      ]
-    }
   ],
   "sinks": [
     {
-      "name": "pronto_normal_metric",
-      "type": "realtime.pronto",
+      "name": "hdfs",
+      "type": "realtime.hdfs",
       "config": {
-        "sub-type": "normal-metric",
-        "index-pattern": "tdq.${flink.app.profile}.metric.normal."
-      }
-    },
-    {
-      "name": "pronto_latency_metric",
-      "type": "realtime.pronto",
-      "config": {
-        "sub-type": "latency-metric",
-        "index-pattern": "tdq.${flink.app.profile}.metric.latency."
+        "sub-type": "raw-dump",
+        "hdfs-path": "hdfs://apollo-rno/user/b_bis/tdq/raw-data"
       }
     }
   ],
@@ -120,7 +32,7 @@
         "topics": "behavior.pulsar.customized.tdq",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1630553400000,
+        "from-timestamp": 1629273900000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
@@ -151,7 +63,7 @@
         "topics": "behavior.pulsar.customized.page2356359",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1630553400000,
+        "from-timestamp": 1629273900000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
@@ -182,7 +94,7 @@
         "topics": "behavior.pulsar.customized.2349624",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1630553400000,
+        "from-timestamp": 1629273900000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
@@ -213,7 +125,7 @@
         "topics": "behavior.pulsar.customized.2351460",
         "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
         "startup-mode": "TIMESTAMP",
-        "from-timestamp": 1630553400000,
+        "from-timestamp": 1629273900000,
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",

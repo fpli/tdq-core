@@ -50,6 +50,13 @@ case class MapType(
   def asNullable: MapType =
     MapType(keyType.asNullable, valueType.asNullable, valueContainsNull = true)
 
+  def buildFormattedString(prefix: String, builder: StringBuilder): Unit = {
+    builder.append(s"$prefix-- key: ${keyType.typeName}\n")
+    builder.append(s"$prefix-- value: ${valueType.typeName} " +
+      s"(valueContainsNull = $valueContainsNull)\n")
+    DataType.buildFormattedString(keyType, s"$prefix    |", builder)
+    DataType.buildFormattedString(valueType, s"$prefix    |", builder)
+  }
 }
 
 /**

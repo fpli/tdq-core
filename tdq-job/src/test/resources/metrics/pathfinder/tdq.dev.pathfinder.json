@@ -6,7 +6,7 @@
       "name": "tdq_system",
       "type": "realtime.rheos.profiler",
       "config": {
-        "window": "10s"
+        "window": "5s"
       },
       "profilers": [
         {
@@ -328,7 +328,7 @@
           "buffer.memory": "1048",
           "acks": "all",
           "enable.idempotence":"true",
-          "transactional.id": "0A0A",
+          "transactional.id": "tdq-dev-pathfinder",
           "compression.type": "lz4",
           "sasl.mechanism": "IAF",
           "sasl.jaas.config": "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:7b071ddc-1ab1-4f2b-8fc4-8d2a0afcff46\" iafSecret=\"2c43449b-0d6f-4054-a082-e5576d667654\" iafEnv=\"staging\";",
@@ -339,9 +339,9 @@
   ],
   "env": {
     "config": {
-      "flink.app.window.metric-1st-aggr": "5s",
+      "flink.app.window.metric-1st-aggr": "2s",
       "flink.app.local-aggr.queue-size": 1000,
-      "flink.app.local-aggr.flush-timeout": "5s",
+      "flink.app.local-aggr.flush-timeout": "2s",
       "flink.app.local-aggr.output-partitions": 2,
       "flink.app.parallelism.metric-1st-aggr": 2,
       "flink.app.parallelism.metric-2nd-aggr": 2
