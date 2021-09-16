@@ -142,3 +142,15 @@ case class Remainder(left: Expression, right: Expression, cacheKey: Option[Strin
     }
   }
 }
+
+case class Abs(child: Expression, cacheKey: Option[String])
+  extends UnaryExpression with ExpectsInputTypes with NullIntolerant {
+
+  override def inputTypes: Seq[AbstractDataType] = Seq(NumericType)
+
+  override def dataType: DataType = child.dataType
+
+  private lazy val numeric = TypeUtils.getNumeric(dataType)
+
+  protected override def nullSafeEval(input: Any): Any = numeric.abs(input)
+}

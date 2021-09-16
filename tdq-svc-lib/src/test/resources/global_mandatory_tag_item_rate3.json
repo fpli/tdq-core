@@ -6,7 +6,7 @@
       "type": "realtime.rheos.profilers",
       "config": {
         "window": "2min",
-        "profilers-expr": "abs(global_mandatory_tag_item_rate1.itm_valid_cnt - global_mandatory_tag_item_rate2.itm_valid_cnt)",
+        "profilers-expr": "global_mandatory_tag_item_rate1.itm_valid_cnt - global_mandatory_tag_item_rate2.itm_valid_cnt",
         "profilers-expr-details": [
           {
             "expr": "coalesce(global_mandatory_tag_item_rate1.itm_cnt, 0d)",

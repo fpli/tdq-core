@@ -1,8 +1,6 @@
 package com.ebay.tdq.rules
 
 import com.ebay.tdq.expressions._
-import com.ebay.tdq.expressions.aggregate.{Count, Max, Min, Sum}
-import com.ebay.tdq.types.{DataType, IntegerType}
 import com.google.common.base.Preconditions
 
 /**
@@ -19,21 +17,6 @@ object CalciteGrammarRegistry extends DelegatingRegistry({
         right = operands(1).asInstanceOf[Expression],
         cacheKey = cacheKey
       )
-    )
-  case RegistryContext("-", operands, cacheKey) =>
-    Preconditions.checkArgument(operands.length == 2)
-    Subtract(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression], cacheKey = cacheKey)
-  case RegistryContext("+", operands, cacheKey) =>
-    Add(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression], cacheKey = cacheKey)
-  case RegistryContext("*", operands, cacheKey) =>
-    Multiply(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression], cacheKey = cacheKey)
-  case RegistryContext("/" | "/INT", operands, cacheKey) =>
-    Division.coerceTypes(Divide(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression], cacheKey = cacheKey))
-  case RegistryContext("CAST", operands, cacheKey) =>
-    Cast(
-      operands.head.asInstanceOf[Expression],
-      operands(1).asInstanceOf[DataType],
-      cacheKey = cacheKey
     )
   case RegistryContext("RLIKE" | "SIMILAR TO", operands: Array[Any], cacheKey) =>
     Preconditions.checkArgument(operands.length == 2)
@@ -58,23 +41,6 @@ object CalciteGrammarRegistry extends DelegatingRegistry({
         cacheKey = cacheKey
       )
     )
-  case RegistryContext("REGEXP_EXTRACT", operands: Array[Any], cacheKey) =>
-    if (operands.length > 2) {
-      RegExpExtract(
-        subject = operands.head.asInstanceOf[Expression],
-        regexp = operands(1).asInstanceOf[Expression],
-        idx = Cast(operands(2).asInstanceOf[Expression], IntegerType),
-        cacheKey = cacheKey
-      )
-    } else if (operands.length == 2) {
-      RegExpExtract(
-        subject = operands.head.asInstanceOf[Expression],
-        regexp = operands(1).asInstanceOf[Expression],
-        cacheKey = cacheKey
-      )
-    } else {
-      throw new IllegalStateException("Unexpected operator[REGEXP_EXTRACT] args")
-    }
   case RegistryContext("NOT", operands: Array[Any], _) =>
     Not(operands.head.asInstanceOf[Expression])
   case RegistryContext("OR", operands: Array[Any], _) =>
@@ -82,16 +48,6 @@ object CalciteGrammarRegistry extends DelegatingRegistry({
     Or(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression])
   case RegistryContext("AND", operands: Array[Any], _) =>
     And(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression])
-  case RegistryContext("ROUND", operands: Array[Any], cacheKey) =>
-    if (operands.length == 1) {
-      new Round(operands.head.asInstanceOf[Expression])
-    } else if (operands.length == 2) {
-      Round(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression], cacheKey)
-    } else {
-      throw new IllegalArgumentException()
-    }
-  case RegistryContext("COALESCE", operands: Array[Any], cacheKey) =>
-    Coalesce(operands.map(_.asInstanceOf[Expression]), cacheKey)
   case RegistryContext("IS NULL", operands: Array[Any], _) =>
     Preconditions.checkArgument(operands.length == 1)
     IsNull(operands.head.asInstanceOf[Expression])
@@ -119,65 +75,4 @@ object CalciteGrammarRegistry extends DelegatingRegistry({
   case RegistryContext("<=", operands: Array[Any], _) =>
     Preconditions.checkArgument(operands.length == 2)
     LessThanOrEqual(operands.head.asInstanceOf[Expression], operands(1).asInstanceOf[Expression])
-  case RegistryContext("CHAR_LENGTH" | "CHARACTER_LENGTH" | "LENGTH", operands: Array[Any], cacheKey) =>
-    Preconditions.checkArgument(operands.length == 1)
-    Length(child = operands.head.asInstanceOf[Expression], cacheKey = cacheKey)
-  case RegistryContext("UPPER", operands: Array[Any], cacheKey) =>
-    Preconditions.checkArgument(operands.length == 1)
-    Upper(child = operands.head.asInstanceOf[Expression], cacheKey = cacheKey)
-  case RegistryContext("LOWER", operands: Array[Any], cacheKey) =>
-    Preconditions.checkArgument(operands.length == 1)
-    Lower(child = operands.head.asInstanceOf[Expression], cacheKey = cacheKey)
-  case RegistryContext("SUBSTRING" | "SUBSTR", operands: Array[Any], cacheKey) =>
-    if (operands.length == 2) {
-      new Substring(
-        operands.head.asInstanceOf[Expression],
-        operands(1).asInstanceOf[Expression],
-        cacheKey = cacheKey
-      )
-    } else {
-      Preconditions.checkArgument(operands.length == 3)
-      Substring(
-        operands.head.asInstanceOf[Expression],
-        operands(1).asInstanceOf[Expression],
-        operands(2).asInstanceOf[Expression],
-        cacheKey = cacheKey
-      )
-    }
-
-  case RegistryContext("CONCAT", operands: Array[Any], cacheKey) =>
-    Concat(
-      operands.map(_.asInstanceOf[Expression]),
-      cacheKey = cacheKey
-    )
-  case RegistryContext("ELEMENT_AT", operands: Array[Any], cacheKey) =>
-    Preconditions.checkArgument(operands.length == 2)
-    ElementAt(
-      operands(0).asInstanceOf[Expression],
-      operands(1).asInstanceOf[Expression],
-      cacheKey = cacheKey
-    )
-  case RegistryContext("SPLIT", operands: Array[Any], cacheKey) =>
-    Preconditions.checkArgument(operands.length == 2)
-    StringSplit(
-      operands(0).asInstanceOf[Expression],
-      operands(1).asInstanceOf[Expression],
-      cacheKey = cacheKey
-    )
-  case RegistryContext("TRIM", operands: Array[Any], cacheKey) =>
-    Preconditions.checkArgument(operands.length == 3)
-    // todo currently only support both
-    StringTrim(operands(2).asInstanceOf[Expression], None, cacheKey = cacheKey)
-  case RegistryContext("SUM", operands: Array[Any], cacheKey) =>
-    Preconditions.checkArgument(operands.length == 1)
-    Sum(operands.head.asInstanceOf[Expression], cacheKey)
-  case RegistryContext("MAX", operands: Array[Any], cacheKey) =>
-    Preconditions.checkArgument(operands.length == 1)
-    Max(operands.head.asInstanceOf[Expression], cacheKey)
-  case RegistryContext("MIN", operands: Array[Any], cacheKey) =>
-    Preconditions.checkArgument(operands.length == 1)
-    Min(operands.head.asInstanceOf[Expression], cacheKey)
-  case RegistryContext("COUNT", operands: Array[Any], cacheKey) =>
-    Preconditions.checkArgument(operands.length == 1)
-    Count(operands.head.asInstanceOf[Expression], cacheKey)
 })
