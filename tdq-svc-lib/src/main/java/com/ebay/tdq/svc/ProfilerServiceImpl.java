@@ -23,6 +23,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -79,7 +80,7 @@ public class ProfilerServiceImpl implements ProfilerService {
       if (ruleConfig.getType().equals("realtime.rheos.profiler")) {
         return query(param, ruleConfig.getProfilers().get(0), window);
       } else if (ruleConfig.getType().equals("realtime.rheos.profilers")) {
-        return query(param, ruleConfig.getProfilers(), window, (String) ruleConfig.getConfig().get("profilers-expr"));
+        return query(param, ruleConfig.getProfilers(), window, ruleConfig.getConfig());
       } else {
         throw new IllegalStateException("Unexpected operator: " + ruleConfig.getType());
       }
@@ -100,7 +101,7 @@ public class ProfilerServiceImpl implements ProfilerService {
   }
 
   private QueryProfilerResult query(QueryProfilerParam param, List<ProfilerConfig> profilerConfigs, int window,
-      String evaluation)
+      Map<String, Object> profilesConfig)
       throws IOException, ParseException {
     final QueryProfilerResult.QueryProfilerResultBuilder<?, ?> resultBuilder =
         QueryProfilerResult.builder().param(param);
@@ -127,11 +128,28 @@ public class ProfilerServiceImpl implements ProfilerService {
         });
       }
     }
-    Expression expression = ExpressionParser.expr(evaluation, ServiceFactory.getTdqEnv(), Schema.Type.DOUBLE);
-    params.forEach((k, v) -> {
-      final Object t = PhysicalPlan.eval(expression, v);
-      resultBuilder.record(new QueryProfilerResult.Record(k, t == null ? 0d : (double) t));
-    });
+    if (profilesConfig.get("profilers-expr") != null) {
+      Expression expression = ExpressionParser
+          .expr((String) profilesConfig.get("profilers-expr"), ServiceFactory.getTdqEnv(), Schema.Type.DOUBLE);
+      params.forEach((k, v) -> {
+        final Object t = PhysicalPlan.eval(expression, v);
+        resultBuilder.record(new QueryProfilerResult.Record(k, t == null ? 0d : (double) t));
+      });
+    }
+
+    if (profilesConfig.get("profilers-expr-details") != null) {
+      ((List<?>) profilesConfig.get("profilers-expr-details")).forEach(detail -> {
+        String name = (String) ((Map<?, ?>) detail).get("name");
+        String expr = (String) ((Map<?, ?>) detail).get("expr");
+        List<QueryProfilerResult.Record> records = new ArrayList<>();
+        Expression expression = ExpressionParser.expr(expr, ServiceFactory.getTdqEnv(), Schema.Type.DOUBLE);
+        params.forEach((k, v) -> {
+          final Object t = PhysicalPlan.eval(expression, v);
+          records.add(new QueryProfilerResult.Record(k, t == null ? 0d : (double) t));
+        });
+        resultBuilder.detail(name, records);
+      });
+    }
     return resultBuilder.build();
   }
 

@@ -113,6 +113,21 @@ public class ProfilerServiceQueryProfilersTest {
     Assert.assertEquals(5d - 1d, a1, 0.0001);
     Assert.assertEquals(2d - 2d, a2, 0.0001);
 
+    Map<Long, Double> detail1 = result.getDetails().get("1").stream().collect(Collectors.toMap(QueryProfilerResult.Record::getTimestamp,
+        QueryProfilerResult.Record::getValue));
+    Assert.assertEquals(5d, detail1.get(DateUtils.parseDateTime("2021-05-29 12:02:00", zone)), 0.0001);
+    Assert.assertEquals(2d, detail1.get(DateUtils.parseDateTime("2021-05-29 12:04:00", zone)), 0.0001);
+
+    Map<Long, Double> detail2 = result.getDetails().get("2").stream().collect(Collectors.toMap(QueryProfilerResult.Record::getTimestamp,
+        QueryProfilerResult.Record::getValue));
+    Assert.assertEquals(1d, detail2.get(DateUtils.parseDateTime("2021-05-29 12:02:00", zone)), 0.0001);
+    Assert.assertEquals(2d, detail2.get(DateUtils.parseDateTime("2021-05-29 12:04:00", zone)), 0.0001);
+
+    Map<Long, Double> detail3 = result.getDetails().get("3").stream().collect(Collectors.toMap(QueryProfilerResult.Record::getTimestamp,
+        QueryProfilerResult.Record::getValue));
+    Assert.assertEquals(5d / 1d, detail3.get(DateUtils.parseDateTime("2021-05-29 12:02:00", zone)), 0.0001);
+    Assert.assertEquals(2d / 2d, detail3.get(DateUtils.parseDateTime("2021-05-29 12:04:00", zone)), 0.0001);
+
     dimensions = new HashMap<>();
     dimensions.put("global_mandatory_tag_item_rate1.page_id", Sets.newHashSet("711"));
     dimensions.put("global_mandatory_tag_item_rate2.page", Sets.newHashSet("1677718"));

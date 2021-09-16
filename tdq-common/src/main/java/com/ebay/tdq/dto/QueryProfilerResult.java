@@ -22,7 +22,8 @@ public class QueryProfilerResult extends TdqResult {
   private QueryProfilerParam param;
   @Singular
   private List<Record> records;
-  private Map<String,List<Record>> details;
+  @Singular
+  private Map<String, List<Record>> details;
 
   @Data
   @RequiredArgsConstructor
