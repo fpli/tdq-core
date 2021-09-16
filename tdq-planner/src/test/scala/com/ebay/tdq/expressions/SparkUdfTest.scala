@@ -180,6 +180,8 @@ class SparkUdfTest {
 
   @Test
   def test_math(): Unit = {
+    exprAssert("regexp_extract('100-200', '(\\\\d+)-(\\\\d+)', 1) = 100")
+    exprAssert("length('Spark SQL ') = 10")
     exprAssert("round(123213 / 1000, 1) - 100 > 23")
     exprAssert("cos(0)=1")
     exprAssert("acos(1)=0")
