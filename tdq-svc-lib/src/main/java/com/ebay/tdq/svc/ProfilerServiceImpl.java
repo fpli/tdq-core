@@ -114,6 +114,8 @@ public class ProfilerServiceImpl implements ProfilerService {
       for (val e : dimensions.entrySet()) {
         if (e.getKey().startsWith(pc.getMetricName())) {
           newDimensions.put(e.getKey().split("\\.")[1], e.getValue());
+        } else if (pc.getDimensions().contains(e.getKey())) {
+          newDimensions.put(e.getKey(), e.getValue());
         }
       }
       for (InternalMetric metric : query0(

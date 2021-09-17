@@ -164,4 +164,37 @@ public class ProfilerServiceQueryProfilersTest {
 
 
   }
+
+  @Test
+  public void testQuery2() throws Exception {
+    val elasticsearchResource = new EmbeddedElasticsearch();
+    elasticsearchResource.start("es-test");
+    createData(elasticsearchResource.getClient());
+
+    Map<String, Set<String>> dimensions = new HashMap<>();
+    dimensions.put("page_id", Sets.newHashSet("711"));
+    dimensions.put("page", Sets.newHashSet("1677718"));
+    QueryProfilerParam param = new QueryProfilerParam(
+        RuleEngineServiceTest.get("global_mandatory_tag_item_rate3"),
+        DateUtils
+            .parseDateTime("2021-05-29 12:02:00", zone),
+        DateUtils
+            .parseDateTime("2021-05-29 12:04:00", zone),
+        dimensions
+    );
+
+    QueryProfilerResult result = ServiceFactory.getProfiler().query(param);
+    Assert.assertEquals(2, result.getRecords().size());
+    Map<Long, Double> m =
+        result.getRecords().stream().collect(Collectors.toMap(QueryProfilerResult.Record::getTimestamp,
+            QueryProfilerResult.Record::getValue));
+    double a1 = m.get(DateUtils.parseDateTime("2021-05-29 12:02:00", zone));
+    double a2 = m.get(DateUtils.parseDateTime("2021-05-29 12:04:00", zone));
+    Assert.assertEquals(5d - 0d, a1, 0.0001);
+    Assert.assertEquals(1d - 2d, a2, 0.0001);
+
+    elasticsearchResource.close();
+
+
+  }
 }
