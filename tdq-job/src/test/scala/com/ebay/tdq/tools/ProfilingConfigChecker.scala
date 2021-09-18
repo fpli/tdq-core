@@ -28,7 +28,7 @@ object ProfilingConfigChecker {
       .test()
   }
 
-  def testLocalPF(): Unit = {
+  def testLocalPathFinder(): Unit = {
     ProfilingLocalPathfinderJobIT(
       """
         |{
@@ -44,7 +44,8 @@ object ProfilingConfigChecker {
         |""".stripMargin).test()
   }
 
-  def testKafkaPF(): Unit = {
+  // need wait for 3min
+  def testKafkaPathFinder(): Unit = {
     ProfilingKafkaPathfinderJobIT(
       """
         |{
