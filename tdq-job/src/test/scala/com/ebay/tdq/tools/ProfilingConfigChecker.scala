@@ -5,8 +5,8 @@ package com.ebay.tdq.tools
  */
 object ProfilingConfigChecker {
   def main(args: Array[String]): Unit = {
-    //    testKafkaPF()
-    //    testLocalPF()
+    //    testLocalPathFinder()
+    //    testKafkaPathFinder()
     testKafkaUtp()
   }
 
@@ -19,7 +19,7 @@ object ProfilingConfigChecker {
           |  "metric-name": "system_metric",
           |  "transformations": [
           |    {
-          |      "expr": "count(1)",
+          |      "expr": "count1(1)",
           |      "alias": "total_cnt"
           |    }
           |  ]
