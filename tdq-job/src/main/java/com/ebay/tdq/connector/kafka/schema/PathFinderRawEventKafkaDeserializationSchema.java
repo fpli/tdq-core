@@ -10,6 +10,8 @@ import com.ebay.sojourner.common.util.SOJNVL;
 import com.ebay.sojourner.common.util.SOJURLDecodeEscape;
 import com.ebay.sojourner.common.util.SojTimestamp;
 import com.ebay.tdq.common.model.TdqEvent;
+import com.ebay.tdq.utils.JsonUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -117,6 +119,10 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
     RawEvent rawEvent = new RawEvent(rheosHeader, sojAMap, sojKMap, sojCMap, clientData,
         ingestTime, null);
     parseEventTimestamp(rawEvent);
+    try {
+      System.out.println(JsonUtils.toJSONString(rawEvent));
+    } catch (JsonProcessingException e) {
+    }
     return new TdqEvent(rawEvent);
   }
 
