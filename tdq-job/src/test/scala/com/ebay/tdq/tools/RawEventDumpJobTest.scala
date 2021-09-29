@@ -1,4 +1,4 @@
-package com.ebay.tdq
+package com.ebay.tdq.tools
 
 import com.ebay.tdq.ProfilingJobIT.setupDB
 import com.ebay.tdq.jobs.{ProfilingJob, RawEventDumpJob}

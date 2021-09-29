@@ -6,7 +6,21 @@
       "type": "realtime.rheos.profilers",
       "config": {
         "window": "2min",
-        "profilers-expr": "(global_mandatory_tag_item_rate1.itm_valid_cnt - global_mandatory_tag_item_rate2.itm_valid_cnt)"
+        "profilers-expr": "global_mandatory_tag_item_rate1.itm_valid_cnt - global_mandatory_tag_item_rate2.itm_valid_cnt",
+        "profilers-expr-details": [
+          {
+            "expr": "coalesce(global_mandatory_tag_item_rate1.itm_valid_cnt, 0.0)",
+            "name": "1"
+          },
+          {
+            "expr": "coalesce(global_mandatory_tag_item_rate2.itm_valid_cnt, 0.0)",
+            "name": "2"
+          },
+          {
+            "expr": "global_mandatory_tag_item_rate1.itm_valid_cnt / global_mandatory_tag_item_rate2.itm_valid_cnt",
+            "name": "3"
+          }
+        ]
       },
       "profilers": [
         {

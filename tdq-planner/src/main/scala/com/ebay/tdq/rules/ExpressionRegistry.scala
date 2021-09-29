@@ -15,6 +15,7 @@ case class ExpressionRegistry(tdqEnv: TdqEnv, getDataType: Array[String] => Data
 
   lazy val registries = Seq(
     CalciteGrammarRegistry,
+    SparkUdfRegistry,
     TdqUdfRegistry,
     SojUdfRegistry
   )

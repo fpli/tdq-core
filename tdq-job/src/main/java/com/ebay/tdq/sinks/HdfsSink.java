@@ -30,7 +30,7 @@ public class HdfsSink implements Sinkable {
       String id, String path, String producerId, int schemaId, TdqEnv tdqEnv,
       DataStream<InternalMetric> ds) {
     StreamingFileSink<TdqMetric> sink = HdfsConnectorFactory.createWithParquet(
-        path, TdqMetric.class, new TdqMetricDateTimeBucketAssigner(tdqEnv.getTimeZone().toZoneId()));
+        path + "/winId=" + id, TdqMetric.class, new TdqMetricDateTimeBucketAssigner(tdqEnv.getTimeZone().toZoneId()));
     ds.map(m -> m.toTdqMetric(producerId, schemaId))
         .uid(id + "_avro")
         .name(id + "_avro")

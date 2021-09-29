@@ -457,7 +457,7 @@ object SojUdfRegistry extends DelegatingRegistry({
       cacheKey = cacheKey
     )
 
-  case RegistryContext("CSTR_STRCHR", operands: Array[Any], cacheKey) =>
+  case RegistryContext("SOJ_CSTR_STRCHR", operands: Array[Any], cacheKey) =>
     Preconditions.checkArgument(operands.length == 2)
     CstrStrchr(
       operands.head.asInstanceOf[Expression],
@@ -465,7 +465,7 @@ object SojUdfRegistry extends DelegatingRegistry({
       cacheKey = cacheKey
     )
 
-  case RegistryContext("IS_TIMESTAMP", operands: Array[Any], cacheKey) =>
+  case RegistryContext("SOJ_IS_TIMESTAMP", operands: Array[Any], cacheKey) =>
     Preconditions.checkArgument(operands.length == 2)
     IsTimestamp(
       operands.head.asInstanceOf[Expression],
@@ -497,7 +497,7 @@ object SojUdfRegistry extends DelegatingRegistry({
       cacheKey = cacheKey
     )
 
-  case RegistryContext("UDF_SOJ_GET_B64_BIT_POSTNS", operands: Array[Any], cacheKey) =>
+  case RegistryContext("SOJ_UDF_SOJ_GET_B64_BIT_POSTNS", operands: Array[Any], cacheKey) =>
     Preconditions.checkArgument(operands.length == 2)
     UdfSojGetB64BitPostns(
       operands.head.asInstanceOf[Expression],
@@ -505,7 +505,7 @@ object SojUdfRegistry extends DelegatingRegistry({
       cacheKey = cacheKey
     )
 
-  case RegistryContext("DECODESRPITMCARDSIG", operands: Array[Any], cacheKey) =>
+  case RegistryContext("SOJ_DECODESRPITMCARDSIG", operands: Array[Any], cacheKey) =>
     Preconditions.checkArgument(operands.length == 3)
     DecodeSRPItmcardSig(
       operands.head.asInstanceOf[Expression],

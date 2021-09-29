@@ -226,6 +226,85 @@
           ]
         },
         {
+          "expr": "m_hub_click_cnt",
+          "dimensions": [
+            "site_id",
+            "device_type",
+            "os_version",
+            "app_version",
+            "is_bot"
+          ],
+          "metric-name": "marketing_metric",
+          "transformations": [
+            {
+              "expr": "soj_nvl('t')",
+              "alias": "soj_tag_t"
+            },
+            {
+              "expr": "soj_nvl('cp')",
+              "alias": "soj_tag_cp"
+            },
+            {
+              "expr": "CAST(soj_tag_t AS INTEGER)",
+              "alias": "site_id",
+              "filter": "m_hub_click_cnt_filter or m_hub_dismiss_cnt_filter"
+            },
+            {
+              "expr": "soj_nvl('p')",
+              "alias": "soj_tag_p"
+            },
+            {
+              "expr": "soj_nvl('efam')",
+              "alias": "soj_tag_efam"
+            },
+            {
+              "expr": "soj_nvl('eactn')",
+              "alias": "soj_tag_eactn"
+            },
+            {
+              "expr": "CAST(soj_tag_p AS INTEGER)",
+              "alias": "page_id"
+            },
+            {
+              "expr": "'Unknown'",
+              "alias": "is_bot"
+            },
+            {
+              "expr": "element_at(split(clientData.agent, ';'), 3)",
+              "alias": "device_type",
+              "filter": "m_hub_click_cnt_filter or m_hub_dismiss_cnt_filter"
+            },
+            {
+              "expr": "element_at(split(clientData.agent, ';'), 4)",
+              "alias": "os_version",
+              "filter": "m_hub_click_cnt_filter or m_hub_dismiss_cnt_filter"
+            },
+            {
+              "expr": "element_at(split(clientData.agent, ';'), 2)",
+              "alias": "app_version",
+              "filter": "m_hub_click_cnt_filter or m_hub_dismiss_cnt_filter"
+            },
+            {
+              "expr": "clientData.agent is not null and (page_id = 2356359 and soj_tag_efam = 'NOTF' and soj_tag_eactn = 'ACTN' and soj_tag_cp = '2380424' and soj_extract_nvp(soj_url_decode_escapes(soj_nvl('moduledtl'), '%'), 'ni_actn', '|', ':') = 'nav')",
+              "alias": "m_hub_click_cnt_filter"
+            },
+            {
+              "expr": "clientData.agent is not null and (page_id = 2356359 and soj_tag_efam = 'NOTF' and soj_tag_eactn = 'ACTN' and soj_tag_cp = '2380424' and soj_extract_nvp(soj_url_decode_escapes(soj_nvl('moduledtl'), '%'), 'ni_actn', '|', ':') = 'delete')",
+              "alias": "m_hub_dismiss_cnt_filter"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "m_hub_click_cnt",
+              "filter": "m_hub_click_cnt_filter"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "m_hub_dismiss_cnt",
+              "filter": "m_hub_dismiss_cnt_filter"
+            }
+          ]
+        },
+        {
           "expr": "total_cnt",
           "dimensions": [
             "expt_flow_type",
@@ -301,6 +380,11 @@
             },
             {
               "expr": "count(1)",
+              "alias": "mrq_total_cnt",
+              "filter": "mdbref_timestamp is not null and qual_timestamp is not null"
+            },
+            {
+              "expr": "sum(case when expt_flow_type in ('Native Client Side','Native web, MWeb, DWeb','Native Server Side') and mdbref_age <= 910 and mdbref_age >= 0 then 1 else 0 end)",
               "alias": "mrq_cnt",
               "filter": "mdbref_timestamp is not null and qual_timestamp is not null"
             }
@@ -316,6 +400,16 @@
       "config": {
         "sub-type": "normal-metric",
         "index-pattern": "tdq.${flink.app.profile}.metric.normal."
+      }
+    },
+    {
+      "name": "hdfs_pathfinder_tdq_normal_metric",
+      "type": "realtime.hdfs",
+      "config": {
+        "sub-type": "normal-metric",
+        "hdfs-path": "hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/metric/normal/cfg=pathfinder",
+        "schema-subject": "tdq.metric",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com"
       }
     },
     {
@@ -413,8 +507,8 @@
         "kafka-consumer": {
           "receive.buffer": 8388608,
           "sasl.mechanism": "IAF",
-          "fetch.min.bytes": 10000,
           "fetch.max.bytes": 52428800,
+          "fetch.min.bytes": 10000,
           "max.poll.records": 5000,
           "sasl.jaas.config": "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" iafSecret=\"c4bb6fca-7ac5-46dd-b218-a49cb6307dbc\" iafEnv=\"production\";",
           "auto.offset.reset": "latest",

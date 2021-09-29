@@ -47,7 +47,7 @@ object AnyDataType extends AbstractDataType {
 /**
  * An internal type used to represent everything that is not null, UDTs, arrays, structs, and maps.
  */
-protected abstract class AtomicType extends DataType {
+abstract class AtomicType extends DataType {
   type InternalType
   val tag: TypeTag[InternalType]
   val ordering: Ordering[InternalType]

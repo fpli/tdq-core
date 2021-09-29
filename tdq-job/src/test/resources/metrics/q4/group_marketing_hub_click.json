@@ -1,0 +1,141 @@
+{
+  "id": "ignore",
+  "rules": [
+    {
+      "name": "Marketing Hub click",
+      "type": "realtime.rheos.profilers",
+      "config": {
+        "window": "1h",
+        "profilers-expr": "(marketing_metric.m_hub_click_cnt - utp_common_metric.m_hub_click_cnt)",
+        "profilers-expr-details": [
+          {
+            "expr": "coalesce(marketing_metric.m_hub_click_cnt, 0d)",
+            "name": "pf_hub_click_cnt"
+          },
+          {
+            "expr": "coalesce(utp_common_metric.m_hub_click_cnt, 0d)",
+            "name": "utp_hub_click_cnt"
+          }
+        ]
+      },
+      "profilers": [
+        {
+          "metric-name": "marketing_metric",
+          "dimensions": ["site_id", "device_type", "os_version", "app_version", "is_bot"],
+          "config": {
+            "pronto-filter": "expr.m_hub_click_cnt > 0"
+          },
+          "transformations": [
+            {
+              "alias": "soj_tag_t",
+              "expr": "soj_nvl('t')"
+            },
+            {
+              "alias": "site_id",
+              "expr": "CAST(soj_tag_t AS INTEGER)"
+            },
+            {
+              "expr": "element_at(split(CLIENT_DATA,';'),3)",
+              "alias": "device_type"
+            },
+            {
+              "expr": "element_at(split(CLIENT_DATA,';'),4)",
+              "alias": "os_version"
+            },
+            {
+              "expr": "element_at(split(CLIENT_DATA,';'),2)",
+              "alias": "app_version"
+            },
+            {
+              "expr": "case when isBot then 'true' else 'false' end",
+              "alias": "is_bot"
+            },
+            {
+              "expr": "soj_nvl('p')",
+              "alias": "soj_tag_p"
+            },
+            {
+              "alias": "page_id",
+              "expr": "CAST(soj_tag_p AS INTEGER)"
+            },
+            {
+              "expr": "soj_nvl('efam')",
+              "alias": "soj_tag_efam"
+            },
+            {
+              "expr": "soj_nvl('eactn')",
+              "alias": "soj_tag_eactn"
+            },
+            {
+              "expr": "soj_nvl('cp')",
+              "alias": "soj_tag_cp"
+            },
+            {
+              "expr": "soj_nvl('moduledtl')",
+              "alias": "soj_tag_moduledtl"
+            },
+            {
+              "expr": "soj_url_decode_escapes(soj_tag_moduledtl, '%')",
+              "alias": "soj_tag_moduledtl_decode"
+            },
+            {
+              "expr": "soj_extract_nvp(soj_tag_moduledtl_decode, 'ni_actn', '|', ':') ",
+              "alias": "soj_tag_moduledtl_decode_extract_str"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "total_cnt",
+              "filter": "(page_id = 2356359 and soj_tag_efam = 'NOTF' and soj_tag_eactn = 'ACTN' and soj_tag_cp = '2380424' and soj_tag_moduledtl_decode_extract_str = 'nav')"
+            }
+          ]
+        },
+        {
+          "metric-name": "utp_common_metric",
+          "dimensions": ["site_id", "device_type", "os_version", "app_version", "is_bot"],
+          "config": {
+            "pronto-filter": "expr.m_hub_click_cnt > 0"
+          },
+          "transformations": [
+            {
+              "expr": "COALESCE(siteId, -1)",
+              "alias": "site_id"
+            },
+            {
+              "expr": "COALESCE(deviceType, 'NULL')",
+              "alias": "device_type"
+            },
+            {
+              "expr": "COALESCE(osVersion, 'NULL')",
+              "alias": "os_version"
+            },
+            {
+              "expr": "COALESCE(appVersion, 'NULL')",
+              "alias": "app_version"
+            },
+            {
+              "expr": "case when isBot is NULL then 'NULL' when isBot then 'Y' else 'N' end",
+              "alias": "is_bot"
+            },
+            {
+              "expr": "COALESCE(service, 'NULL')",
+              "alias": "service"
+            },
+            {
+              "expr": "COALESCE(channelType, 'NULL')",
+              "alias": "channelType"
+            },
+            {
+              "expr": "COALESCE(actionType, 'NULL')",
+              "alias": "actionType"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "m_hub_click_cnt",
+              "filter": "(service = 'mc3dtpull' and channelType = 'HUB_NOTIF' and actionType = 'CLICK')"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -379,8 +379,7 @@ class ProfilingSqlParser(profilerConfig: ProfilerConfig, window: Long, tdqEnv: T
 
   private def parseFilter(filter: String): Expression = {
     if (StringUtils.isNotBlank(filter)) {
-      transformSqlBaseCall(getSql("SELECT 1 FROM T where " + filter)
-        .getWhere.asInstanceOf[SqlBasicCall], "")
+      transformSqlNode(getSql("SELECT 1 FROM T where " + filter).getWhere, "")
     } else {
       null
     }

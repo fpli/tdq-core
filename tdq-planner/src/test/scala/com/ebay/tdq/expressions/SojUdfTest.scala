@@ -446,12 +446,12 @@ class SojUdfTest {
 
   @Test
   def cstr_strchr(): Unit = {
-    testExpr("cstr_strchr('www.ebay.com','.')", "'.ebay.com'")
+    testExpr("soj_cstr_strchr('www.ebay.com','.')", "'.ebay.com'")
   }
 
   @Test
   def IsTimestamp(): Unit = {
-    testExpr("is_timestamp('2009-01-01 10:00:02',0)", "1")
+    testExpr("soj_is_timestamp('2009-01-01 10:00:02',0)", "1")
   }
 
 
@@ -472,12 +472,12 @@ class SojUdfTest {
 
   @Test
   def udf_soj_get_b64_bit_postns(): Unit = {
-    testExpr("udf_soj_get_b64_bit_postns('BA**',0)", "'5,'")
+    testExpr("soj_udf_soj_get_b64_bit_postns('BA**',0)", "'5,'")
   }
 
   @Test
   def decodeSRPItmcardSig(): Unit = {
-    testExpr("decodeSRPItmcardSig('NGQoACIQAA%3D%3D%2CCCJkKAACCAA%3D%2CImAoAIIAAA%3D%3D%2CAmAoAAIgAA%3D%3D%2CAkAoAAIgAA%3D%3D%2CAkAoAAIgAA%3D%3D%2CImQoAAIAAA%3D%3D%2CAkAoAAIAAA%3D%3D%2CImQpAAIgAA%3D%3D%2CFEIICCIRAA%3D%3D%2CImAoAAI',14,65)", "0")
+    testExpr("soj_decodeSRPItmcardSig('NGQoACIQAA%3D%3D%2CCCJkKAACCAA%3D%2CImAoAIIAAA%3D%3D%2CAmAoAAIgAA%3D%3D%2CAkAoAAIgAA%3D%3D%2CAkAoAAIgAA%3D%3D%2CImQoAAIAAA%3D%3D%2CAkAoAAIAAA%3D%3D%2CImQpAAIgAA%3D%3D%2CFEIICCIRAA%3D%3D%2CImAoAAI',14,65)", "0")
   }
 
   @Test
