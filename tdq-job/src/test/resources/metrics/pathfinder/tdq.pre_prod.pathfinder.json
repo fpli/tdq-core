@@ -227,20 +227,27 @@
         },
         {
           "expr": "m_hub_click_cnt",
-          "dimensions": ["site_id", "device_type", "os_version", "app_version", "is_bot"],
+          "dimensions": [
+            "site_id",
+            "device_type",
+            "os_version",
+            "app_version",
+            "is_bot"
+          ],
           "metric-name": "marketing_metric",
-          "transformations":[
+          "transformations": [
             {
-              "alias": "soj_tag_t",
-              "expr": "soj_nvl('t')"
+              "expr": "soj_nvl('t')",
+              "alias": "soj_tag_t"
             },
             {
               "expr": "soj_nvl('cp')",
               "alias": "soj_tag_cp"
             },
             {
+              "expr": "CAST(soj_tag_t AS INTEGER)",
               "alias": "site_id",
-              "expr": "CAST(soj_tag_t AS INTEGER)"
+              "filter": "m_hub_click_cnt_filter or m_hub_dismiss_cnt_filter"
             },
             {
               "expr": "soj_nvl('p')",
@@ -255,8 +262,8 @@
               "alias": "soj_tag_eactn"
             },
             {
-              "alias": "page_id",
-              "expr": "CAST(soj_tag_p AS INTEGER)"
+              "expr": "CAST(soj_tag_p AS INTEGER)",
+              "alias": "page_id"
             },
             {
               "expr": "'Unknown'",
@@ -265,26 +272,35 @@
             {
               "expr": "element_at(split(clientData.agent, ';'), 3)",
               "alias": "device_type",
-              "filter": "m_hub_click_cnt_filter"
+              "filter": "m_hub_click_cnt_filter or m_hub_dismiss_cnt_filter"
             },
             {
               "expr": "element_at(split(clientData.agent, ';'), 4)",
               "alias": "os_version",
-              "filter": "m_hub_click_cnt_filter"
+              "filter": "m_hub_click_cnt_filter or m_hub_dismiss_cnt_filter"
             },
             {
               "expr": "element_at(split(clientData.agent, ';'), 2)",
               "alias": "app_version",
-              "filter": "m_hub_click_cnt_filter"
+              "filter": "m_hub_click_cnt_filter or m_hub_dismiss_cnt_filter"
             },
             {
               "expr": "clientData.agent is not null and (page_id = 2356359 and soj_tag_efam = 'NOTF' and soj_tag_eactn = 'ACTN' and soj_tag_cp = '2380424' and soj_extract_nvp(soj_url_decode_escapes(soj_nvl('moduledtl'), '%'), 'ni_actn', '|', ':') = 'nav')",
               "alias": "m_hub_click_cnt_filter"
             },
             {
+              "expr": "clientData.agent is not null and (page_id = 2356359 and soj_tag_efam = 'NOTF' and soj_tag_eactn = 'ACTN' and soj_tag_cp = '2380424' and soj_extract_nvp(soj_url_decode_escapes(soj_nvl('moduledtl'), '%'), 'ni_actn', '|', ':') = 'delete')",
+              "alias": "m_hub_dismiss_cnt_filter"
+            },
+            {
               "expr": "count(1)",
               "alias": "m_hub_click_cnt",
               "filter": "m_hub_click_cnt_filter"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "m_hub_dismiss_cnt",
+              "filter": "m_hub_dismiss_cnt_filter"
             }
           ]
         },
@@ -384,6 +400,16 @@
       "config": {
         "sub-type": "normal-metric",
         "index-pattern": "tdq.${flink.app.profile}.metric.normal."
+      }
+    },
+    {
+      "name": "hdfs_pathfinder_tdq_normal_metric",
+      "type": "realtime.hdfs",
+      "config": {
+        "sub-type": "normal-metric",
+        "hdfs-path": "hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/metric/normal/cfg=pathfinder",
+        "schema-subject": "tdq.metric",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com"
       }
     },
     {

@@ -96,17 +96,17 @@
             {
               "expr": "count(1)",
               "alias": "store_total_cnt",
-              "filter": "( page_id = 4634 or (page_id = 2499619 and upper(applicationPayload['eactn'])='EXPC') or page_id in(2545226, 2048320, 2056805) or page_id in(3911,2050449,2046732) or (page_id in (2351460, 2053742, 2047936, 2381081) AND soj_url_decode_escapes(lower(applicationPayload['gf']), '%') like '%seller:specific%' ) or page_id in(3418065, 3658866) or (page_id in (3238419, 3238420) and (applicationPayload['sid']='p3533390' or applicationPayload['cp']='3418065')) or (page_id = 2356359 and applicationPayload['cp']='3418065' and lower(soj_url_decode_escapes(applicationPayload['moduledtl'], '%')) in ('mi:54476','82052')) ) and rdt=0"
+              "filter": "( page_id = 4634 or (page_id = 2499619 and upper(applicationPayload['eactn'])='EXPC') or page_id in(2545226, 2048320, 2056805) or page_id in(3911,2050449,2046732) or (page_id in (2351460, 2053742, 2047936, 2381081) AND soj_url_decode_escapes(lower(applicationPayload['gf']), '%') like '%seller:specific%' ) or page_id in(3418065, 3658866) or (page_id in (3238419, 3238420) and (applicationPayload['sid']='p3533390' or applicationPayload['cp']='3418065')) or (page_id = 2356359 and applicationPayload['cp']='3418065' and soj_url_decode_escapes(lower(applicationPayload['moduledtl']), '%') in ('mi:54476','82052')) ) and rdt=0"
             },
             {
               "expr": "count(1)",
               "alias": "url_query_sn_vol",
-              "filter": "length(case when urlQueryString like '/str/%' then soj_list_get_val_by_idx(soj_get_url_path('http://www.ebay.com', urlQueryString) , '/', 3) when urlQueryString like '/experience/shopping/%' then soj_url_extract_nvp(urlQueryString, 'store_name', 0) when webServer like '%stores%' then soj_list_get_val_by_idx( soj_get_url_path('http://www.ebay.com', urlQueryString) , '/', 2) end) > 0"
+              "filter": "length(case when urlQueryString like '/str/%' then soj_list_get_val_by_idx(soj_get_url_path('http://www.ebay.com', urlQueryString) , '/', 3) when urlQueryString like '/experience/shopping/%' then soj_url_extract_nvp(urlQueryString, 'store_name', 0) when webServer like '%stores%' then soj_list_get_val_by_idx( soj_get_url_path('http://www.ebay.com', urlQueryString) , '/', 2) end) > 0 and (page_id in (4634, 3418065) or (page_id = 2499619 and upper(applicationPayload['eactn'])='EXPC') ) and rdt=0"
             },
             {
               "expr": "count(1)",
               "alias": "url_query_slctd_vol",
-              "filter": "length(case when page_id = 2048320 then COALESCE( soj_url_decode_escapes( applicationPayload['sn'], '%'), soj_url_extract_nvp(  soj_url_decode_escapes( soj_get_url_params( concat('http://www.ebay.com',  urlQueryString)), '%') ,  'sn',0)) when page_id = 2056805 then soj_url_extract_nvp(  soj_url_decode_escapes( soj_get_url_params(concat('http://www.ebay.com',  urlQueryString)), '%') ,  'sid',0) when page_id in (2351460, 2053742, 2047936, 2381081) then coalesce(soj_url_extract_nvp(soj_url_decode_escapes(soj_get_url_params(concat('http://www.ebay.com',  urlQueryString)), '%') ,  'sid',0) , soj_url_extract_nvp(  soj_url_decode_escapes( soj_get_url_params( concat('http://www.ebay.com',  urlQueryString)), '%') , '_ssn',0) , applicationPayload['sn']) when page_id in (3238419, 3238420) then substr(soj_url_decode_escapes( applicationPayload['folent'], '%'), 2) when page_id = 3658866 then soj_url_extract_nvp(soj_url_decode_escapes(soj_get_url_params( concat('http://www.ebay.com',  urlQueryString)), '%') ,  '_ssn',0) when urlQueryString like '/sch/%' or urlQueryString like '/usr/%' then soj_list_get_val_by_idx(soj_get_url_path(concat('http://www.ebay.com',  urlQueryString)), '/', 3) when page_id = 1236 then soj_str_between_str(  soj_get_url_params(concat('http://www.ebay.com',  urlQueryString)), 'userid=', '&') end)>0"
+              "filter": "length(case when page_id = 2048320 then COALESCE( soj_url_decode_escapes( applicationPayload['sn'], '%'), soj_url_extract_nvp(  soj_url_decode_escapes( soj_get_url_params( concat('http://www.ebay.com',  urlQueryString)), '%') ,  'sn',0)) when page_id = 2056805 then soj_url_extract_nvp(  soj_url_decode_escapes( soj_get_url_params(concat('http://www.ebay.com',  urlQueryString)), '%') ,  'sid',0) when page_id in (2351460, 2053742, 2047936, 2381081) then coalesce(soj_url_extract_nvp(soj_url_decode_escapes(soj_get_url_params(concat('http://www.ebay.com',  urlQueryString)), '%') ,  'sid',0) , soj_url_extract_nvp(  soj_url_decode_escapes( soj_get_url_params( concat('http://www.ebay.com',  urlQueryString)), '%') , '_ssn',0) , applicationPayload['sn']) when page_id in (3238419, 3238420) then substr(soj_url_decode_escapes( applicationPayload['folent'], '%'), 2) when page_id = 3658866 then soj_url_extract_nvp(soj_url_decode_escapes(soj_get_url_params( concat('http://www.ebay.com',  urlQueryString)), '%') ,  '_ssn',0) when urlQueryString like '/sch/%' or urlQueryString like '/usr/%' then soj_list_get_val_by_idx(soj_get_url_path(concat('http://www.ebay.com',  urlQueryString)), '/', 3) when page_id = 1236 then soj_str_between_str(  soj_get_url_params(concat('http://www.ebay.com',  urlQueryString)), 'userid=', '&') end)>0 and (page_id in (2545226, 2048320, 2046732, 3658866) or (page_id in (2351460, 2047936, 2381081) AND soj_url_decode_escapes(lower(applicationPayload['gf']), '%') like '%seller:specific%' ) or (page_id in (3238419, 3238420) and (applicationPayload['sid']='p3533390' or applicationPayload['cp']='3418065'))) and rdt=0"
             },
             {
               "expr": "sum(case when is_decimal(soj_list_get_val_by_idx(soj_decode_base36_vec(applicationPayload['!itm']),',', 1),18) then 1 else 0 end)",
@@ -140,6 +140,16 @@
       "config": {
         "sub-type": "normal-metric",
         "index-pattern": "tdq.${flink.app.profile}.metric.normal."
+      }
+    },
+    {
+      "name": "hdfs_normal_metric",
+      "type": "realtime.hdfs",
+      "config": {
+        "sub-type": "normal-metric",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
+        "schema-subject": "tdq.metric",
+        "hdfs-path": "hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/metric/normal/cfg=sojevent_tdq"
       }
     },
     {
