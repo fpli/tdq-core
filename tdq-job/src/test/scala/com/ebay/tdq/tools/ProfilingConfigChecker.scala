@@ -18,14 +18,14 @@ object ProfilingConfigChecker {
           |{
           |  "expr": "total_cnt",
           |  "metric-name": "system_metric",
-          |  "dimensions": ["site_id"],
+          |  "dimensions": ["site_id","user_id"],
           |  "transformations": [
           |    {
           |      "expr": "count(1)",
           |      "alias": "total_cnt"
           |    },
           |    {
-          |      "expr": "autoTrackEvent.userId",
+          |      "expr": "COALESCE(autoTrackEvent.userId,'Others')",
           |      "alias": "user_id"
           |    },
           |    {

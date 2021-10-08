@@ -112,7 +112,7 @@ public class TdqConfigManager implements Refreshable {
     String id = String.valueOf(rs.getInt("id"));
     String name = tdqEnv.getJobName();
     TdqConfig c = JsonUtils.parseObject(json, TdqConfig.class);
-    log.warn("{} getTdqConfigs={}", tdqEnv.getId(), json);
+    // log.warn("{} getTdqConfigs={}", tdqEnv.getId(), json);
     conn.close();
     return TdqConfig.builder()
         .id(id)
