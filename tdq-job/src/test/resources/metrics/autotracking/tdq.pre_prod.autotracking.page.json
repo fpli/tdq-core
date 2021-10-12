@@ -1,0 +1,94 @@
+{
+  "id": "ignore",
+  "env": {
+    "config": {
+      "flink.app.local-aggr.queue-size": 1000,
+      "flink.app.window.metric-1st-aggr": "1min",
+      "flink.app.local-aggr.flush-timeout": "5s",
+      "flink.app.parallelism.metric-1st-aggr": 5,
+      "flink.app.parallelism.metric-2nd-aggr": 1,
+      "flink.app.local-aggr.output-partitions": 1
+    }
+  },
+  "name": "ignore",
+  "rules": [
+    {
+      "name": "system",
+      "type": "realtime.rheos.profiler",
+      "config": {
+        "window": "1min"
+      },
+      "profilers": [
+        {
+          "expr": "total_cnt",
+          "metric-name": "atpage_system_metric",
+          "transformations": [
+            {
+              "expr": "count(1)",
+              "alias": "total_cnt"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sinks": [
+    {
+      "name": "pronto_normal_metric",
+      "type": "realtime.pronto",
+      "config": {
+        "sub-type": "normal-metric",
+        "index-pattern": "tdq.${flink.app.profile}.metric.normal."
+      }
+    },
+    {
+      "name": "pronto_latency_metric",
+      "type": "realtime.pronto",
+      "config": {
+        "sub-type": "latency-metric",
+        "index-pattern": "tdq.${flink.app.profile}.metric.latency."
+      }
+    },
+    {
+      "name": "hdfs_normal_metric",
+      "type": "realtime.hdfs",
+      "config": {
+        "sub-type": "normal-metric",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
+        "schema-subject": "tdq.metric",
+        "hdfs-path": "hdfs://apollo-rno/user/b_bis/tdq/${flink.app.profile}/metric/normal/cfg=autotracking_page"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "name": "kafka_atpage",
+      "type": "realtime.kafka",
+      "config": {
+        "stream": "behavior.autotracking",
+        "topics": "behavior.autotracking.rheostrackevent",
+        "deserializer": "com.ebay.tdq.connector.kafka.schema.TdqEventDeserializationSchema",
+        "startup-mode": "LATEST",
+        "kafka-consumer": {
+          "receive.buffer": 8388608,
+          "sasl.mechanism": "IAF",
+          "fetch.max.bytes": 52428800,
+          "max.poll.records": 5000,
+          "sasl.jaas.config": "io.ebay.rheos.kafka.security.iaf.IAFLoginModule required iafConsumerId=\"urn:ebay-marketplace-consumerid:68a97ac2-013b-4915-9ed7-d6ae2ff01618\" iafSecret=\"c4bb6fca-7ac5-46dd-b218-a49cb6307dbc\" iafEnv=\"production\";",
+          "auto.offset.reset": "latest",
+          "bootstrap.servers": "rhs-bkuvkiaa-kfk-rno-1.rheos-streaming-prod.svc.26.tess.io:9092,rhs-bkuvkiaa-kfk-rno-2.rheos-streaming-prod.svc.26.tess.io:9092,rhs-bkuvkiaa-kfk-rno-3.rheos-streaming-prod.svc.26.tess.io:9092,rhs-bkuvkiaa-kfk-rno-4.rheos-streaming-prod.svc.26.tess.io:9092,rhs-bkuvkiaa-kfk-rno-5.rheos-streaming-prod.svc.26.tess.io:9092,rhs-bkuvkiaa-kfk-rno-6.rheos-streaming-prod.svc.26.tess.io:9092,rhs-bkuvkiaa-kfk-rno-7.rheos-streaming-prod.svc.26.tess.io:9092,rhs-bkuvkiaa-kfk-rno-8.rheos-streaming-prod.svc.26.tess.io:9092,rhs-bkuvkiaa-kfk-rno-9.rheos-streaming-prod.svc.26.tess.io:9092,rhs-bkuvkiaa-kfk-rno-10.rheos-streaming-prod.svc.26.tess.io:9092",
+          "fetch.max.wait.ms": 100,
+          "security.protocol": "SASL_PLAINTEXT",
+          "max.partition.fetch.bytes": 10485760,
+          "partition.assignment.strategy": "org.apache.kafka.clients.consumer.RoundRobinAssignor"
+        },
+        "schema-subject": "rheostrackevent",
+        "rhs-parallelism": 10,
+        "event-time-field": "autoTrackEvent.activity.`timestamp`",
+        "rhs-idle-timeout": "3min",
+        "rheos-services-urls": "https://rheos-services.stratus.ebay.com",
+        "rhs-out-of-orderless": "3min"
+      }
+    }
+  ]
+}
