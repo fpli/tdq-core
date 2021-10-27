@@ -11,9 +11,9 @@ import org.junit.Test
 class DateUtilsTest {
   @Test
   def test_getMinBuckets(): Unit = {
-    println(FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").parse("2021-09-03 10:45:00").getTime)
-    println(FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").parse("2021-07-29 14:00:00").getTime)
-    println(FastDateFormat.getInstance("yyyyMMddHHmm").format(1621391339604L))
+    println(FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").parse("2021-10-27 06:10:00").getTime)
+//    println(FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss").parse("2021-07-29 14:00:00").getTime)
+//    println(FastDateFormat.getInstance("yyyyMMddHHmm").format(1621391339604L))
     assert(getMinBuckets(1621391339604L, 10) == "202105191020")
     assert(getMinBuckets(1621391339604L, 5) == "202105191025")
     println(SojTimestamp.getSojTimestampToUnixTimestamp(3835843200089000L))

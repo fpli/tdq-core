@@ -7,7 +7,35 @@ object ProfilingConfigChecker {
   def main(args: Array[String]): Unit = {
     //    testLocalPathFinder()
     //    testKafkaPathFinder()
-    testKafkaUtp()
+    //    testKafkaUtp()
+    testKafkaAutoTracking()
+  }
+
+  def testKafkaAutoTracking(): Unit = {
+    ProfilingKafkaAutoTrackingIT(
+      profiler =
+        """
+          |{
+          |  "expr": "total_cnt",
+          |  "metric-name": "system_metric",
+          |  "dimensions": ["site_id","user_id"],
+          |  "transformations": [
+          |    {
+          |      "expr": "count(1)",
+          |      "alias": "total_cnt"
+          |    },
+          |    {
+          |      "expr": "COALESCE(autoTrackEvent.userId,'Others')",
+          |      "alias": "user_id"
+          |    },
+          |    {
+          |      "expr": "autoTrackEvent.siteId",
+          |      "alias": "site_id"
+          |    }
+          |  ]
+          |}
+          |""".stripMargin)
+      .test()
   }
 
   def testKafkaUtp(): Unit = {
@@ -19,7 +47,7 @@ object ProfilingConfigChecker {
           |  "metric-name": "system_metric",
           |  "transformations": [
           |    {
-          |      "expr": "count1(1)",
+          |      "expr": "count(1)",
           |      "alias": "total_cnt"
           |    }
           |  ]
