@@ -20,8 +20,12 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.flink.api.common.serialization.DeserializationSchema.InitializationContext;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.metrics.Counter;
+import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.streaming.connectors.kafka.KafkaDeserializationSchema;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.joda.time.DateTimeZone;
@@ -42,11 +46,21 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
   private static final String[] tagsToEncode = new String[]{Constants.TAG_ITEMIDS, Constants.TAG_TRKP};
   private final Long endTimestamp;
   private final String schemaRegistryUrl;
+  private transient Map<String, Counter> counterMap;
+  private transient MetricGroup group;
+  private transient long errorMsgCurrentTimeMillis = 0L;
 
   public PathFinderRawEventKafkaDeserializationSchema(String schemaRegistryUrl, Long endTimestamp,
       String eventTimeField) {
     this.endTimestamp = endTimestamp;
     this.schemaRegistryUrl = schemaRegistryUrl;
+  }
+
+  @Override
+  public void open(InitializationContext context) {
+    counterMap = new HashMap<>();
+    group = context.getMetricGroup().addGroup("tdq").addGroup("pathfinder");
+    errorMsgCurrentTimeMillis = 0L;
   }
 
   @Override
@@ -58,9 +72,31 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
     return this.endTimestamp > 0 && t > this.endTimestamp;
   }
 
+  public void inc(String key) {
+    Counter counter = counterMap.get(key);
+    if (counter == null) {
+      counter = group.counter(key);
+      counterMap.put(key, counter);
+    }
+    counter.inc();
+  }
+
+
   @Override
   public TdqEvent deserialize(ConsumerRecord<byte[], byte[]> record) {
-    return deserialize0(record.value());
+    try {
+      return deserialize0(record.value());
+    } catch (Exception e) {
+      inc("deserializeError");
+      if ((System.currentTimeMillis() - errorMsgCurrentTimeMillis) > 10000) {
+        if (record != null) {
+          log.error("record hex string:{}", Hex.encodeHexString(record.value()));
+        }
+        log.error(e.getMessage(), e);
+        errorMsgCurrentTimeMillis = System.currentTimeMillis();
+      }
+      return null;
+    }
   }
 
   public TdqEvent deserialize0(byte[] message) {

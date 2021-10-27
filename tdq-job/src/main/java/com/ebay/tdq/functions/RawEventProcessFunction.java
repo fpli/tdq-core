@@ -62,8 +62,12 @@ public class RawEventProcessFunction extends ProcessFunction<TdqEvent, InternalM
   @Override
   public void processElement(TdqEvent event, Context ctx, Collector<InternalMetric> collector) throws Exception {
     long s1 = System.nanoTime();
-    processElement0(event, TdqConfigManager.getInstance(tdqEnv).getPhysicalPlans(), ctx, collector);
-    metricGroup.markElement(s1);
+    if (event != null) {
+      processElement0(event, TdqConfigManager.getInstance(tdqEnv).getPhysicalPlans(), ctx, collector);
+      metricGroup.markElement(s1);
+    } else {
+      metricGroup.inc("emptyEvent");
+    }
   }
 
   @Override
