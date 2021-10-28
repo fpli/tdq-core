@@ -42,8 +42,7 @@ public class RawEventDumpJob {
     tdqCxt.getTdqEnv().setFromTimestamp(ksc.getFromTimestamp());
     tdqCxt.getTdqEnv().setToTimestamp(ksc.getToTimestamp());
 
-    PathFinderRawEventKafkaDeserializationSchema deserializer = new PathFinderRawEventKafkaDeserializationSchema(
-        ksc.getRheosServicesUrls(), ksc.getEndOfStreamTimestamp(), ksc.getEventTimeField());
+    PathFinderRawEventKafkaDeserializationSchema deserializer = new PathFinderRawEventKafkaDeserializationSchema(ksc);
     FlinkKafkaConsumer<TdqEvent> flinkKafkaConsumer = new FlinkKafkaConsumer<>(
         ksc.getTopics(), deserializer, ksc.getKafkaConsumer());
 

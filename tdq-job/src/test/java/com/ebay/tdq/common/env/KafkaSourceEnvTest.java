@@ -1,5 +1,6 @@
 package com.ebay.tdq.common.env;
 
+import com.ebay.tdq.config.KafkaSourceConfig;
 import com.ebay.tdq.connector.kafka.schema.PathFinderRawEventKafkaDeserializationSchema;
 import java.text.ParseException;
 import lombok.val;
@@ -14,8 +15,12 @@ public class KafkaSourceEnvTest {
 
   @Test
   public void testIsEndOfStream() throws Exception {
-    val schema = new PathFinderRawEventKafkaDeserializationSchema(
-        null, getTime("2021-07-20 18:25:00"), null);
+    KafkaSourceConfig ksc = new KafkaSourceConfig();
+    ksc.setName("test");
+    ksc.setRheosServicesUrls(null);
+    ksc.setOutOfOrderlessMs(0L);
+    ksc.setToTimestamp(getTime("2021-07-20 18:25:00"));
+    val schema = new PathFinderRawEventKafkaDeserializationSchema(ksc);
     Assert.assertFalse(schema.isEndOfStream(getTime("2021-07-20 18:24:00")));
     Assert.assertTrue(schema.isEndOfStream(getTime("2021-07-20 18:26:00")));
   }

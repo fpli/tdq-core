@@ -1,6 +1,6 @@
 package com.ebay.tdq
 
-import com.ebay.tdq.common.env.{JdbcEnv, TdqEnv}
+import com.ebay.tdq.common.env.TdqEnv
 import com.ebay.tdq.common.model.InternalMetric
 import com.ebay.tdq.config.TdqConfig
 import com.ebay.tdq.rules.{PhysicalPlan, ProfilingSqlParser}
@@ -149,6 +149,9 @@ class LocalCacheTest {
 
     override def markEvent(): Unit = {
       tdqProcessEventsMeter += 1
+    }
+
+    override def inc(key: String, label: String, v: String): Unit = {
     }
 
     override def inc(key: String): Unit = {
