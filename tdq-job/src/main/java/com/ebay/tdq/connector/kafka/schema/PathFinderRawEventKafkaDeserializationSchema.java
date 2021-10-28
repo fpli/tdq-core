@@ -24,6 +24,8 @@ import org.apache.avro.util.Utf8;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.serialization.DeserializationSchema.InitializationContext;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.metrics.Counter;
+import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.streaming.connectors.kafka.KafkaDeserializationSchema;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.joda.time.DateTimeZone;
@@ -44,16 +46,24 @@ public class PathFinderRawEventKafkaDeserializationSchema extends AbstractTdqEve
   private static final String[] tagsToEncode = new String[]{Constants.TAG_ITEMIDS, Constants.TAG_TRKP};
   private final Long endTimestamp;
   private final String schemaRegistryUrl;
+  private transient Map<String, Counter> counterMap;
+  private transient MetricGroup group;
+  private transient long errorMsgCurrentTimeMillis = 0L;
+  private final String name;
 
   public PathFinderRawEventKafkaDeserializationSchema(KafkaSourceConfig ksc) {
-    super(ksc.getName());
+    this.name = ksc.getName();
     this.endTimestamp = ksc.getEndOfStreamTimestamp();
     this.schemaRegistryUrl = ksc.getRheosServicesUrls();
   }
 
   @Override
   public void open(InitializationContext context) {
-    super.open(context.getMetricGroup());
+    this.group = context.getMetricGroup();
+    counterMap = new HashMap<>();
+    this.group = group.addGroup("tdq").addGroup("src", name);
+    errorMsgCurrentTimeMillis = 0L;
+    log.info("open success");
   }
 
   @Override
@@ -528,5 +538,25 @@ public class PathFinderRawEventKafkaDeserializationSchema extends AbstractTdqEve
   @Override
   public TypeInformation<TdqEvent> getProducedType() {
     return TypeInformation.of(TdqEvent.class);
+  }
+
+  @Override
+  Map<String, Counter> getCounterMap() {
+    return counterMap;
+  }
+
+  @Override
+  MetricGroup getGroup() {
+    return group;
+  }
+
+  @Override
+  long getErrorMsgCurrentTimeMillis() {
+    return errorMsgCurrentTimeMillis;
+  }
+
+  @Override
+  void setErrorMsgCurrentTimeMillis(Long t) {
+    this.errorMsgCurrentTimeMillis = t;
   }
 }
