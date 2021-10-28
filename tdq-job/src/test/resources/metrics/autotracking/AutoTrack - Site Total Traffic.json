@@ -1,0 +1,31 @@
+{
+  "id": "ignore",
+  "rules": [
+    {
+      "name": "AutoTrack - Site Total Traffic",
+      "type": "realtime.rheos.profilers",
+      "config": {
+        "window": "1h"
+      },
+      "profilers": [
+        {
+          "expr": "total_cnt",
+          "metric-name": "atpage_common_metric",
+          "dimensions": [
+            "site_id"
+          ],
+          "transformations": [
+            {
+              "expr": "autoTrackEvent.siteId",
+              "alias": "site_id"
+            },
+            {
+              "expr": "count(1)",
+              "alias": "total_cnt"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

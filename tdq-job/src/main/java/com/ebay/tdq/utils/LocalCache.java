@@ -64,7 +64,7 @@ public class LocalCache {
       }
       for (InternalMetric m : cache.values()) {
         m.setPartition(Math.abs(random.nextInt()) % tdqEnv.getOutputPartitions());
-        metricGroup.inc("localCachePartition" + m.getPartition());
+        metricGroup.inc("localCache", "partition", String.valueOf(m.getPartition()));
         metricGroup.inc("collect");
         collector.collect(m);
       }

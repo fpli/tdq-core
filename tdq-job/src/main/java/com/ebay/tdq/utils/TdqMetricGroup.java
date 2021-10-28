@@ -1,6 +1,7 @@
 package com.ebay.tdq.utils;
 
 import com.codahale.metrics.SlidingWindowReservoir;
+import com.google.common.annotations.VisibleForTesting;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.flink.dropwizard.metrics.DropwizardHistogramWrapper;
@@ -22,22 +23,23 @@ public class TdqMetricGroup {
   private Histogram tdqProcessElementHistogram;
   private Map<String, Counter> counterMap;
 
+  @VisibleForTesting
   protected TdqMetricGroup() {
   }
 
   public TdqMetricGroup(MetricGroup _group) {
-    group                      = _group.addGroup("tdq");
-    tdqProcessEventsMeter      = group.meter("processEventsMeter",
+    group = _group.addGroup("tdq");
+    tdqProcessEventsMeter = group.meter("processEventsMeter",
         new DropwizardMeterWrapper(new com.codahale.metrics.Meter()));
-    tdqProcessElementMeter     = group.meter("processElementMeter",
+    tdqProcessElementMeter = group.meter("processElementMeter",
         new DropwizardMeterWrapper(new com.codahale.metrics.Meter()));
-    tdqProcessMetricHistogram  = group.histogram("processMetricHistogram",
+    tdqProcessMetricHistogram = group.histogram("processMetricHistogram",
         new DropwizardHistogramWrapper(
             new com.codahale.metrics.Histogram(new SlidingWindowReservoir(10))));
     tdqProcessElementHistogram = group.histogram("processElementHistogram",
         new DropwizardHistogramWrapper(
             new com.codahale.metrics.Histogram(new SlidingWindowReservoir(10))));
-    counterMap                 = new HashMap<>();
+    counterMap = new HashMap<>();
   }
 
   public void gauge(LocalCache cache) {
@@ -55,6 +57,16 @@ public class TdqMetricGroup {
 
   public void updateEventHistogram(long s) {
     tdqProcessMetricHistogram.update(System.nanoTime() - s);
+  }
+
+  public void inc(String name, String label, String v) {
+    String k = String.format("%s_%s=%s", name, label, v);
+    Counter counter = counterMap.get(k);
+    if (counter == null) {
+      counter = group.addGroup(label, v).counter(name);
+      counterMap.put(k, counter);
+    }
+    counter.inc();
   }
 
   public void inc(String key) {

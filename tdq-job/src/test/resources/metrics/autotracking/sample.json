@@ -1,0 +1,60 @@
+{
+  "rheosHeader": {
+    "eventCreateTimestamp": 1635371414835,
+    "eventSentTimestamp": 1635371414835,
+    "schemaId": 7140,
+    "eventId": "d01b359d-b15a-4216-865e-529221bab343",
+    "producerId": ""
+  },
+  "autoTrackEvent": {
+    "guid": "39ce7e8f1790a12b7ca8f10affdd6467",
+    "userId": 2113340224,
+    "siteId": 0,
+    "eventFamily": "ATK",
+    "agentVersion": "2.0.5",
+    "context": {
+      "appId": null,
+      "version": null,
+      "os": "Windows",
+      "utcOffset": "7",
+      "clientIp": "174.193.134.207",
+      "userLang": "en-US",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36",
+      "screenWidth": 1920,
+      "screenHeight": 1080,
+      "screenDPI": null,
+      "deviceInfo": null,
+      "others": {
+        "browserFamily": "Chrome"
+      }
+    },
+    "trackable": {
+      "trackableId": "d01b359d-b15a-4216-865e-529221bab343",
+      "parentTrackableId": "00ec7b96-1ce5-4460-82f1-a4c91a2c4b30",
+      "entityId": "2367289",
+      "instanceId": "https://www.ebay.com/sh/ord?filter=status:AWAITING_SHIPMENT",
+      "description": "Manage orders awaiting shipment — eBay Seller Hub",
+      "correlationId": null,
+      "screenId": "8a93d807-6546-4b6d-b288-f699b3f82f25",
+      "entityType": "Page"
+    },
+    "activity": {
+      "timestamp": 1635371414605,
+      "duration": null,
+      "ratio": null,
+      "viewportWidth": 1920,
+      "viewportHeight": 880,
+      "category": "Impression",
+      "type": "EXIT.PAGE_UNLOAD",
+      "referer": "https://www.ebay.com/sh/ovw",
+      "details": {
+        "nPageId": "2303516",
+        "history": "50",
+        "openTime": "1635371398759",
+        "perf": "{\"conn\":0,\"dns\":0,\"load\":2008,\"ttfb\":197}",
+        "ePageId": "2367289",
+        "ciid": "Auzd/8Y4*"
+      }
+    }
+  }
+}

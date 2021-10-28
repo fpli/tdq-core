@@ -10,6 +10,7 @@ import com.ebay.sojourner.common.util.SOJNVL;
 import com.ebay.sojourner.common.util.SOJURLDecodeEscape;
 import com.ebay.sojourner.common.util.SojTimestamp;
 import com.ebay.tdq.common.model.TdqEvent;
+import com.ebay.tdq.config.KafkaSourceConfig;
 import io.ebay.rheos.schema.event.RheosEvent;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -20,12 +21,9 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.serialization.DeserializationSchema.InitializationContext;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.metrics.Counter;
-import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.streaming.connectors.kafka.KafkaDeserializationSchema;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.joda.time.DateTimeZone;
@@ -33,7 +31,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 @Slf4j
-public class PathFinderRawEventKafkaDeserializationSchema implements
+public class PathFinderRawEventKafkaDeserializationSchema extends AbstractTdqEventDeserializationSchema implements
     KafkaDeserializationSchema<TdqEvent> {
 
   private static final DateTimeFormatter FORMATTER_UTC =
@@ -46,21 +44,16 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
   private static final String[] tagsToEncode = new String[]{Constants.TAG_ITEMIDS, Constants.TAG_TRKP};
   private final Long endTimestamp;
   private final String schemaRegistryUrl;
-  private transient Map<String, Counter> counterMap;
-  private transient MetricGroup group;
-  private transient long errorMsgCurrentTimeMillis = 0L;
 
-  public PathFinderRawEventKafkaDeserializationSchema(String schemaRegistryUrl, Long endTimestamp,
-      String eventTimeField) {
-    this.endTimestamp = endTimestamp;
-    this.schemaRegistryUrl = schemaRegistryUrl;
+  public PathFinderRawEventKafkaDeserializationSchema(KafkaSourceConfig ksc) {
+    super(ksc.getName());
+    this.endTimestamp = ksc.getEndOfStreamTimestamp();
+    this.schemaRegistryUrl = ksc.getRheosServicesUrls();
   }
 
   @Override
   public void open(InitializationContext context) {
-    counterMap = new HashMap<>();
-    group = context.getMetricGroup().addGroup("tdq").addGroup("pathfinder");
-    errorMsgCurrentTimeMillis = 0L;
+    super.open(context.getMetricGroup());
   }
 
   @Override
@@ -72,34 +65,16 @@ public class PathFinderRawEventKafkaDeserializationSchema implements
     return this.endTimestamp > 0 && t > this.endTimestamp;
   }
 
-  public void inc(String key) {
-    Counter counter = counterMap.get(key);
-    if (counter == null) {
-      counter = group.counter(key);
-      counterMap.put(key, counter);
-    }
-    counter.inc();
-  }
-
-
   @Override
   public TdqEvent deserialize(ConsumerRecord<byte[], byte[]> record) {
-    try {
-      return deserialize0(record.value());
-    } catch (Exception e) {
-      inc("deserializeError");
-      if ((System.currentTimeMillis() - errorMsgCurrentTimeMillis) > 10000) {
-        if (record != null) {
-          log.error("record hex string:{}", Hex.encodeHexString(record.value()));
-        }
-        log.error(e.getMessage(), e);
-        errorMsgCurrentTimeMillis = System.currentTimeMillis();
-      }
+    if (record == null) {
       return null;
     }
+    return deserialize0(record.value());
   }
 
-  public TdqEvent deserialize0(byte[] message) {
+  @Override
+  public TdqEvent deserialize1(byte[] message) {
     long ingestTime = new Date().getTime();
     RheosEvent rheosEvent = RheosEventSerdeFactory.getRheosEventHeaderDeserializer().deserialize(null, message);
     GenericRecord genericRecord = RheosEventSerdeFactory.getRheosEventDeserializer(this.schemaRegistryUrl)
